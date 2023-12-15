@@ -70,7 +70,7 @@ kotlin {
 }
 
 fun awsModelFile(name: String): String =
-    rootProject.file("codegen/sdk/aws-models/$name").relativeTo(project.buildDir).toString()
+    rootProject.file("codegen/sdk/aws-models/$name").relativeTo(project.layout.buildDirectory.get().asFile).toString()
 
 codegen {
     val basePackage = "aws.sdk.kotlin.runtime.auth.credentials.internal"

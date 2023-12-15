@@ -22,7 +22,7 @@ data class EventStreamTest(
     val modelTemplate: File,
 ) {
     val model: File
-        get() = buildDir.resolve("$projectionName/model.smithy")
+        get() = layout.buildDirectory.file("$projectionName/model.smithy").get().asFile
 }
 
 val tests = listOf(
