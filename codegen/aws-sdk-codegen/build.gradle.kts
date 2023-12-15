@@ -8,12 +8,13 @@ plugins {
 }
 
 val sdkVersion: String by project
-description = "Codegen support for AWS protocols"
-group = "software.amazon.smithy.kotlin"
+description = "Codegen support for AWS SDK for Kotlin"
+group = "aws.sdk.kotlin"
 version = sdkVersion
 
 dependencies {
 
+    api(project(":codegen:smithy-aws-kotlin-codegen"))
     implementation(libs.kotlin.stdlib.jdk8)
     api(libs.smithy.kotlin.codegen)
 
@@ -34,10 +35,25 @@ dependencies {
     testImplementation(libs.kotlinx.serialization.json)
 }
 
+val generateSdkRuntimeVersion by tasks.registering {
+    // generate the version of the runtime to use as a resource.
+    // this keeps us from having to manually change version numbers in multiple places
+    val resourcesDir = "$buildDir/resources/main/aws/sdk/kotlin/codegen"
+    val versionFile = file("$resourcesDir/sdk-version.txt")
+    val gradlePropertiesFile = rootProject.file("gradle.properties")
+    inputs.file(gradlePropertiesFile)
+    outputs.file(versionFile)
+    sourceSets.main.get().output.dir(resourcesDir)
+    doLast {
+        versionFile.writeText("$version")
+    }
+}
+
 val jvmTargetVersion = JavaVersion.VERSION_17.toString()
 
 tasks.compileKotlin {
     kotlinOptions.jvmTarget = jvmTargetVersion
+    dependsOn(generateSdkRuntimeVersion)
 }
 
 tasks.compileTestKotlin {
@@ -86,10 +102,3 @@ tasks.jacocoTestReport {
 
 // Always run the jacoco test report after testing.
 tasks["test"].finalizedBy(tasks["jacocoTestReport"])
-
-val sourcesJar by tasks.creating(Jar::class) {
-    group = "publishing"
-    description = "Assembles Kotlin sources jar"
-    archiveClassifier.set("sources")
-    from(sourceSets.getByName("main").allSource)
-}

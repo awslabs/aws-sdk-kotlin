@@ -101,7 +101,7 @@ codegen {
             transforms = listOf(
                 """
                 {
-                    "name": "awsSdkKotlinIncludeOperations",
+                    "name": "awsSmithyKotlinIncludeOperations",
                     "args": {
                         "operations": [
                             "com.amazonaws.sts#AssumeRole",
@@ -138,7 +138,7 @@ codegen {
             transforms = listOf(
                 """
                 {
-                    "name": "awsSdkKotlinIncludeOperations",
+                    "name": "awsSmithyKotlinIncludeOperations",
                     "args": {
                         "operations": [
                             "com.amazonaws.sso#GetRoleCredentials"
@@ -173,7 +173,7 @@ codegen {
             transforms = listOf(
                 """
             {
-                "name": "awsSdkKotlinIncludeOperations",
+                "name": "awsSmithyKotlinIncludeOperations",
                 "args": {
                     "operations": [
                         "com.amazonaws.ssooidc#CreateToken"
