@@ -4,6 +4,7 @@
  */
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("aws.sdk.kotlin.codegen")
@@ -200,13 +201,20 @@ val codegenTask = tasks.named("generateSmithyProjections")
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     dependsOn(codegenTask)
 
-    // generated sts/sso credential providers have quite a few warnings
-    kotlinOptions.allWarningsAsErrors = false
+    compilerOptions {
+        // generated sts/sso credential providers have quite a few warnings
+        allWarningsAsErrors.set(false)
+        jvmTarget.set(JvmTarget.JVM_1_8)
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
     dependsOn(codegenTask)
-    kotlinOptions.allWarningsAsErrors = false
+    compilerOptions {
+        allWarningsAsErrors.set(false)
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
@@ -243,6 +251,7 @@ listOf("apiElements", "runtimeElements").forEach {
 
 // suppress internal generated clients
 tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {
+    dependsOn(codegenTask)
     dokkaSourceSets.configureEach {
         perPackageOption {
             matchingRegex.set(""".*\.internal.*""")
