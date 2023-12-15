@@ -7,7 +7,6 @@ import aws.sdk.kotlin.gradle.kmp.*
 
 description = "AWS client runtime support for generated service clients"
 
-@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotlinx.binary.compatibility.validator)
