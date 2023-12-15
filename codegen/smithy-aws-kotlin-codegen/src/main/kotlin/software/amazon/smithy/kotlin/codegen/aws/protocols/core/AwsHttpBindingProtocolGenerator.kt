@@ -36,24 +36,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
     }
 
     override fun generateProtocolUnitTests(ctx: ProtocolGenerator.GenerationContext) {
-        val ignoredTests = TestMemberDelta(
-            setOf(
-                // FIXME - compression not yet supported, see https://github.com/awslabs/smithy-kotlin/issues/955
-                "SDKAppliedContentEncoding_awsJson1_0",
-                "SDKAppliedContentEncoding_awsJson1_1",
-                "SDKAppliedContentEncoding_awsQuery",
-                "SDKAppliedContentEncoding_ec2Query",
-                "SDKAppliedContentEncoding_restJson1",
-                "SDKAppliedContentEncoding_restXml",
-                "SDKAppendedGzipAfterProvidedEncoding_restJson1",
-                "SDKAppendedGzipAfterProvidedEncoding_restXml",
-                "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsJson1_0",
-                "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsJson1_1",
-                "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_awsQuery",
-                "SDKAppendsGzipAndIgnoresHttpProvidedEncoding_ec2Query",
-            ),
-        )
-
         // The following can be used to generate only a specific test by name.
         // val targetedTest = TestMemberDelta(setOf("RestJsonComplexErrorWithNoMessage"), TestContainmentMode.RUN_TESTS)
 
@@ -66,7 +48,6 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             requestTestBuilder,
             responseTestBuilder,
             errorTestBuilder,
-            ignoredTests,
         ).generateProtocolTests()
     }
 
