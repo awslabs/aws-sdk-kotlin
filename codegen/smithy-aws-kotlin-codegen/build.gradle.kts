@@ -2,11 +2,9 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-import aws.sdk.kotlin.gradle.dsl.configurePublishing
 plugins {
     kotlin("jvm")
     jacoco
-    `maven-publish`
 }
 
 val sdkVersion: String by project
@@ -36,25 +34,10 @@ dependencies {
     testImplementation(libs.kotlinx.serialization.json)
 }
 
-val generateSdkRuntimeVersion by tasks.registering {
-    // generate the version of the runtime to use as a resource.
-    // this keeps us from having to manually change version numbers in multiple places
-    val resourcesDir = "$buildDir/resources/main/aws/sdk/kotlin/codegen"
-    val versionFile = file("$resourcesDir/sdk-version.txt")
-    val gradlePropertiesFile = rootProject.file("gradle.properties")
-    inputs.file(gradlePropertiesFile)
-    outputs.file(versionFile)
-    sourceSets.main.get().output.dir(resourcesDir)
-    doLast {
-        versionFile.writeText("$version")
-    }
-}
-
 val jvmTargetVersion = JavaVersion.VERSION_17.toString()
 
 tasks.compileKotlin {
     kotlinOptions.jvmTarget = jvmTargetVersion
-    dependsOn(generateSdkRuntimeVersion)
 }
 
 tasks.compileTestKotlin {
@@ -110,14 +93,3 @@ val sourcesJar by tasks.creating(Jar::class) {
     archiveClassifier.set("sources")
     from(sourceSets.getByName("main").allSource)
 }
-
-publishing {
-    publications {
-        create<MavenPublication>("codegen") {
-            from(components["java"])
-            artifact(sourcesJar)
-        }
-    }
-}
-
-configurePublishing("aws-sdk-kotlin")

@@ -103,8 +103,8 @@ private fun Project.createCodegenConfiguration(): Configuration {
     codegenConfig.extendsFrom(createSmithyCliConfiguration())
 
     dependencies {
-        // depend on aws-kotlin code generation
-        codegenConfig(project(":codegen:smithy-aws-kotlin-codegen"))
+        // depend on AWS SDK Kotlin code generation
+        codegenConfig(project(":codegen:aws-sdk-codegen"))
     }
 
     return codegenConfig

@@ -172,7 +172,7 @@ fun transformsForService(service: AwsService): List<String>? {
 
 fun removeDeprecatedShapesTransform(removeDeprecatedShapesUntil: String): String = """
     {
-        "name": "AwsSdkKotlinRemoveDeprecatedShapes",
+        "name": "awsSmithyKotlinRemoveDeprecatedShapes",
         "args": {
             "until": "$removeDeprecatedShapesUntil"
         }
