@@ -16,4 +16,3 @@ import org.jetbrains.dokka.plugability.DokkaContext
 class NoOpSearchbarDataInstaller(context: DokkaContext) : SearchbarDataInstaller(context) {
     override fun generatePagesList(pages: List<SignatureWithId>, locationResolver: DriResolver): List<SearchRecord> = listOf()
 }
-
