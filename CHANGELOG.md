@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.17] - 12/14/2023
+
+### Features
+* (**appstream**) This release includes support for images of Windows Server 2022 platform.
+* (**billingconductor**) Billing Conductor is releasing a new API, GetBillingGroupCostReport, which provides the ability to retrieve/view the Billing Group Cost Report broken down by attributes for a specific billing group.
+* (**connect**) This release adds support for more granular billing using tags (key:value pairs)
+* (**firehose**) This release, 1) adds configurable buffering hints for the Splunk destination, and 2) reduces the minimum configurable buffering interval for supported destinations
+* (**gamelift**) Amazon GameLift adds the ability to add and update the game properties of active game sessions.
+* (**iot**) This release adds the ability to self-manage certificate signing in AWS IoT Core fleet provisioning using the new certificate provider resource.
+* (**neptunegraph**) This is the initial SDK release for Amazon Neptune Analytics
+* (**opensearch**) Updating documentation for Amazon OpenSearch Service support for new zero-ETL integration with Amazon S3.
+* (**quicksight**) Update Dashboard Links support; SingleAxisOptions support; Scatterplot Query limit support.
+
+### Documentation
+* (**b2bi**) Documentation updates for AWS B2B Data Interchange
+* (**controltower**) Documentation updates for AWS Control Tower.
+* (**workspaces**) Updated note to ensure customers understand running modes.
+
 ## [1.0.16] - 12/13/2023
 
 ### Features
