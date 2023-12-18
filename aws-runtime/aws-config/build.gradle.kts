@@ -41,9 +41,6 @@ kotlin {
                 // additional dependencies required by generated sso provider(s)
                 implementation(libs.smithy.kotlin.aws.json.protocols)
 
-                // atomics
-                implementation(libs.kotlinx.atomicfu)
-
                 // coroutines
                 implementation(libs.kotlinx.coroutines.core)
             }
