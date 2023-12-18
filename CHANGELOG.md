@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.19] - 12/18/2023
+
+### Features
+* (**cognitoidentityprovider**) Amazon Cognito now supports trigger versions that define the fields in the request sent to pre token generation Lambda triggers.
+* (**eks**) Add support for EKS Cluster Access Management.
+* (**route53resolver**) Add DOH protocols in resolver endpoints.
+
+### Documentation
+* (**quicksight**) A docs-only release to add missing entities to the API reference.
+
 ## [1.0.18] - 12/15/2023
 
 ### Features
