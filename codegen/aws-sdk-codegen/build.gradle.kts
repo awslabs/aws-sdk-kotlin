@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * SPDX-License-Identifier: Apache-2.0
  */
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
     jacoco
 }
 

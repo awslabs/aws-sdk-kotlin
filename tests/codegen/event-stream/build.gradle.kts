@@ -6,7 +6,7 @@ import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
     id("aws.sdk.kotlin.codegen")
 }
 

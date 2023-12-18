@@ -5,7 +5,7 @@
 import aws.sdk.kotlin.gradle.dsl.skipPublishing
 
 plugins {
-    kotlin("multiplatform")
+    alias(libs.plugins.kotlin.multiplatform)
     application
 }
 
