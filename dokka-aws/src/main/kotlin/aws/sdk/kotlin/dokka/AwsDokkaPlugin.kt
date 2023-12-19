@@ -6,6 +6,7 @@
 package aws.sdk.kotlin.dokka
 
 import aws.sdk.kotlin.dokka.transformers.FilterInternalApis
+import aws.sdk.kotlin.dokka.transformers.NoOpSearchbarDataInstaller
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.plugability.DokkaPlugin
 import org.jetbrains.dokka.plugability.DokkaPluginApiPreview
@@ -23,6 +24,12 @@ class AwsDokkaPlugin : DokkaPlugin() {
 
     val filterInternalApis by extending {
         dokkaBase.preMergeDocumentableTransformer providing ::FilterInternalApis
+    }
+
+    // FIXME Re-enable search once Dokka addresses performance issues
+    // https://github.com/Kotlin/dokka/issues/2741
+    val disableSearch by extending {
+        dokkaBase.htmlPreprocessors providing ::NoOpSearchbarDataInstaller override dokkaBase.baseSearchbarDataInstaller
     }
 
     @DokkaPluginApiPreview

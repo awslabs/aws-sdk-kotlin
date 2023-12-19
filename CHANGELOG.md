@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.0.19] - 12/18/2023
+
+### Features
+* (**cognitoidentityprovider**) Amazon Cognito now supports trigger versions that define the fields in the request sent to pre token generation Lambda triggers.
+* (**eks**) Add support for EKS Cluster Access Management.
+* (**route53resolver**) Add DOH protocols in resolver endpoints.
+
+### Documentation
+* (**quicksight**) A docs-only release to add missing entities to the API reference.
+
+## [1.0.18] - 12/15/2023
+
+### Features
+* (**connect**) Adds relatedContactId field to StartOutboundVoiceContact API input. Introduces PauseContact API and ResumeContact API for Task contacts. Adds pause duration, number of pauses, timestamps for last paused and resumed events to DescribeContact API response. Adds new Rule type and new Rule action.
+* (**connectcases**) Increase number of fields that can be included in CaseEventIncludedData from 50 to 200
+* (**sagemaker**) This release 1) introduces a new API: DeleteCompilationJob , and 2) adds InfraCheckConfig for Create/Describe training job API
+
+### Documentation
+* (**cloud9**) Updated Cloud9 API documentation for AL2023 release
+* (**kms**) Documentation updates for AWS Key Management Service
+* (**rds**) Updates Amazon RDS documentation by adding code examples
+
 ## [1.0.17] - 12/14/2023
 
 ### Features

@@ -5,11 +5,11 @@
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
 import aws.sdk.kotlin.gradle.kmp.*
 import aws.sdk.kotlin.gradle.util.typedProp
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.time.LocalDateTime
 
 plugins {
     `maven-publish`
-    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once https://youtrack.jetbrains.com/issue/KTIJ-19369 is fixed
     alias(libs.plugins.dokka)
 }
 
@@ -117,9 +117,9 @@ subprojects {
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            allWarningsAsErrors = false // FIXME Tons of errors occur in generated code
-            jvmTarget = "1.8" // fixes outgoing variant metadata: https://github.com/awslabs/smithy-kotlin/issues/258
+        compilerOptions {
+            allWarningsAsErrors.set(false) // FIXME Tons of errors occur in generated code
+            jvmTarget.set(JvmTarget.JVM_1_8) // fixes outgoing variant metadata: https://github.com/awslabs/smithy-kotlin/issues/258
         }
     }
 
