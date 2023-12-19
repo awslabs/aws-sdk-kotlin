@@ -55,3 +55,11 @@
 .symbol {
     overflow-wrap: break-word;
 }
+
+/*
+    Disable the playground run button for generated samples
+    https://github.com/Kotlin/dokka/issues/3041
+*/
+div .compiler-info, .fold-button, .run-button {
+    display: none;
+}
