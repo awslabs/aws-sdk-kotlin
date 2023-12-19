@@ -6,7 +6,7 @@ import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import software.amazon.smithy.gradle.tasks.SmithyBuild
 
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
     id("aws.sdk.kotlin.codegen")
 }
 
@@ -22,7 +22,7 @@ data class EventStreamTest(
     val modelTemplate: File,
 ) {
     val model: File
-        get() = buildDir.resolve("$projectionName/model.smithy")
+        get() = layout.buildDirectory.file("$projectionName/model.smithy").get().asFile
 }
 
 val tests = listOf(

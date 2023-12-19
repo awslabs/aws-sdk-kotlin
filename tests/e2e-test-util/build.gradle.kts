@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
 }
 
 description = "Test utilities for integration and e2e tests"

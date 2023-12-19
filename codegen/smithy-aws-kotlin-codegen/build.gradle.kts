@@ -2,8 +2,15 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
     jacoco
 }
 
@@ -34,19 +41,15 @@ dependencies {
     testImplementation(libs.kotlinx.serialization.json)
 }
 
-val jvmTargetVersion = JavaVersion.VERSION_17.toString()
-
-tasks.compileKotlin {
-    kotlinOptions.jvmTarget = jvmTargetVersion
-}
-
-tasks.compileTestKotlin {
-    kotlinOptions.jvmTarget = jvmTargetVersion
+tasks.withType<KotlinCompile> {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
+    }
 }
 
 tasks.withType<JavaCompile> {
-    sourceCompatibility = jvmTargetVersion
-    targetCompatibility = jvmTargetVersion
+    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
+    targetCompatibility = JavaVersion.VERSION_1_8.toString()
 }
 
 // Reusable license copySpec
@@ -78,9 +81,9 @@ tasks.test {
 // Configure jacoco (code coverage) to generate an HTML report
 tasks.jacocoTestReport {
     reports {
-        xml.isEnabled = false
-        csv.isEnabled = false
-        html.destination = file("$buildDir/reports/jacoco")
+        xml.required.set(false)
+        csv.required.set(false)
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco"))
     }
 }
 

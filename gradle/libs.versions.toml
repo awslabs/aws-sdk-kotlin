@@ -1,10 +1,10 @@
 [versions]
-kotlin-version = "1.9.20"
+kotlin-version = "1.9.21"
 dokka-version = "1.9.10"
 
 # libs
 coroutines-version = "1.7.3"
-atomicfu-version = "0.22.0"
+atomicfu-version = "0.23.1"
 
 # smithy-kotlin codegen and runtime are versioned separately
 smithy-kotlin-runtime-version = "1.0.4"
