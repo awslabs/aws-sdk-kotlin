@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.21] - 12/20/2023
+
+### Features
+* (**appstream**) This release introduces configurable clipboard, allowing admins to specify the maximum length of text that can be copied by the users from their device to the remote session and vice-versa.
+* (**eks**) Add support for cluster insights, new EKS capability that surfaces potentially upgrade impacting issues.
+* (**guardduty**) This release 1) introduces a new API: GetOrganizationStatistics , and 2) adds a new UsageStatisticType TOP_ACCOUNTS_BY_FEATURE for GetUsageStatistics API
+* (**managedblockchainquery**) Adding Confirmation Status and Execution Status to GetTransaction Response.
+* (**mediatailor**) Adds the ability to configure time shifting on MediaTailor channels using the TimeShiftConfiguration field
+* (**route53**) Amazon Route 53 now supports the Canada West (Calgary) Region (ca-west-1) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region.
+* [#239](https://github.com/awslabs/aws-sdk-kotlin/issues/239) Generate KDoc samples from modeled examples
+* Added support for [request compression](https://smithy.io/2.0/spec/behavior-traits.html#requestcompression-trait)
+
 ## [1.0.20] - 12/19/2023
 
 ### Features
