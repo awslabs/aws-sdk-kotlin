@@ -1,0 +1,8 @@
+{
+    "id": "93140368-5000-4614-9f21-e9f1cf76f2ee",
+    "type": "feature",
+    "description": "Generate KDoc samples from modeled examples",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#239"
+    ]
+}

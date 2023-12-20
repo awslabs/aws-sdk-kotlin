@@ -72,6 +72,10 @@ allprojects {
             }
         }
 
+        dokkaSourceSets.configureEach {
+            samples.from(project.file("samples").path, project.file("generated-src/samples").path)
+        }
+
         val smithyKotlinPackageListUrl: String? by project
         val smithyKotlinDocBaseUrl: String? by project
 
