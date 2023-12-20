@@ -6,6 +6,8 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
+import aws.sdk.kotlin.runtime.config.compression.resolveDisableRequestCompression
+import aws.sdk.kotlin.runtime.config.compression.resolveRequestMinCompressionSizeBytes
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseFips
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
@@ -20,6 +22,7 @@ import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
+import aws.smithy.kotlin.runtime.client.config.CompressionClientConfig
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.telemetry.TelemetryConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
@@ -76,6 +79,16 @@ public abstract class AbstractAwsSdkClientFactory<
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
+
+            if (config is CompressionClientConfig.Builder) {
+                config.requestCompression.disableRequestCompression =
+                    config.requestCompression.disableRequestCompression
+                        ?: resolveDisableRequestCompression(platform, profile)
+
+                config.requestCompression.requestMinCompressionSizeBytes =
+                    config.requestCompression.requestMinCompressionSizeBytes
+                        ?: resolveRequestMinCompressionSizeBytes(platform, profile)
+            }
 
             finalizeConfig(builder, sharedConfig, profile)
         }

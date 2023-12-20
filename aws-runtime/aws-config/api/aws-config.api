@@ -221,6 +221,13 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
 }
 
+public final class aws/sdk/kotlin/runtime/config/compression/RequestCompressionResolversKt {
+	public static final fun resolveDisableRequestCompression (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveDisableRequestCompression$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun resolveRequestMinCompressionSizeBytes (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveRequestMinCompressionSizeBytes$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
 public final class aws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode : java/lang/Enum {
 	public static final field DISABLED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
 	public static final field PREFERRED Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
