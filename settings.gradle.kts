@@ -27,7 +27,7 @@ sourceControl {
 
 rootProject.name = "aws-sdk-kotlin"
 
-includeBuild("./gradle/sdk-plugins")
+// includeBuild("./gradle/sdk-plugins")
 
 include(":dokka-aws")
 include(":bom")

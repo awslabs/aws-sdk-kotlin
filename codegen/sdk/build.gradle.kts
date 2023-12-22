@@ -3,24 +3,20 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// This build file has been adapted from the Go v2 SDK, here:
-// https://github.com/aws/aws-sdk-go-v2/blob/master/codegen/sdk-codegen/build.gradle.kts
-
 import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
-import aws.sdk.kotlin.gradle.codegen.dsl.projectionRootDir
+import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
-import software.amazon.smithy.gradle.tasks.SmithyBuild
+import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
 import java.util.*
-import kotlin.streams.toList
 
 description = "AWS SDK codegen tasks"
 
 plugins {
-    id("aws.sdk.kotlin.codegen")
+    id("aws.sdk.kotlin.gradle.smithybuild")
 }
 
 buildscript {
@@ -29,9 +25,6 @@ buildscript {
         classpath(libs.smithy.aws.traits)
     }
 }
-
-// This project doesn't produce a JAR.
-tasks["jar"].enabled = false
 
 // get a project property by name if it exists (including from local.properties)
 fun getProperty(name: String): String? {
@@ -106,7 +99,6 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
         it.map { service ->
             SmithyProjection(
                 service.projectionName,
-                project.projectionRootDir(service.projectionName),
             ).apply {
                 val importPaths = mutableListOf(service.modelFile.absolutePath)
                 if (file(service.modelExtrasDir).exists()) {
@@ -151,7 +143,7 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
 // this will lazily evaluate the provider and only cause the models to be
 // mapped if the tasks are actually needed
 // NOTE: FYI evaluation still happens if you ask for the list of tasks or rebuild the gradle model in intellij
-codegen.projections.addAllLater(awsServiceProjections())
+smithyBuild.projections.addAllLater(awsServiceProjections())
 
 /**
  * This function retrieves Smithy transforms associated with the target service to be merged into generated
@@ -200,7 +192,7 @@ fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File -
     val sdkId = serviceTrait.sdkId
     val packageName = sdkId.replace(" ", "")
         .replace("-", "")
-        .toLowerCase()
+        .lowercase()
         .kotlinNamespace()
     val packageDescription = "The AWS Kotlin client for $sdkId"
 
@@ -294,7 +286,7 @@ fun String.kotlinNamespace(): String = split(".")
  */
 val AwsService.destinationDir: String
     get() {
-        val sanitizedName = sdkId.replace(" ", "").replace("-", "").toLowerCase()
+        val sanitizedName = sdkId.replace(" ", "").replace("-", "").lowercase()
         return rootProject.file("services/$sanitizedName").absolutePath
     }
 
@@ -322,7 +314,14 @@ fun forwardProperty(name: String) {
     }
 }
 
-val generateSmithyProjections = tasks.named<SmithyBuild>("generateSmithyProjections") {
+val codegen by configurations.getting
+dependencies {
+    codegen(project(":codegen:aws-sdk-codegen"))
+    codegen(libs.smithy.cli)
+    codegen(libs.smithy.model)
+}
+
+tasks.generateSmithyProjections {
     doFirst {
         forwardProperty("aws.partitions_file")
         forwardProperty("aws.user_agent.add_metadata")
@@ -332,11 +331,12 @@ val generateSmithyProjections = tasks.named<SmithyBuild>("generateSmithyProjecti
 val stageSdks = tasks.register("stageSdks") {
     group = "codegen"
     description = "relocate generated SDK(s) from build directory to services/ dir"
-    dependsOn(generateSmithyProjections)
+    dependsOn(tasks.generateSmithyProjections)
     doLast {
         println("discoveredServices = ${discoveredServices.joinToString { it.sdkId }}")
         discoveredServices.forEach {
-            val projectionOutputDir = codegen.projections.getByName(it.projectionName).projectionRootDir
+            // val projectionOutputDir = smithyBuild.projections.getByName(it.projectionName).projectionRootDir
+            val projectionOutputDir = smithyBuild.smithyKotlinProjectionPath(it.projectionName).get()
             logger.info("copying $projectionOutputDir to ${it.destinationDir}")
             copy {
                 from("$projectionOutputDir/src")
@@ -354,7 +354,7 @@ tasks.register("bootstrap") {
     group = "codegen"
     description = "Generate AWS SDK's and register them with the build"
 
-    dependsOn(generateSmithyProjections)
+    dependsOn(tasks.generateSmithyProjections)
     finalizedBy(stageSdks)
 }
 
@@ -380,7 +380,7 @@ data class SourceModel(
      */
     val destFilename: String
         get() {
-            val name = sdkId.replace(" ", "-").toLowerCase()
+            val name = sdkId.replace(" ", "-").lowercase()
             return "$name.json"
         }
 }
