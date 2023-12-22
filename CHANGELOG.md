@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.23] - 12/22/2023
+
+### Features
+* (**bedrockagent**) Adding Claude 2.1 support to Bedrock Agents
+* (**glue**) This release adds additional configurations for Query Session Context on the following APIs: GetUnfilteredTableMetadata, GetUnfilteredPartitionMetadata, GetUnfilteredPartitionsMetadata.
+* (**lakeformation**) This release adds additional configurations on GetTemporaryGlueTableCredentials for Query Session Context.
+* (**mediaconnect**) This release adds the DescribeSourceMetadata API. This API can be used to view the stream information of the flow's source.
+* (**networkmonitor**) CloudWatch Network Monitor is a new service within CloudWatch that will help network administrators and operators continuously monitor network performance metrics such as round-trip-time and packet loss between their AWS-hosted applications and their on-premises locations.
+* (**s3**) Added additional examples for some operations.
+* (**secretsmanager**) Update endpoint rules and examples.
+
+### Documentation
+* (**omics**) Provides minor corrections and an updated description of APIs.
+
 ## [1.0.22] - 12/21/2023
 
 ### Features
