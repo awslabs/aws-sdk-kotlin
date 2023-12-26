@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.24] - 12/26/2023
+
+### Documentation
+* (**iam**) Documentation updates for AWS Identity and Access Management (IAM).
+
 ## [1.0.23] - 12/22/2023
 
 ### Features
