@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.25] - 12/27/2023
+
+### Features
+* (**emr**) Add support for customers to modify cluster attribute auto-terminate post cluster launch
+
 ## [1.0.24] - 12/26/2023
 
 ### Documentation
