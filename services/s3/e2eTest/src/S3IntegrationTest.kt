@@ -326,7 +326,7 @@ class S3BucketOpsIntegrationTest {
                 key = keyName
                 body = ByteStream.fromString(contents)
                 checksumAlgorithm = ChecksumAlgorithm.Sha256
-                checksumSha256 = "blerg"
+                checksumSha256 = "LPJNul+wow4m6DsqxbninhsWHlwfp0JecwQzYpOLmCP="
             }
         }
         ex.message?.let {
