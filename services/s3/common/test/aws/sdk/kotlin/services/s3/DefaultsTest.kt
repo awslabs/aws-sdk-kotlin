@@ -5,13 +5,18 @@
 package aws.sdk.kotlin.services.s3
 
 import aws.sdk.kotlin.runtime.client.AwsClientOption
+import aws.smithy.kotlin.runtime.auth.AuthSchemeId
+import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSignedBodyHeader
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
 import aws.smithy.kotlin.runtime.client.RequestInterceptorContext
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.get
+import aws.smithy.kotlin.runtime.http.auth.*
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.identity.IdentityProvider
+import aws.smithy.kotlin.runtime.identity.IdentityProviderConfig
 import aws.smithy.kotlin.runtime.io.use
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -29,9 +34,16 @@ class DefaultsTest {
     @Test
     fun testDefaultExecutionContext() = runTest {
         val mockEngine = buildTestConnection { expect() }
+        val noAuth = object : AuthScheme {
+            override val schemeId: AuthSchemeId = AuthSchemeId.AwsSigV4
+            override val signer: HttpSigner = AnonymousHttpSigner
+            override fun identityProvider(identityProviderConfig: IdentityProviderConfig): IdentityProvider = AnonymousIdentityProvider
+        }
+
         S3Client {
             region = "us-east-1"
             httpClient = mockEngine
+            authSchemes = listOf(noAuth)
             interceptors += object : HttpInterceptor {
                 override fun readBeforeExecution(context: RequestInterceptorContext<Any>) {
                     assertNotNull(context.executionContext[SdkClientOption.ClientName])
