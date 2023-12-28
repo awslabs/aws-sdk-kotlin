@@ -8,6 +8,7 @@ import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
 
 plugins {
+    kotlin("jvm") // FIXME - configuration doesn't resolve without this
     id("aws.sdk.kotlin.gradle.smithybuild")
 }
 
@@ -41,6 +42,8 @@ val enabledProtocols = listOf(
 smithyBuild {
     enabledProtocols.forEach { test ->
         projections.register(test.projectionName) {
+            imports = listOf(file("model").absolutePath)
+
             transforms = listOf(
                 """
                 {
@@ -136,11 +139,14 @@ smithyBuild.projections.forEach {
 
     // FIXME This is a hack to work around how protocol tests aren't in the actual service model and thus codegen
     // separately from service customizations.
-    tasks.register<Copy>("copyStaticFiles-$protocolName") {
+    val copyStaticFiles = tasks.register<Copy>("copyStaticFiles-$protocolName") {
         group = "codegen"
         from(rootProject.projectDir.resolve("services/$protocolName/common/src"))
         into(smithyBuild.smithyKotlinProjectionSrcDir(it.name))
-        mustRunAfter(tasks.generateSmithyProjections)
+    }
+
+    tasks.generateSmithyProjections.configure {
+        finalizedBy(copyStaticFiles)
     }
 }
 
@@ -148,10 +154,4 @@ tasks.register("testAllProtocols") {
     group = "Verification"
     val allTests = tasks.withType<ProtocolTestTask>()
     dependsOn(allTests)
-}
-
-tasks.register("clean") {
-    doLast {
-        project.layout.buildDirectory.get().asFile.deleteRecursively()
-    }
 }

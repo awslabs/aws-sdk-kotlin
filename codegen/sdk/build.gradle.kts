@@ -18,13 +18,6 @@ plugins {
     id("aws.sdk.kotlin.gradle.smithybuild")
 }
 
-// buildscript {
-//     dependencies {
-//         classpath(libs.smithy.model)
-//         classpath(libs.smithy.aws.traits)
-//     }
-// }
-
 description = "AWS SDK codegen tasks"
 
 // get a project property by name if it exists (including from local.properties)
@@ -189,7 +182,7 @@ fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File -
     val protocol = service.protocol()
 
     println(software.amazon.smithy.aws.traits.ServiceTrait.ID.toString())
-    println(service.allTraits.map{ it.key.toString() })
+    println(service.allTraits.map { it.key.toString() })
     println(service.hasTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java))
     println(service.findTrait(software.amazon.smithy.aws.traits.ServiceTrait.ID))
 
@@ -198,7 +191,6 @@ fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File -
     println(instance)
     println(service::class.java.classLoader.name)
     println(software.amazon.smithy.aws.traits.ServiceTrait::class.java.classLoader.name)
-
 
     // FIXME - our use of smithy-model in repo-tools `aws.sdk.kotlin.gradle.smithybuild` plugin AND
     //         because we put repo-tools on the root buildscript classpath causes some kind of classloader
@@ -420,7 +412,7 @@ fun discoverSourceModels(repoPath: String): List<SourceModel> {
         require(services.size == 1) { "Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}" }
         val service = services.first()
         val serviceApi = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
-            ?: error ("Expected aws.api#service trait attached to model ${file.absolutePath}")
+            ?: error("Expected aws.api#service trait attached to model ${file.absolutePath}")
 
         SourceModel(file.absolutePath, serviceApi.sdkId, service.version)
     }
