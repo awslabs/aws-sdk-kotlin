@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.26] - 12/28/2023
+
+### Features
+* (**codestarconnections**) New integration with the GitLab self-managed provider type.
+* (**kinesisvideoarchivedmedia**) NoDataRetentionException thrown when GetImages requested for a Stream that does not retain data (that is, has a DataRetentionInHours of 0).
+* (**sagemaker**) Amazon SageMaker Studio now supports Docker access from within app container
+
 ## [1.0.25] - 12/27/2023
 
 ### Features
