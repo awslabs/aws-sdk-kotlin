@@ -61,7 +61,7 @@ smithyBuild {
 
             smithyKotlinPlugin {
                 serviceShapeId = testServiceShapeId
-                packageName = "aws.sdk.kotlin.test.eventstream.${test.projectionName.toLowerCase()}"
+                packageName = "aws.sdk.kotlin.test.eventstream.${test.projectionName.lowercase()}"
                 packageVersion = "1.0"
                 buildSettings {
                     generateFullProject = false
