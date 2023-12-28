@@ -6,8 +6,8 @@
 package aws.sdk.kotlin.codegen.customization.s3
 
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
@@ -27,10 +27,12 @@ class S3SigningConfig : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings) =
         model.expectShape<ServiceShape>(settings.service).isS3
 
-    override val sectionWriters: List<SectionWriterBinding> = listOf(
-        SectionWriterBinding(HttpProtocolClientGenerator.MergeServiceDefaults, ::renderDefaultSigningContext),
-    )
-    private fun renderDefaultSigningContext(writer: KotlinWriter, previousValue: String?) {
+    override val sectionWriters: List<SectionWriterBinding>
+        get() = listOf(
+            SectionWriterBinding(HttpProtocolClientGenerator.MergeServiceDefaults, renderDefaultSigningContext),
+        )
+
+    private val renderDefaultSigningContext = AppendingSectionWriter { writer ->
         val signingAttrs = RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes
         // https://github.com/awslabs/aws-sdk-kotlin/issues/200
         writer.putIfAbsent(signingAttrs, "NormalizeUriPath", "false")
