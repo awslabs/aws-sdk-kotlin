@@ -18,6 +18,13 @@ buildscript {
                 branch = "smithy-build-plugin"
             }
         }
+
+        // FIXME - we need the ClassLoader used for Model and any traits to be the same. Unfortunately our
+        // build plugin has a transitive dependency on `smithy-model` which means our :codegen:sdk project
+        // that uses both in it's build logic won't work correctly. We "fix" this by placing them both
+        // into the root buildscript classpath and force them to share a class loader.
+        classpath(libs.smithy.model)
+        classpath(libs.smithy.aws.traits)
     }
 }
 

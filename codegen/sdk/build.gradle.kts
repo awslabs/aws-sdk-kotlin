@@ -13,18 +13,19 @@ import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
 import java.util.*
 
-description = "AWS SDK codegen tasks"
-
 plugins {
+    kotlin("jvm") // FIXME - configuration doesn't resolve without this
     id("aws.sdk.kotlin.gradle.smithybuild")
 }
 
-buildscript {
-    dependencies {
-        classpath(libs.smithy.model)
-        classpath(libs.smithy.aws.traits)
-    }
-}
+// buildscript {
+//     dependencies {
+//         classpath(libs.smithy.model)
+//         classpath(libs.smithy.aws.traits)
+//     }
+// }
+
+description = "AWS SDK codegen tasks"
 
 // get a project property by name if it exists (including from local.properties)
 fun getProperty(name: String): String? {
@@ -89,13 +90,13 @@ data class AwsService(
 
 )
 
+val servicesProvider: Provider<List<AwsService>> = project.provider { discoverServices() }
+
 // Manually create the projections rather than using the extension to avoid unnecessary configuration evaluation.
 // Otherwise we would be reading the models from disk on every gradle invocation for unrelated projects/tasks
 fun awsServiceProjections(): Provider<List<SmithyProjection>> {
-    val p = project.provider {
-        println("AWS service projection provider called")
-        discoveredServices
-    }.map {
+    println("AWS service projection provider called")
+    val p = servicesProvider.map {
         it.map { service ->
             SmithyProjection(
                 service.projectionName,
@@ -137,7 +138,8 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
     }
 
     // get around class cast issues, listProperty implements what we need to pass this to `NamedObjectContainer`
-    return project.objects.listProperty<SmithyProjection>().value(p)
+    // return project.objects.listProperty<SmithyProjection>().value(p)
+    return p
 }
 
 // this will lazily evaluate the provider and only cause the models to be
@@ -171,8 +173,6 @@ fun removeDeprecatedShapesTransform(removeDeprecatedShapesUntil: String): String
     }
 """.trimIndent()
 
-val discoveredServices: List<AwsService> by lazy { discoverServices() }
-
 // The root namespace prefix for SDKs
 val sdkPackageNamePrefix = "aws.sdk.kotlin.services."
 
@@ -187,8 +187,30 @@ fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File -
     val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
     val service = services.singleOrNull() ?: error("Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}")
     val protocol = service.protocol()
-    val serviceTrait = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
-        ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
+
+    println(software.amazon.smithy.aws.traits.ServiceTrait.ID.toString())
+    println(service.allTraits.map{ it.key.toString() })
+    println(service.hasTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java))
+    println(service.findTrait(software.amazon.smithy.aws.traits.ServiceTrait.ID))
+
+    println("classloader...")
+    val instance = buildscript.classLoader.loadClass("software.amazon.smithy.aws.traits.ServiceTrait")
+    println(instance)
+    println(service::class.java.classLoader.name)
+    println(software.amazon.smithy.aws.traits.ServiceTrait::class.java.classLoader.name)
+
+
+    // FIXME - our use of smithy-model in repo-tools `aws.sdk.kotlin.gradle.smithybuild` plugin AND
+    //         because we put repo-tools on the root buildscript classpath causes some kind of classloader
+    //         issue where getTrait(Class<T>) to fail the internal `instanceof()` checks. We either
+    //         (1) need to publish the plugin which would mean we don't muck with the classpath of the buildscript
+    //         as much OR (2) remove smithy-model as a dependency of our plugin.
+    val serviceTrait = service
+        .findTrait(software.amazon.smithy.aws.traits.ServiceTrait.ID)
+        .map { it as software.amazon.smithy.aws.traits.ServiceTrait }
+        .orNull()
+        ?: error("Expected aws.api#service trait attached to model ${file.absolutePath}")
+
     val sdkId = serviceTrait.sdkId
     val packageName = sdkId.replace(" ", "")
         .replace("-", "")
@@ -333,6 +355,7 @@ val stageSdks = tasks.register("stageSdks") {
     description = "relocate generated SDK(s) from build directory to services/ dir"
     dependsOn(tasks.generateSmithyProjections)
     doLast {
+        val discoveredServices = servicesProvider.get()
         println("discoveredServices = ${discoveredServices.joinToString { it.sdkId }}")
         discoveredServices.forEach {
             // val projectionOutputDir = smithyBuild.projections.getByName(it.projectionName).projectionRootDir
@@ -397,7 +420,7 @@ fun discoverSourceModels(repoPath: String): List<SourceModel> {
         require(services.size == 1) { "Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}" }
         val service = services.first()
         val serviceApi = service.getTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java).orNull()
-            ?: error { "Expected aws.api#service trait attached to model ${file.absolutePath}" }
+            ?: error ("Expected aws.api#service trait attached to model ${file.absolutePath}")
 
         SourceModel(file.absolutePath, serviceApi.sdkId, service.version)
     }
