@@ -14,8 +14,7 @@ buildscript {
         classpath(libs.kotlinx.atomicfu.plugin)
         classpath("aws.sdk.kotlin:build-plugins") {
             version {
-                // require("0.3.1")
-                branch = "smithy-build-plugin"
+                require("0.3.2")
             }
         }
 

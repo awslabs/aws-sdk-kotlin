@@ -131,7 +131,6 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
     }
 
     // get around class cast issues, listProperty implements what we need to pass this to `NamedObjectContainer`
-    // return project.objects.listProperty<SmithyProjection>().value(p)
     return p
 }
 
@@ -181,22 +180,6 @@ fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File -
     val service = services.singleOrNull() ?: error("Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}")
     val protocol = service.protocol()
 
-    println(software.amazon.smithy.aws.traits.ServiceTrait.ID.toString())
-    println(service.allTraits.map { it.key.toString() })
-    println(service.hasTrait(software.amazon.smithy.aws.traits.ServiceTrait::class.java))
-    println(service.findTrait(software.amazon.smithy.aws.traits.ServiceTrait.ID))
-
-    println("classloader...")
-    val instance = buildscript.classLoader.loadClass("software.amazon.smithy.aws.traits.ServiceTrait")
-    println(instance)
-    println(service::class.java.classLoader.name)
-    println(software.amazon.smithy.aws.traits.ServiceTrait::class.java.classLoader.name)
-
-    // FIXME - our use of smithy-model in repo-tools `aws.sdk.kotlin.gradle.smithybuild` plugin AND
-    //         because we put repo-tools on the root buildscript classpath causes some kind of classloader
-    //         issue where getTrait(Class<T>) to fail the internal `instanceof()` checks. We either
-    //         (1) need to publish the plugin which would mean we don't muck with the classpath of the buildscript
-    //         as much OR (2) remove smithy-model as a dependency of our plugin.
     val serviceTrait = service
         .findTrait(software.amazon.smithy.aws.traits.ServiceTrait.ID)
         .map { it as software.amazon.smithy.aws.traits.ServiceTrait }
