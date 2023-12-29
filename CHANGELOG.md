@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.27] - 12/29/2023
+
+### Features
+* (**apprunner**) AWS App Runner adds Python 3.11 and Node.js 18 runtimes.
+* (**location**) This release introduces a new parameter to bypasses an API key's expiry conditions and delete the key.
+* (**quicksight**) Add LinkEntityArn support for different partitions; Add UnsupportedUserEditionException in UpdateDashboardLinks API; Add support for New Reader Experience Topics
+
+### Fixes
+* [#1165](https://github.com/awslabs/aws-sdk-kotlin/issues/1165) (**s3**) Fix default execution context attributes
+
+### Miscellaneous
+* Bump smithy version to 1.42.0
+
 ## [1.0.26] - 12/28/2023
 
 ### Features

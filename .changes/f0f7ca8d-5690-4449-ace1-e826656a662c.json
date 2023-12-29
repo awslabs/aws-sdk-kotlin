@@ -1,8 +1,0 @@
-{
-    "id": "f0f7ca8d-5690-4449-ace1-e826656a662c",
-    "type": "bugfix",
-    "description": "(**s3**) Fix default execution context attributes",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1165"
-    ]
-}
