@@ -12,6 +12,7 @@ import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
 import java.util.*
+import kotlin.streams.toList
 
 plugins {
     kotlin("jvm") // FIXME - configuration doesn't resolve without this
