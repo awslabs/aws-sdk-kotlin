@@ -2,11 +2,13 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
+import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
-    id("aws.sdk.kotlin.codegen")
+    id("aws.sdk.kotlin.gradle.smithybuild")
 }
 
 description = "Support for AWS configuration"
@@ -69,7 +71,14 @@ kotlin {
 fun awsModelFile(name: String): String =
     rootProject.file("codegen/sdk/aws-models/$name").relativeTo(project.layout.buildDirectory.get().asFile).toString()
 
-codegen {
+val codegen by configurations.getting
+dependencies {
+    codegen(project(":codegen:aws-sdk-codegen"))
+    codegen(libs.smithy.cli)
+    codegen(libs.smithy.model)
+}
+
+smithyBuild {
     val basePackage = "aws.sdk.kotlin.runtime.auth.credentials.internal"
 
     projections {
@@ -193,9 +202,8 @@ NOTE: We need the following tasks to depend on codegen for gradle caching/up-to-
 * For Kotlin/Native, an additional dependency is introduced:
 * `compileKotlin<Platform>` (Type=KotlinNativeCompile) (e.g. compileKotlinLinuxX64)
 */
-val codegenTask = tasks.named("generateSmithyProjections")
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    dependsOn(codegenTask)
+    dependsOn(tasks.generateSmithyProjections)
 
     compilerOptions {
         // generated sts/sso credential providers have quite a few warnings
@@ -204,14 +212,14 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
-    dependsOn(codegenTask)
+    dependsOn(tasks.generateSmithyProjections)
     compilerOptions {
         allWarningsAsErrors.set(false)
     }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
-    dependsOn(codegenTask)
+    dependsOn(tasks.generateSmithyProjections)
 }
 
 tasks.withType<org.gradle.jvm.tasks.Jar> {
@@ -219,32 +227,22 @@ tasks.withType<org.gradle.jvm.tasks.Jar> {
         println("Disabling $project task '$name' because it conflicts with Kotlin JAR tasks")
         enabled = false
     } else {
-        dependsOn(codegenTask)
+        dependsOn(tasks.generateSmithyProjections)
     }
 }
 
-codegen.projections.all {
+smithyBuild.projections.all {
     // add this projected source dir to the common sourceSet
-    // NOTE - build.gradle.kts is still being generated, it's NOT used though
-    // TODO - we should probably either have a postProcessing spec or a plugin setting to not generate it to avoid confusion
-    val projectedSrcDir = projectionRootDir.resolve("src/main/kotlin")
+    val projectionSrcDir = smithyBuild.smithyKotlinProjectionSrcDir(name)
     kotlin.sourceSets.commonMain {
-        println("added $projectedSrcDir to common sourceSet")
-        kotlin.srcDir(projectedSrcDir)
-    }
-}
-
-// Necessary to avoid Gradle problems identifying correct variant of aws-config. This stems from the smithy-gradle
-// plugin (used by codegen plugin) applying the Java plugin which creates these configurations.
-listOf("apiElements", "runtimeElements").forEach {
-    configurations.named(it) {
-        isCanBeConsumed = false
+        logger.info("added $projectionSrcDir to common sourceSet")
+        kotlin.srcDir(projectionSrcDir)
     }
 }
 
 // suppress internal generated clients
 tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {
-    dependsOn(codegenTask)
+    dependsOn(tasks.generateSmithyProjections)
     dokkaSourceSets.configureEach {
         perPackageOption {
             matchingRegex.set(""".*\.internal.*""")

@@ -2,21 +2,20 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
-import software.amazon.smithy.gradle.tasks.SmithyBuild
+import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
+import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
 
 plugins {
-    id("aws.sdk.kotlin.codegen")
+    kotlin("jvm") // FIXME - configuration doesn't resolve without this
+    id("aws.sdk.kotlin.gradle.smithybuild")
 }
 
 description = "Smithy protocol test suite"
 
-dependencies {
-    implementation(libs.smithy.aws.protocol.tests)
-}
-
 data class ProtocolTest(val projectionName: String, val serviceShapeId: String, val sdkId: String? = null) {
-    val packageName: String = projectionName.toLowerCase().filter { it.isLetterOrDigit() }
+    val packageName: String = projectionName.lowercase().filter { it.isLetterOrDigit() }
 }
 
 // The following section exposes Smithy protocol test suites as gradle test targets
@@ -40,9 +39,11 @@ val enabledProtocols = listOf(
     ProtocolTest("error-correction-xml", "aws.protocoltests.errorcorrection#RequiredValueXml"),
 )
 
-codegen {
+smithyBuild {
     enabledProtocols.forEach { test ->
         projections.register(test.projectionName) {
+            imports = listOf(file("model").absolutePath)
+
             transforms = listOf(
                 """
                 {
@@ -74,12 +75,19 @@ codegen {
     }
 }
 
-tasks.named<SmithyBuild>("generateSmithyProjections") {
+val codegen by configurations.getting
+dependencies {
+    codegen(project(":codegen:aws-sdk-codegen"))
+    codegen(libs.smithy.cli)
+    codegen(libs.smithy.model)
+
     // NOTE: The protocol tests are published to maven as a jar, this ensures that
     // the aws-protocol-tests dependency is found when generating code such that the `includeServices` transform
     // actually works
-    addCompileClasspath = true
+    codegen(libs.smithy.aws.protocol.tests)
+}
 
+tasks.generateSmithyProjections {
     // ensure the generated clients use the same version of the runtime as the aws aws-runtime
     val smithyKotlinRuntimeVersion = libs.versions.smithy.kotlin.runtime.version.get()
     doFirst {
@@ -87,40 +95,46 @@ tasks.named<SmithyBuild>("generateSmithyProjections") {
     }
 }
 
-open class ProtocolTestTask : DefaultTask() {
+abstract class ProtocolTestTask @Inject constructor(private val project: Project) : DefaultTask() {
     /**
      * The projection
      */
     @get:Input
-    var projection: aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection? = null
+    abstract val projectionName: Property<String>
+
+    /**
+     * The projection root directory
+     */
+    @get:Input
+    abstract val projectionRootDirectory: Property<String>
 
     @TaskAction
     fun runTests() {
-        val projection = requireNotNull(projection) { "projection is required task input" }
-        println("[${projection.name}] buildDir: ${projection.projectionRootDir}")
-        if (!projection.projectionRootDir.exists()) {
-            throw GradleException("${projection.projectionRootDir} does not exist")
+        val projectionRootDir = project.file(projectionRootDirectory.get())
+        println("[$projectionName] buildDir: $projectionRootDir")
+        if (!projectionRootDir.exists()) {
+            throw GradleException("$projectionRootDir does not exist")
         }
-        val wrapper = if (System.getProperty("os.name").toLowerCase().contains("windows")) "gradlew.bat" else "gradlew"
+        val wrapper = if (System.getProperty("os.name").lowercase().contains("windows")) "gradlew.bat" else "gradlew"
         val gradlew = project.rootProject.file(wrapper).absolutePath
 
         // NOTE - this still requires us to publish to maven local.
         project.exec {
-            workingDir = projection.projectionRootDir
+            workingDir = projectionRootDir
             executable = gradlew
             args = listOf("test")
         }
     }
 }
 
-val codegenTask = tasks.getByName("generateSmithyProjections")
-codegen.projections.forEach {
+smithyBuild.projections.forEach {
     val protocolName = it.name
 
     tasks.register<ProtocolTestTask>("testProtocol-$protocolName") {
-        dependsOn(codegenTask)
+        dependsOn(tasks.generateSmithyProjections)
         group = "Verification"
-        projection = it
+        projectionName.set(it.name)
+        projectionRootDirectory.set(smithyBuild.smithyKotlinProjectionPath(it.name).map { it.toString() })
     }
 
     // FIXME This is a hack to work around how protocol tests aren't in the actual service model and thus codegen
@@ -128,10 +142,12 @@ codegen.projections.forEach {
     val copyStaticFiles = tasks.register<Copy>("copyStaticFiles-$protocolName") {
         group = "codegen"
         from(rootProject.projectDir.resolve("services/$protocolName/common/src"))
-        into(it.projectionRootDir.resolve("src/main/kotlin/"))
+        into(smithyBuild.smithyKotlinProjectionSrcDir(it.name))
     }
 
-    codegenTask.finalizedBy(copyStaticFiles)
+    tasks.generateSmithyProjections.configure {
+        finalizedBy(copyStaticFiles)
+    }
 }
 
 tasks.register("testAllProtocols") {

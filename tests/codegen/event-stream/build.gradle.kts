@@ -2,19 +2,17 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+
+import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
-import software.amazon.smithy.gradle.tasks.SmithyBuild
+import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    id("aws.sdk.kotlin.codegen")
+    id("aws.sdk.kotlin.gradle.smithybuild")
 }
 
 description = "Event stream codegen integration test suite"
-
-dependencies {
-    implementation(project(":codegen:smithy-aws-kotlin-codegen"))
-}
 
 data class EventStreamTest(
     val projectionName: String,
@@ -45,11 +43,11 @@ fun fillInModel(output: File, protocolName: String, template: File) {
 }
 
 val testServiceShapeId = "aws.sdk.kotlin.test.eventstream#TestService"
-codegen {
+smithyBuild {
     tests.forEach { test ->
 
         projections.register(test.projectionName) {
-            imports = listOf(test.model.relativeTo(project.buildDir).toString())
+            imports = listOf(test.model.absolutePath)
             transforms = listOf(
                 """
                 {
@@ -63,7 +61,7 @@ codegen {
 
             smithyKotlinPlugin {
                 serviceShapeId = testServiceShapeId
-                packageName = "aws.sdk.kotlin.test.eventstream.${test.projectionName.toLowerCase()}"
+                packageName = "aws.sdk.kotlin.test.eventstream.${test.projectionName.lowercase()}"
                 packageVersion = "1.0"
                 buildSettings {
                     generateFullProject = false
@@ -78,18 +76,23 @@ codegen {
     }
 }
 
-tasks.named("generateSmithyBuildConfig") {
+val codegen by configurations.getting
+dependencies {
+    codegen(project(":codegen:aws-sdk-codegen"))
+    codegen(libs.smithy.cli)
+    codegen(libs.smithy.model)
+}
+
+tasks.generateSmithyBuild {
     doFirst {
         tests.forEach { test -> fillInModel(test.model, test.protocolName, test.modelTemplate) }
     }
 }
 
-val generateProjectionsTask = tasks.named<SmithyBuild>("generateSmithyProjections") {
-    addCompileClasspath = true
-
-    // ensure the generated tests use the same version of the runtime as the aws aws-runtime
-    val smithyKotlinRuntimeVersion = libs.versions.smithy.kotlin.runtime.version.get()
+tasks.generateSmithyProjections {
     doFirst {
+        // ensure the generated tests use the same version of the runtime as the aws aws-runtime
+        val smithyKotlinRuntimeVersion = libs.versions.smithy.kotlin.runtime.version.get()
         System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinRuntimeVersion)
     }
 }
@@ -104,14 +107,13 @@ kotlin.sourceSets.all {
 }
 
 kotlin.sourceSets.getByName("test") {
-    codegen.projections.forEach {
-        val projectedSrcDir = it.projectionRootDir.resolve("src/main/kotlin")
-        kotlin.srcDir(projectedSrcDir)
+    smithyBuild.projections.forEach {
+        kotlin.srcDir(smithyBuild.smithyKotlinProjectionSrcDir(it.name))
     }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    dependsOn(generateProjectionsTask)
+    dependsOn(tasks.generateSmithyProjections)
     // generated clients have quite a few warnings
     kotlinOptions.allWarningsAsErrors = false
 }
