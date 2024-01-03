@@ -12,11 +12,6 @@ buildscript {
     // only need to add e.g. atomic-fu and build-plugins here for imports and plugins to be available in subprojects.
     dependencies {
         classpath(libs.kotlinx.atomicfu.plugin)
-        classpath("aws.sdk.kotlin:build-plugins") {
-            version {
-                require("0.3.2")
-            }
-        }
 
         // FIXME - we need the ClassLoader used for Model and any traits to be the same. Unfortunately our
         // build plugin has a transitive dependency on `smithy-model` which means our :codegen:sdk project
@@ -29,14 +24,14 @@ buildscript {
 
 plugins {
     alias(libs.plugins.dokka)
+    // configures (KMP) subprojects with our own KMP conventions and some default dependencies
+    alias(libs.plugins.aws.kotlin.repo.tools.kmp)
+
     // ensure the correct version of KGP ends up on our buildscript classpath
     // since build-plugins also has <some> version in its dependency closure
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.jvm) apply false
 }
-
-// configures (KMP) subprojects with our own KMP conventions and some default dependencies
-apply(plugin = "aws.sdk.kotlin.kmp")
 
 val testJavaVersion = typedProp<String>("test.java.version")?.let {
     JavaLanguageVersion.of(it)

@@ -80,7 +80,7 @@ fun createBomConstraintsAndVersionCatalog() {
 fun Project.artifactId(target: KotlinTarget): String = when (target) {
     is KotlinMetadataTarget -> name
     is KotlinJsTarget -> "$name-js"
-    else -> "$name-${target.targetName.toLowerCase(Locale.ROOT)}"
+    else -> "$name-${target.targetName.lowercase()}"
 }
 
 /**

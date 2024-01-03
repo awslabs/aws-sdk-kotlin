@@ -2,6 +2,8 @@
 kotlin-version = "1.9.21"
 dokka-version = "1.9.10"
 
+aws-kotlin-repo-tools-version = "0.3.2"
+
 # libs
 coroutines-version = "1.7.3"
 atomicfu-version = "0.23.1"
@@ -129,3 +131,5 @@ kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kot
 kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version"}
 smithy-gradle = { id = "software.amazon.smithy", version.ref = "smithy-gradle-version" }
+aws-kotlin-repo-tools-kmp = { id = "aws.sdk.kotlin.kmp", version.ref = "aws-kotlin-repo-tools-version" }
+aws-kotlin-repo-tools-smithybuild = { id = "aws.sdk.kotlin.gradle.smithybuild", version.ref = "aws-kotlin-repo-tools-version" }
