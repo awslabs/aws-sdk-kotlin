@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.28] - 01/03/2024
+
+### Features
+* (**connect**) Amazon Connect, Contact Lens Evaluation API increase evaluation notes max length to 3072.
+* (**mediaconvert**) This release includes video engine updates including HEVC improvements, support for ingesting VP9 encoded video in MP4 containers, and support for user-specified 3D LUTs.
+
 ## [1.0.27] - 12/29/2023
 
 ### Features
