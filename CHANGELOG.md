@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.29] - 01/04/2024
+
+### Features
+* (**configservice**) Updated ResourceType enum with new resource types onboarded by AWS Config in November and December 2023.
+* (**docdb**) Adding PerformanceInsightsEnabled and PerformanceInsightsKMSKeyId fields to DescribeDBInstances Response.
+* (**ecs**) This release adds support for managed instance draining which facilitates graceful termination of Amazon ECS instances.
+* (**elasticsearchservice**) This release adds support for new or existing Amazon OpenSearch domains to enable TLS 1.3 or TLS 1.2 with perfect forward secrecy cipher suites for domain endpoints.
+* (**lightsail**) This release adds support to set up an HTTPS endpoint on an instance.
+* (**opensearch**) This release adds support for new or existing Amazon OpenSearch domains to enable TLS 1.3 or TLS 1.2 with perfect forward secrecy cipher suites for domain endpoints.
+* (**sagemaker**) Adding support for provisioned throughput mode for SageMaker Feature Groups
+* (**servicecatalog**) Added Idempotency token support to Service Catalog  AssociateServiceActionWithProvisioningArtifact, DisassociateServiceActionFromProvisioningArtifact, DeleteServiceAction API
+
 ## [1.0.28] - 01/03/2024
 
 ### Features
