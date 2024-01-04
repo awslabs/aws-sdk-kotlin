@@ -115,6 +115,12 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/ProviderConfiguration
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
+public final class aws/sdk/kotlin/runtime/auth/credentials/S3ExpressCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
+	public fun <init> (Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;)V
+	public final fun getBootstrapCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class aws/sdk/kotlin/runtime/auth/credentials/SsoCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/time/Clock;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/time/Clock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
