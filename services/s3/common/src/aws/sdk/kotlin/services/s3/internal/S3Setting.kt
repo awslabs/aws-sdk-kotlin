@@ -21,4 +21,9 @@ internal object S3Setting {
      * See [Amazon S3 Multi-Region Access Points](https://docs.aws.amazon.com/sdkref/latest/guide/feature-s3-mrap.html)
      */
     public val DisableMultiRegionAccessPoints: EnvironmentSetting<Boolean> = boolEnvSetting("aws.s3DisableMultiRegionAccessPoints", "AWS_S3_DISABLE_MULTIREGION_ACCESS_POINTS")
+
+    /**
+     * Configure whether requests made to S3 Express One Zone should use bucket-level session authentication or the default S3 authentication method.
+     */
+    public val DisableExpressSessionAuth: EnvironmentSetting<Boolean> = boolEnvSetting("aws.s3DisableExpressSessionAuth", "AWS_S3_DISABLE_EXPRESS_SESSION_AUTH")
 }
