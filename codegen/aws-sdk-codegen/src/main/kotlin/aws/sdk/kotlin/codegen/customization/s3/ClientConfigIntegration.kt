@@ -62,6 +62,14 @@ class ClientConfigIntegration : KotlinIntegration {
                 Flag to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
             """.trimIndent()
         }
+
+        val DisableExpressSessionAuth: ConfigProperty = ConfigProperty {
+            name = "disableExpressSessionAuth"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
+            documentation = """
+                Flag to disable S3 Express One Zone's bucket-level session authentication method.  
+            """.trimIndent()
+        }
     }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
@@ -87,6 +95,7 @@ class ClientConfigIntegration : KotlinIntegration {
             ForcePathStyleProp,
             UseArnRegionProp,
             DisableMrapProp,
+            DisableExpressSessionAuth
         )
 
     override val sectionWriters: List<SectionWriterBinding>

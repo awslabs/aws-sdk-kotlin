@@ -20,6 +20,7 @@ internal suspend fun finalizeS3Config(
     val activeProfile = sharedConfig.get().activeProfile
     builder.config.useArnRegion = builder.config.useArnRegion ?: S3Setting.UseArnRegion.resolve(provider) ?: activeProfile.useArnRegion
     builder.config.disableMrap = builder.config.disableMrap ?: S3Setting.DisableMultiRegionAccessPoints.resolve(provider) ?: activeProfile.disableMrap
+    builder.config.disableExpressSessionAuth = builder.config.disableExpressSessionAuth ?: S3Setting.DisableExpressSessionAuth.resolve(provider) ?: activeProfile.disableExpressSessionAuth
 }
 
 private val AwsProfile.useArnRegion: Boolean?
@@ -27,3 +28,6 @@ private val AwsProfile.useArnRegion: Boolean?
 
 private val AwsProfile.disableMrap: Boolean?
     get() = getBooleanOrNull("s3_disable_multiregion_access_points")
+
+private val AwsProfile.disableExpressSessionAuth: Boolean?
+    get() = getBooleanOrNull("s3_disable_express_session_auth")
