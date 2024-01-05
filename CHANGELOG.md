@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.30] - 01/05/2024
+
+### Features
+* (**connect**) Minor trait updates for User APIs
+* (**qconnect**) Marked SearchQuickResponses API as readonly.
+
+### Documentation
+* (**kms**) Documentation updates for AWS Key Management Service (KMS).
+* (**redshiftserverless**) use_fips_ssl and require_ssl parameter support for Workgroup, UpdateWorkgroup, and CreateWorkgroup
+
 ## [1.0.29] - 01/04/2024
 
 ### Features
