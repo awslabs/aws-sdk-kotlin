@@ -3,86 +3,26 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import aws.sdk.kotlin.gradle.codegen.*
 import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
 import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
-import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
+import aws.sdk.kotlin.gradle.sdk.*
+import aws.sdk.kotlin.gradle.util.typedProp
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
 import java.util.*
 import kotlin.streams.toList
 
 plugins {
-    kotlin("jvm") // FIXME - configuration doesn't resolve without this
+    kotlin("jvm") // FIXME - codegen configuration doesn't resolve without this
     id("aws.sdk.kotlin.gradle.smithybuild")
+    id("sdk-bootstrap")
 }
 
+val sdkVersion: String by project
 description = "AWS SDK codegen tasks"
-
-// get a project property by name if it exists (including from local.properties)
-fun getProperty(name: String): String? {
-    if (project.hasProperty(name)) {
-        return project.properties[name].toString()
-    } else if (project.ext.has(name)) {
-        return project.ext[name].toString()
-    }
-
-    val localProperties = Properties()
-    val propertiesFile: File = rootProject.file("local.properties")
-    if (propertiesFile.exists()) {
-        propertiesFile.inputStream().use { localProperties.load(it) }
-
-        if (localProperties.containsKey(name)) {
-            return localProperties[name].toString()
-        }
-    }
-    return null
-}
-
-// Represents information needed to generate a smithy projection JSON stanza
-data class AwsService(
-    /**
-     * The service shape ID name
-     */
-    val serviceShapeId: String,
-    /**
-     * The package name to use for the service when generating smithy-build.json
-     */
-    val packageName: String,
-
-    /**
-     * The package version (this should match the sdk version of the project)
-     */
-    val packageVersion: String,
-
-    /**
-     * The path to the model file in aws-sdk-kotlin
-     */
-    val modelFile: File,
-
-    /**
-     * The name of the projection to generate
-     */
-    val projectionName: String,
-
-    /**
-     * The sdkId value from the service trait
-     */
-    val sdkId: String,
-
-    /**
-     * The model version from the service shape
-     */
-    val version: String,
-
-    /**
-     * A description of the service (taken from the title trait)
-     */
-    val description: String? = null,
-
-)
 
 val servicesProvider: Provider<List<AwsService>> = project.provider { discoverServices() }
 
@@ -100,18 +40,9 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                     importPaths.add(service.modelExtrasDir)
                 }
                 imports = importPaths
-                transforms = (transformsForService(service) ?: emptyList()) + removeDeprecatedShapesTransform("2023-11-28")
+                transforms = (transformsForService(service) ?: emptyList()) + REMOVE_DEPRECATED_SHAPES_TRANSFORM
 
-                val packageSettingsFile = file(service.packageSettings)
-                val packageSettings = if (packageSettingsFile.exists()) {
-                    val node = Node.parse(packageSettingsFile.inputStream()).asObjectNode().get()
-                    node.expectMember("sdkId", "${packageSettingsFile.absolutePath} does not contain member `sdkId`")
-                    val packageSdkId = node.getStringMember("sdkId").get().value
-                    check(service.sdkId == packageSdkId) { "${packageSettingsFile.absolutePath} `sdkId` ($packageSdkId) does not match expected `${service.sdkId}`" }
-                    node
-                } else {
-                    Node.objectNode()
-                }
+                val packageSettings = PackageSettings.fromFile(service.sdkId, file(service.packageSettings))
 
                 smithyKotlinPlugin {
                     serviceShapeId = service.serviceShapeId
@@ -124,7 +55,7 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                         generateDefaultBuildFiles = false
                     }
                     apiSettings {
-                        enableEndpointAuthProvider = packageSettings.getBooleanMember("enableEndpointAuthProvider").orNull()?.value
+                        enableEndpointAuthProvider = packageSettings.enableEndpointAuthProvider
                     }
                 }
             }
@@ -157,69 +88,10 @@ fun transformsForService(service: AwsService): List<String>? {
     }
 }
 
-fun removeDeprecatedShapesTransform(removeDeprecatedShapesUntil: String): String = """
-    {
-        "name": "awsSmithyKotlinRemoveDeprecatedShapes",
-        "args": {
-            "until": "$removeDeprecatedShapesUntil"
-        }
-    }
-""".trimIndent()
-
-// The root namespace prefix for SDKs
-val sdkPackageNamePrefix = "aws.sdk.kotlin.services."
-
-val sdkVersion: String by project
-
-val serviceMembership: Membership by lazy { parseMembership(getProperty("aws.services")) }
-val protocolMembership: Membership by lazy { parseMembership(getProperty("aws.protocols")) }
-
-fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File ->
-    val filename = file.nameWithoutExtension
-    val model = Model.assembler().addImport(file.absolutePath).assemble().result.get()
-    val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
-    val service = services.singleOrNull() ?: error("Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}")
-    val protocol = service.protocol()
-
-    val serviceTrait = service
-        .findTrait(software.amazon.smithy.aws.traits.ServiceTrait.ID)
-        .map { it as software.amazon.smithy.aws.traits.ServiceTrait }
-        .orNull()
-        ?: error("Expected aws.api#service trait attached to model ${file.absolutePath}")
-
-    val sdkId = serviceTrait.sdkId
-    val packageName = sdkId.replace(" ", "")
-        .replace("-", "")
-        .lowercase()
-        .kotlinNamespace()
-    val packageDescription = "The AWS Kotlin client for $sdkId"
-
-    when {
-        applyFilters && !serviceMembership.isMember(filename, packageName) -> {
-            logger.info("skipping ${file.absolutePath}, $filename/$packageName not a member of $serviceMembership")
-            null
-        }
-
-        applyFilters && !protocolMembership.isMember(protocol) -> {
-            logger.info("skipping ${file.absolutePath}, $protocol not a member of $protocolMembership")
-            null
-        }
-
-        else -> {
-            logger.info("discovered service: ${serviceTrait.sdkId}")
-            AwsService(
-                serviceShapeId = service.id.toString(),
-                packageName = "$sdkPackageNamePrefix$packageName",
-                packageVersion = sdkVersion,
-                modelFile = file,
-                projectionName = filename,
-                sdkId = sdkId,
-                version = service.version,
-                description = packageDescription,
-            )
-        }
-    }
-}
+val bootstrap = BootstrapConfig(
+    typedProp("aws.services"),
+    typedProp("aws.protocols"),
+)
 
 /**
  * Returns an AwsService model for every JSON file found in directory defined by property `modelsDirProp`
@@ -229,53 +101,9 @@ fun fileToService(applyFilters: Boolean): (File) -> AwsService? = { file: File -
 fun discoverServices(applyFilters: Boolean = true): List<AwsService> {
     println("discover services called")
     val modelsDir: String by project
-    return fileTree(project.file(modelsDir)).mapNotNull(fileToService(applyFilters))
+    val bootstrapConfig = bootstrap.takeIf { applyFilters } ?: BootstrapConfig.ALL
+    return fileTree(project.file(modelsDir)).mapNotNull(fileToService(project, bootstrapConfig))
 }
-
-// Returns the trait name of the protocol of the service
-fun ServiceShape.protocol(): String =
-    listOf(
-        "aws.protocols#awsJson1_0",
-        "aws.protocols#awsJson1_1",
-        "aws.protocols#awsQuery",
-        "aws.protocols#ec2Query",
-        "aws.protocols#restJson1",
-        "aws.protocols#restXml",
-    ).first { protocol -> findTrait(protocol).isPresent }.split("#")[1]
-
-// Class and functions for service and protocol membership for SDK generation
-data class Membership(val inclusions: Set<String> = emptySet(), val exclusions: Set<String> = emptySet())
-
-fun Membership.isMember(vararg memberNames: String): Boolean =
-    memberNames.none(exclusions::contains) && (inclusions.isEmpty() || memberNames.any(inclusions::contains))
-
-fun parseMembership(rawList: String?): Membership {
-    if (rawList == null) return Membership()
-
-    val inclusions = mutableSetOf<String>()
-    val exclusions = mutableSetOf<String>()
-
-    rawList.split(",").map { it.trim() }.forEach { item ->
-        when {
-            item.startsWith('-') -> exclusions.add(item.substring(1))
-            item.startsWith('+') -> inclusions.add(item.substring(1))
-            else -> inclusions.add(item)
-        }
-    }
-
-    val conflictingMembers = inclusions.intersect(exclusions)
-    require(conflictingMembers.isEmpty()) { "$conflictingMembers specified both for inclusion and exclusion in $rawList" }
-
-    return Membership(inclusions, exclusions)
-}
-
-fun <T> java.util.Optional<T>.orNull(): T? = this.orElse(null)
-
-/**
- * Remove characters invalid for Kotlin package namespace identifier
- */
-fun String.kotlinNamespace(): String = split(".")
-    .joinToString(separator = ".") { segment -> segment.filter { it.isLetterOrDigit() } }
 
 /**
  * The project directory under `aws-sdk-kotlin/services`
@@ -283,10 +111,7 @@ fun String.kotlinNamespace(): String = split(".")
  * NOTE: this will also be the artifact name in the GAV coordinates
  */
 val AwsService.destinationDir: String
-    get() {
-        val sanitizedName = sdkId.replace(" ", "").replace("-", "").lowercase()
-        return rootProject.file("services/$sanitizedName").absolutePath
-    }
+    get() = rootProject.file("services/$artifactName").absolutePath
 
 /**
  * Service specific model extras
@@ -307,7 +132,7 @@ val AwsService.packageSettings: String
     get() = rootProject.file("$destinationDir/package.json").absolutePath
 
 fun forwardProperty(name: String) {
-    getProperty(name)?.let {
+    typedProp<String>(name)?.let {
         System.setProperty(name, it)
     }
 }
@@ -335,7 +160,6 @@ val stageSdks = tasks.register("stageSdks") {
         val discoveredServices = servicesProvider.get()
         println("discoveredServices = ${discoveredServices.joinToString { it.sdkId }}")
         discoveredServices.forEach {
-            // val projectionOutputDir = smithyBuild.projections.getByName(it.projectionName).projectionRootDir
             val projectionOutputDir = smithyBuild.smithyKotlinProjectionPath(it.projectionName).get()
             logger.info("copying $projectionOutputDir to ${it.destinationDir}")
             copy {
@@ -379,10 +203,7 @@ data class SourceModel(
      * The model filename in aws-sdk-kotlin
      */
     val destFilename: String
-        get() {
-            val name = sdkId.replace(" ", "-").lowercase()
-            return "$name.json"
-        }
+        get() = "${sdkIdToModelFilename(sdkId)}.json"
 }
 
 fun discoverSourceModels(repoPath: String): List<SourceModel> {
@@ -407,7 +228,7 @@ fun discoverAwsModelsRepoPath(): String? {
     val discovered = rootProject.file("../aws-models")
     if (discovered.exists()) return discovered.absolutePath
 
-    return getProperty("awsModelsDir")?.let { File(it) }?.absolutePath
+    return typedProp<String>("awsModelsDir")?.let { File(it) }?.absolutePath
 }
 
 /**
