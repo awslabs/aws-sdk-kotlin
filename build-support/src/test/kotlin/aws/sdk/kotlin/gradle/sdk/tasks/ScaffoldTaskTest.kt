@@ -1,0 +1,95 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package aws.sdk.kotlin.gradle.sdk.tasks
+
+import aws.sdk.kotlin.gradle.sdk.PackageManifest
+import aws.sdk.kotlin.gradle.sdk.PackageMetadata
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import org.gradle.kotlin.dsl.create
+import org.gradle.testfixtures.ProjectBuilder
+import org.junit.jupiter.api.io.TempDir
+import java.io.File
+import kotlin.test.*
+
+@OptIn(ExperimentalSerializationApi::class)
+class ScaffoldTaskTest {
+    fun modelContents(sdkId: String): String = """
+        ${"$"}version: "2.0"
+        namespace gradle.test
+
+        use aws.api#service
+        use aws.protocols#awsJson1_0
+
+        @service(sdkId: "$sdkId")
+        @awsJson1_0
+        service TestService{
+            operations: [],
+            version: "1-alpha"
+        }
+    """.trimIndent()
+
+    private val json = Json { prettyPrint = true }
+
+    private val initialManifest = PackageManifest(
+        listOf(
+            PackageMetadata("Package 1", "aws.sdk.kotlin.services.package1", "package1", "AwsSdkKotlinPackage1"),
+            PackageMetadata("Package 2", "aws.sdk.kotlin.services.package2", "package2", "AwsSdkKotlinPackage2"),
+        ),
+    )
+
+    private fun setupTest(tempDir: File, sdkId: String, currentManifest: PackageManifest? = initialManifest): Scaffold {
+        val project = ProjectBuilder.builder().withProjectDir(tempDir).build()
+        currentManifest?.let {
+            val currentManifestContents = json.encodeToString(it)
+            tempDir.resolve("packages.json").writeText(currentManifestContents)
+        }
+        val testModelFile = tempDir.resolve("model.smithy")
+        testModelFile.writeText(modelContents(sdkId))
+
+        return project.tasks.create<Scaffold>("scaffold") {
+            modelFile.set(testModelFile)
+        }
+    }
+
+    @Test
+    fun testNewPackage(@TempDir tempDir: File) {
+        val task = setupTest(tempDir, "Test Gradle")
+        task.updatePackageManifest()
+
+        val updated = json.decodeFromStream<PackageManifest>(tempDir.resolve("packages.json").inputStream())
+        val expectedPackages = initialManifest.packages.toMutableList()
+        expectedPackages.add(
+            PackageMetadata("Test Gradle", "aws.sdk.kotlin.services.testgradle", "testgradle", "AwsSdkKotlinTestGradle"),
+        )
+        val expected = initialManifest.copy(expectedPackages)
+
+        assertEquals(expected, updated)
+    }
+
+    @Test
+    fun testManifestNotExistYet(@TempDir tempDir: File) {
+        val task = setupTest(tempDir, "Test Gradle", null)
+        task.updatePackageManifest()
+        val updated = json.decodeFromStream<PackageManifest>(tempDir.resolve("packages.json").inputStream())
+        val expected = PackageManifest(
+            listOf(
+                PackageMetadata("Test Gradle", "aws.sdk.kotlin.services.testgradle", "testgradle", "AwsSdkKotlinTestGradle"),
+            ),
+        )
+        assertEquals(expected, updated)
+    }
+
+    @Test
+    fun testExistingPackage(@TempDir tempDir: File) {
+        val task = setupTest(tempDir, "Package 2")
+        val ex = assertFailsWith<IllegalStateException> {
+            task.updatePackageManifest()
+        }
+        assertContains(ex.message!!, "found existing package in manifest for sdkId `Package 2`")
+    }
+}
