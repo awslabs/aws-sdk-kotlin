@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.0.31] - 01/08/2024
+
+### Features
+* (**codebuild**) Aws CodeBuild now supports new compute type BUILD_GENERAL1_XLARGE
+* (**ec2**) Amazon EC2 R7iz bare metal instances are powered by custom 4th generation Intel Xeon Scalable processors.
+* (**route53resolver**) This release adds support for query type configuration on firewall rules that enables customers for granular action (ALLOW, ALERT, BLOCK) by DNS query type.
+
+## [1.0.30] - 01/05/2024
+
+### Features
+* (**connect**) Minor trait updates for User APIs
+* (**qconnect**) Marked SearchQuickResponses API as readonly.
+
+### Documentation
+* (**kms**) Documentation updates for AWS Key Management Service (KMS).
+* (**redshiftserverless**) use_fips_ssl and require_ssl parameter support for Workgroup, UpdateWorkgroup, and CreateWorkgroup
+
+## [1.0.29] - 01/04/2024
+
+### Features
+* (**configservice**) Updated ResourceType enum with new resource types onboarded by AWS Config in November and December 2023.
+* (**docdb**) Adding PerformanceInsightsEnabled and PerformanceInsightsKMSKeyId fields to DescribeDBInstances Response.
+* (**ecs**) This release adds support for managed instance draining which facilitates graceful termination of Amazon ECS instances.
+* (**elasticsearchservice**) This release adds support for new or existing Amazon OpenSearch domains to enable TLS 1.3 or TLS 1.2 with perfect forward secrecy cipher suites for domain endpoints.
+* (**lightsail**) This release adds support to set up an HTTPS endpoint on an instance.
+* (**opensearch**) This release adds support for new or existing Amazon OpenSearch domains to enable TLS 1.3 or TLS 1.2 with perfect forward secrecy cipher suites for domain endpoints.
+* (**sagemaker**) Adding support for provisioned throughput mode for SageMaker Feature Groups
+* (**servicecatalog**) Added Idempotency token support to Service Catalog  AssociateServiceActionWithProvisioningArtifact, DisassociateServiceActionFromProvisioningArtifact, DeleteServiceAction API
+
+## [1.0.28] - 01/03/2024
+
+### Features
+* (**connect**) Amazon Connect, Contact Lens Evaluation API increase evaluation notes max length to 3072.
+* (**mediaconvert**) This release includes video engine updates including HEVC improvements, support for ingesting VP9 encoded video in MP4 containers, and support for user-specified 3D LUTs.
+
 ## [1.0.27] - 12/29/2023
 
 ### Features
