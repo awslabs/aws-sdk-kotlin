@@ -16,6 +16,7 @@ import aws.smithy.kotlin.runtime.http.SdkHttpClient
 import aws.smithy.kotlin.runtime.http.complete
 import aws.smithy.kotlin.runtime.http.toByteStream
 import kotlinx.coroutines.*
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -42,8 +43,7 @@ class S3PresignerTest {
         client.close()
     }
 
-    @Test
-    fun testPresign() = runBlocking {
+    private suspend fun testPresign(client: S3Client) {
         val contents = "presign-test"
         val keyName = "foo$PRINTABLE_CHARS"
 
@@ -70,5 +70,20 @@ class S3PresignerTest {
             assertEquals(200, call.response.status.value)
             assertEquals(contents, body)
         }
+    }
+
+    @Test
+    fun testPresignNormal() = runTest {
+        S3Client {
+            region = S3TestUtils.DEFAULT_REGION
+        }.use { testPresign(it) }
+    }
+
+    @Test
+    fun testPresignWithForcePathStyle() = runBlocking {
+        S3Client {
+            region = S3TestUtils.DEFAULT_REGION
+            forcePathStyle = true
+        }.use { testPresign(it) }
     }
 }
