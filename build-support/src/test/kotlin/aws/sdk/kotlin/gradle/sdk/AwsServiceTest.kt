@@ -15,7 +15,7 @@ import kotlin.test.assertNull
 class AwsServiceTest {
 
     val modelContents = """
-        ${"$"}version: "2.0"
+        ${"$"}version: "2"
         namespace gradle.test
 
         use aws.api#service
@@ -23,7 +23,7 @@ class AwsServiceTest {
 
         @service(sdkId: "Test Gradle")
         @awsJson1_0
-        service TestService{
+        service TestService {
             operations: [],
             version: "1-alpha"
         }

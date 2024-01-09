@@ -6,14 +6,18 @@ package aws.sdk.kotlin.gradle.sdk.tasks
 
 import aws.sdk.kotlin.gradle.sdk.PackageManifest
 import aws.sdk.kotlin.gradle.sdk.PackageMetadata
+import aws.sdk.kotlin.gradle.sdk.orNull
 import aws.sdk.kotlin.gradle.sdk.validate
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import software.amazon.smithy.aws.traits.ServiceTrait
@@ -26,13 +30,22 @@ import software.amazon.smithy.model.shapes.ServiceShape
  */
 abstract class Scaffold : DefaultTask() {
 
-    @get:Option(option = "model-file", description = "the path to the model file")
+    @get:Option(option = "model", description = "the path to a single model file to scaffold")
+    @get:Optional
     @get:InputFile
     public abstract val modelFile: RegularFileProperty
+
+    @get:Optional
+    @get:Option(option = "model-dir", description = "the path to a directory of model files to scaffold")
+    @get:InputDirectory
+    public abstract val modelDir: DirectoryProperty
 
     @OptIn(ExperimentalSerializationApi::class)
     @TaskAction
     fun updatePackageManifest() {
+        check(modelFile.isPresent || modelDir.isPresent) { "one of `model` or `model-dir` is required" }
+        check(!(modelFile.isPresent && modelDir.isPresent)) { "only one of `model` or `model-dir` can be set" }
+
         val manifestFile = project.file("packages.json")
         val json = Json { prettyPrint = true }
 
@@ -46,22 +59,29 @@ abstract class Scaffold : DefaultTask() {
 
         val model = Model.assembler()
             .discoverModels()
-            .addImport(modelFile.get().asFile.absolutePath)
+            .apply {
+                val import = if (modelFile.isPresent) modelFile else modelDir
+                addImport(import.get().asFile.absolutePath)
+            }
             .assemble()
             .result
             .get()
 
-        val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
-        val service = services.singleOrNull() ?: error("Expected one service per aws model, but found ${services.size} in ${modelFile.get().asFile.absolutePath}: ${services.map { it.id }}")
-        val serviceTrait = service.expectTrait(ServiceTrait::class.java)
+        val newPackages = model
+            .shapes(ServiceShape::class.java)
+            .toList()
+            .mapNotNull { it.getTrait(ServiceTrait::class.java).orNull()?.sdkId }
+            .map { PackageMetadata.from(it) }
 
-        val existing = manifest.packages.find { it.sdkId == serviceTrait.sdkId }
-        check(existing == null) { "found existing package in manifest for sdkId `${serviceTrait.sdkId}`: $existing" }
+        newPackages.forEach { pkg ->
+            val existing = manifest.packages.find { it.sdkId == pkg.sdkId }
+            check(existing == null) { "found existing package in manifest for sdkId `${pkg.sdkId}`: $existing" }
+        }
 
-        val packages = manifest.packages.toMutableList()
-        val newPackage = PackageMetadata.from(serviceTrait.sdkId)
-        packages.add(newPackage)
-        val updatedManifest = manifest.copy(packages = packages.sortedBy { it.sdkId })
+        logger.lifecycle("scaffolding ${newPackages.size} new service packages")
+
+        val updatedPackages = manifest.packages + newPackages
+        val updatedManifest = manifest.copy(packages = updatedPackages.sortedBy { it.sdkId })
 
         val contents = json.encodeToString(updatedManifest)
         manifestFile.writeText(contents)

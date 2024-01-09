@@ -18,8 +18,8 @@ import kotlin.test.*
 
 @OptIn(ExperimentalSerializationApi::class)
 class ScaffoldTaskTest {
-    fun modelContents(sdkId: String): String = """
-        ${"$"}version: "2.0"
+    fun modelContents(sdkId: String, serviceName: String = "TestService"): String = """
+        ${"$"}version: "2"
         namespace gradle.test
 
         use aws.api#service
@@ -27,7 +27,7 @@ class ScaffoldTaskTest {
 
         @service(sdkId: "$sdkId")
         @awsJson1_0
-        service TestService{
+        service $serviceName {
             operations: [],
             version: "1-alpha"
         }
@@ -91,5 +91,37 @@ class ScaffoldTaskTest {
             task.updatePackageManifest()
         }
         assertContains(ex.message!!, "found existing package in manifest for sdkId `Package 2`")
+    }
+
+    @Test
+    fun testDirectory(@TempDir tempDir: File) {
+        val project = ProjectBuilder.builder().withProjectDir(tempDir).build()
+        val models = listOf(
+            "model1.smithy" to modelContents("Package 1", "Service1"),
+            "model2.smithy" to modelContents("Package 2", "Service2"),
+            // non AWS service (no sdkId)
+            "model3.smithy" to """
+                ${"$"}version: "2"
+                namespace gradle.test
+                service Service3 {
+                    operations: [],
+                    version: "1-alpha"
+                }
+            """.trimIndent(),
+        )
+
+        val modelFolder = tempDir.resolve("models")
+        modelFolder.mkdirs()
+        models.forEach { (filename, contents) ->
+            val modelFile = modelFolder.resolve(filename)
+            modelFile.writeText(contents)
+        }
+        val task = project.tasks.create<Scaffold>("scaffold") {
+            modelDir.set(modelFolder)
+        }
+
+        task.updatePackageManifest()
+        val updated = json.decodeFromStream<PackageManifest>(tempDir.resolve("packages.json").inputStream())
+        assertEquals(initialManifest, updated)
     }
 }
