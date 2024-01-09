@@ -29,7 +29,7 @@ val servicesProvider: Provider<List<AwsService>> = project.provider { discoverSe
 // Manually create the projections rather than using the extension to avoid unnecessary configuration evaluation.
 // Otherwise we would be reading the models from disk on every gradle invocation for unrelated projects/tasks
 fun awsServiceProjections(): Provider<List<SmithyProjection>> {
-    println("AWS service projection provider called")
+    logger.info("AWS service projection provider called")
     val p = servicesProvider.map {
         it.map { service ->
             SmithyProjection(
@@ -99,10 +99,12 @@ val bootstrap = BootstrapConfig(
  * membership tests
  */
 fun discoverServices(applyFilters: Boolean = true): List<AwsService> {
-    println("discover services called")
+    logger.info("discover services called")
     val modelsDir: String by project
     val bootstrapConfig = bootstrap.takeIf { applyFilters } ?: BootstrapConfig.ALL
-    return fileTree(project.file(modelsDir)).mapNotNull(fileToService(project, bootstrapConfig))
+    return fileTree(project.file(modelsDir)).mapNotNull(fileToService(project, bootstrapConfig)).also {
+        logger.lifecycle("discovered ${it.size} services")
+    }
 }
 
 /**
@@ -146,6 +148,7 @@ dependencies {
 }
 
 tasks.generateSmithyProjections {
+    inputs.property("bootstrapConfigHash", bootstrap.hashCode())
     doFirst {
         forwardProperty("aws.partitions_file")
         forwardProperty("aws.user_agent.add_metadata")
@@ -158,7 +161,7 @@ val stageSdks = tasks.register("stageSdks") {
     dependsOn(tasks.generateSmithyProjections)
     doLast {
         val discoveredServices = servicesProvider.get()
-        println("discoveredServices = ${discoveredServices.joinToString { it.sdkId }}")
+        logger.lifecycle("discoveredServices = ${discoveredServices.joinToString { it.sdkId }}")
         discoveredServices.forEach {
             val projectionOutputDir = smithyBuild.smithyKotlinProjectionPath(it.projectionName).get()
             logger.info("copying $projectionOutputDir to ${it.destinationDir}")
