@@ -15,10 +15,8 @@ import kotlinx.serialization.json.decodeFromStream
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.*
 import org.gradle.api.tasks.options.Option
 import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.model.Model
@@ -39,6 +37,14 @@ abstract class Scaffold : DefaultTask() {
     @get:Option(option = "model-dir", description = "the path to a directory of model files to scaffold")
     @get:InputDirectory
     public abstract val modelDir: DirectoryProperty
+
+    @get:Optional
+    @get:Option(
+        option = "discover",
+        description = "Flag to discover and process only new packages not currently in the manifest. Only applicable when used in conjunction with `model-dir`",
+    )
+    @get:Input
+    public abstract val discover: Property<Boolean>
 
     @OptIn(ExperimentalSerializationApi::class)
     @TaskAction
@@ -67,15 +73,17 @@ abstract class Scaffold : DefaultTask() {
             .result
             .get()
 
-        val newPackages = model
+        val discoveredPackages = model
             .shapes(ServiceShape::class.java)
             .toList()
             .mapNotNull { it.getTrait(ServiceTrait::class.java).orNull()?.sdkId }
             .map { PackageMetadata.from(it) }
 
-        newPackages.forEach { pkg ->
-            val existing = manifest.packages.find { it.sdkId == pkg.sdkId }
-            check(existing == null) { "found existing package in manifest for sdkId `${pkg.sdkId}`: $existing" }
+        val newPackages = validatedPackages(manifest, discoveredPackages)
+
+        if (newPackages.isEmpty()) {
+            logger.lifecycle("no new packages to scaffold")
+            return
         }
 
         logger.lifecycle("scaffolding ${newPackages.size} new service packages")
@@ -86,4 +94,16 @@ abstract class Scaffold : DefaultTask() {
         val contents = json.encodeToString(updatedManifest)
         manifestFile.writeText(contents)
     }
+
+    private fun validatedPackages(manifest: PackageManifest, discovered: List<PackageMetadata>): List<PackageMetadata> =
+        if (modelDir.isPresent && discover.orNull == true) {
+            val bySdkId = manifest.packages.associateBy(PackageMetadata::sdkId)
+            discovered.filter { it.sdkId !in bySdkId }
+        } else {
+            discovered.forEach { pkg ->
+                val existing = manifest.packages.find { it.sdkId == pkg.sdkId }
+                check(existing == null) { "found existing package in manifest for sdkId `${pkg.sdkId}`: $existing" }
+            }
+            discovered
+        }
 }

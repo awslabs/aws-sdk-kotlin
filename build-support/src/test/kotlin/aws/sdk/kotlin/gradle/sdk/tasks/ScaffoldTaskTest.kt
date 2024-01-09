@@ -124,4 +124,38 @@ class ScaffoldTaskTest {
         val updated = json.decodeFromStream<PackageManifest>(tempDir.resolve("packages.json").inputStream())
         assertEquals(initialManifest, updated)
     }
+
+    @Test
+    fun testDirectoryDiscover(@TempDir tempDir: File) {
+        val project = ProjectBuilder.builder().withProjectDir(tempDir).build()
+        val models = listOf(
+            "model1.smithy" to modelContents("Package 1", "Service1"),
+            "model2.smithy" to modelContents("Package 2", "Service2"),
+            "model3.smithy" to modelContents("Package 3", "Service3"),
+        )
+
+        val modelFolder = tempDir.resolve("models")
+        modelFolder.mkdirs()
+        models.forEach { (filename, contents) ->
+            val modelFile = modelFolder.resolve(filename)
+            modelFile.writeText(contents)
+        }
+
+        val currentManifestContents = json.encodeToString(initialManifest)
+        tempDir.resolve("packages.json").writeText(currentManifestContents)
+
+        val task = project.tasks.create<Scaffold>("scaffold") {
+            modelDir.set(modelFolder)
+            discover.set(true)
+        }
+
+        task.updatePackageManifest()
+        val updated = json.decodeFromStream<PackageManifest>(tempDir.resolve("packages.json").inputStream())
+        val expected = initialManifest.copy(
+            initialManifest.packages + listOf(
+                PackageMetadata("Package 3", "aws.sdk.kotlin.services.package3", "package3", "AwsSdkKotlinPackage3"),
+            ),
+        )
+        assertEquals(expected, updated)
+    }
 }
