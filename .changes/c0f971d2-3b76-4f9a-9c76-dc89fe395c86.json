@@ -1,0 +1,8 @@
+{
+    "id": "c0f971d2-3b76-4f9a-9c76-dc89fe395c86",
+    "type": "bugfix",
+    "description": "Correctly presign S3 requests when `forcePathStyle = true`",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1173"
+    ]
+}
