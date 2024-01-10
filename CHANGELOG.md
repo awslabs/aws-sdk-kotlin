@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.0.32] - 01/10/2024
+
+### Features
+* (**cloudwatchlogs**) Add support for account level subscription filter policies to PutAccountPolicy, DescribeAccountPolicies, and DeleteAccountPolicy APIs. Additionally, PutAccountPolicy has been modified with new optional "selectionCriteria" parameter for resource selection.
+* (**connectcampaigns**) Minor pattern updates for Campaign and Dial Request API fields.
+* (**location**) This release adds API support for custom layers for the maps service APIs: CreateMap, UpdateMap, DescribeMap.
+* (**qconnect**) QueryAssistant and GetRecommendations will be discontinued starting June 1, 2024. To receive generative responses after March 1, 2024 you will need to create a new Assistant in the Connect console and integrate the Amazon Q in Connect JavaScript library (amazon-q-connectjs) into your applications.
+* (**route53**) Route53 now supports geoproximity routing in AWS regions
+* (**wisdom**) QueryAssistant and GetRecommendations will be discontinued starting June 1, 2024. To receive generative responses after March 1, 2024 you will need to create a new Assistant in the Connect console and integrate the Amazon Q in Connect JavaScript library (amazon-q-connectjs) into your applications.
+
+### Fixes
+* [#1173](https://github.com/awslabs/aws-sdk-kotlin/issues/1173) Correctly presign S3 requests when `forcePathStyle = true`
+
+### Documentation
+* (**redshiftserverless**) Updates to ConfigParameter for RSS workgroup, removal of use_fips_ssl
+
 ## [1.0.31] - 01/08/2024
 
 ### Features
