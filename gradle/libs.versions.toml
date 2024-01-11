@@ -92,6 +92,7 @@ smithy-aws-cloudformation-traits = { module = "software.amazon.smithy:smithy-aws
 smithy-model = { module = "software.amazon.smithy:smithy-model", version.ref = "smithy-version" }
 smithy-protocol-test-traits = { module = "software.amazon.smithy:smithy-protocol-test-traits", version.ref = "smithy-version" }
 smithy-gradle-plugin = { module = "software.amazon.smithy:smithy-gradle-plugin", version.ref = "smithy-gradle-version" }
+smithy-smoke-test-traits = { module = "software.amazon.smithy:smithy-smoke-test-traits", version.ref = "smithy-version" }
 
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-version" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-version" }
