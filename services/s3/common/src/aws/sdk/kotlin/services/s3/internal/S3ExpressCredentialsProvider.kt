@@ -5,8 +5,6 @@
 package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.runtime.auth.S3ExpressAttributes
-import aws.sdk.kotlin.runtime.auth.credentials.internal.S3ExpressCredentialsCache
-import aws.sdk.kotlin.runtime.auth.credentials.internal.S3ExpressCredentialsCacheKey
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.model.CreateSessionRequest

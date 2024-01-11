@@ -65,7 +65,7 @@ class ClientConfigIntegration : KotlinIntegration {
         }
 
         val DisableExpressSessionAuth: ConfigProperty = ConfigProperty {
-            name = "disableExpressSessionAuth"
+            name = "disableS3ExpressSessionAuth"
             useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to disable S3 Express One Zone's bucket-level session authentication method.  

@@ -25,7 +25,14 @@ import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.StructureShape
 
-class ConfigureS3ExpressAuthSchemeIntegration : KotlinIntegration {
+/**
+ * An integration which sets up multiple code-generation aspects for S3 Express.
+ * 1. Configure auth scheme (auth scheme ID, auth option, identity provider for auth scheme)
+ * 2. Add S3Client and Bucket to execution context (required for the S3 Express credentials cache key)
+ * 3. Override all checksums to use CRC32 instead
+ * 4. Disable all checksums for s3:UploadPart
+ */
+class S3ExpressIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings) = model.expectShape<ServiceShape>(settings.service).isS3
 
     override val sectionWriters: List<SectionWriterBinding>

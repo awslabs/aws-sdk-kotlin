@@ -37,4 +37,4 @@ aws.sdk.kotlin.codegen.customization.route53.ChangeResourceRecordSetsUnmarshalli
 aws.sdk.kotlin.codegen.customization.ec2.EC2MakePrimitivesOptional
 aws.sdk.kotlin.codegen.customization.RemoveDefaults
 aws.sdk.kotlin.codegen.customization.s3.express.SigV4S3ExpressAuthSchemeIntegration
-aws.sdk.kotlin.codegen.customization.s3.express.ConfigureS3ExpressAuthSchemeIntegration
+aws.sdk.kotlin.codegen.customization.s3.express.S3ExpressIntegration
