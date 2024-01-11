@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.33] - 01/11/2024
+
+### Features
+* (**ec2**) This release adds support for adding an ElasticBlockStorage volume configurations in ECS RunTask/StartTask/CreateService/UpdateService APIs. The configuration allows for attaching EBS volumes to ECS Tasks.
+* (**ecs**) This release adds support for adding an ElasticBlockStorage volume configurations in ECS RunTask/StartTask/CreateService/UpdateService APIs. The configuration allows for attaching EBS volumes to ECS Tasks.
+* (**eventbridge**) Adding AppSync as an EventBridge Target
+* (**iot**) Add ConflictException to Update APIs of AWS IoT Software Package Catalog
+* (**iotfleetwise**) The following dataTypes have been removed: CUSTOMER_DECODED_INTERFACE in NetworkInterfaceType; CUSTOMER_DECODED_SIGNAL_INFO_IS_NULL in SignalDecoderFailureReason; CUSTOMER_DECODED_SIGNAL_NETWORK_INTERFACE_INFO_IS_NULL in NetworkInterfaceFailureReason; CUSTOMER_DECODED_SIGNAL in SignalDecoderType
+
+### Documentation
+* (**secretsmanager**) Doc only update for Secrets Manager
+* (**workspaces**) Added AWS Workspaces RebootWorkspaces API - Extended Reboot documentation update
+
 ## [1.0.32] - 01/10/2024
 
 ### Features
