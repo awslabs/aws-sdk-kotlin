@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
@@ -75,15 +74,26 @@ class ClientConfigIntegration : KotlinIntegration {
 
         val S3ExpressCredentialsProvider: ConfigProperty = ConfigProperty {
             name = "s3ExpressCredentialsProvider"
-            propertyType = ConfigPropertyType.RequiredWithDefault("S3ExpressCredentialsProvider(config.credentialsProvider)")
-            useSymbolWithNullableBuilder(buildSymbol {
+            symbol = buildSymbol {
                 name = "S3ExpressCredentialsProvider"
                 nullable = false
-                namespace = "aws.sdk.kotlin.services.s3"
-            })
+                namespace = "aws.sdk.kotlin.services.s3.internal"
+            }
             documentation = """
                 Credentials provider to be used for making requests to S3 Express.   
             """.trimIndent()
+
+            // FIXME Figure out why the default value is not being used properly.
+//            propertyType = ConfigPropertyType.RequiredWithDefault("S3ExpressCredentialsProvider(this.credentialsProvider)")
+            propertyType = ConfigPropertyType.Custom(
+                render = { _, writer ->
+                    writer.write("public val $name: S3ExpressCredentialsProvider = builder.$name ?: S3ExpressCredentialsProvider(this.credentialsProvider)")
+                },
+                renderBuilder = { prop, writer ->
+                    prop.documentation?.let(writer::dokka)
+                    writer.write("public var $name: S3ExpressCredentialsProvider? = null")
+                },
+            )
         }
     }
 

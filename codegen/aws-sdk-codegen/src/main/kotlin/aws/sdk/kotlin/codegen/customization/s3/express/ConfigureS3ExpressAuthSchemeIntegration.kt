@@ -7,24 +7,19 @@ package aws.sdk.kotlin.codegen.customization.s3.express
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.customization.s3.ClientConfigIntegration
 import aws.sdk.kotlin.codegen.customization.s3.isS3
-import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Auth.Identity.AuthSchemeId
-import software.amazon.smithy.kotlin.codegen.core.defaultName
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.rendering.auth.AuthSchemeProviderGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.auth.IdentityProviderConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
-import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -81,5 +76,4 @@ class ConfigureS3ExpressAuthSchemeIntegration : KotlinIntegration {
             writer.write("input.bucket?.let { op.context[#T.Bucket] = it }", attributesSymbol)
         }
     }
-
 }
