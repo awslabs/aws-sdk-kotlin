@@ -52,7 +52,14 @@ object AwsRuntimeTypes {
             val DefaultChainCredentialsProvider = symbol("DefaultChainCredentialsProvider")
             val DefaultChainBearerTokenProvider = symbol("DefaultChainBearerTokenProvider")
             val StaticCredentialsProvider = symbol("StaticCredentialsProvider")
+            val S3ExpressCredentialsProvider = symbol("S3ExpressCredentialsProvider")
             val manage = symbol("manage", "auth.credentials.internal", isExtension = true)
+        }
+
+        object Auth : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "auth") {
+            val SigV4S3ExpressAuthScheme = symbol("SigV4S3ExpressAuthScheme")
+            val sigV4S3Express = symbol("sigV4S3Express")
+            val S3ExpressAttributes = symbol("S3ExpressAttributes")
         }
     }
 

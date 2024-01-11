@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3
 
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
@@ -14,6 +15,7 @@ import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.transform.ModelTransformer
@@ -70,6 +72,19 @@ class ClientConfigIntegration : KotlinIntegration {
                 Flag to disable S3 Express One Zone's bucket-level session authentication method.  
             """.trimIndent()
         }
+
+        val S3ExpressCredentialsProvider: ConfigProperty = ConfigProperty {
+            name = "s3ExpressCredentialsProvider"
+            propertyType = ConfigPropertyType.RequiredWithDefault("S3ExpressCredentialsProvider(config.credentialsProvider)")
+            useSymbolWithNullableBuilder(buildSymbol {
+                name = "S3ExpressCredentialsProvider"
+                nullable = false
+                namespace = "aws.sdk.kotlin.services.s3"
+            })
+            documentation = """
+                Credentials provider to be used for making requests to S3 Express.   
+            """.trimIndent()
+        }
     }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
@@ -95,7 +110,8 @@ class ClientConfigIntegration : KotlinIntegration {
             ForcePathStyleProp,
             UseArnRegionProp,
             DisableMrapProp,
-            DisableExpressSessionAuth
+            DisableExpressSessionAuth,
+            S3ExpressCredentialsProvider,
         )
 
     override val sectionWriters: List<SectionWriterBinding>
