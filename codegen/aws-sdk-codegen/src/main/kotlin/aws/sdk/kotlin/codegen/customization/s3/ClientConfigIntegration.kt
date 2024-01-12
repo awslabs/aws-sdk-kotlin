@@ -6,7 +6,6 @@ package aws.sdk.kotlin.codegen.customization.s3
 
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
@@ -15,7 +14,6 @@ import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
-import software.amazon.smithy.kotlin.codegen.rendering.util.RuntimeConfigProperty
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.transform.ModelTransformer
@@ -64,14 +62,6 @@ class ClientConfigIntegration : KotlinIntegration {
                 Flag to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
             """.trimIndent()
         }
-
-        val AuthSchemes = RuntimeConfigProperty
-            .AuthSchemes
-            .toBuilder()
-            .apply {
-                symbol = KotlinTypes.Collections.list(RuntimeTypes.Auth.HttpAuth.AuthScheme, default = "listOf(${RuntimeTypes.Auth.HttpAuthAws.SigV4AsymmetricAuthScheme}(${RuntimeTypes.Auth.Signing.AwsSigningStandard.DefaultAwsSigner}))")
-            }
-            .build()
     }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
@@ -97,7 +87,6 @@ class ClientConfigIntegration : KotlinIntegration {
             ForcePathStyleProp,
             UseArnRegionProp,
             DisableMrapProp,
-            AuthSchemes,
         )
 
     override val sectionWriters: List<SectionWriterBinding>
