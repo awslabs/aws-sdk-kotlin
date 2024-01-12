@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.34] - 01/12/2024
+
+### Features
+* (**connect**) Supervisor Barge for Chat is now supported through the MonitorContact API.
+* (**connectparticipant**) Introduce new Supervisor participant role
+* (**mwaa**) This Amazon MWAA feature release includes new fields in CreateWebLoginToken response model. The new fields IamIdentity and AirflowIdentity will let you match identifications, as the Airflow identity length is currently hashed to 64 characters.
+* (**s3control**) S3 On Outposts team adds dualstack endpoints support for S3Control and S3Outposts API calls.
+* (**supplychain**) This release includes APIs CreateBillOfMaterialsImportJob and GetBillOfMaterialsImportJob.
+* (**transfer**) AWS Transfer Family now supports static IP addresses for SFTP & AS2 connectors and for async MDNs on AS2 servers.
+
+### Documentation
+* (**location**) Location SDK documentation update. Added missing fonts to the MapConfiguration data type. Updated note for the SubMunicipality property in the place data type.
+
 ## [1.0.33] - 01/11/2024
 
 ### Features
