@@ -21,8 +21,8 @@ class SigV4AsymmetricTraitCustomization : KotlinIntegration {
     override val order: Byte = -60
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
-        val sdkId = model.expectShape<ServiceShape>(settings.service).sdkId.lowercase()
-        return sdkId == "s3" || sdkId == "eventbridge" //|| sdkId == "cloudfrontkeyvaluestore"
+        val sdkId = model.expectShape<ServiceShape>(settings.service).sdkId.lowercase() // FIXME don't use sdkId
+        return sdkId == "s3" || sdkId == "eventbridge" || sdkId == "cloudfront keyvaluestore"
     }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
