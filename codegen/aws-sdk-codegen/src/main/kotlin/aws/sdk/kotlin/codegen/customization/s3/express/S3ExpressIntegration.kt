@@ -7,23 +7,28 @@ package aws.sdk.kotlin.codegen.customization.s3.express
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.customization.s3.ClientConfigIntegration
 import aws.sdk.kotlin.codegen.customization.s3.isS3
+import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
+import software.amazon.smithy.kotlin.codegen.model.getTrait
+import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.auth.AuthSchemeProviderGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.auth.IdentityProviderConfigGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.utils.dq
+import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.StructureShape
+import software.amazon.smithy.model.traits.HttpChecksumRequiredTrait
+import software.amazon.smithy.model.traits.HttpHeaderTrait
 
 /**
  * An integration which sets up multiple code-generation aspects for S3 Express.
@@ -57,7 +62,7 @@ class S3ExpressIntegration : KotlinIntegration {
     }
 
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
-        resolved + AddClientToExecutionContext + AddBucketToExecutionContext
+        resolved + AddClientToExecutionContext + AddBucketToExecutionContext + UseCrc32Checksum + UploadPartDisableChecksum
 
     private val AddClientToExecutionContext = object : ProtocolMiddleware {
         override val name: String = "AddClientToExecutionContext"
@@ -83,4 +88,56 @@ class S3ExpressIntegration : KotlinIntegration {
             writer.write("input.bucket?.let { op.context[#T.Bucket] = it }", attributesSymbol)
         }
     }
+
+    /**
+     * For any operations that may send a checksum, override a user-configured checksum to set CRC32.
+     */
+    private val UseCrc32Checksum = object : ProtocolMiddleware {
+        override val name: String = "UseCrc32Checksum"
+
+        override val order: Byte = -1 // Render before flexible checksums
+
+        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
+            !op.isS3UploadPart && (op.hasTrait<HttpChecksumRequiredTrait>() || op.hasTrait<HttpChecksumTrait>())
+
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()
+
+            val checksumAlgorithmMember = ctx.model.expectShape<StructureShape>(op.input.get())
+                .members()
+                .firstOrNull { it.memberName == httpChecksumTrait?.requestAlgorithmMember?.getOrNull() }
+
+            val checksumHeaderName = checksumAlgorithmMember?.getTrait<HttpHeaderTrait>()?.value
+
+            val checksumRequiredTrait = op.getTrait<HttpChecksumRequiredTrait>()
+
+            if (checksumAlgorithmMember != null) {
+                if (checksumRequiredTrait != null) { // checksum required, enable flexible checksums using CRC32
+                    writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq()}))", AwsRuntimeTypes.Http.Interceptors.S3ExpressCrc32ChecksumInterceptor)
+                } else { // checksum not required, override with CRC32 only if user enabled flexible checksums
+                    writer.withBlock("if (input.${checksumAlgorithmMember.defaultName()} != null) {", "}") {
+                        writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq()}))", AwsRuntimeTypes.Http.Interceptors.S3ExpressCrc32ChecksumInterceptor)
+                    }
+                }
+            } else {
+                if (checksumRequiredTrait != null) {
+                    error("Checksum is required but operation does not support flexible checksums. Can't proceed because S3 Express requires sending CRC32 checksums, not MD5.")
+                }
+            }
+        }
+    }
+
+    private val UploadPartDisableChecksum = object : ProtocolMiddleware {
+        override val name: String = "UploadPartDisableChecksum"
+
+        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean = op.isS3UploadPart
+
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            val interceptorSymbol = AwsRuntimeTypes.Http.Interceptors.S3ExpressDisableChecksumInterceptor
+            writer.addImport(interceptorSymbol)
+            writer.write("op.interceptors.add(#T())", interceptorSymbol)
+        }
+    }
+
+    private val OperationShape.isS3UploadPart: Boolean get() = id.name == "UploadPart"
 }

@@ -1,0 +1,38 @@
+package aws.sdk.kotlin.runtime.http.interceptors
+
+import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
+import aws.smithy.kotlin.runtime.collections.AttributeKey
+import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
+import aws.smithy.kotlin.runtime.http.operation.HttpOperationContext
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.http.request.toBuilder
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
+import kotlin.coroutines.coroutineContext
+
+internal val S3_EXPRESS_ENDPOINT_PROPERTY = "backend"
+private val CRC32_ALGORITHM_NAME = "CRC32"
+
+public class S3ExpressCrc32ChecksumInterceptor(
+    public val checksumAlgorithmHeaderName: String? = null
+): HttpInterceptor {
+    override suspend fun modifyBeforeSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
+        if (!context.executionContext.contains(AttributeKey<Any>(S3_EXPRESS_ENDPOINT_PROPERTY))) {
+            return context.protocolRequest
+        }
+
+        val logger = coroutineContext.logger<S3ExpressCrc32ChecksumInterceptor>()
+        val req = context.protocolRequest.toBuilder()
+
+        // Update the execution context so flexible checksums uses CRC32
+        logger.info { "Setting checksum algorithm to $CRC32_ALGORITHM_NAME for S3 Express" }
+        context.executionContext[HttpOperationContext.ChecksumAlgorithm] = CRC32_ALGORITHM_NAME
+
+        // Most checksum headers are handled by the flexible checksums feature. But,services may model an HTTP header binding for the
+        // checksum algorithm, which also needs to be overwritten and set to CRC32.
+        checksumAlgorithmHeaderName?.let {
+            req.headers[it] = CRC32_ALGORITHM_NAME
+        }
+
+        return req.build()
+    }
+}
