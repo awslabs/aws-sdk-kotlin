@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.runtime.http.interceptors
 
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
@@ -13,8 +17,8 @@ internal val S3_EXPRESS_ENDPOINT_PROPERTY = "backend"
 private val CRC32_ALGORITHM_NAME = "CRC32"
 
 public class S3ExpressCrc32ChecksumInterceptor(
-    public val checksumAlgorithmHeaderName: String? = null
-): HttpInterceptor {
+    public val checksumAlgorithmHeaderName: String? = null,
+) : HttpInterceptor {
     override suspend fun modifyBeforeSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
         if (!context.executionContext.contains(AttributeKey<Any>(S3_EXPRESS_ENDPOINT_PROPERTY))) {
             return context.protocolRequest
