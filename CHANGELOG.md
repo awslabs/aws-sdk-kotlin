@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.35] - 01/14/2024
+
+### Features
+* (**sagemaker**) This release will have ValidationException thrown if certain invalid app types are provided. The release will also throw ValidationException if more than 10 account ids are provided in VpcOnlyTrustedAccounts.
+
 ## [1.0.34] - 01/12/2024
 
 ### Features
