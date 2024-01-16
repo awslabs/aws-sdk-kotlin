@@ -1,0 +1,8 @@
+{
+    "id": "57d333b1-559b-4635-9a04-d78565be34b9",
+    "type": "bugfix",
+    "description": "Bump **smithy-kotlin** version to correct S3 presigning issues with custom endpoint ports",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1177"
+    ]
+}
