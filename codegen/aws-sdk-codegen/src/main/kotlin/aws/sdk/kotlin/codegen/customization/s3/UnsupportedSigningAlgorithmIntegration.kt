@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
@@ -11,8 +15,9 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
+// FIXME: Remove this once sigV4a is supported by default AWS signer
 /**
- * Registers an interceptor for S3.
+ * Registers an interceptor for S3 to deal with the default signer not supporting sigV4a
  * See: [aws.sdk.kotlin.runtime.http.interceptors.UnsupportedSigningAlgorithmInterceptor]
  */
 class UnsupportedSigningAlgorithmIntegration : KotlinIntegration {
