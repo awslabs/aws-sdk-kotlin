@@ -2,13 +2,15 @@
 kotlin-version = "1.9.21"
 dokka-version = "1.9.10"
 
+aws-kotlin-repo-tools-version = "0.3.2"
+
 # libs
 coroutines-version = "1.7.3"
 atomicfu-version = "0.23.1"
 
 # smithy-kotlin codegen and runtime are versioned separately
-smithy-kotlin-runtime-version = "1.0.7"
-smithy-kotlin-codegen-version = "0.30.8"
+smithy-kotlin-runtime-version = "1.0.9"
+smithy-kotlin-codegen-version = "0.30.10"
 
 # codegen
 smithy-version = "1.42.0"
@@ -90,6 +92,7 @@ smithy-aws-cloudformation-traits = { module = "software.amazon.smithy:smithy-aws
 smithy-model = { module = "software.amazon.smithy:smithy-model", version.ref = "smithy-version" }
 smithy-protocol-test-traits = { module = "software.amazon.smithy:smithy-protocol-test-traits", version.ref = "smithy-version" }
 smithy-gradle-plugin = { module = "software.amazon.smithy:smithy-gradle-plugin", version.ref = "smithy-gradle-version" }
+smithy-smoke-test-traits = { module = "software.amazon.smithy:smithy-smoke-test-traits", version.ref = "smithy-version" }
 
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-version" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-version" }
@@ -129,3 +132,5 @@ kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kot
 kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version"}
 smithy-gradle = { id = "software.amazon.smithy", version.ref = "smithy-gradle-version" }
+aws-kotlin-repo-tools-kmp = { id = "aws.sdk.kotlin.kmp", version.ref = "aws-kotlin-repo-tools-version" }
+aws-kotlin-repo-tools-smithybuild = { id = "aws.sdk.kotlin.gradle.smithybuild", version.ref = "aws-kotlin-repo-tools-version" }

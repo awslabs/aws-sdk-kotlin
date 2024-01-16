@@ -8,6 +8,13 @@ pluginManagement {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
+        maven {
+            name = "kotlinRepoTools"
+            url = java.net.URI("https://d2gys1nrxnjnyg.cloudfront.net/releases")
+            content {
+                includeGroupByRegex("""aws\.sdk\.kotlin.*""")
+            }
+        }
     }
 }
 
@@ -15,13 +22,6 @@ dependencyResolutionManagement {
     repositories {
         mavenLocal()
         mavenCentral()
-    }
-}
-
-sourceControl {
-    gitRepository(java.net.URI("https://github.com/awslabs/aws-kotlin-repo-tools.git")) {
-        producesModule("aws.sdk.kotlin:build-plugins")
-        producesModule("aws.sdk.kotlin:ktlint-rules")
     }
 }
 

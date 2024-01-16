@@ -1,5 +1,87 @@
 # Changelog
 
+## [1.0.35] - 01/14/2024
+
+### Features
+* (**sagemaker**) This release will have ValidationException thrown if certain invalid app types are provided. The release will also throw ValidationException if more than 10 account ids are provided in VpcOnlyTrustedAccounts.
+
+## [1.0.34] - 01/12/2024
+
+### Features
+* (**connect**) Supervisor Barge for Chat is now supported through the MonitorContact API.
+* (**connectparticipant**) Introduce new Supervisor participant role
+* (**mwaa**) This Amazon MWAA feature release includes new fields in CreateWebLoginToken response model. The new fields IamIdentity and AirflowIdentity will let you match identifications, as the Airflow identity length is currently hashed to 64 characters.
+* (**s3control**) S3 On Outposts team adds dualstack endpoints support for S3Control and S3Outposts API calls.
+* (**supplychain**) This release includes APIs CreateBillOfMaterialsImportJob and GetBillOfMaterialsImportJob.
+* (**transfer**) AWS Transfer Family now supports static IP addresses for SFTP & AS2 connectors and for async MDNs on AS2 servers.
+
+### Documentation
+* (**location**) Location SDK documentation update. Added missing fonts to the MapConfiguration data type. Updated note for the SubMunicipality property in the place data type.
+
+## [1.0.33] - 01/11/2024
+
+### Features
+* (**ec2**) This release adds support for adding an ElasticBlockStorage volume configurations in ECS RunTask/StartTask/CreateService/UpdateService APIs. The configuration allows for attaching EBS volumes to ECS Tasks.
+* (**ecs**) This release adds support for adding an ElasticBlockStorage volume configurations in ECS RunTask/StartTask/CreateService/UpdateService APIs. The configuration allows for attaching EBS volumes to ECS Tasks.
+* (**eventbridge**) Adding AppSync as an EventBridge Target
+* (**iot**) Add ConflictException to Update APIs of AWS IoT Software Package Catalog
+* (**iotfleetwise**) The following dataTypes have been removed: CUSTOMER_DECODED_INTERFACE in NetworkInterfaceType; CUSTOMER_DECODED_SIGNAL_INFO_IS_NULL in SignalDecoderFailureReason; CUSTOMER_DECODED_SIGNAL_NETWORK_INTERFACE_INFO_IS_NULL in NetworkInterfaceFailureReason; CUSTOMER_DECODED_SIGNAL in SignalDecoderType
+
+### Documentation
+* (**secretsmanager**) Doc only update for Secrets Manager
+* (**workspaces**) Added AWS Workspaces RebootWorkspaces API - Extended Reboot documentation update
+
+## [1.0.32] - 01/10/2024
+
+### Features
+* (**cloudwatchlogs**) Add support for account level subscription filter policies to PutAccountPolicy, DescribeAccountPolicies, and DeleteAccountPolicy APIs. Additionally, PutAccountPolicy has been modified with new optional "selectionCriteria" parameter for resource selection.
+* (**connectcampaigns**) Minor pattern updates for Campaign and Dial Request API fields.
+* (**location**) This release adds API support for custom layers for the maps service APIs: CreateMap, UpdateMap, DescribeMap.
+* (**qconnect**) QueryAssistant and GetRecommendations will be discontinued starting June 1, 2024. To receive generative responses after March 1, 2024 you will need to create a new Assistant in the Connect console and integrate the Amazon Q in Connect JavaScript library (amazon-q-connectjs) into your applications.
+* (**route53**) Route53 now supports geoproximity routing in AWS regions
+* (**wisdom**) QueryAssistant and GetRecommendations will be discontinued starting June 1, 2024. To receive generative responses after March 1, 2024 you will need to create a new Assistant in the Connect console and integrate the Amazon Q in Connect JavaScript library (amazon-q-connectjs) into your applications.
+
+### Fixes
+* [#1173](https://github.com/awslabs/aws-sdk-kotlin/issues/1173) Correctly presign S3 requests when `forcePathStyle = true`
+
+### Documentation
+* (**redshiftserverless**) Updates to ConfigParameter for RSS workgroup, removal of use_fips_ssl
+
+## [1.0.31] - 01/08/2024
+
+### Features
+* (**codebuild**) Aws CodeBuild now supports new compute type BUILD_GENERAL1_XLARGE
+* (**ec2**) Amazon EC2 R7iz bare metal instances are powered by custom 4th generation Intel Xeon Scalable processors.
+* (**route53resolver**) This release adds support for query type configuration on firewall rules that enables customers for granular action (ALLOW, ALERT, BLOCK) by DNS query type.
+
+## [1.0.30] - 01/05/2024
+
+### Features
+* (**connect**) Minor trait updates for User APIs
+* (**qconnect**) Marked SearchQuickResponses API as readonly.
+
+### Documentation
+* (**kms**) Documentation updates for AWS Key Management Service (KMS).
+* (**redshiftserverless**) use_fips_ssl and require_ssl parameter support for Workgroup, UpdateWorkgroup, and CreateWorkgroup
+
+## [1.0.29] - 01/04/2024
+
+### Features
+* (**configservice**) Updated ResourceType enum with new resource types onboarded by AWS Config in November and December 2023.
+* (**docdb**) Adding PerformanceInsightsEnabled and PerformanceInsightsKMSKeyId fields to DescribeDBInstances Response.
+* (**ecs**) This release adds support for managed instance draining which facilitates graceful termination of Amazon ECS instances.
+* (**elasticsearchservice**) This release adds support for new or existing Amazon OpenSearch domains to enable TLS 1.3 or TLS 1.2 with perfect forward secrecy cipher suites for domain endpoints.
+* (**lightsail**) This release adds support to set up an HTTPS endpoint on an instance.
+* (**opensearch**) This release adds support for new or existing Amazon OpenSearch domains to enable TLS 1.3 or TLS 1.2 with perfect forward secrecy cipher suites for domain endpoints.
+* (**sagemaker**) Adding support for provisioned throughput mode for SageMaker Feature Groups
+* (**servicecatalog**) Added Idempotency token support to Service Catalog  AssociateServiceActionWithProvisioningArtifact, DisassociateServiceActionFromProvisioningArtifact, DeleteServiceAction API
+
+## [1.0.28] - 01/03/2024
+
+### Features
+* (**connect**) Amazon Connect, Contact Lens Evaluation API increase evaluation notes max length to 3072.
+* (**mediaconvert**) This release includes video engine updates including HEVC improvements, support for ingesting VP9 encoded video in MP4 containers, and support for user-specified 3D LUTs.
+
 ## [1.0.27] - 12/29/2023
 
 ### Features
