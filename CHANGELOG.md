@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.36] - 01/16/2024
+
+### Features
+* (**iot**) Revert release of LogTargetTypes
+* (**iotfleetwise**) Updated APIs: SignalNodeType query parameter has been added to ListSignalCatalogNodesRequest and ListVehiclesResponse has been extended with attributes field.
+* (**macie2**) This release adds support for analyzing Amazon S3 objects that are encrypted using dual-layer server-side encryption with AWS KMS keys (DSSE-KMS). It also adds support for reporting DSSE-KMS details in statistics and metadata about encryption settings for S3 buckets and objects.
+* (**paymentcryptography**) Provide an additional option for key exchange using RSA wrap/unwrap in addition to tr-34/tr-31 in ImportKey and ExportKey operations. Added new key usage (type) TR31_M1_ISO_9797_1_MAC_KEY, for use with Generate/VerifyMac dataplane operations  with ISO9797 Algorithm 1 MAC calculations.
+* (**rekognition**) This release adds ContentType and TaxonomyLevel attributes to DetectModerationLabels and GetMediaAnalysisJob API responses.
+
+### Fixes
+* [#1177](https://github.com/awslabs/aws-sdk-kotlin/issues/1177) Bump **smithy-kotlin** version to correct S3 presigning issues with custom endpoint ports
+
+### Documentation
+* (**personalize**) Documentation updates for Amazon Personalize.
+* (**personalizeruntime**) Documentation updates for Amazon Personalize
+* (**securityhub**) Documentation updates for AWS Security Hub
+
 ## [1.0.35] - 01/14/2024
 
 ### Features
