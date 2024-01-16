@@ -317,6 +317,7 @@ dependencies {
     codegen(project(":codegen:aws-sdk-codegen"))
     codegen(libs.smithy.cli)
     codegen(libs.smithy.model)
+    codegen(libs.smithy.smoke.test.traits)
 }
 
 tasks.generateSmithyProjections {
