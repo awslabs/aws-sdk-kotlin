@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.codegen.customization
 
 import software.amazon.smithy.aws.traits.auth.SigV4ATrait
@@ -46,8 +50,8 @@ class SigV4AsymmetricTraitCustomizationTest {
                 KotlinSettings(
                     ShapeId.from("smithy.example#Example"),
                     KotlinSettings.PackageSettings("example", "1.0.0"),
-                    "example"
-                )
+                    "example",
+                ),
             )
 
         assertTrue(customizedModel.appliedTraits.contains(SigV4ATrait.ID))

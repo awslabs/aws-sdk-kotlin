@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.runtime.auth.credentials.ProcessCredentialsProvider
@@ -19,19 +23,18 @@ class MultRegionAccessPointTest {
             credentialsProvider = ProcessCredentialsProvider("isengardcli credentials --awscli aoperez@amazon.com --role Admin")
         }
 
-
         val exception = assertThrows<UnsupportedSigningAlgorithm> {
             client.putObject(
                 PutObjectRequest {
                     bucket = "..."
                     key = "thisIsATestForMrap"
-                }
+                },
             )
         }
 
         assertEquals(
             "SIGV4_ASYMMETRIC support is not yet implemented for the default signer. Please follow the AWS SDK for Kotlin developer guide to set it up with the CRT signer. **LINK TO GUIDE**",
-            exception.message
+            exception.message,
         )
     }
 

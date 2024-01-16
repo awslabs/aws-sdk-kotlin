@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.sdkId
@@ -25,22 +29,22 @@ class SigV4AsymmetricTraitCustomization : KotlinIntegration {
         return sdkId == "s3" || sdkId == "eventbridge" || sdkId == "cloudfront keyvaluestore"
     }
 
-    override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
-        return ModelTransformer.create().mapShapes(model) { shape ->
+    override fun preprocessModel(model: Model, settings: KotlinSettings): Model = ModelTransformer.create()
+        .mapShapes(model) { shape ->
             if (shape.isServiceShape) {
                 val authSchemes: MutableSet<ShapeId> =
                     (shape as ServiceShape).getTrait<AuthTrait>()?.let {
-                    val modeledAuthSchemes = it.valueSet
-                    modeledAuthSchemes.add( SigV4ATrait.ID)
-                    modeledAuthSchemes.add(SigV4Trait.ID)
-                    modeledAuthSchemes
-                } ?: mutableSetOf(SigV4ATrait.ID, SigV4Trait.ID)
+                        val modeledAuthSchemes = it.valueSet
+                        modeledAuthSchemes.add(SigV4ATrait.ID)
+                        modeledAuthSchemes.add(SigV4Trait.ID)
+                        modeledAuthSchemes
+                    } ?: mutableSetOf(SigV4ATrait.ID, SigV4Trait.ID)
 
                 // SigV4A trait name is based on these rules: https://smithy.io/2.0/aws/aws-auth.html?highlight=sigv4#aws-auth-sigv4a-trait
                 val sigV4ATraitNameProperty =
                     shape.getTrait<ServiceTrait>()?.let { it.arnNamespace }
-                    ?: shape.getTrait<SigV4Trait>()?.let { it.name }
-                    ?: throw Exception("Service (${shape.id}) is missing ARN namespace. Please report to AWS.")
+                        ?: shape.getTrait<SigV4Trait>()?.let { it.name }
+                        ?: throw Exception("Service (${shape.id}) is missing ARN namespace. Please report to AWS.")
 
                 shape
                     .toBuilder()
@@ -48,15 +52,14 @@ class SigV4AsymmetricTraitCustomization : KotlinIntegration {
                         SigV4ATrait
                             .builder()
                             .name(sigV4ATraitNameProperty)
-                            .build()
+                            .build(),
                     )
                     .addTrait(
-                        AuthTrait(authSchemes)
+                        AuthTrait(authSchemes),
                     )
                     .build()
             } else {
                 shape
             }
         }
-    }
 }
