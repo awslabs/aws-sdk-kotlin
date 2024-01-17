@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.37] - 01/17/2024
+
+### Features
+* (**keyspaces**) This release adds support for Multi-Region Replication with provisioned tables, and Keyspaces auto scaling APIs
+
+### Documentation
+* (**dynamodb**) Updating note for enabling streams for UpdateTable.
+
 ## [1.0.36] - 01/16/2024
 
 ### Features
