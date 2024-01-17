@@ -5,7 +5,8 @@
 package aws.sdk.kotlin.runtime.http.interceptors
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
-import aws.smithy.kotlin.runtime.auth.awssigning.UnsupportedSigningAlgorithm
+import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAlgorithm
+import aws.smithy.kotlin.runtime.auth.awssigning.UnsupportedSigningAlgorithmException
 import aws.smithy.kotlin.runtime.client.ResponseInterceptorContext
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
@@ -20,10 +21,9 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
     override suspend fun modifyBeforeCompletion(context: ResponseInterceptorContext<Any, Any, HttpRequest?, HttpResponse?>): Result<Any> {
         context.response.exceptionOrNull()?.let {
-            if (it is UnsupportedSigningAlgorithm && it.isSigV4a) {
-                throw UnsupportedSigningAlgorithm(
-                    it.message!!, // TODO: Add a message and link pointing to AWS SDK for Kotlin developer guide
-                    true,
+            if (it is UnsupportedSigningAlgorithmException && it.signingAlgorithm == AwsSigningAlgorithm.SIGV4_ASYMMETRIC) {
+                return Result.failure(
+                    it, // TODO: Add a message and link pointing to AWS SDK for Kotlin developer guide
                 )
             }
         }
