@@ -23,7 +23,7 @@ public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
         context.response.exceptionOrNull()?.let {
             if (it is UnsupportedSigningAlgorithmException && it.signingAlgorithm == AwsSigningAlgorithm.SIGV4_ASYMMETRIC) {
                 return Result.failure(
-                    it, // TODO: Add a message and link pointing to AWS SDK for Kotlin developer guide
+                    it, // TODO: Add a message and link pointing to AWS SDK for Kotlin developer guide.
                 )
             }
         }
