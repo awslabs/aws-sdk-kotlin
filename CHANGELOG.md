@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.38] - 01/18/2024
+
+### Features
+* (**b2bi**) Increasing TestMapping inputFileContent file size limit to 5MB and adding file size limit 250KB for TestParsing input file. This release also includes exposing InternalServerException for Tag APIs.
+* (**cloudtrail**) This release adds a new API ListInsightsMetricData to retrieve metric data from CloudTrail Insights.
+* (**connect**) GetMetricDataV2 now supports 3 groupings
+* (**drs**) Removed invalid and unnecessary default values.
+* (**firehose**) Allow support for Snowflake as a Kinesis Data Firehose delivery destination.
+* (**sagemakerfeaturestoreruntime**) Increase BatchGetRecord limits from 10 items to 100 items
+
 ## [1.0.37] - 01/17/2024
 
 ### Features
