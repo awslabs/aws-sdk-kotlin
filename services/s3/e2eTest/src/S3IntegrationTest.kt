@@ -132,7 +132,6 @@ class S3BucketOpsIntegrationTest {
         assertEquals(contents, roundTrippedContents)
     }
 
-
     @Test
     fun testGetEmptyObject(): Unit = runBlocking {
         // See https://github.com/awslabs/aws-sdk-kotlin/issues/1014
