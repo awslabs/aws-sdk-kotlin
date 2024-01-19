@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.smithy.kotlin.runtime.InternalApi
 
 /**
- * Wrapper for java's InetAddress
+ * Wrapper for native implementations of IP addresses / DNS host resolving
  */
 @InternalApi
 public actual class Ip<InternalRepresentation> private actual constructor(private val address: InternalRepresentation) {
