@@ -135,7 +135,22 @@ class EcsCredentialsProviderTest {
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<ProviderConfigurationException> {
             provider.resolve()
-        }.message.shouldContain("The container credentials full URI (http://amazonaws.com/full) is specified via hostname which is not currently supported.")
+        }.message.shouldContain("The container credentials full URI (http://amazonaws.com/full) is specified via a hostname whose IP address(es) do not resolve to the loopback device.")
+    }
+
+    @Test
+    fun testNonexistentFullUri() = runTest {
+        val uri = "http://amazonaws.net/full"
+        val engine = TestConnection()
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<ProviderConfigurationException> {
+            provider.resolve()
+        }.message.shouldContain("The container credentials full URI (http://amazonaws.net/full) is specified via a hostname whose IP address(es) could not be resolved.")
     }
 
     @Test
