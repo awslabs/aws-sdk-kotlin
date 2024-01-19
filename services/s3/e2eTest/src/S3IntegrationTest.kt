@@ -26,6 +26,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import java.io.File
+import java.nio.file.Paths
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -107,6 +108,30 @@ class S3BucketOpsIntegrationTest {
         val contents = tempFile.readText()
         assertEquals(contents, roundTrippedContents)
     }
+
+    @Test
+    fun testPutObjectFromPathAsByteStream(): Unit = runBlocking {
+        val tempFile = RandomTempFile(1024)
+        val keyName = "put-obj-from-path-as-byte-stream.txt"
+
+        withTimeout(5.seconds) {
+            client.putObject {
+                bucket = testBucket
+                key = keyName
+                body = Paths.get(tempFile.path).asByteStream()
+            }
+        }
+
+        val req = GetObjectRequest {
+            bucket = testBucket
+            key = keyName
+        }
+        val roundTrippedContents = client.getObject(req) { it.body?.decodeToString() }
+
+        val contents = tempFile.readText()
+        assertEquals(contents, roundTrippedContents)
+    }
+
 
     @Test
     fun testGetEmptyObject(): Unit = runBlocking {
