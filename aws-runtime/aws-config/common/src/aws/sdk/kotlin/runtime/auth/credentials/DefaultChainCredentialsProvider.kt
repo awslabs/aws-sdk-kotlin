@@ -88,7 +88,7 @@ public class DefaultChainCredentialsProvider constructor(
 private class StsWebIdentityProvider(
     val platformProvider: PlatformProvider = PlatformProvider.System,
     val httpClient: HttpClientEngine? = null,
-    val region: String? = null
+    val region: String? = null,
 ) : CloseableCredentialsProvider {
     override suspend fun resolve(attributes: Attributes): Credentials {
         val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClient = httpClient, region = region)
