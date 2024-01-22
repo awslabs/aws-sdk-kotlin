@@ -1,0 +1,8 @@
+{
+    "id": "aef506d4-5c0b-4fa5-ac02-77ff09130875",
+    "type": "bugfix",
+    "description": "fix missing header (x-amz-content-sha256) in s3 control sigV4 operations",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1187"
+    ]
+}
