@@ -8,6 +8,7 @@ import org.gradle.api.Project
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.io.File
+import kotlin.streams.toList
 
 /**
  * Represents information needed to generate a smithy projection JSON stanza
