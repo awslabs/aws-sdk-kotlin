@@ -9,7 +9,7 @@ import software.amazon.smithy.aws.traits.auth.SigV4ATrait
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.model.expectTrait
+import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.traits.AuthTrait
@@ -33,19 +33,22 @@ class SigV4AsymmetricTraitCustomization : KotlinIntegration {
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model =
         ModelTransformer.create().mapShapes(model) { shape ->
             when (shape.isServiceShape) {
-                true ->
-                    (shape as ServiceShape)
-                        .toBuilder()
-                        .addTraits(
-                            mutableSetOf(
-                                SigV4ATrait
-                                    .builder()
-                                    .name(shape.expectTrait<ServiceTrait>().arnNamespace)
-                                    .build(),
-                                AuthTrait(mutableSetOf(SigV4ATrait.ID, SigV4Trait.ID)),
-                            ),
-                        )
-                        .build()
+                true -> {
+                    val builder = (shape as ServiceShape).toBuilder()
+                    val name = shape.getTrait<SigV4Trait>()?.name ?: shape.getTrait<ServiceTrait>()?.arnNamespace
+                    builder.addTrait(SigV4ATrait.builder().name(name).build())
+
+                    val authTrait = shape.getTrait<AuthTrait>()?.let {
+                        if (it.valueSet.contains(SigV4ATrait.ID)) {
+                            it
+                        } else {
+                            AuthTrait(it.valueSet + mutableSetOf(SigV4ATrait.ID))
+                        }
+                    } ?: AuthTrait(mutableSetOf(SigV4Trait.ID, SigV4ATrait.ID))
+                    builder.addTrait(authTrait)
+
+                    builder.build()
+                }
                 false -> shape
             }
         }
