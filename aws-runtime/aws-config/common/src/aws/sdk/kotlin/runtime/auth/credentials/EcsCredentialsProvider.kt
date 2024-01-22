@@ -61,6 +61,7 @@ private const val PROVIDER_NAME = "EcsContainer"
 public class EcsCredentialsProvider(
     public val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
+    private val hostResolver: HostResolver = HostResolver.Default,
 ) : CloseableCredentialsProvider {
 
     private val manageEngine = httpClient == null
@@ -162,7 +163,7 @@ public class EcsCredentialsProvider(
 
             is Host.Domain -> {
                 val hostAddresses = try {
-                    HostResolver.Default.resolve(url.host.toString())
+                    hostResolver.resolve(url.host.toString())
                 } catch (exception: Throwable) {
                     throw ProviderConfigurationException(
                         "The container credentials full URI ($uri) is specified via a hostname whose IP address(es) could not be resolved. ${exception.message}",
