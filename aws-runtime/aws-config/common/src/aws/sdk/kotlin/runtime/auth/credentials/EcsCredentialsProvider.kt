@@ -8,7 +8,6 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.ErrorMetadata
-import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
@@ -24,10 +23,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
-import aws.smithy.kotlin.runtime.net.Host
-import aws.smithy.kotlin.runtime.net.IpV4Addr
-import aws.smithy.kotlin.runtime.net.IpV6Addr
-import aws.smithy.kotlin.runtime.net.Scheme
+import aws.smithy.kotlin.runtime.net.*
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
@@ -144,7 +140,7 @@ public class EcsCredentialsProvider(
      *
      * @return the validated URL
      */
-    private fun validateFullUri(uri: String): Url {
+    private suspend fun validateFullUri(uri: String): Url {
         val url = try {
             Url.parse(uri)
         } catch (ex: Exception) {
@@ -165,8 +161,8 @@ public class EcsCredentialsProvider(
             }
 
             is Host.Domain -> {
-                val ipAddresses = try {
-                    Ip.getAllFromHost(url.host.toString())
+                val hostAddresses = try {
+                    HostResolver.Default.resolve(url.host.toString())
                 } catch (exception: Throwable) {
                     throw ProviderConfigurationException(
                         "The container credentials full URI ($uri) is specified via a hostname whose IP address(es) could not be resolved. ${exception.message}",
@@ -174,7 +170,7 @@ public class EcsCredentialsProvider(
                     )
                 }
 
-                if (ipAddresses.all { it.isLoopbackAddress() }) {
+                if (hostAddresses.isNotEmpty() && hostAddresses.all { it.address.isLoopBack }) {
                     return url
                 } else {
                     throw ProviderConfigurationException(
@@ -274,14 +270,3 @@ private val eksV4Addr = IpV4Addr(169u, 254u, 170u, 23u)
 private val eksV6Addr = IpV6Addr(0xfd00u, 0xec2u, 0u, 0u, 0u, 0u, 0u, 0x23u)
 
 private val allowedAddrs = setOf(IpV4Addr.LOCALHOST, IpV6Addr.LOCALHOST, ecsV4Addr, eksV4Addr, eksV6Addr)
-
-/**
- * Wrapper for KMP implementations of IP addresses / DNS host resolving
- */
-@InternalApi
-public expect class Ip<InternalRepresentation> private constructor(address: InternalRepresentation) {
-    public companion object {
-        public fun getAllFromHost(host: String): List<Ip<Any>>
-    }
-    public fun isLoopbackAddress(): Boolean
-}
