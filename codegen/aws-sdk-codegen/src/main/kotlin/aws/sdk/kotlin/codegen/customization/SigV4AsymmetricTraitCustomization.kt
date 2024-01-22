@@ -24,11 +24,11 @@ class SigV4AsymmetricTraitCustomization : KotlinIntegration {
     // Needs to happen before the `SigV4AsymmetricAuthSchemeIntegration` & `SigV4AuthSchemeIntegration` (-50 & -50)
     override val order: Byte = -60
 
+    // services which support SigV4A but don't model it
+    private val unmodeledSigV4aServices = listOf("s3", "eventbridge", "cloudfront keyvaluestore")
+
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
-        when (settings.sdkId.lowercase()) {
-            "s3", "eventbridge", "cloudfront keyvaluestore" -> true
-            else -> false
-        }
+        unmodeledSigV4aServices.contains(settings.sdkId.lowercase()) && !model.isTraitApplied(SigV4ATrait::class.java)
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model =
         ModelTransformer.create().mapShapes(model) { shape ->
