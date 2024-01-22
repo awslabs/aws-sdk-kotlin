@@ -19,6 +19,12 @@ class MembershipTest {
     }
 
     @Test
+    fun testExcludePrecedence() {
+        val unit = Membership(setOf("m1"), setOf("m1"))
+        assertFalse(unit.isMember("m1"))
+    }
+
+    @Test
     fun testParse() {
         val expected = Membership(
             setOf("i1", "i2"),

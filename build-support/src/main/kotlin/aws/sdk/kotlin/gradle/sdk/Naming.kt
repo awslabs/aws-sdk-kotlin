@@ -28,7 +28,7 @@ fun String.kotlinNamespace(): String = split(".")
     .joinToString(separator = ".") { segment -> segment.filter { it.isLetterOrDigit() } }
 
 /**
- * Convert an sdkID to the module/artifact name to use
+ * Convert an sdkId to the module/artifact name to use
  */
 internal fun sdkIdToArtifactName(sdkId: String): String = sdkId.replace(" ", "").replace("-", "").lowercase()
 

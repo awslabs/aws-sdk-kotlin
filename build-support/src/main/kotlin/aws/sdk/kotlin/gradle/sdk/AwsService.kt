@@ -85,7 +85,7 @@ fun fileToService(
         .result
         .get()
     val services: List<ServiceShape> = model.shapes(ServiceShape::class.java).sorted().toList()
-    val service = services.singleOrNull() ?: error("Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.map { it.id }}")
+    val service = services.singleOrNull() ?: error("Expected one service per aws model, but found ${services.size} in ${file.absolutePath}: ${services.joinToString { it.id.toString() }}")
     val protocolName = service.protocolName()
 
     val serviceTrait = service

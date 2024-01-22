@@ -24,6 +24,9 @@ class NamingTest {
 
     @Test
     fun testSdkIdToArtifactName() {
+        assertEquals("foobar", sdkIdToArtifactName("foo bar"))
+        assertEquals("foobar", sdkIdToArtifactName("foo-bar"))
+        assertEquals("foobar", sdkIdToArtifactName("fOo -Bar"))
     }
 
     @Test
