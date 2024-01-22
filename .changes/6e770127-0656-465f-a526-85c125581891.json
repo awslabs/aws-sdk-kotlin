@@ -1,5 +1,0 @@
-{
-    "id": "6e770127-0656-465f-a526-85c125581891",
-    "type": "bugfix",
-    "description": "Pass client-configured region to StsWebIdentityCredentialsProvider"
-}
