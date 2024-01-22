@@ -35,8 +35,11 @@ class SigV4AsymmetricTraitCustomization : KotlinIntegration {
             when (shape.isServiceShape) {
                 true -> {
                     val builder = (shape as ServiceShape).toBuilder()
-                    val name = shape.getTrait<SigV4Trait>()?.name ?: shape.getTrait<ServiceTrait>()?.arnNamespace
-                    builder.addTrait(SigV4ATrait.builder().name(name).build())
+                    builder.addTrait(
+                        SigV4ATrait.builder()
+                            .name(shape.getTrait<SigV4Trait>()?.name ?: shape.getTrait<ServiceTrait>()?.arnNamespace)
+                        .build()
+                    )
 
                     val authTrait = shape.getTrait<AuthTrait>()?.let {
                         if (it.valueSet.contains(SigV4ATrait.ID)) {
