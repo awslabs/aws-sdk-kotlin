@@ -1,9 +1,0 @@
-{
-    "id": "8147aee6-9f81-40cc-965e-9867044439b9",
-    "type": "bugfix",
-    "description": "Add missing `x-amz-content-sha256` header for SigV4 requests.",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1187"
-    ],
-    "module": "s3control"
-}

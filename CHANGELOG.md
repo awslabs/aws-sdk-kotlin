@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.41] - 01/23/2024
+
+### Features
+* (**inspector2**) This release adds support for CIS scans on EC2 instances.
+
+### Fixes
+* [#1187](https://github.com/awslabs/aws-sdk-kotlin/issues/1187) (**s3control**) Add missing `x-amz-content-sha256` header for SigV4 requests.
+
 ## [1.0.40] - 01/22/2024
 
 ### Features
