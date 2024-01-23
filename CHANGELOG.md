@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.40] - 01/22/2024
+
+### Features
+* (**appconfigdata**) Fix FIPS Endpoints in aws-us-gov.
+* (**cloudfrontkeyvaluestore**) This release improves upon the DescribeKeyValueStore API by returning two additional fields, Status of the KeyValueStore and the FailureReason in case of failures during creation of KeyValueStore.
+* (**connectcases**) This release adds the ability to view audit history on a case and introduces a new parameter, performedBy, for CreateCase and UpdateCase API's.
+* (**ecs**) This release adds support for Transport Layer Security (TLS) and Configurable Timeout to ECS Service Connect. TLS facilitates privacy and data security for inter-service communications, while Configurable Timeout allows customized per-request timeout and idle timeout for Service Connect services.
+* (**finspace**) Allow customer to set zip default through command line arguments.
+* (**rds**) Introduced support for the InsufficientDBInstanceCapacityFault error in the RDS CreateDBCluster API method. This provides enhanced error handling, ensuring a more robust experience when creating database clusters with insufficient instance capacity.
+
+### Fixes
+* Pass client-configured region to StsWebIdentityCredentialsProvider
+
+### Documentation
+* (**cloud9**) Doc-only update around removing AL1 from list of available AMIs for Cloud9
+* (**ec2**) Documentation updates for Amazon EC2.
+* (**organizations**) Doc only update for quota increase change
+
 ## [1.0.39] - 01/19/2024
 
 ### Features

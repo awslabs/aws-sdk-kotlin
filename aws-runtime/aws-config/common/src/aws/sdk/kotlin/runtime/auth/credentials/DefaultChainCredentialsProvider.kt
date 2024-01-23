@@ -56,7 +56,7 @@ public class DefaultChainCredentialsProvider constructor(
         EnvironmentCredentialsProvider(platformProvider::getenv),
         ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClient = engine, region = region),
         // STS web identity provider can be constructed from either the profile OR 100% from the environment
-        StsWebIdentityProvider(platformProvider = platformProvider, httpClient = engine),
+        StsWebIdentityProvider(platformProvider = platformProvider, httpClient = engine, region = region),
         EcsCredentialsProvider(platformProvider, engine),
         ImdsCredentialsProvider(
             client = lazy {
@@ -88,9 +88,10 @@ public class DefaultChainCredentialsProvider constructor(
 private class StsWebIdentityProvider(
     val platformProvider: PlatformProvider = PlatformProvider.System,
     val httpClient: HttpClientEngine? = null,
+    val region: String? = null,
 ) : CloseableCredentialsProvider {
     override suspend fun resolve(attributes: Attributes): Credentials {
-        val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClient = httpClient)
+        val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClient = httpClient, region = region)
         return wrapped.resolve(attributes)
     }
 
