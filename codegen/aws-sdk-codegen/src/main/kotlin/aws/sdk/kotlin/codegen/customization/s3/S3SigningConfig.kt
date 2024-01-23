@@ -24,8 +24,10 @@ class S3SigningConfig : KotlinIntegration {
     override val order: Byte
         get() = 127
 
-    override fun enabledForService(model: Model, settings: KotlinSettings) =
-        model.expectShape<ServiceShape>(settings.service).isS3
+    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
+        val service = model.expectShape<ServiceShape>(settings.service)
+        return (service.isS3 || service.isS3Control)
+    }
 
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
