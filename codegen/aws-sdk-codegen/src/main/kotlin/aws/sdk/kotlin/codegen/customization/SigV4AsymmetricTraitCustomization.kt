@@ -10,6 +10,7 @@ import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.getTrait
+import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.traits.AuthTrait
@@ -35,11 +36,14 @@ class SigV4AsymmetricTraitCustomization : KotlinIntegration {
             when (shape.isServiceShape) {
                 true -> {
                     val builder = (shape as ServiceShape).toBuilder()
-                    builder.addTrait(
-                        SigV4ATrait.builder()
-                            .name(shape.getTrait<SigV4Trait>()?.name ?: shape.getTrait<ServiceTrait>()?.arnNamespace)
-                            .build(),
-                    )
+
+                    if (!shape.hasTrait<SigV4ATrait>()) {
+                        builder.addTrait(
+                            SigV4ATrait.builder()
+                                .name(shape.getTrait<SigV4Trait>()?.name ?: shape.getTrait<ServiceTrait>()?.arnNamespace)
+                                .build(),
+                        )
+                    }
 
                     // SigV4A is added at the end because these services model SigV4A through endpoint rules instead of the service shape.
                     // Because of that, SigV4A can apply to any operation, and the safest thing to do is add it at the end
