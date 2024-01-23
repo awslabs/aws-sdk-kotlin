@@ -139,6 +139,26 @@ class EcsCredentialsProviderTest {
     }
 
     @Test
+    fun testLocalFullUri() = runTest {
+        val uri = "http://localhost"
+        val engine = buildTestConnection {
+            expect(
+                ecsRequest(uri),
+                ecsResponse(),
+            )
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        val actual = provider.resolve()
+        assertEquals(expectedCredentials, actual)
+        engine.assertRequests()
+    }
+
+    @Test
     fun testNonexistentFullUri() = runTest {
         val uri = "http://amazonaws.net/full"
         val engine = TestConnection()
