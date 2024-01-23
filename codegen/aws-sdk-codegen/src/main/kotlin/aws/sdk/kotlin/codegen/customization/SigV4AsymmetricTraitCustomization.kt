@@ -25,7 +25,7 @@ class SigV4AsymmetricTraitCustomization : KotlinIntegration {
     override val order: Byte = -60
 
     // services which support SigV4A but don't model it
-    private val unmodeledSigV4aServices = listOf("s3", "eventbridge", "cloudfront keyvaluestore")
+    private val unmodeledSigV4aServices = listOf("s3", "eventbridge")
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
         unmodeledSigV4aServices.contains(settings.sdkId.lowercase()) && !model.isTraitApplied(SigV4ATrait::class.java)

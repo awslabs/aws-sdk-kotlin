@@ -4,7 +4,9 @@
  */
 package aws.sdk.kotlin.codegen.customization.cloudfrontkeyvaluestore
 
+import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.aws.traits.auth.SigV4ATrait
+import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.getTrait
@@ -17,9 +19,8 @@ import software.amazon.smithy.model.transform.ModelTransformer
  * Modify the [AuthTrait] of the CloudFront KeyValueStore service, placing SigV4A before SigV4 in the
  * prioritized list.
  */
-class CloudFrontKeyValueStoreSigV4APrioritizationCustomization : KotlinIntegration {
+class BackfillSigV4ACustomization : KotlinIntegration {
     // Runs after SigV4AsymmetricTraitCustomization (-60) and before `SigV4AsymmetricAuthSchemeIntegration`(-50) and `SigV4AuthSchemeIntegration` (-50)
-    override val order: Byte = -55
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean = settings.sdkId.lowercase() == "cloudfront keyvaluestore"
 
@@ -28,6 +29,13 @@ class CloudFrontKeyValueStoreSigV4APrioritizationCustomization : KotlinIntegrati
             when (shape.isServiceShape) {
                 true -> {
                     val builder = (shape as ServiceShape).toBuilder()
+
+                    builder.addTrait(
+                        SigV4ATrait.builder()
+                            .name(shape.getTrait<SigV4Trait>()?.name ?: shape.getTrait<ServiceTrait>()?.arnNamespace)
+                        .build(),
+                    )
+
                     val authTraitValueSet = shape.getTrait<AuthTrait>()?.valueSet ?: mutableSetOf()
 
                     if (authTraitValueSet.firstOrNull() != SigV4ATrait.ID) {
