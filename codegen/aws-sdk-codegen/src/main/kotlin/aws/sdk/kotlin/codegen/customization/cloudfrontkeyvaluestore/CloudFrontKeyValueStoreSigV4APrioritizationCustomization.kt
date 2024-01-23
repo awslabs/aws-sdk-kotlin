@@ -30,7 +30,7 @@ class CloudFrontKeyValueStoreSigV4APrioritizationCustomization : KotlinIntegrati
                     val builder = (shape as ServiceShape).toBuilder()
                     val authTraitValueSet = shape.getTrait<AuthTrait>()?.valueSet ?: mutableSetOf()
 
-                    if (!authTraitValueSet.contains(SigV4ATrait.ID)) {
+                    if (authTraitValueSet.firstOrNull() != SigV4ATrait.ID) {
                         // remove existing auth trait
                         builder.removeTrait(AuthTrait.ID)
 
