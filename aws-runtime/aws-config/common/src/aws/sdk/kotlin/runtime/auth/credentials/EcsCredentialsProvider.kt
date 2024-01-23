@@ -56,13 +56,23 @@ private const val PROVIDER_NAME = "EcsContainer"
  * @param platformProvider the platform provider
  * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
- *
+ * @param hostResolver used to resolve hostname from AwsContainerCredentialsFullUri env setting. If not specified falls back to default.
  */
 public class EcsCredentialsProvider(
     public val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
     private val hostResolver: HostResolver = HostResolver.Default,
 ) : CloseableCredentialsProvider {
+
+    // Keeping previous constructor as secondary due to backwards compatibility.
+    public constructor(
+        platformProvider: PlatformProvider = PlatformProvider.System,
+        httpClient: HttpClientEngine? = null,
+    ) : this(
+        platformProvider,
+        httpClient,
+        HostResolver.Default,
+    )
 
     private val manageEngine = httpClient == null
     private val httpClient: HttpClientEngine = httpClient ?: DefaultHttpEngine()
