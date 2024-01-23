@@ -20,8 +20,6 @@ import software.amazon.smithy.model.transform.ModelTransformer
  * prioritized list.
  */
 class BackfillSigV4ACustomization : KotlinIntegration {
-    // Runs after SigV4AsymmetricTraitCustomization (-60) and before `SigV4AsymmetricAuthSchemeIntegration`(-50) and `SigV4AuthSchemeIntegration` (-50)
-
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean = settings.sdkId.lowercase() == "cloudfront keyvaluestore"
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model =
