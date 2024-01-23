@@ -31,7 +31,7 @@ class BackfillSigV4ACustomization : KotlinIntegration {
                     builder.addTrait(
                         SigV4ATrait.builder()
                             .name(shape.getTrait<SigV4Trait>()?.name ?: shape.getTrait<ServiceTrait>()?.arnNamespace)
-                        .build(),
+                            .build(),
                     )
 
                     val authTraitValueSet = shape.getTrait<AuthTrait>()?.valueSet ?: mutableSetOf()
