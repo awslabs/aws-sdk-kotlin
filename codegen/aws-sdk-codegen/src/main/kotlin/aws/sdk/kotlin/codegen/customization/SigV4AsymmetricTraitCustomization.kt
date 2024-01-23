@@ -41,6 +41,9 @@ class SigV4AsymmetricTraitCustomization : KotlinIntegration {
                             .build(),
                     )
 
+                    // SigV4A is added at the end because these services model SigV4A through endpoint rules instead of the service shape.
+                    // Because of that, SigV4A can apply to any operation, and the safest thing to do is add it at the end
+                    // and let the endpoint rules change priority as needed.
                     val authTrait = shape.getTrait<AuthTrait>()?.let {
                         if (it.valueSet.contains(SigV4ATrait.ID)) {
                             it
