@@ -2,12 +2,12 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.codegen.customization
+package aws.sdk.kotlin.codegen.customization.cloudfrontkeyvaluestore
 
 import software.amazon.smithy.aws.traits.auth.SigV4ATrait
-import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.traits.AuthTrait
@@ -28,11 +28,15 @@ class CloudFrontKeyValueStoreSigV4APrioritizationCustomization : KotlinIntegrati
             when (shape.isServiceShape) {
                 true -> {
                     val builder = (shape as ServiceShape).toBuilder()
-                    builder.removeTrait(AuthTrait.ID) // remove existing auth trait
+                    val authTraitValueSet = shape.getTrait<AuthTrait>()?.valueSet ?: mutableSetOf()
 
-                    // add a new auth trait with SigV4A in front
-                    val authTrait = AuthTrait(mutableSetOf(SigV4ATrait.ID, SigV4Trait.ID))
-                    builder.addTrait(authTrait)
+                    if (!authTraitValueSet.contains(SigV4ATrait.ID)) {
+                        // remove existing auth trait
+                        builder.removeTrait(AuthTrait.ID)
+
+                        // add a new auth trait with SigV4A in front of the existing values
+                        builder.addTrait(AuthTrait(mutableSetOf(SigV4ATrait.ID) + authTraitValueSet))
+                    }
 
                     builder.build()
                 }
