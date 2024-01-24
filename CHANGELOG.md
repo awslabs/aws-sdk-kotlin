@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.42] - 01/24/2024
+
+### Features
+* (**ec2**) Introduced a new clientToken request parameter on CreateNetworkAcl and CreateRouteTable APIs. The clientToken parameter allows idempotent operations on the APIs.
+* (**outposts**) DeviceSerialNumber parameter is now optional in StartConnection API
+* (**rds**) This release adds support for Aurora Limitless Database.
+* (**storagegateway**) Add DeprecationDate and SoftwareVersion to response of ListGateways.
+
+### Fixes
+* Fix application of sigv4a authentication scheme for S3, Eventbridge, and CloudFront KeyValueStore
+
+### Documentation
+* (**ecs**) Documentation updates for Amazon ECS.
+
+### Miscellaneous
+* Bump smithy-kotlin version to 1.0.11
+
 ## [1.0.41] - 01/23/2024
 
 ### Features
