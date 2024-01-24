@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
-import aws.sdk.kotlin.gradle.kmp.*
+import aws.sdk.kotlin.gradle.kmp.kotlin
 import aws.sdk.kotlin.gradle.util.typedProp
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.time.LocalDateTime
@@ -54,6 +54,8 @@ subprojects {
                 dependencies {
                     implementation(libraries.kotlinx.coroutines.test)
                     implementation(libraries.smithy.kotlin.http.test)
+                    implementation("aws.sdk.kotlin:s3control:+") // TODO: Duplicates
+                    implementation("aws.smithy.kotlin:aws-signing-crt:+")
                 }
             }
         }
@@ -73,6 +75,8 @@ subprojects {
                             implementation(libraries.kotlin.test.junit5)
                             implementation(project(":tests:e2e-test-util"))
                             implementation(libraries.slf4j.simple)
+                            implementation("aws.sdk.kotlin:s3control:+") // TODO: Duplicates
+                            implementation("aws.smithy.kotlin:aws-signing-crt:+")
                         }
                     }
 
