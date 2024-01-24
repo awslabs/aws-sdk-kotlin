@@ -10,67 +10,101 @@ import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.withConfig
 import aws.sdk.kotlin.services.s3control.S3ControlClient
 import aws.sdk.kotlin.services.s3control.model.*
+import aws.smithy.kotlin.runtime.auth.awssigning.UnsupportedSigningAlgorithmException
+import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
-import aws.smithy.kotlin.runtime.auth.awssigning.UnsupportedSigningAlgorithmException
 import kotlin.test.assertFailsWith
-import io.kotest.matchers.string.shouldContain
 
 class UnsupportedSigningAlgorithmTest {
-//    @Test
+    @Test
     fun testUnsupportedSigningAlgorithm(): Unit = runBlocking {
-        try {
-            S3Client {
-                region = "us-west-2"
-            }.use { s3West ->
+        val accountId = getAccountId()
+        val s3West = S3Client {
+            region = "us-west-2"
+        }
+        val s3East = s3West.withConfig {
+            region = "us-east-2"
+        }
+        val s3Control = S3ControlClient {
+            region = "us-west-2"
+        }
 
-                createS3Bucket(
-                    s3West,
-                    usWestBucket,
-                    BucketLocationConstraint.UsWest2,
+        val usWestBucket = "aws-sdk-for-kotlin-test-bucket-us-west-2"
+        val usEastBucket = "aws-sdk-for-kotlin-test-bucket-us-east-2"
+        val multiRegionAccessPoint = "aws-sdk-for-kotlin-test-multi-region-access-point"
+        val keyForObject = "test.txt"
+
+        try {
+            createS3Bucket(
+                s3West,
+                usWestBucket,
+                BucketLocationConstraint.UsWest2,
+            )
+
+            createS3Bucket(
+                s3East,
+                usEastBucket,
+                BucketLocationConstraint.UsEast2,
+            )
+
+            createMultiRegionAccessPoint(
+                s3Control,
+                multiRegionAccessPoint,
+                usWestBucket,
+                usEastBucket,
+                accountId,
+            )
+
+            val multiRegionAccessPointArn =
+                getMultiRegionAccessPointArn(
+                    s3Control,
+                    multiRegionAccessPoint,
+                    accountId,
                 )
 
-                s3West.withConfig {
-                    region = "us-east-2"
-                }.use { s3East ->
+            assertFailsWith<UnsupportedSigningAlgorithmException> {
+                createObject(
+                    s3West,
+                    multiRegionAccessPointArn,
+                    keyForObject,
+                )
+            }.message.shouldContain("SIGV4A support is not yet implemented for the default signer.")
 
-                    createS3Bucket(
-                        s3East,
-                        usEastBucket,
-                        BucketLocationConstraint.UsEast2,
-                    )
+            deleteMultiRegionAccessPoint(
+                s3Control,
+                multiRegionAccessPoint,
+                accountId,
+            )
 
-                    S3ControlClient {
-                        region = "us-west-2"
-                    }.use { s3Control ->
+            deleteS3Bucket(
+                s3West,
+                usWestBucket,
+            )
 
-                        createMultiRegionAccessPoint(s3Control)
-                        val multiRegionAccessPointArn = getMultiRegionAccessPointArn(s3Control) ?: throw Exception("Unable to get multi region access point arn")
-
-                        assertFailsWith<UnsupportedSigningAlgorithmException> {
-                            createObject(
-                                s3West,
-                                multiRegionAccessPointArn,
-                            )
-                        }.message.shouldContain("SIGV4A support is not yet implemented for the default signer.")
-
-                        deleteMultiRegionAccessPoint(s3Control)
-
-                        deleteS3Bucket(
-                            s3West,
-                            usWestBucket,
-                        )
-
-                        deleteS3Bucket(
-                            s3East,
-                            usEastBucket,
-                        )
-                    }
-                }
-            }
+            deleteS3Bucket(
+                s3East,
+                usEastBucket,
+            )
         } catch (exception: Throwable) {
-            cleanUpTest()
+            closeClients(
+                s3West,
+                s3East,
+                s3Control,
+            )
+            cleanUpTest(
+                accountId,
+                multiRegionAccessPoint,
+                usWestBucket,
+                usEastBucket,
+                keyForObject,
+            )
             throw exception
         }
+        closeClients(
+            s3West,
+            s3East,
+            s3Control,
+        )
     }
 }

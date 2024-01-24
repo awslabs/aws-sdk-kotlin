@@ -13,83 +13,129 @@ import aws.sdk.kotlin.services.s3.model.DeleteBucketRequest
 import aws.sdk.kotlin.services.s3.withConfig
 import aws.sdk.kotlin.services.s3control.S3ControlClient
 import aws.sdk.kotlin.services.s3control.model.*
+import aws.sdk.kotlin.services.sts.StsClient
+import aws.sdk.kotlin.services.sts.model.GetCallerIdentityRequest
 import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
+import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.http.auth.SigV4AsymmetricAuthScheme
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 
-internal const val usWestBucket = "aws-sdk-for-kotlin-test-bucket-west"
-internal const val usEastBucket = "aws-sdk-for-kotlin-test-bucket-east"
-internal const val multiRegionAccessPoint = "aws-sdk-for-kotlin-test-multi-region-access-point"
-internal const val testAccountId = "393681621311"
-internal const val testKeyForObject = "text.txt"
-
 class MutliRegionAccessPointTest {
-//    @Test
+    @Test
     fun testMultRegionAccessPointOperation(): Unit = runBlocking {
-        try {
-            S3Client {
-                region = "us-west-2"
-            }.use { s3West ->
+        val accountId = getAccountId()
+        val s3West = S3Client {
+            region = "us-west-2"
+        }
+        val s3East = s3West.withConfig {
+            region = "us-east-2"
+        }
+        val s3SigV4a = s3West.withConfig {
+            authSchemes = listOf(SigV4AsymmetricAuthScheme(CrtAwsSigner))
+        }
+        val s3Control = S3ControlClient {
+            region = "us-west-2"
+        }
 
-                createS3Bucket(
-                    s3West,
-                    usWestBucket,
-                    BucketLocationConstraint.UsWest2,
+        val usWestBucket = "aws-sdk-for-kotlin-test-bucket-us-west-2"
+        val usEastBucket = "aws-sdk-for-kotlin-test-bucket-us-east-2"
+        val multiRegionAccessPoint = "aws-sdk-for-kotlin-test-multi-region-access-point"
+        val keyForObject = "test.txt"
+
+        try {
+            createS3Bucket(
+                s3West,
+                usWestBucket,
+                BucketLocationConstraint.UsWest2,
+            )
+
+            createS3Bucket(
+                s3East,
+                usEastBucket,
+                BucketLocationConstraint.UsEast2,
+            )
+
+            createMultiRegionAccessPoint(
+                s3Control,
+                multiRegionAccessPoint,
+                usWestBucket,
+                usEastBucket,
+                accountId,
+            )
+
+            val multiRegionAccessPointArn =
+                getMultiRegionAccessPointArn(
+                    s3Control,
+                    multiRegionAccessPoint,
+                    accountId,
                 )
 
-                s3West.withConfig {
-                    region = "us-east-2"
-                }.use { s3East ->
+            createObject(
+                s3SigV4a,
+                multiRegionAccessPointArn,
+                keyForObject,
+            )
 
-                    createS3Bucket(
-                        s3East,
-                        usEastBucket,
-                        BucketLocationConstraint.UsEast2,
-                    )
+            deleteObject(
+                s3SigV4a,
+                multiRegionAccessPointArn,
+                keyForObject,
+            )
 
-                    S3ControlClient {
-                        region = "us-west-2"
-                    }.use { s3Control ->
+            deleteMultiRegionAccessPoint(
+                s3Control,
+                multiRegionAccessPoint,
+                accountId,
+            )
 
-                        createMultiRegionAccessPoint(s3Control)
-                        val multiRegionAccessPointArn = getMultiRegionAccessPointArn(s3Control) ?: throw Exception("Unable to get multi region access point arn")
+            deleteS3Bucket(
+                s3West,
+                usWestBucket,
+            )
 
-                        s3West.withConfig {
-                            authSchemes = listOf(SigV4AsymmetricAuthScheme(CrtAwsSigner))
-                        }.use { s3SigV4a ->
-
-                            createObject(
-                                s3SigV4a,
-                                multiRegionAccessPointArn,
-                            )
-
-                            deleteObject(
-                                s3SigV4a,
-                                multiRegionAccessPointArn,
-                            )
-                        }
-
-                        deleteMultiRegionAccessPoint(s3Control)
-
-                        deleteS3Bucket(
-                            s3West,
-                            usWestBucket,
-                        )
-
-                        deleteS3Bucket(
-                            s3East,
-                            usEastBucket,
-                        )
-                    }
-                }
-            }
+            deleteS3Bucket(
+                s3East,
+                usEastBucket,
+            )
         } catch (exception: Throwable) {
-            cleanUpTest()
+            closeClients(
+                s3West,
+                s3East,
+                s3SigV4a,
+                s3Control,
+            )
+            cleanUpTest(
+                accountId,
+                multiRegionAccessPoint,
+                usWestBucket,
+                usEastBucket,
+                keyForObject,
+            )
             throw exception
         }
+        closeClients(
+            s3West,
+            s3East,
+            s3SigV4a,
+            s3Control,
+        )
     }
+}
+
+internal suspend fun getAccountId(): String {
+    val sts = StsClient {
+        region = "us-west-2"
+    }
+
+    val accountId = sts.getCallerIdentity(
+        GetCallerIdentityRequest { },
+    ).account
+
+    sts.close()
+
+    return accountId ?: throw Exception("Unable to get AWS account ID")
 }
 
 internal suspend fun createS3Bucket(
@@ -110,20 +156,24 @@ internal suspend fun createS3Bucket(
 
 internal suspend fun createMultiRegionAccessPoint(
     s3ControlClient: S3ControlClient,
+    multiRegionAccessPointName: String,
+    regionOneBucket: String,
+    regionTwoBucket: String,
+    testAccountId: String,
 ) {
     val createRequestToken = s3ControlClient.createMultiRegionAccessPoint(
         CreateMultiRegionAccessPointRequest {
             accountId = testAccountId
             details =
                 CreateMultiRegionAccessPointInput {
-                    name = multiRegionAccessPoint
+                    name = multiRegionAccessPointName
                     regions =
                         listOf(
                             Region {
-                                bucket = usWestBucket
+                                bucket = regionOneBucket
                             },
                             Region {
-                                bucket = usEastBucket
+                                bucket = regionTwoBucket
                             },
                         )
                 }
@@ -134,29 +184,35 @@ internal suspend fun createMultiRegionAccessPoint(
         s3ControlClient,
         createRequestToken.requestTokenArn ?: throw Exception("Unable to get request token ARN"),
         1000 * 60 * 10, // 10 minutes
-        "createMultiRegionAccessPoint"
+        testAccountId,
+        "createMultiRegionAccessPoint",
     )
 }
 
 internal suspend fun getMultiRegionAccessPointArn(
     s3ControlClient: S3ControlClient,
-): String? =
+    multiRegionAccessPointName: String,
+    testAccountId: String,
+): String {
     s3ControlClient.listMultiRegionAccessPoints(
         ListMultiRegionAccessPointsRequest {
             accountId = testAccountId
         },
-    ).accessPoints?.find { it.name == multiRegionAccessPoint }?.alias?.let { alias ->
+    ).accessPoints?.find { it.name == multiRegionAccessPointName }?.alias?.let { alias ->
         return "arn:aws:s3::$testAccountId:accesspoint/$alias"
     }
+    throw Exception("Unable to get multi region access point arn")
+}
 
 internal suspend fun createObject(
     s3Client: S3Client,
     bucketName: String,
+    keyName: String,
 ) {
     s3Client.putObject(
         PutObjectRequest {
             bucket = bucketName
-            key = testKeyForObject
+            key = keyName
         },
     )
 }
@@ -164,24 +220,27 @@ internal suspend fun createObject(
 internal suspend fun deleteObject(
     s3Client: S3Client,
     bucketName: String,
+    keyName: String,
 ) {
     s3Client.deleteObject(
         DeleteObjectRequest {
             bucket = bucketName
-            key = testKeyForObject
+            key = keyName
         },
     )
 }
 
 internal suspend fun deleteMultiRegionAccessPoint(
     s3ControlClient: S3ControlClient,
+    multiRegionAccessPointName: String,
+    testAccountId: String,
 ) {
     val deleteRequestToken = s3ControlClient.deleteMultiRegionAccessPoint(
         DeleteMultiRegionAccessPointRequest {
             accountId = testAccountId
             details =
                 DeleteMultiRegionAccessPointInput {
-                    name = multiRegionAccessPoint
+                    name = multiRegionAccessPointName
                 }
         },
     )
@@ -190,15 +249,17 @@ internal suspend fun deleteMultiRegionAccessPoint(
         s3ControlClient,
         deleteRequestToken.requestTokenArn ?: throw Exception("Unable to get request token ARN"),
         1000 * 60 * 5, // 5 minutes
-        "deleteMultiRegionAccessPoint"
+        testAccountId,
+        "deleteMultiRegionAccessPoint",
     )
 }
 
-internal suspend fun waitUntilMultiRegionAccessPointOperationCompletes(
+private suspend fun waitUntilMultiRegionAccessPointOperationCompletes(
     s3ControlClient: S3ControlClient,
     request: String,
     timeLimit: Int,
-    operation: String
+    testAccountId: String,
+    operation: String,
 ) {
     val startTime = System.currentTimeMillis()
 
@@ -212,10 +273,10 @@ internal suspend fun waitUntilMultiRegionAccessPointOperationCompletes(
 
         println("Waiting on $operation operation. Status: $status")
         if (status == "SUCCEEDED") return
-        TimeUnit.SECONDS.sleep(10L)
+        TimeUnit.SECONDS.sleep(10L) // Avoid constant status checks
     }
 
-    throw Exception("The multi-region-access-point operation exceeded the time limit set ($timeLimit ms)")
+    throw Exception("The multi-region-access-point $operation operation exceeded the time limit set ($timeLimit ms)")
 }
 
 internal suspend fun deleteS3Bucket(
@@ -229,11 +290,17 @@ internal suspend fun deleteS3Bucket(
     )
 }
 
-internal suspend fun cleanUpTest() {
+internal suspend fun cleanUpTest(
+    testAccountId: String,
+    multiRegionAccessPointName: String,
+    usWestBucket: String,
+    usEastBucket: String,
+    keyName: String,
+) {
     S3ControlClient {
         region = "us-west-2"
     }.use { s3Control ->
-        if (multiRegionAccessPointWasCreated(s3Control)) deleteMultiRegionAccessPoint(s3Control)
+        if (multiRegionAccessPointWasCreated(s3Control, multiRegionAccessPointName, testAccountId)) deleteMultiRegionAccessPoint(s3Control, multiRegionAccessPointName, testAccountId)
     }
 
     S3Client {
@@ -245,16 +312,17 @@ internal suspend fun cleanUpTest() {
             region = "us-east-2"
         }.use { s3East ->
             if (s3BucketWasCreated(s3East, usEastBucket)) {
-                if (objectWasCreated(s3East, usEastBucket)) deleteObject(s3East, usEastBucket)
+                if (objectWasCreated(s3East, usEastBucket, keyName)) deleteObject(s3East, usEastBucket, keyName)
                 deleteS3Bucket(s3East, usEastBucket)
             }
         }
     }
 }
 
-internal suspend fun objectWasCreated(
+private suspend fun objectWasCreated(
     s3: S3Client,
     bucketName: String,
+    keyName: String,
 ): Boolean {
     val search = s3.listObjectsV2(
         ListObjectsV2Request {
@@ -262,10 +330,10 @@ internal suspend fun objectWasCreated(
         },
     ).contents
 
-    return search?.find { it.key == testKeyForObject } != null
+    return search?.find { it.key == keyName } != null
 }
 
-internal suspend fun s3BucketWasCreated(
+private suspend fun s3BucketWasCreated(
     s3: S3Client,
     bucketName: String,
 ): Boolean {
@@ -276,14 +344,24 @@ internal suspend fun s3BucketWasCreated(
     return search?.find { it.name == bucketName } != null
 }
 
-internal suspend fun multiRegionAccessPointWasCreated(
+private suspend fun multiRegionAccessPointWasCreated(
     s3Control: S3ControlClient,
+    multiRegionAccessPointName: String,
+    testAccountId: String,
 ): Boolean {
     val search = s3Control.listMultiRegionAccessPoints(
         ListMultiRegionAccessPointsRequest {
             accountId = testAccountId
         },
-    ).accessPoints?.find { it.name == multiRegionAccessPoint }
+    ).accessPoints?.find { it.name == multiRegionAccessPointName }
 
     return search != null
+}
+
+internal fun closeClients(
+    vararg clients: SdkClient,
+) {
+    clients.forEach { client ->
+        client.close()
+    }
 }
