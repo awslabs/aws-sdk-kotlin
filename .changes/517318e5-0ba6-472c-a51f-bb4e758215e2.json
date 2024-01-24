@@ -1,0 +1,5 @@
+{
+    "id": "517318e5-0ba6-472c-a51f-bb4e758215e2",
+    "type": "bugfix",
+    "description": "Fix application of sigv4a authentication scheme for S3, Eventbridge, and CloudFront KeyValueStore"
+}
