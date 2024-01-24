@@ -54,8 +54,6 @@ subprojects {
                 dependencies {
                     implementation(libraries.kotlinx.coroutines.test)
                     implementation(libraries.smithy.kotlin.http.test)
-                    implementation("aws.sdk.kotlin:s3control:+") // TODO: Duplicates
-                    implementation("aws.smithy.kotlin:aws-signing-crt:+")
                 }
             }
         }
@@ -75,8 +73,9 @@ subprojects {
                             implementation(libraries.kotlin.test.junit5)
                             implementation(project(":tests:e2e-test-util"))
                             implementation(libraries.slf4j.simple)
-                            implementation("aws.sdk.kotlin:s3control:+") // TODO: Duplicates
+                            implementation("aws.sdk.kotlin:s3control:+")
                             implementation("aws.smithy.kotlin:aws-signing-crt:+")
+                            implementation("io.kotest:kotest-assertions-core:5.8.0")
                         }
                     }
 
