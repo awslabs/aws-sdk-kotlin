@@ -92,7 +92,7 @@ class UnsupportedSigningAlgorithmTest {
                 s3East,
                 s3Control,
             )
-            cleanUpTest(
+            cleanUpMrapTest(
                 accountId,
                 multiRegionAccessPoint,
                 usWestBucket,
