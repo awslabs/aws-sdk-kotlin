@@ -27,6 +27,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "aws-sdk-kotlin"
 
+includeBuild("build-support")
+
 include(":dokka-aws")
 include(":bom")
 include(":codegen:sdk")
