@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.43] - 01/25/2024
+
+### Features
+* (**acmpca**) AWS Private CA now supports an option to omit the CDP extension from issued certificates, when CRL revocation is enabled.
+* (**lightsail**) This release adds support for IPv6-only instance plans.
+
 ## [1.0.42] - 01/24/2024
 
 ### Features
