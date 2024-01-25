@@ -65,6 +65,7 @@ object AwsRuntimeTypes {
     object Http : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP) {
         object Interceptors : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP, "interceptors") {
             val AddUserAgentMetadataInterceptor = symbol("AddUserAgentMetadataInterceptor")
+            val UnsupportedSigningAlgorithmInterceptor = symbol("UnsupportedSigningAlgorithmInterceptor")
             val S3ExpressCrc32ChecksumInterceptor = symbol("S3ExpressCrc32ChecksumInterceptor")
             val S3ExpressDisableChecksumInterceptor = symbol("S3ExpressDisableChecksumInterceptor")
         }

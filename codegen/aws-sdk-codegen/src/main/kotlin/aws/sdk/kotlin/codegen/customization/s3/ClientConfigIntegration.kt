@@ -21,7 +21,7 @@ import software.amazon.smithy.model.transform.ModelTransformer
 import software.amazon.smithy.rulesengine.traits.ClientContextParamsTrait
 
 /**
- * Integration to inject s3-related client config builtins for endpoint resolution in place of the corresponding client
+ * Integration to inject s3-related client config builtins for endpoint resolution & multi-region access points in place of the corresponding client
  * context params.
  */
 class ClientConfigIntegration : KotlinIntegration {
@@ -55,10 +55,9 @@ class ClientConfigIntegration : KotlinIntegration {
             """.trimIndent()
         }
 
-        // FIXME: default signer doesn't yet implement sigv4a, default to mrap OFF until it does
         val DisableMrapProp: ConfigProperty = ConfigProperty {
             name = "disableMrap"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
             documentation = """
                 Flag to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
             """.trimIndent()

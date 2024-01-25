@@ -1,5 +1,91 @@
 # Changelog
 
+## [1.0.42] - 01/24/2024
+
+### Features
+* (**ec2**) Introduced a new clientToken request parameter on CreateNetworkAcl and CreateRouteTable APIs. The clientToken parameter allows idempotent operations on the APIs.
+* (**outposts**) DeviceSerialNumber parameter is now optional in StartConnection API
+* (**rds**) This release adds support for Aurora Limitless Database.
+* (**storagegateway**) Add DeprecationDate and SoftwareVersion to response of ListGateways.
+
+### Fixes
+* Fix application of sigv4a authentication scheme for S3, Eventbridge, and CloudFront KeyValueStore
+
+### Documentation
+* (**ecs**) Documentation updates for Amazon ECS.
+
+### Miscellaneous
+* Bump smithy-kotlin version to 1.0.11
+
+## [1.0.41] - 01/23/2024
+
+### Features
+* (**inspector2**) This release adds support for CIS scans on EC2 instances.
+
+### Fixes
+* [#1187](https://github.com/awslabs/aws-sdk-kotlin/issues/1187) (**s3control**) Add missing `x-amz-content-sha256` header for SigV4 requests.
+
+## [1.0.40] - 01/22/2024
+
+### Features
+* (**appconfigdata**) Fix FIPS Endpoints in aws-us-gov.
+* (**cloudfrontkeyvaluestore**) This release improves upon the DescribeKeyValueStore API by returning two additional fields, Status of the KeyValueStore and the FailureReason in case of failures during creation of KeyValueStore.
+* (**connectcases**) This release adds the ability to view audit history on a case and introduces a new parameter, performedBy, for CreateCase and UpdateCase API's.
+* (**ecs**) This release adds support for Transport Layer Security (TLS) and Configurable Timeout to ECS Service Connect. TLS facilitates privacy and data security for inter-service communications, while Configurable Timeout allows customized per-request timeout and idle timeout for Service Connect services.
+* (**finspace**) Allow customer to set zip default through command line arguments.
+* (**rds**) Introduced support for the InsufficientDBInstanceCapacityFault error in the RDS CreateDBCluster API method. This provides enhanced error handling, ensuring a more robust experience when creating database clusters with insufficient instance capacity.
+
+### Fixes
+* Pass client-configured region to StsWebIdentityCredentialsProvider
+
+### Documentation
+* (**cloud9**) Doc-only update around removing AL1 from list of available AMIs for Cloud9
+* (**ec2**) Documentation updates for Amazon EC2.
+* (**organizations**) Doc only update for quota increase change
+
+## [1.0.39] - 01/19/2024
+
+### Features
+* (**athena**) Introducing new NotebookS3LocationUri parameter to Athena ImportNotebook API. Payload is no longer required and either Payload or NotebookS3LocationUri needs to be provided (not both) for a successful ImportNotebook API call. If both are provided, an InvalidRequestException will be thrown.
+* (**codebuild**) Release CodeBuild Reserved Capacity feature
+* (**dynamodb**) This release adds support for including ApproximateCreationDateTimePrecision configurations in EnableKinesisStreamingDestination API, adds the same as an optional field in the response of DescribeKinesisStreamingDestination, and adds support for a new UpdateKinesisStreamingDestination API.
+* (**qconnect**) Increased Quick Response name max length to 100
+
+## [1.0.38] - 01/18/2024
+
+### Features
+* (**b2bi**) Increasing TestMapping inputFileContent file size limit to 5MB and adding file size limit 250KB for TestParsing input file. This release also includes exposing InternalServerException for Tag APIs.
+* (**cloudtrail**) This release adds a new API ListInsightsMetricData to retrieve metric data from CloudTrail Insights.
+* (**connect**) GetMetricDataV2 now supports 3 groupings
+* (**drs**) Removed invalid and unnecessary default values.
+* (**firehose**) Allow support for Snowflake as a Kinesis Data Firehose delivery destination.
+* (**sagemakerfeaturestoreruntime**) Increase BatchGetRecord limits from 10 items to 100 items
+
+## [1.0.37] - 01/17/2024
+
+### Features
+* (**keyspaces**) This release adds support for Multi-Region Replication with provisioned tables, and Keyspaces auto scaling APIs
+
+### Documentation
+* (**dynamodb**) Updating note for enabling streams for UpdateTable.
+
+## [1.0.36] - 01/16/2024
+
+### Features
+* (**iot**) Revert release of LogTargetTypes
+* (**iotfleetwise**) Updated APIs: SignalNodeType query parameter has been added to ListSignalCatalogNodesRequest and ListVehiclesResponse has been extended with attributes field.
+* (**macie2**) This release adds support for analyzing Amazon S3 objects that are encrypted using dual-layer server-side encryption with AWS KMS keys (DSSE-KMS). It also adds support for reporting DSSE-KMS details in statistics and metadata about encryption settings for S3 buckets and objects.
+* (**paymentcryptography**) Provide an additional option for key exchange using RSA wrap/unwrap in addition to tr-34/tr-31 in ImportKey and ExportKey operations. Added new key usage (type) TR31_M1_ISO_9797_1_MAC_KEY, for use with Generate/VerifyMac dataplane operations  with ISO9797 Algorithm 1 MAC calculations.
+* (**rekognition**) This release adds ContentType and TaxonomyLevel attributes to DetectModerationLabels and GetMediaAnalysisJob API responses.
+
+### Fixes
+* [#1177](https://github.com/awslabs/aws-sdk-kotlin/issues/1177) Bump **smithy-kotlin** version to correct S3 presigning issues with custom endpoint ports
+
+### Documentation
+* (**personalize**) Documentation updates for Amazon Personalize.
+* (**personalizeruntime**) Documentation updates for Amazon Personalize
+* (**securityhub**) Documentation updates for AWS Security Hub
+
 ## [1.0.35] - 01/14/2024
 
 ### Features
