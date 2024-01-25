@@ -20,6 +20,9 @@ import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.net.HostAddress
+import aws.smithy.kotlin.runtime.net.HostResolver
+import aws.smithy.kotlin.runtime.net.IpAddr
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.time.Instant
@@ -82,6 +85,21 @@ class EcsCredentialsProviderTest {
             }
         }
         return builder.build()
+    }
+
+    /**
+     * Mock resolver that always resolves to loopback address
+     */
+    private object LocalHostResolver : HostResolver {
+        override suspend fun resolve(hostname: String): List<HostAddress> =
+            listOf(
+                HostAddress(
+                    "localhost",
+                    IpAddr.parse("127.0.0.1"),
+                ),
+            )
+        override fun reportFailure(addr: HostAddress) { }
+        override fun purgeCache(addr: HostAddress?) { }
     }
 
     @Test
@@ -152,7 +170,7 @@ class EcsCredentialsProviderTest {
             env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
         )
 
-        val provider = EcsCredentialsProvider(testPlatform, engine)
+        val provider = EcsCredentialsProvider(testPlatform, engine, LocalHostResolver)
         val actual = provider.resolve()
         assertEquals(expectedCredentials, actual)
         engine.assertRequests()
