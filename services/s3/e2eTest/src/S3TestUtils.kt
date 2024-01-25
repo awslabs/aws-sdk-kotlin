@@ -278,7 +278,7 @@ internal suspend fun waitUntilMultiRegionAccessPointOperationCompletes(
             },
         ).asyncOperation?.requestStatus
 
-        println("Waiting on $operation operation. Status: $status")
+        println("Waiting on $operation operation. Status: $status ")
         if (status == "SUCCEEDED") return
         TimeUnit.SECONDS.sleep(10L) // Avoid constant status checks
     }
