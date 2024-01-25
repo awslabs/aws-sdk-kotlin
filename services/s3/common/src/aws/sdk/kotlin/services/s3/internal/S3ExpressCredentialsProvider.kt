@@ -10,45 +10,31 @@ import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.model.CreateSessionRequest
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.util.ExpiringValue
 import kotlin.coroutines.coroutineContext
+import aws.smithy.kotlin.runtime.io.SdkManagedBase
 
 public class S3ExpressCredentialsProvider(
     public val bootstrapCredentialsProvider: CredentialsProvider,
-) : CredentialsProvider {
+) : CloseableCredentialsProvider, SdkManagedBase() {
     private val credentialsCache = S3ExpressCredentialsCache()
 
     override suspend fun resolve(attributes: Attributes): Credentials {
+        val logger = coroutineContext.logger<S3ExpressCredentialsProvider>()
+
         val bucket: String = attributes[S3ExpressAttributes.Bucket]
         val client = attributes[S3ExpressAttributes.Client]
 
         val key = S3ExpressCredentialsCacheKey(bucket, client, bootstrapCredentialsProvider.resolve(attributes))
 
-        return credentialsCache.get(key)
-            ?: (createSessionCredentials(key).also { credentialsCache.put(key, it) }).value
+        return credentialsCache.get(key).also { logger.trace { "Got credentials $it from cache" }}
     }
 
-    private suspend fun createSessionCredentials(key: S3ExpressCredentialsCacheKey): ExpiringValue<Credentials> {
-        val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
-
-        val credentials = (key.client as S3Client).createSession(
-            CreateSessionRequest {
-                bucket = key.bucket
-            },
-        ).credentials!!
-
-        return ExpiringValue(
-            credentials(
-                accessKeyId = credentials.accessKeyId,
-                secretAccessKey = credentials.secretAccessKey,
-                sessionToken = credentials.sessionToken,
-                expiration = credentials.expiration,
-                providerName = "S3ExpressCredentialsProvider",
-            ),
-            credentials.expiration,
-        ).also { logger.debug { "got credentials ${it.value}" } }
+    override fun close() {
+        credentialsCache.close()
     }
 }
