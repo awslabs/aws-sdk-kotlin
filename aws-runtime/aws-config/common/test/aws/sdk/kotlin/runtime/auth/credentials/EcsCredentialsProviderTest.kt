@@ -20,6 +20,9 @@ import aws.smithy.kotlin.runtime.http.request.url
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
+import aws.smithy.kotlin.runtime.net.HostAddress
+import aws.smithy.kotlin.runtime.net.HostResolver
+import aws.smithy.kotlin.runtime.net.IpAddr
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.time.Instant
@@ -84,6 +87,21 @@ class EcsCredentialsProviderTest {
         return builder.build()
     }
 
+    /**
+     * Mock resolver that always resolves to loopback address
+     */
+    private object LocalHostResolver : HostResolver {
+        override suspend fun resolve(hostname: String): List<HostAddress> =
+            listOf(
+                HostAddress(
+                    "localhost",
+                    IpAddr.parse("127.0.0.1"),
+                ),
+            )
+        override fun reportFailure(addr: HostAddress) { }
+        override fun purgeCache(addr: HostAddress?) { }
+    }
+
     @Test
     fun testRelativeUri() = runTest {
         val engine = buildTestConnection {
@@ -135,7 +153,42 @@ class EcsCredentialsProviderTest {
         val provider = EcsCredentialsProvider(testPlatform, engine)
         assertFailsWith<ProviderConfigurationException> {
             provider.resolve()
-        }.message.shouldContain("The container credentials full URI (http://amazonaws.com/full) is specified via hostname which is not currently supported.")
+        }.message.shouldContain("The container credentials full URI (http://amazonaws.com/full) is specified via a hostname whose IP address(es) do not resolve to the loopback device.")
+    }
+
+    @Test
+    fun testLocalFullUri() = runTest {
+        val uri = "http://localhost"
+        val engine = buildTestConnection {
+            expect(
+                ecsRequest(uri),
+                ecsResponse(),
+            )
+        }
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine, LocalHostResolver)
+        val actual = provider.resolve()
+        assertEquals(expectedCredentials, actual)
+        engine.assertRequests()
+    }
+
+    @Test
+    fun testNonexistentFullUri() = runTest {
+        val uri = "http://amazonaws.net/full"
+        val engine = TestConnection()
+
+        val testPlatform = TestPlatformProvider(
+            env = mapOf(AwsSdkSetting.AwsContainerCredentialsFullUri.envVar to uri),
+        )
+
+        val provider = EcsCredentialsProvider(testPlatform, engine)
+        assertFailsWith<ProviderConfigurationException> {
+            provider.resolve()
+        }.message.shouldContain("The container credentials full URI (http://amazonaws.net/full) is specified via a hostname whose IP address(es) could not be resolved.")
     }
 
     @Test

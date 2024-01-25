@@ -16,7 +16,6 @@ import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.*
-import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.operation.*
@@ -24,10 +23,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequestBuilder
 import aws.smithy.kotlin.runtime.http.request.header
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
-import aws.smithy.kotlin.runtime.net.Host
-import aws.smithy.kotlin.runtime.net.IpV4Addr
-import aws.smithy.kotlin.runtime.net.IpV6Addr
-import aws.smithy.kotlin.runtime.net.Scheme
+import aws.smithy.kotlin.runtime.net.*
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
@@ -60,12 +56,23 @@ private const val PROVIDER_NAME = "EcsContainer"
  * @param platformProvider the platform provider
  * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and lifetime
  * are NOT managed by the provider. Caller is responsible for closing.
- *
+ * @param hostResolver used to resolve hostname from AwsContainerCredentialsFullUri env setting. If not specified falls back to default.
  */
 public class EcsCredentialsProvider(
     public val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
+    private val hostResolver: HostResolver = HostResolver.Default,
 ) : CloseableCredentialsProvider {
+
+    // Keeping previous constructor as secondary due to backwards compatibility.
+    public constructor(
+        platformProvider: PlatformProvider = PlatformProvider.System,
+        httpClient: HttpClientEngine? = null,
+    ) : this(
+        platformProvider,
+        httpClient,
+        HostResolver.Default,
+    )
 
     private val manageEngine = httpClient == null
     private val httpClient: HttpClientEngine = httpClient ?: DefaultHttpEngine()
@@ -164,10 +171,24 @@ public class EcsCredentialsProvider(
                 )
             }
 
-            // TODO - resolve hostnames
-            is Host.Domain -> throw ProviderConfigurationException(
-                "The container credentials full URI ($uri) is specified via hostname which is not currently supported.",
-            )
+            is Host.Domain -> {
+                val hostAddresses = try {
+                    hostResolver.resolve(url.host.toString())
+                } catch (exception: Throwable) {
+                    throw ProviderConfigurationException(
+                        "The container credentials full URI ($uri) is specified via a hostname whose IP address(es) could not be resolved. ${exception.message}",
+                        exception,
+                    )
+                }
+
+                if (hostAddresses.isNotEmpty() && hostAddresses.all { it.address.isLoopBack }) {
+                    return url
+                } else {
+                    throw ProviderConfigurationException(
+                        "The container credentials full URI ($uri) is specified via a hostname whose IP address(es) do not resolve to the loopback device.",
+                    )
+                }
+            }
         }
     }
 

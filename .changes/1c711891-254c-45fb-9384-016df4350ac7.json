@@ -1,0 +1,8 @@
+{
+    "id": "1c711891-254c-45fb-9384-016df4350ac7",
+    "type": "feature",
+    "description": "Allow full URI path to a localhost metadata service (AwsContainerCredentialsFullUri) to be a host name",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#476"
+    ]
+}
