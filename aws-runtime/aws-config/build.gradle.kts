@@ -8,7 +8,7 @@ import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
-    id("aws.sdk.kotlin.gradle.smithybuild")
+    alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
 }
 
 description = "Support for AWS configuration"

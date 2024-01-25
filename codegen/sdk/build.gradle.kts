@@ -16,8 +16,8 @@ import java.util.*
 import kotlin.streams.toList
 
 plugins {
-    kotlin("jvm") // FIXME - codegen configuration doesn't resolve without this
-    id("aws.sdk.kotlin.gradle.smithybuild")
+    kotlin("jvm")
+    alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
     id("sdk-bootstrap")
 }
 
