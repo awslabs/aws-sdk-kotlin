@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.44] - 01/26/2024
+
+### Features
+* (**connect**) Update list and string length limits for predefined attributes.
+* (**inspector2**) This release adds ECR container image scanning based on their lastRecordedPullTime.
+* (**sagemaker**) Amazon SageMaker Automatic Model Tuning now provides an API to programmatically delete tuning jobs.
+
 ## [1.0.43] - 01/25/2024
 
 ### Features
