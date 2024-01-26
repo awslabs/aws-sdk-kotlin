@@ -32,8 +32,8 @@ class MutliRegionAccessPointTest {
             region = "us-west-2"
         }
 
-        val usWestBucket = "aws-sdk-for-kotlin-test-bucket-us-west-2"
-        val usEastBucket = "aws-sdk-for-kotlin-test-bucket-us-east-2"
+        val usWestBucket = "${S3TestUtils.TEST_BUCKET_PREFIX}us-west-2"
+        val usEastBucket = "${S3TestUtils.TEST_BUCKET_PREFIX}us-east-2"
         val multiRegionAccessPoint = "aws-sdk-for-kotlin-test-multi-region-access-point"
         val keyForObject = "test.txt"
 

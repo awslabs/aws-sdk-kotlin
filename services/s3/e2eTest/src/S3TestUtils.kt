@@ -132,6 +132,8 @@ object S3TestUtils {
 }
 
 internal suspend fun getAccountId(): String {
+    println("Getting account ID")
+
     val sts = StsClient {
         region = "us-west-2"
     }
@@ -150,6 +152,8 @@ internal suspend fun createS3Bucket(
     bucketName: String,
     location: BucketLocationConstraint,
 ) {
+    println("Creating S3 bucket: $bucketName")
+
     s3Client.createBucket(
         CreateBucketRequest {
             bucket = bucketName
@@ -168,6 +172,8 @@ internal suspend fun createMultiRegionAccessPoint(
     regionTwoBucket: String,
     testAccountId: String,
 ) {
+    println("Creating multi region access point: $multiRegionAccessPointName")
+
     val createRequestToken = s3ControlClient.createMultiRegionAccessPoint(
         CreateMultiRegionAccessPointRequest {
             accountId = testAccountId
@@ -201,6 +207,8 @@ internal suspend fun getMultiRegionAccessPointArn(
     multiRegionAccessPointName: String,
     testAccountId: String,
 ): String {
+    println("Getting multi region access point arn for: $multiRegionAccessPointName")
+
     s3ControlClient.listMultiRegionAccessPoints(
         ListMultiRegionAccessPointsRequest {
             accountId = testAccountId
@@ -216,6 +224,8 @@ internal suspend fun createObject(
     bucketName: String,
     keyName: String,
 ) {
+    println("Creating object '$keyName' in S3 bucket: $bucketName")
+
     s3Client.putObject(
         PutObjectRequest {
             bucket = bucketName
@@ -229,6 +239,8 @@ internal suspend fun deleteObject(
     bucketName: String,
     keyName: String,
 ) {
+    println("Deleting object '$keyName' in S3 bucket: $bucketName")
+
     s3Client.deleteObject(
         DeleteObjectRequest {
             bucket = bucketName
@@ -242,6 +254,8 @@ internal suspend fun deleteMultiRegionAccessPoint(
     multiRegionAccessPointName: String,
     testAccountId: String,
 ) {
+    println("Deleting multi region access point: $multiRegionAccessPointName")
+
     val deleteRequestToken = s3ControlClient.deleteMultiRegionAccessPoint(
         DeleteMultiRegionAccessPointRequest {
             accountId = testAccountId
@@ -279,7 +293,12 @@ internal suspend fun waitUntilMultiRegionAccessPointOperationCompletes(
         ).asyncOperation?.requestStatus
 
         println("Waiting on $operation operation. Status: $status ")
-        if (status == "SUCCEEDED") return
+
+        if (status == "SUCCEEDED") {
+            println("$operation operation succeeded.")
+            return
+        }
+
         TimeUnit.SECONDS.sleep(10L) // Avoid constant status checks
     }
 
@@ -290,6 +309,8 @@ internal suspend fun deleteS3Bucket(
     s3Client: S3Client,
     bucketName: String,
 ) {
+    println("Deleting S3 bucket: $bucketName")
+
     s3Client.deleteBucket(
         DeleteBucketRequest {
             bucket = bucketName
@@ -302,6 +323,8 @@ internal suspend fun objectWasCreated(
     bucketName: String,
     keyName: String,
 ): Boolean {
+    println("Checking if object '$keyName' was created in S3 bucket: $bucketName")
+
     val search = s3.listObjectsV2(
         ListObjectsV2Request {
             bucket = bucketName
@@ -315,6 +338,8 @@ internal suspend fun s3BucketWasCreated(
     s3: S3Client,
     bucketName: String,
 ): Boolean {
+    println("Checking if S3 bucket was created: $bucketName")
+
     val search = s3.listBuckets(
         ListBucketsRequest {},
     ).buckets
@@ -327,6 +352,8 @@ internal suspend fun multiRegionAccessPointWasCreated(
     multiRegionAccessPointName: String,
     testAccountId: String,
 ): Boolean {
+    println("Checking if multi region access point was created: $multiRegionAccessPointName")
+
     val search = s3Control.listMultiRegionAccessPoints(
         ListMultiRegionAccessPointsRequest {
             accountId = testAccountId
