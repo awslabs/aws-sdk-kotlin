@@ -35,7 +35,8 @@ object S3TestUtils {
 
     const val DEFAULT_REGION = "us-west-2"
 
-    private const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
+    // The E2E test account only has permission to operate on buckets with the prefix
+    internal const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
 
     suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
 
