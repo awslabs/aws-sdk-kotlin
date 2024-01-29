@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.45] - 01/29/2024
+
+### Features
+* (**autoscaling**) EC2 Auto Scaling customers who use attribute based instance-type selection can now intuitively define their Spot instances price protection limit as a percentage of the lowest priced On-Demand instance type.
+* (**ec2**) EC2 Fleet customers who use attribute based instance-type selection can now intuitively define their Spot instances price protection limit as a percentage of the lowest priced On-Demand instance type.
+* (**mwaa**) This release adds MAINTENANCE environment status for Amazon MWAA environments.
+* (**rds**) Introduced support for the InsufficientDBInstanceCapacityFault error in the RDS RestoreDBClusterFromSnapshot and RestoreDBClusterToPointInTime API methods. This provides enhanced error handling, ensuring a more robust experience.
+
+### Documentation
+* (**comprehend**) Comprehend PII analysis now supports Spanish input documents.
+* (**snowball**) Modified description of createaddress to include direction to add path when providing a JSON file.
+
 ## [1.0.44] - 01/26/2024
 
 ### Features
