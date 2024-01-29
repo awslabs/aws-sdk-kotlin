@@ -73,7 +73,7 @@ class MutliRegionAccessPointTest {
         }
 
         if (s3BucketWasCreated(s3East, usEastBucket)) {
-            if (objectWasCreated(s3East, usEastBucket, keyForObject)) { // TODO: Change to MRAP > How ?
+            if (objectWasCreated(s3East, usEastBucket, keyForObject)) { // TODO: Change to MRAP ARN - How ?
                 deleteObject(s3East, usEastBucket, keyForObject)
             }
             deleteS3Bucket(s3East, usEastBucket)
