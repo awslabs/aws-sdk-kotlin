@@ -10,53 +10,87 @@ import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.withConfig
 import aws.sdk.kotlin.services.s3control.S3ControlClient
 import aws.sdk.kotlin.services.s3control.model.*
+import aws.smithy.kotlin.runtime.auth.awssigning.UnsupportedSigningAlgorithmException
 import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
 import aws.smithy.kotlin.runtime.http.auth.SigV4AsymmetricAuthScheme
+import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 
 class MutliRegionAccessPointTest {
+    private val s3West = S3Client { region = "us-west-2" }
+    private val s3East = s3West.withConfig { region = "us-east-2" }
+    private val s3SigV4a = s3West.withConfig { authSchemes = listOf(SigV4AsymmetricAuthScheme(CrtAwsSigner)) }
+    private val s3Control = S3ControlClient { region = "us-west-2" }
+
+    private val usWestBucket = "${S3TestUtils.TEST_BUCKET_PREFIX}for-aws-kotlin-sdk-us-west-2"
+    private val usEastBucket = "${S3TestUtils.TEST_BUCKET_PREFIX}for-aws-kotlin-sdk-us-east-2"
+    private val multiRegionAccessPoint = "aws-sdk-for-kotlin-test-multi-region-access-point"
+    private val keyForObject = "test.txt"
+
+    @BeforeAll
+    private suspend fun setUpMrapTest() {
+        println("Setting up MutliRegionAccessPointTest tests")
+
+        val accountId = getAccountId()
+
+        createS3Bucket( // TODO: Use function already there
+            s3West,
+            usWestBucket,
+            BucketLocationConstraint.UsWest2,
+        )
+
+        createS3Bucket(
+            s3East,
+            usEastBucket,
+            BucketLocationConstraint.UsEast2,
+        )
+
+        createMultiRegionAccessPoint(
+            s3Control,
+            multiRegionAccessPoint,
+            usWestBucket,
+            usEastBucket,
+            accountId,
+        )
+    }
+
+    @AfterAll
+    private suspend fun cleanUpMrapTest() {
+        println("Cleaning up MutliRegionAccessPointTest tests")
+
+        val accountId = getAccountId()
+
+        if (multiRegionAccessPointWasCreated(s3Control, multiRegionAccessPoint, accountId)) {
+            deleteMultiRegionAccessPoint(s3Control, multiRegionAccessPoint, accountId)
+        }
+
+        if (s3BucketWasCreated(s3West, usWestBucket)) {
+            deleteS3Bucket(s3West, usWestBucket) // TODO: Use function already there
+        }
+
+        if (s3BucketWasCreated(s3East, usEastBucket)) {
+            if (objectWasCreated(s3East, usEastBucket, keyForObject)) { // TODO: Change to MRAP > How ?
+                deleteObject(s3East, usEastBucket, keyForObject)
+            }
+            deleteS3Bucket(s3East, usEastBucket)
+        }
+
+        closeClients(
+            s3West,
+            s3East,
+            s3SigV4a,
+            s3Control,
+        )
+    }
+
     @Test
     fun testMultRegionAccessPointOperation(): Unit = runBlocking {
-        val accountId = getAccountId()
-        val s3West = S3Client {
-            region = "us-west-2"
-        }
-        val s3East = s3West.withConfig {
-            region = "us-east-2"
-        }
-        val s3SigV4a = s3West.withConfig {
-            authSchemes = listOf(SigV4AsymmetricAuthScheme(CrtAwsSigner))
-        }
-        val s3Control = S3ControlClient {
-            region = "us-west-2"
-        }
-
-        val usWestBucket = "${S3TestUtils.TEST_BUCKET_PREFIX}for-aws-kotlin-sdk-us-west-2"
-        val usEastBucket = "${S3TestUtils.TEST_BUCKET_PREFIX}for-aws-kotlin-sdk-us-east-2"
-        val multiRegionAccessPoint = "aws-sdk-for-kotlin-test-multi-region-access-point"
-        val keyForObject = "test.txt"
-
         try {
-            createS3Bucket(
-                s3West,
-                usWestBucket,
-                BucketLocationConstraint.UsWest2,
-            )
-
-            createS3Bucket(
-                s3East,
-                usEastBucket,
-                BucketLocationConstraint.UsEast2,
-            )
-
-            createMultiRegionAccessPoint(
-                s3Control,
-                multiRegionAccessPoint,
-                usWestBucket,
-                usEastBucket,
-                accountId,
-            )
+            val accountId = getAccountId()
 
             val multiRegionAccessPointArn =
                 getMultiRegionAccessPointArn(
@@ -76,72 +110,34 @@ class MutliRegionAccessPointTest {
                 multiRegionAccessPointArn,
                 keyForObject,
             )
-
-            deleteMultiRegionAccessPoint(
-                s3Control,
-                multiRegionAccessPoint,
-                accountId,
-            )
-
-            deleteS3Bucket(
-                s3West,
-                usWestBucket,
-            )
-
-            deleteS3Bucket(
-                s3East,
-                usEastBucket,
-            )
         } catch (exception: Throwable) {
-            closeClients(
-                s3West,
-                s3East,
-                s3SigV4a,
-                s3Control,
-            )
-            cleanUpMrapTest(
-                accountId,
-                multiRegionAccessPoint,
-                usWestBucket,
-                usEastBucket,
-                keyForObject,
-            )
+            println("Test failed with exception: ${exception.cause}")
             throw exception
         }
-        closeClients(
-            s3West,
-            s3East,
-            s3SigV4a,
-            s3Control,
-        )
-    }
-}
-
-internal suspend fun cleanUpMrapTest(
-    testAccountId: String,
-    multiRegionAccessPointName: String,
-    usWestBucket: String,
-    usEastBucket: String,
-    keyName: String,
-) {
-    S3ControlClient {
-        region = "us-west-2"
-    }.use { s3Control ->
-        if (multiRegionAccessPointWasCreated(s3Control, multiRegionAccessPointName, testAccountId)) deleteMultiRegionAccessPoint(s3Control, multiRegionAccessPointName, testAccountId)
     }
 
-    S3Client {
-        region = "us-west-2"
-    }.use { s3West ->
-        if (s3BucketWasCreated(s3West, usWestBucket)) deleteS3Bucket(s3West, usWestBucket)
+    @Test
+    fun testUnsupportedSigningAlgorithm(): Unit = runBlocking {
+        try {
+            val accountId = getAccountId()
 
-        s3West.withConfig {
-            region = "us-east-2"
-        }.use { s3East ->
-            if (s3BucketWasCreated(s3East, usEastBucket)) {
-                if (objectWasCreated(s3East, usEastBucket, keyName)) deleteObject(s3East, usEastBucket, keyName)
-                deleteS3Bucket(s3East, usEastBucket)
-            }
+            val multiRegionAccessPointArn =
+                getMultiRegionAccessPointArn(
+                    s3Control,
+                    multiRegionAccessPoint,
+                    accountId,
+                )
+
+            assertFailsWith<UnsupportedSigningAlgorithmException> {
+                createObject(
+                    s3West,
+                    multiRegionAccessPointArn,
+                    keyForObject,
+                )
+            }.message.shouldContain("SIGV4_ASYMMETRIC support is not yet implemented for the default signer.")
+        } catch (exception: Throwable) {
+            println("Test failed with exception: ${exception.cause}")
+            throw exception
         }
     }
 }
