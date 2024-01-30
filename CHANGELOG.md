@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.46] - 01/30/2024
+
+### Features
+* (**datazone**) Add new skipDeletionCheck to DeleteDomain. Add new skipDeletionCheck to DeleteProject which also automatically deletes dependent objects
+
+### Documentation
+* (**route53**) Update the SDKs for text changes in the APIs.
+
 ## [1.0.45] - 01/29/2024
 
 ### Features
