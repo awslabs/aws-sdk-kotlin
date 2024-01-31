@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.47] - 01/31/2024
+
+### Features
+* (**cloudformation**) CloudFormation IaC generator allows you to scan existing resources in your account and select resources to generate a template for a new or existing CloudFormation stack.
+* (**elasticloadbalancingv2**) This release enables unhealthy target draining intervals for Network Load Balancers.
+* (**glue**) Update page size limits for GetJobRuns and GetTriggers APIs.
+* (**ssm**) This release adds an optional Duration parameter to StateManager Associations. This allows customers to specify how long an apply-only-on-cron association execution should run. Once the specified Duration is out all the ongoing cancellable commands or automations are cancelled.
+
 ## [1.0.46] - 01/30/2024
 
 ### Features
