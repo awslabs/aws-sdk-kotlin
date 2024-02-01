@@ -1,5 +1,0 @@
-{
-    "id": "499084ed-325b-442f-bb2a-680a19e16b6a",
-    "type": "bugfix",
-    "description": "Bump **smithy-kotlin** version to fix an error with serializing maps which use the `Document` type as a value"
-}

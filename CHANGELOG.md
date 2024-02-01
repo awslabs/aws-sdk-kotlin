@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.48] - 02/01/2024
+
+### Features
+* (**cognitoidentityprovider**) Added CreateIdentityProvider and UpdateIdentityProvider details for new SAML IdP features
+* (**ivs**) This release introduces a new resource Playback Restriction Policy which can be used to geo-restrict or domain-restrict channel stream playback when associated with a channel.  New APIs to support this resource were introduced in the form of Create/Delete/Get/Update/List.
+* (**managedblockchainquery**) This release adds support for transactions that have not reached finality. It also removes support for the status property from the response of the GetTransaction operation. You can use the confirmationStatus and executionStatus properties to determine the status of the transaction.
+* (**mediaconvert**) This release includes support for broadcast-mixed audio description tracks.
+* (**neptunegraph**) Adding new APIs in SDK for Amazon Neptune Analytics. These APIs include operations to execute, cancel, list queries and get the graph summary.
+* [#476](https://github.com/awslabs/aws-sdk-kotlin/issues/476) Allow full URI path to a localhost metadata service (AwsContainerCredentialsFullUri) to be a host name
+
+### Fixes
+* Bump **smithy-kotlin** version to fix an error with serializing maps which use the `Document` type as a value
+
 ## [1.0.47] - 01/31/2024
 
 ### Features
