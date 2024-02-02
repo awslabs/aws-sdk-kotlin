@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.49] - 02/02/2024
+
+### Features
+* (**sagemaker**) Amazon SageMaker Canvas adds GenerativeAiSettings support for CanvasAppSettings.
+
+### Documentation
+* (**dynamodb**) Any number of users can execute up to 50 concurrent restores (any type of restore) in a given account.
+
 ## [1.0.48] - 02/01/2024
 
 ### Features
