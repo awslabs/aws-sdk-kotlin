@@ -20,6 +20,7 @@ import org.gradle.api.tasks.options.Option
 import software.amazon.smithy.aws.traits.ServiceTrait
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
+import kotlin.streams.toList
 
 /**
  * Task to update the package manifest which is used by the bootstrap process to generate service clients.
