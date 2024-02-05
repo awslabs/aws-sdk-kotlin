@@ -7,7 +7,7 @@ public final class aws/sdk/kotlin/runtime/auth/S3ExpressAttributes {
 public final class aws/sdk/kotlin/runtime/auth/SigV4S3ExpressAuthScheme : aws/smithy/kotlin/runtime/http/auth/AuthScheme {
 	public fun <init> (Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigner;Ljava/lang/String;)V
 	public synthetic fun <init> (Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigner;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun <init> (Laws/smithy/kotlin/runtime/http/auth/AwsHttpSigner$Config;)V
+	public fun <init> (Laws/smithy/kotlin/runtime/http/auth/AwsHttpSigner;)V
 	public fun getSchemeId-DepwgT4 ()Ljava/lang/String;
 	public fun getSigner ()Laws/smithy/kotlin/runtime/http/auth/AwsHttpSigner;
 	public synthetic fun getSigner ()Laws/smithy/kotlin/runtime/http/auth/HttpSigner;
