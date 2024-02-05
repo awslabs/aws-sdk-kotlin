@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.50] - 02/05/2024
+
+### Features
+* (**glue**) Introduce Catalog Encryption Role within Glue Data Catalog Settings. Introduce SASL/PLAIN as an authentication method for Glue Kafka connections
+
+### Documentation
+* (**workspaces**) Added definitions of various WorkSpace states
+
 ## [1.0.49] - 02/02/2024
 
 ### Features
