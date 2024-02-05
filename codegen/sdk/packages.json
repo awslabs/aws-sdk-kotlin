@@ -1,0 +1,2254 @@
+{
+    "packages": [
+        {
+            "sdkId": "ACM",
+            "namespace": "aws.sdk.kotlin.services.acm",
+            "artifactName": "acm",
+            "brazilName": "AwsSdkKotlinAcm"
+        },
+        {
+            "sdkId": "ACM PCA",
+            "namespace": "aws.sdk.kotlin.services.acmpca",
+            "artifactName": "acmpca",
+            "brazilName": "AwsSdkKotlinAcmPca"
+        },
+        {
+            "sdkId": "API Gateway",
+            "namespace": "aws.sdk.kotlin.services.apigateway",
+            "artifactName": "apigateway",
+            "brazilName": "AwsSdkKotlinApiGateway"
+        },
+        {
+            "sdkId": "ARC Zonal Shift",
+            "namespace": "aws.sdk.kotlin.services.arczonalshift",
+            "artifactName": "arczonalshift",
+            "brazilName": "AwsSdkKotlinArcZonalShift"
+        },
+        {
+            "sdkId": "AccessAnalyzer",
+            "namespace": "aws.sdk.kotlin.services.accessanalyzer",
+            "artifactName": "accessanalyzer",
+            "brazilName": "AwsSdkKotlinAccessanalyzer"
+        },
+        {
+            "sdkId": "Account",
+            "namespace": "aws.sdk.kotlin.services.account",
+            "artifactName": "account",
+            "brazilName": "AwsSdkKotlinAccount"
+        },
+        {
+            "sdkId": "Alexa For Business",
+            "namespace": "aws.sdk.kotlin.services.alexaforbusiness",
+            "artifactName": "alexaforbusiness",
+            "brazilName": "AwsSdkKotlinAlexaForBusiness"
+        },
+        {
+            "sdkId": "Amplify",
+            "namespace": "aws.sdk.kotlin.services.amplify",
+            "artifactName": "amplify",
+            "brazilName": "AwsSdkKotlinAmplify"
+        },
+        {
+            "sdkId": "AmplifyBackend",
+            "namespace": "aws.sdk.kotlin.services.amplifybackend",
+            "artifactName": "amplifybackend",
+            "brazilName": "AwsSdkKotlinAmplifybackend"
+        },
+        {
+            "sdkId": "AmplifyUIBuilder",
+            "namespace": "aws.sdk.kotlin.services.amplifyuibuilder",
+            "artifactName": "amplifyuibuilder",
+            "brazilName": "AwsSdkKotlinAmplifyuibuilder"
+        },
+        {
+            "sdkId": "ApiGatewayManagementApi",
+            "namespace": "aws.sdk.kotlin.services.apigatewaymanagementapi",
+            "artifactName": "apigatewaymanagementapi",
+            "brazilName": "AwsSdkKotlinApigatewaymanagementapi"
+        },
+        {
+            "sdkId": "ApiGatewayV2",
+            "namespace": "aws.sdk.kotlin.services.apigatewayv2",
+            "artifactName": "apigatewayv2",
+            "brazilName": "AwsSdkKotlinApigatewayv2"
+        },
+        {
+            "sdkId": "App Mesh",
+            "namespace": "aws.sdk.kotlin.services.appmesh",
+            "artifactName": "appmesh",
+            "brazilName": "AwsSdkKotlinAppMesh"
+        },
+        {
+            "sdkId": "AppConfig",
+            "namespace": "aws.sdk.kotlin.services.appconfig",
+            "artifactName": "appconfig",
+            "brazilName": "AwsSdkKotlinAppconfig"
+        },
+        {
+            "sdkId": "AppConfigData",
+            "namespace": "aws.sdk.kotlin.services.appconfigdata",
+            "artifactName": "appconfigdata",
+            "brazilName": "AwsSdkKotlinAppconfigdata"
+        },
+        {
+            "sdkId": "AppFabric",
+            "namespace": "aws.sdk.kotlin.services.appfabric",
+            "artifactName": "appfabric",
+            "brazilName": "AwsSdkKotlinAppfabric"
+        },
+        {
+            "sdkId": "AppIntegrations",
+            "namespace": "aws.sdk.kotlin.services.appintegrations",
+            "artifactName": "appintegrations",
+            "brazilName": "AwsSdkKotlinAppintegrations"
+        },
+        {
+            "sdkId": "AppRunner",
+            "namespace": "aws.sdk.kotlin.services.apprunner",
+            "artifactName": "apprunner",
+            "brazilName": "AwsSdkKotlinApprunner"
+        },
+        {
+            "sdkId": "AppStream",
+            "namespace": "aws.sdk.kotlin.services.appstream",
+            "artifactName": "appstream",
+            "brazilName": "AwsSdkKotlinAppstream"
+        },
+        {
+            "sdkId": "AppSync",
+            "namespace": "aws.sdk.kotlin.services.appsync",
+            "artifactName": "appsync",
+            "brazilName": "AwsSdkKotlinAppsync"
+        },
+        {
+            "sdkId": "Appflow",
+            "namespace": "aws.sdk.kotlin.services.appflow",
+            "artifactName": "appflow",
+            "brazilName": "AwsSdkKotlinAppflow"
+        },
+        {
+            "sdkId": "Application Auto Scaling",
+            "namespace": "aws.sdk.kotlin.services.applicationautoscaling",
+            "artifactName": "applicationautoscaling",
+            "brazilName": "AwsSdkKotlinApplicationAutoScaling"
+        },
+        {
+            "sdkId": "Application Discovery Service",
+            "namespace": "aws.sdk.kotlin.services.applicationdiscoveryservice",
+            "artifactName": "applicationdiscoveryservice",
+            "brazilName": "AwsSdkKotlinApplicationDiscoveryService"
+        },
+        {
+            "sdkId": "Application Insights",
+            "namespace": "aws.sdk.kotlin.services.applicationinsights",
+            "artifactName": "applicationinsights",
+            "brazilName": "AwsSdkKotlinApplicationInsights"
+        },
+        {
+            "sdkId": "ApplicationCostProfiler",
+            "namespace": "aws.sdk.kotlin.services.applicationcostprofiler",
+            "artifactName": "applicationcostprofiler",
+            "brazilName": "AwsSdkKotlinApplicationcostprofiler"
+        },
+        {
+            "sdkId": "Athena",
+            "namespace": "aws.sdk.kotlin.services.athena",
+            "artifactName": "athena",
+            "brazilName": "AwsSdkKotlinAthena"
+        },
+        {
+            "sdkId": "AuditManager",
+            "namespace": "aws.sdk.kotlin.services.auditmanager",
+            "artifactName": "auditmanager",
+            "brazilName": "AwsSdkKotlinAuditmanager"
+        },
+        {
+            "sdkId": "Auto Scaling",
+            "namespace": "aws.sdk.kotlin.services.autoscaling",
+            "artifactName": "autoscaling",
+            "brazilName": "AwsSdkKotlinAutoScaling"
+        },
+        {
+            "sdkId": "Auto Scaling Plans",
+            "namespace": "aws.sdk.kotlin.services.autoscalingplans",
+            "artifactName": "autoscalingplans",
+            "brazilName": "AwsSdkKotlinAutoScalingPlans"
+        },
+        {
+            "sdkId": "BCM Data Exports",
+            "namespace": "aws.sdk.kotlin.services.bcmdataexports",
+            "artifactName": "bcmdataexports",
+            "brazilName": "AwsSdkKotlinBcmDataExports"
+        },
+        {
+            "sdkId": "Backup",
+            "namespace": "aws.sdk.kotlin.services.backup",
+            "artifactName": "backup",
+            "brazilName": "AwsSdkKotlinBackup"
+        },
+        {
+            "sdkId": "Backup Gateway",
+            "namespace": "aws.sdk.kotlin.services.backupgateway",
+            "artifactName": "backupgateway",
+            "brazilName": "AwsSdkKotlinBackupGateway"
+        },
+        {
+            "sdkId": "BackupStorage",
+            "namespace": "aws.sdk.kotlin.services.backupstorage",
+            "artifactName": "backupstorage",
+            "brazilName": "AwsSdkKotlinBackupstorage"
+        },
+        {
+            "sdkId": "Batch",
+            "namespace": "aws.sdk.kotlin.services.batch",
+            "artifactName": "batch",
+            "brazilName": "AwsSdkKotlinBatch"
+        },
+        {
+            "sdkId": "Bedrock",
+            "namespace": "aws.sdk.kotlin.services.bedrock",
+            "artifactName": "bedrock",
+            "brazilName": "AwsSdkKotlinBedrock"
+        },
+        {
+            "sdkId": "Bedrock Agent",
+            "namespace": "aws.sdk.kotlin.services.bedrockagent",
+            "artifactName": "bedrockagent",
+            "brazilName": "AwsSdkKotlinBedrockAgent"
+        },
+        {
+            "sdkId": "Bedrock Agent Runtime",
+            "namespace": "aws.sdk.kotlin.services.bedrockagentruntime",
+            "artifactName": "bedrockagentruntime",
+            "brazilName": "AwsSdkKotlinBedrockAgentRuntime"
+        },
+        {
+            "sdkId": "Bedrock Runtime",
+            "namespace": "aws.sdk.kotlin.services.bedrockruntime",
+            "artifactName": "bedrockruntime",
+            "brazilName": "AwsSdkKotlinBedrockRuntime"
+        },
+        {
+            "sdkId": "Braket",
+            "namespace": "aws.sdk.kotlin.services.braket",
+            "artifactName": "braket",
+            "brazilName": "AwsSdkKotlinBraket"
+        },
+        {
+            "sdkId": "Budgets",
+            "namespace": "aws.sdk.kotlin.services.budgets",
+            "artifactName": "budgets",
+            "brazilName": "AwsSdkKotlinBudgets"
+        },
+        {
+            "sdkId": "Chime",
+            "namespace": "aws.sdk.kotlin.services.chime",
+            "artifactName": "chime",
+            "brazilName": "AwsSdkKotlinChime"
+        },
+        {
+            "sdkId": "Chime SDK Identity",
+            "namespace": "aws.sdk.kotlin.services.chimesdkidentity",
+            "artifactName": "chimesdkidentity",
+            "brazilName": "AwsSdkKotlinChimeSdkIdentity"
+        },
+        {
+            "sdkId": "Chime SDK Media Pipelines",
+            "namespace": "aws.sdk.kotlin.services.chimesdkmediapipelines",
+            "artifactName": "chimesdkmediapipelines",
+            "brazilName": "AwsSdkKotlinChimeSdkMediaPipelines"
+        },
+        {
+            "sdkId": "Chime SDK Meetings",
+            "namespace": "aws.sdk.kotlin.services.chimesdkmeetings",
+            "artifactName": "chimesdkmeetings",
+            "brazilName": "AwsSdkKotlinChimeSdkMeetings"
+        },
+        {
+            "sdkId": "Chime SDK Messaging",
+            "namespace": "aws.sdk.kotlin.services.chimesdkmessaging",
+            "artifactName": "chimesdkmessaging",
+            "brazilName": "AwsSdkKotlinChimeSdkMessaging"
+        },
+        {
+            "sdkId": "Chime SDK Voice",
+            "namespace": "aws.sdk.kotlin.services.chimesdkvoice",
+            "artifactName": "chimesdkvoice",
+            "brazilName": "AwsSdkKotlinChimeSdkVoice"
+        },
+        {
+            "sdkId": "CleanRooms",
+            "namespace": "aws.sdk.kotlin.services.cleanrooms",
+            "artifactName": "cleanrooms",
+            "brazilName": "AwsSdkKotlinCleanrooms"
+        },
+        {
+            "sdkId": "CleanRoomsML",
+            "namespace": "aws.sdk.kotlin.services.cleanroomsml",
+            "artifactName": "cleanroomsml",
+            "brazilName": "AwsSdkKotlinCleanroomsml"
+        },
+        {
+            "sdkId": "Cloud9",
+            "namespace": "aws.sdk.kotlin.services.cloud9",
+            "artifactName": "cloud9",
+            "brazilName": "AwsSdkKotlinCloud9"
+        },
+        {
+            "sdkId": "CloudControl",
+            "namespace": "aws.sdk.kotlin.services.cloudcontrol",
+            "artifactName": "cloudcontrol",
+            "brazilName": "AwsSdkKotlinCloudcontrol"
+        },
+        {
+            "sdkId": "CloudDirectory",
+            "namespace": "aws.sdk.kotlin.services.clouddirectory",
+            "artifactName": "clouddirectory",
+            "brazilName": "AwsSdkKotlinClouddirectory"
+        },
+        {
+            "sdkId": "CloudFormation",
+            "namespace": "aws.sdk.kotlin.services.cloudformation",
+            "artifactName": "cloudformation",
+            "brazilName": "AwsSdkKotlinCloudformation"
+        },
+        {
+            "sdkId": "CloudFront",
+            "namespace": "aws.sdk.kotlin.services.cloudfront",
+            "artifactName": "cloudfront",
+            "brazilName": "AwsSdkKotlinCloudfront"
+        },
+        {
+            "sdkId": "CloudFront KeyValueStore",
+            "namespace": "aws.sdk.kotlin.services.cloudfrontkeyvaluestore",
+            "artifactName": "cloudfrontkeyvaluestore",
+            "brazilName": "AwsSdkKotlinCloudfrontKeyvaluestore"
+        },
+        {
+            "sdkId": "CloudHSM",
+            "namespace": "aws.sdk.kotlin.services.cloudhsm",
+            "artifactName": "cloudhsm",
+            "brazilName": "AwsSdkKotlinCloudhsm"
+        },
+        {
+            "sdkId": "CloudHSM V2",
+            "namespace": "aws.sdk.kotlin.services.cloudhsmv2",
+            "artifactName": "cloudhsmv2",
+            "brazilName": "AwsSdkKotlinCloudhsmV2"
+        },
+        {
+            "sdkId": "CloudSearch",
+            "namespace": "aws.sdk.kotlin.services.cloudsearch",
+            "artifactName": "cloudsearch",
+            "brazilName": "AwsSdkKotlinCloudsearch"
+        },
+        {
+            "sdkId": "CloudSearch Domain",
+            "namespace": "aws.sdk.kotlin.services.cloudsearchdomain",
+            "artifactName": "cloudsearchdomain",
+            "brazilName": "AwsSdkKotlinCloudsearchDomain"
+        },
+        {
+            "sdkId": "CloudTrail",
+            "namespace": "aws.sdk.kotlin.services.cloudtrail",
+            "artifactName": "cloudtrail",
+            "brazilName": "AwsSdkKotlinCloudtrail"
+        },
+        {
+            "sdkId": "CloudTrail Data",
+            "namespace": "aws.sdk.kotlin.services.cloudtraildata",
+            "artifactName": "cloudtraildata",
+            "brazilName": "AwsSdkKotlinCloudtrailData"
+        },
+        {
+            "sdkId": "CloudWatch",
+            "namespace": "aws.sdk.kotlin.services.cloudwatch",
+            "artifactName": "cloudwatch",
+            "brazilName": "AwsSdkKotlinCloudwatch"
+        },
+        {
+            "sdkId": "CloudWatch Events",
+            "namespace": "aws.sdk.kotlin.services.cloudwatchevents",
+            "artifactName": "cloudwatchevents",
+            "brazilName": "AwsSdkKotlinCloudwatchEvents"
+        },
+        {
+            "sdkId": "CloudWatch Logs",
+            "namespace": "aws.sdk.kotlin.services.cloudwatchlogs",
+            "artifactName": "cloudwatchlogs",
+            "brazilName": "AwsSdkKotlinCloudwatchLogs"
+        },
+        {
+            "sdkId": "CodeBuild",
+            "namespace": "aws.sdk.kotlin.services.codebuild",
+            "artifactName": "codebuild",
+            "brazilName": "AwsSdkKotlinCodebuild"
+        },
+        {
+            "sdkId": "CodeCatalyst",
+            "namespace": "aws.sdk.kotlin.services.codecatalyst",
+            "artifactName": "codecatalyst",
+            "brazilName": "AwsSdkKotlinCodecatalyst"
+        },
+        {
+            "sdkId": "CodeCommit",
+            "namespace": "aws.sdk.kotlin.services.codecommit",
+            "artifactName": "codecommit",
+            "brazilName": "AwsSdkKotlinCodecommit"
+        },
+        {
+            "sdkId": "CodeDeploy",
+            "namespace": "aws.sdk.kotlin.services.codedeploy",
+            "artifactName": "codedeploy",
+            "brazilName": "AwsSdkKotlinCodedeploy"
+        },
+        {
+            "sdkId": "CodeGuru Reviewer",
+            "namespace": "aws.sdk.kotlin.services.codegurureviewer",
+            "artifactName": "codegurureviewer",
+            "brazilName": "AwsSdkKotlinCodeguruReviewer"
+        },
+        {
+            "sdkId": "CodeGuru Security",
+            "namespace": "aws.sdk.kotlin.services.codegurusecurity",
+            "artifactName": "codegurusecurity",
+            "brazilName": "AwsSdkKotlinCodeguruSecurity"
+        },
+        {
+            "sdkId": "CodeGuruProfiler",
+            "namespace": "aws.sdk.kotlin.services.codeguruprofiler",
+            "artifactName": "codeguruprofiler",
+            "brazilName": "AwsSdkKotlinCodeguruprofiler"
+        },
+        {
+            "sdkId": "CodePipeline",
+            "namespace": "aws.sdk.kotlin.services.codepipeline",
+            "artifactName": "codepipeline",
+            "brazilName": "AwsSdkKotlinCodepipeline"
+        },
+        {
+            "sdkId": "CodeStar",
+            "namespace": "aws.sdk.kotlin.services.codestar",
+            "artifactName": "codestar",
+            "brazilName": "AwsSdkKotlinCodestar"
+        },
+        {
+            "sdkId": "CodeStar connections",
+            "namespace": "aws.sdk.kotlin.services.codestarconnections",
+            "artifactName": "codestarconnections",
+            "brazilName": "AwsSdkKotlinCodestarConnections"
+        },
+        {
+            "sdkId": "Cognito Identity",
+            "namespace": "aws.sdk.kotlin.services.cognitoidentity",
+            "artifactName": "cognitoidentity",
+            "brazilName": "AwsSdkKotlinCognitoIdentity"
+        },
+        {
+            "sdkId": "Cognito Identity Provider",
+            "namespace": "aws.sdk.kotlin.services.cognitoidentityprovider",
+            "artifactName": "cognitoidentityprovider",
+            "brazilName": "AwsSdkKotlinCognitoIdentityProvider"
+        },
+        {
+            "sdkId": "Cognito Sync",
+            "namespace": "aws.sdk.kotlin.services.cognitosync",
+            "artifactName": "cognitosync",
+            "brazilName": "AwsSdkKotlinCognitoSync"
+        },
+        {
+            "sdkId": "Comprehend",
+            "namespace": "aws.sdk.kotlin.services.comprehend",
+            "artifactName": "comprehend",
+            "brazilName": "AwsSdkKotlinComprehend"
+        },
+        {
+            "sdkId": "ComprehendMedical",
+            "namespace": "aws.sdk.kotlin.services.comprehendmedical",
+            "artifactName": "comprehendmedical",
+            "brazilName": "AwsSdkKotlinComprehendmedical"
+        },
+        {
+            "sdkId": "Compute Optimizer",
+            "namespace": "aws.sdk.kotlin.services.computeoptimizer",
+            "artifactName": "computeoptimizer",
+            "brazilName": "AwsSdkKotlinComputeOptimizer"
+        },
+        {
+            "sdkId": "Config Service",
+            "namespace": "aws.sdk.kotlin.services.configservice",
+            "artifactName": "configservice",
+            "brazilName": "AwsSdkKotlinConfigService"
+        },
+        {
+            "sdkId": "Connect",
+            "namespace": "aws.sdk.kotlin.services.connect",
+            "artifactName": "connect",
+            "brazilName": "AwsSdkKotlinConnect"
+        },
+        {
+            "sdkId": "Connect Contact Lens",
+            "namespace": "aws.sdk.kotlin.services.connectcontactlens",
+            "artifactName": "connectcontactlens",
+            "brazilName": "AwsSdkKotlinConnectContactLens"
+        },
+        {
+            "sdkId": "ConnectCampaigns",
+            "namespace": "aws.sdk.kotlin.services.connectcampaigns",
+            "artifactName": "connectcampaigns",
+            "brazilName": "AwsSdkKotlinConnectcampaigns"
+        },
+        {
+            "sdkId": "ConnectCases",
+            "namespace": "aws.sdk.kotlin.services.connectcases",
+            "artifactName": "connectcases",
+            "brazilName": "AwsSdkKotlinConnectcases"
+        },
+        {
+            "sdkId": "ConnectParticipant",
+            "namespace": "aws.sdk.kotlin.services.connectparticipant",
+            "artifactName": "connectparticipant",
+            "brazilName": "AwsSdkKotlinConnectparticipant"
+        },
+        {
+            "sdkId": "ControlTower",
+            "namespace": "aws.sdk.kotlin.services.controltower",
+            "artifactName": "controltower",
+            "brazilName": "AwsSdkKotlinControltower"
+        },
+        {
+            "sdkId": "Cost Explorer",
+            "namespace": "aws.sdk.kotlin.services.costexplorer",
+            "artifactName": "costexplorer",
+            "brazilName": "AwsSdkKotlinCostExplorer"
+        },
+        {
+            "sdkId": "Cost Optimization Hub",
+            "namespace": "aws.sdk.kotlin.services.costoptimizationhub",
+            "artifactName": "costoptimizationhub",
+            "brazilName": "AwsSdkKotlinCostOptimizationHub"
+        },
+        {
+            "sdkId": "Cost and Usage Report Service",
+            "namespace": "aws.sdk.kotlin.services.costandusagereportservice",
+            "artifactName": "costandusagereportservice",
+            "brazilName": "AwsSdkKotlinCostAndUsageReportService"
+        },
+        {
+            "sdkId": "Customer Profiles",
+            "namespace": "aws.sdk.kotlin.services.customerprofiles",
+            "artifactName": "customerprofiles",
+            "brazilName": "AwsSdkKotlinCustomerProfiles"
+        },
+        {
+            "sdkId": "DAX",
+            "namespace": "aws.sdk.kotlin.services.dax",
+            "artifactName": "dax",
+            "brazilName": "AwsSdkKotlinDax"
+        },
+        {
+            "sdkId": "DLM",
+            "namespace": "aws.sdk.kotlin.services.dlm",
+            "artifactName": "dlm",
+            "brazilName": "AwsSdkKotlinDlm"
+        },
+        {
+            "sdkId": "Data Pipeline",
+            "namespace": "aws.sdk.kotlin.services.datapipeline",
+            "artifactName": "datapipeline",
+            "brazilName": "AwsSdkKotlinDataPipeline"
+        },
+        {
+            "sdkId": "DataBrew",
+            "namespace": "aws.sdk.kotlin.services.databrew",
+            "artifactName": "databrew",
+            "brazilName": "AwsSdkKotlinDatabrew"
+        },
+        {
+            "sdkId": "DataExchange",
+            "namespace": "aws.sdk.kotlin.services.dataexchange",
+            "artifactName": "dataexchange",
+            "brazilName": "AwsSdkKotlinDataexchange"
+        },
+        {
+            "sdkId": "DataSync",
+            "namespace": "aws.sdk.kotlin.services.datasync",
+            "artifactName": "datasync",
+            "brazilName": "AwsSdkKotlinDatasync"
+        },
+        {
+            "sdkId": "DataZone",
+            "namespace": "aws.sdk.kotlin.services.datazone",
+            "artifactName": "datazone",
+            "brazilName": "AwsSdkKotlinDatazone"
+        },
+        {
+            "sdkId": "Database Migration Service",
+            "namespace": "aws.sdk.kotlin.services.databasemigrationservice",
+            "artifactName": "databasemigrationservice",
+            "brazilName": "AwsSdkKotlinDatabaseMigrationService"
+        },
+        {
+            "sdkId": "Detective",
+            "namespace": "aws.sdk.kotlin.services.detective",
+            "artifactName": "detective",
+            "brazilName": "AwsSdkKotlinDetective"
+        },
+        {
+            "sdkId": "DevOps Guru",
+            "namespace": "aws.sdk.kotlin.services.devopsguru",
+            "artifactName": "devopsguru",
+            "brazilName": "AwsSdkKotlinDevopsGuru"
+        },
+        {
+            "sdkId": "Device Farm",
+            "namespace": "aws.sdk.kotlin.services.devicefarm",
+            "artifactName": "devicefarm",
+            "brazilName": "AwsSdkKotlinDeviceFarm"
+        },
+        {
+            "sdkId": "Direct Connect",
+            "namespace": "aws.sdk.kotlin.services.directconnect",
+            "artifactName": "directconnect",
+            "brazilName": "AwsSdkKotlinDirectConnect"
+        },
+        {
+            "sdkId": "Directory Service",
+            "namespace": "aws.sdk.kotlin.services.directoryservice",
+            "artifactName": "directoryservice",
+            "brazilName": "AwsSdkKotlinDirectoryService"
+        },
+        {
+            "sdkId": "DocDB",
+            "namespace": "aws.sdk.kotlin.services.docdb",
+            "artifactName": "docdb",
+            "brazilName": "AwsSdkKotlinDocdb"
+        },
+        {
+            "sdkId": "DocDB Elastic",
+            "namespace": "aws.sdk.kotlin.services.docdbelastic",
+            "artifactName": "docdbelastic",
+            "brazilName": "AwsSdkKotlinDocdbElastic"
+        },
+        {
+            "sdkId": "DynamoDB",
+            "namespace": "aws.sdk.kotlin.services.dynamodb",
+            "artifactName": "dynamodb",
+            "brazilName": "AwsSdkKotlinDynamodb"
+        },
+        {
+            "sdkId": "DynamoDB Streams",
+            "namespace": "aws.sdk.kotlin.services.dynamodbstreams",
+            "artifactName": "dynamodbstreams",
+            "brazilName": "AwsSdkKotlinDynamodbStreams"
+        },
+        {
+            "sdkId": "EBS",
+            "namespace": "aws.sdk.kotlin.services.ebs",
+            "artifactName": "ebs",
+            "brazilName": "AwsSdkKotlinEbs"
+        },
+        {
+            "sdkId": "EC2",
+            "namespace": "aws.sdk.kotlin.services.ec2",
+            "artifactName": "ec2",
+            "brazilName": "AwsSdkKotlinEc2"
+        },
+        {
+            "sdkId": "EC2 Instance Connect",
+            "namespace": "aws.sdk.kotlin.services.ec2instanceconnect",
+            "artifactName": "ec2instanceconnect",
+            "brazilName": "AwsSdkKotlinEc2InstanceConnect"
+        },
+        {
+            "sdkId": "ECR",
+            "namespace": "aws.sdk.kotlin.services.ecr",
+            "artifactName": "ecr",
+            "brazilName": "AwsSdkKotlinEcr"
+        },
+        {
+            "sdkId": "ECR PUBLIC",
+            "namespace": "aws.sdk.kotlin.services.ecrpublic",
+            "artifactName": "ecrpublic",
+            "brazilName": "AwsSdkKotlinEcrPublic"
+        },
+        {
+            "sdkId": "ECS",
+            "namespace": "aws.sdk.kotlin.services.ecs",
+            "artifactName": "ecs",
+            "brazilName": "AwsSdkKotlinEcs"
+        },
+        {
+            "sdkId": "EFS",
+            "namespace": "aws.sdk.kotlin.services.efs",
+            "artifactName": "efs",
+            "brazilName": "AwsSdkKotlinEfs"
+        },
+        {
+            "sdkId": "EKS",
+            "namespace": "aws.sdk.kotlin.services.eks",
+            "artifactName": "eks",
+            "brazilName": "AwsSdkKotlinEks"
+        },
+        {
+            "sdkId": "EKS Auth",
+            "namespace": "aws.sdk.kotlin.services.eksauth",
+            "artifactName": "eksauth",
+            "brazilName": "AwsSdkKotlinEksAuth"
+        },
+        {
+            "sdkId": "EMR",
+            "namespace": "aws.sdk.kotlin.services.emr",
+            "artifactName": "emr",
+            "brazilName": "AwsSdkKotlinEmr"
+        },
+        {
+            "sdkId": "EMR Serverless",
+            "namespace": "aws.sdk.kotlin.services.emrserverless",
+            "artifactName": "emrserverless",
+            "brazilName": "AwsSdkKotlinEmrServerless"
+        },
+        {
+            "sdkId": "EMR containers",
+            "namespace": "aws.sdk.kotlin.services.emrcontainers",
+            "artifactName": "emrcontainers",
+            "brazilName": "AwsSdkKotlinEmrContainers"
+        },
+        {
+            "sdkId": "ElastiCache",
+            "namespace": "aws.sdk.kotlin.services.elasticache",
+            "artifactName": "elasticache",
+            "brazilName": "AwsSdkKotlinElasticache"
+        },
+        {
+            "sdkId": "Elastic Beanstalk",
+            "namespace": "aws.sdk.kotlin.services.elasticbeanstalk",
+            "artifactName": "elasticbeanstalk",
+            "brazilName": "AwsSdkKotlinElasticBeanstalk"
+        },
+        {
+            "sdkId": "Elastic Inference",
+            "namespace": "aws.sdk.kotlin.services.elasticinference",
+            "artifactName": "elasticinference",
+            "brazilName": "AwsSdkKotlinElasticInference"
+        },
+        {
+            "sdkId": "Elastic Load Balancing",
+            "namespace": "aws.sdk.kotlin.services.elasticloadbalancing",
+            "artifactName": "elasticloadbalancing",
+            "brazilName": "AwsSdkKotlinElasticLoadBalancing"
+        },
+        {
+            "sdkId": "Elastic Load Balancing v2",
+            "namespace": "aws.sdk.kotlin.services.elasticloadbalancingv2",
+            "artifactName": "elasticloadbalancingv2",
+            "brazilName": "AwsSdkKotlinElasticLoadBalancingV2"
+        },
+        {
+            "sdkId": "Elastic Transcoder",
+            "namespace": "aws.sdk.kotlin.services.elastictranscoder",
+            "artifactName": "elastictranscoder",
+            "brazilName": "AwsSdkKotlinElasticTranscoder"
+        },
+        {
+            "sdkId": "Elasticsearch Service",
+            "namespace": "aws.sdk.kotlin.services.elasticsearchservice",
+            "artifactName": "elasticsearchservice",
+            "brazilName": "AwsSdkKotlinElasticsearchService"
+        },
+        {
+            "sdkId": "EntityResolution",
+            "namespace": "aws.sdk.kotlin.services.entityresolution",
+            "artifactName": "entityresolution",
+            "brazilName": "AwsSdkKotlinEntityresolution"
+        },
+        {
+            "sdkId": "EventBridge",
+            "namespace": "aws.sdk.kotlin.services.eventbridge",
+            "artifactName": "eventbridge",
+            "brazilName": "AwsSdkKotlinEventbridge"
+        },
+        {
+            "sdkId": "Evidently",
+            "namespace": "aws.sdk.kotlin.services.evidently",
+            "artifactName": "evidently",
+            "brazilName": "AwsSdkKotlinEvidently"
+        },
+        {
+            "sdkId": "FMS",
+            "namespace": "aws.sdk.kotlin.services.fms",
+            "artifactName": "fms",
+            "brazilName": "AwsSdkKotlinFms"
+        },
+        {
+            "sdkId": "FSx",
+            "namespace": "aws.sdk.kotlin.services.fsx",
+            "artifactName": "fsx",
+            "brazilName": "AwsSdkKotlinFsx"
+        },
+        {
+            "sdkId": "Firehose",
+            "namespace": "aws.sdk.kotlin.services.firehose",
+            "artifactName": "firehose",
+            "brazilName": "AwsSdkKotlinFirehose"
+        },
+        {
+            "sdkId": "FraudDetector",
+            "namespace": "aws.sdk.kotlin.services.frauddetector",
+            "artifactName": "frauddetector",
+            "brazilName": "AwsSdkKotlinFrauddetector"
+        },
+        {
+            "sdkId": "FreeTier",
+            "namespace": "aws.sdk.kotlin.services.freetier",
+            "artifactName": "freetier",
+            "brazilName": "AwsSdkKotlinFreetier"
+        },
+        {
+            "sdkId": "GameLift",
+            "namespace": "aws.sdk.kotlin.services.gamelift",
+            "artifactName": "gamelift",
+            "brazilName": "AwsSdkKotlinGamelift"
+        },
+        {
+            "sdkId": "Glacier",
+            "namespace": "aws.sdk.kotlin.services.glacier",
+            "artifactName": "glacier",
+            "brazilName": "AwsSdkKotlinGlacier"
+        },
+        {
+            "sdkId": "Global Accelerator",
+            "namespace": "aws.sdk.kotlin.services.globalaccelerator",
+            "artifactName": "globalaccelerator",
+            "brazilName": "AwsSdkKotlinGlobalAccelerator"
+        },
+        {
+            "sdkId": "Glue",
+            "namespace": "aws.sdk.kotlin.services.glue",
+            "artifactName": "glue",
+            "brazilName": "AwsSdkKotlinGlue"
+        },
+        {
+            "sdkId": "Greengrass",
+            "namespace": "aws.sdk.kotlin.services.greengrass",
+            "artifactName": "greengrass",
+            "brazilName": "AwsSdkKotlinGreengrass"
+        },
+        {
+            "sdkId": "GreengrassV2",
+            "namespace": "aws.sdk.kotlin.services.greengrassv2",
+            "artifactName": "greengrassv2",
+            "brazilName": "AwsSdkKotlinGreengrassv2"
+        },
+        {
+            "sdkId": "GroundStation",
+            "namespace": "aws.sdk.kotlin.services.groundstation",
+            "artifactName": "groundstation",
+            "brazilName": "AwsSdkKotlinGroundstation"
+        },
+        {
+            "sdkId": "GuardDuty",
+            "namespace": "aws.sdk.kotlin.services.guardduty",
+            "artifactName": "guardduty",
+            "brazilName": "AwsSdkKotlinGuardduty"
+        },
+        {
+            "sdkId": "Health",
+            "namespace": "aws.sdk.kotlin.services.health",
+            "artifactName": "health",
+            "brazilName": "AwsSdkKotlinHealth"
+        },
+        {
+            "sdkId": "HealthLake",
+            "namespace": "aws.sdk.kotlin.services.healthlake",
+            "artifactName": "healthlake",
+            "brazilName": "AwsSdkKotlinHealthlake"
+        },
+        {
+            "sdkId": "Honeycode",
+            "namespace": "aws.sdk.kotlin.services.honeycode",
+            "artifactName": "honeycode",
+            "brazilName": "AwsSdkKotlinHoneycode"
+        },
+        {
+            "sdkId": "IAM",
+            "namespace": "aws.sdk.kotlin.services.iam",
+            "artifactName": "iam",
+            "brazilName": "AwsSdkKotlinIam"
+        },
+        {
+            "sdkId": "IVS RealTime",
+            "namespace": "aws.sdk.kotlin.services.ivsrealtime",
+            "artifactName": "ivsrealtime",
+            "brazilName": "AwsSdkKotlinIvsRealtime"
+        },
+        {
+            "sdkId": "Inspector",
+            "namespace": "aws.sdk.kotlin.services.inspector",
+            "artifactName": "inspector",
+            "brazilName": "AwsSdkKotlinInspector"
+        },
+        {
+            "sdkId": "Inspector Scan",
+            "namespace": "aws.sdk.kotlin.services.inspectorscan",
+            "artifactName": "inspectorscan",
+            "brazilName": "AwsSdkKotlinInspectorScan"
+        },
+        {
+            "sdkId": "Inspector2",
+            "namespace": "aws.sdk.kotlin.services.inspector2",
+            "artifactName": "inspector2",
+            "brazilName": "AwsSdkKotlinInspector2"
+        },
+        {
+            "sdkId": "InternetMonitor",
+            "namespace": "aws.sdk.kotlin.services.internetmonitor",
+            "artifactName": "internetmonitor",
+            "brazilName": "AwsSdkKotlinInternetmonitor"
+        },
+        {
+            "sdkId": "IoT",
+            "namespace": "aws.sdk.kotlin.services.iot",
+            "artifactName": "iot",
+            "brazilName": "AwsSdkKotlinIot"
+        },
+        {
+            "sdkId": "IoT 1Click Devices Service",
+            "namespace": "aws.sdk.kotlin.services.iot1clickdevicesservice",
+            "artifactName": "iot1clickdevicesservice",
+            "brazilName": "AwsSdkKotlinIot1clickDevicesService"
+        },
+        {
+            "sdkId": "IoT 1Click Projects",
+            "namespace": "aws.sdk.kotlin.services.iot1clickprojects",
+            "artifactName": "iot1clickprojects",
+            "brazilName": "AwsSdkKotlinIot1clickProjects"
+        },
+        {
+            "sdkId": "IoT Data Plane",
+            "namespace": "aws.sdk.kotlin.services.iotdataplane",
+            "artifactName": "iotdataplane",
+            "brazilName": "AwsSdkKotlinIotDataPlane"
+        },
+        {
+            "sdkId": "IoT Events",
+            "namespace": "aws.sdk.kotlin.services.iotevents",
+            "artifactName": "iotevents",
+            "brazilName": "AwsSdkKotlinIotEvents"
+        },
+        {
+            "sdkId": "IoT Events Data",
+            "namespace": "aws.sdk.kotlin.services.ioteventsdata",
+            "artifactName": "ioteventsdata",
+            "brazilName": "AwsSdkKotlinIotEventsData"
+        },
+        {
+            "sdkId": "IoT Jobs Data Plane",
+            "namespace": "aws.sdk.kotlin.services.iotjobsdataplane",
+            "artifactName": "iotjobsdataplane",
+            "brazilName": "AwsSdkKotlinIotJobsDataPlane"
+        },
+        {
+            "sdkId": "IoT RoboRunner",
+            "namespace": "aws.sdk.kotlin.services.iotroborunner",
+            "artifactName": "iotroborunner",
+            "brazilName": "AwsSdkKotlinIotRoborunner"
+        },
+        {
+            "sdkId": "IoT Wireless",
+            "namespace": "aws.sdk.kotlin.services.iotwireless",
+            "artifactName": "iotwireless",
+            "brazilName": "AwsSdkKotlinIotWireless"
+        },
+        {
+            "sdkId": "IoTAnalytics",
+            "namespace": "aws.sdk.kotlin.services.iotanalytics",
+            "artifactName": "iotanalytics",
+            "brazilName": "AwsSdkKotlinIotanalytics"
+        },
+        {
+            "sdkId": "IoTFleetHub",
+            "namespace": "aws.sdk.kotlin.services.iotfleethub",
+            "artifactName": "iotfleethub",
+            "brazilName": "AwsSdkKotlinIotfleethub"
+        },
+        {
+            "sdkId": "IoTFleetWise",
+            "namespace": "aws.sdk.kotlin.services.iotfleetwise",
+            "artifactName": "iotfleetwise",
+            "brazilName": "AwsSdkKotlinIotfleetwise"
+        },
+        {
+            "sdkId": "IoTSecureTunneling",
+            "namespace": "aws.sdk.kotlin.services.iotsecuretunneling",
+            "artifactName": "iotsecuretunneling",
+            "brazilName": "AwsSdkKotlinIotsecuretunneling"
+        },
+        {
+            "sdkId": "IoTSiteWise",
+            "namespace": "aws.sdk.kotlin.services.iotsitewise",
+            "artifactName": "iotsitewise",
+            "brazilName": "AwsSdkKotlinIotsitewise"
+        },
+        {
+            "sdkId": "IoTThingsGraph",
+            "namespace": "aws.sdk.kotlin.services.iotthingsgraph",
+            "artifactName": "iotthingsgraph",
+            "brazilName": "AwsSdkKotlinIotthingsgraph"
+        },
+        {
+            "sdkId": "IoTTwinMaker",
+            "namespace": "aws.sdk.kotlin.services.iottwinmaker",
+            "artifactName": "iottwinmaker",
+            "brazilName": "AwsSdkKotlinIottwinmaker"
+        },
+        {
+            "sdkId": "IotDeviceAdvisor",
+            "namespace": "aws.sdk.kotlin.services.iotdeviceadvisor",
+            "artifactName": "iotdeviceadvisor",
+            "brazilName": "AwsSdkKotlinIotdeviceadvisor"
+        },
+        {
+            "sdkId": "KMS",
+            "namespace": "aws.sdk.kotlin.services.kms",
+            "artifactName": "kms",
+            "brazilName": "AwsSdkKotlinKms"
+        },
+        {
+            "sdkId": "Kafka",
+            "namespace": "aws.sdk.kotlin.services.kafka",
+            "artifactName": "kafka",
+            "brazilName": "AwsSdkKotlinKafka"
+        },
+        {
+            "sdkId": "KafkaConnect",
+            "namespace": "aws.sdk.kotlin.services.kafkaconnect",
+            "artifactName": "kafkaconnect",
+            "brazilName": "AwsSdkKotlinKafkaconnect"
+        },
+        {
+            "sdkId": "Kendra Ranking",
+            "namespace": "aws.sdk.kotlin.services.kendraranking",
+            "artifactName": "kendraranking",
+            "brazilName": "AwsSdkKotlinKendraRanking"
+        },
+        {
+            "sdkId": "Keyspaces",
+            "namespace": "aws.sdk.kotlin.services.keyspaces",
+            "artifactName": "keyspaces",
+            "brazilName": "AwsSdkKotlinKeyspaces"
+        },
+        {
+            "sdkId": "Kinesis",
+            "namespace": "aws.sdk.kotlin.services.kinesis",
+            "artifactName": "kinesis",
+            "brazilName": "AwsSdkKotlinKinesis"
+        },
+        {
+            "sdkId": "Kinesis Analytics",
+            "namespace": "aws.sdk.kotlin.services.kinesisanalytics",
+            "artifactName": "kinesisanalytics",
+            "brazilName": "AwsSdkKotlinKinesisAnalytics"
+        },
+        {
+            "sdkId": "Kinesis Analytics V2",
+            "namespace": "aws.sdk.kotlin.services.kinesisanalyticsv2",
+            "artifactName": "kinesisanalyticsv2",
+            "brazilName": "AwsSdkKotlinKinesisAnalyticsV2"
+        },
+        {
+            "sdkId": "Kinesis Video",
+            "namespace": "aws.sdk.kotlin.services.kinesisvideo",
+            "artifactName": "kinesisvideo",
+            "brazilName": "AwsSdkKotlinKinesisVideo"
+        },
+        {
+            "sdkId": "Kinesis Video Archived Media",
+            "namespace": "aws.sdk.kotlin.services.kinesisvideoarchivedmedia",
+            "artifactName": "kinesisvideoarchivedmedia",
+            "brazilName": "AwsSdkKotlinKinesisVideoArchivedMedia"
+        },
+        {
+            "sdkId": "Kinesis Video Media",
+            "namespace": "aws.sdk.kotlin.services.kinesisvideomedia",
+            "artifactName": "kinesisvideomedia",
+            "brazilName": "AwsSdkKotlinKinesisVideoMedia"
+        },
+        {
+            "sdkId": "Kinesis Video Signaling",
+            "namespace": "aws.sdk.kotlin.services.kinesisvideosignaling",
+            "artifactName": "kinesisvideosignaling",
+            "brazilName": "AwsSdkKotlinKinesisVideoSignaling"
+        },
+        {
+            "sdkId": "Kinesis Video WebRTC Storage",
+            "namespace": "aws.sdk.kotlin.services.kinesisvideowebrtcstorage",
+            "artifactName": "kinesisvideowebrtcstorage",
+            "brazilName": "AwsSdkKotlinKinesisVideoWebrtcStorage"
+        },
+        {
+            "sdkId": "LakeFormation",
+            "namespace": "aws.sdk.kotlin.services.lakeformation",
+            "artifactName": "lakeformation",
+            "brazilName": "AwsSdkKotlinLakeformation"
+        },
+        {
+            "sdkId": "Lambda",
+            "namespace": "aws.sdk.kotlin.services.lambda",
+            "artifactName": "lambda",
+            "brazilName": "AwsSdkKotlinLambda"
+        },
+        {
+            "sdkId": "Lex Model Building Service",
+            "namespace": "aws.sdk.kotlin.services.lexmodelbuildingservice",
+            "artifactName": "lexmodelbuildingservice",
+            "brazilName": "AwsSdkKotlinLexModelBuildingService"
+        },
+        {
+            "sdkId": "Lex Models V2",
+            "namespace": "aws.sdk.kotlin.services.lexmodelsv2",
+            "artifactName": "lexmodelsv2",
+            "brazilName": "AwsSdkKotlinLexModelsV2"
+        },
+        {
+            "sdkId": "Lex Runtime Service",
+            "namespace": "aws.sdk.kotlin.services.lexruntimeservice",
+            "artifactName": "lexruntimeservice",
+            "brazilName": "AwsSdkKotlinLexRuntimeService"
+        },
+        {
+            "sdkId": "Lex Runtime V2",
+            "namespace": "aws.sdk.kotlin.services.lexruntimev2",
+            "artifactName": "lexruntimev2",
+            "brazilName": "AwsSdkKotlinLexRuntimeV2"
+        },
+        {
+            "sdkId": "License Manager",
+            "namespace": "aws.sdk.kotlin.services.licensemanager",
+            "artifactName": "licensemanager",
+            "brazilName": "AwsSdkKotlinLicenseManager"
+        },
+        {
+            "sdkId": "License Manager Linux Subscriptions",
+            "namespace": "aws.sdk.kotlin.services.licensemanagerlinuxsubscriptions",
+            "artifactName": "licensemanagerlinuxsubscriptions",
+            "brazilName": "AwsSdkKotlinLicenseManagerLinuxSubscriptions"
+        },
+        {
+            "sdkId": "License Manager User Subscriptions",
+            "namespace": "aws.sdk.kotlin.services.licensemanagerusersubscriptions",
+            "artifactName": "licensemanagerusersubscriptions",
+            "brazilName": "AwsSdkKotlinLicenseManagerUserSubscriptions"
+        },
+        {
+            "sdkId": "Lightsail",
+            "namespace": "aws.sdk.kotlin.services.lightsail",
+            "artifactName": "lightsail",
+            "brazilName": "AwsSdkKotlinLightsail"
+        },
+        {
+            "sdkId": "Location",
+            "namespace": "aws.sdk.kotlin.services.location",
+            "artifactName": "location",
+            "brazilName": "AwsSdkKotlinLocation"
+        },
+        {
+            "sdkId": "LookoutEquipment",
+            "namespace": "aws.sdk.kotlin.services.lookoutequipment",
+            "artifactName": "lookoutequipment",
+            "brazilName": "AwsSdkKotlinLookoutequipment"
+        },
+        {
+            "sdkId": "LookoutMetrics",
+            "namespace": "aws.sdk.kotlin.services.lookoutmetrics",
+            "artifactName": "lookoutmetrics",
+            "brazilName": "AwsSdkKotlinLookoutmetrics"
+        },
+        {
+            "sdkId": "LookoutVision",
+            "namespace": "aws.sdk.kotlin.services.lookoutvision",
+            "artifactName": "lookoutvision",
+            "brazilName": "AwsSdkKotlinLookoutvision"
+        },
+        {
+            "sdkId": "MTurk",
+            "namespace": "aws.sdk.kotlin.services.mturk",
+            "artifactName": "mturk",
+            "brazilName": "AwsSdkKotlinMturk"
+        },
+        {
+            "sdkId": "MWAA",
+            "namespace": "aws.sdk.kotlin.services.mwaa",
+            "artifactName": "mwaa",
+            "brazilName": "AwsSdkKotlinMwaa"
+        },
+        {
+            "sdkId": "Machine Learning",
+            "namespace": "aws.sdk.kotlin.services.machinelearning",
+            "artifactName": "machinelearning",
+            "brazilName": "AwsSdkKotlinMachineLearning"
+        },
+        {
+            "sdkId": "Macie2",
+            "namespace": "aws.sdk.kotlin.services.macie2",
+            "artifactName": "macie2",
+            "brazilName": "AwsSdkKotlinMacie2"
+        },
+        {
+            "sdkId": "ManagedBlockchain",
+            "namespace": "aws.sdk.kotlin.services.managedblockchain",
+            "artifactName": "managedblockchain",
+            "brazilName": "AwsSdkKotlinManagedblockchain"
+        },
+        {
+            "sdkId": "ManagedBlockchain Query",
+            "namespace": "aws.sdk.kotlin.services.managedblockchainquery",
+            "artifactName": "managedblockchainquery",
+            "brazilName": "AwsSdkKotlinManagedblockchainQuery"
+        },
+        {
+            "sdkId": "Marketplace Agreement",
+            "namespace": "aws.sdk.kotlin.services.marketplaceagreement",
+            "artifactName": "marketplaceagreement",
+            "brazilName": "AwsSdkKotlinMarketplaceAgreement"
+        },
+        {
+            "sdkId": "Marketplace Catalog",
+            "namespace": "aws.sdk.kotlin.services.marketplacecatalog",
+            "artifactName": "marketplacecatalog",
+            "brazilName": "AwsSdkKotlinMarketplaceCatalog"
+        },
+        {
+            "sdkId": "Marketplace Commerce Analytics",
+            "namespace": "aws.sdk.kotlin.services.marketplacecommerceanalytics",
+            "artifactName": "marketplacecommerceanalytics",
+            "brazilName": "AwsSdkKotlinMarketplaceCommerceAnalytics"
+        },
+        {
+            "sdkId": "Marketplace Deployment",
+            "namespace": "aws.sdk.kotlin.services.marketplacedeployment",
+            "artifactName": "marketplacedeployment",
+            "brazilName": "AwsSdkKotlinMarketplaceDeployment"
+        },
+        {
+            "sdkId": "Marketplace Entitlement Service",
+            "namespace": "aws.sdk.kotlin.services.marketplaceentitlementservice",
+            "artifactName": "marketplaceentitlementservice",
+            "brazilName": "AwsSdkKotlinMarketplaceEntitlementService"
+        },
+        {
+            "sdkId": "Marketplace Metering",
+            "namespace": "aws.sdk.kotlin.services.marketplacemetering",
+            "artifactName": "marketplacemetering",
+            "brazilName": "AwsSdkKotlinMarketplaceMetering"
+        },
+        {
+            "sdkId": "MediaConnect",
+            "namespace": "aws.sdk.kotlin.services.mediaconnect",
+            "artifactName": "mediaconnect",
+            "brazilName": "AwsSdkKotlinMediaconnect"
+        },
+        {
+            "sdkId": "MediaConvert",
+            "namespace": "aws.sdk.kotlin.services.mediaconvert",
+            "artifactName": "mediaconvert",
+            "brazilName": "AwsSdkKotlinMediaconvert"
+        },
+        {
+            "sdkId": "MediaLive",
+            "namespace": "aws.sdk.kotlin.services.medialive",
+            "artifactName": "medialive",
+            "brazilName": "AwsSdkKotlinMedialive"
+        },
+        {
+            "sdkId": "MediaPackage",
+            "namespace": "aws.sdk.kotlin.services.mediapackage",
+            "artifactName": "mediapackage",
+            "brazilName": "AwsSdkKotlinMediapackage"
+        },
+        {
+            "sdkId": "MediaPackage Vod",
+            "namespace": "aws.sdk.kotlin.services.mediapackagevod",
+            "artifactName": "mediapackagevod",
+            "brazilName": "AwsSdkKotlinMediapackageVod"
+        },
+        {
+            "sdkId": "MediaPackageV2",
+            "namespace": "aws.sdk.kotlin.services.mediapackagev2",
+            "artifactName": "mediapackagev2",
+            "brazilName": "AwsSdkKotlinMediapackagev2"
+        },
+        {
+            "sdkId": "MediaStore",
+            "namespace": "aws.sdk.kotlin.services.mediastore",
+            "artifactName": "mediastore",
+            "brazilName": "AwsSdkKotlinMediastore"
+        },
+        {
+            "sdkId": "MediaStore Data",
+            "namespace": "aws.sdk.kotlin.services.mediastoredata",
+            "artifactName": "mediastoredata",
+            "brazilName": "AwsSdkKotlinMediastoreData"
+        },
+        {
+            "sdkId": "MediaTailor",
+            "namespace": "aws.sdk.kotlin.services.mediatailor",
+            "artifactName": "mediatailor",
+            "brazilName": "AwsSdkKotlinMediatailor"
+        },
+        {
+            "sdkId": "Medical Imaging",
+            "namespace": "aws.sdk.kotlin.services.medicalimaging",
+            "artifactName": "medicalimaging",
+            "brazilName": "AwsSdkKotlinMedicalImaging"
+        },
+        {
+            "sdkId": "MemoryDB",
+            "namespace": "aws.sdk.kotlin.services.memorydb",
+            "artifactName": "memorydb",
+            "brazilName": "AwsSdkKotlinMemorydb"
+        },
+        {
+            "sdkId": "Migration Hub",
+            "namespace": "aws.sdk.kotlin.services.migrationhub",
+            "artifactName": "migrationhub",
+            "brazilName": "AwsSdkKotlinMigrationHub"
+        },
+        {
+            "sdkId": "Migration Hub Refactor Spaces",
+            "namespace": "aws.sdk.kotlin.services.migrationhubrefactorspaces",
+            "artifactName": "migrationhubrefactorspaces",
+            "brazilName": "AwsSdkKotlinMigrationHubRefactorSpaces"
+        },
+        {
+            "sdkId": "MigrationHub Config",
+            "namespace": "aws.sdk.kotlin.services.migrationhubconfig",
+            "artifactName": "migrationhubconfig",
+            "brazilName": "AwsSdkKotlinMigrationhubConfig"
+        },
+        {
+            "sdkId": "MigrationHubOrchestrator",
+            "namespace": "aws.sdk.kotlin.services.migrationhuborchestrator",
+            "artifactName": "migrationhuborchestrator",
+            "brazilName": "AwsSdkKotlinMigrationhuborchestrator"
+        },
+        {
+            "sdkId": "MigrationHubStrategy",
+            "namespace": "aws.sdk.kotlin.services.migrationhubstrategy",
+            "artifactName": "migrationhubstrategy",
+            "brazilName": "AwsSdkKotlinMigrationhubstrategy"
+        },
+        {
+            "sdkId": "Mobile",
+            "namespace": "aws.sdk.kotlin.services.mobile",
+            "artifactName": "mobile",
+            "brazilName": "AwsSdkKotlinMobile"
+        },
+        {
+            "sdkId": "Neptune",
+            "namespace": "aws.sdk.kotlin.services.neptune",
+            "artifactName": "neptune",
+            "brazilName": "AwsSdkKotlinNeptune"
+        },
+        {
+            "sdkId": "Neptune Graph",
+            "namespace": "aws.sdk.kotlin.services.neptunegraph",
+            "artifactName": "neptunegraph",
+            "brazilName": "AwsSdkKotlinNeptuneGraph"
+        },
+        {
+            "sdkId": "Network Firewall",
+            "namespace": "aws.sdk.kotlin.services.networkfirewall",
+            "artifactName": "networkfirewall",
+            "brazilName": "AwsSdkKotlinNetworkFirewall"
+        },
+        {
+            "sdkId": "NetworkManager",
+            "namespace": "aws.sdk.kotlin.services.networkmanager",
+            "artifactName": "networkmanager",
+            "brazilName": "AwsSdkKotlinNetworkmanager"
+        },
+        {
+            "sdkId": "NetworkMonitor",
+            "namespace": "aws.sdk.kotlin.services.networkmonitor",
+            "artifactName": "networkmonitor",
+            "brazilName": "AwsSdkKotlinNetworkmonitor"
+        },
+        {
+            "sdkId": "OAM",
+            "namespace": "aws.sdk.kotlin.services.oam",
+            "artifactName": "oam",
+            "brazilName": "AwsSdkKotlinOam"
+        },
+        {
+            "sdkId": "OSIS",
+            "namespace": "aws.sdk.kotlin.services.osis",
+            "artifactName": "osis",
+            "brazilName": "AwsSdkKotlinOsis"
+        },
+        {
+            "sdkId": "Omics",
+            "namespace": "aws.sdk.kotlin.services.omics",
+            "artifactName": "omics",
+            "brazilName": "AwsSdkKotlinOmics"
+        },
+        {
+            "sdkId": "OpenSearch",
+            "namespace": "aws.sdk.kotlin.services.opensearch",
+            "artifactName": "opensearch",
+            "brazilName": "AwsSdkKotlinOpensearch"
+        },
+        {
+            "sdkId": "OpenSearchServerless",
+            "namespace": "aws.sdk.kotlin.services.opensearchserverless",
+            "artifactName": "opensearchserverless",
+            "brazilName": "AwsSdkKotlinOpensearchserverless"
+        },
+        {
+            "sdkId": "OpsWorks",
+            "namespace": "aws.sdk.kotlin.services.opsworks",
+            "artifactName": "opsworks",
+            "brazilName": "AwsSdkKotlinOpsworks"
+        },
+        {
+            "sdkId": "OpsWorksCM",
+            "namespace": "aws.sdk.kotlin.services.opsworkscm",
+            "artifactName": "opsworkscm",
+            "brazilName": "AwsSdkKotlinOpsworkscm"
+        },
+        {
+            "sdkId": "Organizations",
+            "namespace": "aws.sdk.kotlin.services.organizations",
+            "artifactName": "organizations",
+            "brazilName": "AwsSdkKotlinOrganizations"
+        },
+        {
+            "sdkId": "Outposts",
+            "namespace": "aws.sdk.kotlin.services.outposts",
+            "artifactName": "outposts",
+            "brazilName": "AwsSdkKotlinOutposts"
+        },
+        {
+            "sdkId": "PI",
+            "namespace": "aws.sdk.kotlin.services.pi",
+            "artifactName": "pi",
+            "brazilName": "AwsSdkKotlinPi"
+        },
+        {
+            "sdkId": "Panorama",
+            "namespace": "aws.sdk.kotlin.services.panorama",
+            "artifactName": "panorama",
+            "brazilName": "AwsSdkKotlinPanorama"
+        },
+        {
+            "sdkId": "Payment Cryptography",
+            "namespace": "aws.sdk.kotlin.services.paymentcryptography",
+            "artifactName": "paymentcryptography",
+            "brazilName": "AwsSdkKotlinPaymentCryptography"
+        },
+        {
+            "sdkId": "Payment Cryptography Data",
+            "namespace": "aws.sdk.kotlin.services.paymentcryptographydata",
+            "artifactName": "paymentcryptographydata",
+            "brazilName": "AwsSdkKotlinPaymentCryptographyData"
+        },
+        {
+            "sdkId": "Pca Connector Ad",
+            "namespace": "aws.sdk.kotlin.services.pcaconnectorad",
+            "artifactName": "pcaconnectorad",
+            "brazilName": "AwsSdkKotlinPcaConnectorAd"
+        },
+        {
+            "sdkId": "Personalize",
+            "namespace": "aws.sdk.kotlin.services.personalize",
+            "artifactName": "personalize",
+            "brazilName": "AwsSdkKotlinPersonalize"
+        },
+        {
+            "sdkId": "Personalize Events",
+            "namespace": "aws.sdk.kotlin.services.personalizeevents",
+            "artifactName": "personalizeevents",
+            "brazilName": "AwsSdkKotlinPersonalizeEvents"
+        },
+        {
+            "sdkId": "Personalize Runtime",
+            "namespace": "aws.sdk.kotlin.services.personalizeruntime",
+            "artifactName": "personalizeruntime",
+            "brazilName": "AwsSdkKotlinPersonalizeRuntime"
+        },
+        {
+            "sdkId": "Pinpoint",
+            "namespace": "aws.sdk.kotlin.services.pinpoint",
+            "artifactName": "pinpoint",
+            "brazilName": "AwsSdkKotlinPinpoint"
+        },
+        {
+            "sdkId": "Pinpoint Email",
+            "namespace": "aws.sdk.kotlin.services.pinpointemail",
+            "artifactName": "pinpointemail",
+            "brazilName": "AwsSdkKotlinPinpointEmail"
+        },
+        {
+            "sdkId": "Pinpoint SMS Voice",
+            "namespace": "aws.sdk.kotlin.services.pinpointsmsvoice",
+            "artifactName": "pinpointsmsvoice",
+            "brazilName": "AwsSdkKotlinPinpointSmsVoice"
+        },
+        {
+            "sdkId": "Pinpoint SMS Voice V2",
+            "namespace": "aws.sdk.kotlin.services.pinpointsmsvoicev2",
+            "artifactName": "pinpointsmsvoicev2",
+            "brazilName": "AwsSdkKotlinPinpointSmsVoiceV2"
+        },
+        {
+            "sdkId": "Pipes",
+            "namespace": "aws.sdk.kotlin.services.pipes",
+            "artifactName": "pipes",
+            "brazilName": "AwsSdkKotlinPipes"
+        },
+        {
+            "sdkId": "Polly",
+            "namespace": "aws.sdk.kotlin.services.polly",
+            "artifactName": "polly",
+            "brazilName": "AwsSdkKotlinPolly"
+        },
+        {
+            "sdkId": "Pricing",
+            "namespace": "aws.sdk.kotlin.services.pricing",
+            "artifactName": "pricing",
+            "brazilName": "AwsSdkKotlinPricing"
+        },
+        {
+            "sdkId": "PrivateNetworks",
+            "namespace": "aws.sdk.kotlin.services.privatenetworks",
+            "artifactName": "privatenetworks",
+            "brazilName": "AwsSdkKotlinPrivatenetworks"
+        },
+        {
+            "sdkId": "Proton",
+            "namespace": "aws.sdk.kotlin.services.proton",
+            "artifactName": "proton",
+            "brazilName": "AwsSdkKotlinProton"
+        },
+        {
+            "sdkId": "QBusiness",
+            "namespace": "aws.sdk.kotlin.services.qbusiness",
+            "artifactName": "qbusiness",
+            "brazilName": "AwsSdkKotlinQbusiness"
+        },
+        {
+            "sdkId": "QConnect",
+            "namespace": "aws.sdk.kotlin.services.qconnect",
+            "artifactName": "qconnect",
+            "brazilName": "AwsSdkKotlinQconnect"
+        },
+        {
+            "sdkId": "QLDB",
+            "namespace": "aws.sdk.kotlin.services.qldb",
+            "artifactName": "qldb",
+            "brazilName": "AwsSdkKotlinQldb"
+        },
+        {
+            "sdkId": "QLDB Session",
+            "namespace": "aws.sdk.kotlin.services.qldbsession",
+            "artifactName": "qldbsession",
+            "brazilName": "AwsSdkKotlinQldbSession"
+        },
+        {
+            "sdkId": "QuickSight",
+            "namespace": "aws.sdk.kotlin.services.quicksight",
+            "artifactName": "quicksight",
+            "brazilName": "AwsSdkKotlinQuicksight"
+        },
+        {
+            "sdkId": "RAM",
+            "namespace": "aws.sdk.kotlin.services.ram",
+            "artifactName": "ram",
+            "brazilName": "AwsSdkKotlinRam"
+        },
+        {
+            "sdkId": "RDS",
+            "namespace": "aws.sdk.kotlin.services.rds",
+            "artifactName": "rds",
+            "brazilName": "AwsSdkKotlinRds"
+        },
+        {
+            "sdkId": "RDS Data",
+            "namespace": "aws.sdk.kotlin.services.rdsdata",
+            "artifactName": "rdsdata",
+            "brazilName": "AwsSdkKotlinRdsData"
+        },
+        {
+            "sdkId": "RUM",
+            "namespace": "aws.sdk.kotlin.services.rum",
+            "artifactName": "rum",
+            "brazilName": "AwsSdkKotlinRum"
+        },
+        {
+            "sdkId": "Redshift",
+            "namespace": "aws.sdk.kotlin.services.redshift",
+            "artifactName": "redshift",
+            "brazilName": "AwsSdkKotlinRedshift"
+        },
+        {
+            "sdkId": "Redshift Data",
+            "namespace": "aws.sdk.kotlin.services.redshiftdata",
+            "artifactName": "redshiftdata",
+            "brazilName": "AwsSdkKotlinRedshiftData"
+        },
+        {
+            "sdkId": "Redshift Serverless",
+            "namespace": "aws.sdk.kotlin.services.redshiftserverless",
+            "artifactName": "redshiftserverless",
+            "brazilName": "AwsSdkKotlinRedshiftServerless"
+        },
+        {
+            "sdkId": "Rekognition",
+            "namespace": "aws.sdk.kotlin.services.rekognition",
+            "artifactName": "rekognition",
+            "brazilName": "AwsSdkKotlinRekognition"
+        },
+        {
+            "sdkId": "Resource Explorer 2",
+            "namespace": "aws.sdk.kotlin.services.resourceexplorer2",
+            "artifactName": "resourceexplorer2",
+            "brazilName": "AwsSdkKotlinResourceExplorer2"
+        },
+        {
+            "sdkId": "Resource Groups",
+            "namespace": "aws.sdk.kotlin.services.resourcegroups",
+            "artifactName": "resourcegroups",
+            "brazilName": "AwsSdkKotlinResourceGroups"
+        },
+        {
+            "sdkId": "Resource Groups Tagging API",
+            "namespace": "aws.sdk.kotlin.services.resourcegroupstaggingapi",
+            "artifactName": "resourcegroupstaggingapi",
+            "brazilName": "AwsSdkKotlinResourceGroupsTaggingApi"
+        },
+        {
+            "sdkId": "RoboMaker",
+            "namespace": "aws.sdk.kotlin.services.robomaker",
+            "artifactName": "robomaker",
+            "brazilName": "AwsSdkKotlinRobomaker"
+        },
+        {
+            "sdkId": "RolesAnywhere",
+            "namespace": "aws.sdk.kotlin.services.rolesanywhere",
+            "artifactName": "rolesanywhere",
+            "brazilName": "AwsSdkKotlinRolesanywhere"
+        },
+        {
+            "sdkId": "Route 53",
+            "namespace": "aws.sdk.kotlin.services.route53",
+            "artifactName": "route53",
+            "brazilName": "AwsSdkKotlinRoute53"
+        },
+        {
+            "sdkId": "Route 53 Domains",
+            "namespace": "aws.sdk.kotlin.services.route53domains",
+            "artifactName": "route53domains",
+            "brazilName": "AwsSdkKotlinRoute53Domains"
+        },
+        {
+            "sdkId": "Route53 Recovery Cluster",
+            "namespace": "aws.sdk.kotlin.services.route53recoverycluster",
+            "artifactName": "route53recoverycluster",
+            "brazilName": "AwsSdkKotlinRoute53RecoveryCluster"
+        },
+        {
+            "sdkId": "Route53 Recovery Control Config",
+            "namespace": "aws.sdk.kotlin.services.route53recoverycontrolconfig",
+            "artifactName": "route53recoverycontrolconfig",
+            "brazilName": "AwsSdkKotlinRoute53RecoveryControlConfig"
+        },
+        {
+            "sdkId": "Route53 Recovery Readiness",
+            "namespace": "aws.sdk.kotlin.services.route53recoveryreadiness",
+            "artifactName": "route53recoveryreadiness",
+            "brazilName": "AwsSdkKotlinRoute53RecoveryReadiness"
+        },
+        {
+            "sdkId": "Route53Resolver",
+            "namespace": "aws.sdk.kotlin.services.route53resolver",
+            "artifactName": "route53resolver",
+            "brazilName": "AwsSdkKotlinRoute53resolver"
+        },
+        {
+            "sdkId": "S3",
+            "namespace": "aws.sdk.kotlin.services.s3",
+            "artifactName": "s3",
+            "brazilName": "AwsSdkKotlinS3"
+        },
+        {
+            "sdkId": "S3 Control",
+            "namespace": "aws.sdk.kotlin.services.s3control",
+            "artifactName": "s3control",
+            "brazilName": "AwsSdkKotlinS3Control"
+        },
+        {
+            "sdkId": "S3Outposts",
+            "namespace": "aws.sdk.kotlin.services.s3outposts",
+            "artifactName": "s3outposts",
+            "brazilName": "AwsSdkKotlinS3outposts"
+        },
+        {
+            "sdkId": "SES",
+            "namespace": "aws.sdk.kotlin.services.ses",
+            "artifactName": "ses",
+            "brazilName": "AwsSdkKotlinSes"
+        },
+        {
+            "sdkId": "SESv2",
+            "namespace": "aws.sdk.kotlin.services.sesv2",
+            "artifactName": "sesv2",
+            "brazilName": "AwsSdkKotlinSesv2"
+        },
+        {
+            "sdkId": "SFN",
+            "namespace": "aws.sdk.kotlin.services.sfn",
+            "artifactName": "sfn",
+            "brazilName": "AwsSdkKotlinSfn"
+        },
+        {
+            "sdkId": "SMS",
+            "namespace": "aws.sdk.kotlin.services.sms",
+            "artifactName": "sms",
+            "brazilName": "AwsSdkKotlinSms"
+        },
+        {
+            "sdkId": "SNS",
+            "namespace": "aws.sdk.kotlin.services.sns",
+            "artifactName": "sns",
+            "brazilName": "AwsSdkKotlinSns"
+        },
+        {
+            "sdkId": "SQS",
+            "namespace": "aws.sdk.kotlin.services.sqs",
+            "artifactName": "sqs",
+            "brazilName": "AwsSdkKotlinSqs"
+        },
+        {
+            "sdkId": "SSM",
+            "namespace": "aws.sdk.kotlin.services.ssm",
+            "artifactName": "ssm",
+            "brazilName": "AwsSdkKotlinSsm"
+        },
+        {
+            "sdkId": "SSM Contacts",
+            "namespace": "aws.sdk.kotlin.services.ssmcontacts",
+            "artifactName": "ssmcontacts",
+            "brazilName": "AwsSdkKotlinSsmContacts"
+        },
+        {
+            "sdkId": "SSM Incidents",
+            "namespace": "aws.sdk.kotlin.services.ssmincidents",
+            "artifactName": "ssmincidents",
+            "brazilName": "AwsSdkKotlinSsmIncidents"
+        },
+        {
+            "sdkId": "SSO",
+            "namespace": "aws.sdk.kotlin.services.sso",
+            "artifactName": "sso",
+            "brazilName": "AwsSdkKotlinSso"
+        },
+        {
+            "sdkId": "SSO Admin",
+            "namespace": "aws.sdk.kotlin.services.ssoadmin",
+            "artifactName": "ssoadmin",
+            "brazilName": "AwsSdkKotlinSsoAdmin"
+        },
+        {
+            "sdkId": "SSO OIDC",
+            "namespace": "aws.sdk.kotlin.services.ssooidc",
+            "artifactName": "ssooidc",
+            "brazilName": "AwsSdkKotlinSsoOidc"
+        },
+        {
+            "sdkId": "STS",
+            "namespace": "aws.sdk.kotlin.services.sts",
+            "artifactName": "sts",
+            "brazilName": "AwsSdkKotlinSts"
+        },
+        {
+            "sdkId": "SWF",
+            "namespace": "aws.sdk.kotlin.services.swf",
+            "artifactName": "swf",
+            "brazilName": "AwsSdkKotlinSwf"
+        },
+        {
+            "sdkId": "SageMaker",
+            "namespace": "aws.sdk.kotlin.services.sagemaker",
+            "artifactName": "sagemaker",
+            "brazilName": "AwsSdkKotlinSagemaker"
+        },
+        {
+            "sdkId": "SageMaker A2I Runtime",
+            "namespace": "aws.sdk.kotlin.services.sagemakera2iruntime",
+            "artifactName": "sagemakera2iruntime",
+            "brazilName": "AwsSdkKotlinSagemakerA2iRuntime"
+        },
+        {
+            "sdkId": "SageMaker FeatureStore Runtime",
+            "namespace": "aws.sdk.kotlin.services.sagemakerfeaturestoreruntime",
+            "artifactName": "sagemakerfeaturestoreruntime",
+            "brazilName": "AwsSdkKotlinSagemakerFeaturestoreRuntime"
+        },
+        {
+            "sdkId": "SageMaker Geospatial",
+            "namespace": "aws.sdk.kotlin.services.sagemakergeospatial",
+            "artifactName": "sagemakergeospatial",
+            "brazilName": "AwsSdkKotlinSagemakerGeospatial"
+        },
+        {
+            "sdkId": "SageMaker Metrics",
+            "namespace": "aws.sdk.kotlin.services.sagemakermetrics",
+            "artifactName": "sagemakermetrics",
+            "brazilName": "AwsSdkKotlinSagemakerMetrics"
+        },
+        {
+            "sdkId": "SageMaker Runtime",
+            "namespace": "aws.sdk.kotlin.services.sagemakerruntime",
+            "artifactName": "sagemakerruntime",
+            "brazilName": "AwsSdkKotlinSagemakerRuntime"
+        },
+        {
+            "sdkId": "Sagemaker Edge",
+            "namespace": "aws.sdk.kotlin.services.sagemakeredge",
+            "artifactName": "sagemakeredge",
+            "brazilName": "AwsSdkKotlinSagemakerEdge"
+        },
+        {
+            "sdkId": "Scheduler",
+            "namespace": "aws.sdk.kotlin.services.scheduler",
+            "artifactName": "scheduler",
+            "brazilName": "AwsSdkKotlinScheduler"
+        },
+        {
+            "sdkId": "Secrets Manager",
+            "namespace": "aws.sdk.kotlin.services.secretsmanager",
+            "artifactName": "secretsmanager",
+            "brazilName": "AwsSdkKotlinSecretsManager"
+        },
+        {
+            "sdkId": "SecurityHub",
+            "namespace": "aws.sdk.kotlin.services.securityhub",
+            "artifactName": "securityhub",
+            "brazilName": "AwsSdkKotlinSecurityhub"
+        },
+        {
+            "sdkId": "SecurityLake",
+            "namespace": "aws.sdk.kotlin.services.securitylake",
+            "artifactName": "securitylake",
+            "brazilName": "AwsSdkKotlinSecuritylake"
+        },
+        {
+            "sdkId": "ServerlessApplicationRepository",
+            "namespace": "aws.sdk.kotlin.services.serverlessapplicationrepository",
+            "artifactName": "serverlessapplicationrepository",
+            "brazilName": "AwsSdkKotlinServerlessapplicationrepository"
+        },
+        {
+            "sdkId": "Service Catalog",
+            "namespace": "aws.sdk.kotlin.services.servicecatalog",
+            "artifactName": "servicecatalog",
+            "brazilName": "AwsSdkKotlinServiceCatalog"
+        },
+        {
+            "sdkId": "Service Catalog AppRegistry",
+            "namespace": "aws.sdk.kotlin.services.servicecatalogappregistry",
+            "artifactName": "servicecatalogappregistry",
+            "brazilName": "AwsSdkKotlinServiceCatalogAppregistry"
+        },
+        {
+            "sdkId": "Service Quotas",
+            "namespace": "aws.sdk.kotlin.services.servicequotas",
+            "artifactName": "servicequotas",
+            "brazilName": "AwsSdkKotlinServiceQuotas"
+        },
+        {
+            "sdkId": "ServiceDiscovery",
+            "namespace": "aws.sdk.kotlin.services.servicediscovery",
+            "artifactName": "servicediscovery",
+            "brazilName": "AwsSdkKotlinServicediscovery"
+        },
+        {
+            "sdkId": "Shield",
+            "namespace": "aws.sdk.kotlin.services.shield",
+            "artifactName": "shield",
+            "brazilName": "AwsSdkKotlinShield"
+        },
+        {
+            "sdkId": "SimSpaceWeaver",
+            "namespace": "aws.sdk.kotlin.services.simspaceweaver",
+            "artifactName": "simspaceweaver",
+            "brazilName": "AwsSdkKotlinSimspaceweaver"
+        },
+        {
+            "sdkId": "Snow Device Management",
+            "namespace": "aws.sdk.kotlin.services.snowdevicemanagement",
+            "artifactName": "snowdevicemanagement",
+            "brazilName": "AwsSdkKotlinSnowDeviceManagement"
+        },
+        {
+            "sdkId": "Snowball",
+            "namespace": "aws.sdk.kotlin.services.snowball",
+            "artifactName": "snowball",
+            "brazilName": "AwsSdkKotlinSnowball"
+        },
+        {
+            "sdkId": "Ssm Sap",
+            "namespace": "aws.sdk.kotlin.services.ssmsap",
+            "artifactName": "ssmsap",
+            "brazilName": "AwsSdkKotlinSsmSap"
+        },
+        {
+            "sdkId": "Storage Gateway",
+            "namespace": "aws.sdk.kotlin.services.storagegateway",
+            "artifactName": "storagegateway",
+            "brazilName": "AwsSdkKotlinStorageGateway"
+        },
+        {
+            "sdkId": "SupplyChain",
+            "namespace": "aws.sdk.kotlin.services.supplychain",
+            "artifactName": "supplychain",
+            "brazilName": "AwsSdkKotlinSupplychain"
+        },
+        {
+            "sdkId": "Support",
+            "namespace": "aws.sdk.kotlin.services.support",
+            "artifactName": "support",
+            "brazilName": "AwsSdkKotlinSupport"
+        },
+        {
+            "sdkId": "Support App",
+            "namespace": "aws.sdk.kotlin.services.supportapp",
+            "artifactName": "supportapp",
+            "brazilName": "AwsSdkKotlinSupportApp"
+        },
+        {
+            "sdkId": "Textract",
+            "namespace": "aws.sdk.kotlin.services.textract",
+            "artifactName": "textract",
+            "brazilName": "AwsSdkKotlinTextract"
+        },
+        {
+            "sdkId": "Timestream Query",
+            "namespace": "aws.sdk.kotlin.services.timestreamquery",
+            "artifactName": "timestreamquery",
+            "brazilName": "AwsSdkKotlinTimestreamQuery"
+        },
+        {
+            "sdkId": "Timestream Write",
+            "namespace": "aws.sdk.kotlin.services.timestreamwrite",
+            "artifactName": "timestreamwrite",
+            "brazilName": "AwsSdkKotlinTimestreamWrite"
+        },
+        {
+            "sdkId": "Transcribe",
+            "namespace": "aws.sdk.kotlin.services.transcribe",
+            "artifactName": "transcribe",
+            "brazilName": "AwsSdkKotlinTranscribe"
+        },
+        {
+            "sdkId": "Transcribe Streaming",
+            "namespace": "aws.sdk.kotlin.services.transcribestreaming",
+            "artifactName": "transcribestreaming",
+            "brazilName": "AwsSdkKotlinTranscribeStreaming"
+        },
+        {
+            "sdkId": "Transfer",
+            "namespace": "aws.sdk.kotlin.services.transfer",
+            "artifactName": "transfer",
+            "brazilName": "AwsSdkKotlinTransfer"
+        },
+        {
+            "sdkId": "Translate",
+            "namespace": "aws.sdk.kotlin.services.translate",
+            "artifactName": "translate",
+            "brazilName": "AwsSdkKotlinTranslate"
+        },
+        {
+            "sdkId": "TrustedAdvisor",
+            "namespace": "aws.sdk.kotlin.services.trustedadvisor",
+            "artifactName": "trustedadvisor",
+            "brazilName": "AwsSdkKotlinTrustedadvisor"
+        },
+        {
+            "sdkId": "VPC Lattice",
+            "namespace": "aws.sdk.kotlin.services.vpclattice",
+            "artifactName": "vpclattice",
+            "brazilName": "AwsSdkKotlinVpcLattice"
+        },
+        {
+            "sdkId": "VerifiedPermissions",
+            "namespace": "aws.sdk.kotlin.services.verifiedpermissions",
+            "artifactName": "verifiedpermissions",
+            "brazilName": "AwsSdkKotlinVerifiedpermissions"
+        },
+        {
+            "sdkId": "Voice ID",
+            "namespace": "aws.sdk.kotlin.services.voiceid",
+            "artifactName": "voiceid",
+            "brazilName": "AwsSdkKotlinVoiceId"
+        },
+        {
+            "sdkId": "WAF",
+            "namespace": "aws.sdk.kotlin.services.waf",
+            "artifactName": "waf",
+            "brazilName": "AwsSdkKotlinWaf"
+        },
+        {
+            "sdkId": "WAF Regional",
+            "namespace": "aws.sdk.kotlin.services.wafregional",
+            "artifactName": "wafregional",
+            "brazilName": "AwsSdkKotlinWafRegional"
+        },
+        {
+            "sdkId": "WAFV2",
+            "namespace": "aws.sdk.kotlin.services.wafv2",
+            "artifactName": "wafv2",
+            "brazilName": "AwsSdkKotlinWafv2"
+        },
+        {
+            "sdkId": "WellArchitected",
+            "namespace": "aws.sdk.kotlin.services.wellarchitected",
+            "artifactName": "wellarchitected",
+            "brazilName": "AwsSdkKotlinWellarchitected"
+        },
+        {
+            "sdkId": "Wisdom",
+            "namespace": "aws.sdk.kotlin.services.wisdom",
+            "artifactName": "wisdom",
+            "brazilName": "AwsSdkKotlinWisdom"
+        },
+        {
+            "sdkId": "WorkDocs",
+            "namespace": "aws.sdk.kotlin.services.workdocs",
+            "artifactName": "workdocs",
+            "brazilName": "AwsSdkKotlinWorkdocs"
+        },
+        {
+            "sdkId": "WorkLink",
+            "namespace": "aws.sdk.kotlin.services.worklink",
+            "artifactName": "worklink",
+            "brazilName": "AwsSdkKotlinWorklink"
+        },
+        {
+            "sdkId": "WorkMail",
+            "namespace": "aws.sdk.kotlin.services.workmail",
+            "artifactName": "workmail",
+            "brazilName": "AwsSdkKotlinWorkmail"
+        },
+        {
+            "sdkId": "WorkMailMessageFlow",
+            "namespace": "aws.sdk.kotlin.services.workmailmessageflow",
+            "artifactName": "workmailmessageflow",
+            "brazilName": "AwsSdkKotlinWorkmailmessageflow"
+        },
+        {
+            "sdkId": "WorkSpaces",
+            "namespace": "aws.sdk.kotlin.services.workspaces",
+            "artifactName": "workspaces",
+            "brazilName": "AwsSdkKotlinWorkspaces"
+        },
+        {
+            "sdkId": "WorkSpaces Thin Client",
+            "namespace": "aws.sdk.kotlin.services.workspacesthinclient",
+            "artifactName": "workspacesthinclient",
+            "brazilName": "AwsSdkKotlinWorkspacesThinClient"
+        },
+        {
+            "sdkId": "WorkSpaces Web",
+            "namespace": "aws.sdk.kotlin.services.workspacesweb",
+            "artifactName": "workspacesweb",
+            "brazilName": "AwsSdkKotlinWorkspacesWeb"
+        },
+        {
+            "sdkId": "XRay",
+            "namespace": "aws.sdk.kotlin.services.xray",
+            "artifactName": "xray",
+            "brazilName": "AwsSdkKotlinXray"
+        },
+        {
+            "sdkId": "amp",
+            "namespace": "aws.sdk.kotlin.services.amp",
+            "artifactName": "amp",
+            "brazilName": "AwsSdkKotlinAmp"
+        },
+        {
+            "sdkId": "b2bi",
+            "namespace": "aws.sdk.kotlin.services.b2bi",
+            "artifactName": "b2bi",
+            "brazilName": "AwsSdkKotlinB2bi"
+        },
+        {
+            "sdkId": "billingconductor",
+            "namespace": "aws.sdk.kotlin.services.billingconductor",
+            "artifactName": "billingconductor",
+            "brazilName": "AwsSdkKotlinBillingconductor"
+        },
+        {
+            "sdkId": "codeartifact",
+            "namespace": "aws.sdk.kotlin.services.codeartifact",
+            "artifactName": "codeartifact",
+            "brazilName": "AwsSdkKotlinCodeartifact"
+        },
+        {
+            "sdkId": "codestar notifications",
+            "namespace": "aws.sdk.kotlin.services.codestarnotifications",
+            "artifactName": "codestarnotifications",
+            "brazilName": "AwsSdkKotlinCodestarNotifications"
+        },
+        {
+            "sdkId": "drs",
+            "namespace": "aws.sdk.kotlin.services.drs",
+            "artifactName": "drs",
+            "brazilName": "AwsSdkKotlinDrs"
+        },
+        {
+            "sdkId": "finspace",
+            "namespace": "aws.sdk.kotlin.services.finspace",
+            "artifactName": "finspace",
+            "brazilName": "AwsSdkKotlinFinspace"
+        },
+        {
+            "sdkId": "finspace data",
+            "namespace": "aws.sdk.kotlin.services.finspacedata",
+            "artifactName": "finspacedata",
+            "brazilName": "AwsSdkKotlinFinspaceData"
+        },
+        {
+            "sdkId": "fis",
+            "namespace": "aws.sdk.kotlin.services.fis",
+            "artifactName": "fis",
+            "brazilName": "AwsSdkKotlinFis"
+        },
+        {
+            "sdkId": "forecast",
+            "namespace": "aws.sdk.kotlin.services.forecast",
+            "artifactName": "forecast",
+            "brazilName": "AwsSdkKotlinForecast"
+        },
+        {
+            "sdkId": "forecastquery",
+            "namespace": "aws.sdk.kotlin.services.forecastquery",
+            "artifactName": "forecastquery",
+            "brazilName": "AwsSdkKotlinForecastquery"
+        },
+        {
+            "sdkId": "grafana",
+            "namespace": "aws.sdk.kotlin.services.grafana",
+            "artifactName": "grafana",
+            "brazilName": "AwsSdkKotlinGrafana"
+        },
+        {
+            "sdkId": "identitystore",
+            "namespace": "aws.sdk.kotlin.services.identitystore",
+            "artifactName": "identitystore",
+            "brazilName": "AwsSdkKotlinIdentitystore"
+        },
+        {
+            "sdkId": "imagebuilder",
+            "namespace": "aws.sdk.kotlin.services.imagebuilder",
+            "artifactName": "imagebuilder",
+            "brazilName": "AwsSdkKotlinImagebuilder"
+        },
+        {
+            "sdkId": "ivs",
+            "namespace": "aws.sdk.kotlin.services.ivs",
+            "artifactName": "ivs",
+            "brazilName": "AwsSdkKotlinIvs"
+        },
+        {
+            "sdkId": "ivschat",
+            "namespace": "aws.sdk.kotlin.services.ivschat",
+            "artifactName": "ivschat",
+            "brazilName": "AwsSdkKotlinIvschat"
+        },
+        {
+            "sdkId": "kendra",
+            "namespace": "aws.sdk.kotlin.services.kendra",
+            "artifactName": "kendra",
+            "brazilName": "AwsSdkKotlinKendra"
+        },
+        {
+            "sdkId": "m2",
+            "namespace": "aws.sdk.kotlin.services.m2",
+            "artifactName": "m2",
+            "brazilName": "AwsSdkKotlinM2"
+        },
+        {
+            "sdkId": "mgn",
+            "namespace": "aws.sdk.kotlin.services.mgn",
+            "artifactName": "mgn",
+            "brazilName": "AwsSdkKotlinMgn"
+        },
+        {
+            "sdkId": "mq",
+            "namespace": "aws.sdk.kotlin.services.mq",
+            "artifactName": "mq",
+            "brazilName": "AwsSdkKotlinMq"
+        },
+        {
+            "sdkId": "neptunedata",
+            "namespace": "aws.sdk.kotlin.services.neptunedata",
+            "artifactName": "neptunedata",
+            "brazilName": "AwsSdkKotlinNeptunedata"
+        },
+        {
+            "sdkId": "nimble",
+            "namespace": "aws.sdk.kotlin.services.nimble",
+            "artifactName": "nimble",
+            "brazilName": "AwsSdkKotlinNimble"
+        },
+        {
+            "sdkId": "rbin",
+            "namespace": "aws.sdk.kotlin.services.rbin",
+            "artifactName": "rbin",
+            "brazilName": "AwsSdkKotlinRbin"
+        },
+        {
+            "sdkId": "repostspace",
+            "namespace": "aws.sdk.kotlin.services.repostspace",
+            "artifactName": "repostspace",
+            "brazilName": "AwsSdkKotlinRepostspace"
+        },
+        {
+            "sdkId": "resiliencehub",
+            "namespace": "aws.sdk.kotlin.services.resiliencehub",
+            "artifactName": "resiliencehub",
+            "brazilName": "AwsSdkKotlinResiliencehub"
+        },
+        {
+            "sdkId": "savingsplans",
+            "namespace": "aws.sdk.kotlin.services.savingsplans",
+            "artifactName": "savingsplans",
+            "brazilName": "AwsSdkKotlinSavingsplans"
+        },
+        {
+            "sdkId": "schemas",
+            "namespace": "aws.sdk.kotlin.services.schemas",
+            "artifactName": "schemas",
+            "brazilName": "AwsSdkKotlinSchemas"
+        },
+        {
+            "sdkId": "signer",
+            "namespace": "aws.sdk.kotlin.services.signer",
+            "artifactName": "signer",
+            "brazilName": "AwsSdkKotlinSigner"
+        },
+        {
+            "sdkId": "synthetics",
+            "namespace": "aws.sdk.kotlin.services.synthetics",
+            "artifactName": "synthetics",
+            "brazilName": "AwsSdkKotlinSynthetics"
+        },
+        {
+            "sdkId": "tnb",
+            "namespace": "aws.sdk.kotlin.services.tnb",
+            "artifactName": "tnb",
+            "brazilName": "AwsSdkKotlinTnb"
+        }
+    ]
+}
