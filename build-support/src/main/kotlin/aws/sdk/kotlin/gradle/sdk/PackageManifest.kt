@@ -4,15 +4,29 @@
  */
 package aws.sdk.kotlin.gradle.sdk
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import java.io.File
 
 /**
  * Manifest containing additional metadata about services.
  */
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class PackageManifest(
     val packages: List<PackageMetadata>,
-)
+) {
+
+    val bySdkId: Map<String, PackageMetadata> = packages.associateBy(PackageMetadata::sdkId)
+    companion object {
+        fun fromFile(file: File): PackageManifest =
+            file.inputStream().use {
+                Json.decodeFromStream<PackageManifest>(it)
+            }
+    }
+}
 
 /**
  * Validate the package manifest for errors throwing an exception if any exist.

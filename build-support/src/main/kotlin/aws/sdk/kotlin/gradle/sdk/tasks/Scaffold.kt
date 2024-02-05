@@ -11,7 +11,6 @@ import aws.sdk.kotlin.gradle.sdk.validate
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -53,10 +52,9 @@ abstract class Scaffold : DefaultTask() {
         check(!(modelFile.isPresent && modelDir.isPresent)) { "only one of `model` or `model-dir` can be set" }
 
         val manifestFile = project.file("packages.json")
-        val json = Json { prettyPrint = true }
 
         val manifest = if (manifestFile.exists()) {
-            val manifest = json.decodeFromStream<PackageManifest>(manifestFile.inputStream())
+            val manifest = PackageManifest.fromFile(manifestFile)
             manifest.validate()
             manifest
         } else {
@@ -91,6 +89,7 @@ abstract class Scaffold : DefaultTask() {
         val updatedPackages = manifest.packages + newPackages
         val updatedManifest = manifest.copy(packages = updatedPackages.sortedBy { it.sdkId })
 
+        val json = Json { prettyPrint = true }
         val contents = json.encodeToString(updatedManifest)
         manifestFile.writeText(contents)
     }

@@ -50,18 +50,16 @@ data class AwsService(
     val version: String,
 
     /**
+     * Get the artifact name to use for the service derived from the sdkId. This will be the `A` in the GAV coordinates
+     * and the directory name under `services/`.
+     */
+    val artifactName: String,
+
+    /**
      * A description of the service (taken from the title trait)
      */
     val description: String? = null,
-
 )
-
-/**
- * Get the artifact name to use for the service derived from the sdkId. This will be the `A` in the GAV coordinates
- * and the directory name under `services/`.
- */
-val AwsService.artifactName: String
-    get() = sdkIdToArtifactName(sdkId)
 
 /**
  * Returns a lambda for a service model file that respects the given bootstrap config
@@ -72,6 +70,7 @@ val AwsService.artifactName: String
 fun fileToService(
     project: Project,
     bootstrap: BootstrapConfig,
+    pkgManifest: PackageManifest,
 ): (File) -> AwsService? = { file: File ->
     val sdkVersion = project.findProperty("sdkVersion") as? String ?: error("expected sdkVersion to be set on project ${project.name}")
     val filename = file.nameWithoutExtension
@@ -111,14 +110,16 @@ fun fileToService(
 
         else -> {
             project.logger.info("discovered service: ${serviceTrait.sdkId}")
+            val pkgMetadata = pkgManifest.bySdkId[sdkId] ?: error("unable to find package metadata for sdkId: $sdkId")
             AwsService(
                 serviceShapeId = service.id.toString(),
-                packageName = packageNamespaceForService(sdkId),
+                packageName = pkgMetadata.namespace,
                 packageVersion = sdkVersion,
                 modelFile = file,
                 projectionName = filename,
                 sdkId = sdkId,
                 version = service.version,
+                artifactName = pkgMetadata.artifactName,
                 description = packageDescription,
             )
         }

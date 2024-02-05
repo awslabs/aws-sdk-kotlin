@@ -103,7 +103,13 @@ fun discoverServices(applyFilters: Boolean = true): List<AwsService> {
     logger.info("discover services called")
     val modelsDir: String by project
     val bootstrapConfig = bootstrap.takeIf { applyFilters } ?: BootstrapConfig.ALL
-    return fileTree(project.file(modelsDir)).mapNotNull(fileToService(project, bootstrapConfig)).also {
+    val pkgManifest = PackageManifest
+        .fromFile(file("packages.json"))
+        .apply {
+            validate()
+        }
+
+    return fileTree(project.file(modelsDir)).mapNotNull(fileToService(project, bootstrapConfig, pkgManifest)).also {
         logger.lifecycle("discovered ${it.size} services")
     }
 }
