@@ -8,6 +8,8 @@
 [maven-badge]: https://img.shields.io/maven-central/v/aws.sdk.kotlin/s3.svg?label=Maven
 [maven-url]: https://search.maven.org/search?q=g:aws.sdk.kotlin
 
+This is a CI test for external contributors
+
 This repo contains the AWS SDK for Kotlin and its [public roadmap](https://github.com/awslabs/aws-sdk-kotlin/projects/2).
 
 ## Getting Started
