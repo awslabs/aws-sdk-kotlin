@@ -8,8 +8,8 @@ import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
 
 plugins {
-    kotlin("jvm") // FIXME - configuration doesn't resolve without this
-    id("aws.sdk.kotlin.gradle.smithybuild")
+    kotlin("jvm")
+    alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
 }
 
 description = "Smithy protocol test suite"
