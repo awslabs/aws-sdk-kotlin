@@ -12,6 +12,7 @@ plugins {
 group = "aws.sdk.kotlin"
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
