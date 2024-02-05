@@ -12,23 +12,14 @@ buildscript {
     // only need to add e.g. atomic-fu and build-plugins here for imports and plugins to be available in subprojects.
     dependencies {
         classpath(libs.kotlinx.atomicfu.plugin)
-
-        // FIXME - we need the ClassLoader used for Model and any traits to be the same. Unfortunately our
-        // build plugin has a transitive dependency on `smithy-model` which means our :codegen:sdk project
-        // that uses both in it's build logic won't work correctly. We "fix" this by placing them both
-        // into the root buildscript classpath and force them to share a class loader.
-        classpath(libs.smithy.model)
-        classpath(libs.smithy.aws.traits)
+        // Add our custom gradle build logic to buildscript classpath
+        classpath(libs.aws.kotlin.repo.tools.build.support)
     }
 }
 
 plugins {
     alias(libs.plugins.dokka)
-    // configures (KMP) subprojects with our own KMP conventions and some default dependencies
-    alias(libs.plugins.aws.kotlin.repo.tools.kmp)
-
     // ensure the correct version of KGP ends up on our buildscript classpath
-    // since build-plugins also has <some> version in its dependency closure
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.jvm) apply false
 }

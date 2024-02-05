@@ -11,6 +11,7 @@ description = "AWS client runtime support for generated service clients"
 plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.kotlinx.binary.compatibility.validator)
+    alias(libs.plugins.aws.kotlin.repo.tools.kmp) apply false
     jacoco
 }
 
@@ -28,6 +29,7 @@ subprojects {
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
         plugin("org.jetbrains.dokka")
+        plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
 
     configurePublishing("aws-sdk-kotlin")
