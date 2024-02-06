@@ -9,7 +9,6 @@ import aws.sdk.kotlin.gradle.sdk.PackageMetadata
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
 import org.gradle.kotlin.dsl.create
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.io.TempDir
@@ -61,7 +60,7 @@ class UpdatePackageManifestTaskTest {
         val task = setupTest(tempDir, "Test Gradle")
         task.updatePackageManifest()
 
-        val updated = json.decodeFromStream<PackageManifest>(tempDir.resolve("packages.json").inputStream())
+        val updated = PackageManifest.fromFile(tempDir.resolve("packages.json"))
         val expectedPackages = initialManifest.packages.toMutableList()
         expectedPackages.add(
             PackageMetadata("Test Gradle", "aws.sdk.kotlin.services.testgradle", "testgradle", "AwsSdkKotlinTestGradle"),
@@ -75,7 +74,7 @@ class UpdatePackageManifestTaskTest {
     fun testManifestNotExistYet(@TempDir tempDir: File) {
         val task = setupTest(tempDir, "Test Gradle", null)
         task.updatePackageManifest()
-        val updated = json.decodeFromStream<PackageManifest>(tempDir.resolve("packages.json").inputStream())
+        val updated = PackageManifest.fromFile(tempDir.resolve("packages.json"))
         val expected = PackageManifest(
             listOf(
                 PackageMetadata("Test Gradle", "aws.sdk.kotlin.services.testgradle", "testgradle", "AwsSdkKotlinTestGradle"),
@@ -121,7 +120,7 @@ class UpdatePackageManifestTaskTest {
         }
 
         task.updatePackageManifest()
-        val updated = json.decodeFromStream<PackageManifest>(tempDir.resolve("packages.json").inputStream())
+        val updated = PackageManifest.fromFile(tempDir.resolve("packages.json"))
         assertEquals(initialManifest, updated)
     }
 
@@ -150,7 +149,7 @@ class UpdatePackageManifestTaskTest {
         }
 
         task.updatePackageManifest()
-        val updated = json.decodeFromStream<PackageManifest>(tempDir.resolve("packages.json").inputStream())
+        val updated = PackageManifest.fromFile(tempDir.resolve("packages.json"))
         val expected = initialManifest.copy(
             initialManifest.packages + listOf(
                 PackageMetadata("Package 3", "aws.sdk.kotlin.services.package3", "package3", "AwsSdkKotlinPackage3"),
