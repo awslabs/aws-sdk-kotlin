@@ -13,6 +13,7 @@ import aws.sdk.kotlin.gradle.util.typedProp
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
+import kotlin.streams.toList
 
 plugins {
     kotlin("jvm")
