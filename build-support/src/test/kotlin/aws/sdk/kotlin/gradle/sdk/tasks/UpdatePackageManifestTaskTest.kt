@@ -17,7 +17,7 @@ import java.io.File
 import kotlin.test.*
 
 @OptIn(ExperimentalSerializationApi::class)
-class ScaffoldTaskTest {
+class UpdatePackageManifestTaskTest {
     fun modelContents(sdkId: String, serviceName: String = "TestService"): String = """
         ${"$"}version: "2"
         namespace gradle.test
@@ -42,7 +42,7 @@ class ScaffoldTaskTest {
         ),
     )
 
-    private fun setupTest(tempDir: File, sdkId: String, currentManifest: PackageManifest? = initialManifest): Scaffold {
+    private fun setupTest(tempDir: File, sdkId: String, currentManifest: PackageManifest? = initialManifest): UpdatePackageManifest {
         val project = ProjectBuilder.builder().withProjectDir(tempDir).build()
         currentManifest?.let {
             val currentManifestContents = json.encodeToString(it)
@@ -51,7 +51,7 @@ class ScaffoldTaskTest {
         val testModelFile = tempDir.resolve("model.smithy")
         testModelFile.writeText(modelContents(sdkId))
 
-        return project.tasks.create<Scaffold>("scaffold") {
+        return project.tasks.create<UpdatePackageManifest>("updatePackageManifest") {
             modelFile.set(testModelFile)
         }
     }
@@ -116,7 +116,7 @@ class ScaffoldTaskTest {
             val modelFile = modelFolder.resolve(filename)
             modelFile.writeText(contents)
         }
-        val task = project.tasks.create<Scaffold>("scaffold") {
+        val task = project.tasks.create<UpdatePackageManifest>("updatePackageManifest") {
             modelDir.set(modelFolder)
         }
 
@@ -144,7 +144,7 @@ class ScaffoldTaskTest {
         val currentManifestContents = json.encodeToString(initialManifest)
         tempDir.resolve("packages.json").writeText(currentManifestContents)
 
-        val task = project.tasks.create<Scaffold>("scaffold") {
+        val task = project.tasks.create<UpdatePackageManifest>("updatePackageManifest") {
             modelDir.set(modelFolder)
             discover.set(true)
         }

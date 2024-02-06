@@ -8,13 +8,11 @@ import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
 import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.sdk.*
-import aws.sdk.kotlin.gradle.sdk.tasks.Scaffold
+import aws.sdk.kotlin.gradle.sdk.tasks.UpdatePackageManifest
 import aws.sdk.kotlin.gradle.util.typedProp
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
-import java.util.*
-import kotlin.streams.toList
 
 plugins {
     kotlin("jvm")
@@ -192,9 +190,9 @@ tasks.register("bootstrap") {
     finalizedBy(stageSdks)
 }
 
-tasks.register<Scaffold>("scaffold") {
+tasks.register<UpdatePackageManifest>("updatePackageManifest") {
     group = "codegen"
-    description = "Add a new service to packages.json manifest"
+    description = "Add (or update) one or more services to packages.json manifest"
 }
 
 /**

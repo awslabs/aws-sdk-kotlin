@@ -38,7 +38,7 @@ internal fun sdkIdToArtifactName(sdkId: String): String = sdkId.replace(" ", "")
  */
 fun sdkIdToModelFilename(sdkId: String): String = sdkId.trim().replace("""[\s]+""".toRegex(), "-").lowercase()
 
-// FIX - replace with case utils from smithy-kotlin once we verify we can change the implementation
+// FIXME - replace with case utils from smithy-kotlin once we verify we can change the implementation
 private fun String.lowercaseAndCapitalize() = lowercase().replaceFirstChar(Char::uppercaseChar)
 private val wordBoundary = "[^a-zA-Z0-9]+".toRegex()
 private fun String.pascalCase(): String = split(wordBoundary).pascalCase()

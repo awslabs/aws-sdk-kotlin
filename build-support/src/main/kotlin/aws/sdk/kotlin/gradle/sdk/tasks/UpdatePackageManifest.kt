@@ -26,7 +26,7 @@ import kotlin.streams.toList
  * Task to update the package manifest which is used by the bootstrap process to generate service clients.
  * New services are required to be scaffolded
  */
-abstract class Scaffold : DefaultTask() {
+abstract class UpdatePackageManifest : DefaultTask() {
 
     @get:Option(option = "model", description = "the path to a single model file to scaffold")
     @get:Optional
@@ -49,8 +49,7 @@ abstract class Scaffold : DefaultTask() {
     @OptIn(ExperimentalSerializationApi::class)
     @TaskAction
     fun updatePackageManifest() {
-        check(modelFile.isPresent || modelDir.isPresent) { "one of `model` or `model-dir` is required" }
-        check(!(modelFile.isPresent && modelDir.isPresent)) { "only one of `model` or `model-dir` can be set" }
+        check(modelFile.isPresent != modelDir.isPresent) { "Exactly one of `model` or `model-dir` must be set" }
 
         val manifestFile = project.file("packages.json")
 

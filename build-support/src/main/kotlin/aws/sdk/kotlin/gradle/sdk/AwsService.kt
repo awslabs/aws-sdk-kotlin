@@ -110,7 +110,9 @@ fun fileToService(
 
         else -> {
             project.logger.info("discovered service: ${serviceTrait.sdkId}")
-            val pkgMetadata = pkgManifest.bySdkId[sdkId] ?: error("unable to find package metadata for sdkId: $sdkId")
+            // FIXME - re-enable making this an error after migration is finished
+            // val pkgMetadata = pkgManifest.bySdkId[sdkId] ?: error("unable to find package metadata for sdkId: $sdkId")
+            val pkgMetadata = pkgManifest.bySdkId[sdkId] ?: PackageMetadata.from(sdkId)
             AwsService(
                 serviceShapeId = service.id.toString(),
                 packageName = pkgMetadata.namespace,

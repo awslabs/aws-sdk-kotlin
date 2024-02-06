@@ -45,6 +45,14 @@ fun PackageManifest.validate() {
     check(errors.isEmpty()) { errors.joinToString(separator = "\n") }
 }
 
+/**
+ * Per/package metadata stored with the repository.
+ *
+ * @param sdkId the unique SDK ID from the model this metadata applies to
+ * @param namespace the package namespace to use as the root namespace when generating code for this package
+ * @param artifactName the Maven artifact name (i.e. the 'A' in 'GAV' coordinates)
+ * @param brazilName the internal Brazil package name for this package
+ */
 @Serializable
 data class PackageMetadata(
     public val sdkId: String,
