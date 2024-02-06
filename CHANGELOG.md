@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.51] - 02/06/2024
+
+### Features
+* (**appsync**) Support for environment variables in AppSync GraphQL APIs
+* (**cloudwatchlogs**) This release adds a new field, logGroupArn, to the response of the logs:DescribeLogGroups action.
+* (**elasticsearchservice**) This release adds clear visibility to the customers on the changes that they make on the domain.
+* (**opensearch**) This release adds clear visibility to the customers on the changes that they make on the domain.
+* (**wafv2**) You can now delete an API key that you've created for use with your CAPTCHA JavaScript integration API.
+
+### Documentation
+* (**ecs**) This release is a documentation only update to address customer issues.
+
 ## [1.0.50] - 02/05/2024
 
 ### Features
