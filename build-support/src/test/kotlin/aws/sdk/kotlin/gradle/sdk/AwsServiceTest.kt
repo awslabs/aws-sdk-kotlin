@@ -8,14 +8,12 @@ import org.gradle.kotlin.dsl.extra
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import kotlin.test.*
 
 class AwsServiceTest {
 
     val modelContents = """
-        ${"$"}version: "2.0"
+        ${"$"}version: "2"
         namespace gradle.test
 
         use aws.api#service
@@ -23,7 +21,7 @@ class AwsServiceTest {
 
         @service(sdkId: "Test Gradle")
         @awsJson1_0
-        service TestService{
+        service TestService {
             operations: [],
             version: "1-alpha"
         }
@@ -34,9 +32,23 @@ class AwsServiceTest {
         val actual: AwsService?,
     )
 
+    private val defaultPackageManifest = PackageManifest(
+        listOf(
+            PackageMetadata(
+                "Test Gradle",
+                // namespace and artifact name intentionally don't match the sdkId derivations to verify we pull from
+                // the metadata rather than inferring again
+                "aws.sdk.kotlin.services.testgradle2",
+                "test-gradle",
+                "AwsSdkKotlinTestGradle",
+            ),
+        ),
+    )
+
     private fun testWith(
         tempDir: File,
         bootstrap: BootstrapConfig,
+        manifest: PackageManifest = defaultPackageManifest,
     ): TestResult {
         val project = ProjectBuilder.builder()
             .build()
@@ -46,7 +58,7 @@ class AwsServiceTest {
         val model = tempDir.resolve("test-gradle.smithy")
         model.writeText(modelContents)
 
-        val lambda = fileToService(project, bootstrap)
+        val lambda = fileToService(project, bootstrap, manifest)
         val actual = lambda(model)
         return TestResult(model, actual)
     }
@@ -69,12 +81,13 @@ class AwsServiceTest {
             val result = testWith(tempDir, bootstrap)
             val expected = AwsService(
                 "gradle.test#TestService",
-                "aws.sdk.kotlin.services.testgradle",
+                "aws.sdk.kotlin.services.testgradle2",
                 "1.2.3",
                 result.model,
                 "test-gradle",
                 "Test Gradle",
                 "1-alpha",
+                "test-gradle",
                 "The AWS SDK for Kotlin client for Test Gradle",
             )
             assertEquals(expected, result.actual)
@@ -98,4 +111,13 @@ class AwsServiceTest {
             assertNull(result.actual, "expected null for bootstrap with $bootstrap")
         }
     }
+
+    // FIXME - re-enable after migration
+    // @Test
+    // fun testFileToServiceMissingPackageMetadata(@TempDir tempDir: File) {
+    //     val ex = assertFailsWith<IllegalStateException> {
+    //         testWith(tempDir, BootstrapConfig.ALL, PackageManifest(emptyList()))
+    //     }
+    //     assertContains(ex.message!!, "unable to find package metadata for sdkId: Test Gradle")
+    // }
 }
