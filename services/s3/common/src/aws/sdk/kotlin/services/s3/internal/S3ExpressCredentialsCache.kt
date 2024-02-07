@@ -57,7 +57,6 @@ public class S3ExpressCredentialsCache(
      *    * a new set of credentials are added to the cache (immediate refresh)
      *    * the `nextRefresh` time has been reached, which is either `DEFAULT_REFRESH_PERIOD` or
      *      the soonest credentials expiration time (minus a buffer), whichever comes first.
-     *
      */
     private suspend fun refresh(): Unit {
         val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
@@ -106,6 +105,7 @@ public class S3ExpressCredentialsCache(
     private suspend fun createSessionCredentials(key: S3ExpressCredentialsCacheKey): ExpiringValue<Credentials> {
         val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
 
+        // FIXME Consider creating a brand new client using the bootstrapped key.credentials instead of abusing the user's client
         val credentials = (key.client as S3Client)
             // de-configure interceptors because this key.client is the user's S3 client, and we don't want to
             // execute their custom interceptors during this internal createSession request
