@@ -9,8 +9,7 @@ public final class aws/sdk/kotlin/runtime/auth/SigV4S3ExpressAuthScheme : aws/sm
 	public synthetic fun <init> (Laws/smithy/kotlin/runtime/auth/awssigning/AwsSigner;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun <init> (Laws/smithy/kotlin/runtime/http/auth/AwsHttpSigner;)V
 	public fun getSchemeId-DepwgT4 ()Ljava/lang/String;
-	public fun getSigner ()Laws/smithy/kotlin/runtime/http/auth/AwsHttpSigner;
-	public synthetic fun getSigner ()Laws/smithy/kotlin/runtime/http/auth/HttpSigner;
+	public fun getSigner ()Laws/smithy/kotlin/runtime/http/auth/HttpSigner;
 	public fun identityProvider (Laws/smithy/kotlin/runtime/identity/IdentityProviderConfig;)Laws/smithy/kotlin/runtime/identity/IdentityProvider;
 }
 

@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth
 
+import aws.sdk.kotlin.runtime.http.S3ExpressHttpSigner
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.AuthOption
 import aws.smithy.kotlin.runtime.auth.AuthSchemeId
@@ -18,23 +19,24 @@ import aws.smithy.kotlin.runtime.collections.emptyAttributes
 import aws.smithy.kotlin.runtime.collections.mutableAttributes
 import aws.smithy.kotlin.runtime.http.auth.AuthScheme
 import aws.smithy.kotlin.runtime.http.auth.AwsHttpSigner
+import aws.smithy.kotlin.runtime.http.auth.HttpSigner
 
 /**
  * HTTP auth scheme for S3 Express One Zone authentication
  */
 public class SigV4S3ExpressAuthScheme(
-    config: AwsHttpSigner.Config,
+    awsHttpSigner: AwsHttpSigner,
 ) : AuthScheme {
-    public constructor(awsSigner: AwsSigner, serviceName: String? = null) : this(
+    public constructor(awsSigner: AwsSigner, serviceName: String? = null) : this(AwsHttpSigner(
         AwsHttpSigner.Config().apply {
             signer = awsSigner
             service = serviceName
             algorithm = AwsSigningAlgorithm.SIGV4_S3EXPRESS
-        },
-    )
+        }
+    ))
 
     override val schemeId: AuthSchemeId = AuthSchemeId.AwsSigV4S3Express
-    override val signer: AwsHttpSigner = AwsHttpSigner(config)
+    override val signer: HttpSigner = S3ExpressHttpSigner(awsHttpSigner)
 }
 
 /**
