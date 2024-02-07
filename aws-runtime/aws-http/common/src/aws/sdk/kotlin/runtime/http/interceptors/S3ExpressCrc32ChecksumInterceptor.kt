@@ -31,8 +31,11 @@ public class S3ExpressCrc32ChecksumInterceptor(
         logger.info { "Setting checksum algorithm to $CRC32_ALGORITHM_NAME for S3 Express" }
         context.executionContext[HttpOperationContext.ChecksumAlgorithm] = CRC32_ALGORITHM_NAME
 
-        // Most checksum headers are handled by the flexible checksums feature. But,services may model an HTTP header binding for the
+        // Most checksum headers are handled by the flexible checksums feature. But, S3 models an HTTP header binding for the
         // checksum algorithm, which also needs to be overwritten and set to CRC32.
+        //
+        // The header is already set by the time this interceptor runs, so it needs to be overwritten and can't be set
+        // through the normal path.
         checksumAlgorithmHeaderName?.let {
             req.headers[it] = CRC32_ALGORITHM_NAME
         }

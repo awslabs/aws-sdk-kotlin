@@ -100,7 +100,7 @@ class S3ExpressIntegration : KotlinIntegration {
     private val UseCrc32Checksum = object : ProtocolMiddleware {
         override val name: String = "UseCrc32Checksum"
 
-        override val order: Byte = -1 // Render before flexible checksums
+        override val order: Byte = 1 // Render after flexible checksums
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
             !op.isS3UploadPart && (op.hasTrait<HttpChecksumRequiredTrait>() || op.hasTrait<HttpChecksumTrait>())
@@ -112,21 +112,20 @@ class S3ExpressIntegration : KotlinIntegration {
                 .members()
                 .firstOrNull { it.memberName == httpChecksumTrait?.requestAlgorithmMember?.getOrNull() }
 
+            // S3 models a header name x-amz-sdk-checksum-algorithm representing the name of the checksum algorithm used
             val checksumHeaderName = checksumAlgorithmMember?.getTrait<HttpHeaderTrait>()?.value
 
-            val checksumRequiredTrait = op.getTrait<HttpChecksumRequiredTrait>()
+            val checksumRequired = op.hasTrait<HttpChecksumRequiredTrait>() || httpChecksumTrait?.isRequestChecksumRequired == true
 
             if (checksumAlgorithmMember != null) {
-                if (checksumRequiredTrait != null) { // checksum required, enable flexible checksums using CRC32
-                    writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq()}))", AwsRuntimeTypes.Http.Interceptors.S3ExpressCrc32ChecksumInterceptor)
-                } else { // checksum not required, override with CRC32 only if user enabled flexible checksums
+                if (checksumRequired) { // checksum required, enable flexible checksums using CRC32 if the user has not already opted-in
                     writer.withBlock("if (input.${checksumAlgorithmMember.defaultName()} != null) {", "}") {
                         writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq()}))", AwsRuntimeTypes.Http.Interceptors.S3ExpressCrc32ChecksumInterceptor)
                     }
                 }
             } else {
-                if (checksumRequiredTrait != null) {
-                    error("Checksum is required but operation does not support flexible checksums. Can't proceed because S3 Express requires sending CRC32 checksums, not MD5.")
+                if (checksumRequired) { // checksum required, operation does not support flexible checksums, so set the checksum algorithm manually
+                    writer.write("op.interceptors.add(#T())", AwsRuntimeTypes.Http.Interceptors.S3ExpressCrc32ChecksumInterceptor)
                 }
             }
         }
