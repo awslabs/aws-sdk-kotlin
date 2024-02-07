@@ -11,25 +11,33 @@ import aws.smithy.kotlin.runtime.http.request.header
 private const val S3_EXPRESS_SESSION_TOKEN_HEADER = "X-Amz-S3Session-Token"
 private const val SESSION_TOKEN_HEADER = "X-Amz-Security-Token"
 
+/**
+ * An [HttpSigner] used for S3 Express requests. It wraps [AwsHttpSigner] and has identical behavior except for two differences:
+ *    1. Adds an `X-Amz-S3Session-Token` header, with a value of the credentials' sessionToken
+ *    2. Removes the `X-Amz-Security-Token` header, which must not be sent for S3 Express requests.
+ * @param awsHttpSigner An instance of [AwsHttpSigner]
+ */
 public class S3ExpressHttpSigner(
     public val awsHttpSigner: AwsHttpSigner
 ): HttpSigner {
+    /**
+     * Sign the request, adding `X-Amz-S3Session-Token` header and removing `X-Amz-Security-Token` header.
+     */
     public override suspend fun sign(signingRequest: SignHttpRequest) {
         val sessionToken = (signingRequest.identity as? Credentials)?.sessionToken
-            ?: error("S3ExpressHttpSigner failed to parse sessionToken from identity")
+            ?: error("Failed to parse sessionToken from identity")
 
         // 1. add the S3 Express Session Token header
         signingRequest.httpRequest.header(S3_EXPRESS_SESSION_TOKEN_HEADER, sessionToken)
-        println("Adding session token $sessionToken")
 
-        // 2. enable omitSessionToken for awsHttpSigner
+        // 2. enable omitSessionToken for awsHttpSigner to disable signing session token header
         val mutAttrs = signingRequest.signingAttributes.toMutableAttributes()
         mutAttrs[AwsSigningAttributes.OmitSessionToken] = true
 
         // 3. call main signer
         awsHttpSigner.sign(signingRequest.copy(signingAttributes = mutAttrs))
 
-        // 4. remove standard session token header
+        // 4. remove session token header
         signingRequest.httpRequest.headers.remove(SESSION_TOKEN_HEADER)
     }
 }
