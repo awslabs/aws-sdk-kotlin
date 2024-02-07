@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.52] - 02/07/2024
+
+### Features
+* (**datasync**) AWS DataSync now supports manifests for specifying files or objects to transfer.
+* (**lexmodelsv2**) This release introduces a new bot replication feature as part of Lex Global Resiliency offering. This feature leverages a new set of APIs that allow customers to create bot replicas and replicate changes to bots across regions.
+* (**redshift**) LisRecommendations API to fetch Amazon Redshift Advisor recommendations.
+
 ## [1.0.51] - 02/06/2024
 
 ### Features
