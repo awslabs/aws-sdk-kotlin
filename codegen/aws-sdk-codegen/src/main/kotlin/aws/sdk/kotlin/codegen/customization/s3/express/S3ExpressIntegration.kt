@@ -31,10 +31,10 @@ import software.amazon.smithy.model.traits.HttpChecksumRequiredTrait
 import software.amazon.smithy.model.traits.HttpHeaderTrait
 
 /**
- * An integration which sets up multiple code-generation aspects for S3 Express.
+ * An integration which handles codegen for S3 Express, such as:
  * 1. Configure auth scheme (auth scheme ID, auth option, identity provider for auth scheme)
  * 2. Add S3Client and Bucket to execution context (required for the S3 Express credentials cache key)
- * 3. Override all checksums to use CRC32 instead
+ * 3. Override checksums to use CRC32 instead of MD5
  * 4. Disable all checksums for s3:UploadPart
  */
 class S3ExpressIntegration : KotlinIntegration {
