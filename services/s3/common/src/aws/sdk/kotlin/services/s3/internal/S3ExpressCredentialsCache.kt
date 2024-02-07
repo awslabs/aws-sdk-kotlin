@@ -14,15 +14,12 @@ import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.selects.*
-import kotlin.coroutines.coroutineContext
 import aws.sdk.kotlin.services.s3.*
-import aws.sdk.kotlin.services.s3.model.CreateSessionRequest
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
+import aws.smithy.kotlin.runtime.io.use
 import kotlin.time.Duration.Companion.minutes
 import kotlin.coroutines.CoroutineContext
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
-import kotlin.time.Duration
-import kotlin.time.*
 import aws.smithy.kotlin.runtime.time.until
 
 private const val DEFAULT_S3_EXPRESS_CACHE_SIZE: Int = 100
@@ -43,7 +40,7 @@ public class S3ExpressCredentialsCache(
         }
     }
 
-    public suspend fun get(key: S3ExpressCredentialsCacheKey): Credentials = lru.get(key)?.value
+    public suspend fun get(key: S3ExpressCredentialsCacheKey): Credentials = lru.get(key)?.takeIf { it.isExpired(clock) }?.value
         ?: (createSessionCredentials(key).also { put(key, it) }).value
 
     public suspend fun put(key: S3ExpressCredentialsCacheKey, value: ExpiringValue<Credentials>): Unit {
@@ -51,6 +48,17 @@ public class S3ExpressCredentialsCache(
         immediateRefreshChannel.send(Unit)
     }
 
+    private fun ExpiringValue<Credentials>.isExpired(clock: Clock): Boolean {
+        return clock.now().until(expiresAt).absoluteValue <= REFRESH_BUFFER
+    }
+
+    /**
+     * Attempt to refresh the credentials in the cache. A refresh is initiated when:
+     *    * a new set of credentials are added to the cache (immediate refresh)
+     *    * the `nextRefresh` time has been reached, which is either `DEFAULT_REFRESH_PERIOD` or
+     *      the soonest credentials expiration time (minus a buffer), whichever comes first.
+     *
+     */
     private suspend fun refresh(): Unit {
         val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
         while (isActive) {
@@ -63,14 +71,14 @@ public class S3ExpressCredentialsCache(
                 lru.entries.forEach { (key, cachedValue) ->
                     logger.trace { "Checking entry for ${key.bucket}" }
                     println("Checking entry for ${key.bucket}")
-                    nextRefresh = minOf(nextRefresh, cachedValue.expiresAt)
+                    nextRefresh = minOf(nextRefresh, cachedValue.expiresAt - REFRESH_BUFFER)
 
-                    if ((clock.now().until(cachedValue.expiresAt)).absoluteValue <= REFRESH_BUFFER) {
+                    if (cachedValue.isExpired(clock)) {
                         logger.trace { "Credentials for ${key.bucket} expire within the refresh buffer period, performing a refresh..." }
                         println("Credentials for ${key.bucket} expire within the refresh buffer period, performing a refresh...")
                         createSessionCredentials(key).also {
-                            refreshedCredentials.put(key, it)
-                            nextRefresh = minOf(nextRefresh, it.expiresAt)
+                            refreshedCredentials[key] = it
+                            nextRefresh = minOf(nextRefresh, it.expiresAt - REFRESH_BUFFER)
                         }
                     }
                 }
@@ -98,11 +106,13 @@ public class S3ExpressCredentialsCache(
     private suspend fun createSessionCredentials(key: S3ExpressCredentialsCacheKey): ExpiringValue<Credentials> {
         val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
 
-        val credentials = (key.client as S3Client).createSession(
-            CreateSessionRequest {
-                bucket = key.bucket
-            },
-        ).credentials!!
+        val credentials = (key.client as S3Client)
+            // de-configure interceptors because this key.client is the user's S3 client, and we don't want to
+            // execute their custom interceptors during this internal createSession request
+            .withConfig { interceptors = mutableListOf() }
+            .use {
+                it.createSession { bucket = key.bucket }.credentials!!
+            }
 
         return ExpiringValue(
             credentials(
