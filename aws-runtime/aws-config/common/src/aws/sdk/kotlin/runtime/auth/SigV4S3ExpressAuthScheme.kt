@@ -31,7 +31,7 @@ public class SigV4S3ExpressAuthScheme(
         AwsHttpSigner.Config().apply {
             signer = awsSigner
             service = serviceName
-            algorithm = AwsSigningAlgorithm.SIGV4_S3EXPRESS
+            algorithm = AwsSigningAlgorithm.SIGV4 // Note: There is no new signing algorithm for S3 Express
         }
     ))
 
