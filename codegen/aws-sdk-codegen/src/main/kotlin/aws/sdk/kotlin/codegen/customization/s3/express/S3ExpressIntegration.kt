@@ -100,7 +100,7 @@ class S3ExpressIntegration : KotlinIntegration {
     private val UseCrc32Checksum = object : ProtocolMiddleware {
         override val name: String = "UseCrc32Checksum"
 
-        override val order: Byte = 1 // Render after flexible checksums
+        override val order: Byte = -1 // Render before flexible checksums
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
             !op.isS3UploadPart && (op.hasTrait<HttpChecksumRequiredTrait>() || op.hasTrait<HttpChecksumTrait>())
