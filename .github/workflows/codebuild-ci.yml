@@ -5,6 +5,14 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      pr:
+        description: The PR number to run the E2E tests on
+        type: number
+        required: true
+
+env:
+  PR: ${{ inputs.pr }}
 
 permissions:
   id-token: write
@@ -29,6 +37,7 @@ jobs:
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
           project-name: gh-aws-sdk-kotlin-e2e-tests
+          env-vars-for-codebuild: PR
       - name: Cancel build
         if: ${{ cancelled() }}
         env:
