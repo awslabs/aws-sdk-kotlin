@@ -9,6 +9,7 @@ import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.text.ensurePrefix
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.io.OutputStreamWriter
@@ -23,7 +24,51 @@ object S3TestUtils {
 
     private const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
 
+    private const val S3_MAX_BUCKET_NAME_LENGTH = 63 // https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+    private const val S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX = "--x-s3"
+
     suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
+
+    suspend fun getTestDirectoryBucket(client: S3Client, suffix: String) = getDirectoryBucket(client, suffix)
+
+    private suspend fun getDirectoryBucket(client: S3Client, suffix: String): String = withTimeout(60.seconds) {
+        var testBucket = client.listBuckets()
+            .buckets
+            ?.mapNotNull { it.name }
+            ?.firstOrNull { it.startsWith(TEST_BUCKET_PREFIX) && it.endsWith(S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX) }
+
+        if (testBucket == null) {
+            // Adding S3 Express suffix surpasses the bucket name length limit... trim the UUID if needed
+            testBucket = TEST_BUCKET_PREFIX +
+                UUID.randomUUID().toString().subSequence(0 until (S3_MAX_BUCKET_NAME_LENGTH - TEST_BUCKET_PREFIX.length - suffix.ensurePrefix("--").length)) +
+                suffix.ensurePrefix("--")
+
+            println("Creating S3 bucket: $testBucket")
+
+            val availabilityZone = testBucket                       // s3-test-bucket-UUID--use1-az4--x-s3
+                .removeSuffix(S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX)   // s3-test-bucket-UUID--use1-az4
+                .substringAfterLast("--")                           // use1-az4
+
+            client.createBucket {
+                bucket = testBucket
+                createBucketConfiguration {
+                    location = LocationInfo {
+                        type = LocationType.AvailabilityZone
+                        name = availabilityZone
+                    }
+                    bucket = BucketInfo {
+                        type = BucketType.Directory
+                        dataRedundancy = DataRedundancy.SingleAvailabilityZone
+                    }
+                }
+            }
+        }
+
+        // FIXME skipping putBucketLifecycleConfiguration because the following exception is thrown from S3 if I try to do it:
+        // aws.sdk.kotlin.services.s3.model.S3Exception: LifecycleConfiguration is not valid, expected CreateBucketConfiguration
+
+        testBucket
+    }
 
     private suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String = withTimeout(60.seconds) {
         var testBucket = client.listBuckets()

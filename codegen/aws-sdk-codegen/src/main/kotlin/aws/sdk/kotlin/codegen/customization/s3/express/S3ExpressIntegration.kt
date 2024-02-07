@@ -117,14 +117,12 @@ class S3ExpressIntegration : KotlinIntegration {
 
             val checksumRequired = op.hasTrait<HttpChecksumRequiredTrait>() || httpChecksumTrait?.isRequestChecksumRequired == true
 
-            if (checksumAlgorithmMember != null) {
-                if (checksumRequired) { // checksum required, enable flexible checksums using CRC32 if the user has not already opted-in
-                    writer.withBlock("if (input.${checksumAlgorithmMember.defaultName()} != null) {", "}") {
+            if (checksumRequired) {
+                if (checksumAlgorithmMember != null) { // enable flexible checksums using CRC32 if the user has not already opted-in
+                    writer.withBlock("if (input.${checksumAlgorithmMember.defaultName()} == null) {", "}") {
                         writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq()}))", AwsRuntimeTypes.Http.Interceptors.S3ExpressCrc32ChecksumInterceptor)
                     }
-                }
-            } else {
-                if (checksumRequired) { // checksum required, operation does not support flexible checksums, so set the checksum algorithm manually
+                } else { // checksum required, operation does not expose flexible checksums member, so set the checksum algorithm manually
                     writer.write("op.interceptors.add(#T())", AwsRuntimeTypes.Http.Interceptors.S3ExpressCrc32ChecksumInterceptor)
                 }
             }
