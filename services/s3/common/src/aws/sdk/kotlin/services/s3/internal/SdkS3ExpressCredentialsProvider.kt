@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.runtime.auth.S3ExpressAttributes
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
+import aws.sdk.kotlin.services.s3.S3ExpressCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.collections.Attributes
@@ -13,11 +13,6 @@ import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.io.SdkManagedBase
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import kotlin.coroutines.coroutineContext
-
-public interface S3ExpressCredentialsProvider : CloseableCredentialsProvider {
-    override suspend fun resolve(attributes: Attributes): Credentials
-    override fun close()
-}
 
 public class SdkS3ExpressCredentialsProvider(
     public val bootstrapCredentialsProvider: CredentialsProvider,

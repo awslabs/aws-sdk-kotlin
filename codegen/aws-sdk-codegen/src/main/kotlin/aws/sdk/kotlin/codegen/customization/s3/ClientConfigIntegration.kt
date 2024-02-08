@@ -86,7 +86,7 @@ class ClientConfigIntegration : KotlinIntegration {
                 buildSymbol {
                     name = "S3ExpressCredentialsProvider"
                     nullable = false
-                    namespace = "aws.sdk.kotlin.services.s3.internal" // FIXME this should not be "internal" -- users will implement their own providers off this interface
+                    namespace = "aws.sdk.kotlin.services.s3"
                 },
             )
 
