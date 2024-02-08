@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.runtime.http
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
@@ -18,8 +22,8 @@ private const val SESSION_TOKEN_HEADER = "X-Amz-Security-Token"
  * @param awsHttpSigner An instance of [AwsHttpSigner]
  */
 public class S3ExpressHttpSigner(
-    public val awsHttpSigner: AwsHttpSigner
-): HttpSigner {
+    public val awsHttpSigner: AwsHttpSigner,
+) : HttpSigner {
     /**
      * Sign the request, adding `X-Amz-S3Session-Token` header and removing `X-Amz-Security-Token` header.
      */

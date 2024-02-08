@@ -29,13 +29,15 @@ private val S3_EXPRESS_AUTH_SCHEME_ID = AuthSchemeId("aws.auth#sigv4s3express")
 public class SigV4S3ExpressAuthScheme(
     awsHttpSigner: AwsHttpSigner,
 ) : AuthScheme {
-    public constructor(awsSigner: AwsSigner, serviceName: String? = null) : this(AwsHttpSigner(
-        AwsHttpSigner.Config().apply {
-            signer = awsSigner
-            service = serviceName
-            algorithm = AwsSigningAlgorithm.SIGV4 // Note: There is no new signing algorithm for S3 Express
-        }
-    ))
+    public constructor(awsSigner: AwsSigner, serviceName: String? = null) : this(
+        AwsHttpSigner(
+            AwsHttpSigner.Config().apply {
+                signer = awsSigner
+                service = serviceName
+                algorithm = AwsSigningAlgorithm.SIGV4 // Note: There is no new signing algorithm for S3 Express
+            },
+        ),
+    )
 
     override val schemeId: AuthSchemeId = S3_EXPRESS_AUTH_SCHEME_ID
     override val signer: HttpSigner = S3ExpressHttpSigner(awsHttpSigner)

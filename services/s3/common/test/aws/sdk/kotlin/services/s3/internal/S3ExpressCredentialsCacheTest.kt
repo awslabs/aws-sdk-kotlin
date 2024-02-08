@@ -13,7 +13,6 @@ import kotlin.test.assertEquals
 public class S3ExpressCredentialsCacheTest {
     @Test
     fun testCacheKeyEquality() = runTest {
-
         val bucket = "bucket"
         val client = S3Client.builder().build()
         val testCredentials = Credentials("accessKeyId", "secretAccessKey", "sessionToken")

@@ -5,15 +5,10 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
-import aws.sdk.kotlin.services.s3.internal.S3ExpressCredentialsProvider
-import aws.sdk.kotlin.services.s3.internal.SdkS3ExpressCredentialsProvider
 import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.putObject
 import aws.sdk.kotlin.services.s3.withConfig
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
-import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
@@ -29,7 +24,6 @@ import kotlin.test.*
  * Tests for S3 Express operations
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
 class S3ExpressTest {
     private val client = S3Client {
         region = S3TestUtils.DEFAULT_REGION
@@ -111,7 +105,7 @@ class S3ExpressTest {
         }
     }
 
-    private class CRC32ChecksumValidatingInterceptor: HttpInterceptor {
+    private class CRC32ChecksumValidatingInterceptor : HttpInterceptor {
         override fun readAfterSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
             val headers = context.protocolRequest.headers
             assertTrue(headers.contains("x-amz-checksum-crc32"), "Failed to find x-amz-checksum-crc32 header")

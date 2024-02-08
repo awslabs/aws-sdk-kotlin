@@ -87,7 +87,7 @@ class ClientConfigIntegration : KotlinIntegration {
                     name = "S3ExpressCredentialsProvider"
                     nullable = false
                     namespace = "aws.sdk.kotlin.services.s3.internal" // FIXME this should not be "internal" -- users will implement their own providers off this interface
-                }
+                },
             )
 
             // FIXME Figure out why the default value is not being used properly.

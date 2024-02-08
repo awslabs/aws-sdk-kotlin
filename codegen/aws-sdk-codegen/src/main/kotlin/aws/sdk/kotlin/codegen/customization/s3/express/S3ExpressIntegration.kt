@@ -63,11 +63,11 @@ class S3ExpressIntegration : KotlinIntegration {
 
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
         resolved + listOf(
-        AddClientToExecutionContext,
-        AddBucketToExecutionContext,
-        UseCrc32Checksum,
-        UploadPartDisableChecksum,
-    )
+            AddClientToExecutionContext,
+            AddBucketToExecutionContext,
+            UseCrc32Checksum,
+            UploadPartDisableChecksum,
+        )
 
     private val AddClientToExecutionContext = object : ProtocolMiddleware {
         override val name: String = "AddClientToExecutionContext"

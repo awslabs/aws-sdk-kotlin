@@ -45,9 +45,9 @@ object S3TestUtils {
 
             println("Creating S3 bucket: $testBucket")
 
-            val availabilityZone = testBucket                       // s3-test-bucket-UUID--use1-az4--x-s3
-                .removeSuffix(S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX)   // s3-test-bucket-UUID--use1-az4
-                .substringAfterLast("--")                           // use1-az4
+            val availabilityZone = testBucket // s3-test-bucket-UUID--use1-az4--x-s3
+                .removeSuffix(S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX) // s3-test-bucket-UUID--use1-az4
+                .substringAfterLast("--") // use1-az4
 
             client.createBucket {
                 bucket = testBucket
