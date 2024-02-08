@@ -1,0 +1,32 @@
+name: API compatibility verification
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened, labeled, unlabeled ]
+    branches: [ main ]
+
+jobs:
+  api-compat-verification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check for API compatibility
+        if: ${{ !contains(github.event.pull_request.labels.*.name, 'acknowledge-api-break') }}
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth 1 && \
+          git diff remotes/origin/${{ github.base_ref }} --numstat "*.api" | awk '
+            BEGIN { s = 0 }
+            
+            # git diff numstat shows lines deleted in field 2, hence sum up field 2 across all items 
+            { s += $2 }
+            
+            # exit with the number of lines deleted as the result code so that `if failure()` works below
+            END { exit s }
+          '
+      - name: Error message
+        if: ${{ failure() }}
+        run: |
+          echo "::error ::This change modifies the public API in a way that may be backwards-incompatible. Carefully review this pull request and either:"
+          echo "::error ::* Revert the changes which caused the API incompatibility –or–"
+          echo "::error ::* Add the 'acknowledge-api-break' label to this PR (in rare cases warranting an API breakage)"
+          exit 1

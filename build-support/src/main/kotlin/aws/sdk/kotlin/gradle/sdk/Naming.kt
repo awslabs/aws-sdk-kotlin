@@ -37,3 +37,16 @@ internal fun sdkIdToArtifactName(sdkId: String): String = sdkId.replace(" ", "")
  * catapult! See AwsSdkCatapultWorkspaceTools:lib/source/merge/smithy-model-handler.ts
  */
 fun sdkIdToModelFilename(sdkId: String): String = sdkId.trim().replace("""[\s]+""".toRegex(), "-").lowercase()
+
+// FIXME - replace with case utils from smithy-kotlin once we verify we can change the implementation
+private fun String.lowercaseAndCapitalize() = lowercase().replaceFirstChar(Char::uppercaseChar)
+private val wordBoundary = "[^a-zA-Z0-9]+".toRegex()
+private fun String.pascalCase(): String = split(wordBoundary).pascalCase()
+fun List<String>.pascalCase() = joinToString(separator = "") { it.lowercaseAndCapitalize() }
+
+private const val BRAZIL_GROUP_NAME = "AwsSdkKotlin"
+
+/**
+ * Maps an sdkId from a model to the brazil package name to use
+ */
+fun sdkIdToBrazilName(sdkId: String): String = "${BRAZIL_GROUP_NAME}${sdkId.pascalCase()}"

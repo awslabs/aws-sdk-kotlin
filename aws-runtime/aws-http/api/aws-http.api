@@ -1,3 +1,16 @@
+public final class aws/sdk/kotlin/runtime/http/ApiMetadata {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/ApiMetadata;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/http/ApiMetadata;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/ApiMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getServiceId ()Ljava/lang/String;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata {
 	public static final field Companion Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion;
 	public fun <init> (Laws/sdk/kotlin/runtime/http/SdkMetadata;Laws/sdk/kotlin/runtime/http/ApiMetadata;Laws/sdk/kotlin/runtime/http/OsMetadata;Laws/sdk/kotlin/runtime/http/LanguageMetadata;Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;Laws/sdk/kotlin/runtime/http/FrameworkMetadata;Ljava/lang/String;Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;)V
@@ -35,6 +48,177 @@ public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion {
 public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadataKt {
 	public static final field AWS_APP_ID_ENV Ljava/lang/String;
 	public static final field AWS_APP_ID_PROP Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/http/ExecutionEnvMetadata {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/ExecutionEnvMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/http/FrameworkMetadata {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/FrameworkMetadata;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/http/FrameworkMetadata;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/FrameworkMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/http/LanguageMetadata {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Ljava/util/Map;)Laws/sdk/kotlin/runtime/http/LanguageMetadata;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/http/LanguageMetadata;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/LanguageMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExtras ()Ljava/util/Map;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/http/OsMetadata {
+	public fun <init> (Laws/smithy/kotlin/runtime/util/OsFamily;Ljava/lang/String;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/OsFamily;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Laws/smithy/kotlin/runtime/util/OsFamily;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Laws/smithy/kotlin/runtime/util/OsFamily;Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/OsMetadata;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/http/OsMetadata;Laws/smithy/kotlin/runtime/util/OsFamily;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/OsMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFamily ()Laws/smithy/kotlin/runtime/util/OsFamily;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/http/SdkMetadata {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/SdkMetadata;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/http/SdkMetadata;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/SdkMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/runtime/http/interceptors/AddUserAgentMetadataInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
+	public fun <init> (Ljava/util/Map;)V
+	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeRetryLoop (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun readAfterAttempt (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterDeserialization (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterExecution (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterSerialization (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readAfterSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readAfterTransmit (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
+	public fun readBeforeAttempt (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
+	public fun readBeforeExecution (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
+	public fun readBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
+	public fun readBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+}
+
+public final class aws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
+	public static final field INSTANCE Laws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor;
+	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeRetryLoop (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun readAfterAttempt (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterDeserialization (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterExecution (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterSerialization (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readAfterSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readAfterTransmit (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
+	public fun readBeforeAttempt (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
+	public fun readBeforeExecution (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
+	public fun readBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
+	public fun readBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+}
+
+public final class aws/sdk/kotlin/runtime/http/interceptors/UnsupportedSigningAlgorithmInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
+	public fun <init> ()V
+	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeRetryLoop (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun readAfterAttempt (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterDeserialization (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterExecution (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterSerialization (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readAfterSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readAfterTransmit (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
+	public fun readBeforeAttempt (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
+	public fun readBeforeExecution (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
+	public fun readBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
+	public fun readBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+}
+
+public final class aws/sdk/kotlin/runtime/http/middleware/AwsRetryHeaderMiddleware : aws/smithy/kotlin/runtime/http/operation/MutateMiddleware {
+	public fun <init> ()V
+	public fun handle (Laws/smithy/kotlin/runtime/http/operation/OperationRequest;Laws/smithy/kotlin/runtime/io/Handler;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Ljava/lang/Object;Laws/smithy/kotlin/runtime/io/Handler;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun install (Laws/smithy/kotlin/runtime/http/operation/SdkHttpOperation;)V
+}
+
+public final class aws/sdk/kotlin/runtime/http/middleware/RecursionDetection : aws/smithy/kotlin/runtime/http/operation/ModifyRequestMiddleware {
+	public fun <init> ()V
+	public fun <init> (Laws/smithy/kotlin/runtime/util/EnvironmentProvider;)V
+	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/EnvironmentProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun install (Laws/smithy/kotlin/runtime/http/operation/SdkHttpOperation;)V
+	public fun modifyRequest (Laws/smithy/kotlin/runtime/http/operation/OperationRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun modifyRequest (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/http/middleware/UserAgent : aws/smithy/kotlin/runtime/http/operation/ModifyRequestMiddleware {
+	public fun <init> (Laws/sdk/kotlin/runtime/http/AwsUserAgentMetadata;)V
+	public fun install (Laws/smithy/kotlin/runtime/http/operation/SdkHttpOperation;)V
+	public fun modifyRequest (Laws/smithy/kotlin/runtime/http/operation/OperationRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun modifyRequest (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/http/operation/ConfigMetadata : aws/sdk/kotlin/runtime/http/operation/TypedUserAgentMetadata {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/operation/ConfigMetadata;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/http/operation/ConfigMetadata;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/operation/ConfigMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/runtime/http/S3ExpressHttpSigner : aws/smithy/kotlin/runtime/http/auth/HttpSigner {
@@ -96,12 +280,30 @@ public final class aws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata
 	public fun <init> ()V
 	public fun <init> (Ljava/util/Map;Ljava/util/List;)V
 	public synthetic fun <init> (Ljava/util/Map;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun add (Laws/sdk/kotlin/runtime/http/operation/TypedUserAgentMetadata;)V
 	public final fun add (Ljava/lang/String;Ljava/lang/String;)V
 	public final fun plus (Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;)Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;
 }
 
 public final class aws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadataKt {
 	public static final fun getCustomUserAgentMetadata (Laws/smithy/kotlin/runtime/operation/ExecutionContext;)Laws/sdk/kotlin/runtime/http/operation/CustomUserAgentMetadata;
+}
+
+public final class aws/sdk/kotlin/runtime/http/operation/FeatureMetadata : aws/sdk/kotlin/runtime/http/operation/TypedUserAgentMetadata {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/operation/FeatureMetadata;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/runtime/http/operation/FeatureMetadata;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/http/operation/FeatureMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getVersion ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class aws/sdk/kotlin/runtime/http/operation/TypedUserAgentMetadata {
 }
 
 public class aws/sdk/kotlin/runtime/http/retries/AwsRetryPolicy : aws/smithy/kotlin/runtime/retries/policy/StandardRetryPolicy {

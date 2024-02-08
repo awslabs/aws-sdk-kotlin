@@ -1,0 +1,8 @@
+{
+    "id": "03502878-f89d-4d73-94d5-0584d145657f",
+    "type": "bugfix",
+    "description": "Bump **smithy-kotlin** version to consume upstream fixes for URL parsing",
+    "issues": [
+        "awslabs/smithy-kotlin#1031"
+    ]
+}

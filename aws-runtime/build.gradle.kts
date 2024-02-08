@@ -77,7 +77,3 @@ subprojects {
         }
     }
 }
-
-apiValidation {
-    nonPublicMarkers.add("aws.sdk.kotlin.runtime.InternalSdkApi")
-}

@@ -67,6 +67,7 @@ jobs:
         shell: bash
         run: |
           pwd
+          ./gradlew :build-support:test
           ./gradlew publishToMavenLocal
           ./gradlew apiCheck
           ./gradlew test jvmTest
