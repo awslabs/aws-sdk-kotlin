@@ -225,11 +225,6 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/SystemPropertyCredent
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/internal/CredentialsExtKt {
-	public static final fun credentials (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Laws/smithy/kotlin/runtime/time/Instant;Ljava/lang/String;Ljava/lang/String;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
-	public static synthetic fun credentials$default (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Laws/smithy/kotlin/runtime/time/Instant;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
-}
-
 public final class aws/sdk/kotlin/runtime/auth/credentials/internal/ManagedBearerTokenProviderKt {
 	public static final fun manage (Laws/smithy/kotlin/runtime/http/auth/CloseableBearerTokenProvider;)Laws/smithy/kotlin/runtime/http/auth/BearerTokenProvider;
 }

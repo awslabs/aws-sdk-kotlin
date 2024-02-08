@@ -12,7 +12,7 @@ import aws.smithy.kotlin.runtime.collections.setIfValueNotNull
 import aws.smithy.kotlin.runtime.identity.IdentityAttributes
 import aws.smithy.kotlin.runtime.time.Instant
 
-public fun credentials( // FIXME can we make this public? if not, how should I create [Credentials] from within the s3 package?
+internal fun credentials(
     accessKeyId: String,
     secretAccessKey: String,
     sessionToken: String? = null,

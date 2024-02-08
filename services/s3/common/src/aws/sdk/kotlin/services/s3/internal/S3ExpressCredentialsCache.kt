@@ -15,7 +15,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.selects.*
 import aws.sdk.kotlin.services.s3.*
-import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.io.use
 import kotlin.time.Duration.Companion.minutes
 import kotlin.coroutines.CoroutineContext
@@ -115,7 +114,7 @@ public class S3ExpressCredentialsCache(
             }
 
         return ExpiringValue(
-            credentials(
+            Credentials.invoke(
                 accessKeyId = credentials.accessKeyId,
                 secretAccessKey = credentials.secretAccessKey,
                 sessionToken = credentials.sessionToken,
