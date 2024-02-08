@@ -60,10 +60,10 @@ private object SigV4S3ExpressEndpointCustomization : EndpointCustomization {
 }
 
 open class SigV4S3ExpressAuthSchemeHandler : AuthSchemeHandler {
-    override val authSchemeId: ShapeId = SigV4S3ExpressTrait.ID
+    override val authSchemeId: ShapeId = ShapeId.from("aws.auth#sigv4s3express")
 
     override val authSchemeIdSymbol: Symbol = buildSymbol {
-        name = "AuthSchemeId.AwsSigV4S3Express"
+        name = "AuthSchemeId(\"aws.auth#sigv4s3express\")"
         val ref = RuntimeTypes.Auth.Identity.AuthSchemeId
         objectRef = ref
         namespace = ref.namespace

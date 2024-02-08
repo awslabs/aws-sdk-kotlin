@@ -21,6 +21,8 @@ import aws.smithy.kotlin.runtime.http.auth.AuthScheme
 import aws.smithy.kotlin.runtime.http.auth.AwsHttpSigner
 import aws.smithy.kotlin.runtime.http.auth.HttpSigner
 
+private val S3_EXPRESS_AUTH_SCHEME_ID = AuthSchemeId("aws.auth#sigv4s3express")
+
 /**
  * HTTP auth scheme for S3 Express One Zone authentication
  */
@@ -35,7 +37,7 @@ public class SigV4S3ExpressAuthScheme(
         }
     ))
 
-    override val schemeId: AuthSchemeId = AuthSchemeId.AwsSigV4S3Express
+    override val schemeId: AuthSchemeId = S3_EXPRESS_AUTH_SCHEME_ID
     override val signer: HttpSigner = S3ExpressHttpSigner(awsHttpSigner)
 }
 
@@ -64,7 +66,7 @@ public fun sigV4S3Express(
     } else {
         emptyAttributes()
     }
-    return AuthOption(AuthSchemeId.AwsSigV4S3Express, attrs)
+    return AuthOption(S3_EXPRESS_AUTH_SCHEME_ID, attrs)
 }
 
 // FIXME Copied from SigV4AuthScheme.kt
