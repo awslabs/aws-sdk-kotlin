@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.53] - 02/08/2024
+
+### Features
+* (**codepipeline**) Add ability to execute pipelines with new parallel & queued execution modes and add support for triggers with filtering on branches and file paths.
+* (**quicksight**) General Interactions for Visuals; Waterfall Chart Color Configuration; Documentation Update
+* (**workspaces**) This release introduces User-Decoupling feature. This feature allows Workspaces Core customers to provision workspaces without providing users. CreateWorkspaces and DescribeWorkspaces APIs will now take a new optional parameter "WorkspaceName".
+
+### Fixes
+* [#1031](https://github.com/awslabs/smithy-kotlin/issues/1031) Bump **smithy-kotlin** version to consume upstream fixes for URL parsing
+
 ## [1.0.52] - 02/07/2024
 
 ### Features
