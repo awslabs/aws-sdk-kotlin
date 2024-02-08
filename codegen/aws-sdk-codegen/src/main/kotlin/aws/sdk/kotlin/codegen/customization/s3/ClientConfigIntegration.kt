@@ -90,8 +90,6 @@ class ClientConfigIntegration : KotlinIntegration {
                 },
             )
 
-            // FIXME Figure out why the default value is not being used properly.
-//            propertyType = ConfigPropertyType.RequiredWithDefault("S3ExpressCredentialsProvider(this.credentialsProvider)")
             propertyType = ConfigPropertyType.Custom(
                 render = { _, writer ->
                     writer.write("public val $name: S3ExpressCredentialsProvider = builder.$name ?: SdkS3ExpressCredentialsProvider(this.credentialsProvider)")

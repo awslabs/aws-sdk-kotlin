@@ -27,7 +27,6 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.node.Node
-import software.amazon.smithy.model.node.ObjectNode
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
@@ -93,19 +92,13 @@ open class SigV4S3ExpressAuthSchemeHandler : AuthSchemeHandler {
     }
 }
 
-private fun String.toAuthOptionFactoryFn(): Symbol? =
-    when (this) {
-        "sigv4-s3express" -> AwsRuntimeTypes.Config.Auth.sigV4S3Express
-        else -> null
-    }
-
 private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, expressionRenderer: ExpressionRenderer) {
     writer.writeInline("#T to ", RuntimeTypes.SmithyClient.Endpoints.SigningContextAttributeKey)
     writer.withBlock("listOf(", ")") {
         authSchemes.toNode().expectArrayNode().forEach {
             val scheme = it.expectObjectNode()
             val schemeName = scheme.expectStringMember("name").value
-            val authFactoryFn = schemeName.toAuthOptionFactoryFn() ?: return@forEach
+            val authFactoryFn = if (schemeName == "sigv4-s3express") AwsRuntimeTypes.Config.Auth.sigV4S3Express else return@forEach
 
             withBlock("#T(", "),", authFactoryFn) {
                 // we delegate back to the expression visitor for each of these fields because it's possible to
@@ -117,9 +110,8 @@ private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, exp
                 writeInline("disableDoubleUriEncode = ")
                 renderOrElse(expressionRenderer, scheme.getBooleanMember("disableDoubleEncoding"), "false")
 
-                when (schemeName) {
-                    "sigv4-s3express" -> renderSigV4ExpressFields(writer, scheme, expressionRenderer)
-                }
+                writer.writeInline("signingRegion = ")
+                writer.renderOrElse(expressionRenderer, scheme.getStringMember("signingRegion"), "null")
             }
         }
     }
@@ -136,9 +128,4 @@ private fun KotlinWriter.renderOrElse(
         else -> expressionRenderer.renderExpression(Expression.fromNode(nullableNode))
     }
     write(",")
-}
-
-private fun renderSigV4ExpressFields(writer: KotlinWriter, scheme: ObjectNode, expressionRenderer: ExpressionRenderer) {
-    writer.writeInline("signingRegion = ")
-    writer.renderOrElse(expressionRenderer, scheme.getStringMember("signingRegion"), "null")
 }
