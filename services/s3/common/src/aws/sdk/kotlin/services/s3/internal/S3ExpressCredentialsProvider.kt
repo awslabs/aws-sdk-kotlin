@@ -32,7 +32,7 @@ public class SdkS3ExpressCredentialsProvider(
 
         val key = S3ExpressCredentialsCacheKey(bucket, client, bootstrapCredentialsProvider.resolve(attributes))
 
-        return credentialsCache.get(key).also { logger.trace { "Got credentials $it from cache" }}
+        return credentialsCache.get(key)
     }
 
     override fun close() {
