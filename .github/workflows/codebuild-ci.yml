@@ -6,13 +6,23 @@ on:
       - main
   workflow_dispatch:
     inputs:
-      pr:
-        description: The PR number to run the E2E tests on
+      aws-sdk-kotlin-pr:
+        description: aws-sdk-kotlin PR number
         type: number
         required: true
+      smithy-kotlin-pr:
+        description: smithy-kotlin PR number (optional)
+        type: number
+        required: false
+      check-pr:
+        description: I verified that the PR's are not running any malicious code
+        required: true
+        type: boolean
+        default: false
 
 env:
-  PR: ${{ inputs.pr }}
+  SDK_PR: ${{ inputs.aws-sdk-kotlin-pr }}
+  SMITHY_PR: ${{ inputs.smithy-kotlin-pr }}
 
 permissions:
   id-token: write
@@ -37,7 +47,7 @@ jobs:
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
           project-name: gh-aws-sdk-kotlin-e2e-tests
-          env-vars-for-codebuild: PR
+          env-vars-for-codebuild: SDK_PR, SMITHY_PR
       - name: Cancel build
         if: ${{ cancelled() }}
         env:
