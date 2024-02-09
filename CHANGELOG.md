@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.54] - 02/09/2024
+
+### Features
+* (**batch**) This feature allows Batch to support configuration of repository credentials for jobs running on ECS
+* (**braket**) Creating a job will result in DeviceOfflineException when using an offline device, and DeviceRetiredException when using a retired device.
+* (**costoptimizationhub**) Adding includeMemberAccounts field to the response of ListEnrollmentStatuses API.
+* (**iot**) This release allows AWS IoT Core users to enable Online Certificate Status Protocol (OCSP) Stapling for TLS X.509 Server Certificates when creating and updating AWS IoT Domain Configurations with Custom Domain.
+* (**pricing**) Add Throttling Exception to all APIs.
+
+### Documentation
+* (**amp**) Overall documentation updates.
+* (**ecs**) Documentation only update for Amazon ECS.
+
 ## [1.0.53] - 02/08/2024
 
 ### Features
