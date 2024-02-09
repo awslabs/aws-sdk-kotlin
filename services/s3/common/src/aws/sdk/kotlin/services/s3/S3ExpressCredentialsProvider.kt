@@ -8,6 +8,9 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvide
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.collections.Attributes
 
+/**
+ * A credentials provider used for making requests to S3 Express One Zone directory buckets.
+ */
 public interface S3ExpressCredentialsProvider : CloseableCredentialsProvider {
     override suspend fun resolve(attributes: Attributes): Credentials
     override fun close()
