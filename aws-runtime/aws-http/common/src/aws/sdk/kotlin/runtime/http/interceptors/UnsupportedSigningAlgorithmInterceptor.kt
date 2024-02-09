@@ -25,9 +25,9 @@ public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
                 return Result.failure(
                     UnsupportedSigningAlgorithmException(
                         "${it.message!!} Please refer to the documentation on how to use the CRT signer: " +
-                        "https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/use-services-s3-mrap.html#mrap-s3client-config",
+                            "https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/use-services-s3-mrap.html#mrap-s3client-config",
                         it.signingAlgorithm,
-                    ).copyStackTrace(it)
+                    ).copyStackTrace(it),
                 )
             }
         }
@@ -36,7 +36,7 @@ public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
 }
 
 private fun UnsupportedSigningAlgorithmException.copyStackTrace(
-    exception: UnsupportedSigningAlgorithmException
+    exception: UnsupportedSigningAlgorithmException,
 ): UnsupportedSigningAlgorithmException {
     this.stackTrace = exception.stackTrace
     return this

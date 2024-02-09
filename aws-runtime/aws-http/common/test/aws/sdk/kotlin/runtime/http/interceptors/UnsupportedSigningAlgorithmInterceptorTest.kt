@@ -38,7 +38,10 @@ class UnsupportedSigningAlgorithmInterceptorTest {
         assertTrue(result.isFailure)
         assertIs<UnsupportedSigningAlgorithmException>(exception)
         assertEquals(exception.signingAlgorithm, AwsSigningAlgorithm.SIGV4_ASYMMETRIC)
-        assertEquals("SIGV4A support is not yet implemented for the default signer.", exception.message)
+        assertEquals(
+            "SIGV4A support is not yet implemented for the default signer. Please refer to the documentation on how to use the CRT signer: https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/use-services-s3-mrap.html#mrap-s3client-config",
+            exception.message,
+        )
     }
 
     @Test
