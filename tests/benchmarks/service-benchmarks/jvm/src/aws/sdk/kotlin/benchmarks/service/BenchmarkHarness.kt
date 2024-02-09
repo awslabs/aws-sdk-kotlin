@@ -15,13 +15,14 @@ val DEFAULT_WARMUP_TIME = 5.seconds
 val DEFAULT_ITERATION_TIME = 15.seconds
 
 private val benchmarks = setOf(
-    S3Benchmark(),
-    SnsBenchmark(),
-    StsBenchmark(),
-    CloudwatchBenchmark(),
-    CloudwatchEventsBenchmark(),
-    DynamoDbBenchmark(),
-    PinpointBenchmark(),
+//    S3Benchmark(),
+//    SnsBenchmark(),
+//    StsBenchmark(),
+//    CloudwatchBenchmark(),
+//    CloudwatchEventsBenchmark(),
+//    DynamoDbBenchmark(),
+//    PinpointBenchmark(),
+    S3ExpressBenchmark()
 ).map {
     @Suppress("UNCHECKED_CAST")
     it as ServiceBenchmark<SdkClient>
