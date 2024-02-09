@@ -58,20 +58,15 @@ public class S3ExpressCredentialsCache(
     private suspend fun refresh() {
         val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
         while (isActive) {
-            logger.trace { "Looping..." }
-            println("Looping...")
             val refreshedCredentials = mutableMapOf<S3ExpressCredentialsCacheKey, ExpiringValue<Credentials>>()
             var nextRefresh: Instant = clock.now() + DEFAULT_REFRESH_PERIOD
 
             lru.withLock {
                 lru.entries.forEach { (key, cachedValue) ->
-                    logger.trace { "Checking entry for ${key.bucket}" }
-                    println("Checking entry for ${key.bucket}")
                     nextRefresh = minOf(nextRefresh, cachedValue.expiresAt - REFRESH_BUFFER)
 
                     if (cachedValue.isExpired(clock)) {
-                        logger.trace { "Credentials for ${key.bucket} expire within the refresh buffer period, performing a refresh..." }
-                        println("Credentials for ${key.bucket} expire within the refresh buffer period, performing a refresh...")
+                        logger.debug { "Credentials for ${key.bucket} expire within the refresh buffer period, performing a refresh..." }
                         createSessionCredentials(key).also {
                             refreshedCredentials[key] = it
                             nextRefresh = minOf(nextRefresh, it.expiresAt - REFRESH_BUFFER)
@@ -87,14 +82,8 @@ public class S3ExpressCredentialsCache(
 
             // wake up when it's time to refresh or an immediate refresh has been triggered
             select<Unit> {
-                onTimeout(clock.now().until(nextRefresh)) {
-                    logger.trace { "Woke up from timeout" }
-                    println("Woke up from timeout")
-                }
-                immediateRefreshChannel.onReceive {
-                    logger.trace { "Woke up from channel" }
-                    println("Woke up from channel")
-                }
+                onTimeout(clock.now().until(nextRefresh)) {}
+                immediateRefreshChannel.onReceive {}
             }
         }
     }
@@ -120,7 +109,7 @@ public class S3ExpressCredentialsCache(
                 providerName = "S3ExpressCredentialsProvider",
             ),
             credentials.expiration,
-        ).also { logger.debug { "got credentials ${it.value}" } }
+        )
     }
 
     override fun close() {
