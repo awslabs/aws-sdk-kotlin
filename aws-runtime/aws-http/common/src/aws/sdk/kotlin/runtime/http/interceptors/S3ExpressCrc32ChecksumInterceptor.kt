@@ -13,14 +13,15 @@ import aws.smithy.kotlin.runtime.http.request.toBuilder
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import kotlin.coroutines.coroutineContext
 
-internal val S3_EXPRESS_ENDPOINT_PROPERTY = "backend"
+internal val S3_EXPRESS_ENDPOINT_PROPERTY_KEY = "backend"
+internal val S3_EXPRESS_ENDPOINT_PROPERTY_VALUE = "S3Express"
 private val CRC32_ALGORITHM_NAME = "CRC32"
 
 public class S3ExpressCrc32ChecksumInterceptor(
     public val checksumAlgorithmHeaderName: String? = null,
 ) : HttpInterceptor {
     override suspend fun modifyBeforeSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
-        if (!context.executionContext.contains(AttributeKey<Any>(S3_EXPRESS_ENDPOINT_PROPERTY))) {
+        if (context.executionContext.getOrNull(AttributeKey(S3_EXPRESS_ENDPOINT_PROPERTY_KEY)) != S3_EXPRESS_ENDPOINT_PROPERTY_VALUE) {
             return context.protocolRequest
         }
 

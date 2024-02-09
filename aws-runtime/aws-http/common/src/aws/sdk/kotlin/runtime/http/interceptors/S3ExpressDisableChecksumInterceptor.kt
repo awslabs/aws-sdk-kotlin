@@ -17,7 +17,7 @@ import kotlin.coroutines.coroutineContext
  */
 public class S3ExpressDisableChecksumInterceptor : HttpInterceptor {
     override suspend fun modifyBeforeSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
-        if (!context.executionContext.contains(AttributeKey<Any>(S3_EXPRESS_ENDPOINT_PROPERTY))) {
+        if (context.executionContext.getOrNull(AttributeKey(S3_EXPRESS_ENDPOINT_PROPERTY_KEY)) != S3_EXPRESS_ENDPOINT_PROPERTY_VALUE) {
             return context.protocolRequest
         }
 
