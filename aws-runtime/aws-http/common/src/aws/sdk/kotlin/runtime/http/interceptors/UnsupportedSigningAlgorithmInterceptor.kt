@@ -22,8 +22,13 @@ public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
     override suspend fun modifyBeforeCompletion(context: ResponseInterceptorContext<Any, Any, HttpRequest?, HttpResponse?>): Result<Any> {
         context.response.exceptionOrNull()?.let {
             if (it is UnsupportedSigningAlgorithmException && it.signingAlgorithm == AwsSigningAlgorithm.SIGV4_ASYMMETRIC) {
+                it.message!!.replace(
+                    it.message!!,
+                    "${it.message!!} Please refer to the AWS documentation on how to set up the CRT signer: " +
+                    "https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/use-services-s3-mrap.html#mrap-s3client-config "
+                )
                 return Result.failure(
-                    it, // TODO: Add a message and link pointing to AWS SDK for Kotlin developer guide.
+                    it,
                 )
             }
         }
