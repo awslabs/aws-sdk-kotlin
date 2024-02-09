@@ -81,10 +81,12 @@ class S3ExpressBenchmark : ServiceBenchmark<S3Client> {
         }
 
         override suspend fun transact(client: S3Client) {
-            client.getObject(GetObjectRequest {
-                bucket = bucketName
-                key = KEY
-            }) { }
+            client.getObject(
+                GetObjectRequest {
+                    bucket = bucketName
+                    key = KEY
+                },
+            ) { }
         }
 
         override suspend fun tearDown(client: S3Client) {

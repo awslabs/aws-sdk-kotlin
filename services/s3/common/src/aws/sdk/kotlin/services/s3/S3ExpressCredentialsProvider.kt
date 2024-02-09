@@ -12,5 +12,3 @@ public interface S3ExpressCredentialsProvider : CloseableCredentialsProvider {
     override suspend fun resolve(attributes: Attributes): Credentials
     override fun close()
 }
-
-
