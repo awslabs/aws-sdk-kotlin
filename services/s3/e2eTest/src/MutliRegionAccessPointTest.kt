@@ -17,9 +17,11 @@ import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MutliRegionAccessPointTest {
     private val s3West = S3Client { region = "us-west-2" }
     private val s3East = s3West.withConfig { region = "us-east-2" }
@@ -32,7 +34,7 @@ class MutliRegionAccessPointTest {
     private val keyForObject = "test.txt"
 
     @BeforeAll
-    private suspend fun setUpMrapTest() {
+    private fun setUpMrapTest(): Unit = runBlocking {
         println("Setting up MutliRegionAccessPointTest tests")
 
         val accountId = getAccountId()
@@ -59,7 +61,7 @@ class MutliRegionAccessPointTest {
     }
 
     @AfterAll
-    private suspend fun cleanUpMrapTest() {
+    private fun cleanUpMrapTest(): Unit = runBlocking {
         println("Cleaning up MutliRegionAccessPointTest tests")
 
         val accountId = getAccountId()
