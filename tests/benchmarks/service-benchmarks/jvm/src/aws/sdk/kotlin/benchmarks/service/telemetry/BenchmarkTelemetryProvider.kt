@@ -14,9 +14,9 @@ import aws.smithy.kotlin.runtime.telemetry.metrics.*
 import aws.smithy.kotlin.runtime.telemetry.trace.TracerProvider
 
 private val capturedMetrics = mapOf(
-//    "smithy.client.call.attempt_overhead_duration" to "Overhead",
+    "smithy.client.call.attempt_overhead_duration" to "Overhead",
     // "smithy.client.http.time_to_first_byte" to "TTFB",
-     "smithy.client.call.attempt_duration" to "Call",
+    // "smithy.client.call.attempt_duration" to "Call",
     // "smithy.client.call.serialization_duration" to "Serlz",
     // "smithy.client.call.deserialization_duration" to "Deserlz",
     // "smithy.client.call.resolve_endpoint_duration" to "EPR",
