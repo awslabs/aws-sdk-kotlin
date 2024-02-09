@@ -7,15 +7,15 @@ on:
   workflow_dispatch:
     inputs:
       aws-sdk-kotlin-pr:
-        description: aws-sdk-kotlin PR number
+        description: aws-sdk-kotlin PR number (optional)
         type: number
-        required: true
+        required: false
       smithy-kotlin-pr:
         description: smithy-kotlin PR number (optional)
         type: number
         required: false
       check-pr:
-        description: I verified that the PR's are not running any malicious code
+        description: I verified that the PRs are not running any malicious code (If running for an external contributor)
         required: true
         type: boolean
         default: false
