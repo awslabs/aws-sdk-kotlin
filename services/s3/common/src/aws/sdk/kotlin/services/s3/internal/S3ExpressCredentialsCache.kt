@@ -39,7 +39,7 @@ public class S3ExpressCredentialsCache(
         }
     }
 
-    public suspend fun get(key: S3ExpressCredentialsCacheKey): Credentials = lru.get(key)?.takeIf { it.isExpired(clock) }?.value
+    public suspend fun get(key: S3ExpressCredentialsCacheKey): Credentials = lru.get(key)?.takeIf { !it.isExpired(clock) }?.value
         ?: (createSessionCredentials(key).also { put(key, it) }).value
 
     public suspend fun put(key: S3ExpressCredentialsCacheKey, value: ExpiringValue<Credentials>) {
