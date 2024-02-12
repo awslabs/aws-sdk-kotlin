@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.55] - 02/12/2024
+
+### Features
+* (**appsync**) Adds support for new options on GraphqlAPIs, Resolvers and  Data Sources for emitting Amazon CloudWatch metrics for enhanced monitoring of AppSync APIs.
+* (**cloudwatch**) This release enables PutMetricData API request payload compression by default.
+* (**neptunegraph**) Adding a new option "parameters" for data plane api ExecuteQuery to support running parameterized query via SDK.
+* (**route53domains**) This release adds bill contact support for RegisterDomain, TransferDomain, UpdateDomainContact and GetDomainDetail API.
+
 ## [1.0.54] - 02/09/2024
 
 ### Features
