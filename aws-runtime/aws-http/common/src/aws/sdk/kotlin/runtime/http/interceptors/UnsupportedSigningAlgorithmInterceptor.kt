@@ -15,7 +15,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 // FIXME: Remove this once sigV4a is supported by default AWS signer
 /**
  * Looks for an unsupported signing algorithm error caused by sigV4a.
- * If so it sends users to a section in the AWS SDK for Kotlin documentation on how to fix it.
+ * Creates an exception with a link to documentation on how to fix it.
  */
 @InternalSdkApi
 public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
@@ -24,10 +24,10 @@ public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
             if (it is UnsupportedSigningAlgorithmException && it.signingAlgorithm == AwsSigningAlgorithm.SIGV4_ASYMMETRIC) {
                 return Result.failure(
                     UnsupportedSigningAlgorithmException(
-                        "${it.message!!} Please refer to the documentation on how to configure it with the CRT signer: " +
-                            "https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/use-services-s3-mrap.html#mrap-s3client-config",
+                        "${it.message} For more information on how to enable it with the CRT signer, please refer to: https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/use-services-s3-mrap.html#mrap-s3client-config",
                         it.signingAlgorithm,
-                    ).initCause(it),
+                        it,
+                    ),
                 )
             }
         }
