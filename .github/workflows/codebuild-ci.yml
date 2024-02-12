@@ -68,7 +68,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
-      - name: Run Service Check Batch
+      - name: Run Service Check Batch # TODO: Add PR numbers here... and figure out how this works so you can debug the e2e tests
         id: svc-check-batch
         run: |
           .github/scripts/run-codebuild-batch-job.sh gh-aws-sdk-kotlin-svc-check-batch ${{ github.event.pull_request.head.sha }}
