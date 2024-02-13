@@ -22,7 +22,7 @@ public class SdkS3ExpressCredentialsProvider(
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<S3ExpressCredentialsProvider>()
 
-        val bucket: String = attributes[S3ExpressAttributes.Bucket]
+        val bucket = attributes[S3ExpressAttributes.Bucket]
         val client = attributes[S3ExpressAttributes.Client]
 
         val key = S3ExpressCredentialsCacheKey(bucket, client, bootstrapCredentialsProvider.resolve(attributes))
