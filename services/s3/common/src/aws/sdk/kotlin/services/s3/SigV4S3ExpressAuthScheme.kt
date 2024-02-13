@@ -11,15 +11,10 @@ import aws.smithy.kotlin.runtime.auth.AuthOption
 import aws.smithy.kotlin.runtime.auth.AuthSchemeId
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAlgorithm
-import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
-import aws.smithy.kotlin.runtime.auth.awssigning.HashSpecification
-import aws.smithy.kotlin.runtime.collections.AttributeKey
-import aws.smithy.kotlin.runtime.collections.MutableAttributes
-import aws.smithy.kotlin.runtime.collections.emptyAttributes
-import aws.smithy.kotlin.runtime.collections.mutableAttributes
 import aws.smithy.kotlin.runtime.http.auth.AuthScheme
 import aws.smithy.kotlin.runtime.http.auth.AwsHttpSigner
 import aws.smithy.kotlin.runtime.http.auth.HttpSigner
+import aws.smithy.kotlin.runtime.http.auth.sigV4
 
 public val AuthSchemeId.Companion.AwsSigV4S3Express: AuthSchemeId
     get() = AuthSchemeId("aws.auth#sigv4s3express")
@@ -61,38 +56,7 @@ public fun sigV4S3Express(
     disableDoubleUriEncode: Boolean? = null,
     normalizeUriPath: Boolean? = null,
 ): AuthOption {
-    val attrs = if (unsignedPayload || serviceName != null || signingRegion != null || disableDoubleUriEncode != null || normalizeUriPath != null) {
-        val mutAttrs = mutableAttributes()
-        mutAttrs.setNotBlank(AwsSigningAttributes.SigningRegion, signingRegion)
-        setCommonSigV4Attrs(mutAttrs, unsignedPayload, serviceName, disableDoubleUriEncode, normalizeUriPath)
-        mutAttrs
-    } else {
-        emptyAttributes()
-    }
-    return AuthOption(AuthSchemeId.AwsSigV4S3Express, attrs)
-}
-
-// FIXME Copied from SigV4AuthScheme.kt
-internal fun MutableAttributes.setNotBlank(key: AttributeKey<String>, value: String?) {
-    if (!value.isNullOrBlank()) set(key, value)
-}
-
-internal fun setCommonSigV4Attrs(
-    attrs: MutableAttributes,
-    unsignedPayload: Boolean = false,
-    serviceName: String? = null,
-    disableDoubleUriEncode: Boolean? = null,
-    normalizeUriPath: Boolean? = null,
-) {
-    if (unsignedPayload) {
-        attrs[AwsSigningAttributes.HashSpecification] = HashSpecification.UnsignedPayload
-    }
-    attrs.setNotBlank(AwsSigningAttributes.SigningService, serviceName)
-    if (disableDoubleUriEncode != null) {
-        attrs[AwsSigningAttributes.UseDoubleUriEncode] = !disableDoubleUriEncode
-    }
-
-    if (normalizeUriPath != null) {
-        attrs[AwsSigningAttributes.NormalizeUriPath] = normalizeUriPath
-    }
+    // Note: SigV4-S3Express has the same attributes as SigV4
+    val sigV4AuthOption = sigV4(unsignedPayload, serviceName, signingRegion, disableDoubleUriEncode, normalizeUriPath)
+    return AuthOption(AuthSchemeId.AwsSigV4S3Express, sigV4AuthOption.attributes)
 }
