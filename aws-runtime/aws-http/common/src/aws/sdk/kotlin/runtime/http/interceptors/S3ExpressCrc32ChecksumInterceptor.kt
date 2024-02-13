@@ -13,9 +13,9 @@ import aws.smithy.kotlin.runtime.http.request.toBuilder
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import kotlin.coroutines.coroutineContext
 
-internal val S3_EXPRESS_ENDPOINT_PROPERTY_KEY = "backend"
-internal val S3_EXPRESS_ENDPOINT_PROPERTY_VALUE = "S3Express"
-private val CRC32_ALGORITHM_NAME = "CRC32"
+internal const val S3_EXPRESS_ENDPOINT_PROPERTY_KEY = "backend"
+internal const val S3_EXPRESS_ENDPOINT_PROPERTY_VALUE = "S3Express"
+private const val CRC32_ALGORITHM_NAME = "CRC32"
 
 public class S3ExpressCrc32ChecksumInterceptor(
     public val checksumAlgorithmHeaderName: String? = null,
