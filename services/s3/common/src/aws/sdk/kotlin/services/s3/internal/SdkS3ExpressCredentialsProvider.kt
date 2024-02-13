@@ -11,17 +11,13 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.io.SdkManagedBase
-import aws.smithy.kotlin.runtime.telemetry.logging.logger
-import kotlin.coroutines.coroutineContext
 
-public class SdkS3ExpressCredentialsProvider(
-    public val bootstrapCredentialsProvider: CredentialsProvider,
+internal class DefaultS3ExpressCredentialsProvider(
+    val bootstrapCredentialsProvider: CredentialsProvider,
 ) : S3ExpressCredentialsProvider, SdkManagedBase() {
     private val credentialsCache = S3ExpressCredentialsCache()
 
     override suspend fun resolve(attributes: Attributes): Credentials {
-        val logger = coroutineContext.logger<S3ExpressCredentialsProvider>()
-
         val bucket = attributes[S3Attributes.DirectoryBucket]
         val client = attributes[S3Attributes.ExpressClient]
 

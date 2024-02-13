@@ -74,9 +74,9 @@ class ClientConfigIntegration : KotlinIntegration {
         val S3ExpressCredentialsProvider: ConfigProperty = ConfigProperty {
             name = "s3ExpressCredentialsProvider"
             symbol = buildSymbol {
-                name = "SdkS3ExpressCredentialsProvider"
+                name = "S3ExpressCredentialsProvider"
                 nullable = false
-                namespace = "aws.sdk.kotlin.services.s3.internal"
+                namespace = "aws.sdk.kotlin.services.s3"
             }
             documentation = """
                 Credentials provider to be used for making requests to S3 Express.   
@@ -92,7 +92,7 @@ class ClientConfigIntegration : KotlinIntegration {
 
             propertyType = ConfigPropertyType.Custom(
                 render = { _, writer ->
-                    writer.write("public val $name: S3ExpressCredentialsProvider = builder.$name ?: SdkS3ExpressCredentialsProvider(this.credentialsProvider)")
+                    writer.write("public val $name: S3ExpressCredentialsProvider = builder.$name ?: S3ExpressCredentialsProvider.default(this.credentialsProvider)")
                 },
                 renderBuilder = { prop, writer ->
                     prop.documentation?.let(writer::dokka)
