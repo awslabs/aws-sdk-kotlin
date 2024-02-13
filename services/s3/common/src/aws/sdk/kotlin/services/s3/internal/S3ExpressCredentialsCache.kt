@@ -101,7 +101,7 @@ public class S3ExpressCredentialsCache(
             }
 
         return ExpiringValue(
-            Credentials.invoke(
+            Credentials(
                 accessKeyId = credentials.accessKeyId,
                 secretAccessKey = credentials.secretAccessKey,
                 sessionToken = credentials.sessionToken,
