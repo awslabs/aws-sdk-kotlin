@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.56] - 02/13/2024
+
+### Features
+* (**lightsail**) This release adds support to upgrade the major version of a database.
+* (**marketplacecatalog**) AWS Marketplace Catalog API now supports setting intent on requests
+* (**resourceexplorer2**) Resource Explorer now uses newly supported IPv4 'amazonaws.com' endpoints by default.
+
+### Documentation
+* (**securitylake**) Documentation updates for Security Lake
+
 ## [1.0.55] - 02/12/2024
 
 ### Features
