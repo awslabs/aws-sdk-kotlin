@@ -15,7 +15,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 // FIXME: Remove this once sigV4a is supported by default AWS signer
 /**
  * Looks for an unsupported signing algorithm error caused by sigV4a.
- * Creates an exception with a link to documentation on how to fix it.
+ * If so it sends users to a section in the AWS SDK for Kotlin documentation on how to fix it.
  */
 @InternalSdkApi
 public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
