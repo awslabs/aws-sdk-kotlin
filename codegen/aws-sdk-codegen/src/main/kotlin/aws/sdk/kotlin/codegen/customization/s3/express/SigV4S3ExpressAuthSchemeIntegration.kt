@@ -52,6 +52,16 @@ class SigV4S3ExpressAuthSchemeIntegration : SigV4AuthSchemeIntegration() {
     override fun authSchemes(ctx: ProtocolGenerator.GenerationContext): List<AuthSchemeHandler> = listOf(SigV4S3ExpressAuthSchemeHandler())
 }
 
+internal val sigV4S3ExpressSymbol = buildSymbol {
+    name = "sigV4S3Express"
+    namespace = "aws.sdk.kotlin.services.s3"
+}
+
+internal val SigV4S3ExpressAuthSchemeSymbol = buildSymbol {
+    name = "SigV4S3ExpressAuthScheme"
+    namespace = "aws.sdk.kotlin.services.s3"
+}
+
 private object SigV4S3ExpressEndpointCustomization : EndpointCustomization {
     override val propertyRenderers: Map<String, EndpointPropertyRenderer> = mapOf(
         "authSchemes" to ::renderAuthSchemes,
@@ -62,7 +72,7 @@ open class SigV4S3ExpressAuthSchemeHandler : AuthSchemeHandler {
     override val authSchemeId: ShapeId = ShapeId.from("aws.auth#sigv4s3express")
 
     override val authSchemeIdSymbol: Symbol = buildSymbol {
-        name = "AuthSchemeId(\"aws.auth#sigv4s3express\")"
+        name = "AuthSchemeId.AwsSigV4S3Express"
         val ref = RuntimeTypes.Auth.Identity.AuthSchemeId
         objectRef = ref
         namespace = ref.namespace
@@ -83,12 +93,12 @@ open class SigV4S3ExpressAuthSchemeHandler : AuthSchemeHandler {
         } else {
             "#T()"
         }
-        writer.write(expr, AwsRuntimeTypes.Config.Auth.sigV4S3Express)
+        writer.write(expr, sigV4S3ExpressSymbol)
     }
 
     override fun instantiateAuthSchemeExpr(ctx: ProtocolGenerator.GenerationContext, writer: KotlinWriter) {
         val signingService = AwsSignatureVersion4.signingServiceName(ctx.service)
-        writer.write("#T(#T, #S)", AwsRuntimeTypes.Config.Auth.SigV4S3ExpressAuthScheme, RuntimeTypes.Auth.Signing.AwsSigningStandard.DefaultAwsSigner, signingService)
+        writer.write("#T(#T, #S)", SigV4S3ExpressAuthSchemeSymbol, RuntimeTypes.Auth.Signing.AwsSigningStandard.DefaultAwsSigner, signingService)
     }
 }
 
@@ -98,7 +108,7 @@ private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, exp
         authSchemes.toNode().expectArrayNode().forEach {
             val scheme = it.expectObjectNode()
             val schemeName = scheme.expectStringMember("name").value
-            val authFactoryFn = if (schemeName == "sigv4-s3express") AwsRuntimeTypes.Config.Auth.sigV4S3Express else return@forEach
+            val authFactoryFn = if (schemeName == "sigv4-s3express") sigV4S3ExpressSymbol else return@forEach
 
             withBlock("#T(", "),", authFactoryFn) {
                 // we delegate back to the expression visitor for each of these fields because it's possible to

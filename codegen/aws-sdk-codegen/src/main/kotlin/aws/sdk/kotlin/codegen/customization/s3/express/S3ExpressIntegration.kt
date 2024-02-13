@@ -50,12 +50,12 @@ class S3ExpressIntegration : KotlinIntegration {
 
     private val configureS3ExpressAuthSchemeWriter = AppendingSectionWriter { writer ->
         writer.withBlock("getOrPut(#T) {", "}", SigV4S3ExpressAuthSchemeHandler().authSchemeIdSymbol) {
-            writer.write("#T(#T, #S)", AwsRuntimeTypes.Config.Auth.SigV4S3ExpressAuthScheme, RuntimeTypes.Auth.Signing.AwsSigningStandard.DefaultAwsSigner, "s3")
+            writer.write("#T(#T, #S)", SigV4S3ExpressAuthSchemeSymbol, RuntimeTypes.Auth.Signing.AwsSigningStandard.DefaultAwsSigner, "s3")
         }
     }
 
     private val setServiceDefaultAuthOptionWriter = AppendingSectionWriter { writer ->
-        writer.write("#T(),", AwsRuntimeTypes.Config.Auth.sigV4S3Express)
+        writer.write("#T(),", sigV4S3ExpressSymbol)
     }
 
     private val configureIdentityProviderForAuthSchemeWriter = AppendingSectionWriter { writer ->
