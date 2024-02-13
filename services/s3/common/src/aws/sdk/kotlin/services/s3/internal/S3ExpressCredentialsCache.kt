@@ -9,7 +9,6 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.collections.LruCache
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.Instant
@@ -25,7 +24,7 @@ private const val DEFAULT_S3_EXPRESS_CACHE_SIZE: Int = 100
 private val REFRESH_BUFFER = 1.minutes
 private val DEFAULT_REFRESH_PERIOD = 5.minutes
 
-public class S3ExpressCredentialsCache(
+internal class S3ExpressCredentialsCache(
     private val clock: Clock = Clock.System,
 ) : CoroutineScope, Closeable {
     override val coroutineContext: CoroutineContext = Job() + CoroutineName("S3ExpressCredentialsCacheRefresh")
@@ -39,10 +38,10 @@ public class S3ExpressCredentialsCache(
         }
     }
 
-    public suspend fun get(key: S3ExpressCredentialsCacheKey): Credentials = lru.get(key)?.takeIf { !it.isExpired(clock) }?.value
+    suspend fun get(key: S3ExpressCredentialsCacheKey): Credentials = lru.get(key)?.takeIf { !it.isExpired(clock) }?.value
         ?: (createSessionCredentials(key).also { put(key, it) }).value
 
-    public suspend fun put(key: S3ExpressCredentialsCacheKey, value: ExpiringValue<Credentials>) {
+    suspend fun put(key: S3ExpressCredentialsCacheKey, value: ExpiringValue<Credentials>) {
         lru.put(key, value)
         immediateRefreshChannel.send(Unit)
     }
@@ -109,24 +108,8 @@ public class S3ExpressCredentialsCache(
     }
 }
 
-public class S3ExpressCredentialsCacheKey(
-    public val bucket: String,
-    public val client: SdkClient,
-    public val credentials: Credentials,
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is S3ExpressCredentialsCacheKey) return false
-        if (bucket != other.bucket) return false
-        if (client != other.client) return false
-        if (credentials != other.credentials) return false
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = bucket.hashCode() ?: 0
-        result = 31 * result + (client.hashCode() ?: 0)
-        result = 31 * result + (credentials.hashCode() ?: 0)
-        return result
-    }
-}
+internal data class S3ExpressCredentialsCacheKey(
+    val bucket: String,
+    val client: SdkClient,
+    val credentials: Credentials,
+)
