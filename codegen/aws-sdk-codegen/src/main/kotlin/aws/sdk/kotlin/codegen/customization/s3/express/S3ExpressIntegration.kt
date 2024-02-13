@@ -13,6 +13,7 @@ import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
@@ -75,8 +76,11 @@ class S3ExpressIntegration : KotlinIntegration {
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean = ctx.model.expectShape<ServiceShape>(ctx.settings.service).isS3
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            val attributesSymbol = AwsRuntimeTypes.Config.Auth.S3ExpressAttributes
-            writer.write("op.context[#T.Client] = this", attributesSymbol)
+            val attributesSymbol = buildSymbol {
+                name = "S3Attributes"
+                namespace = "aws.sdk.kotlin.services.s3"
+            }
+            writer.write("op.context[#T.ExpressClient] = this", attributesSymbol)
         }
     }
 
@@ -89,8 +93,11 @@ class S3ExpressIntegration : KotlinIntegration {
                 .any { it.memberName == "Bucket" }
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            val attributesSymbol = AwsRuntimeTypes.Config.Auth.S3ExpressAttributes
-            writer.write("input.bucket?.let { op.context[#T.Bucket] = it }", attributesSymbol)
+            val attributesSymbol = buildSymbol {
+                name = "S3Attributes"
+                namespace = "aws.sdk.kotlin.services.s3"
+            }
+            writer.write("input.bucket?.let { op.context[#T.DirectoryBucket] = it }", attributesSymbol)
         }
     }
 

@@ -58,7 +58,7 @@ object AwsRuntimeTypes {
         object Auth : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "auth") {
             val SigV4S3ExpressAuthScheme = symbol("SigV4S3ExpressAuthScheme")
             val sigV4S3Express = symbol("sigV4S3Express")
-            val S3ExpressAttributes = symbol("S3ExpressAttributes")
+
         }
     }
 

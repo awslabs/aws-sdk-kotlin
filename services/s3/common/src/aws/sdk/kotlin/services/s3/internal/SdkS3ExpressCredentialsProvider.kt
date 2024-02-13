@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.services.s3.internal
 
-import aws.sdk.kotlin.runtime.auth.S3ExpressAttributes
+import aws.sdk.kotlin.services.s3.S3Attributes
 import aws.sdk.kotlin.services.s3.S3ExpressCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
@@ -22,8 +22,8 @@ public class SdkS3ExpressCredentialsProvider(
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<S3ExpressCredentialsProvider>()
 
-        val bucket = attributes[S3ExpressAttributes.Bucket]
-        val client = attributes[S3ExpressAttributes.Client]
+        val bucket = attributes[S3Attributes.DirectoryBucket]
+        val client = attributes[S3Attributes.ExpressClient]
 
         val key = S3ExpressCredentialsCacheKey(bucket, client, bootstrapCredentialsProvider.resolve(attributes))
 
