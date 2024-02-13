@@ -26,7 +26,7 @@ public class S3ExpressDisableChecksumInterceptor : HttpInterceptor {
         val configuredChecksumAlgorithm = context.executionContext.getOrNull(HttpOperationContext.ChecksumAlgorithm)
 
         configuredChecksumAlgorithm?.let {
-            logger.info { "Disabling configured checksum $it for S3 Express" }
+            logger.warn { "Disabling configured checksum $it for S3 Express UploadPart" }
             context.executionContext.remove(HttpOperationContext.ChecksumAlgorithm)
         }
 
