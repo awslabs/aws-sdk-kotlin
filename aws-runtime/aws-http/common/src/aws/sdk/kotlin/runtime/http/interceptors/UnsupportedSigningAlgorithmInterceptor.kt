@@ -11,6 +11,7 @@ import aws.smithy.kotlin.runtime.client.ResponseInterceptorContext
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
+import aws.smithy.kotlin.runtime.text.ensureSuffix
 
 // FIXME: Remove this once sigV4a is supported by default AWS signer
 /**
@@ -24,7 +25,7 @@ public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
             if (it is UnsupportedSigningAlgorithmException && it.signingAlgorithm == AwsSigningAlgorithm.SIGV4_ASYMMETRIC) {
                 return Result.failure(
                     UnsupportedSigningAlgorithmException(
-                        "${it.message} For more information on how to enable it with the CRT signer, please refer to: https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/use-services-s3-mrap.html#mrap-s3client-config",
+                        "${it.message!!.ensureSuffix(".")} For more information on how to enable it with the CRT signer, please refer to: https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/use-services-s3-mrap.html#mrap-s3client-config",
                         it.signingAlgorithm,
                         it,
                     ),
