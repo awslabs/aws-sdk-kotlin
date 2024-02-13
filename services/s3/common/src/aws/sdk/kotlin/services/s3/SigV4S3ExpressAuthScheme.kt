@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package aws.sdk.kotlin.runtime.auth
+package aws.sdk.kotlin.services.s3
 
 import aws.sdk.kotlin.runtime.http.S3ExpressHttpSigner
 import aws.smithy.kotlin.runtime.InternalApi
@@ -21,7 +21,8 @@ import aws.smithy.kotlin.runtime.http.auth.AuthScheme
 import aws.smithy.kotlin.runtime.http.auth.AwsHttpSigner
 import aws.smithy.kotlin.runtime.http.auth.HttpSigner
 
-private val S3_EXPRESS_AUTH_SCHEME_ID = AuthSchemeId("aws.auth#sigv4s3express")
+public val AuthSchemeId.Companion.AwsSigV4S3Express: AuthSchemeId
+    get() = AuthSchemeId("aws.auth#sigv4s3express")
 
 /**
  * HTTP auth scheme for S3 Express One Zone authentication
@@ -39,7 +40,7 @@ public class SigV4S3ExpressAuthScheme(
         ),
     )
 
-    override val schemeId: AuthSchemeId = S3_EXPRESS_AUTH_SCHEME_ID
+    override val schemeId: AuthSchemeId = AuthSchemeId.AwsSigV4S3Express
     override val signer: HttpSigner = S3ExpressHttpSigner(awsHttpSigner)
 }
 
@@ -68,7 +69,7 @@ public fun sigV4S3Express(
     } else {
         emptyAttributes()
     }
-    return AuthOption(S3_EXPRESS_AUTH_SCHEME_ID, attrs)
+    return AuthOption(AuthSchemeId.AwsSigV4S3Express, attrs)
 }
 
 // FIXME Copied from SigV4AuthScheme.kt
