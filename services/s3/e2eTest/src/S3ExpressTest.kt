@@ -9,6 +9,7 @@ import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.putObject
 import aws.sdk.kotlin.services.s3.withConfig
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
+import aws.smithy.kotlin.runtime.collections.AttributeKey
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
@@ -108,8 +109,10 @@ class S3ExpressTest {
     private class CRC32ChecksumValidatingInterceptor : HttpInterceptor {
         override fun readAfterSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
             val headers = context.protocolRequest.headers
-            assertTrue(headers.contains("x-amz-checksum-crc32"), "Failed to find x-amz-checksum-crc32 header")
-            assertFalse(headers.contains("Content-MD5"), "Unexpectedly found Content-MD5 header")
+            if (headers.contains("X-Amz-S3session-Token")) {
+                assertTrue(headers.contains("x-amz-checksum-crc32"), "Failed to find x-amz-checksum-crc32 header")
+                assertFalse(headers.contains("Content-MD5"), "Unexpectedly found Content-MD5 header")
+            }
         }
     }
 }

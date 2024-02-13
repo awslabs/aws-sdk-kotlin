@@ -89,16 +89,7 @@ public class S3ExpressCredentialsCache(
     }
 
     private suspend fun createSessionCredentials(key: S3ExpressCredentialsCacheKey): ExpiringValue<Credentials> {
-        val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
-
-        // FIXME Consider creating a brand new client using the bootstrapped key.credentials instead of abusing the user's client
-        val credentials = (key.client as S3Client)
-            // de-configure interceptors because this key.client is the user's S3 client, and we don't want to
-            // execute their custom interceptors during this internal createSession request
-            .withConfig { interceptors = mutableListOf() }
-            .use {
-                it.createSession { bucket = key.bucket }.credentials!!
-            }
+        val credentials = (key.client as S3Client).createSession { bucket = key.bucket }.credentials!!
 
         return ExpiringValue(
             Credentials(
