@@ -19,13 +19,10 @@ import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
-import software.amazon.smithy.kotlin.codegen.rendering.auth.Sigv4SignedBodyHeaderMiddleware
-import software.amazon.smithy.kotlin.codegen.rendering.auth.credentialsProviderProp
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointCustomization
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointPropertyRenderer
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.ExpressionRenderer
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
-import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.node.Node
