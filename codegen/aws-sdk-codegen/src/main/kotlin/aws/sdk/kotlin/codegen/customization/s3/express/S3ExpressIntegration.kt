@@ -113,6 +113,11 @@ class S3ExpressIntegration : KotlinIntegration {
             !op.isS3UploadPart && (op.hasTrait<HttpChecksumRequiredTrait>() || op.hasTrait<HttpChecksumTrait>())
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            val interceptorSymbol = buildSymbol {
+                namespace = "aws.sdk.kotlin.services.s3"
+                name = "S3ExpressCrc32ChecksumInterceptor"
+            }
+
             val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()
 
             val checksumAlgorithmMember = ctx.model.expectShape<StructureShape>(op.input.get())
@@ -125,7 +130,7 @@ class S3ExpressIntegration : KotlinIntegration {
             val checksumRequired = op.hasTrait<HttpChecksumRequiredTrait>() || httpChecksumTrait?.isRequestChecksumRequired == true
 
             if (checksumRequired) {
-                writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq() ?: ""}))", AwsRuntimeTypes.Http.Interceptors.S3ExpressCrc32ChecksumInterceptor)
+                writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq() ?: ""}))", interceptorSymbol)
             }
         }
     }
@@ -136,7 +141,10 @@ class S3ExpressIntegration : KotlinIntegration {
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean = op.isS3UploadPart
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            val interceptorSymbol = AwsRuntimeTypes.Http.Interceptors.S3ExpressDisableChecksumInterceptor
+            val interceptorSymbol = buildSymbol {
+                namespace = "aws.sdk.kotlin.services.s3"
+                name = "S3ExpressDisableChecksumInterceptor"
+            }
             writer.addImport(interceptorSymbol)
             writer.write("op.interceptors.add(#T())", interceptorSymbol)
         }

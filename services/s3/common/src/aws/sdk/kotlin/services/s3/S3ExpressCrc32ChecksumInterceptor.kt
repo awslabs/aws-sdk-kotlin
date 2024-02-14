@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.runtime.http.interceptors
+package aws.sdk.kotlin.services.s3
 
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
 import aws.smithy.kotlin.runtime.collections.AttributeKey

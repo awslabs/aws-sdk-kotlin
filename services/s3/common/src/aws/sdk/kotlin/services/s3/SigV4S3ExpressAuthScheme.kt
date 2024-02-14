@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.services.s3
 
-import aws.sdk.kotlin.runtime.http.S3ExpressHttpSigner
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.AuthOption
 import aws.smithy.kotlin.runtime.auth.AuthSchemeId
