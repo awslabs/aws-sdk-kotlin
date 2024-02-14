@@ -45,13 +45,6 @@ class SigV4S3ExpressAuthSchemeIntegration : KotlinIntegration {
 
     override fun authSchemes(ctx: ProtocolGenerator.GenerationContext): List<AuthSchemeHandler> = listOf(SigV4S3ExpressAuthSchemeHandler())
 
-    override fun customizeMiddleware(
-        ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>,
-    ): List<ProtocolMiddleware> = resolved + Sigv4SignedBodyHeaderMiddleware()
-
-    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = listOf(credentialsProviderProp)
-
     override fun customizeEndpointResolution(ctx: ProtocolGenerator.GenerationContext): EndpointCustomization = SigV4S3ExpressEndpointCustomization
 
     override val sectionWriters: List<SectionWriterBinding>
