@@ -96,7 +96,7 @@ internal class S3ExpressCredentialsCache(
                 secretAccessKey = credentials.secretAccessKey,
                 sessionToken = credentials.sessionToken,
                 expiration = credentials.expiration,
-                providerName = "S3ExpressCredentialsProvider",
+                providerName = "DefaultS3ExpressCredentialsProvider",
             ),
             credentials.expiration,
         )
