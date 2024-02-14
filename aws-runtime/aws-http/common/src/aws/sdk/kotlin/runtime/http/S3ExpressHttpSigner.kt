@@ -16,13 +16,13 @@ private const val S3_EXPRESS_SESSION_TOKEN_HEADER = "X-Amz-S3session-Token"
 private const val SESSION_TOKEN_HEADER = "X-Amz-Security-Token"
 
 /**
- * An [HttpSigner] used for S3 Express requests. It wraps [AwsHttpSigner] and has identical behavior except for two differences:
+ * An [HttpSigner] used for S3 Express requests. It has identical behavior with the given [httpSigner] except for two differences:
  *    1. Adds an `X-Amz-S3Session-Token` header, with a value of the credentials' sessionToken
  *    2. Removes the `X-Amz-Security-Token` header, which must not be sent for S3 Express requests.
- * @param awsHttpSigner An instance of [AwsHttpSigner]
+ * @param httpSigner An instance of [HttpSigner]
  */
 public class S3ExpressHttpSigner(
-    public val awsHttpSigner: AwsHttpSigner,
+    public val httpSigner: HttpSigner,
 ) : HttpSigner {
     /**
      * Sign the request, adding `X-Amz-S3Session-Token` header and removing `X-Amz-Security-Token` header.
@@ -39,7 +39,7 @@ public class S3ExpressHttpSigner(
         mutAttrs[AwsSigningAttributes.OmitSessionToken] = true
 
         // 3. call main signer
-        awsHttpSigner.sign(signingRequest.copy(signingAttributes = mutAttrs))
+        httpSigner.sign(signingRequest.copy(signingAttributes = mutAttrs))
 
         // 4. remove session token header
         signingRequest.httpRequest.headers.remove(SESSION_TOKEN_HEADER)

@@ -104,8 +104,8 @@ public final class aws/sdk/kotlin/runtime/http/OsMetadata {
 }
 
 public final class aws/sdk/kotlin/runtime/http/S3ExpressHttpSigner : aws/smithy/kotlin/runtime/http/auth/HttpSigner {
-	public fun <init> (Laws/smithy/kotlin/runtime/http/auth/AwsHttpSigner;)V
-	public final fun getAwsHttpSigner ()Laws/smithy/kotlin/runtime/http/auth/AwsHttpSigner;
+	public fun <init> (Laws/smithy/kotlin/runtime/http/auth/HttpSigner;)V
+	public final fun getHttpSigner ()Laws/smithy/kotlin/runtime/http/auth/HttpSigner;
 	public fun sign (Laws/smithy/kotlin/runtime/http/auth/SignHttpRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
