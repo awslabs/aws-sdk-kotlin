@@ -11,6 +11,7 @@ import java.time.LocalDateTime
 plugins {
     `maven-publish`
     alias(libs.plugins.dokka)
+    alias(libs.plugins.aws.kotlin.repo.tools.kmp) apply false
 }
 
 val sdkVersion: String by project
@@ -31,6 +32,7 @@ subprojects {
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
         plugin("org.jetbrains.dokka")
+        plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
 
     logger.info("configuring: $project")

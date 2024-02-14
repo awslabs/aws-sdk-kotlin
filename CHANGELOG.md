@@ -1,5 +1,178 @@
 # Changelog
 
+## [1.0.56] - 02/13/2024
+
+### Features
+* (**lightsail**) This release adds support to upgrade the major version of a database.
+* (**marketplacecatalog**) AWS Marketplace Catalog API now supports setting intent on requests
+* (**resourceexplorer2**) Resource Explorer now uses newly supported IPv4 'amazonaws.com' endpoints by default.
+
+### Documentation
+* (**securitylake**) Documentation updates for Security Lake
+
+## [1.0.55] - 02/12/2024
+
+### Features
+* (**appsync**) Adds support for new options on GraphqlAPIs, Resolvers and  Data Sources for emitting Amazon CloudWatch metrics for enhanced monitoring of AppSync APIs.
+* (**cloudwatch**) This release enables PutMetricData API request payload compression by default.
+* (**neptunegraph**) Adding a new option "parameters" for data plane api ExecuteQuery to support running parameterized query via SDK.
+* (**route53domains**) This release adds bill contact support for RegisterDomain, TransferDomain, UpdateDomainContact and GetDomainDetail API.
+
+## [1.0.54] - 02/09/2024
+
+### Features
+* (**batch**) This feature allows Batch to support configuration of repository credentials for jobs running on ECS
+* (**braket**) Creating a job will result in DeviceOfflineException when using an offline device, and DeviceRetiredException when using a retired device.
+* (**costoptimizationhub**) Adding includeMemberAccounts field to the response of ListEnrollmentStatuses API.
+* (**iot**) This release allows AWS IoT Core users to enable Online Certificate Status Protocol (OCSP) Stapling for TLS X.509 Server Certificates when creating and updating AWS IoT Domain Configurations with Custom Domain.
+* (**pricing**) Add Throttling Exception to all APIs.
+
+### Documentation
+* (**amp**) Overall documentation updates.
+* (**ecs**) Documentation only update for Amazon ECS.
+
+## [1.0.53] - 02/08/2024
+
+### Features
+* (**codepipeline**) Add ability to execute pipelines with new parallel & queued execution modes and add support for triggers with filtering on branches and file paths.
+* (**quicksight**) General Interactions for Visuals; Waterfall Chart Color Configuration; Documentation Update
+* (**workspaces**) This release introduces User-Decoupling feature. This feature allows Workspaces Core customers to provision workspaces without providing users. CreateWorkspaces and DescribeWorkspaces APIs will now take a new optional parameter "WorkspaceName".
+
+### Fixes
+* [#1031](https://github.com/awslabs/smithy-kotlin/issues/1031) Bump **smithy-kotlin** version to consume upstream fixes for URL parsing
+
+## [1.0.52] - 02/07/2024
+
+### Features
+* (**datasync**) AWS DataSync now supports manifests for specifying files or objects to transfer.
+* (**lexmodelsv2**) This release introduces a new bot replication feature as part of Lex Global Resiliency offering. This feature leverages a new set of APIs that allow customers to create bot replicas and replicate changes to bots across regions.
+* (**redshift**) LisRecommendations API to fetch Amazon Redshift Advisor recommendations.
+
+## [1.0.51] - 02/06/2024
+
+### Features
+* (**appsync**) Support for environment variables in AppSync GraphQL APIs
+* (**cloudwatchlogs**) This release adds a new field, logGroupArn, to the response of the logs:DescribeLogGroups action.
+* (**elasticsearchservice**) This release adds clear visibility to the customers on the changes that they make on the domain.
+* (**opensearch**) This release adds clear visibility to the customers on the changes that they make on the domain.
+* (**wafv2**) You can now delete an API key that you've created for use with your CAPTCHA JavaScript integration API.
+
+### Documentation
+* (**ecs**) This release is a documentation only update to address customer issues.
+
+## [1.0.50] - 02/05/2024
+
+### Features
+* (**glue**) Introduce Catalog Encryption Role within Glue Data Catalog Settings. Introduce SASL/PLAIN as an authentication method for Glue Kafka connections
+
+### Documentation
+* (**workspaces**) Added definitions of various WorkSpace states
+
+## [1.0.49] - 02/02/2024
+
+### Features
+* (**sagemaker**) Amazon SageMaker Canvas adds GenerativeAiSettings support for CanvasAppSettings.
+
+### Documentation
+* (**dynamodb**) Any number of users can execute up to 50 concurrent restores (any type of restore) in a given account.
+
+## [1.0.48] - 02/01/2024
+
+### Features
+* (**cognitoidentityprovider**) Added CreateIdentityProvider and UpdateIdentityProvider details for new SAML IdP features
+* (**ivs**) This release introduces a new resource Playback Restriction Policy which can be used to geo-restrict or domain-restrict channel stream playback when associated with a channel.  New APIs to support this resource were introduced in the form of Create/Delete/Get/Update/List.
+* (**managedblockchainquery**) This release adds support for transactions that have not reached finality. It also removes support for the status property from the response of the GetTransaction operation. You can use the confirmationStatus and executionStatus properties to determine the status of the transaction.
+* (**mediaconvert**) This release includes support for broadcast-mixed audio description tracks.
+* (**neptunegraph**) Adding new APIs in SDK for Amazon Neptune Analytics. These APIs include operations to execute, cancel, list queries and get the graph summary.
+* [#476](https://github.com/awslabs/aws-sdk-kotlin/issues/476) Allow full URI path to a localhost metadata service (AwsContainerCredentialsFullUri) to be a host name
+
+### Fixes
+* Bump **smithy-kotlin** version to fix an error with serializing maps which use the `Document` type as a value
+
+## [1.0.47] - 01/31/2024
+
+### Features
+* (**cloudformation**) CloudFormation IaC generator allows you to scan existing resources in your account and select resources to generate a template for a new or existing CloudFormation stack.
+* (**elasticloadbalancingv2**) This release enables unhealthy target draining intervals for Network Load Balancers.
+* (**glue**) Update page size limits for GetJobRuns and GetTriggers APIs.
+* (**ssm**) This release adds an optional Duration parameter to StateManager Associations. This allows customers to specify how long an apply-only-on-cron association execution should run. Once the specified Duration is out all the ongoing cancellable commands or automations are cancelled.
+
+## [1.0.46] - 01/30/2024
+
+### Features
+* (**datazone**) Add new skipDeletionCheck to DeleteDomain. Add new skipDeletionCheck to DeleteProject which also automatically deletes dependent objects
+
+### Documentation
+* (**route53**) Update the SDKs for text changes in the APIs.
+
+## [1.0.45] - 01/29/2024
+
+### Features
+* (**autoscaling**) EC2 Auto Scaling customers who use attribute based instance-type selection can now intuitively define their Spot instances price protection limit as a percentage of the lowest priced On-Demand instance type.
+* (**ec2**) EC2 Fleet customers who use attribute based instance-type selection can now intuitively define their Spot instances price protection limit as a percentage of the lowest priced On-Demand instance type.
+* (**mwaa**) This release adds MAINTENANCE environment status for Amazon MWAA environments.
+* (**rds**) Introduced support for the InsufficientDBInstanceCapacityFault error in the RDS RestoreDBClusterFromSnapshot and RestoreDBClusterToPointInTime API methods. This provides enhanced error handling, ensuring a more robust experience.
+
+### Documentation
+* (**comprehend**) Comprehend PII analysis now supports Spanish input documents.
+* (**snowball**) Modified description of createaddress to include direction to add path when providing a JSON file.
+
+## [1.0.44] - 01/26/2024
+
+### Features
+* (**connect**) Update list and string length limits for predefined attributes.
+* (**inspector2**) This release adds ECR container image scanning based on their lastRecordedPullTime.
+* (**sagemaker**) Amazon SageMaker Automatic Model Tuning now provides an API to programmatically delete tuning jobs.
+
+## [1.0.43] - 01/25/2024
+
+### Features
+* (**acmpca**) AWS Private CA now supports an option to omit the CDP extension from issued certificates, when CRL revocation is enabled.
+* (**lightsail**) This release adds support for IPv6-only instance plans.
+
+## [1.0.42] - 01/24/2024
+
+### Features
+* (**ec2**) Introduced a new clientToken request parameter on CreateNetworkAcl and CreateRouteTable APIs. The clientToken parameter allows idempotent operations on the APIs.
+* (**outposts**) DeviceSerialNumber parameter is now optional in StartConnection API
+* (**rds**) This release adds support for Aurora Limitless Database.
+* (**storagegateway**) Add DeprecationDate and SoftwareVersion to response of ListGateways.
+
+### Fixes
+* Fix application of sigv4a authentication scheme for S3, Eventbridge, and CloudFront KeyValueStore
+
+### Documentation
+* (**ecs**) Documentation updates for Amazon ECS.
+
+### Miscellaneous
+* Bump smithy-kotlin version to 1.0.11
+
+## [1.0.41] - 01/23/2024
+
+### Features
+* (**inspector2**) This release adds support for CIS scans on EC2 instances.
+
+### Fixes
+* [#1187](https://github.com/awslabs/aws-sdk-kotlin/issues/1187) (**s3control**) Add missing `x-amz-content-sha256` header for SigV4 requests.
+
+## [1.0.40] - 01/22/2024
+
+### Features
+* (**appconfigdata**) Fix FIPS Endpoints in aws-us-gov.
+* (**cloudfrontkeyvaluestore**) This release improves upon the DescribeKeyValueStore API by returning two additional fields, Status of the KeyValueStore and the FailureReason in case of failures during creation of KeyValueStore.
+* (**connectcases**) This release adds the ability to view audit history on a case and introduces a new parameter, performedBy, for CreateCase and UpdateCase API's.
+* (**ecs**) This release adds support for Transport Layer Security (TLS) and Configurable Timeout to ECS Service Connect. TLS facilitates privacy and data security for inter-service communications, while Configurable Timeout allows customized per-request timeout and idle timeout for Service Connect services.
+* (**finspace**) Allow customer to set zip default through command line arguments.
+* (**rds**) Introduced support for the InsufficientDBInstanceCapacityFault error in the RDS CreateDBCluster API method. This provides enhanced error handling, ensuring a more robust experience when creating database clusters with insufficient instance capacity.
+
+### Fixes
+* Pass client-configured region to StsWebIdentityCredentialsProvider
+
+### Documentation
+* (**cloud9**) Doc-only update around removing AL1 from list of available AMIs for Cloud9
+* (**ec2**) Documentation updates for Amazon EC2.
+* (**organizations**) Doc only update for quota increase change
+
 ## [1.0.39] - 01/19/2024
 
 ### Features

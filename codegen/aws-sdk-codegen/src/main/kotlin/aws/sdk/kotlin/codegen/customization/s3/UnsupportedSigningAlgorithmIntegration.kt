@@ -8,12 +8,10 @@ import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
-import software.amazon.smithy.model.shapes.ServiceShape
 
 // FIXME: Remove this once sigV4a is supported by default AWS signer
 /**
@@ -22,7 +20,10 @@ import software.amazon.smithy.model.shapes.ServiceShape
  */
 class UnsupportedSigningAlgorithmIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
-        model.expectShape<ServiceShape>(settings.service).isS3
+        when (settings.sdkId.lowercase()) {
+            "s3", "eventbridge", "cloudfront keyvaluestore" -> true
+            else -> false
+        }
 
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,

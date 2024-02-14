@@ -9,7 +9,7 @@ import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    id("aws.sdk.kotlin.gradle.smithybuild")
+    alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
 }
 
 description = "Event stream codegen integration test suite"

@@ -4261,6 +4261,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>If you received a <code>NextToken</code> from a previous call that was paginated,\n         provide this token to receive the next set of results.</p>"
                     }
+                },
+                "WorkspaceName": {
+                    "target": "com.amazonaws.workspaces#WorkspaceName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the user-decoupled WorkSpace.</p>"
+                    }
                 }
             },
             "traits": {
@@ -6238,7 +6244,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Reboots the specified WorkSpaces.</p>\n         <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code>,\n         <code>UNHEALTHY</code>, or <code>REBOOTING</code>. Reboot a WorkSpace in the <code>REBOOTING</code> \n         state only if your WorkSpace has been stuck in the <code>REBOOTING</code> state for over 20 minutes.</p>\n         <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>"
+                "smithy.api#documentation": "<p>Reboots the specified WorkSpaces.</p>\n         <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code> or\n            <code>UNHEALTHY</code>.</p>\n         <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>"
             }
         },
         "com.amazonaws.workspaces#RebootWorkspacesRequest": {
@@ -7960,6 +7966,12 @@
                         "smithy.api#documentation": "<p>Indicates whether the data stored on the root volume is encrypted.</p>"
                     }
                 },
+                "WorkspaceName": {
+                    "target": "com.amazonaws.workspaces#WorkspaceName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the user-decoupled WorkSpace.</p>"
+                    }
+                },
                 "WorkspaceProperties": {
                     "target": "com.amazonaws.workspaces#WorkspaceProperties",
                     "traits": {
@@ -8826,6 +8838,12 @@
                 "target": "com.amazonaws.workspaces#Workspace"
             }
         },
+        "com.amazonaws.workspaces#WorkspaceName": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^[a-zA-Z0-9_()][a-zA-Z0-9_.()-]{1,63}$"
+            }
+        },
         "com.amazonaws.workspaces#WorkspaceProperties": {
             "type": "structure",
             "members": {
@@ -8889,7 +8907,7 @@
                 "UserName": {
                     "target": "com.amazonaws.workspaces#UserName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The user name of the user for the WorkSpace. This user name must exist in the Directory Service directory for the WorkSpace.</p>",
+                        "smithy.api#documentation": "<p>The user name of the user for the WorkSpace. This user name must exist in the Directory Service directory for the WorkSpace.</p>\n         <p>The reserved keyword, <code>[UNDEFINED]</code>, is used when creating user-decoupled WorkSpaces.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -8928,6 +8946,12 @@
                     "target": "com.amazonaws.workspaces#TagList",
                     "traits": {
                         "smithy.api#documentation": "<p>The tags for the WorkSpace.</p>"
+                    }
+                },
+                "WorkspaceName": {
+                    "target": "com.amazonaws.workspaces#WorkspaceName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the user-decoupled WorkSpace.</p>"
                     }
                 }
             },
