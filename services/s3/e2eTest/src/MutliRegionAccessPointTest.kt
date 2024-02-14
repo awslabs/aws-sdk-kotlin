@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.e2etest
 
+import aws.sdk.kotlin.e2etest.S3TestUtils.deleteBucketAndAllContents
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
@@ -70,16 +71,8 @@ class MutliRegionAccessPointTest {
             deleteMultiRegionAccessPoint(s3Control, multiRegionAccessPoint, accountId)
         }
 
-        if (s3BucketWasCreated(s3West, usWestBucket)) {
-            deleteS3Bucket(s3West, usWestBucket)
-        }
-
-        if (s3BucketWasCreated(s3East, usEastBucket)) {
-            if (objectWasCreated(s3East, usEastBucket, keyForObject)) {
-                deleteObject(s3East, usEastBucket, keyForObject)
-            }
-            deleteS3Bucket(s3East, usEastBucket)
-        }
+        deleteBucketAndAllContents(s3West, usWestBucket)
+        deleteBucketAndAllContents(s3East, usEastBucket)
 
         closeClients(
             s3West,
