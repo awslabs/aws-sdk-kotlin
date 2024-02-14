@@ -14,12 +14,11 @@ public class S3ExpressCredentialsCacheTest {
     @Test
     fun testCacheKeyEquality() = runTest {
         val bucket = "bucket"
-        val client = S3Client.builder().build()
         val testCredentials = Credentials("accessKeyId", "secretAccessKey", "sessionToken")
 
-        // Different keys with the same bucket, client, and credentials should be considered equal
-        val key1 = S3ExpressCredentialsCacheKey(bucket, client, testCredentials)
-        val key2 = S3ExpressCredentialsCacheKey(bucket, client, testCredentials)
+        // Different keys with the same bucket and credentials should be considered equal
+        val key1 = S3ExpressCredentialsCacheKey(bucket, testCredentials)
+        val key2 = S3ExpressCredentialsCacheKey(bucket, testCredentials)
 
         assertEquals(key1, key2)
     }

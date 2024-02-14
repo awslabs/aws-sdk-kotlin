@@ -25,6 +25,7 @@ private val REFRESH_BUFFER = 1.minutes
 private val DEFAULT_REFRESH_PERIOD = 5.minutes
 
 internal class S3ExpressCredentialsCache(
+    private val client: S3Client,
     private val clock: Clock = Clock.System,
 ) : CoroutineScope, Closeable {
     override val coroutineContext: CoroutineContext = Job() + CoroutineName("S3ExpressCredentialsCacheRefresh")
@@ -39,7 +40,7 @@ internal class S3ExpressCredentialsCache(
     }
 
     suspend fun get(key: S3ExpressCredentialsCacheKey): Credentials = lru.get(key)?.takeIf { !it.isExpired(clock) }?.value
-        ?: (createSessionCredentials(key).also { put(key, it) }).value
+        ?: (createSessionCredentials(key.bucket).also { put(key, it) }).value
 
     suspend fun put(key: S3ExpressCredentialsCacheKey, value: ExpiringValue<Credentials>) {
         lru.put(key, value)
@@ -66,7 +67,7 @@ internal class S3ExpressCredentialsCache(
 
                     if (cachedValue.isExpired(clock)) {
                         logger.debug { "Credentials for ${key.bucket} expire within the refresh buffer period, performing a refresh..." }
-                        createSessionCredentials(key).also {
+                        createSessionCredentials(key.bucket).also {
                             refreshedCredentials[key] = it
                             nextRefresh = minOf(nextRefresh, it.expiresAt - REFRESH_BUFFER)
                         }
@@ -87,8 +88,8 @@ internal class S3ExpressCredentialsCache(
         }
     }
 
-    private suspend fun createSessionCredentials(key: S3ExpressCredentialsCacheKey): ExpiringValue<Credentials> {
-        val credentials = (key.client as S3Client).createSession { bucket = key.bucket }.credentials!!
+    private suspend fun createSessionCredentials(bucket: String): ExpiringValue<Credentials> {
+        val credentials = client.createSession { this.bucket = bucket }.credentials!!
 
         return ExpiringValue(
             Credentials(
@@ -110,6 +111,5 @@ internal class S3ExpressCredentialsCache(
 
 internal data class S3ExpressCredentialsCacheKey(
     val bucket: String,
-    val client: SdkClient,
     val credentials: Credentials,
 )
