@@ -25,7 +25,7 @@ public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
             if (it is UnsupportedSigningAlgorithmException && it.signingAlgorithm == AwsSigningAlgorithm.SIGV4_ASYMMETRIC) {
                 return Result.failure(
                     UnsupportedSigningAlgorithmException(
-                        "${it.message!!.ensureSuffix(".")} For more information on how to enable it with the CRT signer, please refer to: https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/use-services-s3-mrap.html#mrap-s3client-config",
+                        "${it.message!!.ensureSuffix(".")} For more information on how to enable it with the CRT signer, please refer to: https://a.co/3sf8533",
                         it.signingAlgorithm,
                         it,
                     ),
