@@ -22,7 +22,8 @@ kotlin {
             dependencies {
                 api(project(":aws-runtime:aws-core"))
                 api(libs.smithy.kotlin.aws.credentials)
-                api(libs.smithy.kotlin.http)
+                api(libs.smithy.kotlin.http.client)
+                implementation(libs.smithy.kotlin.http)
                 implementation(libs.smithy.kotlin.http.auth)
                 implementation(libs.smithy.kotlin.telemetry.api)
                 implementation(libs.smithy.kotlin.http.client.engine.default)

@@ -76,6 +76,7 @@ private fun mergeSectionMaps(maps: List<SectionMap>): SectionMap = buildMap {
 /**
  * Specifies the active profile and configured (may not actually exist) locations of configuration files.
  */
+@InternalSdkApi
 public data class AwsConfigurationSource(val profile: String, val configPath: String, val credentialsPath: String)
 
 /**
