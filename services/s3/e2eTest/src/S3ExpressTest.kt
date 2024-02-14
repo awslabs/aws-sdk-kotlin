@@ -9,7 +9,6 @@ import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.putObject
 import aws.sdk.kotlin.services.s3.withConfig
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
-import aws.smithy.kotlin.runtime.collections.AttributeKey
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor

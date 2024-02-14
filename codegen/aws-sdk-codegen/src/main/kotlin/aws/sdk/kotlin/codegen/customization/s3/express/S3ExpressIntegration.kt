@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3.express
 
-import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.customization.s3.ClientConfigIntegration
 import aws.sdk.kotlin.codegen.customization.s3.isS3
 import software.amazon.smithy.aws.traits.HttpChecksumTrait
