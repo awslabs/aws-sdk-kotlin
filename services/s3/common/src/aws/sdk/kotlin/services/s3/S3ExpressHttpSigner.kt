@@ -20,13 +20,13 @@ private const val SESSION_TOKEN_HEADER = "X-Amz-Security-Token"
  *    2. Removes the `X-Amz-Security-Token` header, which must not be sent for S3 Express requests.
  * @param httpSigner An instance of [HttpSigner]
  */
-public class S3ExpressHttpSigner(
-    public val httpSigner: HttpSigner,
+internal class S3ExpressHttpSigner(
+    private val httpSigner: HttpSigner,
 ) : HttpSigner {
     /**
      * Sign the request, adding `X-Amz-S3Session-Token` header and removing `X-Amz-Security-Token` header.
      */
-    public override suspend fun sign(signingRequest: SignHttpRequest) {
+    override suspend fun sign(signingRequest: SignHttpRequest) {
         val sessionToken = (signingRequest.identity as? Credentials)?.sessionToken
             ?: error("Failed to parse sessionToken from identity")
 
