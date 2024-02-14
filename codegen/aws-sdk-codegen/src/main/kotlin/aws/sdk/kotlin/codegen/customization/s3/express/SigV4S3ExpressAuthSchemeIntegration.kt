@@ -14,16 +14,19 @@ import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.AuthSchemeHandler
+import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
-import software.amazon.smithy.kotlin.codegen.rendering.auth.SigV4AuthSchemeIntegration
+import software.amazon.smithy.kotlin.codegen.rendering.auth.Sigv4SignedBodyHeaderMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.auth.credentialsProviderProp
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointCustomization
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointPropertyRenderer
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.ExpressionRenderer
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.*
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.node.Node
@@ -36,8 +39,19 @@ import java.util.*
 /**
  * Register support for the `sigv4-s3express` auth scheme.
  */
-class SigV4S3ExpressAuthSchemeIntegration : SigV4AuthSchemeIntegration() {
+class SigV4S3ExpressAuthSchemeIntegration : KotlinIntegration {
+    override val order: Byte = -50
+
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean = model.expectShape<ServiceShape>(settings.service).isS3
+
+    override fun authSchemes(ctx: ProtocolGenerator.GenerationContext): List<AuthSchemeHandler> = listOf(SigV4S3ExpressAuthSchemeHandler())
+
+    override fun customizeMiddleware(
+        ctx: ProtocolGenerator.GenerationContext,
+        resolved: List<ProtocolMiddleware>,
+    ): List<ProtocolMiddleware> = resolved + Sigv4SignedBodyHeaderMiddleware()
+
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = listOf(credentialsProviderProp)
 
     override fun customizeEndpointResolution(ctx: ProtocolGenerator.GenerationContext): EndpointCustomization = SigV4S3ExpressEndpointCustomization
 
@@ -46,10 +60,8 @@ class SigV4S3ExpressAuthSchemeIntegration : SigV4AuthSchemeIntegration() {
 
     // add S3 Express credentials provider to managed resources in the service client initializer
     private val renderClientInitializer = AppendingSectionWriter { writer ->
-        writer.write("managedResources.addIfManaged(config.s3ExpressCredentialsProvider)")
+        writer.write("managedResources.#T(config.s3ExpressCredentialsProvider)", RuntimeTypes.Core.IO.addIfManaged)
     }
-
-    override fun authSchemes(ctx: ProtocolGenerator.GenerationContext): List<AuthSchemeHandler> = listOf(SigV4S3ExpressAuthSchemeHandler())
 }
 
 internal val sigV4S3ExpressSymbol = buildSymbol {
