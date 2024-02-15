@@ -14,7 +14,7 @@ import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.io.SdkManagedBase
 
 internal class DefaultS3ExpressCredentialsProvider(
-    val bootstrapCredentialsProvider: CredentialsProvider
+    val bootstrapCredentialsProvider: CredentialsProvider,
 ) : S3ExpressCredentialsProvider, SdkManagedBase() {
     private lateinit var credentialsCache: S3ExpressCredentialsCache
 

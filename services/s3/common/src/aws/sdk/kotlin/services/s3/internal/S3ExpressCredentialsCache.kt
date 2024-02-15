@@ -6,18 +6,13 @@ package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.services.s3.*
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.collections.LruCache
 import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.telemetry.TelemetryProviderContext
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.Clock
-import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.until
 import aws.smithy.kotlin.runtime.util.ExpiringValue
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.selects.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -72,7 +67,7 @@ internal class S3ExpressCredentialsCache(
 
             // Evict any credentials that weren't used since the last refresh
             lru.entries.filter { !it.value.usedSinceLastRefresh }.forEach {
-                logger.debug { "Credentials for ${it.key.bucket} were not used since last refresh, evicting..."}
+                logger.debug { "Credentials for ${it.key.bucket} were not used since last refresh, evicting..." }
                 lru.remove(it.key)
             }
 
@@ -84,7 +79,7 @@ internal class S3ExpressCredentialsCache(
             // Refresh any credentials which are already expired
             val expiredEntries = lru.entries.filter { it.value.expiringCredentials.isExpired(clock) }
             expiredEntries.forEach { entry ->
-                logger.debug { "Credentials for ${entry.key.bucket} are expired, refreshing..."}
+                logger.debug { "Credentials for ${entry.key.bucket} are expired, refreshing..." }
                 lru.put(entry.key, S3ExpressCredentialsCacheValue(createSessionCredentials(entry.key.bucket), false))
             }
 
@@ -127,5 +122,5 @@ internal data class S3ExpressCredentialsCacheKey(
 
 internal data class S3ExpressCredentialsCacheValue(
     val expiringCredentials: ExpiringValue<Credentials>,
-    var usedSinceLastRefresh: Boolean
+    var usedSinceLastRefresh: Boolean,
 )

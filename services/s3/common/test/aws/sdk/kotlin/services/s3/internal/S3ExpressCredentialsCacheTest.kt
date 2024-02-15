@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.services.s3.internal
 
-import aws.sdk.kotlin.services.s3.S3Client
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
