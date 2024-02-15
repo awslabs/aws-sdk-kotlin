@@ -48,13 +48,11 @@ internal class S3ExpressCredentialsCache(
         lru.put(key, S3ExpressCredentialsCacheValue(value, usedSinceLastRefresh = true))
     }
 
-    private fun ExpiringValue<Credentials>.isExpired(clock: Clock): Boolean = clock.now().until(expiresAt).absoluteValue - 5.minutes <= REFRESH_BUFFER
+    private fun ExpiringValue<Credentials>.isExpired(clock: Clock): Boolean = clock.now().until(expiresAt).absoluteValue <= REFRESH_BUFFER
 
     /**
-     * Attempt to refresh the credentials in the cache. A refresh is initiated when:
-     *    * a new set of credentials are added to the cache (immediate refresh)
-     *    * the `nextRefresh` time has been reached, which is either `DEFAULT_REFRESH_PERIOD` or
-     *      the soonest credentials expiration time (minus a buffer), whichever comes first.
+     * Attempt to refresh the credentials in the cache. A refresh is initiated when the `nextRefresh` time has been reached,
+     * which is either `DEFAULT_REFRESH_PERIOD` or the soonest credentials expiration time (minus a buffer), whichever comes first.
      */
     private suspend fun refresh() {
         val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
