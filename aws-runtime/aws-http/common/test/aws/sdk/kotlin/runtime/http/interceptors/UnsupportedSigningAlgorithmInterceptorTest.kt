@@ -38,7 +38,10 @@ class UnsupportedSigningAlgorithmInterceptorTest {
         assertTrue(result.isFailure)
         assertIs<UnsupportedSigningAlgorithmException>(exception)
         assertEquals(exception.signingAlgorithm, AwsSigningAlgorithm.SIGV4_ASYMMETRIC)
-        assertEquals("SIGV4A support is not yet implemented for the default signer.", exception.message)
+        assertEquals(
+            "SIGV4A support is not yet implemented for the default signer. For more information on how to enable it with the CRT signer, please refer to: https://a.co/3sf8533",
+            exception.message,
+        )
     }
 
     @Test
