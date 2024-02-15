@@ -20,7 +20,7 @@ START_RESULT=$(
   aws codebuild start-build-batch \
     --project-name ${PROJECT_NAME} \
     --source-version $SOURCE_VERSION \
-    --environment-variables-override file:///tmp/gh_env_vars.json name=SDK_PR,value=$SDK_PR name=SMITHY_PR,value=$SMITHY_PR
+    --environment-variables-override name=SDK_PR,value=$SDK_PR name=SMITHY_PR,value=$SMITHY_PR file:///tmp/gh_env_vars.json
 )
 
 if [ "$?" != "0" ]; then
