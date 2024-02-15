@@ -21,7 +21,7 @@ class S3ExpressBenchmark : ServiceBenchmark<S3Client> {
         "--$regionAz--x-s3"
 
     private val KEY = "64kb-object"
-    private val CONTENTS = "a".repeat(65536) // 64MB
+    private val CONTENTS = "a".repeat(65536) // 64KB
 
     @OptIn(ExperimentalApi::class)
     override suspend fun client() = S3Client.fromEnvironment {
