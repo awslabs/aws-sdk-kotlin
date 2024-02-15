@@ -121,8 +121,8 @@ private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, exp
                 writeInline("disableDoubleUriEncode = ")
                 renderOrElse(expressionRenderer, scheme.getBooleanMember("disableDoubleEncoding"), "false")
 
-                writer.writeInline("signingRegion = ")
-                writer.renderOrElse(expressionRenderer, scheme.getStringMember("signingRegion"), "null")
+                writeInline("signingRegion = ")
+                renderOrElse(expressionRenderer, scheme.getStringMember("signingRegion"), "null")
             }
         }
     }
