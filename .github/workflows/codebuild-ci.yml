@@ -83,9 +83,7 @@ jobs:
         run: |
           .github/scripts/run-codebuild-batch-job.sh \
             gh-aws-sdk-kotlin-svc-check-batch \
-            ${{ github.event.pull_request.head.sha }} \
-            ${{ inputs.aws-sdk-kotlin-pr }} \
-            ${{ inputs.smithy-kotlin-pr }}
+            ${{ github.event.pull_request.head.sha }} ${{ inputs.aws-sdk-kotlin-pr }} ${{ inputs.smithy-kotlin-pr }}
       - name: Cancel build
         if: ${{ cancelled() }}
         env:
