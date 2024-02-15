@@ -19,6 +19,7 @@ import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.selects.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 private const val DEFAULT_S3_EXPRESS_CACHE_SIZE: Int = 100
 private val REFRESH_BUFFER = 1.minutes
@@ -31,7 +32,6 @@ internal class S3ExpressCredentialsCache(
     override val coroutineContext: CoroutineContext = Job() + CoroutineName("S3ExpressCredentialsCacheRefresh")
 
     private val lru = LruCache<S3ExpressCredentialsCacheKey, ExpiringValue<Credentials>>(DEFAULT_S3_EXPRESS_CACHE_SIZE)
-    private val immediateRefreshChannel = Channel<Unit>(Channel.CONFLATED) // channel used to indicate an immediate refresh attempt is required
 
     init {
         launch(coroutineContext) {
@@ -44,10 +44,9 @@ internal class S3ExpressCredentialsCache(
 
     suspend fun put(key: S3ExpressCredentialsCacheKey, value: ExpiringValue<Credentials>) {
         lru.put(key, value)
-        immediateRefreshChannel.send(Unit)
     }
 
-    private fun ExpiringValue<Credentials>.isExpired(clock: Clock): Boolean = clock.now().until(expiresAt).absoluteValue <= REFRESH_BUFFER
+    private fun ExpiringValue<Credentials>.isExpired(clock: Clock): Boolean = clock.now().until(expiresAt).absoluteValue - 5.minutes <= REFRESH_BUFFER
 
     /**
      * Attempt to refresh the credentials in the cache. A refresh is initiated when:
@@ -55,35 +54,29 @@ internal class S3ExpressCredentialsCache(
      *    * the `nextRefresh` time has been reached, which is either `DEFAULT_REFRESH_PERIOD` or
      *      the soonest credentials expiration time (minus a buffer), whichever comes first.
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun refresh() {
-        val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
         while (isActive) {
-            val refreshedCredentials = mutableMapOf<S3ExpressCredentialsCacheKey, ExpiringValue<Credentials>>()
-            var nextRefresh: Instant = clock.now() + DEFAULT_REFRESH_PERIOD
-
-            lru.withLock {
-                lru.entries.forEach { (key, cachedValue) ->
-                    nextRefresh = minOf(nextRefresh, cachedValue.expiresAt - REFRESH_BUFFER)
-
-                    if (cachedValue.isExpired(clock)) {
-                        logger.debug { "Credentials for ${key.bucket} expire within the refresh buffer period, performing a refresh..." }
-                        createSessionCredentials(key.bucket).also {
-                            refreshedCredentials[key] = it
-                            nextRefresh = minOf(nextRefresh, it.expiresAt - REFRESH_BUFFER)
-                        }
-                    }
-                }
-
-                refreshedCredentials.forEach { (key, value) ->
-                    lru.remove(key)
-                    lru.putUnlocked(key, value)
-                }
+            if (lru.size == 0) {
+                println("CACHE: LRU is empty, continuing...")
+                delay(5.seconds)
+                continue
             }
 
-            // wake up when it's time to refresh or an immediate refresh has been triggered
-            select<Unit> {
+            // Refresh any credentials which are already expired
+            val expiredEntries = lru.entries.filter { it.value.isExpired(clock) }
+            println("CACHE: ${expiredEntries.size} entries are expired, refreshing...")
+            expiredEntries.forEach { entry ->
+                lru.put(entry.key, createSessionCredentials(entry.key.bucket))
+            }
+
+            // Find the next expiring credentials, sleep until then
+            val nextExpiringEntry = lru.entries.minBy { it.value.expiresAt }
+            println("CACHE: Current time ${clock.now()}, next expiration: ${nextExpiringEntry.value.expiresAt} ")
+            val nextRefresh = minOf(clock.now() + DEFAULT_REFRESH_PERIOD, nextExpiringEntry.value.expiresAt - REFRESH_BUFFER)
+
+            select {
                 onTimeout(clock.now().until(nextRefresh)) {}
-                immediateRefreshChannel.onReceive {}
             }
         }
     }
@@ -105,7 +98,6 @@ internal class S3ExpressCredentialsCache(
 
     override fun close() {
         coroutineContext.cancel(null)
-        immediateRefreshChannel.close()
     }
 }
 
