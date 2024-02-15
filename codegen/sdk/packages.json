@@ -151,6 +151,12 @@
             "brazilName": "AwsSdkKotlinApplicationcostprofiler"
         },
         {
+            "sdkId": "Artifact",
+            "namespace": "aws.sdk.kotlin.services.artifact",
+            "artifactName": "artifact",
+            "brazilName": "AwsSdkKotlinArtifact"
+        },
+        {
             "sdkId": "Athena",
             "namespace": "aws.sdk.kotlin.services.athena",
             "artifactName": "athena",
