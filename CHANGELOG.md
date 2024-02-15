@@ -1,5 +1,80 @@
 # Changelog
 
+## [1.0.57] - 02/14/2024
+
+### Features
+* (**controltower**) Adds support for new Baseline and EnabledBaseline APIs for automating multi-account governance.
+* (**lookoutequipment**) This feature allows customers to see pointwise model diagnostics results for their models.
+* (**qbusiness**) This release adds the metadata-boosting feature, which allows customers to easily fine-tune the underlying ranking of retrieved RAG passages in order to optimize Q&A answer relevance. It also adds new feedback reasons for the PutFeedback API.
+
+## [1.0.56] - 02/13/2024
+
+### Features
+* (**lightsail**) This release adds support to upgrade the major version of a database.
+* (**marketplacecatalog**) AWS Marketplace Catalog API now supports setting intent on requests
+* (**resourceexplorer2**) Resource Explorer now uses newly supported IPv4 'amazonaws.com' endpoints by default.
+
+### Documentation
+* (**securitylake**) Documentation updates for Security Lake
+
+## [1.0.55] - 02/12/2024
+
+### Features
+* (**appsync**) Adds support for new options on GraphqlAPIs, Resolvers and  Data Sources for emitting Amazon CloudWatch metrics for enhanced monitoring of AppSync APIs.
+* (**cloudwatch**) This release enables PutMetricData API request payload compression by default.
+* (**neptunegraph**) Adding a new option "parameters" for data plane api ExecuteQuery to support running parameterized query via SDK.
+* (**route53domains**) This release adds bill contact support for RegisterDomain, TransferDomain, UpdateDomainContact and GetDomainDetail API.
+
+## [1.0.54] - 02/09/2024
+
+### Features
+* (**batch**) This feature allows Batch to support configuration of repository credentials for jobs running on ECS
+* (**braket**) Creating a job will result in DeviceOfflineException when using an offline device, and DeviceRetiredException when using a retired device.
+* (**costoptimizationhub**) Adding includeMemberAccounts field to the response of ListEnrollmentStatuses API.
+* (**iot**) This release allows AWS IoT Core users to enable Online Certificate Status Protocol (OCSP) Stapling for TLS X.509 Server Certificates when creating and updating AWS IoT Domain Configurations with Custom Domain.
+* (**pricing**) Add Throttling Exception to all APIs.
+
+### Documentation
+* (**amp**) Overall documentation updates.
+* (**ecs**) Documentation only update for Amazon ECS.
+
+## [1.0.53] - 02/08/2024
+
+### Features
+* (**codepipeline**) Add ability to execute pipelines with new parallel & queued execution modes and add support for triggers with filtering on branches and file paths.
+* (**quicksight**) General Interactions for Visuals; Waterfall Chart Color Configuration; Documentation Update
+* (**workspaces**) This release introduces User-Decoupling feature. This feature allows Workspaces Core customers to provision workspaces without providing users. CreateWorkspaces and DescribeWorkspaces APIs will now take a new optional parameter "WorkspaceName".
+
+### Fixes
+* [#1031](https://github.com/awslabs/smithy-kotlin/issues/1031) Bump **smithy-kotlin** version to consume upstream fixes for URL parsing
+
+## [1.0.52] - 02/07/2024
+
+### Features
+* (**datasync**) AWS DataSync now supports manifests for specifying files or objects to transfer.
+* (**lexmodelsv2**) This release introduces a new bot replication feature as part of Lex Global Resiliency offering. This feature leverages a new set of APIs that allow customers to create bot replicas and replicate changes to bots across regions.
+* (**redshift**) LisRecommendations API to fetch Amazon Redshift Advisor recommendations.
+
+## [1.0.51] - 02/06/2024
+
+### Features
+* (**appsync**) Support for environment variables in AppSync GraphQL APIs
+* (**cloudwatchlogs**) This release adds a new field, logGroupArn, to the response of the logs:DescribeLogGroups action.
+* (**elasticsearchservice**) This release adds clear visibility to the customers on the changes that they make on the domain.
+* (**opensearch**) This release adds clear visibility to the customers on the changes that they make on the domain.
+* (**wafv2**) You can now delete an API key that you've created for use with your CAPTCHA JavaScript integration API.
+
+### Documentation
+* (**ecs**) This release is a documentation only update to address customer issues.
+
+## [1.0.50] - 02/05/2024
+
+### Features
+* (**glue**) Introduce Catalog Encryption Role within Glue Data Catalog Settings. Introduce SASL/PLAIN as an authentication method for Glue Kafka connections
+
+### Documentation
+* (**workspaces**) Added definitions of various WorkSpace states
+
 ## [1.0.49] - 02/02/2024
 
 ### Features

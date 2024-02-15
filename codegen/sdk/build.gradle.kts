@@ -8,11 +8,11 @@ import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
 import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.sdk.*
+import aws.sdk.kotlin.gradle.sdk.tasks.UpdatePackageManifest
 import aws.sdk.kotlin.gradle.util.typedProp
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
-import java.util.*
 import kotlin.streams.toList
 
 plugins {
@@ -102,7 +102,13 @@ fun discoverServices(applyFilters: Boolean = true): List<AwsService> {
     logger.info("discover services called")
     val modelsDir: String by project
     val bootstrapConfig = bootstrap.takeIf { applyFilters } ?: BootstrapConfig.ALL
-    return fileTree(project.file(modelsDir)).mapNotNull(fileToService(project, bootstrapConfig)).also {
+    val pkgManifest = PackageManifest
+        .fromFile(file("packages.json"))
+        .apply {
+            validate()
+        }
+
+    return fileTree(project.file(modelsDir)).mapNotNull(fileToService(project, bootstrapConfig, pkgManifest)).also {
         logger.lifecycle("discovered ${it.size} services")
     }
 }
@@ -183,6 +189,11 @@ tasks.register("bootstrap") {
 
     dependsOn(tasks.generateSmithyProjections)
     finalizedBy(stageSdks)
+}
+
+tasks.register<UpdatePackageManifest>("updatePackageManifest") {
+    group = "codegen"
+    description = "Add (or update) one or more services to packages.json manifest"
 }
 
 /**
