@@ -8,6 +8,8 @@ error_exit() {
 PROJECT_NAME=$1
 # get the source version to be built (defaults to main branch if not specified)
 SOURCE_VERSION=${2:-main}
+SDK_PR=$3
+SMITHY_PR=$4
 
 echo "Starting CodeBuild project ${PROJECT_NAME}"
 
@@ -18,7 +20,7 @@ START_RESULT=$(
   aws codebuild start-build-batch \
     --project-name ${PROJECT_NAME} \
     --source-version $SOURCE_VERSION \
-    --environment-variables-override file:///tmp/gh_env_vars.json
+    --environment-variables-override file:///tmp/gh_env_vars.json name=SDK_PR,value=$SDK_PR name=SMITHY_PR,value=$SMITHY_PR
 )
 
 if [ "$?" != "0" ]; then
