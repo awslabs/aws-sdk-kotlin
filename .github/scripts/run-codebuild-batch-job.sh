@@ -13,14 +13,17 @@ SMITHY_PR=$4
 
 echo "Starting CodeBuild project ${PROJECT_NAME}"
 
-# dump all GITHUB_* environment variables to file and pass to start job
-jq -n 'env | to_entries | [.[] | select(.key | startswith("GITHUB_"))] | [.[] | {name: .key, value:.value, type:"PLAINTEXT"}]' >/tmp/gh_env_vars.json
+export SDK_PR
+export SMITHY_PR
+
+# dump all GITHUB_* & *_PR environment variables to file and pass to start job
+jq -n 'env | to_entries | [.[] | select((.key | startswith("GITHUB_")) or (.key | endswith("_PR")))] | [.[] | {name: .key, value:.value, type:"PLAINTEXT"}]' >/tmp/gh_env_vars.json
 
 START_RESULT=$(
   aws codebuild start-build-batch \
     --project-name ${PROJECT_NAME} \
     --source-version $SOURCE_VERSION \
-    --environment-variables-override name=SDK_PR,value=$SDK_PR name=SMITHY_PR,value=$SMITHY_PR file:///tmp/gh_env_vars.json
+    --environment-variables-override file:///tmp/gh_env_vars.json
 )
 
 if [ "$?" != "0" ]; then
