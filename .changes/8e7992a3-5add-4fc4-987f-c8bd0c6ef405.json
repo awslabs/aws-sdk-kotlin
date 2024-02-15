@@ -1,0 +1,5 @@
+{
+   "id": "8e7992a3-5add-4fc4-987f-c8bd0c6ef405",
+    "type": "bugfix",
+    "description": "Fix an issue where sections were not properly divided when parsing the config file"
+}
