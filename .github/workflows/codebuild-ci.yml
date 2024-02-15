@@ -37,14 +37,17 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
     steps:
+      - name: Verify PRs are not running malicious code
+        if: ${{ (inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == false }}
+        run: |
+          echo Please verify the PRs are not running any malicious code and mark the checkbox true when running the workflow
+          exit 1
       - name: Configure AWS Credentials
-        if: ${{ ((inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == true) || (inputs.aws-sdk-kotlin-pr == '' && inputs.smithy-kotlin-pr == '') }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
       - name: Run E2E Tests
-        if: ${{ ((inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == true) || (inputs.aws-sdk-kotlin-pr == '' && inputs.smithy-kotlin-pr == '') }}
         id: e2e-tests
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
@@ -59,26 +62,23 @@ jobs:
             echo "cancelling in-progress build: id=$BUILD_ID"
             aws codebuild stop-build --id $BUILD_ID
           fi
+
+  service-check-batch:
+    runs-on: ubuntu-latest
+    steps:
       - name: Verify PRs are not running malicious code
         if: ${{ (inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == false }}
         run: |
           echo Please verify the PRs are not running any malicious code and mark the checkbox true when running the workflow
           exit 1
-
-  service-check-batch:
-    runs-on: ubuntu-latest
-    steps:
       - name: Checkout sources
-        if: ${{ ((inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == true) || (inputs.aws-sdk-kotlin-pr == '' && inputs.smithy-kotlin-pr == '') }}
         uses: actions/checkout@v2
       - name: Configure AWS Credentials
-        if: ${{ ((inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == true) || (inputs.aws-sdk-kotlin-pr == '' && inputs.smithy-kotlin-pr == '') }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
       - name: Run Service Check Batch
-        if: ${{ ((inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == true) || (inputs.aws-sdk-kotlin-pr == '' && inputs.smithy-kotlin-pr == '') }}
         id: svc-check-batch
         run: |
           .github/scripts/run-codebuild-batch-job.sh \
@@ -93,8 +93,3 @@ jobs:
             echo "cancelling in-progress batch build: id=$BUILD_ID"
             aws codebuild stop-build --id $BUILD_ID
           fi
-      - name: Verify PRs are not running malicious code
-        if: ${{ (inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == false }}
-        run: |
-          echo Please verify the PRs are not running any malicious code and mark the checkbox true when running the workflow
-          exit 1
