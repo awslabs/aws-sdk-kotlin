@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.57] - 02/14/2024
+
+### Features
+* (**controltower**) Adds support for new Baseline and EnabledBaseline APIs for automating multi-account governance.
+* (**lookoutequipment**) This feature allows customers to see pointwise model diagnostics results for their models.
+* (**qbusiness**) This release adds the metadata-boosting feature, which allows customers to easily fine-tune the underlying ranking of retrieved RAG passages in order to optimize Q&A answer relevance. It also adds new feedback reasons for the PutFeedback API.
+
 ## [1.0.56] - 02/13/2024
 
 ### Features
