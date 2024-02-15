@@ -11,10 +11,10 @@ SOURCE_VERSION=${2:-main}
 SDK_PR=$3
 SMITHY_PR=$4
 
-echo "Starting CodeBuild project ${PROJECT_NAME}"
-
 export SDK_PR
 export SMITHY_PR
+
+echo "Starting CodeBuild project ${PROJECT_NAME}"
 
 # dump all GITHUB_* & *_PR environment variables to file and pass to start job
 jq -n 'env | to_entries | [.[] | select((.key | startswith("GITHUB_")) or (.key | endswith("_PR")))] | [.[] | {name: .key, value:.value, type:"PLAINTEXT"}]' >/tmp/gh_env_vars.json
