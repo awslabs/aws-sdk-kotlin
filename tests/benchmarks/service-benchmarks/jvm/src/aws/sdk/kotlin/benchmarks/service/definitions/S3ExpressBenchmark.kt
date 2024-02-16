@@ -15,7 +15,7 @@ import aws.smithy.kotlin.runtime.content.ByteStream
  * Note: This benchmark must be run from an EC2 host in the same AZ as the bucket (usw2-az1).
  */
 class S3ExpressBenchmark : ServiceBenchmark<S3Client> {
-    private val regionAz = "usw2-az1"
+    private val regionAz = "usw2-az1" // FIXME Use IMDS to dynamically create a bucket in the EC2 host's AZ
     private val bucketName = Common.random("sdk-benchmark-bucket-")
         .substring(0 until 47) + // truncate to prevent "bucket name too long" errors
         "--$regionAz--x-s3"
