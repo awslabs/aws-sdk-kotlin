@@ -1,0 +1,8 @@
+{
+    "id": "42b15168-de5f-46aa-867a-02a28b4a7b31",
+    "type": "bugfix",
+    "description": "Properly handle members with HTTP header bindings to x-amz-content-sha256",
+    "issues": [
+        "https://github.com/awslabs/aws-sdk-kotlin/issues/1217"
+    ]
+}
