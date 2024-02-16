@@ -24,8 +24,8 @@ import software.amazon.smithy.model.traits.HttpHeaderTrait
 class UpdateExecutionContextWithXAmzContentSha256HeaderBinding : KotlinIntegration {
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>
-    ): List<ProtocolMiddleware>  { return resolved + UpdateExecutionContextWithSha256HeaderBindingMiddleware() }
+        resolved: List<ProtocolMiddleware>,
+    ): List<ProtocolMiddleware> = resolved + UpdateExecutionContextWithSha256HeaderBindingMiddleware()
 }
 
 private class UpdateExecutionContextWithSha256HeaderBindingMiddleware : ProtocolMiddleware {
