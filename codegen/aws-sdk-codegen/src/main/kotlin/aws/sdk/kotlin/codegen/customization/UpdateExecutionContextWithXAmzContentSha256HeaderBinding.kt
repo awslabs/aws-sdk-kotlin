@@ -16,6 +16,11 @@ import software.amazon.smithy.model.shapes.MemberShape
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.traits.HttpHeaderTrait
 
+/**
+ * Registers a middleware which overrides the execution context HashSpecification for members with an HTTP header binding
+ * to `x-amz-content-sha256`.
+ * https://github.com/awslabs/aws-sdk-kotlin/issues/1217
+ */
 class UpdateExecutionContextWithXAmzContentSha256HeaderBinding : KotlinIntegration {
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
@@ -31,7 +36,7 @@ private class UpdateExecutionContextWithSha256HeaderBindingMiddleware : Protocol
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         val member = getXAmzContentSha256HeaderMember(ctx, op)!!
         writer.withBlock("input.${member.defaultName()}?.let {", "}") {
-            writer.write("op.context[#T.#T] = #T.Precalculated(it)", RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes, RuntimeTypes.Auth.Signing.AwsSigningCommon.HashSpecification, RuntimeTypes.Auth.Signing.AwsSigningCommon.HashSpecification)
+            writer.write("op.context[#1T.#2T] = #2T.Precalculated(it)", RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes, RuntimeTypes.Auth.Signing.AwsSigningCommon.HashSpecification)
         }
     }
 
