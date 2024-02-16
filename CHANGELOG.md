@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.59] - 02/16/2024
+
+### Features
+* (**emr**) adds fine grained control over Unhealthy Node Replacement to Amazon ElasticMapReduce
+* (**firehose**) This release adds support for Data Message Extraction for decompressed CloudWatch logs, and to use a custom file extension or time zone for S3 destinations.
+* (**sns**) This release marks phone numbers as sensitive inputs.
+
+### Documentation
+* (**connectparticipant**) Doc only update to GetTranscript API reference guide to inform users about presence of events in the chat transcript.
+* (**lambda**) Documentation-only updates for Lambda to clarify a number of existing actions and properties.
+* (**rds**) Doc only update for a valid option in DB parameter group
+
 ## [1.0.58] - 02/15/2024
 
 ### Features
