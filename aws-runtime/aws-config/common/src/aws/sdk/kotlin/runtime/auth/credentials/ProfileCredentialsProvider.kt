@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProvider
 import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
@@ -77,13 +78,27 @@ import kotlin.coroutines.coroutineContext
  * @param configurationSource An optional configuration source to use for loading shared config. If not provided,
  * it will be resolved from the environment.
  */
-public class ProfileCredentialsProvider(
+public class ProfileCredentialsProvider @InternalSdkApi constructor(
     public val profileName: String? = null,
     public val region: String? = null,
     public val platformProvider: PlatformProvider = PlatformProvider.System,
     public val httpClient: HttpClientEngine? = null,
     public val configurationSource: AwsConfigurationSource? = null,
 ) : CloseableCredentialsProvider {
+
+    public constructor(
+        profileName: String? = null,
+        region: String? = null,
+        platformProvider: PlatformProvider = PlatformProvider.System,
+        httpClient: HttpClientEngine? = null,
+    ) : this (
+        profileName,
+        region,
+        platformProvider,
+        httpClient,
+        null,
+    )
+
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
         "Ec2InstanceMetadata" to ImdsCredentialsProvider(
