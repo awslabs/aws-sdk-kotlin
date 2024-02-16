@@ -39,3 +39,4 @@ aws.sdk.kotlin.codegen.customization.RemoveDefaults
 aws.sdk.kotlin.codegen.customization.s3.UnsupportedSigningAlgorithmIntegration
 aws.sdk.kotlin.codegen.customization.SigV4AsymmetricTraitCustomization
 aws.sdk.kotlin.codegen.customization.cloudfrontkeyvaluestore.BackfillSigV4ACustomization
+aws.sdk.kotlin.codegen.customization.UpdateExecutionContextWithXAmzContentSha256HeaderBinding
