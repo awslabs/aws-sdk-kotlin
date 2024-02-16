@@ -1,0 +1,8 @@
+{
+    "id": "a3dbe57d-1309-4535-8025-6458466ba154",
+    "type": "bugfix",
+    "description": "Profile credentials provider is no longer marked as internal API",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1208"
+    ]
+}

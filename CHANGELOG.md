@@ -1,5 +1,58 @@
 # Changelog
 
+## [1.0.58] - 02/15/2024
+
+### Features
+* (**artifact**) This is the initial SDK release for AWS Artifact. AWS Artifact provides on-demand access to compliance and third-party compliance reports. This release includes access to List and Get reports, along with their metadata. This release also includes access to AWS Artifact notifications settings.
+* (**codepipeline**) Add ability to override timeout on action level.
+* (**guardduty**) Marked fields IpAddressV4, PrivateIpAddress, Email as Sensitive.
+* (**healthlake**) This release adds a new response parameter, JobProgressReport, to the DescribeFHIRImportJob and ListFHIRImportJobs API operation. JobProgressReport provides details on the progress of the import job on the server.
+* (**opensearch**) Adds additional supported instance types.
+* (**polly**) Amazon Polly adds 1 new voice - Burcu (tr-TR)
+* (**sagemaker**) This release adds a new API UpdateClusterSoftware for SageMaker HyperPod. This API allows users to patch HyperPod clusters with latest platform softwares.
+
+### Documentation
+* (**detective**) Doc only updates for content enhancement
+* (**secretsmanager**) Doc only update for Secrets Manager
+
+## [1.0.57] - 02/14/2024
+
+### Features
+* (**controltower**) Adds support for new Baseline and EnabledBaseline APIs for automating multi-account governance.
+* (**lookoutequipment**) This feature allows customers to see pointwise model diagnostics results for their models.
+* (**qbusiness**) This release adds the metadata-boosting feature, which allows customers to easily fine-tune the underlying ranking of retrieved RAG passages in order to optimize Q&A answer relevance. It also adds new feedback reasons for the PutFeedback API.
+
+## [1.0.56] - 02/13/2024
+
+### Features
+* (**lightsail**) This release adds support to upgrade the major version of a database.
+* (**marketplacecatalog**) AWS Marketplace Catalog API now supports setting intent on requests
+* (**resourceexplorer2**) Resource Explorer now uses newly supported IPv4 'amazonaws.com' endpoints by default.
+
+### Documentation
+* (**securitylake**) Documentation updates for Security Lake
+
+## [1.0.55] - 02/12/2024
+
+### Features
+* (**appsync**) Adds support for new options on GraphqlAPIs, Resolvers and  Data Sources for emitting Amazon CloudWatch metrics for enhanced monitoring of AppSync APIs.
+* (**cloudwatch**) This release enables PutMetricData API request payload compression by default.
+* (**neptunegraph**) Adding a new option "parameters" for data plane api ExecuteQuery to support running parameterized query via SDK.
+* (**route53domains**) This release adds bill contact support for RegisterDomain, TransferDomain, UpdateDomainContact and GetDomainDetail API.
+
+## [1.0.54] - 02/09/2024
+
+### Features
+* (**batch**) This feature allows Batch to support configuration of repository credentials for jobs running on ECS
+* (**braket**) Creating a job will result in DeviceOfflineException when using an offline device, and DeviceRetiredException when using a retired device.
+* (**costoptimizationhub**) Adding includeMemberAccounts field to the response of ListEnrollmentStatuses API.
+* (**iot**) This release allows AWS IoT Core users to enable Online Certificate Status Protocol (OCSP) Stapling for TLS X.509 Server Certificates when creating and updating AWS IoT Domain Configurations with Custom Domain.
+* (**pricing**) Add Throttling Exception to all APIs.
+
+### Documentation
+* (**amp**) Overall documentation updates.
+* (**ecs**) Documentation only update for Amazon ECS.
+
 ## [1.0.53] - 02/08/2024
 
 ### Features
