@@ -64,9 +64,6 @@ object S3TestUtils {
             }
         }
 
-        // FIXME skipping putBucketLifecycleConfiguration because the following exception is thrown from S3 if I try to do it:
-        // aws.sdk.kotlin.services.s3.model.S3Exception: LifecycleConfiguration is not valid, expected CreateBucketConfiguration
-
         testBucket
     }
 
