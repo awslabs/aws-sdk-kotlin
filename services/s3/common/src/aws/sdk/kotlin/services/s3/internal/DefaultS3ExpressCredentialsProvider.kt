@@ -23,7 +23,7 @@ internal class DefaultS3ExpressCredentialsProvider(
             credentialsCache = S3ExpressCredentialsCache(attributes[S3Attributes.ExpressClient] as S3Client)
         }
 
-        val key = S3ExpressCredentialsCacheKey(attributes[S3Attributes.DirectoryBucket], bootstrapCredentialsProvider.resolve(attributes))
+        val key = S3ExpressCredentialsCacheKey(attributes[S3Attributes.Bucket], bootstrapCredentialsProvider.resolve(attributes))
         return credentialsCache.get(key)
     }
 

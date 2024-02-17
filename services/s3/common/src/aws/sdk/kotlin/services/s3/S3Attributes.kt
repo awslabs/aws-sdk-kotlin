@@ -12,9 +12,9 @@ import aws.smithy.kotlin.runtime.collections.AttributeKey
  */
 public object S3Attributes {
     /**
-     * The name of the directory bucket requests are being made to
+     * The name of the bucket requests are being made to
      */
-    public val DirectoryBucket: AttributeKey<String> = AttributeKey("aws.sdk.kotlin#S3ExpressBucket")
+    public val Bucket: AttributeKey<String> = AttributeKey("aws.sdk.kotlin#S3Bucket")
 
     /**
      * The S3 client being used to make requests to directory buckets. This client will be used to call s3:CreateSession
