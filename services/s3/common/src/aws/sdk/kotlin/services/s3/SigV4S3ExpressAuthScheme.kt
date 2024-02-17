@@ -2,9 +2,9 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 package aws.sdk.kotlin.services.s3
 
+import aws.sdk.kotlin.services.s3.express.S3ExpressHttpSigner
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.AuthOption
 import aws.smithy.kotlin.runtime.auth.AuthSchemeId
@@ -15,6 +15,7 @@ import aws.smithy.kotlin.runtime.http.auth.AwsHttpSigner
 import aws.smithy.kotlin.runtime.http.auth.HttpSigner
 import aws.smithy.kotlin.runtime.http.auth.sigV4
 
+// FIXME Had trouble moving this to `express` package because this val became unresolved symbol
 public val AuthSchemeId.Companion.AwsSigV4S3Express: AuthSchemeId
     get() = AuthSchemeId("aws.auth#sigv4s3express")
 

@@ -76,7 +76,7 @@ class ClientConfigIntegration : KotlinIntegration {
             symbol = buildSymbol {
                 name = "S3ExpressCredentialsProvider"
                 nullable = false
-                namespace = "aws.sdk.kotlin.services.s3"
+                namespace = "aws.sdk.kotlin.services.s3.express"
             }
             documentation = """
                 Credentials provider to be used for making requests to S3 Express.   
