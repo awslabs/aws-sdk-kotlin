@@ -71,8 +71,8 @@ class ClientConfigIntegration : KotlinIntegration {
             """.trimIndent()
         }
 
-        val S3ExpressCredentialsProvider: ConfigProperty = ConfigProperty {
-            name = "s3ExpressCredentialsProvider"
+        val ExpressCredentialsProvider: ConfigProperty = ConfigProperty {
+            name = "expressCredentialsProvider"
             symbol = buildSymbol {
                 name = "S3ExpressCredentialsProvider"
                 nullable = false
@@ -82,21 +82,13 @@ class ClientConfigIntegration : KotlinIntegration {
                 Credentials provider to be used for making requests to S3 Express.   
             """.trimIndent()
 
-            additionalImports = listOf(
-                buildSymbol {
-                    name = "S3ExpressCredentialsProvider"
-                    nullable = false
-                    namespace = "aws.sdk.kotlin.services.s3"
-                },
-            )
-
             propertyType = ConfigPropertyType.Custom(
                 render = { _, writer ->
-                    writer.write("public val $name: S3ExpressCredentialsProvider = builder.$name ?: S3ExpressCredentialsProvider.default(this.credentialsProvider)")
+                    writer.write("public val #1L: #2T = builder.#1L ?: #2T.default(this.credentialsProvider)", name, symbol)
                 },
                 renderBuilder = { prop, writer ->
                     prop.documentation?.let(writer::dokka)
-                    writer.write("public var $name: S3ExpressCredentialsProvider? = null")
+                    writer.write("public var #L: #T? = null", name, symbol)
                 },
             )
         }
@@ -126,7 +118,7 @@ class ClientConfigIntegration : KotlinIntegration {
             UseArnRegionProp,
             DisableMrapProp,
             DisableExpressSessionAuth,
-            S3ExpressCredentialsProvider,
+            ExpressCredentialsProvider,
         )
 
     override val sectionWriters: List<SectionWriterBinding>

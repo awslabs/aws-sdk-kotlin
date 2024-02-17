@@ -49,7 +49,7 @@ class SigV4S3ExpressAuthSchemeIntegration : KotlinIntegration {
 
     // add S3 Express credentials provider to managed resources in the service client initializer
     private val renderClientInitializer = AppendingSectionWriter { writer ->
-        writer.write("managedResources.#T(config.s3ExpressCredentialsProvider)", RuntimeTypes.Core.IO.addIfManaged)
+        writer.write("managedResources.#T(config.expressCredentialsProvider)", RuntimeTypes.Core.IO.addIfManaged)
     }
 }
 
@@ -81,7 +81,7 @@ open class SigV4S3ExpressAuthSchemeHandler : AuthSchemeHandler {
     }
 
     override fun identityProviderAdapterExpression(writer: KotlinWriter) {
-        writer.write("config.#T", ClientConfigIntegration.S3ExpressCredentialsProvider.propertyName)
+        writer.write("config.#T", ClientConfigIntegration.ExpressCredentialsProvider.propertyName)
     }
 
     override fun authSchemeProviderInstantiateAuthOptionExpr(
