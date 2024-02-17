@@ -81,7 +81,7 @@ open class SigV4S3ExpressAuthSchemeHandler : AuthSchemeHandler {
     }
 
     override fun identityProviderAdapterExpression(writer: KotlinWriter) {
-        writer.write("config.#T", ClientConfigIntegration.ExpressCredentialsProvider.propertyName)
+        writer.write("config.#L", ClientConfigIntegration.ExpressCredentialsProvider.propertyName)
     }
 
     override fun authSchemeProviderInstantiateAuthOptionExpr(
