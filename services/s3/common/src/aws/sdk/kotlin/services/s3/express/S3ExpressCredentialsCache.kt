@@ -12,18 +12,21 @@ import aws.smithy.kotlin.runtime.telemetry.TelemetryProviderContext
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.until
-import aws.smithy.kotlin.runtime.util.ExpiringValue
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TimeMark
+import kotlin.time.TimeSource
 
 private const val DEFAULT_S3_EXPRESS_CACHE_SIZE: Int = 100
 private val REFRESH_BUFFER = 1.minutes
-private val DEFAULT_REFRESH_PERIOD = 5.minutes
+private val DEFAULT_REFRESH_PERIOD = 3.minutes
 
 internal class S3ExpressCredentialsCache(
     private val client: S3Client,
+    private val timeSource: TimeSource = TimeSource.Monotonic,
     private val clock: Clock = Clock.System,
 ) : CoroutineScope, Closeable {
     override val coroutineContext: CoroutineContext = Job() + CoroutineName("S3ExpressCredentialsCacheRefresh") + TelemetryProviderContext(client.config.telemetryProvider)
@@ -38,7 +41,7 @@ internal class S3ExpressCredentialsCache(
 
     suspend fun get(key: S3ExpressCredentialsCacheKey): Credentials = lru
         .get(key)
-        ?.takeIf { !it.expiringCredentials.isExpired(clock) }
+        ?.takeIf { !it.expiringCredentials.isExpired }
         ?.let {
             it.usedSinceLastRefresh = true
             it.expiringCredentials.value
@@ -49,7 +52,7 @@ internal class S3ExpressCredentialsCache(
         lru.put(key, S3ExpressCredentialsCacheValue(value, usedSinceLastRefresh = true))
     }
 
-    private fun ExpiringValue<Credentials>.isExpired(clock: Clock): Boolean = clock.now().until(expiresAt).absoluteValue <= REFRESH_BUFFER
+    private val ExpiringValue<Credentials>.isExpired: Boolean get() = (expiresAt + REFRESH_BUFFER).hasPassedNow()
 
     /**
      * Attempt to refresh the credentials in the cache. A refresh is initiated when the `nextRefresh` time has been reached,
@@ -78,26 +81,31 @@ internal class S3ExpressCredentialsCache(
             }
 
             // Refresh any credentials which are already expired
-            val expiredEntries = entries.filter { it.value.expiringCredentials.isExpired(clock) }
+            val expiredEntries = entries.filter { it.value.expiringCredentials.isExpired }
             expiredEntries.forEach { entry ->
                 logger.debug { "Credentials for ${entry.key.bucket} are expired, refreshing..." }
                 lru.put(entry.key, S3ExpressCredentialsCacheValue(createSessionCredentials(entry.key.bucket), false))
             }
 
             // Find the next expiring credentials, sleep until then
-            val nextExpiringEntry = entries.minByOrNull { it.value.expiringCredentials.expiresAt }
+            val nextExpiringEntry = entries.maxByOrNull {
+                // note: `expiresAt` is always in the future, so the `elapsedNow` values are negative.
+                // that's the reason `maxBy` is used instead of `minBy`
+                it.value.expiringCredentials.expiresAt.elapsedNow()
+            }
 
-            val nextRefresh = nextExpiringEntry?.let {
-                minOf(clock.now() + DEFAULT_REFRESH_PERIOD, it.value.expiringCredentials.expiresAt - REFRESH_BUFFER)
-            } ?: (clock.now() + DEFAULT_REFRESH_PERIOD)
+            val delayDuration = nextExpiringEntry
+                ?.let { timeSource.markNow().until(it.value.expiringCredentials.expiresAt) }
+                ?: DEFAULT_REFRESH_PERIOD
 
-            logger.debug { "Completed credentials refresh, next attempt in ${clock.now().until(nextRefresh)}" }
-            delay(clock.now().until(nextRefresh))
+            logger.debug { "Completed credentials refresh, next attempt in $delayDuration" }
+            delay(delayDuration)
         }
     }
 
     private suspend fun createSessionCredentials(bucket: String): ExpiringValue<Credentials> {
         val credentials = client.createSession { this.bucket = bucket }.credentials!!
+        val expirationTimeMark = timeSource.markNow() + clock.now().until(credentials.expiration)
 
         return ExpiringValue(
             Credentials(
@@ -107,7 +115,7 @@ internal class S3ExpressCredentialsCache(
                 expiration = credentials.expiration,
                 providerName = "DefaultS3ExpressCredentialsProvider",
             ),
-            credentials.expiration,
+            expirationTimeMark,
         )
     }
 
@@ -125,3 +133,13 @@ internal data class S3ExpressCredentialsCacheValue(
     val expiringCredentials: ExpiringValue<Credentials>,
     var usedSinceLastRefresh: Boolean,
 )
+
+/**
+ * Get the [Duration] between [this] TimeMark and an [other] TimeMark
+ */
+internal fun TimeMark.until(other: TimeMark): Duration = (this.elapsedNow().absoluteValue - other.elapsedNow().absoluteValue).absoluteValue
+
+/**
+ * A value with an expiration [TimeMark]
+ */
+internal data class ExpiringValue<T> (val value: T, val expiresAt: TimeMark)
