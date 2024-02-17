@@ -8,6 +8,7 @@ import aws.sdk.kotlin.services.s3.*
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.collections.LruCache
 import aws.smithy.kotlin.runtime.io.Closeable
+import aws.smithy.kotlin.runtime.telemetry.TelemetryProviderContext
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.until
@@ -25,7 +26,7 @@ internal class S3ExpressCredentialsCache(
     private val client: S3Client,
     private val clock: Clock = Clock.System,
 ) : CoroutineScope, Closeable {
-    override val coroutineContext: CoroutineContext = Job() + CoroutineName("S3ExpressCredentialsCacheRefresh")
+    override val coroutineContext: CoroutineContext = Job() + CoroutineName("S3ExpressCredentialsCacheRefresh") + TelemetryProviderContext(client.config.telemetryProvider)
 
     private val lru = LruCache<S3ExpressCredentialsCacheKey, S3ExpressCredentialsCacheValue>(DEFAULT_S3_EXPRESS_CACHE_SIZE)
 
