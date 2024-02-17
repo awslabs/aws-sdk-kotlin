@@ -58,7 +58,7 @@ internal class S3ExpressCredentialsCache(
         val logger = coroutineContext.logger<S3ExpressCredentialsCache>()
         while (isActive) {
             if (lru.size == 0) {
-                logger.debug { "Cache is empty, waiting..." }
+                logger.trace { "Cache is empty, waiting..." }
                 delay(5.seconds)
                 continue
             }
