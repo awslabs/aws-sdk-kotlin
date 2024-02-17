@@ -22,7 +22,7 @@ public val AuthSchemeId.Companion.AwsSigV4S3Express: AuthSchemeId
  * HTTP auth scheme for S3 Express One Zone authentication
  */
 public class SigV4S3ExpressAuthScheme(
-    awsHttpSigner: AwsHttpSigner,
+    httpSigner: HttpSigner,
 ) : AuthScheme {
     public constructor(awsSigner: AwsSigner, serviceName: String? = null) : this(
         AwsHttpSigner(
@@ -35,7 +35,7 @@ public class SigV4S3ExpressAuthScheme(
     )
 
     override val schemeId: AuthSchemeId = AuthSchemeId.AwsSigV4S3Express
-    override val signer: HttpSigner = S3ExpressHttpSigner(awsHttpSigner)
+    override val signer: HttpSigner = S3ExpressHttpSigner(httpSigner)
 }
 
 /**
