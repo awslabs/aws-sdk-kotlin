@@ -28,7 +28,7 @@ internal class S3ExpressHttpSigner(
      */
     override suspend fun sign(signingRequest: SignHttpRequest) {
         val sessionToken = (signingRequest.identity as? Credentials)?.sessionToken
-            ?: error("Failed to parse sessionToken from identity")
+            ?: error("No session token found on identity, required for S3 Express")
 
         // 1. add the S3 Express Session Token header
         signingRequest.httpRequest.header(S3_EXPRESS_SESSION_TOKEN_HEADER, sessionToken)
