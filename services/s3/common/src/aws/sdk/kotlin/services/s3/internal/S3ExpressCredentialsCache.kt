@@ -63,26 +63,28 @@ internal class S3ExpressCredentialsCache(
                 continue
             }
 
+            val entries = lru.entries
+
             // Evict any credentials that weren't used since the last refresh
-            lru.entries.filter { !it.value.usedSinceLastRefresh }.forEach {
+            entries.filter { !it.value.usedSinceLastRefresh }.forEach {
                 logger.debug { "Credentials for ${it.key.bucket} were not used since last refresh, evicting..." }
                 lru.remove(it.key)
             }
 
             // Mark all credentials as not used since last refresh
-            lru.entries.forEach {
+            entries.forEach {
                 it.value.usedSinceLastRefresh = false
             }
 
             // Refresh any credentials which are already expired
-            val expiredEntries = lru.entries.filter { it.value.expiringCredentials.isExpired(clock) }
+            val expiredEntries = entries.filter { it.value.expiringCredentials.isExpired(clock) }
             expiredEntries.forEach { entry ->
                 logger.debug { "Credentials for ${entry.key.bucket} are expired, refreshing..." }
                 lru.put(entry.key, S3ExpressCredentialsCacheValue(createSessionCredentials(entry.key.bucket), false))
             }
 
             // Find the next expiring credentials, sleep until then
-            val nextExpiringEntry = lru.entries.minByOrNull { it.value.expiringCredentials.expiresAt }
+            val nextExpiringEntry = entries.minByOrNull { it.value.expiringCredentials.expiresAt }
 
             val nextRefresh = nextExpiringEntry?.let {
                 minOf(clock.now() + DEFAULT_REFRESH_PERIOD, it.value.expiringCredentials.expiresAt - REFRESH_BUFFER)
