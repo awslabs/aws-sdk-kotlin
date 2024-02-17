@@ -7,6 +7,9 @@ package aws.sdk.kotlin.services.s3
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.collections.AttributeKey
 
+/**
+ * Execution context attributes specific to S3
+ */
 public object S3Attributes {
     /**
      * The name of the directory bucket requests are being made to
