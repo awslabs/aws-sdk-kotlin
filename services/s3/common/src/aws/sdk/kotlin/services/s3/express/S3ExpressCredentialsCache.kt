@@ -82,14 +82,24 @@ internal class S3ExpressCredentialsCache(
 
             // Refresh any credentials which are already expired
             val expiredEntries = entries.filter { it.value.expiringCredentials.isExpired }
-            expiredEntries.forEach { entry ->
-                logger.debug { "Credentials for ${entry.key.bucket} are expired, refreshing..." }
-                lru.put(entry.key, S3ExpressCredentialsCacheValue(createSessionCredentials(entry.key.bucket), false))
+
+            supervisorScope {
+                expiredEntries.forEach { entry ->
+                    logger.debug { "Credentials for ${entry.key.bucket} are expired, refreshing..." }
+
+                    try {
+                        val refreshed = async { createSessionCredentials(entry.key.bucket) }.await()
+                        lru.put(entry.key, S3ExpressCredentialsCacheValue(refreshed, false))
+                    } catch (e: Exception) {
+                        logger.warn(e) { "Failed to refresh credentials for ${entry.key.bucket}" }
+                    }
+
+                }
             }
 
             // Find the next expiring credentials, sleep until then
             val nextExpiringEntry = entries.maxByOrNull {
-                // note: `expiresAt` is always in the future, so the `elapsedNow` values are negative.
+                // note: `expiresAt` is always in the future, which means the `elapsedNow` values are negative.
                 // that's the reason `maxBy` is used instead of `minBy`
                 it.value.expiringCredentials.expiresAt.elapsedNow()
             }
