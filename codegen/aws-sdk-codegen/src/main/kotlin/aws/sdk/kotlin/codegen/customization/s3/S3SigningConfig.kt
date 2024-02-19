@@ -20,7 +20,6 @@ import software.amazon.smithy.model.shapes.ServiceShape
  * Set default signing attributes in the execution context (which ultimately becomes the signing context) for S3.
  */
 class S3SigningConfig : KotlinIntegration {
-    // integrations are de-duped by taking the last one registered
     override val order: Byte
         get() = 127
 
