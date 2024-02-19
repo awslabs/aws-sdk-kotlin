@@ -94,7 +94,7 @@ class ClientConfigIntegration : KotlinIntegration {
             ForcePathStyleProp,
             UseArnRegionProp,
             DisableMrapProp,
-            EnableAwsChunked
+            EnableAwsChunked,
         )
 
     override val sectionWriters: List<SectionWriterBinding>
