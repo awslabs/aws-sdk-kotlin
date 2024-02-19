@@ -23,7 +23,11 @@ public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
         context.response.exceptionOrNull()?.let {
             if (it is UnsupportedSigningAlgorithmException && it.signingAlgorithm == AwsSigningAlgorithm.SIGV4_ASYMMETRIC) {
                 return Result.failure(
-                    it, // TODO: Add a message and link pointing to AWS SDK for Kotlin developer guide.
+                    UnsupportedSigningAlgorithmException(
+                        "SIGV4A support is not yet implemented for the default signer. For more information on how to enable it with the CRT signer, please refer to: https://a.co/3sf8533",
+                        it.signingAlgorithm,
+                        it,
+                    ),
                 )
             }
         }

@@ -151,6 +151,12 @@
             "brazilName": "AwsSdkKotlinApplicationcostprofiler"
         },
         {
+            "sdkId": "Artifact",
+            "namespace": "aws.sdk.kotlin.services.artifact",
+            "artifactName": "artifact",
+            "brazilName": "AwsSdkKotlinArtifact"
+        },
+        {
             "sdkId": "Athena",
             "namespace": "aws.sdk.kotlin.services.athena",
             "artifactName": "athena",
@@ -2087,6 +2093,12 @@
             "namespace": "aws.sdk.kotlin.services.billingconductor",
             "artifactName": "billingconductor",
             "brazilName": "AwsSdkKotlinBillingconductor"
+        },
+        {
+            "sdkId": "chatbot",
+            "namespace": "aws.sdk.kotlin.services.chatbot",
+            "artifactName": "chatbot",
+            "brazilName": "AwsSdkKotlinChatbot"
         },
         {
             "sdkId": "codeartifact",

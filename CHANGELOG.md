@@ -1,5 +1,44 @@
 # Changelog
 
+## [1.0.60] - 02/19/2024
+
+### Features
+* (**amplify**) This release contains API changes that enable users to configure their Amplify domains with their own custom SSL/TLS certificate.
+* (**chatbot**) This release adds support for AWS Chatbot. You can now monitor, operate, and troubleshoot your AWS resources with interactive ChatOps using the AWS SDK.
+* (**mediatailor**) MediaTailor: marking #AdBreak.OffsetMillis as required.
+
+### Documentation
+* (**configservice**) Documentation updates for the AWS Config CLI
+* (**ivs**) Changed description for latencyMode in Create/UpdateChannel and Channel/ChannelSummary.
+* (**keyspaces**) Documentation updates for Amazon Keyspaces
+
+## [1.0.59] - 02/16/2024
+
+### Features
+* (**emr**) adds fine grained control over Unhealthy Node Replacement to Amazon ElasticMapReduce
+* (**firehose**) This release adds support for Data Message Extraction for decompressed CloudWatch logs, and to use a custom file extension or time zone for S3 destinations.
+* (**sns**) This release marks phone numbers as sensitive inputs.
+
+### Documentation
+* (**connectparticipant**) Doc only update to GetTranscript API reference guide to inform users about presence of events in the chat transcript.
+* (**lambda**) Documentation-only updates for Lambda to clarify a number of existing actions and properties.
+* (**rds**) Doc only update for a valid option in DB parameter group
+
+## [1.0.58] - 02/15/2024
+
+### Features
+* (**artifact**) This is the initial SDK release for AWS Artifact. AWS Artifact provides on-demand access to compliance and third-party compliance reports. This release includes access to List and Get reports, along with their metadata. This release also includes access to AWS Artifact notifications settings.
+* (**codepipeline**) Add ability to override timeout on action level.
+* (**guardduty**) Marked fields IpAddressV4, PrivateIpAddress, Email as Sensitive.
+* (**healthlake**) This release adds a new response parameter, JobProgressReport, to the DescribeFHIRImportJob and ListFHIRImportJobs API operation. JobProgressReport provides details on the progress of the import job on the server.
+* (**opensearch**) Adds additional supported instance types.
+* (**polly**) Amazon Polly adds 1 new voice - Burcu (tr-TR)
+* (**sagemaker**) This release adds a new API UpdateClusterSoftware for SageMaker HyperPod. This API allows users to patch HyperPod clusters with latest platform softwares.
+
+### Documentation
+* (**detective**) Doc only updates for content enhancement
+* (**secretsmanager**) Doc only update for Secrets Manager
+
 ## [1.0.57] - 02/14/2024
 
 ### Features
