@@ -7,6 +7,7 @@ package aws.sdk.kotlin.codegen.customization.s3
 
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
@@ -20,7 +21,7 @@ import software.amazon.smithy.model.shapes.ServiceShape
  * Set default signing attributes in the execution context (which ultimately becomes the signing context) for S3.
  */
 class S3SigningConfig : KotlinIntegration {
-    // auth schemes are de-duped by taking the last one registered
+    // integrations are de-duped by taking the last one registered
     override val order: Byte
         get() = 127
 
@@ -40,6 +41,6 @@ class S3SigningConfig : KotlinIntegration {
         writer.putIfAbsent(signingAttrs, "NormalizeUriPath", "false")
         writer.putIfAbsent(signingAttrs, "UseDoubleUriEncode", "false")
         writer.putIfAbsent(signingAttrs, "SignedBodyHeader", writer.format("#T.X_AMZ_CONTENT_SHA256", RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSignedBodyHeader))
-        writer.putIfAbsent(signingAttrs, "EnableAwsChunked", "true")
+        writer.putIfAbsent(signingAttrs, "EnableAwsChunked", "config.enableAwsChunked")
     }
 }

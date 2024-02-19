@@ -61,6 +61,14 @@ class ClientConfigIntegration : KotlinIntegration {
                 Flag to disable [S3 multi-region access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiRegionAccessPoints.html).
             """.trimIndent()
         }
+
+        val EnableAwsChunked: ConfigProperty = ConfigProperty {
+            name = "enableAwsChunked"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
+            documentation = """
+                Flag to enable [aws-chunked](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html) content encoding.
+            """.trimIndent()
+        }
     }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
@@ -86,6 +94,7 @@ class ClientConfigIntegration : KotlinIntegration {
             ForcePathStyleProp,
             UseArnRegionProp,
             DisableMrapProp,
+            EnableAwsChunked
         )
 
     override val sectionWriters: List<SectionWriterBinding>
