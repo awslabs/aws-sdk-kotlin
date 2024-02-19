@@ -84,7 +84,7 @@ class ClientConfigIntegration : KotlinIntegration {
 
             propertyType = ConfigPropertyType.Custom(
                 render = { _, writer ->
-                    writer.write("public val #1L: #2T = builder.#1L ?: #2T.default(this.credentialsProvider)", name, symbol)
+                    writer.write("public val #1L: #2T = builder.#1L ?: #2T.default()", name, symbol)
                 },
                 renderBuilder = { prop, writer ->
                     prop.documentation?.let(writer::dokka)
