@@ -5,11 +5,52 @@ error_exit() {
   exit 1
 }
 
-PROJECT_NAME=$1
+PROJECT_NAME=gh-aws-sdk-kotlin-svc-check-batch
 # get the source version to be built (defaults to main branch if not specified)
-SOURCE_VERSION=${2:-main}
-SDK_PR=$3
-SMITHY_PR=$4
+SOURCE_VERSION=main
+SDK_PR=""
+SMITHY_PR=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --project)
+          if [[ "$2" == --* ]]; then
+            shift 1
+          else
+            PROJECT_NAME="$2"
+            shift 2
+          fi
+          ;;
+        --source)
+          if [[ "$2" == --* ]]; then
+            shift 1
+          else
+            SOURCE_VERSION="$2"
+            shift 2
+          fi
+          ;;
+        --sdk)
+          if [[ "$2" == --* ]]; then
+            shift 1
+          else
+            SDK_PR="$2"
+            shift 2
+          fi
+          ;;
+        --smithy)
+          if [[ "$2" == --* || -z "$2" ]]; then
+            shift 1
+          else
+            SMITHY_PR="$2"
+            shift 2
+          fi
+          ;;
+        *)
+          echo "Unknown option: $1"
+          exit 1
+          ;;
+    esac
+done
 
 export SDK_PR
 export SMITHY_PR
