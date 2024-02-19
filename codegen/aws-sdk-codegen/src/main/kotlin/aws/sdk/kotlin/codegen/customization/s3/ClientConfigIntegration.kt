@@ -65,9 +65,7 @@ class ClientConfigIntegration : KotlinIntegration {
         val EnableAwsChunked: ConfigProperty = ConfigProperty {
             name = "enableAwsChunked"
             useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
-            documentation = """
-                Flag to enable [aws-chunked](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html) content encoding.
-            """.trimIndent()
+            documentation = "Flag to enable [aws-chunked](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html) content encoding."
         }
     }
 
