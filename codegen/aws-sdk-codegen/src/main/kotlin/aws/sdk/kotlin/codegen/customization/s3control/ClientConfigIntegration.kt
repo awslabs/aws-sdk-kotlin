@@ -8,6 +8,7 @@ import aws.sdk.kotlin.codegen.customization.s3.isS3Control
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.model.Model
@@ -32,6 +33,12 @@ class ClientConfigIntegration : KotlinIntegration {
             [S3 access points](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points.html).
             """.trimIndent(),
         )
+
+        val EnableAwsChunked: ConfigProperty = ConfigProperty {
+            name = "enableAwsChunked"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
+            documentation = "Flag to enable [aws-chunked](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html) content encoding."
+        }
     }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
@@ -51,5 +58,6 @@ class ClientConfigIntegration : KotlinIntegration {
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
         listOf(
             UseArnRegionProp,
+            EnableAwsChunked,
         )
 }
