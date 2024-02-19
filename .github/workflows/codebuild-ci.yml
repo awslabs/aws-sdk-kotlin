@@ -5,6 +5,24 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      aws-sdk-kotlin-pr:
+        description: aws-sdk-kotlin PR number (optional)
+        type: number
+        required: false
+      smithy-kotlin-pr:
+        description: smithy-kotlin PR number (optional)
+        type: number
+        required: false
+      check-pr:
+        description: I verified that the PRs are not running any malicious code (If running for an external contributor)
+        required: true
+        type: boolean
+        default: false
+
+env:
+  SDK_PR: ${{ inputs.aws-sdk-kotlin-pr }}
+  SMITHY_PR: ${{ inputs.smithy-kotlin-pr }}
 
 permissions:
   id-token: write
@@ -19,6 +37,11 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
     steps:
+      - name: Verify PRs are not running malicious code
+        if: ${{ (inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == false }}
+        run: |
+          echo Please verify the PRs are not running any malicious code and mark the checkbox true when running the workflow
+          exit 1
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -29,6 +52,7 @@ jobs:
         uses: aws-actions/aws-codebuild-run-build@v1
         with:
           project-name: gh-aws-sdk-kotlin-e2e-tests
+          env-vars-for-codebuild: SDK_PR, SMITHY_PR
       - name: Cancel build
         if: ${{ cancelled() }}
         env:
@@ -42,6 +66,11 @@ jobs:
   service-check-batch:
     runs-on: ubuntu-latest
     steps:
+      - name: Verify PRs are not running malicious code
+        if: ${{ (inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == false }}
+        run: |
+          echo Please verify the PRs are not running any malicious code and mark the checkbox true when running the workflow
+          exit 1
       - name: Checkout sources
         uses: actions/checkout@v2
       - name: Configure AWS Credentials
@@ -52,7 +81,9 @@ jobs:
       - name: Run Service Check Batch
         id: svc-check-batch
         run: |
-          .github/scripts/run-codebuild-batch-job.sh gh-aws-sdk-kotlin-svc-check-batch ${{ github.event.pull_request.head.sha }}
+          .github/scripts/run-codebuild-batch-job.sh \
+            gh-aws-sdk-kotlin-svc-check-batch \
+            ${{ github.event.pull_request.head.sha }} ${{ inputs.aws-sdk-kotlin-pr }} ${{ inputs.smithy-kotlin-pr }}
       - name: Cancel build
         if: ${{ cancelled() }}
         env:
