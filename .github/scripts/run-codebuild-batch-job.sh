@@ -8,11 +8,16 @@ error_exit() {
 PROJECT_NAME=$1
 # get the source version to be built (defaults to main branch if not specified)
 SOURCE_VERSION=${2:-main}
+SDK_PR=$3
+SMITHY_PR=$4
+
+export SDK_PR
+export SMITHY_PR
 
 echo "Starting CodeBuild project ${PROJECT_NAME}"
 
-# dump all GITHUB_* environment variables to file and pass to start job
-jq -n 'env | to_entries | [.[] | select(.key | startswith("GITHUB_"))] | [.[] | {name: .key, value:.value, type:"PLAINTEXT"}]' >/tmp/gh_env_vars.json
+# dump all GITHUB_* & *_PR environment variables to file and pass to start job
+jq -n 'env | to_entries | [.[] | select((.key | startswith("GITHUB_")) or (.key | endswith("_PR")))] | [.[] | {name: .key, value:.value, type:"PLAINTEXT"}]' >/tmp/gh_env_vars.json
 
 START_RESULT=$(
   aws codebuild start-build-batch \
