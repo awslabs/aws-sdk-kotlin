@@ -29,7 +29,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
           fi
           ;;
-        --sdk)
+        --sdk-pr)
           if [[ "$2" == --* ]]; then
             shift 1
           else
@@ -37,7 +37,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
           fi
           ;;
-        --smithy)
+        --smithy-pr)
           if [[ "$2" == --* || -z "$2" ]]; then
             shift 1
           else
