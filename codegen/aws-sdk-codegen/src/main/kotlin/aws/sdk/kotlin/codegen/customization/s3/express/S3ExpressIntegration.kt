@@ -4,21 +4,16 @@
  */
 package aws.sdk.kotlin.codegen.customization.s3.express
 
-import aws.sdk.kotlin.codegen.customization.s3.ClientConfigIntegration
+import SigV4S3ExpressAuthTrait
 import aws.sdk.kotlin.codegen.customization.s3.isS3
 import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
-import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
-import software.amazon.smithy.kotlin.codegen.rendering.auth.AuthSchemeProviderGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.auth.IdentityProviderConfigGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpProtocolClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.utils.dq
@@ -27,8 +22,10 @@ import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.StructureShape
+import software.amazon.smithy.model.traits.AuthTrait
 import software.amazon.smithy.model.traits.HttpChecksumRequiredTrait
 import software.amazon.smithy.model.traits.HttpHeaderTrait
+import software.amazon.smithy.model.transform.ModelTransformer
 
 /**
  * An integration which handles codegen for S3 Express, such as:
@@ -40,25 +37,25 @@ import software.amazon.smithy.model.traits.HttpHeaderTrait
 class S3ExpressIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings) = model.expectShape<ServiceShape>(settings.service).isS3
 
-    override val sectionWriters: List<SectionWriterBinding>
-        get() = listOf(
-            SectionWriterBinding(HttpProtocolClientGenerator.ConfigureAuthSchemes, configureS3ExpressAuthSchemeWriter),
-            SectionWriterBinding(AuthSchemeProviderGenerator.ServiceDefaults, setServiceDefaultAuthOptionWriter),
-            SectionWriterBinding(IdentityProviderConfigGenerator.ConfigureIdentityProviderForAuthScheme, configureIdentityProviderForAuthSchemeWriter),
-        )
+    /**
+     * Add a synthetic SigV4 S3 Express auth trait
+     */
+    override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
+        return ModelTransformer.create().mapShapes(model) { shape ->
+            when {
+                shape.isServiceShape -> {
+                    val builder = (shape as ServiceShape).toBuilder()
 
-    private val configureS3ExpressAuthSchemeWriter = AppendingSectionWriter { writer ->
-        writer.withBlock("getOrPut(#T) {", "}", SigV4S3ExpressAuthSchemeHandler().authSchemeIdSymbol) {
-            writer.write("#T(#T, #S)", SigV4S3ExpressAuthSchemeSymbol, RuntimeTypes.Auth.Signing.AwsSigningStandard.DefaultAwsSigner, "s3")
+                    builder.addTrait(SigV4S3ExpressAuthTrait())
+
+                    val authTrait = AuthTrait(mutableSetOf(SigV4S3ExpressAuthTrait.ID) + shape.expectTrait(AuthTrait::class.java).valueSet)
+                    builder.addTrait(authTrait)
+
+                    builder.build()
+                }
+                else -> shape
+            }
         }
-    }
-
-    private val setServiceDefaultAuthOptionWriter = AppendingSectionWriter { writer ->
-        writer.write("#T(),", sigV4S3ExpressSymbol)
-    }
-
-    private val configureIdentityProviderForAuthSchemeWriter = AppendingSectionWriter { writer ->
-        writer.write("#S -> config.#L", "aws.auth#sigv4s3express", ClientConfigIntegration.S3ExpressCredentialsProvider.propertyName)
     }
 
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
@@ -96,7 +93,7 @@ class S3ExpressIntegration : KotlinIntegration {
                 name = "S3Attributes"
                 namespace = "aws.sdk.kotlin.services.s3"
             }
-            writer.write("input.bucket?.let { op.context[#T.DirectoryBucket] = it }", attributesSymbol)
+            writer.write("input.bucket?.let { op.context[#T.Bucket] = it }", attributesSymbol)
         }
     }
 
@@ -113,7 +110,7 @@ class S3ExpressIntegration : KotlinIntegration {
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val interceptorSymbol = buildSymbol {
-                namespace = "aws.sdk.kotlin.services.s3"
+                namespace = "aws.sdk.kotlin.services.s3.express"
                 name = "S3ExpressCrc32ChecksumInterceptor"
             }
 
@@ -141,7 +138,7 @@ class S3ExpressIntegration : KotlinIntegration {
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val interceptorSymbol = buildSymbol {
-                namespace = "aws.sdk.kotlin.services.s3"
+                namespace = "aws.sdk.kotlin.services.s3.express"
                 name = "S3ExpressDisableChecksumInterceptor"
             }
             writer.addImport(interceptorSymbol)
