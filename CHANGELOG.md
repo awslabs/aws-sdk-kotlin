@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.61] - 02/20/2024
+
+### Features
+* (**firehose**) This release updates a few Firehose related APIs.
+* (**lambda**) Add .NET 8 (dotnet8) Runtime support to AWS Lambda.
+
+### Documentation
+* (**dynamodb**) Publishing quick fix for doc only update.
+
 ## [1.0.60] - 02/19/2024
 
 ### Features
