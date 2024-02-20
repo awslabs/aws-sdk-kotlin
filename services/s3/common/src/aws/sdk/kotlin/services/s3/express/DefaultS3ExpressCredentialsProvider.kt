@@ -98,7 +98,7 @@ internal class DefaultS3ExpressCredentialsProvider(
             // Refresh any credentials which are already expired
             refreshExpiredEntries(entries.filter { it.value.expiringCredentials.isExpired })
 
-            // delay until the next refresh
+            // Delay until the next refresh
             getNextRefreshDuration(entries).also {
                 logger.debug { "Completed credentials refresh, next attempt in $it" }
                 delay(it)
