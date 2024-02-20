@@ -2095,6 +2095,12 @@
             "brazilName": "AwsSdkKotlinBillingconductor"
         },
         {
+            "sdkId": "chatbot",
+            "namespace": "aws.sdk.kotlin.services.chatbot",
+            "artifactName": "chatbot",
+            "brazilName": "AwsSdkKotlinChatbot"
+        },
+        {
             "sdkId": "codeartifact",
             "namespace": "aws.sdk.kotlin.services.codeartifact",
             "artifactName": "codeartifact",

@@ -63,6 +63,12 @@ class ClientConfigIntegration : KotlinIntegration {
             """.trimIndent()
         }
 
+        val EnableAwsChunked: ConfigProperty = ConfigProperty {
+            name = "enableAwsChunked"
+            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
+            documentation = "Flag to enable [aws-chunked](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html) content encoding."
+        }
+
         val DisableExpressSessionAuth: ConfigProperty = ConfigProperty {
             name = "disableS3ExpressSessionAuth"
             useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
@@ -117,6 +123,7 @@ class ClientConfigIntegration : KotlinIntegration {
             ForcePathStyleProp,
             UseArnRegionProp,
             DisableMrapProp,
+            EnableAwsChunked,
             DisableExpressSessionAuth,
             ExpressCredentialsProvider,
         )

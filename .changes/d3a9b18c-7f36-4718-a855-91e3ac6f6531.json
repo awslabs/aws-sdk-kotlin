@@ -1,0 +1,8 @@
+{
+    "id": "d3a9b18c-7f36-4718-a855-91e3ac6f6531",
+    "type": "bugfix",
+    "description": "Only enable aws-chunked content encoding for S3",
+    "issues": [
+        "https://github.com/awslabs/aws-sdk-kotlin/issues/1217"
+    ]
+}

@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.0.61] - 02/20/2024
+
+### Features
+* (**firehose**) This release updates a few Firehose related APIs.
+* (**lambda**) Add .NET 8 (dotnet8) Runtime support to AWS Lambda.
+
+### Documentation
+* (**dynamodb**) Publishing quick fix for doc only update.
+
+## [1.0.60] - 02/19/2024
+
+### Features
+* (**amplify**) This release contains API changes that enable users to configure their Amplify domains with their own custom SSL/TLS certificate.
+* (**chatbot**) This release adds support for AWS Chatbot. You can now monitor, operate, and troubleshoot your AWS resources with interactive ChatOps using the AWS SDK.
+* (**mediatailor**) MediaTailor: marking #AdBreak.OffsetMillis as required.
+
+### Documentation
+* (**configservice**) Documentation updates for the AWS Config CLI
+* (**ivs**) Changed description for latencyMode in Create/UpdateChannel and Channel/ChannelSummary.
+* (**keyspaces**) Documentation updates for Amazon Keyspaces
+
 ## [1.0.59] - 02/16/2024
 
 ### Features
