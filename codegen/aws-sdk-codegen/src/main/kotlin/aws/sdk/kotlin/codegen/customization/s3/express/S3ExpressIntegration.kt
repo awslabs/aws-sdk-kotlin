@@ -22,8 +22,8 @@ import software.amazon.smithy.model.transform.ModelTransformer
 
 /**
  * An integration which handles codegen for S3 Express, such as:
- * 1. Configure auth scheme (auth scheme ID, auth option, identity provider for auth scheme)
- * 2. Add S3Client and Bucket to execution context (required for the S3 Express credentials cache key)
+ * 1. Configure auth scheme by applying a synthetic shape and trait
+ * 2. Add ExpressClient and Bucket to execution context
  * 3. Override checksums to use CRC32 instead of MD5
  * 4. Disable all checksums for s3:UploadPart
  */
@@ -32,12 +32,12 @@ class S3ExpressIntegration : KotlinIntegration {
         model.expectShape<ServiceShape>(settings.service).isS3
 
     /**
-     * Add a synthetic SigV4 S3 Express auth trait
+     * Add a synthetic SigV4 S3 Express auth trait and shape
      */
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
         val transformer = ModelTransformer.create()
 
-        // AuthIndex.getAuthSchemes looks for shapes with an AuthDefinitionTrait, so make one for SigV4 S3Express
+        // AuthIndex.getAuthSchemes looks for shapes with an AuthDefinitionTrait, so need to make one for SigV4 S3Express
         val authDefinitionTrait = AuthDefinitionTrait.builder().addTrait(SigV4S3ExpressAuthTrait.ID).build()
         val sigV4S3ExpressAuthShape = StructureShape.builder()
             .addTrait(authDefinitionTrait)
@@ -52,7 +52,7 @@ class S3ExpressIntegration : KotlinIntegration {
         val authTrait = AuthTrait(mutableSetOf(SigV4S3ExpressAuthTrait.ID) + serviceShape.expectTrait(AuthTrait::class.java).valueSet)
         serviceShapeBuilder.addTrait(authTrait)
 
-        // Add new shape and update service shape
+        // Add the new shape and update the service shape's AuthTrait
         return transformer.replaceShapes(model, listOf(sigV4S3ExpressAuthShape, serviceShapeBuilder.build()))
     }
 
