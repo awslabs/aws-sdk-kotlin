@@ -7,6 +7,7 @@ package aws.sdk.kotlin.services.s3.express
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TestTimeSource
 
@@ -51,9 +52,11 @@ public class S3ExpressCredentialsCacheTest {
         val timeSource = TestTimeSource()
 
         val sessionCredentials = Credentials("superFastAccessKey", "superSecretSecretKey", "s3SessionToken")
-        val expiringSessionCredentials = ExpiringValue(sessionCredentials, timeSource.markNow())
 
+        // credentials expire in 1 minute 1 second, just outside the refresh buffer
+        val expiringSessionCredentials = ExpiringValue(sessionCredentials, timeSource.markNow() + 1.minutes + 1.seconds)
         assertFalse(expiringSessionCredentials.isExpired)
+
         timeSource += 1.seconds
         assertTrue(expiringSessionCredentials.isExpired)
     }
