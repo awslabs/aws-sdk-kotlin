@@ -10,21 +10,14 @@ import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.model.getTrait
-import software.amazon.smithy.kotlin.codegen.model.hasTrait
+import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.OperationShape
-import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.traits.AuthTrait
-import software.amazon.smithy.model.traits.HttpChecksumRequiredTrait
-import software.amazon.smithy.model.traits.HttpHeaderTrait
+import software.amazon.smithy.model.shapes.*
+import software.amazon.smithy.model.traits.*
 import software.amazon.smithy.model.transform.ModelTransformer
 
 /**
@@ -41,24 +34,27 @@ class S3ExpressIntegration : KotlinIntegration {
     /**
      * Add a synthetic SigV4 S3 Express auth trait
      */
-    override fun preprocessModel(model: Model, settings: KotlinSettings): Model =
-        ModelTransformer.create().mapShapes(model) { shape ->
-            when {
-                shape.isServiceShape -> {
-                    val builder = (shape as ServiceShape).toBuilder()
+    override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
+        val transformer = ModelTransformer.create()
 
-                    builder.addTrait(SigV4S3ExpressAuthTrait())
+        // AuthIndex.getAuthSchemes looks for shapes with an AuthDefinitionTrait, so make one for SigV4 S3Express
+        val authDefinitionTrait = AuthDefinitionTrait.builder().addTrait(SigV4S3ExpressAuthTrait.ID).build()
+        val sigV4S3ExpressAuthShape = StructureShape.builder()
+            .addTrait(authDefinitionTrait)
+            .id(SigV4S3ExpressAuthTrait.ID)
+            .build()
 
-                    val authTrait =
-                        AuthTrait(mutableSetOf(SigV4S3ExpressAuthTrait.ID) + shape.expectTrait(AuthTrait::class.java).valueSet)
-                    builder.addTrait(authTrait)
+        val serviceShape = settings.getService(model)
+        val serviceShapeBuilder = serviceShape.toBuilder()
 
-                    builder.build()
-                }
+        serviceShapeBuilder.addTrait(SigV4S3ExpressAuthTrait())
 
-                else -> shape
-            }
-        }
+        val authTrait = AuthTrait(mutableSetOf(SigV4S3ExpressAuthTrait.ID) + serviceShape.expectTrait(AuthTrait::class.java).valueSet)
+        serviceShapeBuilder.addTrait(authTrait)
+
+        // Add new shape and update service shape
+        return transformer.replaceShapes(model, listOf(sigV4S3ExpressAuthShape, serviceShapeBuilder.build()))
+    }
 
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
         resolved + listOf(
