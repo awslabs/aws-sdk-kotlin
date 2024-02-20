@@ -4,21 +4,9 @@
  */
 package aws.sdk.kotlin.services.s3.express
 
-import aws.sdk.kotlin.services.s3.*
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.collections.LruCache
-import aws.smithy.kotlin.runtime.io.Closeable
-import aws.smithy.kotlin.runtime.telemetry.TelemetryProviderContext
-import aws.smithy.kotlin.runtime.telemetry.logging.logger
-import aws.smithy.kotlin.runtime.time.Clock
-import aws.smithy.kotlin.runtime.time.until
-import kotlinx.coroutines.*
-import kotlin.coroutines.CoroutineContext
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TimeMark
-import kotlin.time.TimeSource
 
 private const val DEFAULT_S3_EXPRESS_CACHE_SIZE: Int = 100
 
@@ -29,7 +17,7 @@ internal class S3ExpressCredentialsCache {
 
     suspend fun put(key: S3ExpressCredentialsCacheKey, value: S3ExpressCredentialsCacheValue) = lru.put(key, value)
 
-    suspend fun remove(key: S3ExpressCredentialsCacheKey) : S3ExpressCredentialsCacheValue? = lru.remove(key)
+    suspend fun remove(key: S3ExpressCredentialsCacheKey): S3ExpressCredentialsCacheValue? = lru.remove(key)
 
     public val size: Int
         get() = lru.size

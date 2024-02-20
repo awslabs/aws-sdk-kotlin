@@ -35,28 +35,30 @@ import software.amazon.smithy.model.transform.ModelTransformer
  * 4. Disable all checksums for s3:UploadPart
  */
 class S3ExpressIntegration : KotlinIntegration {
-    override fun enabledForService(model: Model, settings: KotlinSettings) = model.expectShape<ServiceShape>(settings.service).isS3
+    override fun enabledForService(model: Model, settings: KotlinSettings) =
+        model.expectShape<ServiceShape>(settings.service).isS3
 
     /**
      * Add a synthetic SigV4 S3 Express auth trait
      */
-    override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
-        return ModelTransformer.create().mapShapes(model) { shape ->
+    override fun preprocessModel(model: Model, settings: KotlinSettings): Model =
+        ModelTransformer.create().mapShapes(model) { shape ->
             when {
                 shape.isServiceShape -> {
                     val builder = (shape as ServiceShape).toBuilder()
 
                     builder.addTrait(SigV4S3ExpressAuthTrait())
 
-                    val authTrait = AuthTrait(mutableSetOf(SigV4S3ExpressAuthTrait.ID) + shape.expectTrait(AuthTrait::class.java).valueSet)
+                    val authTrait =
+                        AuthTrait(mutableSetOf(SigV4S3ExpressAuthTrait.ID) + shape.expectTrait(AuthTrait::class.java).valueSet)
                     builder.addTrait(authTrait)
 
                     builder.build()
                 }
+
                 else -> shape
             }
         }
-    }
 
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
         resolved + listOf(
@@ -69,7 +71,8 @@ class S3ExpressIntegration : KotlinIntegration {
     private val AddClientToExecutionContext = object : ProtocolMiddleware {
         override val name: String = "AddClientToExecutionContext"
 
-        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean = ctx.model.expectShape<ServiceShape>(ctx.settings.service).isS3
+        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
+            ctx.model.expectShape<ServiceShape>(ctx.settings.service).isS3
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val attributesSymbol = buildSymbol {
@@ -123,7 +126,8 @@ class S3ExpressIntegration : KotlinIntegration {
             // S3 models a header name x-amz-sdk-checksum-algorithm representing the name of the checksum algorithm used
             val checksumHeaderName = checksumAlgorithmMember?.getTrait<HttpHeaderTrait>()?.value
 
-            val checksumRequired = op.hasTrait<HttpChecksumRequiredTrait>() || httpChecksumTrait?.isRequestChecksumRequired == true
+            val checksumRequired =
+                op.hasTrait<HttpChecksumRequiredTrait>() || httpChecksumTrait?.isRequestChecksumRequired == true
 
             if (checksumRequired) {
                 writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq() ?: ""}))", interceptorSymbol)
@@ -134,7 +138,8 @@ class S3ExpressIntegration : KotlinIntegration {
     private val UploadPartDisableChecksum = object : ProtocolMiddleware {
         override val name: String = "UploadPartDisableChecksum"
 
-        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean = op.isS3UploadPart
+        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
+            op.isS3UploadPart
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val interceptorSymbol = buildSymbol {

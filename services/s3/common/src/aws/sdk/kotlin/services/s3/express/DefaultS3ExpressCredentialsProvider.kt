@@ -4,9 +4,9 @@
  */
 package aws.sdk.kotlin.services.s3.express
 
+import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.S3Attributes
 import aws.sdk.kotlin.services.s3.S3Client
-import aws.sdk.kotlin.services.s3.*
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.collections.Attributes
@@ -109,7 +109,6 @@ internal class DefaultS3ExpressCredentialsProvider(
                     } catch (e: Exception) {
                         logger.warn(e) { "Failed to refresh credentials for ${entry.key.bucket}" }
                     }
-
                 }
             }
 
@@ -139,7 +138,7 @@ internal class DefaultS3ExpressCredentialsProvider(
                 secretAccessKey = credentials.secretAccessKey,
                 sessionToken = credentials.sessionToken,
                 expiration = credentials.expiration,
-                providerName = CREDENTIALS_PROVIDER_NAME ,
+                providerName = CREDENTIALS_PROVIDER_NAME,
             ),
             expirationTimeMark,
         )
@@ -152,7 +151,6 @@ internal class DefaultS3ExpressCredentialsProvider(
         TelemetryProvider.None.loggerProvider.getLogger<DefaultS3ExpressCredentialsProvider>()
     }
 }
-
 
 /**
  * Get the [Duration] between [this] TimeMark and an [other] TimeMark

@@ -7,8 +7,8 @@ package aws.sdk.kotlin.services.s3.express
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
-import kotlin.time.TestTimeSource
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TestTimeSource
 
 public class S3ExpressCredentialsCacheTest {
     @Test
