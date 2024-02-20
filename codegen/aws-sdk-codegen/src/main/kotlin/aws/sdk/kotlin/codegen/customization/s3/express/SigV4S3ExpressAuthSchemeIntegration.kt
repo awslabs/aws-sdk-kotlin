@@ -55,12 +55,12 @@ class SigV4S3ExpressAuthSchemeIntegration : KotlinIntegration {
 
 internal val sigV4S3ExpressSymbol = buildSymbol {
     name = "sigV4S3Express"
-    namespace = "aws.sdk.kotlin.services.s3"
+    namespace = "aws.sdk.kotlin.services.s3.express"
 }
 
 internal val SigV4S3ExpressAuthSchemeSymbol = buildSymbol {
     name = "SigV4S3ExpressAuthScheme"
-    namespace = "aws.sdk.kotlin.services.s3"
+    namespace = "aws.sdk.kotlin.services.s3.express"
 }
 
 private object SigV4S3ExpressEndpointCustomization : EndpointCustomization {
@@ -73,7 +73,7 @@ open class SigV4S3ExpressAuthSchemeHandler : AuthSchemeHandler {
     override val authSchemeId: ShapeId = ShapeId.from("aws.auth#sigv4s3express")
 
     override val authSchemeIdSymbol: Symbol = buildSymbol {
-        name = "AuthSchemeId.AwsSigV4S3Express"
+        name = "AuthSchemeId(\"aws.auth#sigv4s3express\")"
         val ref = RuntimeTypes.Auth.Identity.AuthSchemeId
         objectRef = ref
         namespace = ref.namespace
