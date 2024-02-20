@@ -12,7 +12,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.io.SdkManagedBase
-import aws.smithy.kotlin.runtime.telemetry.logging.Logger
+import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
 import aws.smithy.kotlin.runtime.telemetry.logging.getLogger
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.until
@@ -24,20 +24,32 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
+/**
+ * The duration before expiration that [Credentials] are considered expired
+ */
 internal val REFRESH_BUFFER = 1.minutes
+
+/**
+ * How long to wait between cache refresh attempts if no [Credentials] are in the cache
+ */
 private val DEFAULT_REFRESH_PERIOD = 3.minutes
+
 private const val CREDENTIALS_PROVIDER_NAME = "DefaultS3ExpressCredentialsProvider"
 
+/**
+ * The default implementation of [S3ExpressCredentialsProvider]
+ * @param timeSource the time source to use. defaults to [TimeSource.Monotonic]
+ * @param clock the clock to use. defaults to [Clock.System]. note: the clock is only used to get an initial [Duration]
+ * until credentials expiration.
+ */
 internal class DefaultS3ExpressCredentialsProvider(
     private val timeSource: TimeSource = TimeSource.Monotonic,
     private val clock: Clock = Clock.System,
 ) : S3ExpressCredentialsProvider, SdkManagedBase(), CoroutineScope {
     private lateinit var client: S3Client
-    private lateinit var logger: Logger
     private val credentialsCache = S3ExpressCredentialsCache()
 
-    override val coroutineContext: CoroutineContext = Job() +
-        CoroutineName(CREDENTIALS_PROVIDER_NAME)
+    override val coroutineContext: CoroutineContext = Job() + CoroutineName(CREDENTIALS_PROVIDER_NAME)
 
     init {
         launch(coroutineContext) {
@@ -45,19 +57,16 @@ internal class DefaultS3ExpressCredentialsProvider(
         }
     }
 
-    @OptIn(ExperimentalApi::class)
     override suspend fun resolve(attributes: Attributes): Credentials {
-        client = (attributes[S3Attributes.ExpressClient] as S3Client)
-        logger = client.config.telemetryProvider.loggerProvider.getLogger<S3ExpressCredentialsProvider>()
+        client = attributes[S3Attributes.ExpressClient] as S3Client
 
         val key = S3ExpressCredentialsCacheKey(attributes[S3Attributes.Bucket], client.config.credentialsProvider.resolve(attributes))
 
-        return credentialsCache.get(key)?.takeIf { !it.isExpired }?.value
-            ?: createSessionCredentials(key.bucket).also { credentialsCache.put(key, it) }.value
+        return credentialsCache.get(key)?.expiringCredentials?.takeIf { !it.isExpired }?.value
+            ?: createSessionCredentials(key.bucket).also { credentialsCache.put(key, S3ExpressCredentialsCacheValue(it, usedSinceLastRefresh = true)) }.value
     }
 
     override fun close() = coroutineContext.cancel(null)
-
 
     /**
      * Attempt to refresh the credentials in the cache. A refresh is initiated when the `nextRefresh` time has been reached,
@@ -96,7 +105,7 @@ internal class DefaultS3ExpressCredentialsProvider(
 
                     try {
                         val refreshed = async { createSessionCredentials(entry.key.bucket) }.await()
-                        credentialsCache.put(entry.key, refreshed, false)
+                        credentialsCache.put(entry.key, S3ExpressCredentialsCacheValue(refreshed, usedSinceLastRefresh = false))
                     } catch (e: Exception) {
                         logger.warn(e) { "Failed to refresh credentials for ${entry.key.bucket}" }
                     }
@@ -106,8 +115,8 @@ internal class DefaultS3ExpressCredentialsProvider(
 
             // Find the next expiring credentials, sleep until then
             val nextExpiringEntry = entries.maxByOrNull {
-                // note: `expiresAt` is always in the future, which means the `elapsedNow` values are negative.
-                // that's the reason `maxBy` is used instead of `minBy`
+                // note: `expiresAt` is a future time, which means the `elapsedNow` values are negative
+                // and count up until expiration at t=0. that's why `maxBy` is used instead of `minBy`
                 it.value.expiringCredentials.expiresAt.elapsedNow()
             }
 
@@ -135,7 +144,15 @@ internal class DefaultS3ExpressCredentialsProvider(
             expirationTimeMark,
         )
     }
+
+    @OptIn(ExperimentalApi::class)
+    internal val logger get() = if (this::client.isInitialized) {
+        client.config.telemetryProvider.loggerProvider.getLogger<DefaultS3ExpressCredentialsProvider>()
+    } else {
+        TelemetryProvider.None.loggerProvider.getLogger<DefaultS3ExpressCredentialsProvider>()
+    }
 }
+
 
 /**
  * Get the [Duration] between [this] TimeMark and an [other] TimeMark

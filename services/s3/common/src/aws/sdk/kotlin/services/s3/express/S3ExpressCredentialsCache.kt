@@ -25,30 +25,17 @@ private const val DEFAULT_S3_EXPRESS_CACHE_SIZE: Int = 100
 internal class S3ExpressCredentialsCache {
     private val lru = LruCache<S3ExpressCredentialsCacheKey, S3ExpressCredentialsCacheValue>(DEFAULT_S3_EXPRESS_CACHE_SIZE)
 
-    suspend fun get(key: S3ExpressCredentialsCacheKey): ExpiringValue<Credentials>? = lru.get(key)?.expiringCredentials
+    suspend fun get(key: S3ExpressCredentialsCacheKey): S3ExpressCredentialsCacheValue? = lru.get(key)
 
-    suspend fun put(key: S3ExpressCredentialsCacheKey, value: ExpiringValue<Credentials>, usedSinceLastRefresh: Boolean = true) =
-        lru.put(key, S3ExpressCredentialsCacheValue(value, usedSinceLastRefresh))
+    suspend fun put(key: S3ExpressCredentialsCacheKey, value: S3ExpressCredentialsCacheValue) = lru.put(key, value)
 
-    suspend fun remove(key: S3ExpressCredentialsCacheKey) : ExpiringValue<Credentials>? =
-        lru.remove(key)?.expiringCredentials
+    suspend fun remove(key: S3ExpressCredentialsCacheKey) : S3ExpressCredentialsCacheValue? = lru.remove(key)
 
     public val size: Int
         get() = lru.size
 
     public val entries: Set<Map.Entry<S3ExpressCredentialsCacheKey, S3ExpressCredentialsCacheValue>>
         get() = lru.entries
-
-//    suspend fun get(key: S3ExpressCredentialsCacheKey): Credentials = lru
-//        .get(key)
-//        ?.takeIf { !it.expiringCredentials.isExpired }
-//        ?.let {
-//            it.usedSinceLastRefresh = true
-//            it.expiringCredentials.value
-//        }
-//        ?: (createSessionCredentials(key.bucket).also { put(key, it) }).value
-
-
 }
 
 internal data class S3ExpressCredentialsCacheKey(
@@ -58,7 +45,7 @@ internal data class S3ExpressCredentialsCacheKey(
 
 internal data class S3ExpressCredentialsCacheValue(
     val expiringCredentials: ExpiringValue<Credentials>,
-    var usedSinceLastRefresh: Boolean,
+    var usedSinceLastRefresh: Boolean = false,
 )
 
 /**
