@@ -8,28 +8,23 @@ import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
-import aws.sdk.kotlin.services.s3.model.CreateBucketConfiguration
-import aws.sdk.kotlin.services.s3.model.CreateBucketRequest
-import aws.sdk.kotlin.services.s3.model.DeleteBucketRequest
 import aws.sdk.kotlin.services.s3.model.ExpirationStatus
 import aws.sdk.kotlin.services.s3.model.LifecycleRule
 import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
-import aws.sdk.kotlin.services.s3control.S3ControlClient
+import aws.sdk.kotlin.services.s3control.*
 import aws.sdk.kotlin.services.s3control.model.*
-import aws.sdk.kotlin.services.sts.StsClient
-import aws.sdk.kotlin.services.sts.model.GetCallerIdentityRequest
-import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.io.OutputStreamWriter
 import java.net.URL
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration.Companion.milliseconds
 
 object S3TestUtils {
 
@@ -38,13 +33,32 @@ object S3TestUtils {
     // The E2E test account only has permission to operate on buckets with the prefix
     internal const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
 
-    suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
+    suspend fun getTestBucket(
+        client: S3Client,
+        region: String? = null,
+        accountId: String? = null,
+    ): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX, region, accountId)
 
-    private suspend fun getBucketWithPrefix(client: S3Client, prefix: String): String = withTimeout(60.seconds) {
-        var testBucket = client.listBuckets()
+    private suspend fun getBucketWithPrefix(
+        client: S3Client,
+        prefix: String,
+        region: String?,
+        accountId: String?,
+    ): String = withTimeout(60.seconds) {
+        val buckets = client.listBuckets()
             .buckets
             ?.mapNotNull { it.name }
-            ?.firstOrNull { it.startsWith(prefix) }
+
+        var testBucket = if (region != null) {
+            buckets?.firstOrNull {
+                client.getBucketLocation {
+                    bucket = it
+                    expectedBucketOwner = accountId
+                }.locationConstraint?.value == region && it.startsWith(prefix)
+            }
+        } else {
+            buckets?.firstOrNull { it.startsWith(prefix) }
+        }
 
         if (testBucket == null) {
             testBucket = prefix + UUID.randomUUID()
@@ -53,7 +67,7 @@ object S3TestUtils {
             client.createBucket {
                 bucket = testBucket
                 createBucketConfiguration {
-                    locationConstraint = BucketLocationConstraint.fromValue(client.config.region!!)
+                    locationConstraint = BucketLocationConstraint.fromValue(region ?: client.config.region!!)
                 }
             }
 
@@ -130,53 +144,17 @@ object S3TestUtils {
 
         return connection.responseCode
     }
-}
 
-internal suspend fun getAccountId(): String {
-    println("Getting account ID")
+    internal suspend fun createMultiRegionAccessPoint(
+        s3ControlClient: S3ControlClient,
+        multiRegionAccessPointName: String,
+        regionOneBucket: String,
+        regionTwoBucket: String,
+        testAccountId: String,
+    ) {
+        println("Creating multi region access point: $multiRegionAccessPointName")
 
-    val sts = StsClient {
-        region = "us-west-2"
-    }
-
-    val accountId = sts.getCallerIdentity(
-        GetCallerIdentityRequest { },
-    ).account
-
-    sts.close()
-
-    return accountId ?: throw Exception("Unable to get AWS account ID")
-}
-
-internal suspend fun createS3Bucket(
-    s3Client: S3Client,
-    bucketName: String,
-    location: BucketLocationConstraint,
-) {
-    println("Creating S3 bucket: $bucketName")
-
-    s3Client.createBucket(
-        CreateBucketRequest {
-            bucket = bucketName
-            createBucketConfiguration =
-                CreateBucketConfiguration {
-                    locationConstraint = location
-                }
-        },
-    )
-}
-
-internal suspend fun createMultiRegionAccessPoint(
-    s3ControlClient: S3ControlClient,
-    multiRegionAccessPointName: String,
-    regionOneBucket: String,
-    regionTwoBucket: String,
-    testAccountId: String,
-) {
-    println("Creating multi region access point: $multiRegionAccessPointName")
-
-    val createRequestToken = s3ControlClient.createMultiRegionAccessPoint(
-        CreateMultiRegionAccessPointRequest {
+        val createRequestToken = s3ControlClient.createMultiRegionAccessPoint {
             accountId = testAccountId
             details =
                 CreateMultiRegionAccessPointInput {
@@ -191,183 +169,100 @@ internal suspend fun createMultiRegionAccessPoint(
                             },
                         )
                 }
-        },
-    )
+        }
 
-    waitUntilMultiRegionAccessPointOperationCompletes(
-        s3ControlClient,
-        createRequestToken.requestTokenArn ?: throw Exception("Unable to get request token ARN"),
-        1000 * 60 * 10, // 10 minutes
-        testAccountId,
-        "createMultiRegionAccessPoint",
-    )
-}
-
-internal suspend fun getMultiRegionAccessPointArn(
-    s3ControlClient: S3ControlClient,
-    multiRegionAccessPointName: String,
-    testAccountId: String,
-): String {
-    println("Getting multi region access point arn for: $multiRegionAccessPointName")
-
-    s3ControlClient.listMultiRegionAccessPoints(
-        ListMultiRegionAccessPointsRequest {
-            accountId = testAccountId
-        },
-    ).accessPoints?.find { it.name == multiRegionAccessPointName }?.alias?.let { alias ->
-        return "arn:aws:s3::$testAccountId:accesspoint/$alias"
+        waitUntilMultiRegionAccessPointOperationCompletes(
+            s3ControlClient,
+            checkNotNull(createRequestToken.requestTokenArn) { "Unable to get request token ARN" },
+            1000 * 60 * 10, // 10 minutes
+            testAccountId,
+            "createMultiRegionAccessPoint",
+        )
     }
-    throw Exception("Unable to get multi region access point arn")
-}
 
-internal suspend fun createObject(
-    s3Client: S3Client,
-    bucketName: String,
-    keyName: String,
-) {
-    println("Creating object '$keyName' in S3 bucket: $bucketName")
+    internal suspend fun getMultiRegionAccessPointArn(
+        s3ControlClient: S3ControlClient,
+        multiRegionAccessPointName: String,
+        testAccountId: String,
+    ): String {
+        println("Getting multi region access point arn for: $multiRegionAccessPointName")
 
-    s3Client.putObject(
-        PutObjectRequest {
-            bucket = bucketName
-            key = keyName
-        },
-    )
-}
+        s3ControlClient.getMultiRegionAccessPoint {
+            accountId = testAccountId
+            name = multiRegionAccessPointName
+        }.accessPoint?.alias?.let { alias ->
+            return "arn:aws:s3::$testAccountId:accesspoint/$alias"
+        }
+        throw Exception("Unable to get multi region access point arn")
+    }
 
-internal suspend fun deleteObject(
-    s3Client: S3Client,
-    bucketName: String,
-    keyName: String,
-) {
-    println("Deleting object '$keyName' in S3 bucket: $bucketName")
+    internal suspend fun deleteMultiRegionAccessPoint(
+        s3ControlClient: S3ControlClient,
+        multiRegionAccessPointName: String,
+        testAccountId: String,
+    ) {
+        println("Deleting multi region access point: $multiRegionAccessPointName")
 
-    s3Client.deleteObject(
-        DeleteObjectRequest {
-            bucket = bucketName
-            key = keyName
-        },
-    )
-}
-
-internal suspend fun deleteMultiRegionAccessPoint(
-    s3ControlClient: S3ControlClient,
-    multiRegionAccessPointName: String,
-    testAccountId: String,
-) {
-    println("Deleting multi region access point: $multiRegionAccessPointName")
-
-    val deleteRequestToken = s3ControlClient.deleteMultiRegionAccessPoint(
-        DeleteMultiRegionAccessPointRequest {
+        val deleteRequestToken = s3ControlClient.deleteMultiRegionAccessPoint {
             accountId = testAccountId
             details =
                 DeleteMultiRegionAccessPointInput {
                     name = multiRegionAccessPointName
                 }
-        },
-    )
-
-    waitUntilMultiRegionAccessPointOperationCompletes(
-        s3ControlClient,
-        deleteRequestToken.requestTokenArn ?: throw Exception("Unable to get request token ARN"),
-        1000 * 60 * 5, // 5 minutes
-        testAccountId,
-        "deleteMultiRegionAccessPoint",
-    )
-}
-
-internal suspend fun waitUntilMultiRegionAccessPointOperationCompletes(
-    s3ControlClient: S3ControlClient,
-    request: String,
-    timeLimit: Int,
-    testAccountId: String,
-    operation: String,
-) {
-    val startTime = System.currentTimeMillis()
-
-    while (System.currentTimeMillis() - startTime < timeLimit) {
-        val status = s3ControlClient.describeMultiRegionAccessPointOperation(
-            DescribeMultiRegionAccessPointOperationRequest {
-                accountId = testAccountId
-                requestTokenArn = request
-            },
-        ).asyncOperation?.requestStatus
-
-        println("Waiting on $operation operation. Status: $status ")
-
-        if (status == "SUCCEEDED") {
-            println("$operation operation succeeded.")
-            return
         }
 
-        TimeUnit.SECONDS.sleep(10L) // Avoid constant status checks
+        waitUntilMultiRegionAccessPointOperationCompletes(
+            s3ControlClient,
+            checkNotNull(deleteRequestToken.requestTokenArn) { "Unable to get request token ARN" },
+            1000 * 60 * 5, // 5 minutes
+            testAccountId,
+            "deleteMultiRegionAccessPoint",
+        )
     }
 
-    throw Exception("The multi-region-access-point $operation operation exceeded the time limit set ($timeLimit ms)")
-}
+    private suspend fun waitUntilMultiRegionAccessPointOperationCompletes(
+        s3ControlClient: S3ControlClient,
+        request: String,
+        duration: Int,
+        testAccountId: String,
+        operation: String,
+    ) {
+        withTimeout(duration.milliseconds) {
+            while (true) {
+                val status = s3ControlClient.describeMultiRegionAccessPointOperation {
+                    accountId = testAccountId
+                    requestTokenArn = request
+                }.asyncOperation?.requestStatus
 
-internal suspend fun deleteS3Bucket(
-    s3Client: S3Client,
-    bucketName: String,
-) {
-    println("Deleting S3 bucket: $bucketName")
+                println("Waiting on $operation operation. Status: $status ")
 
-    s3Client.deleteBucket(
-        DeleteBucketRequest {
-            bucket = bucketName
-        },
-    )
-}
+                if (status == "SUCCEEDED") {
+                    println("$operation operation succeeded.")
+                    return@withTimeout
+                }
 
-internal suspend fun objectWasCreated(
-    s3: S3Client,
-    bucketName: String,
-    keyName: String,
-): Boolean {
-    println("Checking if object '$keyName' was created in S3 bucket: $bucketName")
+                if (status == "FAILED") throw Exception("$operation operation failed.")
 
-    val search = s3.listObjectsV2(
-        ListObjectsV2Request {
-            bucket = bucketName
-        },
-    ).contents
+                delay(10.seconds) // Avoid constant status checks
+            }
+        }
+    }
 
-    return search?.find { it.key == keyName } != null
-}
+    internal suspend fun multiRegionAccessPointWasCreated(
+        s3Control: S3ControlClient,
+        multiRegionAccessPointName: String,
+        testAccountId: String,
+    ): Boolean {
+        println("Checking if multi region access point was created: $multiRegionAccessPointName")
 
-internal suspend fun s3BucketWasCreated(
-    s3: S3Client,
-    bucketName: String,
-): Boolean {
-    println("Checking if S3 bucket was created: $bucketName")
-
-    val search = s3.listBuckets(
-        ListBucketsRequest {},
-    ).buckets
-
-    return search?.find { it.name == bucketName } != null
-}
-
-internal suspend fun multiRegionAccessPointWasCreated(
-    s3Control: S3ControlClient,
-    multiRegionAccessPointName: String,
-    testAccountId: String,
-): Boolean {
-    println("Checking if multi region access point was created: $multiRegionAccessPointName")
-
-    val search = s3Control.listMultiRegionAccessPoints(
-        ListMultiRegionAccessPointsRequest {
-            accountId = testAccountId
-        },
-    ).accessPoints?.find { it.name == multiRegionAccessPointName }
-
-    return search != null
-}
-
-internal fun closeClients(
-    vararg clients: SdkClient,
-) {
-    clients.forEach { client ->
-        client.close()
+        try {
+            s3Control.getMultiRegionAccessPoint {
+                accountId = testAccountId
+                name = multiRegionAccessPointName
+            }
+        } catch (ex: Throwable) {
+            return false
+        }
+        return true
     }
 }

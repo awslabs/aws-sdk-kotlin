@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
-import aws.sdk.kotlin.gradle.kmp.kotlin
+import aws.sdk.kotlin.gradle.kmp.*
 import aws.sdk.kotlin.gradle.util.typedProp
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.time.LocalDateTime
@@ -75,10 +75,6 @@ subprojects {
                             implementation(libraries.kotlin.test.junit5)
                             implementation(project(":tests:e2e-test-util"))
                             implementation(libraries.slf4j.simple)
-                            implementation("aws.sdk.kotlin:s3control:+")
-                            implementation("aws.sdk.kotlin:sts:+")
-                            implementation("aws.smithy.kotlin:aws-signing-crt:+")
-                            implementation("io.kotest:kotest-assertions-core:5.8.0")
                         }
                     }
 
@@ -89,6 +85,19 @@ subprojects {
                     }
 
                     tasks.register<Test>("e2eTest") {
+                        if (project.name == "s3") {
+                            dependencies {
+                                project.parent?.subprojects?.forEach {
+                                    println("\n\n\n\n\n")
+                                    println(it.name)
+                                    println("\n\n\n\n\n")
+                                }
+                                implementation("aws.sdk.kotlin:s3control:+") // services:s3control (if present)
+                                implementation("aws.sdk.kotlin:sts:+") // services:sts (if present)
+                                implementation("aws.smithy.kotlin:aws-signing-crt:+") // :runtime:auth:aws-signing-crt (in smithy)
+                            }
+                        }
+
                         description = "Run e2e service tests"
                         group = "verification"
 
