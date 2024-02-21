@@ -8,6 +8,7 @@ import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.S3Attributes
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.smithy.kotlin.runtime.ExperimentalApi
+import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.get
@@ -48,7 +49,7 @@ internal class DefaultS3ExpressCredentialsProvider(
     private val timeSource: TimeSource = TimeSource.Monotonic,
     private val clock: Clock = Clock.System,
     private val credentialsCache: S3ExpressCredentialsCache = S3ExpressCredentialsCache(),
-) : S3ExpressCredentialsProvider, SdkManagedBase(), CoroutineScope {
+) : S3ExpressCredentialsProvider, CloseableCredentialsProvider, SdkManagedBase(), CoroutineScope {
     private lateinit var client: S3Client
     override val coroutineContext: CoroutineContext = Job() + CoroutineName(CREDENTIALS_PROVIDER_NAME)
 
