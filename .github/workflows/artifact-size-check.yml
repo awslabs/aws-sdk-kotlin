@@ -1,0 +1,68 @@
+name: Artifact Size Check
+
+on:
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ci-artifact-size-check-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BOOTSTRAP_SERVICES: +s3,+dynamodb,+sts,+polly
+
+jobs:
+  check-sizes:
+    if: ${{ github.event_name == "pull_request" }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check artifact sizes
+        run: | 
+          ./gradlew :codegen:sdk:bootstrap -Paws.services=${{ env.BOOTSTRAP_SERVICES }}
+          ./gradlew artifactMetrics
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
+          aws-region: us-west-2
+      - name: Compare metrics
+        run: |
+          ./gradlew checkArtifactMetrics
+      - name: Publish PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('node:fs');
+            const content = fs.readFileSync('./build/reports/metrics/artifact-summary.md');
+            await github.rest.issues.createComment({
+              issue_number: ${{ github.event.number }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: content,
+            });
+
+  publish-metrics:
+    if: ${{ github.event_name == "release" }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check artifact sizes
+        run: | 
+          ./gradlew :codegen:sdk:bootstrap -Paws.services=${{ env.BOOTSTRAP_SERVICES }} 
+          ./gradlew artifactMetrics
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
+          aws-region: us-west-2
+      - name: Publish new metrics
+        run: |
+          aws --region us-west-2 cloudwatch put-metric-data --namespace "AwsSdkKotlin/ArtifactMetrics" --metric-data file://build/reports/metrics/artifacts.json

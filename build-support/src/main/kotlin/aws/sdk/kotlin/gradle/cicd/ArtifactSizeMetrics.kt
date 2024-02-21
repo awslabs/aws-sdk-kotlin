@@ -4,6 +4,12 @@
  */
 package aws.sdk.kotlin.gradle.cicd
 
+import aws.sdk.kotlin.services.cloudwatch.CloudWatchClient
+import aws.sdk.kotlin.services.cloudwatch.getMetricStatistics
+import aws.sdk.kotlin.services.cloudwatch.listMetrics
+import aws.sdk.kotlin.services.cloudwatch.model.*
+import aws.smithy.kotlin.runtime.io.use
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -11,15 +17,20 @@ import kotlinx.serialization.json.Json
 import org.gradle.api.*
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.*
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import java.time.Instant
+import kotlin.math.abs
+import kotlin.time.Duration.Companion.days
+import aws.smithy.kotlin.runtime.time.Instant as SmithyKotlinInstant
+
+private const val REPORT_PATH = "reports/metrics/artifacts.json"
+private const val GROUP_NAME = "cicd"
+private const val CW_NAMESPACE = "AwsSdkKotlin/ArtifactMetrics"
+private const val TRAILING_DAYS = 30
 
 /**
  * Generate artifact size statistics that can be used for tracking artifact sizes over time.
@@ -53,9 +64,10 @@ class ArtifactSizeMetrics : Plugin<Project> {
     }
 
     private fun Project.createSummaryTask(dependencies: List<TaskProvider<ArtifactMetricsTask>>) {
+        val jsonFile = layout.buildDirectory.file(REPORT_PATH)
         tasks.register("artifactMetrics") {
+            group = GROUP_NAME
             dependsOn(dependencies)
-            val jsonFile = layout.buildDirectory.file("reports/metrics/artifacts.json")
             outputs.file(jsonFile)
             doLast {
                 val json = Json { prettyPrint = true }
@@ -73,10 +85,17 @@ class ArtifactSizeMetrics : Plugin<Project> {
                 }
             }
         }
+
+        tasks.register<CheckMetricsTask>("checkArtifactMetrics") {
+            group = GROUP_NAME
+            metricsFile.set(jsonFile)
+        }
     }
 
     private fun Project.createMetricsTask(): TaskProvider<ArtifactMetricsTask> {
         val metricsTask = tasks.register<ArtifactMetricsTask>("artifactMetrics") {
+            group = GROUP_NAME
+
             onlyIf {
                 tasks.findByName("jvmJar") != null
             }
@@ -84,13 +103,11 @@ class ArtifactSizeMetrics : Plugin<Project> {
             val jarTasks = tasks.withType<Jar>()
             dependsOn(jarTasks)
         }
-        // configureCleanTask()
         return metricsTask
     }
 }
 
 private abstract class ArtifactMetricsTask : DefaultTask() {
-
     @get:OutputFile
     abstract val metricsFile: RegularFileProperty
 
@@ -98,7 +115,7 @@ private abstract class ArtifactMetricsTask : DefaultTask() {
     abstract val generateRuntimeClosure: Property<Boolean>
 
     init {
-        metricsFile.convention(project.layout.buildDirectory.file("reports/metrics/artifacts.json"))
+        metricsFile.convention(project.layout.buildDirectory.file(REPORT_PATH))
         generateRuntimeClosure.convention(false)
     }
 
@@ -125,6 +142,91 @@ private abstract class ArtifactMetricsTask : DefaultTask() {
         val json = Json { prettyPrint = true }
         val content = json.encodeToString(metrics)
         metricsFile.asFile.get().writeText(content)
+    }
+}
+
+private abstract class CheckMetricsTask : DefaultTask() {
+    @get:InputFile
+    abstract val metricsFile: RegularFileProperty
+
+    @get:OutputFile
+    abstract val summaryMarkdown: RegularFileProperty
+    init {
+        metricsFile.convention(project.layout.buildDirectory.file(REPORT_PATH))
+        summaryMarkdown.convention(project.layout.buildDirectory.file("reports/metrics/artifact-summary.md"))
+    }
+
+    @TaskAction
+    fun check() {
+        runBlocking {
+            val localMetrics = Json.decodeFromString<List<CloudwatchMetric>>(metricsFile.get().asFile.readText())
+            CloudWatchClient.fromEnvironment().use { cw ->
+                val metrics = cw.listMetrics {
+                    namespace = CW_NAMESPACE
+                }.metrics.orEmpty()
+
+                val metricsAvailable = localMetrics.filter { lmetric ->
+                    metrics.find { rmetric ->
+                        val ldimensions = lmetric.dimensions.map(CloudwatchDimension::toSdkDimension).sortedBy { it.name }
+                        val rdimensions = rmetric.dimensions.orEmpty().sortedBy { it.name }
+                        rmetric.namespace == CW_NAMESPACE &&
+                            rmetric.metricName == lmetric.metricName &&
+                            ldimensions == rdimensions
+                    } != null
+                }
+
+                val content = StringBuilder()
+
+                // MetricName, Dimensions, KB, DeltaPct
+                content.append(String.format("| %22s | %40s | %12s | %12s |\n", "MetricName", "Dimensions", "Bytes", "DeltaPct"))
+                content.append("| --- | --- | --- | --- |\n")
+                val fmt = "| %22s | %40s | %,12d | %+12.2f%% |\n"
+                metricsAvailable.forEach { lmetric ->
+                    val data = getMetricStats(cw, lmetric)
+                    val minAvg = data.maxBy { it.average!! }.average!!
+                    val maxAvg = data.minBy { it.average!! }.average!!
+
+                    val avg = if (abs(lmetric.value.toDouble() - minAvg) > abs(lmetric.value.toDouble() - maxAvg)) {
+                        minAvg
+                    } else {
+                        maxAvg
+                    }
+
+                    val deltaPct = (lmetric.value.toDouble() - avg) / avg * 100
+
+                    val formattedDimensions = lmetric
+                        .dimensions
+                        .sortedBy { it.name }
+                        .joinToString(separator = ",") {
+                            "${it.name}=${it.value}"
+                        }
+
+                    val row = fmt.format(lmetric.metricName, formattedDimensions, lmetric.value, deltaPct)
+                    content.append(row)
+                }
+
+                summaryMarkdown.get().asFile.writeText(content.toString())
+            }
+        }
+    }
+
+    private suspend fun getMetricStats(cw: CloudWatchClient, metric: CloudwatchMetric): List<Datapoint> {
+        val result = cw.getMetricStatistics {
+            metricName = metric.metricName
+            namespace = CW_NAMESPACE
+            dimensions = metric.dimensions.map(CloudwatchDimension::toSdkDimension)
+            unit = StandardUnit.Bytes
+            endTime = SmithyKotlinInstant.now()
+            startTime = SmithyKotlinInstant.now() - TRAILING_DAYS.days
+            period = 3600
+            statistics = listOf(
+                Statistic.Minimum,
+                Statistic.Maximum,
+                Statistic.Average,
+            )
+        }
+
+        return result.datapoints.orEmpty()
     }
 }
 
@@ -190,4 +292,9 @@ private data class CloudwatchDimension(
     val name: String,
     @SerialName("Value")
     val value: String,
-)
+) {
+    fun toSdkDimension(): Dimension = Dimension {
+        name = this@CloudwatchDimension.name
+        value = this@CloudwatchDimension.value
+    }
+}
