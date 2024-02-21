@@ -39,7 +39,7 @@ internal data class S3ExpressCredentialsCacheValue(
 /**
  * A value with an expiration [TimeMark]
  */
-internal data class ExpiringValue<T> (val value: T, val expiresAt: TimeMark)
+internal data class ExpiringValue<T>(val value: T, val expiresAt: TimeMark)
 
 internal val ExpiringValue<Credentials>.isExpired: Boolean get() = (expiresAt - REFRESH_BUFFER).hasPassedNow()
 
