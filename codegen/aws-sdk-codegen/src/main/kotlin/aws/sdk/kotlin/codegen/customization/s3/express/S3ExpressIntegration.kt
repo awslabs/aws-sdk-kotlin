@@ -49,10 +49,15 @@ class S3ExpressIntegration : KotlinIntegration {
 
             propertyType = ConfigPropertyType.Custom(
                 render = { _, writer ->
-                    writer.write("public val #1L: #2T = builder.#1L ?: #3T()", name, symbol, buildSymbol {
-                        name = "DefaultS3ExpressCredentialsProvider"
-                        namespace = "aws.sdk.kotlin.services.s3.express"
-                    })
+                    writer.write(
+                        "public val #1L: #2T = builder.#1L ?: #3T()",
+                        name,
+                        symbol,
+                        buildSymbol {
+                            name = "DefaultS3ExpressCredentialsProvider"
+                            namespace = "aws.sdk.kotlin.services.s3.express"
+                        },
+                    )
                 },
                 renderBuilder = { prop, writer ->
                     prop.documentation?.let(writer::dokka)

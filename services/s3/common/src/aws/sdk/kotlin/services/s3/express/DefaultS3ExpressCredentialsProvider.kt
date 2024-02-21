@@ -41,7 +41,7 @@ internal class DefaultS3ExpressCredentialsProvider(
     private val credentialsCache: S3ExpressCredentialsCache = S3ExpressCredentialsCache(),
     private val refreshBuffer: Duration = 1.minutes,
 ) : CloseableCredentialsProvider, SdkManagedBase(), CoroutineScope {
-    public constructor(): this(TimeSource.Monotonic)
+    public constructor() : this(TimeSource.Monotonic)
 
     private lateinit var client: S3Client
     override val coroutineContext: CoroutineContext = Job() + CoroutineName("DefaultS3ExpressCredentialsProvider")
