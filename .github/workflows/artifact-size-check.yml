@@ -16,7 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  BOOTSTRAP_SERVICES: +s3,+dynamodb,+sts,+polly
+#  BOOTSTRAP_SERVICES: +s3,+dynamodb,+sts,+polly
+  BOOTSTRAP_SERVICES: +s3
 
 jobs:
   check-sizes:
@@ -24,6 +25,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Configure JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: 17
+          cache: 'gradle'
       - name: Check artifact sizes
         run: | 
           ./gradlew :codegen:sdk:bootstrap -Paws.services=${{ env.BOOTSTRAP_SERVICES }}
@@ -54,6 +61,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Configure JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: 17
+          cache: 'gradle'
       - name: Check artifact sizes
         run: | 
           ./gradlew :codegen:sdk:bootstrap -Paws.services=${{ env.BOOTSTRAP_SERVICES }} 

@@ -165,7 +165,7 @@ private abstract class CheckMetricsTask : DefaultTask() {
                     namespace = CW_NAMESPACE
                 }.metrics.orEmpty()
 
-                val metricsAvailable = localMetrics.filter { lmetric ->
+                val metricsWithHistory = localMetrics.filter { lmetric ->
                     metrics.find { rmetric ->
                         val ldimensions = lmetric.dimensions.map(CloudwatchDimension::toSdkDimension).sortedBy { it.name }
                         val rdimensions = rmetric.dimensions.orEmpty().sortedBy { it.name }
@@ -175,37 +175,59 @@ private abstract class CheckMetricsTask : DefaultTask() {
                     } != null
                 }
 
+                val newMetrics = localMetrics.filterNot { metricsWithHistory.contains(it) }
+
                 val content = StringBuilder()
 
-                // MetricName, Dimensions, KB, DeltaPct
                 content.append(String.format("| %22s | %40s | %12s | %12s |\n", "MetricName", "Dimensions", "Bytes", "DeltaPct"))
                 content.append("| --- | --- | --- | --- |\n")
                 val fmt = "| %22s | %40s | %,12d | %+12.2f%% |\n"
-                metricsAvailable.forEach { lmetric ->
+
+                val metricSummaries = metricsWithHistory.map { lmetric ->
                     val data = getMetricStats(cw, lmetric)
-                    val minAvg = data.maxBy { it.average!! }.average!!
-                    val maxAvg = data.minBy { it.average!! }.average!!
+                    MetricSummary(lmetric, data)
+                }
 
-                    val avg = if (abs(lmetric.value.toDouble() - minAvg) > abs(lmetric.value.toDouble() - maxAvg)) {
-                        minAvg
-                    } else {
-                        maxAvg
-                    }
+                val newMetricSummaries = newMetrics.map { MetricSummary(it, emptyList()) }
 
-                    val deltaPct = (lmetric.value.toDouble() - avg) / avg * 100
+                val allSummaries = metricSummaries + newMetricSummaries
 
-                    val formattedDimensions = lmetric
+                allSummaries.forEach { summary ->
+                    val formattedDimensions = summary.metric
                         .dimensions
                         .sortedBy { it.name }
                         .joinToString(separator = ",") {
                             "${it.name}=${it.value}"
                         }
 
-                    val row = fmt.format(lmetric.metricName, formattedDimensions, lmetric.value, deltaPct)
+                    val row = fmt.format(summary.metric.metricName, formattedDimensions, summary.metric.value, summary.deltaPctChange())
                     content.append(row)
                 }
 
                 summaryMarkdown.get().asFile.writeText(content.toString())
+            }
+        }
+    }
+
+    private data class MetricSummary(
+        val metric: CloudwatchMetric,
+        val historicalData: List<Datapoint>,
+    ) {
+
+        fun deltaPctChange(): Double {
+            val minAvg = historicalData.maxByOrNull { it.average!! }?.average
+            val maxAvg = historicalData.minByOrNull { it.average!! }?.average
+
+            return if (minAvg != null && maxAvg != null) {
+                val avg = if (abs(metric.value.toDouble() - minAvg) > abs(metric.value.toDouble() - maxAvg)) {
+                    minAvg
+                } else {
+                    maxAvg
+                }
+
+                (metric.value.toDouble() - avg) / avg * 100
+            } else {
+                0.0
             }
         }
     }
