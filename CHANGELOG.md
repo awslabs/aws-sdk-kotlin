@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.62] - 02/21/2024
+
+### Features
+* (**iotevents**) Increase the maximum length of descriptions for Inputs, Detector Models, and Alarm Models
+* (**lookoutequipment**) This release adds a field exposing model quality to read APIs for models. It also adds a model quality field to the API response when creating an inference scheduler.
+* (**medialive**) MediaLive now supports the ability to restart pipelines in a running channel.
+* (**ssm**) This release adds support for sharing Systems Manager parameters with other AWS accounts.
+
+### Fixes
+* [#1208](https://github.com/awslabs/aws-sdk-kotlin/issues/1208) Profile credentials provider is no longer marked as internal API
+* [#1217](https://github.com/awslabs/aws-sdk-kotlin/issues/1217) Only enable aws-chunked content encoding for S3
+
 ## [1.0.61] - 02/20/2024
 
 ### Features
