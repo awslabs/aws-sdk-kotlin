@@ -36,7 +36,8 @@ import java.util.*
  * Register support for the `sigv4-s3express` auth scheme.
  */
 class SigV4S3ExpressAuthSchemeIntegration : KotlinIntegration {
-    override val order: Byte = -50
+    // Needs to run after `SigV4AuthSchemeIntegration`
+    override val order: Byte = -51
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean = model.expectShape<ServiceShape>(settings.service).isS3
 
@@ -81,7 +82,7 @@ class SigV4S3ExpressAuthSchemeHandler : AuthSchemeHandler {
     }
 
     override fun identityProviderAdapterExpression(writer: KotlinWriter) {
-        writer.write("config.#L", ClientConfigIntegration.ExpressCredentialsProvider.propertyName)
+        writer.write("config.#L", S3ExpressIntegration.ExpressCredentialsProvider.propertyName)
     }
 
     override fun authSchemeProviderInstantiateAuthOptionExpr(
