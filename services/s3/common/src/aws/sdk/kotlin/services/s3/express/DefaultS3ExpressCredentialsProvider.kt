@@ -13,7 +13,6 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.io.SdkManagedBase
-import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
 import aws.smithy.kotlin.runtime.telemetry.logging.getLogger
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.time.until
@@ -21,141 +20,71 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TimeSource
 
 /**
- * The duration before expiration that [Credentials] are considered expired
- */
-internal val REFRESH_BUFFER = 1.minutes
-
-/**
- * How long to wait between cache refresh attempts if no [Credentials] are in the cache
- */
-internal val DEFAULT_REFRESH_PERIOD = 3.minutes
-
-private const val CREDENTIALS_PROVIDER_NAME = "DefaultS3ExpressCredentialsProvider"
-
-/**
- * The default implementation of [S3ExpressCredentialsProvider]
+ * The default implementation of [S3ExpressCredentialsProvider]. Performs best-effort asynchronous refresh if the
+ * cached credentials are within their refresh window ([REFRESH_BUFFER] away from expiration) during a call to [resolve].
+ * Otherwise, performs synchronous refresh.
+ *
  * @param timeSource the time source to use. defaults to [TimeSource.Monotonic]
  * @param clock the clock to use. defaults to [Clock.System]. note: the clock is only used to get an initial [Duration]
  * until credentials expiration.
  * @param credentialsCache an [S3ExpressCredentialsCache] to be used for caching session credentials, defaults to
  * [S3ExpressCredentialsCache].
+ * @param refreshBuffer an optional [Duration] representing the duration before expiration that [Credentials]
+ * are considered refreshable, defaults to 1 minute.
  */
 internal class DefaultS3ExpressCredentialsProvider(
     private val timeSource: TimeSource.WithComparableMarks = TimeSource.Monotonic,
     private val clock: Clock = Clock.System,
     private val credentialsCache: S3ExpressCredentialsCache = S3ExpressCredentialsCache(),
+    private val refreshBuffer: Duration = 1.minutes,
 ) : S3ExpressCredentialsProvider, CloseableCredentialsProvider, SdkManagedBase(), CoroutineScope {
     private lateinit var client: S3Client
-    override val coroutineContext: CoroutineContext = Job() + CoroutineName(CREDENTIALS_PROVIDER_NAME)
-
-    init {
-        launch(coroutineContext) {
-            refresh()
-        }
-    }
+    override val coroutineContext: CoroutineContext = Job() + CoroutineName("DefaultS3ExpressCredentialsProvider")
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         client = attributes[S3Attributes.ExpressClient] as S3Client
 
         val key = S3ExpressCredentialsCacheKey(attributes[S3Attributes.Bucket], client.config.credentialsProvider.resolve(attributes))
 
-        return credentialsCache.get(key)?.expiringCredentials?.takeIf { !it.isExpired }?.value
-            ?: createSessionCredentials(key.bucket, client).also { credentialsCache.put(key, S3ExpressCredentialsCacheValue(it, usedSinceLastRefresh = true)) }.value
+        return credentialsCache.get(key)
+            ?.takeIf { !it.expiringCredentials.isExpired }
+            ?.also {
+                if (it.expiringCredentials.isExpiringWithin(refreshBuffer)) {
+                    it.sfg.singleFlight {
+                        logger.trace { "Credentials for ${key.bucket} are within their refresh window, performing asynchronous refresh..." }
+                        launch(coroutineContext) {
+                            try {
+                                val sessionCredentials = createSessionCredentials(key.bucket, client)
+                                credentialsCache.put(key, S3ExpressCredentialsCacheValue(sessionCredentials))
+                            } catch (e: Exception) {
+                                logger.warn(e) { "Asynchronous refresh for ${key.bucket} failed." }
+                            }
+
+                        }
+                    }
+                }
+            }
+            ?.expiringCredentials
+            ?.value
+            ?: createSessionCredentials(key.bucket, client).also {
+                credentialsCache.put(key, S3ExpressCredentialsCacheValue(it))
+            }.value
     }
 
     override fun close() = coroutineContext.cancel(null)
 
-    /**
-     * Attempt to refresh the credentials in the cache. A refresh is initiated when the `nextRefresh` time has been reached,
-     * which is either `DEFAULT_REFRESH_PERIOD` or the soonest credentials expiration time (minus a buffer), whichever comes first.
-     */
-    internal suspend fun refresh() {
-        while (isActive) {
-            if (!this::client.isInitialized) {
-                delay(5.seconds)
-                continue
-            } else if (credentialsCache.size == 0) {
-                logger.trace { "Cache is empty, waiting..." }
-                delay(5.seconds)
-                continue
-            }
-
-            val entries = credentialsCache.entries
-
-            // Evict any credentials that weren't used since the last refresh
-            entries.filter { !it.value.usedSinceLastRefresh }.forEach {
-                logger.debug { "Credentials for ${it.key.bucket} were not used since last refresh, evicting..." }
-                credentialsCache.remove(it.key)
-            }
-
-            // Mark all credentials as not used since last refresh
-            entries.forEach { it.value.usedSinceLastRefresh = false }
-
-            // Refresh any credentials which are already expired
-            refreshExpiredEntries(entries.filter { it.value.expiringCredentials.isExpired })
-
-            // Delay until the next refresh
-            getNextRefreshDuration(entries).also {
-                logger.debug { "Completed credentials refresh, next attempt in $it" }
-                delay(it)
-            }
+    internal suspend fun createSessionCredentials(bucket: String, client: S3Client): ExpiringValue<Credentials> =
+        client.createSession { this.bucket = bucket }.credentials!!.let {
+            ExpiringValue(
+                Credentials(it.accessKeyId, it.secretAccessKey, it.sessionToken, it.expiration),
+                expiresAt = timeSource.markNow() + clock.now().until(it.expiration),
+            )
         }
-    }
-
-    /**
-     * Attempt to refresh expired credentials cache entries.
-     */
-    internal suspend fun refreshExpiredEntries(expiredEntries: Collection<S3ExpressCredentialsCacheEntry>, client: S3Client = this.client) {
-        supervisorScope {
-            expiredEntries.forEach { entry ->
-                logger.debug { "Credentials for ${entry.key.bucket} are expired, refreshing..." }
-
-                try {
-                    val refreshed = async { createSessionCredentials(entry.key.bucket, client) }.await()
-                    credentialsCache.put(entry.key, S3ExpressCredentialsCacheValue(refreshed, usedSinceLastRefresh = false))
-                } catch (e: Exception) {
-                    logger.warn(e) { "Failed to refresh credentials for ${entry.key.bucket}" }
-                }
-            }
-        }
-    }
-
-    internal fun getNextRefreshDuration(entries: Collection<S3ExpressCredentialsCacheEntry>): Duration {
-        val nextExpiringEntry = entries.maxByOrNull {
-            // note: `expiresAt` is a future time, which means the `elapsedNow` values are negative
-            // and count up until expiration at t=0. that's why `maxBy` is used instead of `minBy`
-            it.value.expiringCredentials.expiresAt.elapsedNow()
-        }
-
-        return nextExpiringEntry?.let {
-            it.value.expiringCredentials.expiresAt - timeSource.markNow() - REFRESH_BUFFER
-        } ?: DEFAULT_REFRESH_PERIOD
-    }
-
-    internal suspend fun createSessionCredentials(bucket: String, client: S3Client): ExpiringValue<Credentials> {
-        val credentials = client.createSession { this.bucket = bucket }.credentials!!
-        val expirationTimeMark = timeSource.markNow() + clock.now().until(credentials.expiration)
-
-        return ExpiringValue(
-            Credentials(
-                accessKeyId = credentials.accessKeyId,
-                secretAccessKey = credentials.secretAccessKey,
-                sessionToken = credentials.sessionToken,
-                expiration = credentials.expiration,
-                providerName = CREDENTIALS_PROVIDER_NAME,
-            ),
-            expirationTimeMark,
-        )
-    }
 
     @OptIn(ExperimentalApi::class)
-    internal val logger get() = if (this::client.isInitialized) {
+    internal val logger get() =
         client.config.telemetryProvider.loggerProvider.getLogger<DefaultS3ExpressCredentialsProvider>()
-    } else {
-        TelemetryProvider.None.loggerProvider.getLogger<DefaultS3ExpressCredentialsProvider>()
-    }
 }
