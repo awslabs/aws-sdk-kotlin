@@ -22,7 +22,6 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
 /**
@@ -46,7 +45,7 @@ private const val CREDENTIALS_PROVIDER_NAME = "DefaultS3ExpressCredentialsProvid
  * [S3ExpressCredentialsCache].
  */
 internal class DefaultS3ExpressCredentialsProvider(
-    private val timeSource: TimeSource = TimeSource.Monotonic,
+    private val timeSource: TimeSource.WithComparableMarks = TimeSource.Monotonic,
     private val clock: Clock = Clock.System,
     private val credentialsCache: S3ExpressCredentialsCache = S3ExpressCredentialsCache(),
 ) : S3ExpressCredentialsProvider, CloseableCredentialsProvider, SdkManagedBase(), CoroutineScope {
@@ -133,7 +132,7 @@ internal class DefaultS3ExpressCredentialsProvider(
         }
 
         return nextExpiringEntry?.let {
-            timeSource.markNow().until(it.value.expiringCredentials.expiresAt) - REFRESH_BUFFER
+            it.value.expiringCredentials.expiresAt - timeSource.markNow() - REFRESH_BUFFER
         } ?: DEFAULT_REFRESH_PERIOD
     }
 
@@ -160,8 +159,3 @@ internal class DefaultS3ExpressCredentialsProvider(
         TelemetryProvider.None.loggerProvider.getLogger<DefaultS3ExpressCredentialsProvider>()
     }
 }
-
-/**
- * Get the [Duration] between [this] TimeMark and an [other] TimeMark
- */
-internal fun TimeMark.until(other: TimeMark): Duration = (this.elapsedNow().absoluteValue - other.elapsedNow().absoluteValue).absoluteValue

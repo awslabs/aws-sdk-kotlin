@@ -13,10 +13,10 @@ import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.time.ManualClock
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
+import kotlin.time.ComparableTimeMark
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TestTimeSource
-import kotlin.time.TimeMark
 
 class DefaultS3ExpressCredentialsProviderTest {
     @Test
@@ -161,7 +161,7 @@ class DefaultS3ExpressCredentialsProviderTest {
      * [bucket], and optional [bootstrapCredentials] and [sessionCredentials].
      */
     private fun getEntry(
-        expiration: TimeMark,
+        expiration: ComparableTimeMark,
         bucket: String = "bucket",
         bootstrapCredentials: Credentials = Credentials(accessKeyId = "accessKeyId", secretAccessKey = "secretAccessKey", sessionToken = "sessionToken"),
         sessionCredentials: Credentials = Credentials(accessKeyId = "s3AccessKeyId", secretAccessKey = "s3SecretAccessKey", sessionToken = "s3SessionToken"),
