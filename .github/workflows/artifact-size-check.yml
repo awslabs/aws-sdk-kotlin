@@ -51,7 +51,7 @@ jobs:
         with:
           script: |
             const fs = require('node:fs');
-            const content = fs.readFileSync('./aws-sdk-kotlin/build/reports/metrics/artifact-summary.md');
+            const content = fs.readFileSync('./aws-sdk-kotlin/build/reports/metrics/artifact-summary.md', 'utf8');
             await github.rest.issues.createComment({
               issue_number: ${{ github.event.number }},
               owner: context.repo.owner,
