@@ -819,6 +819,24 @@ internal const val parserTestSuiteJson = """
           }
         }
       }
+    },
+    {
+      "name": "SSO Session in config file with same name as default profile",
+      "input": {
+        "configFile": "[default]\nname = profile-default\n[sso-session default]\nname = sso-session-default"
+      },
+      "output": {
+        "profiles": {
+          "default": {
+            "name": "profile-default"
+          }
+        },
+        "sso-sessions": {
+            "default": {
+                "name": "sso-session-default"
+            }
+        }
+      }
     }
   ]
 }

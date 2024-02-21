@@ -169,7 +169,7 @@ private fun mergeSections(tokenIndexMap: Map<Token.Section, Map<String, AwsConfi
             when (entry.key.hasSectionPrefix) {
                 true -> true
                 false -> {
-                    val prefixVariantExists = tokenIndexMap.keys.any { it.hasSectionPrefix && it.name == entry.key.name }
+                    val prefixVariantExists = tokenIndexMap.keys.any { it.hasSectionPrefix && it.name == entry.key.name && it.type == entry.key.type }
                     !prefixVariantExists
                 }
             }
