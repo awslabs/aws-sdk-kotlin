@@ -53,11 +53,24 @@ public class S3ExpressCredentialsCacheTest {
 
         val sessionCredentials = Credentials("superFastAccessKey", "superSecretSecretKey", "s3SessionToken")
 
-        // credentials expire in 1 minute 1 second, just outside the refresh buffer
-        val expiringSessionCredentials = ExpiringValue(sessionCredentials, timeSource.markNow() + 1.minutes + 1.seconds)
+        val expiringSessionCredentials = ExpiringValue(sessionCredentials, timeSource.markNow() + 5.minutes)
         assertFalse(expiringSessionCredentials.isExpired)
 
-        timeSource += 1.seconds
+        timeSource += 5.minutes + 1.seconds // advance just past the expiration time
         assertTrue(expiringSessionCredentials.isExpired)
+    }
+
+    @Test
+    fun testIsWithin() = runTest {
+        val timeSource = TestTimeSource()
+
+        val sessionCredentials = Credentials("superFastAccessKey", "superSecretSecretKey", "s3SessionToken")
+
+        val expiringSessionCredentials = ExpiringValue(sessionCredentials, timeSource.markNow() + 1.minutes)
+        assertFalse(expiringSessionCredentials.isExpiringWithin(30.seconds))
+
+        timeSource += 31.seconds
+        assertTrue(expiringSessionCredentials.isExpiringWithin(30.seconds))
+
     }
 }

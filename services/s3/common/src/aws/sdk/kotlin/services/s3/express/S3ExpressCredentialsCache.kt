@@ -6,7 +6,9 @@ package aws.sdk.kotlin.services.s3.express
 
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.collections.LruCache
+import aws.smithy.kotlin.runtime.util.SingleFlightGroup
 import kotlin.time.ComparableTimeMark
+import kotlin.time.Duration
 import kotlin.time.TimeMark
 
 private const val DEFAULT_S3_EXPRESS_CACHE_SIZE: Int = 100
@@ -15,13 +17,25 @@ internal typealias S3ExpressCredentialsCache = LruCache<S3ExpressCredentialsCach
 internal fun S3ExpressCredentialsCache() = S3ExpressCredentialsCache(DEFAULT_S3_EXPRESS_CACHE_SIZE)
 
 internal data class S3ExpressCredentialsCacheKey(
+    /**
+     * The directory bucket requests are being made to
+     */
     val bucket: String,
+    /**
+     * The base credentials used to resolve session credentials
+     */
     val credentials: Credentials,
 )
 
 internal data class S3ExpressCredentialsCacheValue(
+    /**
+     * The expiring session [Credentials]
+     */
     val expiringCredentials: ExpiringValue<Credentials>,
-    var usedSinceLastRefresh: Boolean = false,
+    /**
+     * A [SingleFlightGroup] used to de-duplicate asynchronous refresh attempts
+     */
+    val sfg: SingleFlightGroup<Unit> = SingleFlightGroup(),
 )
 
 /**
@@ -29,6 +43,8 @@ internal data class S3ExpressCredentialsCacheValue(
  */
 internal data class ExpiringValue<T>(val value: T, val expiresAt: ComparableTimeMark)
 
-internal val ExpiringValue<Credentials>.isExpired: Boolean get() = (expiresAt - REFRESH_BUFFER).hasPassedNow()
+internal val ExpiringValue<Credentials>.isExpired: Boolean get() = expiresAt.hasPassedNow()
+
+internal fun ExpiringValue<Credentials>.isExpiringWithin(duration: Duration) = (expiresAt - duration).hasPassedNow()
 
 internal typealias S3ExpressCredentialsCacheEntry = Map.Entry<S3ExpressCredentialsCacheKey, S3ExpressCredentialsCacheValue>
