@@ -4,12 +4,12 @@
  */
 package aws.sdk.kotlin.services.s3.express
 
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
+import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 
 /**
  * A credentials provider used for making requests to S3 Express One Zone directory buckets.
  */
-public interface S3ExpressCredentialsProvider : CloseableCredentialsProvider {
+public interface S3ExpressCredentialsProvider : CredentialsProvider {
     public companion object {
         /**
          * Create an instance of the default [S3ExpressCredentialsProvider] implementation
