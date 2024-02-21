@@ -68,36 +68,6 @@ class ClientConfigIntegration : KotlinIntegration {
             useSymbolWithNullableBuilder(KotlinTypes.Boolean, "true")
             documentation = "Flag to enable [aws-chunked](https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming.html) content encoding."
         }
-
-        val DisableExpressSessionAuth: ConfigProperty = ConfigProperty {
-            name = "disableS3ExpressSessionAuth"
-            useSymbolWithNullableBuilder(KotlinTypes.Boolean, "false")
-            documentation = """
-                Flag to disable S3 Express One Zone's bucket-level session authentication method.  
-            """.trimIndent()
-        }
-
-        val ExpressCredentialsProvider: ConfigProperty = ConfigProperty {
-            name = "expressCredentialsProvider"
-            symbol = buildSymbol {
-                name = "S3ExpressCredentialsProvider"
-                nullable = false
-                namespace = "aws.sdk.kotlin.services.s3.express"
-            }
-            documentation = """
-                Credentials provider to be used for making requests to S3 Express.   
-            """.trimIndent()
-
-            propertyType = ConfigPropertyType.Custom(
-                render = { _, writer ->
-                    writer.write("public val #1L: #2T = builder.#1L ?: #2T.default()", name, symbol)
-                },
-                renderBuilder = { prop, writer ->
-                    prop.documentation?.let(writer::dokka)
-                    writer.write("public var #L: #T? = null", name, symbol)
-                },
-            )
-        }
     }
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
@@ -124,8 +94,6 @@ class ClientConfigIntegration : KotlinIntegration {
             UseArnRegionProp,
             DisableMrapProp,
             EnableAwsChunked,
-            DisableExpressSessionAuth,
-            ExpressCredentialsProvider,
         )
 
     override val sectionWriters: List<SectionWriterBinding>

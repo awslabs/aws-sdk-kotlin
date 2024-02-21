@@ -6,6 +6,7 @@ package aws.sdk.kotlin.codegen.endpoints
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import aws.sdk.kotlin.codegen.customization.AccountIdEndpointBuiltinCustomization
+import aws.sdk.kotlin.codegen.customization.s3.express.S3ExpressIntegration
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
@@ -90,7 +91,7 @@ fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: Kotl
                 AwsBuiltins.S3_ACCELERATE -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.EnableAccelerateProp.propertyName)
                 AwsBuiltins.S3_FORCE_PATH_STYLE -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.ForcePathStyleProp.propertyName)
                 AwsBuiltins.S3_DISABLE_MRAP -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableMrapProp.propertyName)
-                AwsBuiltins.S3_DISABLE_EXPRESS_SESSION_AUTH -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.DisableExpressSessionAuth.propertyName)
+                AwsBuiltins.S3_DISABLE_EXPRESS_SESSION_AUTH -> renderBasicConfigBinding(writer, it, S3ExpressIntegration.DisableExpressSessionAuth.propertyName)
                 AwsBuiltins.S3_USE_ARN_REGION -> renderBasicConfigBinding(writer, it, S3ClientConfigIntegration.UseArnRegionProp.propertyName)
                 AwsBuiltins.S3_CONTROL_USE_ARN_REGION -> renderBasicConfigBinding(writer, it, S3ControlClientConfigIntegration.UseArnRegionProp.propertyName)
 
