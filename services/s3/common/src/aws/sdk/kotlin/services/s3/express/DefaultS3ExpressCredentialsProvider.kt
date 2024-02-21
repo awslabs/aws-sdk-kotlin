@@ -62,7 +62,6 @@ internal class DefaultS3ExpressCredentialsProvider(
                             } catch (e: Exception) {
                                 logger.warn(e) { "Asynchronous refresh for ${key.bucket} failed." }
                             }
-
                         }
                     }
                 }

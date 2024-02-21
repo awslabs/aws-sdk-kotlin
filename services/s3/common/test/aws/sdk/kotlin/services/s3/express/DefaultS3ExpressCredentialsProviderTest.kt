@@ -17,8 +17,6 @@ import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.ManualClock
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
 import kotlin.time.ComparableTimeMark
@@ -151,20 +149,19 @@ class DefaultS3ExpressCredentialsProviderTest {
     }
 
     /**
-      * Get an instance of [Map.Entry<S3ExpressCredentialsCacheKey, S3ExpressCredentialsCacheValue>] using the given [expiration],
-      * [bucket], and optional [bootstrapCredentials] and [sessionCredentials].
-      */
-     private fun getCacheEntry(
-         expiration: ComparableTimeMark,
-         bucket: String = "bucket",
-         bootstrapCredentials: Credentials = Credentials(accessKeyId = "accessKeyId", secretAccessKey = "secretAccessKey", sessionToken = "sessionToken"),
-         sessionCredentials: Credentials = Credentials(accessKeyId = "s3AccessKeyId", secretAccessKey = "s3SecretAccessKey", sessionToken = "s3SessionToken"),
-     ): S3ExpressCredentialsCacheEntry = mapOf(
-         S3ExpressCredentialsCacheKey(bucket, bootstrapCredentials) to S3ExpressCredentialsCacheValue(ExpiringValue(sessionCredentials, expiration)),
-     ).entries.first()
+     * Get an instance of [Map.Entry<S3ExpressCredentialsCacheKey, S3ExpressCredentialsCacheValue>] using the given [expiration],
+     * [bucket], and optional [bootstrapCredentials] and [sessionCredentials].
+     */
+    private fun getCacheEntry(
+        expiration: ComparableTimeMark,
+        bucket: String = "bucket",
+        bootstrapCredentials: Credentials = Credentials(accessKeyId = "accessKeyId", secretAccessKey = "secretAccessKey", sessionToken = "sessionToken"),
+        sessionCredentials: Credentials = Credentials(accessKeyId = "s3AccessKeyId", secretAccessKey = "s3SecretAccessKey", sessionToken = "s3SessionToken"),
+    ): S3ExpressCredentialsCacheEntry = mapOf(
+        S3ExpressCredentialsCacheKey(bucket, bootstrapCredentials) to S3ExpressCredentialsCacheValue(ExpiringValue(sessionCredentials, expiration)),
+    ).entries.first()
 
-
-     /**
+    /**
      * A test S3Client used to mock calls to s3:CreateSession.
      * @param expectedCredentials the expected session credentials returned from s3:CreateSession
      * @param client the base S3 client used to implement other operations, though they are unused.
@@ -172,10 +169,10 @@ class DefaultS3ExpressCredentialsProviderTest {
      * cause the client to throw an exception instead of returning credentials. Used for testing s3:CreateSession failures.
      */
     private class TestS3Client(
-         val expectedCredentials: SessionCredentials,
-         val client: S3Client = S3Client { },
-         val baseCredentials: Credentials? = null,
-         val throwExceptionOnBucketNamed: String? = null,
+        val expectedCredentials: SessionCredentials,
+        val client: S3Client = S3Client { },
+        val baseCredentials: Credentials? = null,
+        val throwExceptionOnBucketNamed: String? = null,
     ) : S3Client by client {
         var numCreateSession = 0
         override val config: S3Client.Config
@@ -198,4 +195,4 @@ class DefaultS3ExpressCredentialsProviderTest {
             return CreateSessionResponse { credentials = expectedCredentials }
         }
     }
- }
+}

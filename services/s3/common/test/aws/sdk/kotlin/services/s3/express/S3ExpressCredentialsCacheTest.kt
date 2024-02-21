@@ -71,6 +71,5 @@ public class S3ExpressCredentialsCacheTest {
 
         timeSource += 31.seconds
         assertTrue(expiringSessionCredentials.isExpiringWithin(30.seconds))
-
     }
 }
