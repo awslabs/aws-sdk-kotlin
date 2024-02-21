@@ -24,13 +24,8 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Configure JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'corretto'
-          java-version: 17
-          cache: 'gradle'
+      - name: Setup Build
+        uses: ./aws-sdk-kotlin/.github/actions/setup-build
       - name: Check artifact sizes
         run: | 
           ./gradlew :codegen:sdk:bootstrap -Paws.services=${{ env.BOOTSTRAP_SERVICES }}
@@ -60,13 +55,8 @@ jobs:
     if: ${{ github.event_name == 'release' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Configure JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'corretto'
-          java-version: 17
-          cache: 'gradle'
+      - name: Setup Build
+        uses: ./aws-sdk-kotlin/.github/actions/setup-build
       - name: Check artifact sizes
         run: | 
           ./gradlew :codegen:sdk:bootstrap -Paws.services=${{ env.BOOTSTRAP_SERVICES }} 
