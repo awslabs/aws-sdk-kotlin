@@ -24,7 +24,7 @@ import kotlin.time.TimeSource
 
 /**
  * The default implementation of a credentials provider for S3 Express One Zone. Performs best-effort asynchronous refresh
- * if the cached credentials are within their refresh window ([REFRESH_BUFFER] away from expiration) during a call to [resolve].
+ * if the cached credentials are expiring within a [refreshBuffer] during a call to [resolve].
  * Otherwise, performs synchronous refresh.
  *
  * @param timeSource the time source to use. defaults to [TimeSource.Monotonic]
