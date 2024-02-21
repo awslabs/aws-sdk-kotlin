@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+    types: [ opened, synchronize, reopened, labeled ]
   workflow_dispatch:
     inputs:
       aws-sdk-kotlin-pr:
@@ -35,6 +36,7 @@ concurrency:
 
 jobs:
   e2e-tests:
+    if: ${{ (github.event_name == 'pull_request' && github.event.action == 'labeled' && github.event.label.name == 'codebuild ci') || github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.action != 'labeled') }}
     runs-on: ubuntu-latest
     steps:
       - name: Verify PRs are not running malicious code
@@ -64,6 +66,7 @@ jobs:
           fi
 
   service-check-batch:
+    if: ${{ (github.event_name == 'pull_request' && github.event.action == 'labeled' && github.event.label.name == 'codebuild ci') || github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.action != 'labeled') }}
     runs-on: ubuntu-latest
     steps:
       - name: Verify PRs are not running malicious code
