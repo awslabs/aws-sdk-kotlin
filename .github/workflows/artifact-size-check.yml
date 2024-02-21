@@ -24,9 +24,15 @@ jobs:
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          path: 'aws-sdk-kotlin'
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
       - name: Check artifact sizes
+        working-directory: ./aws-sdk-kotlin
+        shell: bash
         run: | 
           ./gradlew :codegen:sdk:bootstrap -Paws.services=${{ env.BOOTSTRAP_SERVICES }}
           ./gradlew artifactMetrics
@@ -36,6 +42,8 @@ jobs:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
       - name: Compare metrics
+        working-directory: ./aws-sdk-kotlin
+        shell: bash
         run: |
           ./gradlew checkArtifactMetrics
       - name: Publish PR comment
@@ -43,7 +51,7 @@ jobs:
         with:
           script: |
             const fs = require('node:fs');
-            const content = fs.readFileSync('./build/reports/metrics/artifact-summary.md');
+            const content = fs.readFileSync('./aws-sdk-kotlin/build/reports/metrics/artifact-summary.md');
             await github.rest.issues.createComment({
               issue_number: ${{ github.event.number }},
               owner: context.repo.owner,
@@ -55,9 +63,15 @@ jobs:
     if: ${{ github.event_name == 'release' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          path: 'aws-sdk-kotlin'
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
       - name: Check artifact sizes
+        working-directory: ./aws-sdk-kotlin
+        shell: bash
         run: | 
           ./gradlew :codegen:sdk:bootstrap -Paws.services=${{ env.BOOTSTRAP_SERVICES }} 
           ./gradlew artifactMetrics
@@ -67,5 +81,7 @@ jobs:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
       - name: Publish new metrics
+        working-directory: ./aws-sdk-kotlin
+        shell: bash
         run: |
           aws --region us-west-2 cloudwatch put-metric-data --namespace "AwsSdkKotlin/ArtifactMetrics" --metric-data file://build/reports/metrics/artifacts.json
