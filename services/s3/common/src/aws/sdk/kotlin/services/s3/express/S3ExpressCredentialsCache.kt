@@ -10,21 +10,8 @@ import kotlin.time.TimeMark
 
 private const val DEFAULT_S3_EXPRESS_CACHE_SIZE: Int = 100
 
-internal class S3ExpressCredentialsCache {
-    private val lru = LruCache<S3ExpressCredentialsCacheKey, S3ExpressCredentialsCacheValue>(DEFAULT_S3_EXPRESS_CACHE_SIZE)
-
-    suspend fun get(key: S3ExpressCredentialsCacheKey): S3ExpressCredentialsCacheValue? = lru.get(key)
-
-    suspend fun put(key: S3ExpressCredentialsCacheKey, value: S3ExpressCredentialsCacheValue) = lru.put(key, value)
-
-    suspend fun remove(key: S3ExpressCredentialsCacheKey): S3ExpressCredentialsCacheValue? = lru.remove(key)
-
-    public val size: Int
-        get() = lru.size
-
-    public val entries: Set<Map.Entry<S3ExpressCredentialsCacheKey, S3ExpressCredentialsCacheValue>>
-        get() = lru.entries
-}
+internal typealias S3ExpressCredentialsCache = LruCache<S3ExpressCredentialsCacheKey, S3ExpressCredentialsCacheValue>
+internal fun S3ExpressCredentialsCache() = S3ExpressCredentialsCache(DEFAULT_S3_EXPRESS_CACHE_SIZE)
 
 internal data class S3ExpressCredentialsCacheKey(
     val bucket: String,
