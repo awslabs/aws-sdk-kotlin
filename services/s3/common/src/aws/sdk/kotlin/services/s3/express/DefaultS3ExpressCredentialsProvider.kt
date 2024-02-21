@@ -23,13 +23,13 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.TimeSource
 
 /**
- * The default implementation of [S3ExpressCredentialsProvider]. Performs best-effort asynchronous refresh if the
- * cached credentials are within their refresh window ([REFRESH_BUFFER] away from expiration) during a call to [resolve].
+ * The default implementation of a credentials provider for S3 Express One Zone. Performs best-effort asynchronous refresh
+ * if the cached credentials are within their refresh window ([REFRESH_BUFFER] away from expiration) during a call to [resolve].
  * Otherwise, performs synchronous refresh.
  *
  * @param timeSource the time source to use. defaults to [TimeSource.Monotonic]
  * @param clock the clock to use. defaults to [Clock.System]. note: the clock is only used to get an initial [Duration]
- * until credentials expiration.
+ * until credentials expiration, [timeSource] is used as the source of truth for credentials expiration.
  * @param credentialsCache an [S3ExpressCredentialsCache] to be used for caching session credentials, defaults to
  * [S3ExpressCredentialsCache].
  * @param refreshBuffer an optional [Duration] representing the duration before expiration that [Credentials]
@@ -40,9 +40,12 @@ internal class DefaultS3ExpressCredentialsProvider(
     private val clock: Clock = Clock.System,
     private val credentialsCache: S3ExpressCredentialsCache = S3ExpressCredentialsCache(),
     private val refreshBuffer: Duration = 1.minutes,
-) : S3ExpressCredentialsProvider, CloseableCredentialsProvider, SdkManagedBase(), CoroutineScope {
+) : CloseableCredentialsProvider, SdkManagedBase(), CoroutineScope {
+    public constructor(): this(TimeSource.Monotonic)
+
     private lateinit var client: S3Client
     override val coroutineContext: CoroutineContext = Job() + CoroutineName("DefaultS3ExpressCredentialsProvider")
+    val jobs = mutableListOf<Job>()
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         client = attributes[S3Attributes.ExpressClient] as S3Client
@@ -73,7 +76,9 @@ internal class DefaultS3ExpressCredentialsProvider(
             }.value
     }
 
-    override fun close() = coroutineContext.cancel(null)
+    override fun close() {
+        coroutineContext.cancel(null)
+    }
 
     internal suspend fun createSessionCredentials(bucket: String, client: S3Client): ExpiringValue<Credentials> =
         client.createSession { this.bucket = bucket }.credentials!!.let {

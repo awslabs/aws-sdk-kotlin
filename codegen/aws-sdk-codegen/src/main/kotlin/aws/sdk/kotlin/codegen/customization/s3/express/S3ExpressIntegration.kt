@@ -42,18 +42,17 @@ class S3ExpressIntegration : KotlinIntegration {
 
         val ExpressCredentialsProvider: ConfigProperty = ConfigProperty {
             name = "expressCredentialsProvider"
-            symbol = buildSymbol {
-                name = "S3ExpressCredentialsProvider"
-                nullable = false
-                namespace = "aws.sdk.kotlin.services.s3.express"
-            }
+            symbol = RuntimeTypes.Auth.Credentials.AwsCredentials.CredentialsProvider
             documentation = """
                 Credentials provider to be used for making requests to S3 Express.   
             """.trimIndent()
 
             propertyType = ConfigPropertyType.Custom(
                 render = { _, writer ->
-                    writer.write("public val #1L: #2T = builder.#1L ?: #2T.default()", name, symbol)
+                    writer.write("public val #1L: #2T = builder.#1L ?: #3T()", name, symbol, buildSymbol {
+                        name = "DefaultS3ExpressCredentialsProvider"
+                        namespace = "aws.sdk.kotlin.services.s3.express"
+                    })
                 },
                 renderBuilder = { prop, writer ->
                     prop.documentation?.let(writer::dokka)

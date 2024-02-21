@@ -10,13 +10,11 @@ import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.CreateSessionRequest
 import aws.sdk.kotlin.services.s3.model.CreateSessionResponse
 import aws.sdk.kotlin.services.s3.model.SessionCredentials
-import aws.sdk.kotlin.services.s3.withConfig
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.io.use
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.ManualClock
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
 import kotlin.time.ComparableTimeMark
@@ -25,6 +23,8 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TestTimeSource
 
 class DefaultS3ExpressCredentialsProviderTest {
+    private val DEFAULT_BASE_CREDENTIALS = Credentials("accessKeyId", "secretAccessKey", "sessionToken")
+
     @Test
     fun testCreateSessionCredentials() = runTest {
         val timeSource = TestTimeSource()
@@ -72,8 +72,10 @@ class DefaultS3ExpressCredentialsProviderTest {
             }
 
             provider.resolve(attributes)
-            assertEquals(1, testClient.numCreateSession)
         }
+        // close the provider, make sure all async refreshes are complete...
+        delay(1.seconds)
+        assertEquals(1, testClient.numCreateSession)
     }
 
     @Test
@@ -101,13 +103,15 @@ class DefaultS3ExpressCredentialsProviderTest {
                 this.attributes[S3Attributes.Bucket] = "bucket"
             }
 
-            // launch many async `resolve` calls, only one should call s3:CreateSession
             val calls = (1..5).map {
                 async { provider.resolve(attributes) }
             }
             calls.awaitAll()
-            assertEquals(1, testClient.numCreateSession)
         }
+
+        // close the provider, make sure all async refreshes are complete...
+        delay(5.seconds)
+        assertEquals(1, testClient.numCreateSession)
     }
 
     @Test
@@ -143,9 +147,48 @@ class DefaultS3ExpressCredentialsProviderTest {
             attributes[S3Attributes.Bucket] = "SuccessfulBucket"
             provider.resolve(attributes)
         }
-
         // close the provider, make sure all async refreshes are complete...
+        delay(1.seconds)
         assertEquals(2, testClient.numCreateSession)
+    }
+
+    @Test
+    fun testAsyncRefreshClosesImmediately() = runTest {
+        val timeSource = TestTimeSource()
+        val clock = ManualClock()
+
+        // Entry expires in 30 seconds, refresh buffer is 1 minute. Next `resolve` call should trigger the async refresh
+        val cache = S3ExpressCredentialsCache()
+        val entry = getCacheEntry(timeSource.markNow() + 30.seconds)
+        cache.put(entry.key, entry.value)
+
+        val expectedCredentials = SessionCredentials {
+            accessKeyId = "access"
+            secretAccessKey = "secret"
+            sessionToken = "session"
+            expiration = clock.now() + 5.minutes
+        }
+
+        val provider = DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes)
+
+        val blockingTestS3Client = object : TestS3Client(expectedCredentials) {
+            override suspend fun createSession(input: CreateSessionRequest): CreateSessionResponse {
+                delay(10.seconds)
+                numCreateSession += 1
+                return CreateSessionResponse { credentials = expectedCredentials }
+            }
+        }
+
+        val attributes = ExecutionContext.build {
+            this.attributes[S3Attributes.ExpressClient] = blockingTestS3Client
+            this.attributes[S3Attributes.Bucket] = "bucket"
+        }
+
+        withTimeout(5.seconds) {
+            provider.resolve(attributes)
+            provider.close()
+        }
+        assertEquals(0, blockingTestS3Client.numCreateSession)
     }
 
     /**
@@ -168,19 +211,13 @@ class DefaultS3ExpressCredentialsProviderTest {
      * @param throwExceptionOnBucketNamed an optional bucket name, which when specified and present in the [CreateSessionRequest], will
      * cause the client to throw an exception instead of returning credentials. Used for testing s3:CreateSession failures.
      */
-    private class TestS3Client(
+    private open inner class TestS3Client(
         val expectedCredentials: SessionCredentials,
-        val client: S3Client = S3Client { },
-        val baseCredentials: Credentials? = null,
+        val baseCredentials: Credentials = DEFAULT_BASE_CREDENTIALS,
+        val client: S3Client = S3Client { credentialsProvider = StaticCredentialsProvider(baseCredentials) },
         val throwExceptionOnBucketNamed: String? = null,
     ) : S3Client by client {
         var numCreateSession = 0
-        override val config: S3Client.Config
-            get() = baseCredentials?.let {
-                client.withConfig {
-                    credentialsProvider = StaticCredentialsProvider(baseCredentials)
-                }.config
-            } ?: client.config
 
         override suspend fun createSession(input: CreateSessionRequest): CreateSessionResponse {
             println("in createSession for $input")
