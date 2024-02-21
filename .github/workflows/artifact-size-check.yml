@@ -20,7 +20,7 @@ env:
 
 jobs:
   check-sizes:
-    if: ${{ github.event_name == "pull_request" }}
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +50,7 @@ jobs:
             });
 
   publish-metrics:
-    if: ${{ github.event_name == "release" }}
+    if: ${{ github.event_name == 'release' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
