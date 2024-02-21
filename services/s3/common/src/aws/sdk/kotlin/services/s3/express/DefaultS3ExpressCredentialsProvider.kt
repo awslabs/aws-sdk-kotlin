@@ -45,7 +45,6 @@ internal class DefaultS3ExpressCredentialsProvider(
 
     private lateinit var client: S3Client
     override val coroutineContext: CoroutineContext = Job() + CoroutineName("DefaultS3ExpressCredentialsProvider")
-    val jobs = mutableListOf<Job>()
 
     override suspend fun resolve(attributes: Attributes): Credentials {
         client = attributes[S3Attributes.ExpressClient] as S3Client
@@ -56,15 +55,13 @@ internal class DefaultS3ExpressCredentialsProvider(
             ?.takeIf { !it.expiringCredentials.isExpired }
             ?.also {
                 if (it.expiringCredentials.isExpiringWithin(refreshBuffer)) {
-                    it.sfg.singleFlight {
-                        logger.trace { "Credentials for ${key.bucket} are within their refresh window, performing asynchronous refresh..." }
-                        launch(coroutineContext) {
-                            try {
-                                val sessionCredentials = createSessionCredentials(key.bucket, client)
-                                credentialsCache.put(key, S3ExpressCredentialsCacheValue(sessionCredentials))
-                            } catch (e: Exception) {
-                                logger.warn(e) { "Asynchronous refresh for ${key.bucket} failed." }
-                            }
+                    logger.trace { "Credentials for ${key.bucket} are within their refresh window, performing asynchronous refresh..." }
+                    launch(coroutineContext) {
+                        try {
+                            val sessionCredentials = it.sfg.singleFlight { createSessionCredentials(key.bucket, client) }
+                            credentialsCache.put(key, S3ExpressCredentialsCacheValue(sessionCredentials))
+                        } catch (e: Exception) {
+                            logger.warn(e) { "Asynchronous refresh for ${key.bucket} failed." }
                         }
                     }
                 }

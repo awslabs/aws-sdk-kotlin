@@ -35,7 +35,7 @@ internal data class S3ExpressCredentialsCacheValue(
     /**
      * A [SingleFlightGroup] used to de-duplicate asynchronous refresh attempts
      */
-    val sfg: SingleFlightGroup<Unit> = SingleFlightGroup(),
+    val sfg: SingleFlightGroup<ExpiringValue<Credentials>> = SingleFlightGroup(),
 )
 
 /**
