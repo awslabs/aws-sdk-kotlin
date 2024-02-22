@@ -55,7 +55,7 @@ class S3ExpressBenchmark : ServiceBenchmark<S3Client> {
         client.deleteBucket { bucket = bucketName }
     }
 
-    private val putObjectBenchmark = object : AbstractOperationBenchmark<S3Client>("s3express:PutObject") {
+    private val putObjectBenchmark = object : AbstractOperationBenchmark<S3Client>("PutObject") {
         override suspend fun transact(client: S3Client) {
             client.putObject {
                 bucket = bucketName
