@@ -273,20 +273,24 @@ object S3TestUtils {
         operation: String,
     ) {
         withTimeout(timeoutAfter) {
+            var status: String? = null
             while (true) {
-                val status = s3ControlClient.describeMultiRegionAccessPointOperation {
+                val latestStatus = s3ControlClient.describeMultiRegionAccessPointOperation {
                     accountId = testAccountId
                     requestTokenArn = request
                 }.asyncOperation?.requestStatus
 
-                println("Waiting on $operation operation. Status: $status ")
-
-                if (status == "SUCCEEDED") {
-                    println("$operation operation succeeded.")
-                    return@withTimeout
+                when (latestStatus) {
+                    "SUCCEEDED" -> {
+                        println("$operation operation succeeded.")
+                        return@withTimeout
+                    }
+                    "FAILED" -> throw IllegalStateException("$operation operation failed")
+                    else -> { if (status == null || latestStatus != status) {
+                        println("Waiting on $operation operation. Status: $latestStatus ")
+                        status = latestStatus
+                    }}
                 }
-
-                check(status != "FAILED") { "$operation operation failed" }
 
                 delay(10.seconds) // Avoid constant status checks
             }
