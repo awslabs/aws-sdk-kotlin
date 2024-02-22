@@ -25,6 +25,7 @@ class S3ExpressBenchmark : ServiceBenchmark<S3Client> {
 
     @OptIn(ExperimentalApi::class)
     override suspend fun client() = S3Client.fromEnvironment {
+        clientName = "S3Express"
         retryStrategy = Common.noRetries
         telemetryProvider = Common.telemetryProvider
         httpClient {
@@ -71,7 +72,7 @@ class S3ExpressBenchmark : ServiceBenchmark<S3Client> {
         }
     }
 
-    private val getObjectBenchmark = object : AbstractOperationBenchmark<S3Client>("s3express:GetObject") {
+    private val getObjectBenchmark = object : AbstractOperationBenchmark<S3Client>("GetObject") {
         override suspend fun setup(client: S3Client) {
             client.putObject {
                 bucket = bucketName
