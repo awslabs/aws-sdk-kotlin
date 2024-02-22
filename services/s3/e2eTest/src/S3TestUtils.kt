@@ -24,7 +24,8 @@ import java.io.OutputStreamWriter
 import java.net.URL
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 object S3TestUtils {
@@ -181,7 +182,7 @@ object S3TestUtils {
         waitUntilMultiRegionAccessPointOperationCompletes(
             s3ControlClient,
             checkNotNull(createRequestToken.requestTokenArn) { "Unable to get request token ARN" },
-            1000 * 60 * 10, // 10 minutes
+            10.minutes,
             testAccountId,
             "createMultiRegionAccessPoint",
         )
@@ -220,7 +221,7 @@ object S3TestUtils {
         waitUntilMultiRegionAccessPointOperationCompletes(
             s3ControlClient,
             checkNotNull(deleteRequestToken.requestTokenArn) { "Unable to get request token ARN" },
-            1000 * 60 * 5, // 5 minutes
+            5.minutes,
             testAccountId,
             "deleteMultiRegionAccessPoint",
         )
@@ -229,11 +230,11 @@ object S3TestUtils {
     private suspend fun waitUntilMultiRegionAccessPointOperationCompletes(
         s3ControlClient: S3ControlClient,
         request: String,
-        duration: Int,
+        timeoutAfter: Duration,
         testAccountId: String,
         operation: String,
     ) {
-        withTimeout(duration.milliseconds) {
+        withTimeout(timeoutAfter) {
             while (true) {
                 val status = s3ControlClient.describeMultiRegionAccessPointOperation {
                     accountId = testAccountId
@@ -247,7 +248,7 @@ object S3TestUtils {
                     return@withTimeout
                 }
 
-                if (status == "FAILED") throw Exception("$operation operation failed.")
+                check(status != "FAILED") { "$operation operation failed" }
 
                 delay(10.seconds) // Avoid constant status checks
             }
