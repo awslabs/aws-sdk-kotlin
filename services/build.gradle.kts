@@ -85,21 +85,28 @@ subprojects {
                     }
 
                     tasks.register<Test>("e2eTest") {
-                        if (project.name == "s3") {
-                            dependencies {
-                                project.parent?.subprojects?.forEach {
-                                    println("\n\n\n\n\n")
-                                    println(it.name)
-                                    println("\n\n\n\n\n")
-                                }
-                                implementation("aws.sdk.kotlin:s3control:+") // services:s3control (if present)
-                                implementation("aws.sdk.kotlin:sts:+") // services:sts (if present)
-                                implementation("aws.smithy.kotlin:aws-signing-crt:+") // :runtime:auth:aws-signing-crt (in smithy)
-                            }
-                        }
-
                         description = "Run e2e service tests"
                         group = "verification"
+
+                        if (project.name == "s3") {
+                            dependencies {
+                                val services = project.parent?.subprojects
+
+                                if (services?.firstOrNull { it.name == "s3control" } == null) {
+                                    implementation("aws.sdk.kotlin:s3control:+")
+                                } else {
+                                    implementation(project(":services:s3control"))
+                                }
+
+                                if (services?.firstOrNull { it.name == "sts" } == null) {
+                                    implementation("aws.sdk.kotlin:sts:+")
+                                } else {
+                                    implementation(project(":services:sts"))
+                                }
+
+                                implementation(libs.smithy.kotlin.aws.signing.crt)
+                            }
+                        }
 
                         // Run the tests with the classpath containing the compile dependencies (including 'main'),
                         // runtime dependencies, and the outputs of this compilation:

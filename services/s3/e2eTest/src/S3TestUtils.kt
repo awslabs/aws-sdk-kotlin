@@ -255,14 +255,10 @@ object S3TestUtils {
     ): Boolean {
         println("Checking if multi region access point was created: $multiRegionAccessPointName")
 
-        try {
-            s3Control.getMultiRegionAccessPoint {
-                accountId = testAccountId
-                name = multiRegionAccessPointName
-            }
-        } catch (ex: Throwable) {
-            return false
-        }
-        return true
+        val search = s3Control.listMultiRegionAccessPoints {
+            accountId = testAccountId
+        }.accessPoints?.find { it.name == multiRegionAccessPointName }
+
+        return search != null
     }
 }
