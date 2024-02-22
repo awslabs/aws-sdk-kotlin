@@ -19,20 +19,20 @@ import aws.sdk.kotlin.services.sts.StsClient
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withTimeout
 import java.io.OutputStreamWriter
 import java.net.URL
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
-import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.withTimeout
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 object S3TestUtils {
 
     const val DEFAULT_REGION = "us-west-2"
 
     // The E2E test account only has permission to operate on buckets with the prefix
-    internal const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
+    private const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
 
     suspend fun getTestBucket(
         client: S3Client,
@@ -155,7 +155,7 @@ object S3TestUtils {
             it.getCallerIdentity().account
         }
 
-        return checkNotNull(accountId) { "Unable to get AWS account ID"}
+        return checkNotNull(accountId) { "Unable to get AWS account ID" }
     }
 
     internal suspend fun createMultiRegionAccessPoint(
@@ -169,19 +169,13 @@ object S3TestUtils {
 
         val createRequestToken = s3ControlClient.createMultiRegionAccessPoint {
             accountId = testAccountId
-            details =
-                CreateMultiRegionAccessPointInput {
-                    name = multiRegionAccessPointName
-                    regions =
-                        listOf(
-                            Region {
-                                bucket = regionOneBucket
-                            },
-                            Region {
-                                bucket = regionTwoBucket
-                            },
-                        )
-                }
+            details {
+                name = multiRegionAccessPointName
+                regions = listOf(
+                    Region { bucket = regionOneBucket },
+                    Region { bucket = regionTwoBucket },
+                )
+            }
         }
 
         waitUntilMultiRegionAccessPointOperationCompletes(
@@ -218,10 +212,9 @@ object S3TestUtils {
 
         val deleteRequestToken = s3ControlClient.deleteMultiRegionAccessPoint {
             accountId = testAccountId
-            details =
-                DeleteMultiRegionAccessPointInput {
-                    name = multiRegionAccessPointName
-                }
+            details {
+                name = multiRegionAccessPointName
+            }
         }
 
         waitUntilMultiRegionAccessPointOperationCompletes(

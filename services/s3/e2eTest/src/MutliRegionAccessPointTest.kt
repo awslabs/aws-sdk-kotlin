@@ -103,7 +103,7 @@ class MutliRegionAccessPointTest {
 
         assertEquals(
             ex.message,
-            "SIGV4A support is not yet implemented for the default signer. For more information on how to enable it with the CRT signer, please refer to: https://a.co/3sf8533"
+            "SIGV4A support is not yet implemented for the default signer. For more information on how to enable it with the CRT signer, please refer to: https://a.co/3sf8533",
         )
     }
 }
