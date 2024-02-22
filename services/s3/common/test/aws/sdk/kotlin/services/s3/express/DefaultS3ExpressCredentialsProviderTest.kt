@@ -76,7 +76,6 @@ class DefaultS3ExpressCredentialsProviderTest {
         assertEquals(1, testClient.numCreateSession)
     }
 
-
     @Test
     fun testAsyncRefresh() = runTest {
         val timeSource = TestTimeSource()
