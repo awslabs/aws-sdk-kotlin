@@ -41,7 +41,10 @@ class DefaultS3ExpressCredentialsProviderTest {
         val client = TestS3Client(expectedCredentials)
 
         DefaultS3ExpressCredentialsProvider(timeSource, clock).use { provider ->
-            val credentials = provider.createSessionCredentials("bucket", client)
+            val credentials = provider.createSessionCredentials(
+                S3ExpressCredentialsCacheKey("bucket", DEFAULT_BASE_CREDENTIALS),
+                client
+            )
             assertFalse(credentials.isExpired)
             assertEquals(timeSource.markNow() + 5.minutes, credentials.expiresAt)
         }

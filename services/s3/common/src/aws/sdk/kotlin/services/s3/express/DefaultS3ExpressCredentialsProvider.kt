@@ -58,8 +58,7 @@ internal class DefaultS3ExpressCredentialsProvider(
                     logger.trace { "Credentials for ${key.bucket} are within their refresh window, performing asynchronous refresh..." }
                     launch(coroutineContext) {
                         try {
-                            val sessionCredentials = it.sfg.singleFlight { createSessionCredentials(key.bucket, client) }
-                            credentialsCache.put(key, S3ExpressCredentialsCacheValue(sessionCredentials))
+                            it.sfg.singleFlight { createSessionCredentials(key, client) }
                         } catch (e: Exception) {
                             logger.warn(e) { "Asynchronous refresh for ${key.bucket} failed." }
                         }
@@ -68,21 +67,24 @@ internal class DefaultS3ExpressCredentialsProvider(
             }
             ?.expiringCredentials
             ?.value
-            ?: createSessionCredentials(key.bucket, client).also {
-                credentialsCache.put(key, S3ExpressCredentialsCacheValue(it))
-            }.value
+            ?: createSessionCredentials(key, client).value
     }
 
     override fun close() {
         coroutineContext.cancel(null)
     }
 
-    internal suspend fun createSessionCredentials(bucket: String, client: S3Client): ExpiringValue<Credentials> =
-        client.createSession { this.bucket = bucket }.credentials!!.let {
+    /**
+     * Create a new set of session credentials by calling s3:CreateSession and then store them in the cache.
+     */
+    internal suspend fun createSessionCredentials(key: S3ExpressCredentialsCacheKey, client: S3Client): ExpiringValue<Credentials> =
+        client.createSession { bucket = key.bucket }.credentials!!.let {
             ExpiringValue(
                 Credentials(it.accessKeyId, it.secretAccessKey, it.sessionToken, it.expiration),
                 expiresAt = timeSource.markNow() + clock.now().until(it.expiration),
             )
+        }.also {
+            credentialsCache.put(key, S3ExpressCredentialsCacheValue(it))
         }
 
     @OptIn(ExperimentalApi::class)
