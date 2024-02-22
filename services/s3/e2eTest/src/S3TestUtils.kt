@@ -15,6 +15,7 @@ import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.sdk.kotlin.services.s3control.*
 import aws.sdk.kotlin.services.s3control.model.*
+import aws.sdk.kotlin.services.sts.StsClient
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -143,6 +144,18 @@ object S3TestUtils {
         }
 
         return connection.responseCode
+    }
+
+    internal suspend fun getAccountId(): String {
+        println("Getting account ID")
+
+        val accountId = StsClient {
+            region = "us-west-2"
+        }.use {
+            it.getCallerIdentity().account
+        }
+
+        return checkNotNull(accountId) { "Unable to get AWS account ID"}
     }
 
     internal suspend fun createMultiRegionAccessPoint(

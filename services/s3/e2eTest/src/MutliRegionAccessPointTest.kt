@@ -7,6 +7,7 @@ package aws.sdk.kotlin.e2etest
 import aws.sdk.kotlin.e2etest.S3TestUtils.createMultiRegionAccessPoint
 import aws.sdk.kotlin.e2etest.S3TestUtils.deleteBucketAndAllContents
 import aws.sdk.kotlin.e2etest.S3TestUtils.deleteMultiRegionAccessPoint
+import aws.sdk.kotlin.e2etest.S3TestUtils.getAccountId
 import aws.sdk.kotlin.e2etest.S3TestUtils.getMultiRegionAccessPointArn
 import aws.sdk.kotlin.e2etest.S3TestUtils.getTestBucket
 import aws.sdk.kotlin.e2etest.S3TestUtils.multiRegionAccessPointWasCreated
@@ -15,7 +16,6 @@ import aws.sdk.kotlin.services.s3.deleteObject
 import aws.sdk.kotlin.services.s3.putObject
 import aws.sdk.kotlin.services.s3.withConfig
 import aws.sdk.kotlin.services.s3control.S3ControlClient
-import aws.sdk.kotlin.services.sts.StsClient
 import aws.smithy.kotlin.runtime.auth.awssigning.UnsupportedSigningAlgorithmException
 import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
 import aws.smithy.kotlin.runtime.http.auth.SigV4AsymmetricAuthScheme
@@ -105,17 +105,5 @@ class MutliRegionAccessPointTest {
             ex.message,
             "SIGV4A support is not yet implemented for the default signer. For more information on how to enable it with the CRT signer, please refer to: https://a.co/3sf8533"
         )
-    }
-
-    private suspend fun getAccountId(): String {
-        println("Getting account ID")
-
-        val accountId = StsClient {
-            region = "us-west-2"
-        }.use {
-            it.getCallerIdentity().account
-        }
-
-        return checkNotNull(accountId) { "Unable to get AWS account ID"}
     }
 }
