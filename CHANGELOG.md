@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.63] - 02/22/2024
+
+### Features
+* (**internetmonitor**) This release adds IPv4 prefixes to health events
+* (**kinesisvideo**) Increasing NextToken parameter length restriction for List APIs from 512 to 1024.
+
 ## [1.0.62] - 02/21/2024
 
 ### Features
