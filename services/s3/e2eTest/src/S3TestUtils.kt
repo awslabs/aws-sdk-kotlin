@@ -107,8 +107,8 @@ object S3TestUtils {
         if (testBucket == null) {
             // Adding S3 Express suffix surpasses the bucket name length limit... trim the UUID if needed
             testBucket = TEST_BUCKET_PREFIX +
-                    UUID.randomUUID().toString().subSequence(0 until (S3_MAX_BUCKET_NAME_LENGTH - TEST_BUCKET_PREFIX.length - suffix.ensurePrefix("--").length)) +
-                    suffix.ensurePrefix("--")
+                UUID.randomUUID().toString().subSequence(0 until (S3_MAX_BUCKET_NAME_LENGTH - TEST_BUCKET_PREFIX.length - suffix.ensurePrefix("--").length)) +
+                suffix.ensurePrefix("--")
 
             println("Creating S3 Express directory bucket: $testBucket")
 
