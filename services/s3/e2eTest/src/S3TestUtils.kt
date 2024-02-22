@@ -51,15 +51,14 @@ object S3TestUtils {
             .buckets
             ?.mapNotNull { it.name }
 
-        var testBucket = if (region != null) {
-            buckets?.firstOrNull {
-                client.getBucketLocation {
-                    bucket = it
-                    expectedBucketOwner = accountId
-                }.locationConstraint?.value == region && it.startsWith(prefix)
-            }
-        } else {
-            buckets?.firstOrNull { it.startsWith(prefix) }
+        var testBucket = buckets?.firstOrNull { bucketName ->
+            bucketName.startsWith(prefix) &&
+                region?.let {
+                    client.getBucketLocation {
+                        bucket = bucketName
+                        expectedBucketOwner = accountId
+                    }.locationConstraint?.value == region
+                } ?: true
         }
 
         if (testBucket == null) {
@@ -262,10 +261,8 @@ object S3TestUtils {
     ): Boolean {
         println("Checking if multi region access point was created: $multiRegionAccessPointName")
 
-        val search = s3Control.listMultiRegionAccessPoints {
+        return s3Control.listMultiRegionAccessPoints {
             accountId = testAccountId
-        }.accessPoints?.find { it.name == multiRegionAccessPointName }
-
-        return search != null
+        }.accessPoints?.any { it.name == multiRegionAccessPointName } ?: false
     }
 }

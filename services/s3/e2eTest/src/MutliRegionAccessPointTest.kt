@@ -43,7 +43,7 @@ class MutliRegionAccessPointTest {
     private lateinit var usEastBucket: String
 
     @BeforeAll
-    private fun setUpMrapTest(): Unit = runBlocking {
+    private fun setUp(): Unit = runBlocking {
         accountId = getAccountId()
         usWestBucket = getTestBucket(s3West, "us-west-2", accountId)
         usEastBucket = getTestBucket(s3East, "us-east-2", accountId)
@@ -65,7 +65,7 @@ class MutliRegionAccessPointTest {
     }
 
     @AfterAll
-    private fun cleanUpMrapTest(): Unit = runBlocking {
+    private fun cleanUp(): Unit = runBlocking {
         if (multiRegionAccessPointWasCreated(s3Control, multiRegionAccessPoint, accountId)) {
             deleteMultiRegionAccessPoint(s3Control, multiRegionAccessPoint, accountId)
         }
