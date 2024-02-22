@@ -18,6 +18,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 import kotlin.test.*
 import kotlin.time.ComparableTimeMark
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TestTimeSource
@@ -47,6 +48,36 @@ class DefaultS3ExpressCredentialsProviderTest {
     }
 
     @Test
+    fun testSyncRefresh() = runTest {
+        val timeSource = TestTimeSource()
+        val clock = ManualClock()
+
+        // Entry expired 30 seconds ago, next `resolve` call should trigger a sync refresh
+        val cache = S3ExpressCredentialsCache()
+        val entry = getCacheEntry(timeSource.markNow() - 30.seconds)
+        cache.put(entry.key, entry.value)
+
+        val expectedCredentials = SessionCredentials {
+            accessKeyId = "access"
+            secretAccessKey = "secret"
+            sessionToken = "session"
+            expiration = clock.now() + 5.minutes
+        }
+
+        val testClient = TestS3Client(expectedCredentials)
+        DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes).use { provider ->
+            val attributes = ExecutionContext.build {
+                this.attributes[S3Attributes.ExpressClient] = testClient
+                this.attributes[S3Attributes.Bucket] = "bucket"
+            }
+
+            provider.resolve(attributes)
+        }
+        assertEquals(1, testClient.numCreateSession)
+    }
+
+
+    @Test
     fun testAsyncRefresh() = runTest {
         val timeSource = TestTimeSource()
         val clock = ManualClock()
@@ -64,17 +95,16 @@ class DefaultS3ExpressCredentialsProviderTest {
         }
 
         val testClient = TestS3Client(expectedCredentials)
-
         DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes).use { provider ->
             val attributes = ExecutionContext.build {
                 this.attributes[S3Attributes.ExpressClient] = testClient
                 this.attributes[S3Attributes.Bucket] = "bucket"
             }
-
             provider.resolve(attributes)
         }
+
         // close the provider, make sure all async refreshes are complete...
-        delay(1.seconds)
+        runBlocking { delay(10.milliseconds) }
         assertEquals(1, testClient.numCreateSession)
     }
 
@@ -110,7 +140,7 @@ class DefaultS3ExpressCredentialsProviderTest {
         }
 
         // close the provider, make sure all async refreshes are complete...
-        delay(5.seconds)
+        runBlocking { delay(10.milliseconds) }
         assertEquals(1, testClient.numCreateSession)
     }
 
@@ -147,8 +177,9 @@ class DefaultS3ExpressCredentialsProviderTest {
             attributes[S3Attributes.Bucket] = "SuccessfulBucket"
             provider.resolve(attributes)
         }
+
         // close the provider, make sure all async refreshes are complete...
-        delay(1.seconds)
+        runBlocking { delay(10.milliseconds) }
         assertEquals(2, testClient.numCreateSession)
     }
 
@@ -220,10 +251,8 @@ class DefaultS3ExpressCredentialsProviderTest {
         var numCreateSession = 0
 
         override suspend fun createSession(input: CreateSessionRequest): CreateSessionResponse {
-            println("in createSession for $input")
             numCreateSession += 1
-            println("numCreateSession: $numCreateSession")
-
+            println("i numCreateSession $numCreateSession")
             throwExceptionOnBucketNamed?.let {
                 if (input.bucket == it) {
                     throw Exception("Failed to create session credentials for bucket: $throwExceptionOnBucketNamed")
