@@ -29,9 +29,7 @@ object S3TestUtils {
 
     suspend fun getTestBucket(client: S3Client): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX)
 
-    suspend fun getTestDirectoryBucket(client: S3Client, suffix: String) = getDirectoryBucket(client, suffix)
-
-    private suspend fun getDirectoryBucket(client: S3Client, suffix: String): String = withTimeout(60.seconds) {
+    suspend fun getTestDirectoryBucket(client: S3Client, suffix: String) = withTimeout(60.seconds) {
         var testBucket = client.listBuckets()
             .buckets
             ?.mapNotNull { it.name }
@@ -43,7 +41,7 @@ object S3TestUtils {
                 UUID.randomUUID().toString().subSequence(0 until (S3_MAX_BUCKET_NAME_LENGTH - TEST_BUCKET_PREFIX.length - suffix.ensurePrefix("--").length)) +
                 suffix.ensurePrefix("--")
 
-            println("Creating S3 bucket: $testBucket")
+            println("Creating S3 Express directory bucket: $testBucket")
 
             val availabilityZone = testBucket // s3-test-bucket-UUID--use1-az4--x-s3
                 .removeSuffix(S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX) // s3-test-bucket-UUID--use1-az4
@@ -63,7 +61,6 @@ object S3TestUtils {
                 }
             }
         }
-
         testBucket
     }
 
