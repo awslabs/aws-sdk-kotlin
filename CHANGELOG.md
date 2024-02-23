@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.64] - 02/23/2024
+
+### Features
+* (**rds**) Add pattern and length based validations for DBShardGroupIdentifier
+
+### Documentation
+* (**appsync**) Documentation only updates for AppSync
+* (**qldb**) Clarify possible values for KmsKeyArn and EncryptionDescription.
+* (**rum**) Doc-only update for new RUM metrics that were added
+
 ## [1.0.63] - 02/22/2024
 
 ### Features
