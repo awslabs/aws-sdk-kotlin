@@ -11,31 +11,32 @@ import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.UnwrappedXmlOutput
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.transform.ModelTransformer
 
 /**
- * Applies the [UnwrappedXmlOutput] custom-made [annotation trait](https://smithy.io/2.0/spec/model.html?highlight=annotation#annotation-traits) to structures
- * whose operation is annotated with `S3UnwrappedXmlOutput` trait to mark when special unwrapped xml output deserialization is required.
+ * Applies the custom [UnwrappedXmlOutput]
+ * [annotation trait](https://smithy.io/2.0/spec/model.html?highlight=annotation#annotation-traits) to operations
+ * annotated with `S3UnwrappedXmlOutput` trait to mark when special unwrapped xml output deserialization is required.
  */
 class UnwrappedXmlOutputIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
         model.expectShape<ServiceShape>(settings.service).isS3
 
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
-        val unwrappedStructures = model
+        val unwrappedOperations = model
             .operationShapes
             .filter { it.hasTrait<S3UnwrappedXmlOutputTrait>() }
-            .map { it.outputShape }
+            .map { it.id }
             .toSet()
 
         return ModelTransformer
             .create()
             .mapShapes(model) { shape ->
                 when {
-                    shape.id in unwrappedStructures ->
-                        (shape as StructureShape).toBuilder().addTrait(UnwrappedXmlOutput()).build()
+                    shape.id in unwrappedOperations ->
+                        (shape as OperationShape).toBuilder().addTrait(UnwrappedXmlOutput()).build()
                     else -> shape
                 }
             }

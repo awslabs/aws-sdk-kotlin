@@ -90,6 +90,7 @@ class RestXmlParserGenerator(
         else -> super.payloadDeserializer(ctx, shape, members)
     }
 
+    // FIXME - reconcile
     private fun explicitBoundStructureDeserializer(
         ctx: ProtocolGenerator.GenerationContext,
         boundMember: MemberShape,
@@ -112,11 +113,110 @@ class RestXmlParserGenerator(
                 addNestedDocumentDeserializers(ctx, targetShape, writer)
                 writer.dokka("Payload deserializer for ${memberSymbol.name} with a different XML name trait (${xmlNameTrait.value})")
                 writer.withBlock("internal fun $name(payload: ByteArray): #T {", "}", memberSymbol) {
-                    write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+                    writer.write("val root = #T(payload).#T()", RuntimeTypes.Serde.SerdeXml.xmlStreamReader, RuntimeTypes.Serde.SerdeXml.root)
+                    val serdeCtx = SerdeCtx("root")
                     write("val builder = #T.Builder()", memberSymbol)
-                    renderDeserializerBody(ctx, copyWithMemberTraits, targetShape.members().toList(), writer)
+                    renderDeserializerBody(ctx, serdeCtx, copyWithMemberTraits, targetShape.members().toList(), writer)
                     write("return builder.build()")
                 }
+            }
+        }
+    }
+
+    override fun unwrapOperationError(
+        ctx: ProtocolGenerator.GenerationContext,
+        serdeCtx: SerdeCtx,
+        errorShape: StructureShape,
+        writer: KotlinWriter,
+    ): SerdeCtx {
+        val unwrapFn = when (ctx.service.getTrait<RestXmlTrait>()?.isNoErrorWrapping == true) {
+            true -> RestXmlErrors.unwrappedErrorResponseDeserializer(ctx)
+            false -> RestXmlErrors.wrappedErrorResponseDeserializer(ctx)
+        }
+        writer.write("val errReader = #T(${serdeCtx.tagReader})", unwrapFn)
+        return SerdeCtx("errReader")
+    }
+}
+
+object RestXmlErrors {
+
+    /**
+     * Error deserializer for a wrapped error response
+     *
+     * ```
+     * <ErrorResponse>
+     *     <Error>
+     *         <-- DATA -->>
+     *     </Error>
+     * </ErrorResponse>
+     * ```
+     *
+     * See https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#error-response-serialization
+     */
+    fun wrappedErrorResponseDeserializer(ctx: ProtocolGenerator.GenerationContext): Symbol = buildSymbol {
+        name = "unwrapWrappedXmlErrorResponse"
+        namespace = ctx.settings.pkg.serde
+        definitionFile = "XmlErrorUtils.kt"
+        renderBy = { writer ->
+            writer.dokka("Handle [wrapped](https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#error-response-serialization) error responses")
+            writer.withBlock(
+                "internal fun $name(root: #1T): #1T {",
+                "}",
+                RuntimeTypes.Serde.SerdeXml.TagReader,
+            ) {
+                withBlock(
+                    "if (root.startTag.name.tag != #S) {",
+                    "}",
+                    "ErrorResponse",
+                ) {
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected <ErrorResponse>; found `\${root.startTag}`")
+                }
+
+                write("val errTag = root.nextTag()")
+                withBlock(
+                    "if (errTag == null || errTag.startTag.name.tag != #S) {",
+                    "}",
+                    "Error",
+                ) {
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${errTag?.startTag}`")
+                }
+
+                write("return errTag")
+            }
+        }
+    }
+
+    /**
+     * Error deserializer for an unwrapped error response
+     *
+     * ```
+     * <Error>
+     *    <-- DATA -->>
+     * </Error>
+     * ```
+     *
+     * See https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#error-response-serialization
+     */
+    fun unwrappedErrorResponseDeserializer(ctx: ProtocolGenerator.GenerationContext): Symbol = buildSymbol {
+        name = "unwrapXmlErrorResponse"
+        namespace = ctx.settings.pkg.serde
+        definitionFile = "XmlErrorUtils.kt"
+        renderBy = { writer ->
+            writer.dokka("Handle [unwrapped](https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#error-response-serialization) error responses (restXml.noErrorWrapping == true)")
+            writer.withBlock(
+                "internal fun $name(root: #1T): #1T {",
+                "}",
+                RuntimeTypes.Serde.SerdeXml.TagReader,
+            ) {
+                withBlock(
+                    "if (root.startTag.name.tag != #S) {",
+                    "}",
+                    "Error",
+                ) {
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${errTag?.startTag}`")
+                }
+
+                write("return root")
             }
         }
     }
