@@ -24,3 +24,7 @@ dependencies {
         "kspJvm", // FIXME Generating common code is hard for KSP: https://github.com/google/ksp/issues/567
     ).forEach { configuration -> add(configuration, project(":hlls:dynamodb-mapper:processor")) }
 }
+
+apiValidation {
+    validationDisabled = true
+}

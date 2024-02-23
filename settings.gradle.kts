@@ -68,6 +68,8 @@ if (file("services/dynamodb").isServiceDir()) {
     include(":hlls:dynamodb-mapper:runtime")
     include(":hlls:dynamodb-mapper:tests")
     include(":hlls:dynamodb-mapper:tests:processor-test")
+} else {
+    logger.warn(":services:dynamodb is not bootstrapped, skipping :hlls:dynamodb-mapper and subprojects")
 }
 
 /**

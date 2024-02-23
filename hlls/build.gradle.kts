@@ -80,11 +80,3 @@ subprojects {
         }
     }
 }
-
-apiValidation {
-    ignoredProjects.addAll(
-        listOf(
-            "processor-test",
-        ),
-    )
-}
