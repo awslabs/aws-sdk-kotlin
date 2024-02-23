@@ -40,6 +40,7 @@ include(":aws-runtime:aws-core")
 include(":aws-runtime:aws-config")
 include(":aws-runtime:aws-endpoint")
 include(":aws-runtime:aws-http")
+include(":hlls")
 include(":services")
 include(":tests")
 include(":tests:benchmarks:service-benchmarks")
@@ -58,6 +59,15 @@ file("services").listFiles().forEach {
     if (it.isServiceDir()) {
         include(":services:${it.name}")
     }
+}
+
+if (file("services/dynamodb").isServiceDir()) {
+    include(":hlls:dynamodb-mapper")
+    include(":hlls:dynamodb-mapper:annotations")
+    include(":hlls:dynamodb-mapper:processor")
+    include(":hlls:dynamodb-mapper:runtime")
+    include(":hlls:dynamodb-mapper:tests")
+    include(":hlls:dynamodb-mapper:tests:processor-test")
 }
 
 /**
