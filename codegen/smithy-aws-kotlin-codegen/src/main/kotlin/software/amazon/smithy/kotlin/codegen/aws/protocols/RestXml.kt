@@ -213,7 +213,7 @@ object RestXmlErrors {
                     "}",
                     "Error",
                 ) {
-                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${errTag?.startTag}`")
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${root.startTag}`")
                 }
 
                 write("return root")
@@ -245,6 +245,7 @@ class RestXmlSerializerGenerator(
         else -> super.payloadSerializer(ctx, shape, members)
     }
 
+    // FIXME
     private fun explicitBoundStructureSerializer(
         ctx: ProtocolGenerator.GenerationContext,
         boundMember: MemberShape,
