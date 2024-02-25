@@ -32,7 +32,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
             </InvalidChangeBatch>
         """.trimIndent()
 
-        val response: HttpResponse = HttpResponse(
+        val response = HttpResponse(
             HttpStatusCode.BadRequest,
             Headers.Empty,
             HttpBody.fromBytes(bodyText.encodeToByteArray()),

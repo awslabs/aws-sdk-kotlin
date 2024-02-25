@@ -14,8 +14,9 @@ import aws.smithy.kotlin.runtime.awsprotocol.setAseErrorMetadata
 import aws.smithy.kotlin.runtime.collections.setIfValueNotNull
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.serde.*
-import aws.smithy.kotlin.runtime.serde.xml.XmlDeserializer
-import aws.smithy.kotlin.runtime.serde.xml.XmlSerialName
+import aws.smithy.kotlin.runtime.serde.xml.data
+import aws.smithy.kotlin.runtime.serde.xml.root
+import aws.smithy.kotlin.runtime.serde.xml.xmlStreamReader
 
 /**
  * Default header name identifying secondary request ID
@@ -45,35 +46,22 @@ internal fun setS3ErrorMetadata(exception: Any, response: HttpResponse, errorDet
 }
 
 internal fun parseS3ErrorResponse(payload: ByteArray): S3ErrorDetails {
-    val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Message"))
-    val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("Code"))
-    val REQUESTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("RequestId"))
-    val HOSTID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, XmlSerialName("HostId"))
-    val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
-        trait(XmlSerialName("Error"))
-        field(MESSAGE_DESCRIPTOR)
-        field(CODE_DESCRIPTOR)
-        field(REQUESTID_DESCRIPTOR)
-        field(HOSTID_DESCRIPTOR)
-    }
+    val root = xmlStreamReader(payload).root()
 
     var message: String? = null
     var code: String? = null
     var requestId: String? = null
     var requestId2: String? = null
 
-    val deserializer = XmlDeserializer(payload, true)
-    deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
-        loop@ while (true) {
-            when (findNextFieldIndex()) {
-                MESSAGE_DESCRIPTOR.index -> message = deserializeString()
-                CODE_DESCRIPTOR.index -> code = deserializeString()
-                REQUESTID_DESCRIPTOR.index -> requestId = deserializeString()
-                HOSTID_DESCRIPTOR.index -> requestId2 = deserializeString()
-                null -> break@loop
-                else -> skipValue()
-            }
+    loop@ while (true) {
+        val curr = root.nextTag() ?: break@loop
+        when (curr.startTag.name.tag) {
+            "Code" -> code = curr.data()
+            "Message", "message" -> message = curr.data()
+            "RequestId" -> requestId = curr.data()
+            "HostId" -> requestId2 = curr.data()
         }
+        curr.drop()
     }
 
     return S3ErrorDetails(code, message, requestId, requestId2)
