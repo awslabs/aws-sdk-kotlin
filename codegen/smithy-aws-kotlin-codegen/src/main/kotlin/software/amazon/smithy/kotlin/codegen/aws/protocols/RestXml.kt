@@ -52,7 +52,7 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
     }
 
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
-        RestXmlParserGenerator(this, defaultTimestampFormat)
+        RestXmlParserGenerator(this)
 
     override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
         RestXmlSerializerGenerator(this, defaultTimestampFormat)
@@ -68,16 +68,8 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
 }
 
 class RestXmlParserGenerator(
-    private val protocolGenerator: RestXml,
-    defaultTimestampFormat: TimestampFormatTrait.Format,
-) : XmlParserGenerator(protocolGenerator, defaultTimestampFormat) {
-
-    override fun descriptorGenerator(
-        ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        members: List<MemberShape>,
-        writer: KotlinWriter,
-    ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
+    protocolGenerator: RestXml,
+) : XmlParserGenerator(protocolGenerator.defaultTimestampFormat) {
 
     override fun payloadDeserializer(
         ctx: ProtocolGenerator.GenerationContext,

@@ -86,7 +86,7 @@ private class Ec2QuerySerializerGenerator(
 
 private class Ec2QueryParserGenerator(
     protocolGenerator: Ec2Query,
-) : XmlParserGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
+) : XmlParserGenerator(protocolGenerator.defaultTimestampFormat) {
     override fun unwrapOperationError(
         ctx: ProtocolGenerator.GenerationContext,
         serdeCtx: SerdeCtx,

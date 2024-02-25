@@ -80,7 +80,7 @@ private class AwsQuerySerializerGenerator(
 
 private class AwsQueryXmlParserGenerator(
     protocolGenerator: AwsQuery,
-) : XmlParserGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
+) : XmlParserGenerator(protocolGenerator.defaultTimestampFormat) {
 
     /**
      * Unwraps the response body as specified by
