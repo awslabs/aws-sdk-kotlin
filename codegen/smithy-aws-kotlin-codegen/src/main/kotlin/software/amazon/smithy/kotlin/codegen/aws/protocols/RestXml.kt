@@ -105,7 +105,7 @@ class RestXmlParserGenerator(
                 addNestedDocumentDeserializers(ctx, targetShape, writer)
                 writer.dokka("Payload deserializer for ${memberSymbol.name} with a different XML name trait (${xmlNameTrait.value})")
                 writer.withBlock("internal fun $name(payload: ByteArray): #T {", "}", memberSymbol) {
-                    writer.write("val root = #T(payload)", RuntimeTypes.Serde.SerdeXml.xmlTagReader)
+                    writer.write("val root = #T(payload)", RuntimeTypes.Serde.SerdeXml.xmlRootTagReader)
                     val serdeCtx = SerdeCtx("root")
                     write("val builder = #T.Builder()", memberSymbol)
                     renderDeserializerBody(ctx, serdeCtx, copyWithMemberTraits, targetShape.members().toList(), writer)
@@ -154,10 +154,10 @@ object RestXmlErrors {
             writer.withBlock(
                 "internal fun $name(root: #1T): #1T {",
                 "}",
-                RuntimeTypes.Serde.SerdeXml.TagReader,
+                RuntimeTypes.Serde.SerdeXml.XmlTagReader,
             ) {
                 withBlock(
-                    "if (root.tag.name.tag != #S) {",
+                    "if (root.tag.name != #S) {",
                     "}",
                     "ErrorResponse",
                 ) {
@@ -166,7 +166,7 @@ object RestXmlErrors {
 
                 write("val errTag = root.nextTag()")
                 withBlock(
-                    "if (errTag == null || errTag.tag.name.tag != #S) {",
+                    "if (errTag == null || errTag.tag.name != #S) {",
                     "}",
                     "Error",
                 ) {
@@ -198,10 +198,10 @@ object RestXmlErrors {
             writer.withBlock(
                 "internal fun $name(root: #1T): #1T {",
                 "}",
-                RuntimeTypes.Serde.SerdeXml.TagReader,
+                RuntimeTypes.Serde.SerdeXml.XmlTagReader,
             ) {
                 withBlock(
-                    "if (root.tag.name.tag != #S) {",
+                    "if (root.tag.name != #S) {",
                     "}",
                     "Error",
                 ) {

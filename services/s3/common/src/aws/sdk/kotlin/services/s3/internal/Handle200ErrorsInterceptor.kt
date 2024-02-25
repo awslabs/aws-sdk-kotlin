@@ -32,7 +32,7 @@ internal object Handle200ErrorsInterceptor : HttpInterceptor {
         // according to the knowledge center article above we should treat these as 5xx,
         // our retry policy will handle standard error codes like `SlowDown`
         val statusCode = HttpStatusCode.InternalServerError
-            .takeIf { token?.name?.local == "Error" }
+            .takeIf { token?.qualifiedName?.local == "Error" }
             ?: response.status
         return response.copy(status = statusCode, body = HttpBody.fromBytes(payload))
     }

@@ -13,8 +13,8 @@ internal fun parseRestXmlInvalidChangeBatchResponse(payload: ByteArray): Invalid
     deserializeInvalidChangeBatchError(InvalidChangeBatch.Builder(), payload)
 
 internal fun deserializeInvalidChangeBatchError(builder: InvalidChangeBatch.Builder, payload: ByteArray): InvalidChangeBatchErrorResponse? {
-    val root = xmlStreamReader(payload).root()
-    if (root.tag.name.tag == "ErrorResponse") {
+    val root = xmlTagReader(payload)
+    if (root.tag.name == "ErrorResponse") {
         val errDetails = parseRestXmlErrorResponse(payload)
         builder.message = errDetails.message
         return InvalidChangeBatchErrorResponse(errDetails, builder.build())
@@ -24,7 +24,7 @@ internal fun deserializeInvalidChangeBatchError(builder: InvalidChangeBatch.Buil
 
     loop@while (true) {
         val curr = root.nextTag() ?: break@loop
-        when (curr.tag.name.tag) {
+        when (curr.tag.name) {
             "Message", "message" -> builder.message = curr.data()
             "Messages", "messages" -> builder.messages = deserializeMessages(curr)
             "RequestId" -> requestId = curr.data()
@@ -39,7 +39,7 @@ private fun deserializeMessages(root: XmlTagReader): List<String> {
     val result = mutableListOf<String>()
     loop@while (true) {
         val curr = root.nextTag() ?: break@loop
-        when (curr.tag.name.tag) {
+        when (curr.tag.name) {
             "Message" -> {
                 val el = curr.tryData().getOrNull() ?: continue@loop
                 result.add(el)

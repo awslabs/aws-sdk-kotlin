@@ -52,7 +52,7 @@ internal fun parseS3ErrorResponse(payload: ByteArray): S3ErrorDetails {
 
     loop@ while (true) {
         val curr = root.nextTag() ?: break@loop
-        when (curr.tag.name.tag) {
+        when (curr.tag.name) {
             "Code" -> code = curr.data()
             "Message", "message" -> message = curr.data()
             "RequestId" -> requestId = curr.data()
