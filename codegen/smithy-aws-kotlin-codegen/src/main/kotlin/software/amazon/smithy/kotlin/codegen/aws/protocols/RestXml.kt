@@ -105,7 +105,7 @@ class RestXmlParserGenerator(
                 addNestedDocumentDeserializers(ctx, targetShape, writer)
                 writer.dokka("Payload deserializer for ${memberSymbol.name} with a different XML name trait (${xmlNameTrait.value})")
                 writer.withBlock("internal fun $name(payload: ByteArray): #T {", "}", memberSymbol) {
-                    writer.write("val root = #T(payload).#T()", RuntimeTypes.Serde.SerdeXml.xmlStreamReader, RuntimeTypes.Serde.SerdeXml.root)
+                    writer.write("val root = #T(payload)", RuntimeTypes.Serde.SerdeXml.xmlTagReader)
                     val serdeCtx = SerdeCtx("root")
                     write("val builder = #T.Builder()", memberSymbol)
                     renderDeserializerBody(ctx, serdeCtx, copyWithMemberTraits, targetShape.members().toList(), writer)
@@ -157,20 +157,20 @@ object RestXmlErrors {
                 RuntimeTypes.Serde.SerdeXml.TagReader,
             ) {
                 withBlock(
-                    "if (root.startTag.name.tag != #S) {",
+                    "if (root.tag.name.tag != #S) {",
                     "}",
                     "ErrorResponse",
                 ) {
-                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected <ErrorResponse>; found `\${root.startTag}`")
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected <ErrorResponse>; found `\${root.tag}`")
                 }
 
                 write("val errTag = root.nextTag()")
                 withBlock(
-                    "if (errTag == null || errTag.startTag.name.tag != #S) {",
+                    "if (errTag == null || errTag.tag.name.tag != #S) {",
                     "}",
                     "Error",
                 ) {
-                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${errTag?.startTag}`")
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${errTag?.tag}`")
                 }
 
                 write("return errTag")
@@ -201,11 +201,11 @@ object RestXmlErrors {
                 RuntimeTypes.Serde.SerdeXml.TagReader,
             ) {
                 withBlock(
-                    "if (root.startTag.name.tag != #S) {",
+                    "if (root.tag.name.tag != #S) {",
                     "}",
                     "Error",
                 ) {
-                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${root.startTag}`")
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${root.tag}`")
                 }
 
                 write("return root")

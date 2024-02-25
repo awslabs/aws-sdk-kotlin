@@ -125,29 +125,29 @@ private class Ec2QueryParserGenerator(
                 RuntimeTypes.Serde.SerdeXml.TagReader,
             ) {
                 withBlock(
-                    "if (root.startTag.name.tag != #S) {",
+                    "if (root.tag.name.tag != #S) {",
                     "}",
                     "Response",
                 ) {
-                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected <Response>; found `\${root.startTag}`")
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected <Response>; found `\${root.tag}`")
                 }
 
                 write("val errorsTag = root.nextTag()")
                 withBlock(
-                    "if (errorsTag == null || errorsTag.startTag.name.tag != #S) {",
+                    "if (errorsTag == null || errorsTag.tag.name.tag != #S) {",
                     "}",
                     "Errors",
                 ) {
-                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Errors>; found `\${errorsTag?.startTag}`")
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Errors>; found `\${errorsTag?.tag}`")
                 }
 
                 write("val errTag = errorsTag.nextTag()")
                 withBlock(
-                    "if (errTag == null || errTag.startTag.name.tag != #S) {",
+                    "if (errTag == null || errTag.tag.name.tag != #S) {",
                     "}",
                     "Error",
                 ) {
-                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${errTag?.startTag}`")
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${errTag?.tag}`")
                 }
 
                 write("return errTag")

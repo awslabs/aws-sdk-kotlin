@@ -118,18 +118,18 @@ private class AwsQueryXmlParserGenerator(
                     write("val responseWrapperName = \"\${operationName}Response\"")
                     write("val resultWrapperName = \"\${operationName}Result\"")
                     withBlock(
-                        "if (root.startTag.name.tag != responseWrapperName) {",
+                        "if (root.tag.name.tag != responseWrapperName) {",
                         "}",
                     ) {
-                        write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected \$responseWrapperName; found `\${root.startTag}`")
+                        write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected \$responseWrapperName; found `\${root.tag}`")
                     }
 
                     write("val resultTag = ${serdeCtx.tagReader}.nextTag()")
                     withBlock(
-                        "if (resultTag == null || resultTag.startTag.name.tag != resultWrapperName) {",
+                        "if (resultTag == null || resultTag.tag.name.tag != resultWrapperName) {",
                         "}",
                     ) {
-                        write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid result, expected \$resultWrapperName; found `\${resultTag?.startTag}`")
+                        write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid result, expected \$resultWrapperName; found `\${resultTag?.tag}`")
                     }
 
                     write("return resultTag")

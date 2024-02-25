@@ -5,7 +5,6 @@
 package aws.sdk.kotlin.services.s3.internal
 
 import aws.sdk.kotlin.runtime.AwsServiceException
-import aws.sdk.kotlin.runtime.http.*
 import aws.sdk.kotlin.services.s3.model.S3ErrorMetadata
 import aws.sdk.kotlin.services.s3.model.S3Exception
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
@@ -13,10 +12,8 @@ import aws.smithy.kotlin.runtime.awsprotocol.AwsErrorDetails
 import aws.smithy.kotlin.runtime.awsprotocol.setAseErrorMetadata
 import aws.smithy.kotlin.runtime.collections.setIfValueNotNull
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.serde.*
 import aws.smithy.kotlin.runtime.serde.xml.data
-import aws.smithy.kotlin.runtime.serde.xml.root
-import aws.smithy.kotlin.runtime.serde.xml.xmlStreamReader
+import aws.smithy.kotlin.runtime.serde.xml.xmlTagReader
 
 /**
  * Default header name identifying secondary request ID
@@ -46,7 +43,7 @@ internal fun setS3ErrorMetadata(exception: Any, response: HttpResponse, errorDet
 }
 
 internal fun parseS3ErrorResponse(payload: ByteArray): S3ErrorDetails {
-    val root = xmlStreamReader(payload).root()
+    val root = xmlTagReader(payload)
 
     var message: String? = null
     var code: String? = null
@@ -55,7 +52,7 @@ internal fun parseS3ErrorResponse(payload: ByteArray): S3ErrorDetails {
 
     loop@ while (true) {
         val curr = root.nextTag() ?: break@loop
-        when (curr.startTag.name.tag) {
+        when (curr.tag.name.tag) {
             "Code" -> code = curr.data()
             "Message", "message" -> message = curr.data()
             "RequestId" -> requestId = curr.data()
