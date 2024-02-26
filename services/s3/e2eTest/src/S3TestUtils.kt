@@ -289,7 +289,7 @@ object S3TestUtils {
                     else -> { if (status == null || latestStatus != status) {
                         println("Waiting on $operation operation. Status: $latestStatus ")
                         status = latestStatus
-                    }}
+                    } }
                 }
 
                 delay(10.seconds) // Avoid constant status checks
