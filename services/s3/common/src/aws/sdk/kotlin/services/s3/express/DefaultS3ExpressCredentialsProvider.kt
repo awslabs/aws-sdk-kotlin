@@ -55,7 +55,7 @@ internal class DefaultS3ExpressCredentialsProvider(
             ?.takeIf { !it.expiringCredentials.isExpired }
             ?.also {
                 if (it.expiringCredentials.isExpiringWithin(refreshBuffer)) {
-                    logger.trace { "Credentials for ${key.bucket} are within their refresh window, performing asynchronous refresh..." }
+                    logger.trace { "Credentials for ${key.bucket} are expiring in ${it.expiringCredentials.expiresAt} and are within their refresh window, performing asynchronous refresh..." }
                     launch(coroutineContext) {
                         try {
                             it.sfg.singleFlight { createSessionCredentials(key, client) }
