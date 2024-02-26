@@ -4,12 +4,14 @@
  */
 package aws.sdk.kotlin.services.s3
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.collections.AttributeKey
 
 /**
  * Execution context attributes specific to S3
  */
+@InternalSdkApi
 public object S3Attributes {
     /**
      * The name of the bucket requests are being made to
