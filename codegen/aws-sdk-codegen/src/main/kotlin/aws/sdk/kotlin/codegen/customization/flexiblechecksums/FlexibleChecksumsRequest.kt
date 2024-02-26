@@ -52,8 +52,12 @@ class FlexibleChecksumsRequest : KotlinIntegration {
                 .members()
                 .first { it.memberName == httpChecksumTrait.requestAlgorithmMember.get() }
 
-            writer.write("op.interceptors.add(#T<#T>())", interceptorSymbol, inputSymbol)
-            writer.withBlock("input.${requestAlgorithmMember.defaultName()}?.let {", "}") {
+            val requestAlgorithmMemberName = ctx.symbolProvider.toMemberName(requestAlgorithmMember)
+
+            writer.withBlock("op.interceptors.add(#T<#T>() {", "})", interceptorSymbol, inputSymbol) {
+                writer.write("input.#L?.value", requestAlgorithmMemberName)
+            }
+            writer.withBlock("input.#L?.let {", "}", requestAlgorithmMemberName) {
                 writer.write("op.context[#T.ChecksumAlgorithm] = it.value", RuntimeTypes.HttpClient.Operation.HttpOperationContext)
             }
         }
