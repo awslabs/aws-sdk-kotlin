@@ -24,7 +24,7 @@ internal data class S3ExpressCredentialsCacheKey(
     /**
      * The base credentials used to resolve session credentials
      */
-    val credentials: Credentials,
+    val baseCredentials: Credentials,
 )
 
 internal data class S3ExpressCredentialsCacheValue(
