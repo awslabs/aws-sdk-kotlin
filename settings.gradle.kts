@@ -40,6 +40,7 @@ include(":aws-runtime:aws-core")
 include(":aws-runtime:aws-config")
 include(":aws-runtime:aws-endpoint")
 include(":aws-runtime:aws-http")
+include(":hlls")
 include(":services")
 include(":tests")
 include(":tests:benchmarks:service-benchmarks")
@@ -58,6 +59,16 @@ file("services").listFiles().forEach {
     if (it.isServiceDir()) {
         include(":services:${it.name}")
     }
+}
+
+if (file("services/dynamodb").isServiceDir()) {
+    include(":hll:ddb-mapper")
+    include(":hll:ddb-mapper:dynamodb-mapper")
+    include(":hll:ddb-mapper:dynamodb-mapper-annotation-processor")
+    include(":hll:ddb-mapper:dynamodb-mapper-annotations")
+    include(":hll:ddb-mapper:tests:ddb-mapper-annotation-processor-test")
+} else {
+    logger.warn(":services:dynamodb is not bootstrapped, skipping :hll:ddb-mapper and subprojects")
 }
 
 /**

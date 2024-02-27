@@ -1,0 +1,325 @@
+public final class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper {
+	public fun <init> (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;)V
+	public final fun getClient ()Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;
+	public final fun getTable (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$CompositeKey;
+	public final fun getTable (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$PartitionKey;
+}
+
+public abstract class aws/sdk/kotlin/hll/dynamodbmapper/Table {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/Table$Companion;
+	public synthetic fun <init> (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getClient ()Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;
+	public abstract fun getItemByKeyItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getName ()Ljava/lang/String;
+	public abstract fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema;
+	public final fun putItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scan ()Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/Table$Companion {
+	public final fun invoke (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$CompositeKey;
+	public final fun invoke (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$PartitionKey;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/Table$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/Table {
+	public final fun getItem (Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getItemByKeyItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey;
+	public synthetic fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/Table$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/Table {
+	public final fun getItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getItemByKeyItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey;
+	public synthetic fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor {
+	public fun <init> (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;)V
+	public final fun getConverter ()Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;
+	public final fun getGetter ()Lkotlin/jvm/functions/Function1;
+	public final fun getKey ()Ljava/lang/String;
+	public final fun getSetter ()Lkotlin/jvm/functions/Function2;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/items/DocumentConverter : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/items/DocumentConverter;
+	public fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Laws/smithy/kotlin/runtime/content/Document;
+	public synthetic fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
+	public fun toItem (Laws/smithy/kotlin/runtime/content/Document;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public synthetic fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/items/HeterogeneousItemConverter : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
+	public fun <init> (Lkotlin/jvm/functions/Function1;Ljava/lang/String;Ljava/util/Map;)V
+	public fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
+	public final fun getSubConverters ()Ljava/util/Map;
+	public final fun getTypeAttribute ()Ljava/lang/String;
+	public final fun getTypeMapper ()Lkotlin/jvm/functions/Function1;
+	public fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
+	public abstract fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
+	public abstract fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter$DefaultImpls {
+	public static synthetic fun toItem$default (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Ljava/lang/Object;Ljava/util/Set;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/items/SimpleItemConverter : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
+	public fun <init> (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Ljava/util/Collection;)V
+	public fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
+	public fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/model/Item : java/util/Map, kotlin/jvm/internal/markers/KMappedMarker {
+	public fun <init> (Ljava/util/Map;)V
+	public fun clear ()V
+	public synthetic fun compute (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun compute (Ljava/lang/String;Ljava/util/function/BiFunction;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun computeIfAbsent (Ljava/lang/Object;Ljava/util/function/Function;)Ljava/lang/Object;
+	public fun computeIfAbsent (Ljava/lang/String;Ljava/util/function/Function;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun computeIfPresent (Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun computeIfPresent (Ljava/lang/String;Ljava/util/function/BiFunction;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public final fun containsKey (Ljava/lang/Object;)Z
+	public fun containsKey (Ljava/lang/String;)Z
+	public fun containsValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Z
+	public final fun containsValue (Ljava/lang/Object;)Z
+	public final fun entrySet ()Ljava/util/Set;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun get (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public final synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun get (Ljava/lang/String;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun getEntries ()Ljava/util/Set;
+	public fun getKeys ()Ljava/util/Set;
+	public fun getSize ()I
+	public fun getValues ()Ljava/util/Collection;
+	public fun hashCode ()I
+	public fun isEmpty ()Z
+	public final fun keySet ()Ljava/util/Set;
+	public synthetic fun merge (Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;
+	public fun merge (Ljava/lang/String;Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;Ljava/util/function/BiFunction;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun put (Ljava/lang/String;Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun putAll (Ljava/util/Map;)V
+	public synthetic fun putIfAbsent (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun putIfAbsent (Ljava/lang/String;Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun remove (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;Ljava/lang/Object;)Z
+	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun replace (Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Z
+	public fun replace (Ljava/lang/String;Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun replace (Ljava/lang/String;Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Z
+	public fun replaceAll (Ljava/util/function/BiFunction;)V
+	public final fun size ()I
+	public final fun toMutableItem ()Laws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem;
+	public final fun values ()Ljava/util/Collection;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/model/ItemKt {
+	public static final fun buildItem (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public static final fun itemOf ([Lkotlin/Pair;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public static final fun toItem (Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem : java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
+	public fun <init> (Ljava/util/Map;)V
+	public fun clear ()V
+	public final fun containsKey (Ljava/lang/Object;)Z
+	public fun containsKey (Ljava/lang/String;)Z
+	public fun containsValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Z
+	public final fun containsValue (Ljava/lang/Object;)Z
+	public final fun entrySet ()Ljava/util/Set;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun get (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public final synthetic fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun get (Ljava/lang/String;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun getEntries ()Ljava/util/Set;
+	public fun getKeys ()Ljava/util/Set;
+	public fun getSize ()I
+	public fun getValues ()Ljava/util/Collection;
+	public fun hashCode ()I
+	public fun isEmpty ()Z
+	public final fun keySet ()Ljava/util/Set;
+	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun put (Ljava/lang/String;Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun putAll (Ljava/util/Map;)V
+	public final fun remove (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public final synthetic fun remove (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/String;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public final fun size ()I
+	public final fun toItem ()Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public final fun toMutableItem ()Laws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem;
+	public final fun values ()Ljava/util/Collection;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/model/MutableItemKt {
+	public static final fun toMutableItem (Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput {
+	public abstract fun getDeserializeSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema;
+	public abstract fun getLowLevelResponse ()Ljava/lang/Object;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext : aws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput {
+	public abstract fun getMapperContext ()Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext : aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext {
+	public abstract fun getHighLevelResponse ()Ljava/lang/Object;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/Interceptor {
+	public abstract fun modifyBeforeCompletion (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext;)Ljava/lang/Object;
+	public abstract fun modifyBeforeDeserialization (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput;
+	public abstract fun modifyBeforeInvocation (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext;)Ljava/lang/Object;
+	public abstract fun modifyBeforeSerialization (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput;
+	public abstract fun readAfterDeserialization (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext;)V
+	public abstract fun readAfterExecution (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext;)V
+	public abstract fun readAfterInvocation (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext;)V
+	public abstract fun readAfterSerialization (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext;)V
+	public abstract fun readBeforeDeserialization (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext;)V
+	public abstract fun readBeforeExecution (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext;)V
+	public abstract fun readBeforeInvocation (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext;)V
+	public abstract fun readBeforeSerialization (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext;)V
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext : aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext {
+	public abstract fun getLowLevelRequest ()Ljava/lang/Object;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext : aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput, aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput {
+	public abstract fun getHighLevelRequest ()Ljava/lang/Object;
+	public abstract fun getSerializeSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema {
+	public abstract fun getConverter ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey {
+	public abstract fun getSortKey ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema {
+	public abstract fun getPartitionKey ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchemaKt {
+	public static final fun withKeySpec (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey;
+	public static final fun withKeySpec (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec {
+	public abstract fun getName ()Ljava/lang/String;
+	public abstract fun toField (Ljava/lang/Object;)Lkotlin/Pair;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$B : aws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$B;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$B;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$B;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public synthetic fun toField (Ljava/lang/Object;)Lkotlin/Pair;
+	public fun toField ([B)Lkotlin/Pair;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$N : aws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$N;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$N;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$N;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toField (Ljava/lang/Number;)Lkotlin/Pair;
+	public synthetic fun toField (Ljava/lang/Object;)Lkotlin/Pair;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$S : aws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$S;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$S;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec$S;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public synthetic fun toField (Ljava/lang/Object;)Lkotlin/Pair;
+	public fun toField (Ljava/lang/String;)Lkotlin/Pair;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/BooleanConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/BooleanConverter;
+	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Boolean;
+	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAv (Z)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/InstantConverter {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/InstantConverter;
+	public final fun getDefault ()Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/InstantConverter$EpochMs : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/InstantConverter$EpochMs;
+	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/time/Instant;
+	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAv (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/InstantConverter$EpochS : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/InstantConverter$EpochS;
+	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/time/Instant;
+	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAv (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/InstantConverter$Iso8601 : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/InstantConverter$Iso8601;
+	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/time/Instant;
+	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAv (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/IntConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/IntConverter;
+	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Integer;
+	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAv (I)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/StringConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/StringConverter;
+	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/String;
+	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAv (Ljava/lang/String;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+	public abstract fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public abstract fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+}
+

@@ -1,0 +1,13 @@
+public abstract interface annotation class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbItem : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbPartitionKey : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbSortKey : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class aws/sdk/kotlin/hll/dynamodbmapper/DynamodDbAttribute : java/lang/annotation/Annotation {
+	public abstract fun name ()Ljava/lang/String;
+}
+
