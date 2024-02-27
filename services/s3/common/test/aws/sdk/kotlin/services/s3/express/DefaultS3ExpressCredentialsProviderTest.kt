@@ -97,16 +97,22 @@ class DefaultS3ExpressCredentialsProviderTest {
         }
 
         val testClient = TestS3Client(expectedCredentials)
-        DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes).use { provider ->
-            val attributes = ExecutionContext.build {
-                this.attributes[S3Attributes.ExpressClient] = testClient
-                this.attributes[S3Attributes.Bucket] = "bucket"
-            }
-            provider.resolve(attributes)
+
+        val provider = DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes)
+
+        val attributes = ExecutionContext.build {
+            this.attributes[S3Attributes.ExpressClient] = testClient
+            this.attributes[S3Attributes.Bucket] = "bucket"
         }
+        provider.resolve(attributes)
+
+        // allow the async refresh to initiate before closing the provider
+        runBlocking { delay(50.milliseconds) }
 
         // close the provider, make sure all async refreshes are complete...
-        runBlocking { delay(10.milliseconds) }
+        provider.close()
+        runBlocking { delay(50.milliseconds) }
+
         assertEquals(1, testClient.numCreateSession)
     }
 
@@ -129,20 +135,24 @@ class DefaultS3ExpressCredentialsProviderTest {
 
         val testClient = TestS3Client(expectedCredentials)
 
-        DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes).use { provider ->
-            val attributes = ExecutionContext.build {
-                this.attributes[S3Attributes.ExpressClient] = testClient
-                this.attributes[S3Attributes.Bucket] = "bucket"
-            }
+        val provider = DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes)
 
-            val calls = (1..5).map {
-                async { provider.resolve(attributes) }
-            }
-            calls.awaitAll()
+        val attributes = ExecutionContext.build {
+            this.attributes[S3Attributes.ExpressClient] = testClient
+            this.attributes[S3Attributes.Bucket] = "bucket"
         }
+        val calls = (1..5).map {
+            async { provider.resolve(attributes) }
+        }
+        calls.awaitAll()
+
+        // allow the async refresh to initiate before closing the provider
+        runBlocking { delay(50.milliseconds) }
 
         // close the provider, make sure all async refreshes are complete...
-        runBlocking { delay(10.milliseconds) }
+        provider.close()
+        runBlocking { delay(50.milliseconds) }
+
         assertEquals(1, testClient.numCreateSession)
     }
 
@@ -169,19 +179,23 @@ class DefaultS3ExpressCredentialsProviderTest {
         // but there should be no crash
         val testClient = TestS3Client(expectedCredentials, throwExceptionOnBucketNamed = "ExceptionBucket", baseCredentials = Credentials("1", "1", "1"))
 
-        DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes).use { provider ->
-            val attributes = ExecutionContext.build {
-                this.attributes[S3Attributes.ExpressClient] = testClient
-                this.attributes[S3Attributes.Bucket] = "ExceptionBucket"
-            }
-            provider.resolve(attributes)
-
-            attributes[S3Attributes.Bucket] = "SuccessfulBucket"
-            provider.resolve(attributes)
+        val provider = DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes)
+        val attributes = ExecutionContext.build {
+            this.attributes[S3Attributes.ExpressClient] = testClient
+            this.attributes[S3Attributes.Bucket] = "ExceptionBucket"
         }
+        provider.resolve(attributes)
+
+        attributes[S3Attributes.Bucket] = "SuccessfulBucket"
+        provider.resolve(attributes)
+
+        // allow the async refresh to initiate before closing the provider
+        runBlocking { delay(50.milliseconds) }
 
         // close the provider, make sure all async refreshes are complete...
-        runBlocking { delay(10.milliseconds) }
+        provider.close()
+        runBlocking { delay(50.milliseconds) }
+
         assertEquals(2, testClient.numCreateSession)
     }
 
@@ -254,7 +268,6 @@ class DefaultS3ExpressCredentialsProviderTest {
 
         override suspend fun createSession(input: CreateSessionRequest): CreateSessionResponse {
             numCreateSession += 1
-            println("i numCreateSession $numCreateSession")
             throwExceptionOnBucketNamed?.let {
                 if (input.bucket == it) {
                     throw Exception("Failed to create session credentials for bucket: $throwExceptionOnBucketNamed")
