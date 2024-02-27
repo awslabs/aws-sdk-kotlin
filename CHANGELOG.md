@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.66] - 02/27/2024
+
+### Features
+* (**amplifyuibuilder**) We have added the ability to tag resources after they are created
+
 ## [1.0.65] - 02/26/2024
 
 ### Features
