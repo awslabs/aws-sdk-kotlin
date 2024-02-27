@@ -88,7 +88,7 @@ class S3ExpressIntegration : KotlinIntegration {
 
         serviceShapeBuilder.addTrait(SigV4S3ExpressAuthTrait())
 
-        val authTrait = AuthTrait(mutableSetOf(SigV4S3ExpressAuthTrait.ID) + serviceShape.expectTrait(AuthTrait::class.java).valueSet)
+        val authTrait = AuthTrait(serviceShape.expectTrait(AuthTrait::class.java).valueSet + mutableSetOf(SigV4S3ExpressAuthTrait.ID))
         serviceShapeBuilder.addTrait(authTrait)
 
         // Add the new shape and update the service shape's AuthTrait
