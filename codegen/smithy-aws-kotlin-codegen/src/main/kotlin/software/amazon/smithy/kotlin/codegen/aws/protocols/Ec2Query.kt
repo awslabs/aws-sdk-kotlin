@@ -125,7 +125,7 @@ private class Ec2QueryParserGenerator(
                 RuntimeTypes.Serde.SerdeXml.XmlTagReader,
             ) {
                 withBlock(
-                    "if (root.tag.name != #S) {",
+                    "if (root.tagName != #S) {",
                     "}",
                     "Response",
                 ) {
@@ -134,7 +134,7 @@ private class Ec2QueryParserGenerator(
 
                 write("val errorsTag = root.nextTag()")
                 withBlock(
-                    "if (errorsTag == null || errorsTag.tag.name != #S) {",
+                    "if (errorsTag == null || errorsTag.tagName != #S) {",
                     "}",
                     "Errors",
                 ) {
@@ -143,7 +143,7 @@ private class Ec2QueryParserGenerator(
 
                 write("val errTag = errorsTag.nextTag()")
                 withBlock(
-                    "if (errTag == null || errTag.tag.name != #S) {",
+                    "if (errTag == null || errTag.tagName != #S) {",
                     "}",
                     "Error",
                 ) {

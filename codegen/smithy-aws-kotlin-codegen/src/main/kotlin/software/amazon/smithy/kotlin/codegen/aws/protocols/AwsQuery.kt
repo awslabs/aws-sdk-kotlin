@@ -118,7 +118,7 @@ private class AwsQueryXmlParserGenerator(
                     write("val responseWrapperName = \"\${operationName}Response\"")
                     write("val resultWrapperName = \"\${operationName}Result\"")
                     withBlock(
-                        "if (root.tag.name != responseWrapperName) {",
+                        "if (root.tagName != responseWrapperName) {",
                         "}",
                     ) {
                         write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected \$responseWrapperName; found `\${root.tag}`")
@@ -126,7 +126,7 @@ private class AwsQueryXmlParserGenerator(
 
                     write("val resultTag = ${serdeCtx.tagReader}.nextTag()")
                     withBlock(
-                        "if (resultTag == null || resultTag.tag.name != resultWrapperName) {",
+                        "if (resultTag == null || resultTag.tagName != resultWrapperName) {",
                         "}",
                     ) {
                         write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid result, expected \$resultWrapperName; found `\${resultTag?.tag}`")

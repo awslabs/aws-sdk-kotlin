@@ -6,7 +6,6 @@ package aws.sdk.kotlin.services.route53.internal
 
 import aws.sdk.kotlin.services.route53.model.InvalidChangeBatch
 import aws.smithy.kotlin.runtime.awsprotocol.ErrorDetails
-import aws.smithy.kotlin.runtime.awsprotocol.xml.parseRestXmlErrorResponse
 import aws.smithy.kotlin.runtime.serde.xml.*
 
 internal fun parseRestXmlInvalidChangeBatchResponse(payload: ByteArray): InvalidChangeBatchErrorResponse? =
@@ -14,17 +13,11 @@ internal fun parseRestXmlInvalidChangeBatchResponse(payload: ByteArray): Invalid
 
 internal fun deserializeInvalidChangeBatchError(builder: InvalidChangeBatch.Builder, payload: ByteArray): InvalidChangeBatchErrorResponse? {
     val root = xmlTagReader(payload)
-    if (root.tag.name == "ErrorResponse") {
-        val errDetails = parseRestXmlErrorResponse(payload)
-        builder.message = errDetails.message
-        return InvalidChangeBatchErrorResponse(errDetails, builder.build())
-    }
-
     var requestId: String? = null
 
     loop@while (true) {
         val curr = root.nextTag() ?: break@loop
-        when (curr.tag.name) {
+        when (curr.tagName) {
             "Message", "message" -> builder.message = curr.data()
             "Messages", "messages" -> builder.messages = deserializeMessages(curr)
             "RequestId" -> requestId = curr.data()
@@ -39,7 +32,7 @@ private fun deserializeMessages(root: XmlTagReader): List<String> {
     val result = mutableListOf<String>()
     loop@while (true) {
         val curr = root.nextTag() ?: break@loop
-        when (curr.tag.name) {
+        when (curr.tagName) {
             "Message" -> {
                 val el = curr.tryData().getOrNull() ?: continue@loop
                 result.add(el)

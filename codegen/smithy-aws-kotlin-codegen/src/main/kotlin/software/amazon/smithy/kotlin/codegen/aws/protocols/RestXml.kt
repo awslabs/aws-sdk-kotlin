@@ -157,7 +157,7 @@ object RestXmlErrors {
                 RuntimeTypes.Serde.SerdeXml.XmlTagReader,
             ) {
                 withBlock(
-                    "if (root.tag.name != #S) {",
+                    "if (root.tagName != #S) {",
                     "}",
                     "ErrorResponse",
                 ) {
@@ -166,7 +166,7 @@ object RestXmlErrors {
 
                 write("val errTag = root.nextTag()")
                 withBlock(
-                    "if (errTag == null || errTag.tag.name != #S) {",
+                    "if (errTag == null || errTag.tagName != #S) {",
                     "}",
                     "Error",
                 ) {
@@ -201,7 +201,7 @@ object RestXmlErrors {
                 RuntimeTypes.Serde.SerdeXml.XmlTagReader,
             ) {
                 withBlock(
-                    "if (root.tag.name != #S) {",
+                    "if (root.tagName != #S) {",
                     "}",
                     "Error",
                 ) {

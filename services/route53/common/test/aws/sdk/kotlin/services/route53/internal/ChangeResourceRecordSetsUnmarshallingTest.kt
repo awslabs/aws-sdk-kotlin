@@ -5,7 +5,6 @@
 package aws.sdk.kotlin.services.route53.internal
 
 import aws.sdk.kotlin.services.route53.model.InvalidChangeBatch
-import aws.sdk.kotlin.services.route53.model.Route53Exception
 import aws.sdk.kotlin.services.route53.serde.ChangeResourceRecordSetsOperationDeserializer
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
@@ -106,35 +105,5 @@ class ChangeResourceRecordSetsUnmarshallingTest {
         }
         assertEquals(listOf<String>("InvalidChangeBatch message 1", "InvalidChangeBatch message 2"), exception.messages)
         assertEquals("InvalidChangeBatch message 3", exception.message)
-    }
-
-    @Test
-    fun changeResourceRecordSetsError() {
-        val bodyText = """
-            <?xml version="1.0"?>
-            <ErrorResponse xmlns="http://route53.amazonaws.com/doc/2016-09-07/">
-              <Error>
-                <Type>Sender</Type>
-                <Code>MalformedXML</Code>
-                <Message>ChangeResourceRecordSets error message</Message>
-              </Error>
-              <RequestId>b25f48e8-84fd-11e6-80d9-574e0c4664cb</RequestId>
-            </ErrorResponse>
-        """.trimIndent()
-
-        val response: HttpResponse = HttpResponse(
-            HttpStatusCode.BadRequest,
-            Headers.Empty,
-            HttpBody.fromBytes(bodyText.encodeToByteArray()),
-        )
-
-        val call = HttpCall(HttpRequestBuilder().build(), response)
-
-        val exception = assertFailsWith<Route53Exception> {
-            runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
-            }
-        }
-        assertEquals("ChangeResourceRecordSets error message", exception.message)
     }
 }
