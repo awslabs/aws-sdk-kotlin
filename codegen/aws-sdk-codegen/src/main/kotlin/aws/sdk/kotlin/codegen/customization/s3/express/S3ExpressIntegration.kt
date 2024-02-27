@@ -140,8 +140,8 @@ class S3ExpressIntegration : KotlinIntegration {
 
         override val order: Byte = -1 // Render before flexible checksums
 
-        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
-            !op.isS3UploadPart && (op.hasTrait<HttpChecksumRequiredTrait>() || op.hasTrait<HttpChecksumTrait>())
+        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean = !op.isS3UploadPart &&
+            (op.hasTrait<HttpChecksumRequiredTrait>() || (op.hasTrait<HttpChecksumTrait>() && op.expectTrait<HttpChecksumTrait>().isRequestChecksumRequired))
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val interceptorSymbol = buildSymbol {
@@ -158,12 +158,7 @@ class S3ExpressIntegration : KotlinIntegration {
             // S3 models a header name x-amz-sdk-checksum-algorithm representing the name of the checksum algorithm used
             val checksumHeaderName = checksumAlgorithmMember?.getTrait<HttpHeaderTrait>()?.value
 
-            val checksumRequired =
-                op.hasTrait<HttpChecksumRequiredTrait>() || httpChecksumTrait?.isRequestChecksumRequired == true
-
-            if (checksumRequired) {
-                writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq() ?: ""}))", interceptorSymbol)
-            }
+            writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq() ?: ""}))", interceptorSymbol)
         }
     }
 
