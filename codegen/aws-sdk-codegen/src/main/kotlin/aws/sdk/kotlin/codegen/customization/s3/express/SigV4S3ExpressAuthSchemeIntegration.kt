@@ -65,7 +65,7 @@ internal val SigV4S3ExpressAuthSchemeSymbol = buildSymbol {
 
 private object SigV4S3ExpressEndpointCustomization : EndpointCustomization {
     override val propertyRenderers: Map<String, EndpointPropertyRenderer> = mapOf(
-        "authSchemes" to ::renderAuthSchemes,
+        "authSchemes" to ::renderAuthScheme,
     )
 }
 
@@ -103,26 +103,26 @@ class SigV4S3ExpressAuthSchemeHandler : AuthSchemeHandler {
     }
 }
 
-private fun renderAuthSchemes(writer: KotlinWriter, authSchemes: Expression, expressionRenderer: ExpressionRenderer) {
-    writer.writeInline("#T to ", RuntimeTypes.SmithyClient.Endpoints.SigningContextAttributeKey)
-    writer.withBlock("listOf(", ")") {
-        authSchemes.toNode().expectArrayNode().forEach {
-            val scheme = it.expectObjectNode()
-            val schemeName = scheme.expectStringMember("name").value
-            val authFactoryFn = if (schemeName == "sigv4-s3express") sigV4S3ExpressSymbol else return@forEach
+private fun renderAuthScheme(writer: KotlinWriter, authSchemes: Expression, expressionRenderer: ExpressionRenderer) {
+    val expressScheme = authSchemes.toNode().expectArrayNode().find {
+        it.expectObjectNode().expectStringMember("name").value == "sigv4-s3express"
+    }?.expectObjectNode()
 
-            withBlock("#T(", "),", authFactoryFn) {
+    expressScheme?.let {
+        writer.writeInline("#T to ", RuntimeTypes.SmithyClient.Endpoints.SigningContextAttributeKey)
+        writer.withBlock("listOf(", ")") {
+            withBlock("#T(", "),", sigV4S3ExpressSymbol) {
                 // we delegate back to the expression visitor for each of these fields because it's possible to
                 // encounter template strings throughout
 
                 writeInline("serviceName = ")
-                renderOrElse(expressionRenderer, scheme.getStringMember("signingName"), "null")
+                renderOrElse(expressionRenderer, expressScheme.getStringMember("signingName"), "null")
 
                 writeInline("disableDoubleUriEncode = ")
-                renderOrElse(expressionRenderer, scheme.getBooleanMember("disableDoubleEncoding"), "false")
+                renderOrElse(expressionRenderer, expressScheme.getBooleanMember("disableDoubleEncoding"), "false")
 
                 writeInline("signingRegion = ")
-                renderOrElse(expressionRenderer, scheme.getStringMember("signingRegion"), "null")
+                renderOrElse(expressionRenderer, expressScheme.getStringMember("signingRegion"), "null")
             }
         }
     }
