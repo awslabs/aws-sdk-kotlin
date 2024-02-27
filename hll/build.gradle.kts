@@ -82,5 +82,10 @@ subprojects {
 }
 
 apiValidation {
-    ignoredProjects += subprojects.map { it.name }.filter { "test" in it }
+    val availableSubprojects = subprojects.map { it.name }.toSet()
+
+    ignoredProjects += listOf(
+        "dynamodb-mapper-annotation-processor",
+        "ddb-mapper-annotation-processor-test",
+    ).filter { it in availableSubprojects } // Some projects may not be in the build depending on bootstrapping
 }

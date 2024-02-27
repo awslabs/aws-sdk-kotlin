@@ -23,8 +23,8 @@ public sealed class Table<I>(public val client: DynamoDbClient, public val name:
         public operator fun <I, PK> invoke(
             client: DynamoDbClient,
             name: String,
-            schema: ItemSchema.SingleKey<I, PK>,
-        ): SingleKey<I, PK> = SingleKey(client, name, schema)
+            schema: ItemSchema.PartitionKey<I, PK>,
+        ): PartitionKey<I, PK> = PartitionKey(client, name, schema)
 
         public operator fun <I, PK, SK> invoke(
             client: DynamoDbClient,
@@ -59,10 +59,10 @@ public sealed class Table<I>(public val client: DynamoDbClient, public val name:
         }
     }
 
-    public class SingleKey<I, PK> internal constructor(
+    public class PartitionKey<I, PK> internal constructor(
         client: DynamoDbClient,
         name: String,
-        override val schema: ItemSchema.SingleKey<I, PK>,
+        override val schema: ItemSchema.PartitionKey<I, PK>,
     ) : Table<I>(client, name) {
         private val keyAttributeNames = setOf(schema.partitionKey.name)
 

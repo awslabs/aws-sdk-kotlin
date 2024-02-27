@@ -1,1 +1,1 @@
-aws.sdk.kotlin.hlls.dynamodbmapper.processor.MapperProcessorProvider
+aws.sdk.kotlin.hll.dynamodbmapper.processor.MapperProcessorProvider

@@ -4,9 +4,9 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.processor
 
-import aws.sdk.kotlin.hll.dynamodbmapper.DdbAttribute
-import aws.sdk.kotlin.hll.dynamodbmapper.DdbItem
-import aws.sdk.kotlin.hll.dynamodbmapper.DdbPartitionKey
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamodDbAttribute
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.isAnnotationPresent
@@ -14,7 +14,7 @@ import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
 
-private val annotationName = DdbItem::class.qualifiedName!!
+private val annotationName = DynamoDbItem::class.qualifiedName!!
 
 public class MapperProcessor(private val env: SymbolProcessorEnvironment) : SymbolProcessor {
     override fun process(resolver: Resolver): List<KSAnnotated> {
@@ -45,7 +45,7 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
 
             val props = classDeclaration.getAllProperties().mapNotNull(Property.Companion::from)
             val keyProp = checkNotNull(props.singleOrNull { it.isPk }) {
-                "Expected exactly one @DdbPartitionKey annotation on a property"
+                "Expected exactly one @DynamoDbPartitionKey annotation on a property"
             }
 
             env.codeGenerator.createNewFile(
@@ -77,12 +77,12 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
                             |    ),
                             |)
                             |
-                            |public object $schemaName : ItemSchema.SingleKey<$className, ${keyProp.typeName.getShortName()}> {
+                            |public object $schemaName : ItemSchema.PartitionKey<$className, ${keyProp.typeName.getShortName()}> {
                             |    override val converter: $converterName = $converterName
                             |    override val partitionKey: KeySpec.${keyProp.keySpecType} = ${generateKeySpec(keyProp)}
                             |}
                             |
-                            |public fun DdbMapper.get${className}Table(name: String): Table.SingleKey<$className, ${keyProp.typeName.getShortName()}> = getTable(name, $schemaName)
+                            |public fun DynamoDbMapper.get${className}Table(name: String): Table.PartitionKey<$className, ${keyProp.typeName.getShortName()}> = getTable(name, $schemaName)
                             |
                         """.trimMargin(),
                     )
@@ -177,9 +177,9 @@ private data class Property(val name: String, val ddbName: String, val typeName:
             ?.declaration
             ?.qualifiedName
             ?.let { typeName ->
-                val isPk = ksProperty.isAnnotationPresent(DdbPartitionKey::class)
+                val isPk = ksProperty.isAnnotationPresent(DynamoDbPartitionKey::class)
                 val name = ksProperty.simpleName.getShortName()
-                val ddbName = ksProperty.getAnnotationsByType(DdbAttribute::class).singleOrNull()?.name ?: name
+                val ddbName = ksProperty.getAnnotationsByType(DynamodDbAttribute::class).singleOrNull()?.name ?: name
                 Property(name, ddbName, typeName, isPk)
             }
     }

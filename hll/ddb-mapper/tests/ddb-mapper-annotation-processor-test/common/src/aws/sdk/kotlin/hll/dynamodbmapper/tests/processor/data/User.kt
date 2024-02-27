@@ -4,14 +4,14 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.tests.processor.data
 
-import aws.sdk.kotlin.hll.dynamodbmapper.DdbAttribute
-import aws.sdk.kotlin.hll.dynamodbmapper.DdbItem
-import aws.sdk.kotlin.hll.dynamodbmapper.DdbPartitionKey
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamodDbAttribute
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 
-@DdbItem
+@DynamoDbItem
 public data class User(
-    @DdbPartitionKey val id: Int,
-    @DdbAttribute("fName") val givenName: String,
-    @DdbAttribute("lName") val surname: String,
+    @DynamoDbPartitionKey val id: Int,
+    @DynamodDbAttribute("fName") val givenName: String,
+    @DynamodDbAttribute("lName") val surname: String,
     val age: Int,
 )

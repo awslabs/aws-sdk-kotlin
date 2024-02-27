@@ -1,8 +1,8 @@
-public final class aws/sdk/kotlin/hll/dynamodbmapper/DdbMapper {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper {
 	public fun <init> (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;)V
 	public final fun getClient ()Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;
 	public final fun getTable (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$CompositeKey;
-	public final fun getTable (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$SingleKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$SingleKey;
+	public final fun getTable (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$PartitionKey;
 }
 
 public abstract class aws/sdk/kotlin/hll/dynamodbmapper/Table {
@@ -18,7 +18,7 @@ public abstract class aws/sdk/kotlin/hll/dynamodbmapper/Table {
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/Table$Companion {
 	public final fun invoke (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$CompositeKey;
-	public final fun invoke (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$SingleKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$SingleKey;
+	public final fun invoke (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey;)Laws/sdk/kotlin/hll/dynamodbmapper/Table$PartitionKey;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/Table$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/Table {
@@ -28,10 +28,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/Table$CompositeKey : aws/sd
 	public synthetic fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/Table$SingleKey : aws/sdk/kotlin/hll/dynamodbmapper/Table {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/Table$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/Table {
 	public final fun getItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun getItemByKeyItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$SingleKey;
+	public fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey;
 	public synthetic fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema;
 }
 
@@ -208,16 +208,16 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSc
 	public abstract fun getConverter ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$SingleKey {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey {
 	public abstract fun getSortKey ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$SingleKey : aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema {
 	public abstract fun getPartitionKey ()Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchemaKt {
-	public static final fun withKeySpec (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$SingleKey;
+	public static final fun withKeySpec (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$PartitionKey;
 	public static final fun withKeySpec (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;Laws/sdk/kotlin/hll/dynamodbmapper/schemas/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/schemas/ItemSchema$CompositeKey;
 }
 

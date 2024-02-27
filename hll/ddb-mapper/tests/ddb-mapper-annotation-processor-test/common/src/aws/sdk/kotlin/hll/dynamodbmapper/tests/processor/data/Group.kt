@@ -4,11 +4,11 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.tests.processor.data
 
-import aws.sdk.kotlin.hll.dynamodbmapper.DdbItem
-import aws.sdk.kotlin.hll.dynamodbmapper.DdbPartitionKey
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 
-@DdbItem
+@DynamoDbItem
 public data class Group(
-    @DdbPartitionKey val name: String,
+    @DynamoDbPartitionKey val name: String,
     val userIds: String,
 )

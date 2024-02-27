@@ -11,11 +11,11 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 public interface ItemSchema<I> {
     public val converter: ItemConverter<I>
 
-    public interface SingleKey<I, in PK> : ItemSchema<I> {
+    public interface PartitionKey<I, in PK> : ItemSchema<I> {
         public val partitionKey: KeySpec<PK>
     }
 
-    public interface CompositeKey<I, PK, SK> : SingleKey<I, PK> {
+    public interface CompositeKey<I, PK, SK> : PartitionKey<I, PK> {
         public val sortKey: KeySpec<SK>
     }
 }
@@ -42,8 +42,8 @@ public sealed interface KeySpec<in K> {
     }
 }
 
-public fun <I, PK> ItemConverter<I>.withKeySpec(partitionKey: KeySpec<PK>): ItemSchema.SingleKey<I, PK> =
-    object : ItemSchema.SingleKey<I, PK> {
+public fun <I, PK> ItemConverter<I>.withKeySpec(partitionKey: KeySpec<PK>): ItemSchema.PartitionKey<I, PK> =
+    object : ItemSchema.PartitionKey<I, PK> {
         override val converter = this@withKeySpec
         override val partitionKey = partitionKey
     }
