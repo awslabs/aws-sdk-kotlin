@@ -14,6 +14,7 @@ import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
+import aws.sdk.kotlin.runtime.config.sigv4a.resolveSigningRegionSet
 import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.ExperimentalApi
@@ -79,6 +80,7 @@ public abstract class AbstractAwsSdkClientFactory<
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
+            config.sigv4aSigningRegionSet = config.sigv4aSigningRegionSet ?: resolveSigningRegionSet(platform, profile)
 
             if (config is CompressionClientConfig.Builder) {
                 config.requestCompression.disableRequestCompression =

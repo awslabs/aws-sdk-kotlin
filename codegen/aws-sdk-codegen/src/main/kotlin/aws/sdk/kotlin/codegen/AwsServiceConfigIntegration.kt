@@ -116,6 +116,17 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                 },
             )
         }
+
+        val Sigv4aSigningRegionSet: ConfigProperty = ConfigProperty {
+            name = "sigv4aSigningRegionSet"
+            symbol = KotlinTypes.Collections.list(KotlinTypes.String).asNullable()
+            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            useNestedBuilderBaseClass()
+            documentation = """
+                The set of regions to use when signing a request with sigV4a. If not provided this will automatically be set by the SDK.
+            """.trimIndent()
+            order = 100
+        }
     }
 
     override val sectionWriters: List<SectionWriterBinding> =
@@ -139,5 +150,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         add(AwsRetryPolicy)
         add(UserAgentAppId)
+        add(Sigv4aSigningRegionSet)
     }
 }

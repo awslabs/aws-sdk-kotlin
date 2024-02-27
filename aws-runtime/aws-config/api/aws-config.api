@@ -251,6 +251,7 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 	public final fun getAwsSecretAccessKey ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsSessionToken ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsSharedCredentialsFile ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
+	public final fun getAwsSigv4aSigningRegionSet ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsUseDualStackEndpoint ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsUseFipsEndpoint ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsWebIdentityTokenFile ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
@@ -472,6 +473,7 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 	public static final fun getRoleArn (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getSdkUserAgentAppId (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getServicesSection (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
+	public static final fun getSigv4aSigningRegionSet (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getSourceProfile (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getUseDualStack (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/Boolean;
 	public static final fun getUseFips (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/Boolean;
@@ -504,6 +506,11 @@ public final class aws/sdk/kotlin/runtime/config/profile/ConfigSection {
 public final class aws/sdk/kotlin/runtime/config/retries/ResolveRetryStrategyKt {
 	public static final fun resolveRetryStrategy (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun resolveRetryStrategy$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/runtime/config/sigv4a/ResolveSigningRegionSetKt {
+	public static final fun resolveSigningRegionSet (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveSigningRegionSet$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/config/useragent/ResolveUserAgentKt {

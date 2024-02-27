@@ -202,6 +202,12 @@ public object AwsSdkSetting {
      */
     public val AwsRequestMinCompressionSizeBytes: EnvironmentSetting<Long> =
         longEnvSetting("aws.requestMinCompressionSizeBytes", "AWS_REQUEST_MIN_COMPRESSION_SIZE_BYTES")
+
+    /**
+     * The set of regions to use when signing a request with sigV4a.
+     */
+    public val AwsSigv4aSigningRegionSet: EnvironmentSetting<String> =
+        strEnvSetting("aws.sigv4aSigningRegionSet", "AWS_SIGV4A_SIGNING_REGION_SET")
 }
 
 /**
