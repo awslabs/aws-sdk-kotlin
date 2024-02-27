@@ -82,7 +82,6 @@ class RestXmlParserGenerator(
         else -> super.payloadDeserializer(ctx, shape, members)
     }
 
-    // FIXME - reconcile
     private fun explicitBoundStructureDeserializer(
         ctx: ProtocolGenerator.GenerationContext,
         boundMember: MemberShape,
