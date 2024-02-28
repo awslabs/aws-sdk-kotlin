@@ -11,7 +11,7 @@ import aws.smithy.kotlin.runtime.http.auth.HttpSigner
 import aws.smithy.kotlin.runtime.http.auth.SignHttpRequest
 import aws.smithy.kotlin.runtime.http.request.header
 
-private const val S3_EXPRESS_SESSION_TOKEN_HEADER = "X-Amz-S3session-Token"
+internal const val S3_EXPRESS_SESSION_TOKEN_HEADER = "X-Amz-S3session-Token"
 private const val SESSION_TOKEN_HEADER = "X-Amz-Security-Token"
 
 /**
