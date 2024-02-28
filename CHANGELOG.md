@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.0.66] - 02/27/2024
+
+### Features
+* (**amplifyuibuilder**) We have added the ability to tag resources after they are created
+
+## [1.0.65] - 02/26/2024
+
+### Features
+* (**drs**) Added volume status to DescribeSourceServer replicated volumes.
+* (**kafkaconnect**) Adds support for tagging, with new TagResource, UntagResource and ListTagsForResource APIs to manage tags and updates to existing APIs to allow tag on create. This release also adds support for the new DeleteWorkerConfiguration API.
+* (**rds**) This release adds support for gp3 data volumes for Multi-AZ DB Clusters.
+
+### Documentation
+* (**apigateway**) Documentation updates for Amazon API Gateway.
+
+## [1.0.64] - 02/23/2024
+
+### Features
+* (**rds**) Add pattern and length based validations for DBShardGroupIdentifier
+
+### Documentation
+* (**appsync**) Documentation only updates for AppSync
+* (**qldb**) Clarify possible values for KmsKeyArn and EncryptionDescription.
+* (**rum**) Doc-only update for new RUM metrics that were added
+
 ## [1.0.63] - 02/22/2024
 
 ### Features
