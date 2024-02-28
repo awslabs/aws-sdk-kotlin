@@ -89,11 +89,14 @@ class S3ExpressTest {
         val keyName = "express-presigned.txt"
 
         testBuckets.forEach { bucketName ->
-            val presigned = client.presignPutObject(PutObjectRequest {
-                bucket = bucketName
-                key = keyName
-                body = ByteStream.fromString(content)
-            }, 5.minutes)
+            val presigned = client.presignPutObject(
+                PutObjectRequest {
+                    bucket = bucketName
+                    key = keyName
+                    body = ByteStream.fromString(content)
+                },
+                5.minutes,
+            )
 
             assertTrue(presigned.url.parameters.decodedParameters.contains("X-Amz-Security-Token"))
 
