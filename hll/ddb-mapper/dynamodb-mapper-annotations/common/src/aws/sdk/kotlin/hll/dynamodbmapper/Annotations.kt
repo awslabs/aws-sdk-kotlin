@@ -9,7 +9,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper
  * included then the attribute name matches the property name.
  */
 @Target(AnnotationTarget.PROPERTY)
-public annotation class DynamodDbAttribute(val name: String)
+public annotation class DynamoDbAttribute(val name: String)
 
 /**
  * Specifies that this class/interface describes an item type in a table. All properties of this type will be mapped to

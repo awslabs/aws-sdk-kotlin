@@ -6,17 +6,37 @@ package aws.sdk.kotlin.hll.dynamodbmapper.model
 
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
-// TODO convert to interface, document, add unit tests, maybe add Attribute wrapper type too?
-public class Item(private val delegate: Map<String, AttributeValue>) : Map<String, AttributeValue> by delegate {
-    override fun equals(other: Any?): Boolean = other is Item && delegate == other.delegate
+/**
+ * An immutable representation of a low-level item in a DynamoDB table. Items consist of attributes, each of which have
+ * a string name and a value.
+ */
+public interface Item : Map<String, AttributeValue>
 
-    override fun hashCode(): Int = delegate.hashCode()
+/**
+ * Convert this [Item] into a [MutableItem]. Changes to the returned instance do not affect this instance.
+ */
+public fun Item.toMutableItem(): MutableItem = toMutableMap().toMutableItem()
 
-    public fun toMutableItem(): MutableItem = MutableItem(delegate.toMutableMap())
-}
+/**
+ * Builds a new immutable [Item] by populating a [MutableItem] using the provided [block] and returning a read-only copy
+ * of it.
+ * @param block The block to apply to the [MutableItem] builder
+ */
+public inline fun buildItem(block: MutableItem.() -> Unit): Item =
+    mutableMapOf<String, AttributeValue>().toMutableItem().apply(block).toItem()
 
-public inline fun buildItem(block: MutableItem.() -> Unit): Item = MutableItem(mutableMapOf()).apply(block).toItem()
+/**
+ * Returns a new immutable [Item] with the specified attributes, given as name-value pairs
+ * @param pairs A collection of [Pair]<[String], [AttributeValue]> where the first value is the attribute name and the
+ * second is the attribute value.
+ */
+public fun itemOf(vararg pairs: Pair<String, AttributeValue>): Item = ItemImpl(mapOf(*pairs))
 
-public fun itemOf(vararg pairs: Pair<String, AttributeValue>): Item = Item(mapOf(*pairs))
+/**
+ * Converts this map to an immutable [Item]
+ */
+public fun Map<String, AttributeValue>.toItem(): Item = ItemImpl(this)
 
-public fun Map<String, AttributeValue>.toItem(): Item = Item(this)
+private data class ItemImpl(
+    private val delegate: Map<String, AttributeValue>,
+) : Item, Map<String, AttributeValue> by delegate

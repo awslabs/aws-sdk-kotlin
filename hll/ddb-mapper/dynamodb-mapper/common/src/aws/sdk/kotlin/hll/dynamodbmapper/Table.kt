@@ -4,10 +4,10 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper
 
+import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
 import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.hll.dynamodbmapper.schemas.ItemSchema
-import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
+import aws.sdk.kotlin.hll.dynamodbmapper.model.toItem
 import aws.sdk.kotlin.services.dynamodb.getItem
 import aws.sdk.kotlin.services.dynamodb.paginators.items
 import aws.sdk.kotlin.services.dynamodb.paginators.scanPaginated
@@ -15,79 +15,113 @@ import aws.sdk.kotlin.services.dynamodb.putItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-// TODO refactor to interface, add support for all operations, document, add unit tests
-public sealed class Table<I>(public val client: DynamoDbClient, public val name: String) {
-    public abstract val schema: ItemSchema<I>
+/**
+ * Represents a table in DynamoDB and an associated item schema. Operations on this table will invoke low-level
+ * operations after mapping objects to items and vice versa.
+ * @param T The type of objects which will be read from and/or written to this table
+ */
+public interface Table<T> {
+    /**
+     * The [DynamoDbMapper] which holds the underlying DynamoDB service client used to invoke operations
+     */
+    public val mapper: DynamoDbMapper
 
-    public companion object {
-        public operator fun <I, PK> invoke(
-            client: DynamoDbClient,
-            name: String,
-            schema: ItemSchema.PartitionKey<I, PK>,
-        ): PartitionKey<I, PK> = PartitionKey(client, name, schema)
+    /**
+     * The name of this table
+     */
+    public val name: String
 
-        public operator fun <I, PK, SK> invoke(
-            client: DynamoDbClient,
-            name: String,
-            schema: ItemSchema.CompositeKey<I, PK, SK>,
-        ): CompositeKey<I, PK, SK> = CompositeKey(client, name, schema)
+    /**
+     * The [ItemSchema] for this table which describes how to map objects to items and vice versa
+     */
+    public val schema: ItemSchema<T>
+
+    // TODO reimplement operations to use pipeline, extension functions where appropriate, docs, etc.
+
+    public suspend fun getItem(key: Item): T?
+
+    @Suppress("INAPPLICABLE_JVM_NAME")
+    @JvmName("getItemByKeyObj")
+    public suspend fun getItem(keyObj: T): T?
+
+    public suspend fun putItem(obj: T)
+
+    public fun scan(): Flow<T>
+
+    /**
+     * Represents a table whose primary key is a single partition key
+     * @param T The type of objects which will be read from and/or written to this table
+     * @param PK The type of the partition key property, either [String], [Number], or [ByteArray]
+     */
+    public interface PartitionKey<T, PK> : Table<T> {
+        // TODO reimplement operations to use pipeline, extension functions where appropriate, docs, etc.
+        public suspend fun getItem(partitionKey: PK): T?
     }
 
-    public fun scan(): Flow<I> {
-        val resp = client.scanPaginated {
-            tableName = name
-        }
-        return resp.items().map { schema.converter.fromItem(Item(it)) }
+    /**
+     * Represents a table whose primary key is a composite of a partition key and a sort key
+     * @param T The type of objects which will be read from and/or written to this table
+     * @param PK The type of the partition key property, either [String], [Number], or [ByteArray]
+     * @param SK The type of the sort key property, either [String], [Number], or [ByteArray]
+     */
+    public interface CompositeKey<T, PK, SK> : Table<T> {
+        // TODO reimplement operations to use pipeline, extension functions where appropriate, docs, etc.
+        public suspend fun getItem(partitionKey: PK, sortKey: SK): T?
     }
+}
 
-    internal suspend fun getItem(key: Item): I? {
-        val resp = client.getItem {
+internal abstract class TableImpl<T>(override val mapper: DynamoDbMapper, override val name: String) : Table<T> {
+    override suspend fun getItem(key: Item): T? {
+        val resp = mapper.client.getItem {
             tableName = name
             this.key = key
         }
-        return resp.item?.let { schema.converter.fromItem(Item(it)) }
+        return resp.item?.toItem()?.let(schema.converter::fromItem)
     }
 
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    @JvmName("getItemByKeyItem")
-    public abstract suspend fun getItem(keyItem: I): I?
-
-    public suspend fun putItem(item: I) {
-        client.putItem {
+    override suspend fun putItem(obj: T) {
+        mapper.client.putItem {
             tableName = name
-            this.item = schema.converter.toItem(item)
+            this.item = schema.converter.toItem(obj)
         }
     }
 
-    public class PartitionKey<I, PK> internal constructor(
-        client: DynamoDbClient,
+    override fun scan(): Flow<T> {
+        val resp = mapper.client.scanPaginated {
+            tableName = name
+        }
+        return resp.items().map { schema.converter.fromItem(it.toItem() ) }
+    }
+
+    internal class PartitionKeyImpl<T, PK> internal constructor(
+        mapper: DynamoDbMapper,
         name: String,
-        override val schema: ItemSchema.PartitionKey<I, PK>,
-    ) : Table<I>(client, name) {
+        override val schema: ItemSchema.PartitionKey<T, PK>,
+    ) : TableImpl<T>(mapper, name), Table.PartitionKey<T, PK> {
         private val keyAttributeNames = setOf(schema.partitionKey.name)
 
         @Suppress("INAPPLICABLE_JVM_NAME")
         @JvmName("getItemByKeyItem")
-        override suspend fun getItem(keyItem: I): I? =
-            getItem(schema.converter.toItem(keyItem, keyAttributeNames))
+        override suspend fun getItem(keyObj: T): T? =
+            getItem(schema.converter.toItem(keyObj, keyAttributeNames))
 
-        public suspend fun getItem(partitionKey: PK): I? =
+        override suspend fun getItem(partitionKey: PK): T? =
             getItem(itemOf(schema.partitionKey.toField(partitionKey)))
     }
 
-    public class CompositeKey<I, PK, SK> internal constructor(
-        client: DynamoDbClient,
+    internal class CompositeKeyImpl<T, PK, SK> internal constructor(
+        mapper: DynamoDbMapper,
         name: String,
-        override val schema: ItemSchema.CompositeKey<I, PK, SK>,
-    ) : Table<I>(client, name) {
+        override val schema: ItemSchema.CompositeKey<T, PK, SK>,
+    ) : TableImpl<T>(mapper, name), Table.CompositeKey<T, PK, SK> {
         private val keyAttributeNames = setOf(schema.partitionKey.name, schema.sortKey.name)
 
         @Suppress("INAPPLICABLE_JVM_NAME")
         @JvmName("getItemByKeyItem")
-        override suspend fun getItem(keyItem: I): I? =
-            getItem(schema.converter.toItem(keyItem, keyAttributeNames))
+        override suspend fun getItem(keyObj: T): T? =
+            getItem(schema.converter.toItem(keyObj, keyAttributeNames))
 
-        public suspend fun getItem(partitionKey: PK, sortKey: SK): I? =
+        override suspend fun getItem(partitionKey: PK, sortKey: SK): T? =
             getItem(itemOf(schema.partitionKey.toField(partitionKey), schema.sortKey.toField(sortKey)))
     }
 }

@@ -16,13 +16,13 @@ public object DocumentConverter : ItemConverter<Document> {
         .mapValues { (_, attr) -> fromAv(attr) }
         .let(Document::Map)
 
-    override fun toItem(obj: Document, onlyKeys: Set<String>?): Item {
+    override fun toItem(obj: Document, onlyAttributes: Set<String>?): Item {
         require(obj is Document.Map)
 
-        val map = if (onlyKeys == null) {
+        val map = if (onlyAttributes == null) {
             obj
         } else {
-            obj.filterKeys { it in onlyKeys }
+            obj.filterKeys { it in onlyAttributes }
         }
 
         return map.mapValues { (_, value) -> toAv(value) }.toItem()

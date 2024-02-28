@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.processor
 
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamodDbAttribute
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import com.google.devtools.ksp.KspExperimental
@@ -60,7 +60,6 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
                             |
                             |import aws.sdk.kotlin.hll.dynamodbmapper.*
                             |import aws.sdk.kotlin.hll.dynamodbmapper.items.*
-                            |import aws.sdk.kotlin.hll.dynamodbmapper.schemas.*
                             |import aws.sdk.kotlin.hll.dynamodbmapper.values.*
                             |import $basePackageName.$className
                             |
@@ -79,7 +78,7 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
                             |
                             |public object $schemaName : ItemSchema.PartitionKey<$className, ${keyProp.typeName.getShortName()}> {
                             |    override val converter: $converterName = $converterName
-                            |    override val partitionKey: KeySpec.${keyProp.keySpecType} = ${generateKeySpec(keyProp)}
+                            |    override val partitionKey: KeySpec<${keyProp.keySpecType}> = ${generateKeySpec(keyProp)}
                             |}
                             |
                             |public fun DynamoDbMapper.get${className}Table(name: String): Table.PartitionKey<$className, ${keyProp.typeName.getShortName()}> = getTable(name, $schemaName)
@@ -179,7 +178,7 @@ private data class Property(val name: String, val ddbName: String, val typeName:
             ?.let { typeName ->
                 val isPk = ksProperty.isAnnotationPresent(DynamoDbPartitionKey::class)
                 val name = ksProperty.simpleName.getShortName()
-                val ddbName = ksProperty.getAnnotationsByType(DynamodDbAttribute::class).singleOrNull()?.name ?: name
+                val ddbName = ksProperty.getAnnotationsByType(DynamoDbAttribute::class).singleOrNull()?.name ?: name
                 Property(name, ddbName, typeName, isPk)
             }
     }
@@ -187,7 +186,7 @@ private data class Property(val name: String, val ddbName: String, val typeName:
 
 private val Property.keySpecType: String
     get() = when (val fqTypeName = typeName.asString()) {
-        "kotlin.Int" -> "N"
-        "kotlin.String" -> "S"
+        "kotlin.Int" -> "Number"
+        "kotlin.String" -> "String"
         else -> error("Unsupported key type $fqTypeName, expected Int or String")
     }
