@@ -133,7 +133,7 @@ class S3ExpressIntegration : KotlinIntegration {
     }
 
     /**
-     * For any operations that may send a checksum, override a user-configured checksum to set CRC32.
+     * For any operations that require a checksum, set CRC32 if the user has not already configured a checksum.
      */
     private val UseCrc32Checksum = object : ProtocolMiddleware {
         override val name: String = "UseCrc32Checksum"
