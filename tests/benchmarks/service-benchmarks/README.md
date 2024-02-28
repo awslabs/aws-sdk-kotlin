@@ -51,6 +51,19 @@ The following benchmark run serves as a baseline for future runs:
 |   —GetEndpoint        |               |  555 | 0.220 | 0.401 | 0.406 | 0.452 |  0.506 |  6.606 |
 |   —PutEvents          |               |  415 | 0.242 | 0.400 | 0.420 | 0.466 |  0.619 |  2.762 |
 
+### S3 Express
+S3 Express benchmarks were ran separately.
+
+| Hardware type  | Operating system | SDK version     |
+|----------------|------------------|-----------------|
+| EC2 m5.4xlarge | Amazon Linux 2023   | 1.0.66 |
+
+|                       | Overhead (ms) |    n |   min |   avg |   med |   p90 |   p99 |    max |
+| :---                  |          ---: | ---: |  ---: |  ---: |  ---: |  ---: |  ---: |   ---: |
+| **S3Express**         |               |      |       |       |       |       |       |        |
+|   —PutObject          |               | 2095 | 0.677 | 0.744 | 0.725 | 0.762 | 0.842 |  7.532 |
+|   —GetObject          |               | 3466 | 0.281 | 0.321 | 0.302 | 0.344 | 0.373 |  8.932 |
+
 ## Methodology
 
 This section describes how the benchmarks actually work at a high level:
