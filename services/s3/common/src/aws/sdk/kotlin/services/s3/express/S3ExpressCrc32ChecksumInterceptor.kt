@@ -29,7 +29,7 @@ internal class S3ExpressCrc32ChecksumInterceptor(
         val req = context.protocolRequest.toBuilder()
 
         if (!context.executionContext.contains(HttpOperationContext.ChecksumAlgorithm)) {
-            logger.info { "Checksum is required and not already configured, enabling CRC32 for S3 Express" }
+            logger.debug { "Checksum is required and not already configured, enabling CRC32 for S3 Express" }
 
             // Update the execution context so flexible checksums uses CRC32
             context.executionContext[HttpOperationContext.ChecksumAlgorithm] = CRC32_ALGORITHM_NAME
