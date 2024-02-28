@@ -5,7 +5,9 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.express.S3_EXPRESS_SESSION_TOKEN_HEADER
 import aws.sdk.kotlin.services.s3.model.*
+import aws.sdk.kotlin.services.s3.presigners.presignPutObject
 import aws.sdk.kotlin.services.s3.putObject
 import aws.sdk.kotlin.services.s3.withConfig
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
@@ -19,6 +21,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.*
+import kotlin.time.Duration.Companion.minutes
 
 /**
  * Tests for S3 Express operations
@@ -55,22 +58,48 @@ class S3ExpressTest {
         val keyName = "express.txt"
 
         testBuckets.forEach { bucketName ->
-            client.putObject {
+            val trackingInterceptor = S3ExpressInvocationTrackingInterceptor()
+            client.withConfig {
+                interceptors += trackingInterceptor
+            }.use { trackingClient ->
+                trackingClient.putObject {
+                    bucket = bucketName
+                    key = keyName
+                    body = ByteStream.fromString(content)
+                }
+
+                val req = GetObjectRequest {
+                    bucket = bucketName
+                    key = keyName
+                }
+
+                val respContent = client.getObject(req) {
+                    it.body?.decodeToString()
+                }
+
+                assertEquals(content, respContent)
+                assertEquals(1, trackingInterceptor.s3ExpressInvocations)
+            }
+        }
+    }
+
+    @Test
+    fun testPresignedPutObject() = runTest {
+        val content = "Presign this!"
+        val keyName = "express-presigned.txt"
+
+        testBuckets.forEach { bucketName ->
+            val presigned = client.presignPutObject(PutObjectRequest {
                 bucket = bucketName
                 key = keyName
                 body = ByteStream.fromString(content)
-            }
+            }, 5.minutes)
 
-            val req = GetObjectRequest {
-                bucket = bucketName
-                key = keyName
-            }
+            assertTrue(presigned.url.parameters.decodedParameters.contains("X-Amz-Security-Token"))
 
-            val respContent = client.getObject(req) {
-                it.body?.decodeToString()
-            }
-
-            assertEquals(content, respContent)
+            // FIXME Presigned requests should use S3 Express Auth Scheme resulting in `X-Amz-S3session-Token`
+            // https://github.com/awslabs/aws-sdk-kotlin/issues/1236
+            assertFalse(presigned.url.parameters.decodedParameters.contains(S3_EXPRESS_SESSION_TOKEN_HEADER))
         }
     }
 
@@ -105,10 +134,20 @@ class S3ExpressTest {
         }
     }
 
+    private class S3ExpressInvocationTrackingInterceptor : HttpInterceptor {
+        var s3ExpressInvocations = 0
+
+        override fun readAfterSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
+            if (context.protocolRequest.headers.contains(S3_EXPRESS_SESSION_TOKEN_HEADER)) {
+                s3ExpressInvocations += 1
+            }
+        }
+    }
+
     private class CRC32ChecksumValidatingInterceptor : HttpInterceptor {
         override fun readAfterSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
             val headers = context.protocolRequest.headers
-            if (headers.contains("X-Amz-S3session-Token")) {
+            if (headers.contains(S3_EXPRESS_SESSION_TOKEN_HEADER)) {
                 assertTrue(headers.contains("x-amz-checksum-crc32"), "Failed to find x-amz-checksum-crc32 header")
                 assertFalse(headers.contains("Content-MD5"), "Unexpectedly found Content-MD5 header")
             }
