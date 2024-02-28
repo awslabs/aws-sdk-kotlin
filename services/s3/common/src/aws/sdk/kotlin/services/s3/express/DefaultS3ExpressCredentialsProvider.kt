@@ -41,13 +41,10 @@ internal class DefaultS3ExpressCredentialsProvider(
     private val credentialsCache: S3ExpressCredentialsCache = S3ExpressCredentialsCache(),
     private val refreshBuffer: Duration = 1.minutes,
 ) : CloseableCredentialsProvider, SdkManagedBase(), CoroutineScope {
-    public constructor() : this(TimeSource.Monotonic)
-
-    private lateinit var client: S3Client
     override val coroutineContext: CoroutineContext = Job() + CoroutineName("DefaultS3ExpressCredentialsProvider")
 
     override suspend fun resolve(attributes: Attributes): Credentials {
-        client = attributes[S3Attributes.ExpressClient] as S3Client
+        val client = attributes[S3Attributes.ExpressClient] as S3Client
 
         val key = S3ExpressCredentialsCacheKey(attributes[S3Attributes.Bucket], client.config.credentialsProvider.resolve(attributes))
 
@@ -55,12 +52,12 @@ internal class DefaultS3ExpressCredentialsProvider(
             ?.takeIf { !it.expiringCredentials.isExpired }
             ?.also {
                 if (it.expiringCredentials.isExpiringWithin(refreshBuffer)) {
-                    logger.trace { "Credentials for ${key.bucket} are expiring in ${it.expiringCredentials.expiresAt} and are within their refresh window, performing asynchronous refresh..." }
+                    client.logger.trace { "Credentials for ${key.bucket} are expiring in ${it.expiringCredentials.expiresAt} and are within their refresh window, performing asynchronous refresh..." }
                     launch(coroutineContext) {
                         try {
                             it.sfg.singleFlight { createSessionCredentials(key, client) }
                         } catch (e: Exception) {
-                            logger.warn(e) { "Asynchronous refresh for ${key.bucket} failed." }
+                            client.logger.warn(e) { "Asynchronous refresh for ${key.bucket} failed." }
                         }
                     }
                 }
@@ -88,6 +85,5 @@ internal class DefaultS3ExpressCredentialsProvider(
         }
 
     @OptIn(ExperimentalApi::class)
-    internal val logger get() =
-        client.config.telemetryProvider.loggerProvider.getLogger<DefaultS3ExpressCredentialsProvider>()
+    internal val S3Client.logger get() = config.telemetryProvider.loggerProvider.getLogger<DefaultS3ExpressCredentialsProvider>()
 }
