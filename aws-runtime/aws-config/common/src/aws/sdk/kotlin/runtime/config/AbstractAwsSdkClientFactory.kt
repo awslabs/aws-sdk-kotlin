@@ -24,6 +24,7 @@ import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
 import aws.smithy.kotlin.runtime.client.config.CompressionClientConfig
+import aws.smithy.kotlin.runtime.client.config.SigV4aClientConfig
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.telemetry.TelemetryConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
@@ -80,7 +81,6 @@ public abstract class AbstractAwsSdkClientFactory<
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)
-            config.sigv4aSigningRegionSet = config.sigv4aSigningRegionSet ?: resolveSigningRegionSet(platform, profile)
 
             if (config is CompressionClientConfig.Builder) {
                 config.requestCompression.disableRequestCompression =
@@ -90,6 +90,11 @@ public abstract class AbstractAwsSdkClientFactory<
                 config.requestCompression.requestMinCompressionSizeBytes =
                     config.requestCompression.requestMinCompressionSizeBytes
                         ?: resolveRequestMinCompressionSizeBytes(platform, profile)
+            }
+
+            if (config is SigV4aClientConfig.Builder) {
+                config.sigv4aSigningRegionSet =
+                    config.sigv4aSigningRegionSet ?: resolveSigningRegionSet(platform, profile)
             }
 
             finalizeConfig(builder, sharedConfig, profile)

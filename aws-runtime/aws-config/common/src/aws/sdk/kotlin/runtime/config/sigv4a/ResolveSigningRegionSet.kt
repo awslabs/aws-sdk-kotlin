@@ -20,7 +20,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 public suspend fun resolveSigningRegionSet(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): List<String>? {
     val rawString = AwsSdkSetting.AwsSigv4aSigningRegionSet.resolve(platform) ?: profile.get().sigv4aSigningRegionSet
     return rawString?.let {
-        check(isValidListFormat(it)) { "Config setting sigv4aSigningRegionSet is not formatted as a list of strings" }
+        check(isValidListFormat(it)) { "Config setting sigv4aSigningRegionSet is not formatted as a list of non-empty strings" }
         it.split(",")
     }
 }

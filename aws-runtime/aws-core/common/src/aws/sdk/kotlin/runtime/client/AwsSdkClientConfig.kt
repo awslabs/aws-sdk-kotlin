@@ -46,11 +46,6 @@ public interface AwsSdkClientConfig : SdkClientConfig {
      */
     public val applicationId: String?
 
-    /**
-     * The set of regions to use when signing a request with sigV4a. If provided it will override endpoints metadata.
-     */
-    public val sigv4aSigningRegionSet: List<String>?
-
     public interface Builder {
         /**
          * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
@@ -85,10 +80,5 @@ public interface AwsSdkClientConfig : SdkClientConfig {
          * reference for more information on environment variables and shared config settings.
          */
         public var applicationId: String?
-
-        /**
-         * The set of regions to use when signing a request with sigV4a. If provided it will override endpoints metadata.
-         */
-        public var sigv4aSigningRegionSet: List<String>?
     }
 }
