@@ -17,8 +17,8 @@ internal const val S3_EXPRESS_ENDPOINT_PROPERTY_KEY = "backend"
 internal const val S3_EXPRESS_ENDPOINT_PROPERTY_VALUE = "S3Express"
 private const val CRC32_ALGORITHM_NAME = "CRC32"
 
-public class S3ExpressCrc32ChecksumInterceptor(
-    public val checksumAlgorithmHeaderName: String? = null,
+internal class S3ExpressCrc32ChecksumInterceptor(
+    val checksumAlgorithmHeaderName: String? = null,
 ) : HttpInterceptor {
     override suspend fun modifyBeforeSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
         if (context.executionContext.getOrNull(AttributeKey(S3_EXPRESS_ENDPOINT_PROPERTY_KEY)) != S3_EXPRESS_ENDPOINT_PROPERTY_VALUE) {
