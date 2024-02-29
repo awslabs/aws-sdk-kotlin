@@ -52,7 +52,7 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
     }
 
     override fun structuredDataParser(ctx: ProtocolGenerator.GenerationContext): StructuredDataParserGenerator =
-        RestXmlParserGenerator(this, defaultTimestampFormat)
+        RestXmlParserGenerator(this)
 
     override fun structuredDataSerializer(ctx: ProtocolGenerator.GenerationContext): StructuredDataSerializerGenerator =
         RestXmlSerializerGenerator(this, defaultTimestampFormat)
@@ -68,16 +68,8 @@ open class RestXml : AwsHttpBindingProtocolGenerator() {
 }
 
 class RestXmlParserGenerator(
-    private val protocolGenerator: RestXml,
-    defaultTimestampFormat: TimestampFormatTrait.Format,
-) : XmlParserGenerator(protocolGenerator, defaultTimestampFormat) {
-
-    override fun descriptorGenerator(
-        ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        members: List<MemberShape>,
-        writer: KotlinWriter,
-    ): XmlSerdeDescriptorGenerator = RestXmlSerdeDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
+    protocolGenerator: RestXml,
+) : XmlParserGenerator(protocolGenerator.defaultTimestampFormat) {
 
     override fun payloadDeserializer(
         ctx: ProtocolGenerator.GenerationContext,
@@ -112,11 +104,110 @@ class RestXmlParserGenerator(
                 addNestedDocumentDeserializers(ctx, targetShape, writer)
                 writer.dokka("Payload deserializer for ${memberSymbol.name} with a different XML name trait (${xmlNameTrait.value})")
                 writer.withBlock("internal fun $name(payload: ByteArray): #T {", "}", memberSymbol) {
-                    write("val deserializer = #T(payload)", RuntimeTypes.Serde.SerdeXml.XmlDeserializer)
+                    writer.write("val root = #T(payload)", RuntimeTypes.Serde.SerdeXml.xmlRootTagReader)
+                    val serdeCtx = SerdeCtx("root")
                     write("val builder = #T.Builder()", memberSymbol)
-                    renderDeserializerBody(ctx, copyWithMemberTraits, targetShape.members().toList(), writer)
+                    renderDeserializerBody(ctx, serdeCtx, copyWithMemberTraits, targetShape.members().toList(), writer)
                     write("return builder.build()")
                 }
+            }
+        }
+    }
+
+    override fun unwrapOperationError(
+        ctx: ProtocolGenerator.GenerationContext,
+        serdeCtx: SerdeCtx,
+        errorShape: StructureShape,
+        writer: KotlinWriter,
+    ): SerdeCtx {
+        val unwrapFn = when (ctx.service.getTrait<RestXmlTrait>()?.isNoErrorWrapping == true) {
+            true -> RestXmlErrors.unwrappedErrorResponseDeserializer(ctx)
+            false -> RestXmlErrors.wrappedErrorResponseDeserializer(ctx)
+        }
+        writer.write("val errReader = #T(${serdeCtx.tagReader})", unwrapFn)
+        return SerdeCtx("errReader")
+    }
+}
+
+object RestXmlErrors {
+
+    /**
+     * Error deserializer for a wrapped error response
+     *
+     * ```
+     * <ErrorResponse>
+     *     <Error>
+     *         <-- DATA -->>
+     *     </Error>
+     * </ErrorResponse>
+     * ```
+     *
+     * See https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#error-response-serialization
+     */
+    fun wrappedErrorResponseDeserializer(ctx: ProtocolGenerator.GenerationContext): Symbol = buildSymbol {
+        name = "unwrapWrappedXmlErrorResponse"
+        namespace = ctx.settings.pkg.serde
+        definitionFile = "XmlErrorUtils.kt"
+        renderBy = { writer ->
+            writer.dokka("Handle [wrapped](https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#error-response-serialization) error responses")
+            writer.withBlock(
+                "internal fun $name(root: #1T): #1T {",
+                "}",
+                RuntimeTypes.Serde.SerdeXml.XmlTagReader,
+            ) {
+                withBlock(
+                    "if (root.tagName != #S) {",
+                    "}",
+                    "ErrorResponse",
+                ) {
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected <ErrorResponse>; found `\${root.tag}`")
+                }
+
+                write("val errTag = root.nextTag()")
+                withBlock(
+                    "if (errTag == null || errTag.tagName != #S) {",
+                    "}",
+                    "Error",
+                ) {
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${errTag?.tag}`")
+                }
+
+                write("return errTag")
+            }
+        }
+    }
+
+    /**
+     * Error deserializer for an unwrapped error response
+     *
+     * ```
+     * <Error>
+     *    <-- DATA -->>
+     * </Error>
+     * ```
+     *
+     * See https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#error-response-serialization
+     */
+    fun unwrappedErrorResponseDeserializer(ctx: ProtocolGenerator.GenerationContext): Symbol = buildSymbol {
+        name = "unwrapXmlErrorResponse"
+        namespace = ctx.settings.pkg.serde
+        definitionFile = "XmlErrorUtils.kt"
+        renderBy = { writer ->
+            writer.dokka("Handle [unwrapped](https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#error-response-serialization) error responses (restXml.noErrorWrapping == true)")
+            writer.withBlock(
+                "internal fun $name(root: #1T): #1T {",
+                "}",
+                RuntimeTypes.Serde.SerdeXml.XmlTagReader,
+            ) {
+                withBlock(
+                    "if (root.tagName != #S) {",
+                    "}",
+                    "Error",
+                ) {
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${root.tag}`")
+                }
+
+                write("return root")
             }
         }
     }
@@ -145,6 +236,7 @@ class RestXmlSerializerGenerator(
         else -> super.payloadSerializer(ctx, shape, members)
     }
 
+    // FIXME
     private fun explicitBoundStructureSerializer(
         ctx: ProtocolGenerator.GenerationContext,
         boundMember: MemberShape,
