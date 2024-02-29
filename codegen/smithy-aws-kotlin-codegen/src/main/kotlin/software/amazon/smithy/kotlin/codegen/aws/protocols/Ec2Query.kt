@@ -6,20 +6,19 @@ package software.amazon.smithy.kotlin.codegen.aws.protocols
 
 import software.amazon.smithy.aws.traits.protocols.Ec2QueryNameTrait
 import software.amazon.smithy.aws.traits.protocols.Ec2QueryTrait
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.aws.protocols.core.AbstractQueryFormUrlSerializerGenerator
 import software.amazon.smithy.kotlin.codegen.aws.protocols.core.QueryHttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.aws.protocols.formurl.QuerySerdeFormUrlDescriptorGenerator
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RenderingContext
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.model.changeNameSuffix
+import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.getTrait
-import software.amazon.smithy.kotlin.codegen.model.hasTrait
-import software.amazon.smithy.kotlin.codegen.model.traits.OperationOutput
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.toRenderingContext
 import software.amazon.smithy.kotlin.codegen.rendering.serde.*
-import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.XmlNameTrait
 
@@ -73,24 +72,6 @@ private class Ec2QuerySerdeFormUrlDescriptorGenerator(
         targetShape.type == ShapeType.LIST
 }
 
-private class Ec2QuerySerdeXmlDescriptorGenerator(
-    ctx: RenderingContext<Shape>,
-    memberShapes: List<MemberShape>? = null,
-) : XmlSerdeDescriptorGenerator(ctx, memberShapes) {
-
-    override fun getObjectDescriptorTraits(): List<SdkFieldDescriptorTrait> {
-        val traits = super.getObjectDescriptorTraits().toMutableList()
-
-        if (objectShape.hasTrait<OperationOutput>()) {
-            traits.removeIf { it.symbol == RuntimeTypes.Serde.SerdeXml.XmlSerialName }
-            val serialName = objectShape.changeNameSuffix("Response" to "Result")
-            traits.add(RuntimeTypes.Serde.SerdeXml.XmlSerialName, serialName.dq())
-        }
-
-        return traits
-    }
-}
-
 private class Ec2QuerySerializerGenerator(
     private val protocolGenerator: Ec2Query,
 ) : AbstractQueryFormUrlSerializerGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
@@ -104,13 +85,73 @@ private class Ec2QuerySerializerGenerator(
 }
 
 private class Ec2QueryParserGenerator(
-    private val protocolGenerator: Ec2Query,
-) : XmlParserGenerator(protocolGenerator, protocolGenerator.defaultTimestampFormat) {
-
-    override fun descriptorGenerator(
+    protocolGenerator: Ec2Query,
+) : XmlParserGenerator(protocolGenerator.defaultTimestampFormat) {
+    override fun unwrapOperationError(
         ctx: ProtocolGenerator.GenerationContext,
-        shape: Shape,
-        members: List<MemberShape>,
+        serdeCtx: SerdeCtx,
+        errorShape: StructureShape,
         writer: KotlinWriter,
-    ): XmlSerdeDescriptorGenerator = Ec2QuerySerdeXmlDescriptorGenerator(ctx.toRenderingContext(protocolGenerator, shape, writer), members)
+    ): SerdeCtx {
+        val unwrapFn = unwrapErrorResponse(ctx)
+        writer.write("val errReader = #T(${serdeCtx.tagReader})", unwrapFn)
+        return SerdeCtx("errReader")
+    }
+
+    /**
+     * Error deserializer for a wrapped error response
+     *
+     * ```
+     * <Response>
+     *     <Errors>
+     *         <Error>
+     *             <-- DATA -->>
+     *         </Error>
+     *     </Errors>
+     * </Response>
+     * ```
+     *
+     * See https://smithy.io/2.0/aws/protocols/aws-ec2-query-protocol.html#operation-error-serialization
+     */
+    private fun unwrapErrorResponse(ctx: ProtocolGenerator.GenerationContext): Symbol = buildSymbol {
+        name = "unwrapXmlErrorResponse"
+        namespace = ctx.settings.pkg.serde
+        definitionFile = "XmlErrorUtils.kt"
+        renderBy = { writer ->
+            writer.dokka("Handle [wrapped](https://smithy.io/2.0/aws/protocols/aws-ec2-query-protocol.html#operation-error-serialization) error responses")
+            writer.withBlock(
+                "internal fun $name(root: #1T): #1T {",
+                "}",
+                RuntimeTypes.Serde.SerdeXml.XmlTagReader,
+            ) {
+                withBlock(
+                    "if (root.tagName != #S) {",
+                    "}",
+                    "Response",
+                ) {
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid root, expected <Response>; found `\${root.tag}`")
+                }
+
+                write("val errorsTag = root.nextTag()")
+                withBlock(
+                    "if (errorsTag == null || errorsTag.tagName != #S) {",
+                    "}",
+                    "Errors",
+                ) {
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Errors>; found `\${errorsTag?.tag}`")
+                }
+
+                write("val errTag = errorsTag.nextTag()")
+                withBlock(
+                    "if (errTag == null || errTag.tagName != #S) {",
+                    "}",
+                    "Error",
+                ) {
+                    write("throw #T(#S)", RuntimeTypes.Serde.DeserializationException, "invalid error, expected <Error>; found `\${errTag?.tag}`")
+                }
+
+                write("return errTag")
+            }
+        }
+    }
 }

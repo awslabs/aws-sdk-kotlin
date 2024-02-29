@@ -17,6 +17,7 @@ import aws.sdk.kotlin.services.s3control.*
 import aws.sdk.kotlin.services.s3control.model.*
 import aws.sdk.kotlin.services.sts.StsClient
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.text.ensurePrefix
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withTimeout
@@ -34,6 +35,9 @@ object S3TestUtils {
 
     // The E2E test account only has permission to operate on buckets with the prefix
     private const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
+
+    private const val S3_MAX_BUCKET_NAME_LENGTH = 63 // https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
+    private const val S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX = "--x-s3"
 
     suspend fun getTestBucket(
         client: S3Client,
@@ -91,6 +95,41 @@ object S3TestUtils {
             }
         }
 
+        testBucket
+    }
+
+    suspend fun getTestDirectoryBucket(client: S3Client, suffix: String) = withTimeout(60.seconds) {
+        var testBucket = client.listBuckets()
+            .buckets
+            ?.mapNotNull { it.name }
+            ?.firstOrNull { it.startsWith(TEST_BUCKET_PREFIX) && it.endsWith(S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX) }
+
+        if (testBucket == null) {
+            // Adding S3 Express suffix surpasses the bucket name length limit... trim the UUID if needed
+            testBucket = TEST_BUCKET_PREFIX +
+                UUID.randomUUID().toString().subSequence(0 until (S3_MAX_BUCKET_NAME_LENGTH - TEST_BUCKET_PREFIX.length - suffix.ensurePrefix("--").length)) +
+                suffix.ensurePrefix("--")
+
+            println("Creating S3 Express directory bucket: $testBucket")
+
+            val availabilityZone = testBucket // s3-test-bucket-UUID--use1-az4--x-s3
+                .removeSuffix(S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX) // s3-test-bucket-UUID--use1-az4
+                .substringAfterLast("--") // use1-az4
+
+            client.createBucket {
+                bucket = testBucket
+                createBucketConfiguration {
+                    location = LocationInfo {
+                        type = LocationType.AvailabilityZone
+                        name = availabilityZone
+                    }
+                    bucket = BucketInfo {
+                        type = BucketType.Directory
+                        dataRedundancy = DataRedundancy.SingleAvailabilityZone
+                    }
+                }
+            }
+        }
         testBucket
     }
 
@@ -234,20 +273,24 @@ object S3TestUtils {
         operation: String,
     ) {
         withTimeout(timeoutAfter) {
+            var status: String? = null
             while (true) {
-                val status = s3ControlClient.describeMultiRegionAccessPointOperation {
+                val latestStatus = s3ControlClient.describeMultiRegionAccessPointOperation {
                     accountId = testAccountId
                     requestTokenArn = request
                 }.asyncOperation?.requestStatus
 
-                println("Waiting on $operation operation. Status: $status ")
-
-                if (status == "SUCCEEDED") {
-                    println("$operation operation succeeded.")
-                    return@withTimeout
+                when (latestStatus) {
+                    "SUCCEEDED" -> {
+                        println("$operation operation succeeded.")
+                        return@withTimeout
+                    }
+                    "FAILED" -> throw IllegalStateException("$operation operation failed")
+                    else -> { if (status == null || latestStatus != status) {
+                        println("Waiting on $operation operation. Status: $latestStatus ")
+                        status = latestStatus
+                    } }
                 }
-
-                check(status != "FAILED") { "$operation operation failed" }
 
                 delay(10.seconds) // Avoid constant status checks
             }
