@@ -8,7 +8,6 @@ import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.defaultName
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.*
@@ -43,8 +42,8 @@ class FlexibleChecksumsRequest : KotlinIntegration {
         }
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
             val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsRequestInterceptor
+            val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
 
             val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
 
@@ -52,13 +51,13 @@ class FlexibleChecksumsRequest : KotlinIntegration {
                 .members()
                 .first { it.memberName == httpChecksumTrait.requestAlgorithmMember.get() }
 
-            writer.withBlock(
-                "op.interceptors.add(#T<#T> {",
-                "})",
-                interceptorSymbol,
-                inputSymbol,
-            ) {
-                writer.write("it.#L?.value", requestAlgorithmMember.defaultName())
+            val requestAlgorithmMemberName = ctx.symbolProvider.toMemberName(requestAlgorithmMember)
+
+            writer.withBlock("op.interceptors.add(#T<#T>() {", "})", interceptorSymbol, inputSymbol) {
+                writer.write("input.#L?.value", requestAlgorithmMemberName)
+            }
+            writer.withBlock("input.#L?.let {", "}", requestAlgorithmMemberName) {
+                writer.write("op.context[#T.ChecksumAlgorithm] = it.value", RuntimeTypes.HttpClient.Operation.HttpOperationContext)
             }
         }
     }

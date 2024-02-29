@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.0.67] - 02/28/2024
+
+### Features
+* (**batch**) This release adds Batch support for configuration of multicontainer jobs in ECS, Fargate, and EKS. This support is available for all types of jobs, including both array jobs and multi-node parallel jobs.
+* (**bedrockagentruntime**) This release adds support to override search strategy performed by the Retrieve and RetrieveAndGenerate APIs for Amazon Bedrock Agents
+* (**costexplorer**) This release introduces the new API 'GetApproximateUsageRecords', which retrieves estimated usage records for hourly granularity or resource-level data at daily granularity.
+* (**ec2**) This release increases the range of MaxResults for GetNetworkInsightsAccessScopeAnalysisFindings to 1,000.
+* (**iot**) This release reduces the maximum results returned per query invocation from 500 to 100 for the SearchIndex API. This change has no implications as long as the API is invoked until the nextToken is NULL.
+* (**wafv2**) AWS WAF now supports configurable time windows for request aggregation with rate-based rules. Customers can now select time windows of 1 minute, 2 minutes or 10 minutes, in addition to the previously supported 5 minutes.
+
+## [1.0.66] - 02/27/2024
+
+### Features
+* (**amplifyuibuilder**) We have added the ability to tag resources after they are created
+
+## [1.0.65] - 02/26/2024
+
+### Features
+* (**drs**) Added volume status to DescribeSourceServer replicated volumes.
+* (**kafkaconnect**) Adds support for tagging, with new TagResource, UntagResource and ListTagsForResource APIs to manage tags and updates to existing APIs to allow tag on create. This release also adds support for the new DeleteWorkerConfiguration API.
+* (**rds**) This release adds support for gp3 data volumes for Multi-AZ DB Clusters.
+
+### Documentation
+* (**apigateway**) Documentation updates for Amazon API Gateway.
+
+## [1.0.64] - 02/23/2024
+
+### Features
+* (**rds**) Add pattern and length based validations for DBShardGroupIdentifier
+
+### Documentation
+* (**appsync**) Documentation only updates for AppSync
+* (**qldb**) Clarify possible values for KmsKeyArn and EncryptionDescription.
+* (**rum**) Doc-only update for new RUM metrics that were added
+
 ## [1.0.63] - 02/22/2024
 
 ### Features
