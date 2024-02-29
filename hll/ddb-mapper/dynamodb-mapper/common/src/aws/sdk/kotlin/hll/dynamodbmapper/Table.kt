@@ -90,7 +90,7 @@ internal abstract class TableImpl<T>(override val mapper: DynamoDbMapper, overri
         val resp = mapper.client.scanPaginated {
             tableName = name
         }
-        return resp.items().map { schema.converter.fromItem(it.toItem() ) }
+        return resp.items().map { schema.converter.fromItem(it.toItem()) }
     }
 
     internal class PartitionKeyImpl<T, PK> internal constructor(
