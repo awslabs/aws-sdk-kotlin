@@ -15,6 +15,7 @@ kotlin {
                 api(project(":aws-runtime:aws-endpoint"))
                 api(libs.smithy.kotlin.aws.signing.common)
                 api(libs.smithy.kotlin.http.client)
+                api(libs.smithy.kotlin.http.auth.aws)
             }
         }
 
