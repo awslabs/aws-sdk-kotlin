@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.69] - 03/01/2024
+
+### Documentation
+* (**accessanalyzer**) Fixed a typo in description field.
+* (**autoscaling**) With this release, Amazon EC2 Auto Scaling groups, EC2 Fleet, and Spot Fleet improve the default price protection behavior of attribute-based instance type selection of Spot Instances, to consistently select from a wide range of instance types.
+* (**ec2**) With this release, Amazon EC2 Auto Scaling groups, EC2 Fleet, and Spot Fleet improve the default price protection behavior of attribute-based instance type selection of Spot Instances, to consistently select from a wide range of instance types.
+
 ## [1.0.68] - 02/29/2024
 
 ### Features
