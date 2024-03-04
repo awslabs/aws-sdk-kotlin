@@ -1,8 +1,0 @@
-{
-    "id": "8571dd20-b6a8-4cab-9e2a-567e273a016f",
-    "type": "feature",
-    "description": "Add request IDs to exception messages where available",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1212"
-    ]
-}
