@@ -1,0 +1,8 @@
+{
+    "id": "de403702-531d-4f43-bc33-aa5bc2fc000f",
+    "type": "feature",
+    "description": "Add error metadata to ServiceException messages when a service-provided message isn't available",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1212"
+    ]
+}

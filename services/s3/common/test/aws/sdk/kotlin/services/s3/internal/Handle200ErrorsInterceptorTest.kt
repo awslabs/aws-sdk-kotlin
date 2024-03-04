@@ -20,6 +20,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
+private const val REQUEST_ID = "K2H6N7ZGQT6WHCEG"
+private const val EXT_REQUEST_ID = "WWoZlnK4pTjKCYn6eNV7GgOurabfqLkjbSyqTvDMGBaI9uwzyNhSaDhOCPs8paFGye7S6b/AB3A="
+
 class Handle200ErrorsInterceptorTest {
 
     object TestCredentialsProvider : CredentialsProvider {
@@ -29,8 +32,8 @@ class Handle200ErrorsInterceptorTest {
             <Error>
                 <Code>SlowDown</Code>
                 <Message>Please reduce your request rate.</Message>
-                <RequestId>K2H6N7ZGQT6WHCEG</RequestId>
-                <HostId>WWoZlnK4pTjKCYn6eNV7GgOurabfqLkjbSyqTvDMGBaI9uwzyNhSaDhOCPs8paFGye7S6b/AB3A=</HostId>
+                <RequestId>$REQUEST_ID</RequestId>
+                <HostId>$EXT_REQUEST_ID</HostId>
             </Error>
     """.trimIndent().encodeToByteArray()
 
@@ -53,9 +56,9 @@ class Handle200ErrorsInterceptorTest {
         val expectedMessage = "Please reduce your request rate."
         assertEquals("SlowDown", ex.sdkErrorMetadata.errorCode)
         assertEquals(expectedMessage, ex.sdkErrorMetadata.errorMessage)
-        assertEquals(expectedMessage, ex.message)
-        assertEquals("K2H6N7ZGQT6WHCEG", ex.sdkErrorMetadata.requestId)
-        assertEquals("WWoZlnK4pTjKCYn6eNV7GgOurabfqLkjbSyqTvDMGBaI9uwzyNhSaDhOCPs8paFGye7S6b/AB3A=", ex.sdkErrorMetadata.requestId2)
+        assertEquals("$expectedMessage, Request ID: $REQUEST_ID, Extended request ID: $EXT_REQUEST_ID", ex.message)
+        assertEquals(REQUEST_ID, ex.sdkErrorMetadata.requestId)
+        assertEquals(EXT_REQUEST_ID, ex.sdkErrorMetadata.requestId2)
     }
 
     @Test
@@ -107,7 +110,7 @@ class Handle200ErrorsInterceptorTest {
             s3.deleteObjects { bucket = "test" }
         }
         val expectedMessage = "Please use less foos."
-        assertEquals(expectedMessage, ex.message)
+        assertEquals("$expectedMessage, Request ID: rid, Extended request ID: rid2", ex.message)
         assertEquals(expectedMessage, ex.sdkErrorMetadata.errorMessage)
         assertEquals("FooError", ex.sdkErrorMetadata.errorCode)
         assertEquals("rid", ex.sdkErrorMetadata.requestId)
