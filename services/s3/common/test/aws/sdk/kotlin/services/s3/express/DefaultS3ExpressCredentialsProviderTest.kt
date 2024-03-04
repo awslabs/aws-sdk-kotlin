@@ -111,7 +111,7 @@ class DefaultS3ExpressCredentialsProviderTest {
 
         // close the provider, make sure all async refreshes are complete...
         provider.close()
-        runBlocking { delay(50.milliseconds) }
+        provider.waitForShutdown()
 
         assertEquals(1, testClient.numCreateSession)
     }
@@ -151,7 +151,7 @@ class DefaultS3ExpressCredentialsProviderTest {
 
         // close the provider, make sure all async refreshes are complete...
         provider.close()
-        runBlocking { delay(50.milliseconds) }
+        provider.waitForShutdown()
 
         assertEquals(1, testClient.numCreateSession)
     }
@@ -194,7 +194,7 @@ class DefaultS3ExpressCredentialsProviderTest {
 
         // close the provider, make sure all async refreshes are complete...
         provider.close()
-        runBlocking { delay(50.milliseconds) }
+        provider.waitForShutdown()
 
         assertEquals(2, testClient.numCreateSession)
     }
