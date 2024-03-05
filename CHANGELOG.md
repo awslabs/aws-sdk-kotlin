@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.71] - 03/05/2024
+
+### Features
+* (**organizations**) This release contains an endpoint addition
+* (**sesv2**) Adds support for providing custom headers within SendEmail and SendBulkEmail for SESv2.
+
+### Documentation
+* (**apigateway**) Documentation updates for Amazon API Gateway
+* (**chatbot**) Minor update to documentation.
+
 ## [1.0.70] - 03/04/2024
 
 ### Features
