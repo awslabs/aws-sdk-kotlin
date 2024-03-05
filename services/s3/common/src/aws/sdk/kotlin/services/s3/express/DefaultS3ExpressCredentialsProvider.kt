@@ -68,7 +68,6 @@ internal class DefaultS3ExpressCredentialsProvider(
     }
 
     override fun close() {
-        runBlocking { coroutineContext.job.join() }
         coroutineContext.cancel(null)
     }
 

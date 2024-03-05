@@ -109,6 +109,7 @@ class DefaultS3ExpressCredentialsProviderTest {
         // allow the async refresh to initiate before closing the provider
         runBlocking { delay(50.milliseconds) }
 
+        provider.coroutineContext.job.join()
         provider.close()
         assertEquals(1, testClient.numCreateSession)
     }
@@ -146,6 +147,7 @@ class DefaultS3ExpressCredentialsProviderTest {
         // allow the async refresh to initiate before closing the provider
         runBlocking { delay(50.milliseconds) }
 
+        provider.coroutineContext.job.join()
         provider.close()
         assertEquals(1, testClient.numCreateSession)
     }
@@ -186,6 +188,7 @@ class DefaultS3ExpressCredentialsProviderTest {
         // allow the async refresh to initiate before closing the provider
         runBlocking { delay(50.milliseconds) }
 
+        provider.coroutineContext.job.join()
         provider.close()
         assertEquals(2, testClient.numCreateSession)
     }
