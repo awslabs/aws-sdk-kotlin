@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.72] - 03/06/2024
+
+### Features
+* (**imagebuilder**) Add PENDING status to Lifecycle Execution resource status. Add StartTime and EndTime to ListLifecycleExecutionResource API response.
+* (**rds**) Updated the input of CreateDBCluster and ModifyDBCluster to support setting CA certificates. Updated the output of DescribeDBCluster to show current CA certificate setting value.
+* (**verifiedpermissions**) Deprecating details in favor of configuration for GetIdentitySource and ListIdentitySources APIs.
+
+### Documentation
+* (**dynamodb**) Doc only updates for DynamoDB documentation
+* (**mwaa**) Amazon MWAA adds support for Apache Airflow v2.8.1.
+* (**redshift**) Update for documentation only. Covers port ranges, definition updates for data sharing, and definition updates to cluster-snapshot documentation.
+
 ## [1.0.71] - 03/05/2024
 
 ### Features
