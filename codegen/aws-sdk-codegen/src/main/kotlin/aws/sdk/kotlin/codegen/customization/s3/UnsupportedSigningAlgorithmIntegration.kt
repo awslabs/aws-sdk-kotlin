@@ -25,8 +25,8 @@ class UnsupportedSigningAlgorithmIntegration : KotlinIntegration {
     // Needs to happen after the SigV4AsymmetricTraitCustomization (-60), which adds the sigV4a trait to models missing it
     override val order: Byte = -50
 
-    // Set to true rather than looking for sigV4a in the model because this integration would be filtered out
-    // before the application of the trait via SigV4AsymmetricTraitCustomization.
+    // Set to true rather than looking for sigV4a in the model here because this integration would be filtered out
+    // before the application of the trait is done for some services via SigV4AsymmetricTraitCustomization.
     // See: CodegenVisitor
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean = true
 
