@@ -206,8 +206,8 @@ public object AwsSdkSetting {
     /**
      * The set of regions to use when signing a request with sigV4a.
      */
-    public val AwsSigv4aSigningRegionSet: EnvironmentSetting<String> =
-        strEnvSetting("aws.sigv4aSigningRegionSet", "AWS_SIGV4A_SIGNING_REGION_SET")
+    public val AwsSigV4aSigningRegionSet: EnvironmentSetting<String> =
+        strEnvSetting("aws.sigV4aSigningRegionSet", "AWS_SIGV4A_SIGNING_REGION_SET")
 }
 
 /**

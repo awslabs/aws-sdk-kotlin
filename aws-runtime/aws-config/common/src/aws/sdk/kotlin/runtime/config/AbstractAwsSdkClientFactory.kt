@@ -14,9 +14,9 @@ import aws.sdk.kotlin.runtime.config.profile.AwsProfile
 import aws.sdk.kotlin.runtime.config.profile.AwsSharedConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
-import aws.sdk.kotlin.runtime.config.sigv4a.resolveSigningRegionSet
 import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.sdk.kotlin.runtime.region.resolveSigV4aSigningRegionSet
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClient
@@ -93,8 +93,8 @@ public abstract class AbstractAwsSdkClientFactory<
             }
 
             if (config is SigV4aClientConfig.Builder) {
-                config.sigv4aSigningRegionSet =
-                    config.sigv4aSigningRegionSet ?: resolveSigningRegionSet(platform, profile)
+                config.sigV4aSigningRegionSet =
+                    config.sigV4aSigningRegionSet ?: resolveSigV4aSigningRegionSet(platform, profile)
             }
 
             finalizeConfig(builder, sharedConfig, profile)

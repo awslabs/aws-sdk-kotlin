@@ -164,7 +164,7 @@ public val AwsProfile.requestMinCompressionSizeBytes: Long?
  * The set of regions to use when signing a request with sigV4a.
  */
 @InternalSdkApi
-public val AwsProfile.sigv4aSigningRegionSet: String?
+public val AwsProfile.sigV4aSigningRegionSet: String?
     get() = getOrNull("sigv4a_signing_region_set")
 
 /**
