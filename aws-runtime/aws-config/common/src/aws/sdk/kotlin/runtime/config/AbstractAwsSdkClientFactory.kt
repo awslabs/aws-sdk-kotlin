@@ -18,13 +18,13 @@ import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.sdk.kotlin.runtime.region.resolveSigV4aSigningRegionSet
 import aws.smithy.kotlin.runtime.ExperimentalApi
+import aws.smithy.kotlin.runtime.auth.awscredentials.SigV4aClientConfig
 import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClientFactory
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
 import aws.smithy.kotlin.runtime.client.config.CompressionClientConfig
-import aws.smithy.kotlin.runtime.client.config.SigV4aClientConfig
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.telemetry.TelemetryConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
