@@ -21,19 +21,17 @@ import software.amazon.smithy.model.shapes.OperationShape
  * See: [aws.sdk.kotlin.runtime.http.interceptors.UnsupportedSigningAlgorithmInterceptor]
  */
 class UnsupportedSigningAlgorithmIntegration : KotlinIntegration {
-
-    // Needs to happen after the SigV4AsymmetricTraitCustomization (-60), which adds the sigV4a trait to models missing it
-    override val order: Byte = -50
-
-    // Set to true rather than looking for sigV4a in the model here because this integration would be filtered out
-    // before the application of the trait is done for some services via SigV4AsymmetricTraitCustomization.
-    // See: CodegenVisitor
-    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean = true
+    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
+        ServiceIndex
+            .of(model)
+            .getAuthSchemes(settings.service)
+            .values
+            .any { it.javaClass == SigV4ATrait::class.java }
 
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
         resolved: List<ProtocolMiddleware>,
-    ): List<ProtocolMiddleware> = if (modelHasSigV4aTrait(ctx)) resolved + UnsupportedSigningAlgorithmMiddleware else resolved
+    ): List<ProtocolMiddleware> = resolved + UnsupportedSigningAlgorithmMiddleware
 }
 
 private val UnsupportedSigningAlgorithmMiddleware = object : ProtocolMiddleware {
@@ -46,10 +44,3 @@ private val UnsupportedSigningAlgorithmMiddleware = object : ProtocolMiddleware 
         )
     }
 }
-
-private fun modelHasSigV4aTrait(ctx: ProtocolGenerator.GenerationContext): Boolean =
-    ServiceIndex
-        .of(ctx.model)
-        .getAuthSchemes(ctx.service)
-        .values
-        .any { it.javaClass == SigV4ATrait::class.java }
