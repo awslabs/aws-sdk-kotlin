@@ -15,7 +15,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.internal.ItemSchemaPartitionKeyIm
 public interface ItemSchema<T> {
     public companion object {
         /**
-         * Create a new item schema with a parimary key consisting of a single partition key.
+         * Create a new item schema with a primary key consisting of a single partition key.
          * @param T The type of objects described by this schema
          * @param PK The type of the partition key property, either [String], [Number], or [ByteArray]
          * @param converter The [ItemConverter] used to convert between objects and items
@@ -27,7 +27,7 @@ public interface ItemSchema<T> {
         ): PartitionKey<T, PK> = ItemSchemaPartitionKeyImpl(converter, partitionKey)
 
         /**
-         * Create a new item schema with a parimary key consisting of a single partition key.
+         * Create a new item schema with a primary key consisting of a single partition key.
          * @param T The type of objects described by this schema
          * @param PK The type of the partition key property, either [String], [Number], or [ByteArray]
          * @param SK The type of the sort key property, either [String], [Number], or [ByteArray]
