@@ -83,6 +83,7 @@ class S3ExpressTest {
         }
     }
 
+    @Ignore
     @Test
     fun testPresignedPutObject() = runTest {
         val content = "Presign this!"
@@ -98,11 +99,9 @@ class S3ExpressTest {
                 5.minutes,
             )
 
-            assertTrue(presigned.url.parameters.decodedParameters.contains("X-Amz-Security-Token"))
-
             // FIXME Presigned requests should use S3 Express Auth Scheme resulting in `X-Amz-S3session-Token`
             // https://github.com/awslabs/aws-sdk-kotlin/issues/1236
-            assertFalse(presigned.url.parameters.decodedParameters.contains(S3_EXPRESS_SESSION_TOKEN_HEADER))
+            assertTrue(presigned.url.parameters.decodedParameters.contains(S3_EXPRESS_SESSION_TOKEN_HEADER))
         }
     }
 

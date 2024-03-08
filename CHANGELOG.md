@@ -1,5 +1,87 @@
 # Changelog
 
+## [1.0.74] - 03/08/2024
+
+### Features
+* (**batch**) This release adds JobStateTimeLimitActions setting to the Job Queue API. It allows you to configure an action Batch can take for a blocking job in front of the queue after the defined period of time. The new parameter applies for ECS, EKS, and FARGATE Job Queues.
+* (**cloudtrail**) Added exceptions to CreateTrail, DescribeTrails, and ListImportFailures APIs.
+* (**cognitoidentityprovider**) Add ConcurrentModificationException to SetUserPoolMfaConfig
+* (**guardduty**) Add RDS Provisioned and Serverless Usage types
+* (**transfer**) Added DES_EDE3_CBC to the list of supported encryption algorithms for messages sent with an AS2 connector.
+* [#1212](https://github.com/awslabs/aws-sdk-kotlin/issues/1212) Add request IDs to exception messages where available
+* [#1212](https://github.com/awslabs/aws-sdk-kotlin/issues/1212) Add error metadata to ServiceException messages when a service-provided message isn't available
+
+### Documentation
+* (**bedrockagentruntime**) Documentation update for Bedrock Runtime Agent
+* (**codebuild**) This release adds support for a new webhook event: PULL_REQUEST_CLOSED.
+
+## [1.0.73] - 03/07/2024
+
+### Features
+* (**appconfig**) AWS AppConfig now supports dynamic parameters, which enhance the functionality of AppConfig Extensions by allowing you to provide parameter values to your Extensions at the time you deploy your configuration.
+* (**ec2**) This release adds an optional parameter to RegisterImage and CopyImage APIs to support tagging AMIs at the time of creation.
+* (**grafana**) Adds support for the new GrafanaToken as part of the Amazon Managed Grafana Enterprise plugins upgrade to associate your AWS account with a Grafana Labs account.
+* (**paymentcryptographydata**) AWS Payment Cryptography EMV Decrypt Feature  Release
+* (**wafv2**) You can increase the max request body inspection size for some regional resources. The size setting is in the web ACL association config. Also, the AWSManagedRulesBotControlRuleSet EnableMachineLearning setting now takes a Boolean instead of a primitive boolean type, for languages like Java.
+
+### Documentation
+* (**lambda**) Documentation updates for AWS Lambda
+* (**rds**) Updates Amazon RDS documentation for io2 storage for Multi-AZ DB clusters
+* (**snowball**) Doc-only update for change to EKS-Anywhere ordering.
+* (**workspaces**) Added note for user decoupling
+
+## [1.0.72] - 03/06/2024
+
+### Features
+* (**imagebuilder**) Add PENDING status to Lifecycle Execution resource status. Add StartTime and EndTime to ListLifecycleExecutionResource API response.
+* (**rds**) Updated the input of CreateDBCluster and ModifyDBCluster to support setting CA certificates. Updated the output of DescribeDBCluster to show current CA certificate setting value.
+* (**verifiedpermissions**) Deprecating details in favor of configuration for GetIdentitySource and ListIdentitySources APIs.
+
+### Documentation
+* (**dynamodb**) Doc only updates for DynamoDB documentation
+* (**mwaa**) Amazon MWAA adds support for Apache Airflow v2.8.1.
+* (**redshift**) Update for documentation only. Covers port ranges, definition updates for data sharing, and definition updates to cluster-snapshot documentation.
+
+## [1.0.71] - 03/05/2024
+
+### Features
+* (**organizations**) This release contains an endpoint addition
+* (**sesv2**) Adds support for providing custom headers within SendEmail and SendBulkEmail for SESv2.
+
+### Documentation
+* (**apigateway**) Documentation updates for Amazon API Gateway
+* (**chatbot**) Minor update to documentation.
+
+## [1.0.70] - 03/04/2024
+
+### Features
+* (**cloudformation**) Add DetailedStatus field to DescribeStackEvents and DescribeStacks APIs
+* (**fsx**) Added support for creating FSx for NetApp ONTAP file systems with up to 12 HA pairs, delivering up to 72 GB/s of read throughput and 12 GB/s of write throughput.
+* (**organizations**) Documentation update for AWS Organizations
+
+## [1.0.69] - 03/01/2024
+
+### Documentation
+* (**accessanalyzer**) Fixed a typo in description field.
+* (**autoscaling**) With this release, Amazon EC2 Auto Scaling groups, EC2 Fleet, and Spot Fleet improve the default price protection behavior of attribute-based instance type selection of Spot Instances, to consistently select from a wide range of instance types.
+* (**ec2**) With this release, Amazon EC2 Auto Scaling groups, EC2 Fleet, and Spot Fleet improve the default price protection behavior of attribute-based instance type selection of Spot Instances, to consistently select from a wide range of instance types.
+
+## [1.0.68] - 02/29/2024
+
+### Features
+* (**docdbelastic**) Launched Elastic Clusters Readable Secondaries, Start/Stop, Configurable Shard Instance count, Automatic Backups and Snapshot Copying
+* (**eks**) Added support for new AL2023 AMIs to the supported AMITypes.
+* (**lexmodelsv2**) This release makes AMAZON.QnAIntent generally available in Amazon Lex. This generative AI feature leverages large language models available through Amazon Bedrock to automate frequently asked questions (FAQ) experience for end-users.
+* (**migrationhuborchestrator**) Adds new CreateTemplate, UpdateTemplate and DeleteTemplate APIs.
+* (**quicksight**) TooltipTarget for Combo chart visuals; ColumnConfiguration limit increase to 2000; Documentation Update
+* (**sagemaker**) Adds support for ModelDataSource in Model Packages to support unzipped models. Adds support to specify SourceUri for models which allows registration of models without mandating a container for hosting. Using SourceUri, customers can decouple the model from hosting information during registration.
+* (**securitylake**) Add capability to update the Data Lake's MetaStoreManager Role in order to perform required data lake updates to use Iceberg table format in their data lake or update the role for any other reason.
+* Add support for S3 Express One Zone
+
+### Fixes
+* Fix an issue where sections were not properly divided when parsing the config file
+* [#1220](https://github.com/awslabs/aws-sdk-kotlin/issues/1220) Refactor XML deserialization to handle flat collections
+
 ## [1.0.67] - 02/28/2024
 
 ### Features

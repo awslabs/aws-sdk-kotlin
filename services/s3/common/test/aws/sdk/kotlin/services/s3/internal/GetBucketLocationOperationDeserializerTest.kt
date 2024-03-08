@@ -67,6 +67,6 @@ class GetBucketLocationOperationDeserializerTest {
             }
         }
 
-        assertEquals("Some message", exception.message)
+        assertEquals("Some message, Request ID: Some request ID", exception.message)
     }
 }
