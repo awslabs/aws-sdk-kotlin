@@ -41,7 +41,7 @@ public interface ItemSchema<T> {
             sortKey: KeySpec<SK>,
         ): CompositeKey<T, PK, SK> = ItemSchemaCompositeKeyImpl(converter, partitionKey, sortKey)
     }
-    
+
     /**
      * The [ItemConverter] used to convert between objects and items
      */
