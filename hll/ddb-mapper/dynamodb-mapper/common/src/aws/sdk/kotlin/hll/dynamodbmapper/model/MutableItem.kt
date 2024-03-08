@@ -4,19 +4,29 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.model
 
+import aws.sdk.kotlin.hll.dynamodbmapper.model.internal.MutableItemImpl
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
-// TODO convert to interface, document, add unit tests, maybe add MutableAttribute wrapper type too?
-public class MutableItem(
-    private val delegate: MutableMap<String, AttributeValue>,
-) : MutableMap<String, AttributeValue> by delegate {
-    public fun toItem(): Item = Item(delegate.toMap())
+/**
+ * A mutable representation of a low-level item in a DynamoDB table. Items consist of attributes, each of which have a
+ * string name and a value.
+ */
+public interface MutableItem : MutableMap<String, AttributeValue>
 
-    override fun equals(other: Any?): Boolean = other is MutableItem && delegate == other.delegate
+/**
+ * Convert this [MutableItem] to an immutable [Item]. Changes to this instance do not affect the returned instance.
+ */
+public fun MutableItem.toItem(): Item = toMap().toItem()
 
-    override fun hashCode(): Int = delegate.hashCode()
+/**
+ * Converts this map to a [MutableItem]
+ */
+public fun MutableMap<String, AttributeValue>.toMutableItem(): MutableItem = MutableItemImpl(this)
 
-    public fun toMutableItem(): MutableItem = MutableItem(delegate.toMutableMap())
-}
-
-public fun MutableMap<String, AttributeValue>.toMutableItem(): MutableItem = MutableItem(this)
+/**
+ * Returns a new immutable [Item] with the specified attributes, given as name-value pairs
+ * @param pairs A collection of [Pair]<[String], [AttributeValue]> where the first value is the attribute name and the
+ * second is the attribute value.
+ */
+public fun mutableItemOf(vararg pairs: Pair<String, AttributeValue>): MutableItem =
+    MutableItemImpl(mutableMapOf(*pairs))

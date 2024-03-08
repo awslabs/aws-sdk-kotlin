@@ -4,48 +4,48 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.pipeline
 
-import aws.sdk.kotlin.hll.dynamodbmapper.schemas.ItemSchema
+import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 
 // TODO finalize interfaces, document, add tests, construct actual request pipeline that invokes these
-public interface Interceptor<I, HReq, LReq, LRes, HRes> {
-    public fun readBeforeExecution(ctx: HReqContext<I, HReq>)
-    public fun modifyBeforeSerialization(ctx: HReqContext<I, HReq>): SerializeInput<I, HReq>
-    public fun readBeforeSerialization(ctx: HReqContext<I, HReq>)
+public interface Interceptor<T, HReq, LReq, LRes, HRes> {
+    public fun readBeforeExecution(ctx: HReqContext<T, HReq>)
+    public fun modifyBeforeSerialization(ctx: HReqContext<T, HReq>): SerializeInput<T, HReq>
+    public fun readBeforeSerialization(ctx: HReqContext<T, HReq>)
 
-    public fun readAfterSerialization(ctx: LReqContext<I, HReq, LReq>)
-    public fun modifyBeforeInvocation(ctx: LReqContext<I, HReq, LReq>): LReq
-    public fun readBeforeInvocation(ctx: LReqContext<I, HReq, LReq>)
+    public fun readAfterSerialization(ctx: LReqContext<T, HReq, LReq>)
+    public fun modifyBeforeInvocation(ctx: LReqContext<T, HReq, LReq>): LReq
+    public fun readBeforeInvocation(ctx: LReqContext<T, HReq, LReq>)
 
-    public fun readAfterInvocation(ctx: LResContext<I, HReq, LReq, LRes>)
-    public fun modifyBeforeDeserialization(ctx: LResContext<I, HReq, LReq, LRes>): DeserializeInput<I, LReq>
-    public fun readBeforeDeserialization(ctx: LResContext<I, HReq, LReq, LRes>)
+    public fun readAfterInvocation(ctx: LResContext<T, HReq, LReq, LRes>)
+    public fun modifyBeforeDeserialization(ctx: LResContext<T, HReq, LReq, LRes>): DeserializeInput<T, LReq>
+    public fun readBeforeDeserialization(ctx: LResContext<T, HReq, LReq, LRes>)
 
-    public fun readAfterDeserialization(ctx: HResContext<I, HReq, LReq, LRes, HRes>)
-    public fun modifyBeforeCompletion(ctx: HResContext<I, HReq, LReq, LRes, HRes>): HReq
-    public fun readAfterExecution(ctx: HResContext<I, HReq, LReq, LRes, HRes>)
+    public fun readAfterDeserialization(ctx: HResContext<T, HReq, LReq, LRes, HRes>)
+    public fun modifyBeforeCompletion(ctx: HResContext<T, HReq, LReq, LRes, HRes>): HReq
+    public fun readAfterExecution(ctx: HResContext<T, HReq, LReq, LRes, HRes>)
 }
 
-public interface SerializeInput<I, HReq> {
+public interface SerializeInput<T, HReq> {
     public val highLevelRequest: HReq
-    public val serializeSchema: ItemSchema<I>
+    public val serializeSchema: ItemSchema<T>
 }
 
-public interface HReqContext<I, HReq> : SerializeInput<I, HReq> {
+public interface HReqContext<T, HReq> : SerializeInput<T, HReq> {
     public val mapperContext: MapperContext // TBD
 }
 
-public interface LReqContext<I, HReq, LReq> : HReqContext<I, HReq> {
+public interface LReqContext<T, HReq, LReq> : HReqContext<T, HReq> {
     public val lowLevelRequest: LReq
 }
 
-public interface DeserializeInput<I, LReq> {
+public interface DeserializeInput<T, LReq> {
     public val lowLevelResponse: LReq
-    public val deserializeSchema: ItemSchema<I>
+    public val deserializeSchema: ItemSchema<T>
 }
 
-public interface LResContext<I, HReq, LReq, LRes> : LReqContext<I, HReq, LReq>, DeserializeInput<I, LReq>
+public interface LResContext<T, HReq, LReq, LRes> : LReqContext<T, HReq, LReq>, DeserializeInput<T, LReq>
 
-public interface HResContext<I, HReq, LReq, LRes, HRes> : LResContext<I, HReq, LReq, LRes> {
+public interface HResContext<T, HReq, LReq, LRes, HRes> : LResContext<T, HReq, LReq, LRes> {
     public val highLevelResponse: HRes
 }
 
