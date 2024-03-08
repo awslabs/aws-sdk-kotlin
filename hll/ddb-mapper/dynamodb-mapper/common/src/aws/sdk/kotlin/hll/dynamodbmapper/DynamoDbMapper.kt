@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper
 
+import aws.sdk.kotlin.hll.dynamodbmapper.internal.DynamoDbMapperImpl
+import aws.sdk.kotlin.hll.dynamodbmapper.internal.MapperConfigBuilderImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.Interceptor
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
@@ -103,31 +105,4 @@ public interface DynamoDbMapper {
             public fun build(): Config
         }
     }
-}
-
-private data class DynamoDbMapperImpl(
-    override val client: DynamoDbClient,
-    private val config: DynamoDbMapper.Config,
-) : DynamoDbMapper {
-    override fun <T, PK> getTable(
-        name: String,
-        schema: ItemSchema.PartitionKey<T, PK>,
-    ): Table.PartitionKey<T, PK> = TableImpl.PartitionKeyImpl(this, name, schema)
-
-    override fun <T, PK, SK> getTable(
-        name: String,
-        schema: ItemSchema.CompositeKey<T, PK, SK>,
-    ): Table.CompositeKey<T, PK, SK> = TableImpl.CompositeKeyImpl(this, name, schema)
-}
-
-private class MapperConfigImpl(override val interceptors: List<Interceptor<*, *, *, *, *>>) : DynamoDbMapper.Config {
-    override fun toBuilder(): DynamoDbMapper.Config.Builder = DynamoDbMapper.Config.Builder().also {
-        it.interceptors = interceptors.toMutableList()
-    }
-}
-
-private class MapperConfigBuilderImpl : DynamoDbMapper.Config.Builder {
-    override var interceptors: MutableList<Interceptor<*, *, *, *, *>> = mutableListOf()
-
-    override fun build(): DynamoDbMapper.Config = MapperConfigImpl(interceptors.toList())
 }

@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.model
 
+import aws.sdk.kotlin.hll.dynamodbmapper.model.internal.MutableItemImpl
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 /**
@@ -22,6 +23,10 @@ public fun MutableItem.toItem(): Item = toMap().toItem()
  */
 public fun MutableMap<String, AttributeValue>.toMutableItem(): MutableItem = MutableItemImpl(this)
 
-private data class MutableItemImpl(
-    private val delegate: MutableMap<String, AttributeValue>,
-) : MutableItem, MutableMap<String, AttributeValue> by delegate
+/**
+ * Returns a new immutable [Item] with the specified attributes, given as name-value pairs
+ * @param pairs A collection of [Pair]<[String], [AttributeValue]> where the first value is the attribute name and the
+ * second is the attribute value.
+ */
+public fun mutableItemOf(vararg pairs: Pair<String, AttributeValue>): MutableItem =
+    MutableItemImpl(mutableMapOf(*pairs))

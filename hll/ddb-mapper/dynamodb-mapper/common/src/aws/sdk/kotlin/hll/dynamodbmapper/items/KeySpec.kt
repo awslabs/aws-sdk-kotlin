@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.items
 
+import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec.Companion.Number
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 /**
@@ -12,10 +13,22 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  */
 public sealed interface KeySpec<in K> {
     public companion object {
+        /**
+         * Creates a new [ByteArray] key specification
+         * @param name The name of the key attribute
+         */
         public fun ByteArray(name: String): KeySpec<ByteArray> = ByteArrayImpl(name)
 
+        /**
+         * Creates a new [Number] key specification
+         * @param name The name of the key attribute
+         */
         public fun Number(name: String): KeySpec<Number> = NumberImpl(name)
 
+        /**
+         * Creates a new [String] key specification
+         * @param name The name of the key attribute
+         */
         public fun String(name: String): KeySpec<String> = StringImpl(name)
     }
 
@@ -29,16 +42,16 @@ public sealed interface KeySpec<in K> {
      * @param value The value to use for the key attribute
      */
     public fun toField(value: K): Pair<String, AttributeValue>
-}
 
-private class ByteArrayImpl(override val name: String) : KeySpec<ByteArray> {
-    override fun toField(value: ByteArray): Pair<String, AttributeValue> = name to AttributeValue.B(value)
-}
+    private data class ByteArrayImpl(override val name: String) : KeySpec<ByteArray> {
+        override fun toField(value: ByteArray) = name to AttributeValue.B(value)
+    }
 
-private class NumberImpl(override val name: String) : KeySpec<Number> {
-    override fun toField(value: Number): Pair<String, AttributeValue> = name to AttributeValue.N(value.toString())
-}
+    private data class NumberImpl(override val name: String) : KeySpec<Number> {
+        override fun toField(value: Number) = name to AttributeValue.N(value.toString())
+    }
 
-private class StringImpl(override val name: String) : KeySpec<String> {
-    override fun toField(value: String): Pair<String, AttributeValue> = name to AttributeValue.S(value)
+    private data class StringImpl(override val name: String) : KeySpec<String> {
+        override fun toField(value: String) = name to AttributeValue.S(value)
+    }
 }

@@ -89,7 +89,13 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter$Default
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$Companion;
 	public abstract fun getConverter ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$Companion {
+	public final fun invoke (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionKey;
+	public final fun invoke (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$CompositeKey;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionKey {
@@ -137,6 +143,7 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/MutableI
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/model/MutableItemKt {
+	public static final fun mutableItemOf ([Lkotlin/Pair;)Laws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem;
 	public static final fun toItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 	public static final fun toMutableItem (Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem;
 }
