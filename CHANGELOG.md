@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.74] - 03/08/2024
+
+### Features
+* (**batch**) This release adds JobStateTimeLimitActions setting to the Job Queue API. It allows you to configure an action Batch can take for a blocking job in front of the queue after the defined period of time. The new parameter applies for ECS, EKS, and FARGATE Job Queues.
+* (**cloudtrail**) Added exceptions to CreateTrail, DescribeTrails, and ListImportFailures APIs.
+* (**cognitoidentityprovider**) Add ConcurrentModificationException to SetUserPoolMfaConfig
+* (**guardduty**) Add RDS Provisioned and Serverless Usage types
+* (**transfer**) Added DES_EDE3_CBC to the list of supported encryption algorithms for messages sent with an AS2 connector.
+* [#1212](https://github.com/awslabs/aws-sdk-kotlin/issues/1212) Add request IDs to exception messages where available
+* [#1212](https://github.com/awslabs/aws-sdk-kotlin/issues/1212) Add error metadata to ServiceException messages when a service-provided message isn't available
+
+### Documentation
+* (**bedrockagentruntime**) Documentation update for Bedrock Runtime Agent
+* (**codebuild**) This release adds support for a new webhook event: PULL_REQUEST_CLOSED.
+
 ## [1.0.73] - 03/07/2024
 
 ### Features
