@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.0.73] - 03/07/2024
+
+### Features
+* (**appconfig**) AWS AppConfig now supports dynamic parameters, which enhance the functionality of AppConfig Extensions by allowing you to provide parameter values to your Extensions at the time you deploy your configuration.
+* (**ec2**) This release adds an optional parameter to RegisterImage and CopyImage APIs to support tagging AMIs at the time of creation.
+* (**grafana**) Adds support for the new GrafanaToken as part of the Amazon Managed Grafana Enterprise plugins upgrade to associate your AWS account with a Grafana Labs account.
+* (**paymentcryptographydata**) AWS Payment Cryptography EMV Decrypt Feature  Release
+* (**wafv2**) You can increase the max request body inspection size for some regional resources. The size setting is in the web ACL association config. Also, the AWSManagedRulesBotControlRuleSet EnableMachineLearning setting now takes a Boolean instead of a primitive boolean type, for languages like Java.
+
+### Documentation
+* (**lambda**) Documentation updates for AWS Lambda
+* (**rds**) Updates Amazon RDS documentation for io2 storage for Multi-AZ DB clusters
+* (**snowball**) Doc-only update for change to EKS-Anywhere ordering.
+* (**workspaces**) Added note for user decoupling
+
+## [1.0.72] - 03/06/2024
+
+### Features
+* (**imagebuilder**) Add PENDING status to Lifecycle Execution resource status. Add StartTime and EndTime to ListLifecycleExecutionResource API response.
+* (**rds**) Updated the input of CreateDBCluster and ModifyDBCluster to support setting CA certificates. Updated the output of DescribeDBCluster to show current CA certificate setting value.
+* (**verifiedpermissions**) Deprecating details in favor of configuration for GetIdentitySource and ListIdentitySources APIs.
+
+### Documentation
+* (**dynamodb**) Doc only updates for DynamoDB documentation
+* (**mwaa**) Amazon MWAA adds support for Apache Airflow v2.8.1.
+* (**redshift**) Update for documentation only. Covers port ranges, definition updates for data sharing, and definition updates to cluster-snapshot documentation.
+
 ## [1.0.71] - 03/05/2024
 
 ### Features
