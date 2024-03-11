@@ -39,6 +39,13 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
         // The following can be used to generate only a specific test by name.
         // val targetedTest = TestMemberDelta(setOf("RestJsonComplexErrorWithNoMessage"), TestContainmentMode.RUN_TESTS)
 
+        val ignoredTests = TestMemberDelta(
+            setOf(
+                // This test requires populating blob members with a default value of "", which the sdk doesn't do
+                "AwsJson10ClientPopulatesDefaultValuesInInput",
+            ),
+        )
+
         val requestTestBuilder = HttpProtocolUnitTestRequestGenerator.Builder()
         val responseTestBuilder = HttpProtocolUnitTestResponseGenerator.Builder()
         val errorTestBuilder = HttpProtocolUnitTestErrorGenerator.Builder()
@@ -48,6 +55,7 @@ abstract class AwsHttpBindingProtocolGenerator : HttpBindingProtocolGenerator() 
             requestTestBuilder,
             responseTestBuilder,
             errorTestBuilder,
+            ignoredTests,
         ).generateProtocolTests()
     }
 
