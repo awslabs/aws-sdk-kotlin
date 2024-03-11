@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.75] - 03/11/2024
+
+### Features
+* (**codestarconnections**) Added a sync configuration enum to disable publishing of deployment status to source providers (PublishDeploymentStatus). Added a sync configuration enum (TriggerStackUpdateOn) to only trigger changes.
+* (**mediapackagev2**) This release enables customers to safely update their MediaPackage v2 channel groups, channels and origin endpoints using entity tags.
+* Added the `sigV4aSigningRegionSet` configuration option
+
+### Documentation
+* (**elasticache**) Revisions to API text that are now to be carried over to SDK text, changing usages of "SFO" in code examples to "us-west-1", and some other typos.
+
+### Miscellaneous
+* Bump smithy version to 1.45.0
+
 ## [1.0.74] - 03/08/2024
 
 ### Features

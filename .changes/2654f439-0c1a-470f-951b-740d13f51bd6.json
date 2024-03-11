@@ -1,5 +1,0 @@
-{
-    "id": "2654f439-0c1a-470f-951b-740d13f51bd6",
-    "type": "feature",
-    "description": "Added the `sigV4aSigningRegionSet` configuration option"
-}
