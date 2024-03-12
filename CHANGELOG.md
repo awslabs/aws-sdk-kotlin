@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.76] - 03/12/2024
+
+### Features
+* (**connect**) This release increases MaxResults limit to 500 in request for SearchUsers, SearchQueues and SearchRoutingProfiles APIs of Amazon Connect.
+* (**kafka**) Added support for specifying the starting position of topic replication in MSK-Replicator.
+
+### Documentation
+* (**cloudformation**) CloudFormation documentation update for March, 2024
+* (**ec2**) Documentation updates for Amazon EC2.
+* (**ssm**) March 2024 doc-only updates for Systems Manager.
+
 ## [1.0.75] - 03/11/2024
 
 ### Features
