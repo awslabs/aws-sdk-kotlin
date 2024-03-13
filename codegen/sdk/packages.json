@@ -955,12 +955,6 @@
             "brazilName": "AwsSdkKotlinIotJobsDataPlane"
         },
         {
-            "sdkId": "IoT RoboRunner",
-            "namespace": "aws.sdk.kotlin.services.iotroborunner",
-            "artifactName": "iotroborunner",
-            "brazilName": "AwsSdkKotlinIotRoborunner"
-        },
-        {
             "sdkId": "IoT Wireless",
             "namespace": "aws.sdk.kotlin.services.iotwireless",
             "artifactName": "iotwireless",
