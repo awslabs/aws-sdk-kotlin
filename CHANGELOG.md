@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.77] - 03/13/2024
+
+### Features
+* (**ivsrealtime**) adds support for multiple new composition layout configuration options (grid, pip)
+* (**kinesisanalyticsv2**) Support new RuntimeEnvironmentUpdate parameter within UpdateApplication API allowing callers to change the Flink version upon which their application runs.
+* (**s3**) This release makes the default option for S3 on Outposts request signing to use the SigV4A algorithm when using AWS Common Runtime (CRT).
+
 ## [1.0.76] - 03/12/2024
 
 ### Features
