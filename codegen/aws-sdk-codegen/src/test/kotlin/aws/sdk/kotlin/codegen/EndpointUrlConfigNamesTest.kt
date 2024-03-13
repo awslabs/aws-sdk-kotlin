@@ -1891,7 +1891,6 @@ private const val javaClientNamesJson = """
   "Glacier": "GlacierClient",
   "Lightsail": "LightsailClient",
   "imagebuilder": "ImagebuilderClient",
-  "IoT RoboRunner": "IotRoboRunnerClient",
   "WorkMailMessageFlow": "WorkMailMessageFlowClient",
   "Kinesis Video Archived Media": "KinesisVideoArchivedMediaClient",
   "AccessAnalyzer": "AccessAnalyzerClient",
