@@ -1,5 +1,52 @@
 # Changelog
 
+## [1.0.78] - 03/14/2024
+
+### Features
+* (**ec2instanceconnect**) This release includes a new exception type "SerialConsoleSessionUnsupportedException" for SendSerialConsoleSSHPublicKey API.
+* (**fis**) This release adds support for previewing target resources before running a FIS experiment. It also adds resource ARNs for actions, experiments, and experiment templates to API responses.
+* (**timestreaminfluxdb**) This is the initial SDK release for Amazon Timestream for InfluxDB. Amazon Timestream for InfluxDB is a new time-series database engine that makes it easy for application developers and DevOps teams to run InfluxDB databases on AWS for near real-time time-series applications using open source APIs.
+
+### Documentation
+* (**amplify**) Documentation updates for Amplify. Identifies the APIs available only to apps created using Amplify Gen 1.
+* (**elasticloadbalancingv2**) This release allows you to configure HTTP client keep-alive duration for communication between clients and Application Load Balancers.
+* (**rds**) Updates Amazon RDS documentation for EBCDIC collation for RDS for Db2.
+* (**secretsmanager**) Doc only update for Secrets Manager
+
+### Miscellaneous
+* Remove IoT RoboRunner service
+
+## [1.0.77] - 03/13/2024
+
+### Features
+* (**ivsrealtime**) adds support for multiple new composition layout configuration options (grid, pip)
+* (**kinesisanalyticsv2**) Support new RuntimeEnvironmentUpdate parameter within UpdateApplication API allowing callers to change the Flink version upon which their application runs.
+* (**s3**) This release makes the default option for S3 on Outposts request signing to use the SigV4A algorithm when using AWS Common Runtime (CRT).
+
+## [1.0.76] - 03/12/2024
+
+### Features
+* (**connect**) This release increases MaxResults limit to 500 in request for SearchUsers, SearchQueues and SearchRoutingProfiles APIs of Amazon Connect.
+* (**kafka**) Added support for specifying the starting position of topic replication in MSK-Replicator.
+
+### Documentation
+* (**cloudformation**) CloudFormation documentation update for March, 2024
+* (**ec2**) Documentation updates for Amazon EC2.
+* (**ssm**) March 2024 doc-only updates for Systems Manager.
+
+## [1.0.75] - 03/11/2024
+
+### Features
+* (**codestarconnections**) Added a sync configuration enum to disable publishing of deployment status to source providers (PublishDeploymentStatus). Added a sync configuration enum (TriggerStackUpdateOn) to only trigger changes.
+* (**mediapackagev2**) This release enables customers to safely update their MediaPackage v2 channel groups, channels and origin endpoints using entity tags.
+* Added the `sigV4aSigningRegionSet` configuration option
+
+### Documentation
+* (**elasticache**) Revisions to API text that are now to be carried over to SDK text, changing usages of "SFO" in code examples to "us-west-1", and some other typos.
+
+### Miscellaneous
+* Bump smithy version to 1.45.0
+
 ## [1.0.74] - 03/08/2024
 
 ### Features

@@ -22,7 +22,7 @@ import software.amazon.smithy.model.transform.ModelTransformer
  * NOTE: Won't add sigV4 trait (services that support sigV4A MUST support sigV4)
  */
 class SigV4AsymmetricTraitCustomization : KotlinIntegration {
-    // Needs to happen before the `SigV4AsymmetricAuthSchemeIntegration` & `SigV4AuthSchemeIntegration` (-50 & -50)
+    // Needs to happen before the SigV4AsymmetricAuthSchemeIntegration & SigV4AuthSchemeIntegration
     override val order: Byte = -60
 
     // services which support SigV4A but don't model it

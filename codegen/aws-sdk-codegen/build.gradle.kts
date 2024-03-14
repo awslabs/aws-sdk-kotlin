@@ -20,10 +20,9 @@ group = "aws.sdk.kotlin"
 version = sdkVersion
 
 dependencies {
-
-    api(project(":codegen:smithy-aws-kotlin-codegen"))
     implementation(libs.kotlin.stdlib.jdk8)
     api(libs.smithy.kotlin.codegen)
+    api(libs.smithy.aws.kotlin.codegen)
 
     api(libs.smithy.aws.traits)
     api(libs.smithy.aws.iam.traits)
