@@ -9,8 +9,8 @@ coroutines-version = "1.7.3"
 atomicfu-version = "0.23.1"
 
 # smithy-kotlin codegen and runtime are versioned separately
-smithy-kotlin-runtime-version = "1.0.18"
-smithy-kotlin-codegen-version = "0.30.19"
+smithy-kotlin-runtime-version = "1.0.19"
+smithy-kotlin-codegen-version = "0.30.20"
 
 # codegen
 smithy-version = "1.45.0"
@@ -81,6 +81,7 @@ smithy-kotlin-testing = { module = "aws.smithy.kotlin:testing", version.ref = "s
 
 smithy-kotlin-codegen = { module = "software.amazon.smithy.kotlin:smithy-kotlin-codegen", version.ref = "smithy-kotlin-codegen-version" }
 smithy-kotlin-codegen-testutils = { module = "software.amazon.smithy.kotlin:smithy-kotlin-codegen-testutils", version.ref = "smithy-kotlin-codegen-version" }
+smithy-aws-kotlin-codegen = { module = "software.amazon.smithy.kotlin:smithy-aws-kotlin-codegen", version.ref = "smithy-kotlin-codegen-version" }
 
 smithy-codegen-core = { module = "software.amazon.smithy:smithy-codegen-core", version.ref = "smithy-version" }
 smithy-cli = { module = "software.amazon.smithy:smithy-cli", version.ref = "smithy-version" }

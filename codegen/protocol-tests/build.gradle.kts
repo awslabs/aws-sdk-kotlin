@@ -21,29 +21,15 @@ data class ProtocolTest(val projectionName: String, val serviceShapeId: String, 
 // The following section exposes Smithy protocol test suites as gradle test targets
 // for the configured protocols in [enabledProtocols].
 val enabledProtocols = listOf(
-    ProtocolTest("aws-ec2-query", "aws.protocoltests.ec2#AwsEc2"),
-    ProtocolTest("aws-json-10", "aws.protocoltests.json10#JsonRpc10"),
-    ProtocolTest("aws-json-11", "aws.protocoltests.json#JsonProtocol"),
-    ProtocolTest("aws-restjson", "aws.protocoltests.restjson#RestJson"),
-    ProtocolTest("aws-restxml", "aws.protocoltests.restxml#RestXml"),
-    ProtocolTest("aws-restxml-xmlns", "aws.protocoltests.restxml.xmlns#RestXmlWithNamespace"),
-    ProtocolTest("aws-query", "aws.protocoltests.query#AwsQuery"),
-
     // service specific tests
     ProtocolTest("apigateway", "com.amazonaws.apigateway#BackplaneControlService"),
     ProtocolTest("glacier", "com.amazonaws.glacier#Glacier"),
     ProtocolTest("machinelearning", "com.amazonaws.machinelearning#AmazonML_20141212", sdkId = "Machine Learning"),
-
-    // Custom hand written tests
-    ProtocolTest("error-correction-json", "aws.protocoltests.errorcorrection#RequiredValueJson"),
-    ProtocolTest("error-correction-xml", "aws.protocoltests.errorcorrection#RequiredValueXml"),
 )
 
 smithyBuild {
     enabledProtocols.forEach { test ->
         projections.register(test.projectionName) {
-            imports = listOf(file("model").absolutePath)
-
             transforms = listOf(
                 """
                 {
