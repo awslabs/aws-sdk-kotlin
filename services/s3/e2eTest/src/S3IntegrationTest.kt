@@ -22,6 +22,7 @@ import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import aws.smithy.kotlin.runtime.text.encoding.encodeToHex
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.flow
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
@@ -34,6 +35,7 @@ import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.time.Duration.Companion.seconds
+import aws.smithy.kotlin.runtime.content.toByteStream
 
 /**
  * Tests for bucket operations and presigner
@@ -117,7 +119,7 @@ class S3BucketOpsIntegrationTest {
         client.putObject {
             bucket = testBucket
             key = keyName
-            body = flow { emit(arr) }.toByteStream(this, arr.size.toLong())
+            body = flow { emit(arr) }.toByteStream(this@runBlocking, arr.size.toLong())
             contentLength = arr.size.toLong()
         }
     }
