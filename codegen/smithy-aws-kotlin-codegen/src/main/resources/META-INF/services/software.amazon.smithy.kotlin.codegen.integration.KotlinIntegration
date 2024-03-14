@@ -1,3 +1,0 @@
-software.amazon.smithy.kotlin.codegen.aws.SdkProtocolGeneratorSupplier
-software.amazon.smithy.kotlin.codegen.aws.customization.RegionSupport
-software.amazon.smithy.kotlin.codegen.aws.middleware.ClockSkew

@@ -16,7 +16,9 @@ import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.retries.resolveRetryStrategy
 import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
 import aws.sdk.kotlin.runtime.region.resolveRegion
+import aws.sdk.kotlin.runtime.region.resolveSigV4aSigningRegionSet
 import aws.smithy.kotlin.runtime.ExperimentalApi
+import aws.smithy.kotlin.runtime.auth.awscredentials.SigV4aClientConfig
 import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
@@ -88,6 +90,11 @@ public abstract class AbstractAwsSdkClientFactory<
                 config.requestCompression.requestMinCompressionSizeBytes =
                     config.requestCompression.requestMinCompressionSizeBytes
                         ?: resolveRequestMinCompressionSizeBytes(platform, profile)
+            }
+
+            if (config is SigV4aClientConfig.Builder) {
+                config.sigV4aSigningRegionSet =
+                    config.sigV4aSigningRegionSet ?: resolveSigV4aSigningRegionSet(platform, profile)
             }
 
             finalizeConfig(builder, sharedConfig, profile)

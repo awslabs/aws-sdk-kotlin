@@ -1,5 +1,171 @@
 # Changelog
 
+## [1.0.77] - 03/13/2024
+
+### Features
+* (**ivsrealtime**) adds support for multiple new composition layout configuration options (grid, pip)
+* (**kinesisanalyticsv2**) Support new RuntimeEnvironmentUpdate parameter within UpdateApplication API allowing callers to change the Flink version upon which their application runs.
+* (**s3**) This release makes the default option for S3 on Outposts request signing to use the SigV4A algorithm when using AWS Common Runtime (CRT).
+
+## [1.0.76] - 03/12/2024
+
+### Features
+* (**connect**) This release increases MaxResults limit to 500 in request for SearchUsers, SearchQueues and SearchRoutingProfiles APIs of Amazon Connect.
+* (**kafka**) Added support for specifying the starting position of topic replication in MSK-Replicator.
+
+### Documentation
+* (**cloudformation**) CloudFormation documentation update for March, 2024
+* (**ec2**) Documentation updates for Amazon EC2.
+* (**ssm**) March 2024 doc-only updates for Systems Manager.
+
+## [1.0.75] - 03/11/2024
+
+### Features
+* (**codestarconnections**) Added a sync configuration enum to disable publishing of deployment status to source providers (PublishDeploymentStatus). Added a sync configuration enum (TriggerStackUpdateOn) to only trigger changes.
+* (**mediapackagev2**) This release enables customers to safely update their MediaPackage v2 channel groups, channels and origin endpoints using entity tags.
+* Added the `sigV4aSigningRegionSet` configuration option
+
+### Documentation
+* (**elasticache**) Revisions to API text that are now to be carried over to SDK text, changing usages of "SFO" in code examples to "us-west-1", and some other typos.
+
+### Miscellaneous
+* Bump smithy version to 1.45.0
+
+## [1.0.74] - 03/08/2024
+
+### Features
+* (**batch**) This release adds JobStateTimeLimitActions setting to the Job Queue API. It allows you to configure an action Batch can take for a blocking job in front of the queue after the defined period of time. The new parameter applies for ECS, EKS, and FARGATE Job Queues.
+* (**cloudtrail**) Added exceptions to CreateTrail, DescribeTrails, and ListImportFailures APIs.
+* (**cognitoidentityprovider**) Add ConcurrentModificationException to SetUserPoolMfaConfig
+* (**guardduty**) Add RDS Provisioned and Serverless Usage types
+* (**transfer**) Added DES_EDE3_CBC to the list of supported encryption algorithms for messages sent with an AS2 connector.
+* [#1212](https://github.com/awslabs/aws-sdk-kotlin/issues/1212) Add request IDs to exception messages where available
+* [#1212](https://github.com/awslabs/aws-sdk-kotlin/issues/1212) Add error metadata to ServiceException messages when a service-provided message isn't available
+
+### Documentation
+* (**bedrockagentruntime**) Documentation update for Bedrock Runtime Agent
+* (**codebuild**) This release adds support for a new webhook event: PULL_REQUEST_CLOSED.
+
+## [1.0.73] - 03/07/2024
+
+### Features
+* (**appconfig**) AWS AppConfig now supports dynamic parameters, which enhance the functionality of AppConfig Extensions by allowing you to provide parameter values to your Extensions at the time you deploy your configuration.
+* (**ec2**) This release adds an optional parameter to RegisterImage and CopyImage APIs to support tagging AMIs at the time of creation.
+* (**grafana**) Adds support for the new GrafanaToken as part of the Amazon Managed Grafana Enterprise plugins upgrade to associate your AWS account with a Grafana Labs account.
+* (**paymentcryptographydata**) AWS Payment Cryptography EMV Decrypt Feature  Release
+* (**wafv2**) You can increase the max request body inspection size for some regional resources. The size setting is in the web ACL association config. Also, the AWSManagedRulesBotControlRuleSet EnableMachineLearning setting now takes a Boolean instead of a primitive boolean type, for languages like Java.
+
+### Documentation
+* (**lambda**) Documentation updates for AWS Lambda
+* (**rds**) Updates Amazon RDS documentation for io2 storage for Multi-AZ DB clusters
+* (**snowball**) Doc-only update for change to EKS-Anywhere ordering.
+* (**workspaces**) Added note for user decoupling
+
+## [1.0.72] - 03/06/2024
+
+### Features
+* (**imagebuilder**) Add PENDING status to Lifecycle Execution resource status. Add StartTime and EndTime to ListLifecycleExecutionResource API response.
+* (**rds**) Updated the input of CreateDBCluster and ModifyDBCluster to support setting CA certificates. Updated the output of DescribeDBCluster to show current CA certificate setting value.
+* (**verifiedpermissions**) Deprecating details in favor of configuration for GetIdentitySource and ListIdentitySources APIs.
+
+### Documentation
+* (**dynamodb**) Doc only updates for DynamoDB documentation
+* (**mwaa**) Amazon MWAA adds support for Apache Airflow v2.8.1.
+* (**redshift**) Update for documentation only. Covers port ranges, definition updates for data sharing, and definition updates to cluster-snapshot documentation.
+
+## [1.0.71] - 03/05/2024
+
+### Features
+* (**organizations**) This release contains an endpoint addition
+* (**sesv2**) Adds support for providing custom headers within SendEmail and SendBulkEmail for SESv2.
+
+### Documentation
+* (**apigateway**) Documentation updates for Amazon API Gateway
+* (**chatbot**) Minor update to documentation.
+
+## [1.0.70] - 03/04/2024
+
+### Features
+* (**cloudformation**) Add DetailedStatus field to DescribeStackEvents and DescribeStacks APIs
+* (**fsx**) Added support for creating FSx for NetApp ONTAP file systems with up to 12 HA pairs, delivering up to 72 GB/s of read throughput and 12 GB/s of write throughput.
+* (**organizations**) Documentation update for AWS Organizations
+
+## [1.0.69] - 03/01/2024
+
+### Documentation
+* (**accessanalyzer**) Fixed a typo in description field.
+* (**autoscaling**) With this release, Amazon EC2 Auto Scaling groups, EC2 Fleet, and Spot Fleet improve the default price protection behavior of attribute-based instance type selection of Spot Instances, to consistently select from a wide range of instance types.
+* (**ec2**) With this release, Amazon EC2 Auto Scaling groups, EC2 Fleet, and Spot Fleet improve the default price protection behavior of attribute-based instance type selection of Spot Instances, to consistently select from a wide range of instance types.
+
+## [1.0.68] - 02/29/2024
+
+### Features
+* (**docdbelastic**) Launched Elastic Clusters Readable Secondaries, Start/Stop, Configurable Shard Instance count, Automatic Backups and Snapshot Copying
+* (**eks**) Added support for new AL2023 AMIs to the supported AMITypes.
+* (**lexmodelsv2**) This release makes AMAZON.QnAIntent generally available in Amazon Lex. This generative AI feature leverages large language models available through Amazon Bedrock to automate frequently asked questions (FAQ) experience for end-users.
+* (**migrationhuborchestrator**) Adds new CreateTemplate, UpdateTemplate and DeleteTemplate APIs.
+* (**quicksight**) TooltipTarget for Combo chart visuals; ColumnConfiguration limit increase to 2000; Documentation Update
+* (**sagemaker**) Adds support for ModelDataSource in Model Packages to support unzipped models. Adds support to specify SourceUri for models which allows registration of models without mandating a container for hosting. Using SourceUri, customers can decouple the model from hosting information during registration.
+* (**securitylake**) Add capability to update the Data Lake's MetaStoreManager Role in order to perform required data lake updates to use Iceberg table format in their data lake or update the role for any other reason.
+* Add support for S3 Express One Zone
+
+### Fixes
+* Fix an issue where sections were not properly divided when parsing the config file
+* [#1220](https://github.com/awslabs/aws-sdk-kotlin/issues/1220) Refactor XML deserialization to handle flat collections
+
+## [1.0.67] - 02/28/2024
+
+### Features
+* (**batch**) This release adds Batch support for configuration of multicontainer jobs in ECS, Fargate, and EKS. This support is available for all types of jobs, including both array jobs and multi-node parallel jobs.
+* (**bedrockagentruntime**) This release adds support to override search strategy performed by the Retrieve and RetrieveAndGenerate APIs for Amazon Bedrock Agents
+* (**costexplorer**) This release introduces the new API 'GetApproximateUsageRecords', which retrieves estimated usage records for hourly granularity or resource-level data at daily granularity.
+* (**ec2**) This release increases the range of MaxResults for GetNetworkInsightsAccessScopeAnalysisFindings to 1,000.
+* (**iot**) This release reduces the maximum results returned per query invocation from 500 to 100 for the SearchIndex API. This change has no implications as long as the API is invoked until the nextToken is NULL.
+* (**wafv2**) AWS WAF now supports configurable time windows for request aggregation with rate-based rules. Customers can now select time windows of 1 minute, 2 minutes or 10 minutes, in addition to the previously supported 5 minutes.
+
+## [1.0.66] - 02/27/2024
+
+### Features
+* (**amplifyuibuilder**) We have added the ability to tag resources after they are created
+
+## [1.0.65] - 02/26/2024
+
+### Features
+* (**drs**) Added volume status to DescribeSourceServer replicated volumes.
+* (**kafkaconnect**) Adds support for tagging, with new TagResource, UntagResource and ListTagsForResource APIs to manage tags and updates to existing APIs to allow tag on create. This release also adds support for the new DeleteWorkerConfiguration API.
+* (**rds**) This release adds support for gp3 data volumes for Multi-AZ DB Clusters.
+
+### Documentation
+* (**apigateway**) Documentation updates for Amazon API Gateway.
+
+## [1.0.64] - 02/23/2024
+
+### Features
+* (**rds**) Add pattern and length based validations for DBShardGroupIdentifier
+
+### Documentation
+* (**appsync**) Documentation only updates for AppSync
+* (**qldb**) Clarify possible values for KmsKeyArn and EncryptionDescription.
+* (**rum**) Doc-only update for new RUM metrics that were added
+
+## [1.0.63] - 02/22/2024
+
+### Features
+* (**internetmonitor**) This release adds IPv4 prefixes to health events
+* (**kinesisvideo**) Increasing NextToken parameter length restriction for List APIs from 512 to 1024.
+
+## [1.0.62] - 02/21/2024
+
+### Features
+* (**iotevents**) Increase the maximum length of descriptions for Inputs, Detector Models, and Alarm Models
+* (**lookoutequipment**) This release adds a field exposing model quality to read APIs for models. It also adds a model quality field to the API response when creating an inference scheduler.
+* (**medialive**) MediaLive now supports the ability to restart pipelines in a running channel.
+* (**ssm**) This release adds support for sharing Systems Manager parameters with other AWS accounts.
+
+### Fixes
+* [#1208](https://github.com/awslabs/aws-sdk-kotlin/issues/1208) Profile credentials provider is no longer marked as internal API
+* [#1217](https://github.com/awslabs/aws-sdk-kotlin/issues/1217) Only enable aws-chunked content encoding for S3
+
 ## [1.0.61] - 02/20/2024
 
 ### Features
