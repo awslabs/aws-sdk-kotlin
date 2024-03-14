@@ -109,6 +109,20 @@ class S3BucketOpsIntegrationTest {
     }
 
     @Test
+    fun testPutObjectWithToByteStreamAndContentLength(): Unit = runBlocking {
+        // See https://github.com/awslabs/aws-sdk-kotlin/issues/1249
+        val keyName = "toByteStream-contentLength.txt"
+        val arr = "Hello!".encodeToByteArray()
+
+        client.putObject {
+            bucket = testBucket
+            key = keyName
+            body = flow { emit(arr) }.toByteStream(this, arr.size.toLong())
+            contentLength = arr.size.toLong()
+        }
+    }
+
+    @Test
     fun testGetEmptyObject(): Unit = runBlocking {
         // See https://github.com/awslabs/aws-sdk-kotlin/issues/1014
         val keyName = "get-empty-obj.txt"
