@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.79] - 03/15/2024
+
+### Features
+* (**backup**) This release introduces a boolean attribute ManagedByAWSBackupOnly as part of ListRecoveryPointsByResource api to filter the recovery points based on ownership. This attribute can be used to filter out the recovery points protected by AWSBackup.
+* (**codebuild**) AWS CodeBuild now supports overflow behavior on Reserved Capacity.
+* (**connect**) This release adds Hierarchy based Access Control fields to Security Profile public APIs and adds support for UserAttributeFilter to SearchUsers API.
+* (**ec2**) Add media accelerator and neuron device information on the describe instance types API.
+* (**kinesisanalyticsv2**) Support for Flink 1.18 in Managed Service for Apache Flink
+* (**sagemaker**) Adds m6i, m6id, m7i, c6i, c6id, c7i, r6i r6id, r7i, p5 instance type support to Sagemaker Notebook Instances and miscellaneous wording fixes for previous Sagemaker documentation.
+* (**workspacesthinclient**) Removed unused parameter kmsKeyArn from UpdateDeviceRequest
+
+### Documentation
+* (**s3**) Documentation updates for Amazon S3.
+
 ## [1.0.78] - 03/14/2024
 
 ### Features
