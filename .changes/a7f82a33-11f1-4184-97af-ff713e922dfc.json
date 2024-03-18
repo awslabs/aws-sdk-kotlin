@@ -1,0 +1,9 @@
+{
+    "id": "a7f82a33-11f1-4184-97af-ff713e922dfc",
+    "type": "bugfix",
+    "description": "⚠️ **IMPORTANT**: Fix codegen for map shapes which use string enums as map keys. See the [**Map key changes** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1258) for more details",
+    "issues": [
+        "awslabs/smithy-kotlin#1045"
+    ],
+    "requiresMinorVersionBump": true
+}
