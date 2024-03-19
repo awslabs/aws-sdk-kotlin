@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.0] - 03/19/2024
+
+### Features
+* (**cloudwatchlogs**) Update LogSamples field in Anomaly model to be a list of LogEvent
+* (**ec2**) This release adds the new DescribeMacHosts API operation for getting information about EC2 Mac Dedicated Hosts. Users can now see the latest macOS versions that their underlying Apple Mac can support without needing to be updated.
+* (**finspace**) Adding new attributes readWrite and onDemand to dataview models for Database Maintenance operations.
+* (**managedblockchainquery**) Introduces a new API for Amazon Managed Blockchain Query: ListFilteredTransactionEvents.
+
+### Fixes
+* [#1045](https://github.com/awslabs/smithy-kotlin/issues/1045) ⚠️ **IMPORTANT**: Fix codegen for map shapes which use string enums as map keys. See the [**Map key changes** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1258) for more details
+* [#1041](https://github.com/awslabs/smithy-kotlin/issues/1041) ⚠️ **IMPORTANT**: Disable [OkHttp's transparent response decompression](https://square.github.io/okhttp/features/calls/#rewriting-requests) by manually specifying `Accept-Encoding: identity` in requests. See the [**Disabling automatic response decompression** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1259) for more details.
+
+### Documentation
+* (**cloudformation**) Documentation update, March 2024. Corrects some formatting.
+
 ## [1.0.80] - 03/18/2024
 
 ### Features
