@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.2] - 03/21/2024
+
+### Features
+* (**codeartifact**) This release adds Package groups to CodeArtifact so you can more conveniently configure package origin controls for multiple packages.
+
 ## [1.1.1] - 03/20/2024
 
 ### Features
