@@ -8,6 +8,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.internal.DynamoDbMapperImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.internal.MapperConfigBuilderImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.Interceptor
+import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.UniversalInterceptor
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 
 /**
@@ -28,6 +29,11 @@ public interface DynamoDbMapper {
      * The low-level DynamoDB client used for underlying calls to the service
      */
     public val client: DynamoDbClient
+
+    /**
+     * The active configuration for this mapper
+     */
+    public val config: Config
 
     /**
      * Get a [Table] reference for performing table operations
@@ -73,7 +79,7 @@ public interface DynamoDbMapper {
          * A list of [Interceptor] instances which will be applied to operations as they move through the request
          * pipeline.
          */
-        public val interceptors: List<Interceptor<*, *, *, *, *>>
+        public val interceptors: List<UniversalInterceptor>
 
         /**
          * Convert this immutable configuration into a mutable [Builder] object. Updates made to the mutable builder
@@ -96,7 +102,7 @@ public interface DynamoDbMapper {
              * A list of [Interceptor] instances which will be applied to operations as they move through the request
              * pipeline.
              */
-            public var interceptors: MutableList<Interceptor<*, *, *, *, *>>
+            public var interceptors: MutableList<UniversalInterceptor>
 
             /**
              * Builds this mutable [Builder] object into an immutable [Config] object. Changes made to this instance do

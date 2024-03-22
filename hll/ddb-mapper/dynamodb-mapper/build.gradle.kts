@@ -10,5 +10,12 @@ kotlin {
                 api(project(":services:dynamodb"))
             }
         }
+
+        commonTest {
+            dependencies {
+                implementation(libs.mockk)
+                implementation(libs.kotlinx.coroutines.test)
+            }
+        }
     }
 }
