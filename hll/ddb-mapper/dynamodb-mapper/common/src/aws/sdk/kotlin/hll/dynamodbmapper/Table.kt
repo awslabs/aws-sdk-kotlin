@@ -4,43 +4,14 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper
 
-import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
-import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
-import kotlinx.coroutines.flow.Flow
+import aws.sdk.kotlin.hll.dynamodbmapper.operations.GetItemRequest
 
 /**
  * Represents a table in DynamoDB and an associated item schema. Operations on this table will invoke low-level
  * operations after mapping objects to items and vice versa.
  * @param T The type of objects which will be read from and/or written to this table
  */
-public interface Table<T> {
-    /**
-     * The [DynamoDbMapper] which holds the underlying DynamoDB service client used to invoke operations
-     */
-    public val mapper: DynamoDbMapper
-
-    /**
-     * The name of this table
-     */
-    public val name: String
-
-    /**
-     * The [ItemSchema] for this table which describes how to map objects to items and vice versa
-     */
-    public val schema: ItemSchema<T>
-
-    // TODO reimplement operations to use pipeline, extension functions where appropriate, docs, etc.
-
-    public suspend fun getItem(key: Item): T?
-
-    @Suppress("INAPPLICABLE_JVM_NAME")
-    @JvmName("getItemByKeyObj")
-    public suspend fun getItem(keyObj: T): T?
-
-    public suspend fun putItem(obj: T)
-
-    public fun scan(): Flow<T>
-
+public interface Table<T> : TableSpec<T>, TableOperations<T> {
     /**
      * Represents a table whose primary key is a single partition key
      * @param T The type of objects which will be read from and/or written to this table
@@ -62,3 +33,6 @@ public interface Table<T> {
         public suspend fun getItem(partitionKey: PK, sortKey: SK): T?
     }
 }
+
+// TODO can this be codegenned?
+public suspend fun <T> Table<T>.getItem(keyObj: T): T? = getItem(GetItemRequest(keyObj)).item

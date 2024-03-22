@@ -48,6 +48,11 @@ public interface ItemSchema<T> {
     public val converter: ItemConverter<T>
 
     /**
+     * The name(s) of the attributes which form the primary key of this table
+     */
+    public val keyAttributeNames: Set<String>
+
+    /**
      * Represents a schema with a primary key consisting of a single partition key
      * @param T The type of objects described by this schema
      * @param PK The type of the partition key property, either [String], [Number], or [ByteArray]
@@ -57,6 +62,9 @@ public interface ItemSchema<T> {
          * The [KeySpec] for the partition key
          */
         public val partitionKey: KeySpec<PK>
+
+        override val keyAttributeNames: Set<String>
+            get() = setOf(partitionKey.name)
     }
 
     /**
@@ -70,6 +78,9 @@ public interface ItemSchema<T> {
          * The [KeySpec] for the sort key
          */
         public val sortKey: KeySpec<SK>
+
+        override val keyAttributeNames: Set<String>
+            get() = setOf(partitionKey.name, sortKey.name)
     }
 }
 
