@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.3] - 03/22/2024
+
+### Features
+* (**kendra**) Documentation update, March 2024. Corrects some docs for Amazon Kendra.
+* (**pricing**) Add ResourceNotFoundException to ListPriceLists and GetPriceListFileUrl APIs
+* (**rolesanywhere**) This release relaxes constraints on the durationSeconds request parameter for the *Profile APIs that support it. This parameter can now take on values that go up to 43200.
+* (**securityhub**) Added new resource detail object to ASFF, including resource for LastKnownExploitAt
+
+### Documentation
+* (**firehose**) Updates Amazon Firehose documentation for message regarding Enforcing Tags IAM Policy.
+
 ## [1.1.2] - 03/21/2024
 
 ### Features
