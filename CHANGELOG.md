@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.1.4] - 03/25/2024
+
+### Features
+* (**codebuild**) Supporting GitLab and GitLab Self Managed as source types in AWS CodeBuild.
+* (**ec2**) Added support for ModifyInstanceMetadataDefaults and GetInstanceMetadataDefaults to set Instance Metadata Service account defaults
+* (**emrcontainers**) This release increases the number of supported job template parameters from 20 to 100.
+* (**globalaccelerator**) AWS Global Accelerator now supports cross-account sharing for bring your own IP addresses.
+* (**medialive**) Exposing TileMedia H265 options
+* (**sagemaker**) Introduced support for the following new instance types on SageMaker Studio for JupyterLab and CodeEditor applications: m6i, m6id, m7i, c6i, c6id, c7i, r6i, r6id, r7i, and p5
+
+### Fixes
+* Support client-configured `accountIdEndpointMode`
+
+### Documentation
+* (**ecs**) Documentation only update for Amazon ECS.
+
 ## [1.1.3] - 03/22/2024
 
 ### Features

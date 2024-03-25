@@ -1,5 +1,0 @@
-{
-    "id": "6788c4d4-2c98-4119-a9d6-cda9ac29bf02",
-    "type": "bugfix",
-    "description": "Support client-configured `accountIdEndpointMode`"
-}
