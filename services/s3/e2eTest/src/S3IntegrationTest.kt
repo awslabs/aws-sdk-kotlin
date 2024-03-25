@@ -14,6 +14,7 @@ import aws.smithy.kotlin.runtime.content.asByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
 import aws.smithy.kotlin.runtime.content.fromFile
 import aws.smithy.kotlin.runtime.content.toByteArray
+import aws.smithy.kotlin.runtime.content.toByteStream
 import aws.smithy.kotlin.runtime.hashing.sha256
 import aws.smithy.kotlin.runtime.http.HttpException
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
@@ -21,6 +22,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import aws.smithy.kotlin.runtime.text.encoding.encodeToHex
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -106,6 +108,20 @@ class S3BucketOpsIntegrationTest {
 
         val contents = tempFile.readText()
         assertEquals(contents, roundTrippedContents)
+    }
+
+    @Test
+    fun testPutObjectWithToByteStreamAndContentLength(): Unit = runBlocking {
+        // See https://github.com/awslabs/aws-sdk-kotlin/issues/1249
+        val keyName = "toByteStream-contentLength.txt"
+        val arr = "Hello!".encodeToByteArray()
+
+        client.putObject {
+            bucket = testBucket
+            key = keyName
+            body = flow { emit(arr) }.toByteStream(this@runBlocking, arr.size.toLong())
+            contentLength = arr.size.toLong()
+        }
     }
 
     @Test

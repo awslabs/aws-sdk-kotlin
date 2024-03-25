@@ -1,5 +1,90 @@
 # Changelog
 
+## [1.1.3] - 03/22/2024
+
+### Features
+* (**kendra**) Documentation update, March 2024. Corrects some docs for Amazon Kendra.
+* (**pricing**) Add ResourceNotFoundException to ListPriceLists and GetPriceListFileUrl APIs
+* (**rolesanywhere**) This release relaxes constraints on the durationSeconds request parameter for the *Profile APIs that support it. This parameter can now take on values that go up to 43200.
+* (**securityhub**) Added new resource detail object to ASFF, including resource for LastKnownExploitAt
+
+### Documentation
+* (**firehose**) Updates Amazon Firehose documentation for message regarding Enforcing Tags IAM Policy.
+
+## [1.1.2] - 03/21/2024
+
+### Features
+* (**codeartifact**) This release adds Package groups to CodeArtifact so you can more conveniently configure package origin controls for multiple packages.
+
+## [1.1.1] - 03/20/2024
+
+### Features
+* (**accessanalyzer**) This release adds support for policy validation and external access findings for DynamoDB tables and streams. IAM Access Analyzer helps you author functional and secure resource-based policies and identify cross-account access. Updated service API, documentation, and paginators.
+* (**connect**) This release updates the *InstanceStorageConfig APIs to support a new ResourceType: REAL_TIME_CONTACT_ANALYSIS_CHAT_SEGMENTS. Use this resource type to enable streaming for real-time analysis of chat contacts and to associate a Kinesis stream where real-time analysis chat segments will be published.
+* (**dynamodb**) This release introduces 3 new APIs ('GetResourcePolicy', 'PutResourcePolicy' and 'DeleteResourcePolicy') and modifies the existing 'CreateTable' API for the resource-based policy support. It also modifies several APIs to accept a 'TableArn' for the 'TableName' parameter.
+* (**managedblockchainquery**) AMB Query: update GetTransaction to include transactionId as input
+* (**savingsplans**) Introducing the Savings Plans Return feature enabling customers to return their Savings Plans within 7 days of purchase.
+
+### Documentation
+* (**codebuild**) This release adds support for new webhook events (RELEASED and PRERELEASED) and filter types (TAG_NAME and RELEASE_NAME).
+
+## [1.1.0] - 03/19/2024
+
+### Features
+* (**cloudwatchlogs**) Update LogSamples field in Anomaly model to be a list of LogEvent
+* (**ec2**) This release adds the new DescribeMacHosts API operation for getting information about EC2 Mac Dedicated Hosts. Users can now see the latest macOS versions that their underlying Apple Mac can support without needing to be updated.
+* (**finspace**) Adding new attributes readWrite and onDemand to dataview models for Database Maintenance operations.
+* (**managedblockchainquery**) Introduces a new API for Amazon Managed Blockchain Query: ListFilteredTransactionEvents.
+
+### Fixes
+* [#1045](https://github.com/awslabs/smithy-kotlin/issues/1045) ⚠️ **IMPORTANT**: Fix codegen for map shapes which use string enums as map keys. See the [**Map key changes** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1258) for more details
+* [#1041](https://github.com/awslabs/smithy-kotlin/issues/1041) ⚠️ **IMPORTANT**: Disable [OkHttp's transparent response decompression](https://square.github.io/okhttp/features/calls/#rewriting-requests) by manually specifying `Accept-Encoding: identity` in requests. See the [**Disabling automatic response decompression** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1259) for more details.
+
+### Documentation
+* (**cloudformation**) Documentation update, March 2024. Corrects some formatting.
+
+## [1.0.80] - 03/18/2024
+
+### Features
+* (**cloudformation**) This release supports for a new API ListStackSetAutoDeploymentTargets, which provider auto-deployment configuration as a describable resource. Customers can now view the specific combinations of regions and OUs that are being auto-deployed.
+* (**kms**) Adds the ability to use the default policy name by omitting the policyName parameter in calls to PutKeyPolicy and GetKeyPolicy
+* (**mediatailor**) This release adds support to allow customers to show different content within a channel depending on metadata associated with the viewer.
+* (**rds**) This release launches the ModifyIntegration API and support for data filtering for zero-ETL Integrations.
+* (**s3**) Fix two issues with response root node names.
+
+### Documentation
+* (**timestreamquery**) Documentation updates, March 2024
+
+## [1.0.79] - 03/15/2024
+
+### Features
+* (**backup**) This release introduces a boolean attribute ManagedByAWSBackupOnly as part of ListRecoveryPointsByResource api to filter the recovery points based on ownership. This attribute can be used to filter out the recovery points protected by AWSBackup.
+* (**codebuild**) AWS CodeBuild now supports overflow behavior on Reserved Capacity.
+* (**connect**) This release adds Hierarchy based Access Control fields to Security Profile public APIs and adds support for UserAttributeFilter to SearchUsers API.
+* (**ec2**) Add media accelerator and neuron device information on the describe instance types API.
+* (**kinesisanalyticsv2**) Support for Flink 1.18 in Managed Service for Apache Flink
+* (**sagemaker**) Adds m6i, m6id, m7i, c6i, c6id, c7i, r6i r6id, r7i, p5 instance type support to Sagemaker Notebook Instances and miscellaneous wording fixes for previous Sagemaker documentation.
+* (**workspacesthinclient**) Removed unused parameter kmsKeyArn from UpdateDeviceRequest
+
+### Documentation
+* (**s3**) Documentation updates for Amazon S3.
+
+## [1.0.78] - 03/14/2024
+
+### Features
+* (**ec2instanceconnect**) This release includes a new exception type "SerialConsoleSessionUnsupportedException" for SendSerialConsoleSSHPublicKey API.
+* (**fis**) This release adds support for previewing target resources before running a FIS experiment. It also adds resource ARNs for actions, experiments, and experiment templates to API responses.
+* (**timestreaminfluxdb**) This is the initial SDK release for Amazon Timestream for InfluxDB. Amazon Timestream for InfluxDB is a new time-series database engine that makes it easy for application developers and DevOps teams to run InfluxDB databases on AWS for near real-time time-series applications using open source APIs.
+
+### Documentation
+* (**amplify**) Documentation updates for Amplify. Identifies the APIs available only to apps created using Amplify Gen 1.
+* (**elasticloadbalancingv2**) This release allows you to configure HTTP client keep-alive duration for communication between clients and Application Load Balancers.
+* (**rds**) Updates Amazon RDS documentation for EBCDIC collation for RDS for Db2.
+* (**secretsmanager**) Doc only update for Secrets Manager
+
+### Miscellaneous
+* Remove IoT RoboRunner service
+
 ## [1.0.77] - 03/13/2024
 
 ### Features

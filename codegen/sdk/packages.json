@@ -1933,6 +1933,12 @@
             "brazilName": "AwsSdkKotlinTextract"
         },
         {
+            "sdkId": "Timestream InfluxDB",
+            "namespace": "aws.sdk.kotlin.services.timestreaminfluxdb",
+            "artifactName": "timestreaminfluxdb",
+            "brazilName": "AwsSdkKotlinTimestreamInfluxdb"
+        },
+        {
             "sdkId": "Timestream Query",
             "namespace": "aws.sdk.kotlin.services.timestreamquery",
             "artifactName": "timestreamquery",
