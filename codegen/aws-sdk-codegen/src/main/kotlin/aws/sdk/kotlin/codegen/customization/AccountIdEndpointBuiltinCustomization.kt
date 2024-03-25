@@ -46,7 +46,7 @@ class AccountIdEndpointBuiltinCustomization : KotlinIntegration {
 
     private val resolveAccountIdEndpointModeSectionWriter = AppendingSectionWriter { writer ->
         writer.write(
-            "builder.config.#L = #T(profile = activeProfile)",
+            "builder.config.#1L = builder.config.#1L ?: #2T(profile = activeProfile)",
             AccountIdEndpointModeProp.propertyName,
             AwsRuntimeTypes.Config.Endpoints.resolveAccountIdEndpointMode,
         )
