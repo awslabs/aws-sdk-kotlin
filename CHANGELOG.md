@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.5] - 03/26/2024
+
+### Features
+* (**bedrockagentruntime**) This release adds support to customize prompts sent through the RetrieveAndGenerate API in Agents for Amazon Bedrock.
+* (**costexplorer**) Adds support for backfill of cost allocation tags, with new StartCostAllocationTagBackfill and ListCostAllocationTagBackfillHistory API.
+* (**ec2**) Documentation updates for Elastic Compute Cloud (EC2).
+* (**finspace**) Add new operation delete-kx-cluster-node and add status parameter to list-kx-cluster-node operation.
+
+### Documentation
+* (**ecs**) This is a documentation update for Amazon ECS.
+
 ## [1.1.4] - 03/25/2024
 
 ### Features
