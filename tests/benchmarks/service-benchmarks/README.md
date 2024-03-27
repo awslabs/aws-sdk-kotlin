@@ -62,7 +62,8 @@ This section describes how the benchmarks actually work at a high level:
 
 These benchmarks select a handful of services to test against. The selection criterion is the top 7 services by traffic
 coming from the AWS SDK for Kotlin (i.e., not from other SDKs, console, etc.). As of 7/28, those top 7 services are S3,
-SNS, STS, CloudWatch, CloudWatch Events, DynamoDB, and Pinpoint (in descending order). However, Pinpoint has strict throttles that make benchmarking impossible, so Secrets Manager is selected instead.
+SNS, STS, CloudWatch, CloudWatch Events, DynamoDB, and Pinpoint (in descending order). However, Pinpoint has strict 
+throttles that make benchmarking impossible, so Secrets Manager is selected instead.
 
 For each service, two APIs are selected roughly corresponding to a read and a write operation (e.g., S3::HeadObject is
 a read operation and S3::PutObject is a write operation). Efforts are made to ensure that the APIs selected are the top
