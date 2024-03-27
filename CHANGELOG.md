@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.6] - 03/27/2024
+
+### Features
+* (**batch**) This feature allows AWS Batch to support configuration of imagePullSecrets and allowPrivilegeEscalation for jobs running on EKS
+* (**bedrockagent**) This changes introduces metadata documents statistics and also updates the documentation for bedrock agent.
+* (**bedrockagentruntime**) This release introduces filtering support on Retrieve and RetrieveAndGenerate APIs.
+* (**elasticache**) Added minimum capacity to  Amazon ElastiCache Serverless. This feature allows customer to ensure minimum capacity even without current load
+
+### Documentation
+* (**secretsmanager**) Documentation updates for Secrets Manager
+
 ## [1.1.5] - 03/26/2024
 
 ### Features
