@@ -63,8 +63,7 @@ class S3OperationErrorHandler : KotlinIntegration {
             namespace = "${ctx.settings.pkg.name}.internal"
         }
 
-        writer.write("val payload = call.response.body.#T()", RuntimeTypes.Http.readAll)
-            .write("val wrappedResponse = call.response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
+        writer.write("val wrappedResponse = call.response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
             .write("val wrappedCall = call.copy(response = wrappedResponse)")
             .write("")
             .write("val errorDetails = try {")
@@ -97,7 +96,7 @@ class S3OperationErrorHandler : KotlinIntegration {
                     name = "${errSymbol.name}Deserializer"
                     namespace = ctx.settings.pkg.serde
                 }
-                writer.write("#S -> #T().deserialize(context, wrappedCall)", err.name, errDeserializerSymbol)
+                writer.write("#S -> #T().deserialize(context, wrappedCall, payload)", err.name, errDeserializerSymbol)
             }
             write("else -> #T(errorDetails.message)", exceptionBaseSymbol)
         }

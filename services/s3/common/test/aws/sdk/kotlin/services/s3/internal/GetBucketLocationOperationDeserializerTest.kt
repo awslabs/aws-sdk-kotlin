@@ -38,7 +38,7 @@ class GetBucketLocationOperationDeserializerTest {
         val call = HttpCall(HttpRequestBuilder().build(), response, Instant.now(), Instant.now())
 
         val actual = runBlocking {
-            GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), call)
+            GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), call, responseXML.encodeToByteArray())
         }
 
         assertEquals(BucketLocationConstraint.UsWest2, actual.locationConstraint)
@@ -63,7 +63,7 @@ class GetBucketLocationOperationDeserializerTest {
         val call = HttpCall(HttpRequestBuilder().build(), response, Instant.now(), Instant.now())
         val exception = assertFailsWith<S3Exception> {
             runBlocking {
-                GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), call)
+                GetBucketLocationOperationDeserializer().deserialize(ExecutionContext(), call, responseXML.encodeToByteArray())
             }
         }
 
