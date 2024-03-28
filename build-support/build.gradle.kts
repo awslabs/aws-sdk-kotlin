@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.smithy.model)
     implementation(libs.smithy.aws.traits)
     implementation(libs.kotlinx.serialization.json)
+    implementation("aws.sdk.kotlin:cloudwatch:1.+")
 
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter.params)
@@ -34,6 +35,11 @@ gradlePlugin {
         create("sdk-bootstrap") {
             id = "sdk-bootstrap"
             implementationClass = "aws.sdk.kotlin.gradle.sdk.Bootstrap"
+        }
+
+        create("sdk-metrics") {
+            id = "sdk-metrics"
+            implementationClass = "aws.sdk.kotlin.gradle.cicd.ArtifactSizeMetrics"
         }
     }
 }
