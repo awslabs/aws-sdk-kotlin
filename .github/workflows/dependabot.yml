@@ -1,7 +1,8 @@
 name: Dependabot Dependency Submission
 
-on: [ push ]
-# branches: [ main ]  # TODO Uncomment after testing. We only want to run Dependabot dependency submission on pushes to main
+on:
+  push:
+    branches: [ main ]
 
 permissions:
   contents: write
