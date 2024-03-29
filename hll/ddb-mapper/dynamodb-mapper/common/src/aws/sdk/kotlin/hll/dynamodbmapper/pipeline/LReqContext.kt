@@ -17,36 +17,33 @@ import aws.sdk.kotlin.services.dynamodb.model.GetItemRequest as LowLevelGetItemR
  * @param LReq The type of low-level request object (e.g., [LowLevelGetItemRequest])
  */
 public interface LReqContext<T, HReq, LReq> : HReqContext<T, HReq> {
-    public companion object {
-        /**
-         * Creates a new [LReqContext]
-         * @param T The type of objects being converted to/from DynamoDB items
-         * @param HReq The type of high-level request object (e.g., [GetItemRequest])
-         * @param LReq The type of low-level request object (e.g., [LowLevelGetItemRequest])
-         * @param highLevelRequest The high-level request object which is to be serialized into a low-level request
-         * object
-         * @param serializeSchema The [ItemSchema] to use for serializing objects into items
-         * @param mapperContext Additional, generalized context which may be useful to interceptors
-         * @param lowLevelRequest The low-level request object which is to be used in the low-level operation invocation
-         * @param error The most recent error which occurred, if any. Defaults to null.
-         */
-        public operator fun <T, HReq, LReq> invoke(
-            highLevelRequest: HReq,
-            serializeSchema: ItemSchema<T>,
-            mapperContext: MapperContext<T>,
-            lowLevelRequest: LReq,
-            error: Throwable? = null,
-        ): LReqContext<T, HReq, LReq> = LReqContextImpl(
-            highLevelRequest,
-            serializeSchema,
-            mapperContext,
-            lowLevelRequest,
-            error,
-        )
-    }
-
     /**
      * The low-level request object which is to be used in the low-level operation invocation
      */
     public val lowLevelRequest: LReq
 }
+
+/**
+ * Creates a new [LReqContext]
+ * @param T The type of objects being converted to/from DynamoDB items
+ * @param HReq The type of high-level request object (e.g., [GetItemRequest])
+ * @param LReq The type of low-level request object (e.g., [LowLevelGetItemRequest])
+ * @param highLevelRequest The high-level request object which is to be serialized into a low-level request object
+ * @param serializeSchema The [ItemSchema] to use for serializing objects into items
+ * @param mapperContext Additional, generalized context which may be useful to interceptors
+ * @param lowLevelRequest The low-level request object which is to be used in the low-level operation invocation
+ * @param error The most recent error which occurred, if any. Defaults to null.
+ */
+public fun <T, HReq, LReq> LReqContext(
+    highLevelRequest: HReq,
+    serializeSchema: ItemSchema<T>,
+    mapperContext: MapperContext<T>,
+    lowLevelRequest: LReq,
+    error: Throwable? = null,
+): LReqContext<T, HReq, LReq> = LReqContextImpl(
+    highLevelRequest,
+    serializeSchema,
+    mapperContext,
+    lowLevelRequest,
+    error,
+)

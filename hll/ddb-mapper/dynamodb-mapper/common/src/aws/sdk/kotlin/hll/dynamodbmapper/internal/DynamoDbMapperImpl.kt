@@ -6,7 +6,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.internal
 
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
-import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.UniversalInterceptor
+import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.InterceptorAny
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 
 internal data class DynamoDbMapperImpl(
@@ -21,7 +21,7 @@ internal data class DynamoDbMapperImpl(
 }
 
 internal data class MapperConfigImpl(
-    override val interceptors: List<UniversalInterceptor>,
+    override val interceptors: List<InterceptorAny>,
 ) : DynamoDbMapper.Config {
     override fun toBuilder() = DynamoDbMapper
         .Config
@@ -30,7 +30,7 @@ internal data class MapperConfigImpl(
 }
 
 internal class MapperConfigBuilderImpl : DynamoDbMapper.Config.Builder {
-    override var interceptors = mutableListOf<UniversalInterceptor>()
+    override var interceptors = mutableListOf<InterceptorAny>()
 
     override fun build() = MapperConfigImpl(interceptors.toList())
 }

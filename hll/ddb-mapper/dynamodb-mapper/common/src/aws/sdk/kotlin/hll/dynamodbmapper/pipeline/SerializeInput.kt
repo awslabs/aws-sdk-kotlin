@@ -14,22 +14,6 @@ import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.internal.SerializeInputImpl
  * @param HReq The type of high-level request object (e.g., [GetItemRequest])
  */
 public interface SerializeInput<T, HReq> {
-    public companion object {
-        /**
-         * Creates a new [SerializeInput]
-         * @param T The type of objects being converted to/from DynamoDB items
-         * @param HReq The type of high-level request object (e.g., [GetItemRequest])
-         * @param highLevelRequest The high-level request object which is to be serialized into a low-level request
-         * object
-         * @param serializeSchema The [ItemSchema] to use for serializing objects into items
-         */
-        public operator fun <T, HReq> invoke(
-            highLevelRequest: HReq,
-            serializeSchema: ItemSchema<T>,
-        ): SerializeInput<T, HReq> =
-            SerializeInputImpl(highLevelRequest, serializeSchema)
-    }
-
     /**
      * The high-level request object which is to be serialized into a low-level request object
      */
@@ -40,3 +24,13 @@ public interface SerializeInput<T, HReq> {
      */
     public val serializeSchema: ItemSchema<T>
 }
+
+/**
+ * Creates a new [SerializeInput]
+ * @param T The type of objects being converted to/from DynamoDB items
+ * @param HReq The type of high-level request object (e.g., [GetItemRequest])
+ * @param highLevelRequest The high-level request object which is to be serialized into a low-level request object
+ * @param serializeSchema The [ItemSchema] to use for serializing objects into items
+ */
+public fun <T, HReq> SerializeInput(highLevelRequest: HReq, serializeSchema: ItemSchema<T>): SerializeInput<T, HReq> =
+    SerializeInputImpl(highLevelRequest, serializeSchema)

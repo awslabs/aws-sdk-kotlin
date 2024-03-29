@@ -45,8 +45,8 @@ import aws.sdk.kotlin.services.dynamodb.model.GetItemResponse as LowLevelGetItem
  * interceptors hooks in the same phase. Only after _all_ interceptors' read-only hooks for a given phase have completed
  * will any exception be thrown. For example, if a mapper has two interceptors **A** and **B** registered, and **A**'s
  * [readAfterSerialization] hook throws an exception, it will be added to the context passed to **B**'s
- * [readAfterSerialization] hook. After **B**'s [readAfterSerialization] hook has completed, the exception be thrown
- * back to the caller.
+ * [readAfterSerialization] hook. After **B**'s [readAfterSerialization] hook has completed, the exception will be
+ * thrown back to the caller.
  *
  * **Modify hooks** are invoked before each step in the pipeline (except _before_ **Initialization**). They offer the
  * ability to see and modify a high-level operation in progress. They can be used to customize behavior and data in ways
@@ -178,6 +178,6 @@ public interface Interceptor<T, HReq, LReq, LRes, HRes> {
 }
 
 /**
- * A "universal" interceptor which acts on any type of objects, requests, and responses
+ * A universal interceptor which acts on any type of high-level objects, requests, and responses
  */
-public typealias UniversalInterceptor = Interceptor<*, *, *, *, *>
+public typealias InterceptorAny = Interceptor<*, *, *, *, *>

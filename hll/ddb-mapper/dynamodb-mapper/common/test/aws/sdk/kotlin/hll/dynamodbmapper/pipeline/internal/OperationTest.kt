@@ -12,10 +12,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.withKeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
 import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.HReqContext
-import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.Interceptor
-import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.LReqContext
-import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.UniversalInterceptor
+import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.*
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import io.mockk.*
 import kotlinx.coroutines.test.runTest
@@ -49,7 +46,7 @@ class OperationTest {
         serialize: (HFooRequest, ItemSchema<Foo>) -> LFooRequest = { hReq, schema -> hReq.convert(TABLE_NAME, schema) },
         lowLevelInvoke: suspend (LFooRequest) -> LFooResponse = ::dummyInvoke,
         deserialize: (LFooResponse, ItemSchema<Foo>) -> HFooResponse = { lRes, schema -> lRes.convert(schema) },
-        interceptors: Collection<UniversalInterceptor> = this.interceptors,
+        interceptors: Collection<InterceptorAny> = this.interceptors,
     ) = Operation(initialize, serialize, lowLevelInvoke, deserialize, interceptors)
 
     @Test

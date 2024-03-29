@@ -7,8 +7,8 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Companion {
-	public final fun invoke (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper;
-	public static synthetic fun invoke$default (Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Companion;Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper;
+	public final fun Config (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config;
+	public static synthetic fun Config$default (Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Companion;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config {
@@ -18,19 +18,18 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config$Builder {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config$Builder$Companion;
 	public abstract fun build ()Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config;
 	public abstract fun getInterceptors ()Ljava/util/List;
 	public abstract fun setInterceptors (Ljava/util/List;)V
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config$Builder$Companion {
-	public final fun invoke ()Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config$Builder;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config$Companion {
+	public final fun Builder ()Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config$Builder;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config;
-	public static synthetic fun invoke$default (Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config$Companion;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper$Config;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapperKt {
+	public static final fun DynamoDbMapper (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper;
+	public static synthetic fun DynamoDbMapper$default (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/Table : aws/sdk/kotlin/hll/dynamodbmapper/TableOperations, aws/sdk/kotlin/hll/dynamodbmapper/TableSpec {
@@ -61,15 +60,14 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/TableSpec {
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor$Companion;
 	public abstract fun getConverter ()Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;
 	public abstract fun getGetter ()Lkotlin/jvm/functions/Function1;
 	public abstract fun getName ()Ljava/lang/String;
 	public abstract fun getSetter ()Lkotlin/jvm/functions/Function2;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor$Companion {
-	public final fun invoke (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;)Laws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptorKt {
+	public static final fun AttributeDescriptor (Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;)Laws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/items/DocumentConverter : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
@@ -99,14 +97,8 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter$Default
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$Companion;
 	public abstract fun getConverter ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;
 	public abstract fun getKeyAttributeNames ()Ljava/util/Set;
-}
-
-public final class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$Companion {
-	public final fun invoke (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionKey;
-	public final fun invoke (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$CompositeKey;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionKey {
@@ -128,6 +120,8 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionK
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchemaKt {
+	public static final fun ItemSchema (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionKey;
+	public static final fun ItemSchema (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$CompositeKey;
 	public static final fun withKeySpec (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionKey;
 	public static final fun withKeySpec (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;)Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$CompositeKey;
 }
@@ -193,28 +187,29 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/Deser
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput$Companion {
-	public final fun invoke (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInputKt {
+	public static final fun DeserializeInput (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext : aws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext$Companion;
 	public abstract fun getError ()Ljava/lang/Throwable;
 	public abstract fun getMapperContext ()Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext$Companion {
-	public final fun invoke (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Throwable;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext;
-	public static synthetic fun invoke$default (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext$Companion;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Throwable;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContextKt {
+	public static final fun HReqContext (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Throwable;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext;
+	public static synthetic fun HReqContext$default (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Throwable;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext : aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext$Companion;
 	public abstract fun getHighLevelResponse ()Ljava/lang/Object;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext$Companion {
-	public final fun invoke (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Ljava/lang/Object;Ljava/lang/Throwable;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext;
-	public static synthetic fun invoke$default (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext$Companion;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Ljava/lang/Object;Ljava/lang/Throwable;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContextKt {
+	public static final fun HResContext (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Ljava/lang/Object;Ljava/lang/Throwable;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext;
+	public static synthetic fun HResContext$default (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Ljava/lang/Object;Ljava/lang/Throwable;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/HResContext;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/Interceptor {
@@ -248,42 +243,38 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/Interceptor$Defaul
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext : aws/sdk/kotlin/hll/dynamodbmapper/pipeline/HReqContext {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext$Companion;
 	public abstract fun getLowLevelRequest ()Ljava/lang/Object;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext$Companion {
-	public final fun invoke (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Throwable;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext;
-	public static synthetic fun invoke$default (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext$Companion;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Throwable;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContextKt {
+	public static final fun LReqContext (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Throwable;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext;
+	public static synthetic fun LReqContext$default (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Throwable;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext : aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput, aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LReqContext {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext$Companion;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext$Companion {
-	public final fun invoke (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Ljava/lang/Throwable;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext;
-	public static synthetic fun invoke$default (Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext$Companion;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Ljava/lang/Throwable;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContextKt {
+	public static final fun LResContext (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Ljava/lang/Throwable;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext;
+	public static synthetic fun LResContext$default (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;Ljava/lang/Object;Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;Ljava/lang/Throwable;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/LResContext;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext$Companion;
 	public abstract fun getOperation ()Ljava/lang/String;
 	public abstract fun getTableSpec ()Laws/sdk/kotlin/hll/dynamodbmapper/TableSpec;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext$Companion {
-	public final fun invoke (Laws/sdk/kotlin/hll/dynamodbmapper/TableSpec;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContextKt {
+	public static final fun MapperContext (Laws/sdk/kotlin/hll/dynamodbmapper/TableSpec;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/MapperContext;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput$Companion;
 	public abstract fun getHighLevelRequest ()Ljava/lang/Object;
 	public abstract fun getSerializeSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput$Companion {
-	public final fun invoke (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInputKt {
+	public static final fun SerializeInput (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/BooleanConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {

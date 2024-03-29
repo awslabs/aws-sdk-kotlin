@@ -14,24 +14,6 @@ import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.internal.HReqContextImpl
  * @param HReq The type of high-level request object (e.g., [GetItemRequest])
  */
 public interface HReqContext<T, HReq> : SerializeInput<T, HReq> {
-    public companion object {
-        /**
-         * Creates a new [HReqContext]
-         * @param T The type of objects being converted to/from DynamoDB items
-         * @param HReq The type of high-level request object (e.g., [GetItemRequest])
-         * @param highLevelRequest The high-level request object which is to be serialized into a low-level request
-         * object
-         * @param serializeSchema The [ItemSchema] to use for serializing objects into items
-         * @param mapperContext Additional, generalized context which may be useful to interceptors
-         * @param error The most recent error which occurred, if any. Defaults to null.
-         */
-        public operator fun <T, HReq> invoke(
-            highLevelRequest: HReq,
-            serializeSchema: ItemSchema<T>,
-            mapperContext: MapperContext<T>,
-            error: Throwable? = null,
-        ): HReqContext<T, HReq> = HReqContextImpl(highLevelRequest, serializeSchema, mapperContext, error)
-    }
 
     /**
      * Additional, generalized context which may be useful to interceptors
@@ -45,3 +27,19 @@ public interface HReqContext<T, HReq> : SerializeInput<T, HReq> {
      */
     public val error: Throwable?
 }
+
+/**
+ * Creates a new [HReqContext]
+ * @param T The type of objects being converted to/from DynamoDB items
+ * @param HReq The type of high-level request object (e.g., [GetItemRequest])
+ * @param highLevelRequest The high-level request object which is to be serialized into a low-level request object
+ * @param serializeSchema The [ItemSchema] to use for serializing objects into items
+ * @param mapperContext Additional, generalized context which may be useful to interceptors
+ * @param error The most recent error which occurred, if any. Defaults to null.
+ */
+public fun <T, HReq> HReqContext(
+    highLevelRequest: HReq,
+    serializeSchema: ItemSchema<T>,
+    mapperContext: MapperContext<T>,
+    error: Throwable? = null,
+): HReqContext<T, HReq> = HReqContextImpl(highLevelRequest, serializeSchema, mapperContext, error)

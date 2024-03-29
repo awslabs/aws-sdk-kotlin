@@ -12,7 +12,7 @@ internal class Operation<T, HReq, LReq, LRes, HRes>(
     private val serialize: (HReq, ItemSchema<T>) -> LReq,
     private val lowLevelInvoke: suspend (LReq) -> LRes,
     private val deserialize: (LRes, ItemSchema<T>) -> HRes,
-    interceptors: Collection<UniversalInterceptor>,
+    interceptors: Collection<InterceptorAny>,
 ) {
     private val interceptors = interceptors.map {
         // Will cause runtime ClassCastExceptions during interceptor invocation if the types don't match. Is that ok?

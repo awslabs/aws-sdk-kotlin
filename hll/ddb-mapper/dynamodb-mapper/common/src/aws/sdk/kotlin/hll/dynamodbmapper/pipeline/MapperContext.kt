@@ -12,17 +12,6 @@ import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.internal.MapperContextImpl
  * @param T The type of objects being converted to/from DynamoDB items
  */
 public interface MapperContext<T> {
-    public companion object {
-        /**
-         * Create a new [MapperContext]
-         * @param T The type of objects being converted to/from DynamoDB items
-         * @param tableSpec The metadata for a table (e.g., name) involved in the operation
-         * @param operation The name of the high-level operation being invoked
-         */
-        public fun <T> invoke(tableSpec: TableSpec<T>, operation: String): MapperContext<T> =
-            MapperContextImpl(tableSpec, operation)
-    }
-
     // TODO what other fields would be useful in here?
 
     /**
@@ -35,3 +24,12 @@ public interface MapperContext<T> {
      */
     public val operation: String
 }
+
+/**
+ * Create a new [MapperContext]
+ * @param T The type of objects being converted to/from DynamoDB items
+ * @param tableSpec The metadata for a table (e.g., name) involved in the operation
+ * @param operation The name of the high-level operation being invoked
+ */
+public fun <T> MapperContext(tableSpec: TableSpec<T>, operation: String): MapperContext<T> =
+    MapperContextImpl(tableSpec, operation)
