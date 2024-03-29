@@ -403,6 +403,12 @@
             "brazilName": "AwsSdkKotlinCodecommit"
         },
         {
+            "sdkId": "CodeConnections",
+            "namespace": "aws.sdk.kotlin.services.codeconnections",
+            "artifactName": "codeconnections",
+            "brazilName": "AwsSdkKotlinCodeconnections"
+        },
+        {
             "sdkId": "CodeDeploy",
             "namespace": "aws.sdk.kotlin.services.codedeploy",
             "artifactName": "codedeploy",

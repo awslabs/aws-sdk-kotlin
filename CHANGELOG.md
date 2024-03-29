@@ -1,5 +1,136 @@
 # Changelog
 
+## [1.1.8] - 03/29/2024
+
+### Features
+* (**b2bi**) Supporting new EDI X12 transaction sets for X12 versions 4010, 4030, and 5010.
+* (**codebuild**) Add new fleet status code for Reserved Capacity.
+* (**codeconnections**) Duplicating the CodeStar Connections service into the new, rebranded AWS CodeConnections service.
+* (**internetmonitor**) This release adds support to allow customers to track cross account monitors through ListMonitor, GetMonitor, ListHealthEvents, GetHealthEvent, StartQuery APIs.
+* (**iotwireless**) Add support for retrieving key historical and live metrics for LoRaWAN devices and gateways
+* (**marketplacecatalog**) This release enhances the ListEntities API to support ResaleAuthorizationId filter and sort for OfferEntity in the request and the addition of a ResaleAuthorizationId field in the response of OfferSummary.
+* (**neptunegraph**) Add the new API Start-Import-Task for Amazon Neptune Analytics.
+* (**sagemaker**) This release adds support for custom images for the CodeEditor App on SageMaker Studio
+
+## [1.1.7] - 03/28/2024
+
+### Features
+* (**codecatalyst**) This release adds support for understanding pending changes to subscriptions by including two new response parameters for the GetSubscription API for Amazon CodeCatalyst.
+* (**computeoptimizer**) This release enables AWS Compute Optimizer to analyze and generate recommendations with a new customization preference, Memory Utilization.
+* (**ec2**) Amazon EC2 C7gd, M7gd and R7gd metal instances with up to 3.8 TB of local NVMe-based SSD block-level storage have up to 45% improved real-time NVMe storage performance than comparable Graviton2-based instances.
+* (**eks**) Add multiple customer error code to handle customer caused failure when managing EKS node groups
+* (**guardduty**) Add EC2 support for GuardDuty Runtime Monitoring auto management.
+* (**neptunegraph**) Update ImportTaskCancelled waiter to evaluate task state correctly and minor documentation changes.
+* (**oam**) This release adds support for sharing AWS::InternetMonitor::Monitor resources.
+* (**quicksight**) Amazon QuickSight: Adds support for setting up VPC Endpoint restrictions for accessing QuickSight Website.
+
+## [1.1.6] - 03/27/2024
+
+### Features
+* (**batch**) This feature allows AWS Batch to support configuration of imagePullSecrets and allowPrivilegeEscalation for jobs running on EKS
+* (**bedrockagent**) This changes introduces metadata documents statistics and also updates the documentation for bedrock agent.
+* (**bedrockagentruntime**) This release introduces filtering support on Retrieve and RetrieveAndGenerate APIs.
+* (**elasticache**) Added minimum capacity to  Amazon ElastiCache Serverless. This feature allows customer to ensure minimum capacity even without current load
+
+### Documentation
+* (**secretsmanager**) Documentation updates for Secrets Manager
+
+## [1.1.5] - 03/26/2024
+
+### Features
+* (**bedrockagentruntime**) This release adds support to customize prompts sent through the RetrieveAndGenerate API in Agents for Amazon Bedrock.
+* (**costexplorer**) Adds support for backfill of cost allocation tags, with new StartCostAllocationTagBackfill and ListCostAllocationTagBackfillHistory API.
+* (**ec2**) Documentation updates for Elastic Compute Cloud (EC2).
+* (**finspace**) Add new operation delete-kx-cluster-node and add status parameter to list-kx-cluster-node operation.
+
+### Documentation
+* (**ecs**) This is a documentation update for Amazon ECS.
+
+## [1.1.4] - 03/25/2024
+
+### Features
+* (**codebuild**) Supporting GitLab and GitLab Self Managed as source types in AWS CodeBuild.
+* (**ec2**) Added support for ModifyInstanceMetadataDefaults and GetInstanceMetadataDefaults to set Instance Metadata Service account defaults
+* (**emrcontainers**) This release increases the number of supported job template parameters from 20 to 100.
+* (**globalaccelerator**) AWS Global Accelerator now supports cross-account sharing for bring your own IP addresses.
+* (**medialive**) Exposing TileMedia H265 options
+* (**sagemaker**) Introduced support for the following new instance types on SageMaker Studio for JupyterLab and CodeEditor applications: m6i, m6id, m7i, c6i, c6id, c7i, r6i, r6id, r7i, and p5
+
+### Fixes
+* Support client-configured `accountIdEndpointMode`
+
+### Documentation
+* (**ecs**) Documentation only update for Amazon ECS.
+
+## [1.1.3] - 03/22/2024
+
+### Features
+* (**kendra**) Documentation update, March 2024. Corrects some docs for Amazon Kendra.
+* (**pricing**) Add ResourceNotFoundException to ListPriceLists and GetPriceListFileUrl APIs
+* (**rolesanywhere**) This release relaxes constraints on the durationSeconds request parameter for the *Profile APIs that support it. This parameter can now take on values that go up to 43200.
+* (**securityhub**) Added new resource detail object to ASFF, including resource for LastKnownExploitAt
+
+### Documentation
+* (**firehose**) Updates Amazon Firehose documentation for message regarding Enforcing Tags IAM Policy.
+
+## [1.1.2] - 03/21/2024
+
+### Features
+* (**codeartifact**) This release adds Package groups to CodeArtifact so you can more conveniently configure package origin controls for multiple packages.
+
+## [1.1.1] - 03/20/2024
+
+### Features
+* (**accessanalyzer**) This release adds support for policy validation and external access findings for DynamoDB tables and streams. IAM Access Analyzer helps you author functional and secure resource-based policies and identify cross-account access. Updated service API, documentation, and paginators.
+* (**connect**) This release updates the *InstanceStorageConfig APIs to support a new ResourceType: REAL_TIME_CONTACT_ANALYSIS_CHAT_SEGMENTS. Use this resource type to enable streaming for real-time analysis of chat contacts and to associate a Kinesis stream where real-time analysis chat segments will be published.
+* (**dynamodb**) This release introduces 3 new APIs ('GetResourcePolicy', 'PutResourcePolicy' and 'DeleteResourcePolicy') and modifies the existing 'CreateTable' API for the resource-based policy support. It also modifies several APIs to accept a 'TableArn' for the 'TableName' parameter.
+* (**managedblockchainquery**) AMB Query: update GetTransaction to include transactionId as input
+* (**savingsplans**) Introducing the Savings Plans Return feature enabling customers to return their Savings Plans within 7 days of purchase.
+
+### Documentation
+* (**codebuild**) This release adds support for new webhook events (RELEASED and PRERELEASED) and filter types (TAG_NAME and RELEASE_NAME).
+
+## [1.1.0] - 03/19/2024
+
+### Features
+* (**cloudwatchlogs**) Update LogSamples field in Anomaly model to be a list of LogEvent
+* (**ec2**) This release adds the new DescribeMacHosts API operation for getting information about EC2 Mac Dedicated Hosts. Users can now see the latest macOS versions that their underlying Apple Mac can support without needing to be updated.
+* (**finspace**) Adding new attributes readWrite and onDemand to dataview models for Database Maintenance operations.
+* (**managedblockchainquery**) Introduces a new API for Amazon Managed Blockchain Query: ListFilteredTransactionEvents.
+
+### Fixes
+* [#1045](https://github.com/awslabs/smithy-kotlin/issues/1045) ⚠️ **IMPORTANT**: Fix codegen for map shapes which use string enums as map keys. See the [**Map key changes** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1258) for more details
+* [#1041](https://github.com/awslabs/smithy-kotlin/issues/1041) ⚠️ **IMPORTANT**: Disable [OkHttp's transparent response decompression](https://square.github.io/okhttp/features/calls/#rewriting-requests) by manually specifying `Accept-Encoding: identity` in requests. See the [**Disabling automatic response decompression** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1259) for more details.
+
+### Documentation
+* (**cloudformation**) Documentation update, March 2024. Corrects some formatting.
+
+## [1.0.80] - 03/18/2024
+
+### Features
+* (**cloudformation**) This release supports for a new API ListStackSetAutoDeploymentTargets, which provider auto-deployment configuration as a describable resource. Customers can now view the specific combinations of regions and OUs that are being auto-deployed.
+* (**kms**) Adds the ability to use the default policy name by omitting the policyName parameter in calls to PutKeyPolicy and GetKeyPolicy
+* (**mediatailor**) This release adds support to allow customers to show different content within a channel depending on metadata associated with the viewer.
+* (**rds**) This release launches the ModifyIntegration API and support for data filtering for zero-ETL Integrations.
+* (**s3**) Fix two issues with response root node names.
+
+### Documentation
+* (**timestreamquery**) Documentation updates, March 2024
+
+## [1.0.79] - 03/15/2024
+
+### Features
+* (**backup**) This release introduces a boolean attribute ManagedByAWSBackupOnly as part of ListRecoveryPointsByResource api to filter the recovery points based on ownership. This attribute can be used to filter out the recovery points protected by AWSBackup.
+* (**codebuild**) AWS CodeBuild now supports overflow behavior on Reserved Capacity.
+* (**connect**) This release adds Hierarchy based Access Control fields to Security Profile public APIs and adds support for UserAttributeFilter to SearchUsers API.
+* (**ec2**) Add media accelerator and neuron device information on the describe instance types API.
+* (**kinesisanalyticsv2**) Support for Flink 1.18 in Managed Service for Apache Flink
+* (**sagemaker**) Adds m6i, m6id, m7i, c6i, c6id, c7i, r6i r6id, r7i, p5 instance type support to Sagemaker Notebook Instances and miscellaneous wording fixes for previous Sagemaker documentation.
+* (**workspacesthinclient**) Removed unused parameter kmsKeyArn from UpdateDeviceRequest
+
+### Documentation
+* (**s3**) Documentation updates for Amazon S3.
+
 ## [1.0.78] - 03/14/2024
 
 ### Features

@@ -21,8 +21,8 @@ private val benchmarks = setOf(
     CloudwatchBenchmark(),
     CloudwatchEventsBenchmark(),
     DynamoDbBenchmark(),
-    PinpointBenchmark(),
     S3ExpressBenchmark(),
+    SecretsManagerBenchmark(),
 ).map {
     @Suppress("UNCHECKED_CAST")
     it as ServiceBenchmark<SdkClient>
