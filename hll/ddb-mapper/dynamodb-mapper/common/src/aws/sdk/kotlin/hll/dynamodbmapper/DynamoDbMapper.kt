@@ -8,6 +8,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.internal.DynamoDbMapperImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.internal.MapperConfigBuilderImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.Interceptor
+import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.InterceptorAny
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 
 /**
@@ -16,18 +17,22 @@ import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 public interface DynamoDbMapper {
     public companion object {
         /**
-         * Instantiate a new [DynamoDbMapper]
-         * @param client The low-level DynamoDB client to use for underlying calls to the service
-         * @param config A DSL configuration block
+         * Instantiate a new [Config] object
+         * @param config A DSL block for setting properties of the config
          */
-        public operator fun invoke(client: DynamoDbClient, config: Config.Builder.() -> Unit = { }): DynamoDbMapper =
-            DynamoDbMapperImpl(client, Config(config))
+        public fun Config(config: Config.Builder.() -> Unit = { }): Config =
+            Config.Builder().apply(config).build()
     }
 
     /**
      * The low-level DynamoDB client used for underlying calls to the service
      */
     public val client: DynamoDbClient
+
+    /**
+     * The active configuration for this mapper
+     */
+    public val config: Config
 
     /**
      * Get a [Table] reference for performing table operations
@@ -62,18 +67,16 @@ public interface DynamoDbMapper {
     public interface Config {
         public companion object {
             /**
-             * Instantiate a new [Config] object
-             * @param config A DSL block for setting properties of the config
+             * Instantiate a new [Builder] object
              */
-            public operator fun invoke(config: Builder.() -> Unit = { }): Config =
-                Builder().apply(config).build()
+            public fun Builder(): Builder = MapperConfigBuilderImpl()
         }
 
         /**
          * A list of [Interceptor] instances which will be applied to operations as they move through the request
          * pipeline.
          */
-        public val interceptors: List<Interceptor<*, *, *, *, *>>
+        public val interceptors: List<InterceptorAny>
 
         /**
          * Convert this immutable configuration into a mutable [Builder] object. Updates made to the mutable builder
@@ -85,18 +88,11 @@ public interface DynamoDbMapper {
          * A mutable configuration builder for a [DynamoDbMapper] instance
          */
         public interface Builder {
-            public companion object {
-                /**
-                 * Instantiate a new [Builder] object
-                 */
-                public operator fun invoke(): Builder = MapperConfigBuilderImpl()
-            }
-
             /**
              * A list of [Interceptor] instances which will be applied to operations as they move through the request
              * pipeline.
              */
-            public var interceptors: MutableList<Interceptor<*, *, *, *, *>>
+            public var interceptors: MutableList<InterceptorAny>
 
             /**
              * Builds this mutable [Builder] object into an immutable [Config] object. Changes made to this instance do
@@ -106,3 +102,13 @@ public interface DynamoDbMapper {
         }
     }
 }
+
+/**
+ * Instantiate a new [DynamoDbMapper]
+ * @param client The low-level DynamoDB client to use for underlying calls to the service
+ * @param config A DSL configuration block
+ */
+public fun DynamoDbMapper(
+    client: DynamoDbClient,
+    config: DynamoDbMapper.Config.Builder.() -> Unit = { },
+): DynamoDbMapper = DynamoDbMapperImpl(client, DynamoDbMapper.Config(config))
