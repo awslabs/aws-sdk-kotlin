@@ -2119,6 +2119,12 @@
             "brazilName": "AwsSdkKotlinCodestarNotifications"
         },
         {
+            "sdkId": "deadline",
+            "namespace": "aws.sdk.kotlin.services.deadline",
+            "artifactName": "deadline",
+            "brazilName": "AwsSdkKotlinDeadline"
+        },
+        {
             "sdkId": "drs",
             "namespace": "aws.sdk.kotlin.services.drs",
             "artifactName": "drs",

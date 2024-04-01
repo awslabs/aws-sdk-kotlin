@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.9] - 04/01/2024
+
+### Features
+* (**cloudwatch**) This release adds support for CloudWatch Anomaly Detection on cross-account metrics. SingleMetricAnomalyDetector and MetricDataQuery inputs to Anomaly Detection APIs now take an optional AccountId field.
+* (**datazone**) This release supports the feature of AI recommendations for descriptions to enrich the business data catalog in Amazon DataZone.
+* (**deadline**) AWS Deadline Cloud is a new fully managed service that helps customers set up, deploy, and scale rendering projects in minutes, so they can improve the efficiency of their rendering pipelines and take on more projects.
+* (**lightsail**) This release adds support to upgrade the TLS version of the distribution.
+
+### Documentation
+* (**emr**) This release fixes a broken link in the documentation.
+
 ## [1.1.8] - 03/29/2024
 
 ### Features
