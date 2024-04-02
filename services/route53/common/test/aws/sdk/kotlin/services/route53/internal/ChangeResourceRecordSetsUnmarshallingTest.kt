@@ -41,7 +41,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val exception = assertFailsWith<InvalidChangeBatch> {
             runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call, bodyText.encodeToByteArray())
             }
         }
         assertEquals(listOf<String>("InvalidChangeBatch message"), exception.messages)
@@ -70,7 +70,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val exception = assertFailsWith<InvalidChangeBatch> {
             runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call, bodyText.encodeToByteArray())
             }
         }
         assertEquals(listOf<String>("InvalidChangeBatch message 1", "InvalidChangeBatch message 2"), exception.messages)
@@ -100,7 +100,7 @@ class ChangeResourceRecordSetsUnmarshallingTest {
 
         val exception = assertFailsWith<InvalidChangeBatch> {
             runBlocking {
-                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call)
+                ChangeResourceRecordSetsOperationDeserializer().deserialize(ExecutionContext(), call, bodyText.encodeToByteArray())
             }
         }
         assertEquals(listOf<String>("InvalidChangeBatch message 1", "InvalidChangeBatch message 2"), exception.messages)
