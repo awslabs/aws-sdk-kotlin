@@ -74,7 +74,7 @@ file("services").listFiles().forEach {
 val compositeProjectList = try {
     val localProperties = java.util.Properties()
     localProperties.load(File(rootProject.projectDir, "local.properties").inputStream())
-    val propertyVal = localProperties.getProperty("compositeProjects") ?: "../smithy-kotlin"
+    val propertyVal = localProperties.getProperty("compositeProjects") ?: "../smithy-kotlin,../../smithy-lang/smithy-kotlin"
     val filePaths = propertyVal
         .splitToSequence(",") // Split comma delimited string into sequence
         .map { it.replaceFirst("^~".toRegex(), System.getProperty("user.home")) } // expand user dir
