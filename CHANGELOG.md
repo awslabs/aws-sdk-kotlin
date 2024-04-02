@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.10] - 04/02/2024
+
+### Features
+* (**glue**) Adding View related fields to responses of read-only Table APIs.
+* (**rolesanywhere**) This release increases the limit on the roleArns request parameter for the *Profile APIs that support it. This parameter can now take up to 250 role ARNs.
+
+### Documentation
+* (**ecs**) Documentation only update for Amazon ECS.
+* (**ivschat**) Doc-only update. Changed "Resources" to "Key Concepts" in docs and updated text.
+* (**securityhub**) Documentation updates for AWS Security Hub
+
 ## [1.1.9] - 04/01/2024
 
 ### Features
