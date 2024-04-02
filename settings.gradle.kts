@@ -85,7 +85,7 @@ val compositeProjectList = try {
     if (filePaths.isNotEmpty()) println("Adding ${filePaths.size} composite build directories from local.properties.")
     filePaths
 } catch (e: java.io.FileNotFoundException) {
-    listOf(file("../smithy-kotlin")) // Default path, not an error.
+    listOf(file("../smithy-kotlin,../../smithy-lang/smithy-kotlin")) // Default path, not an error.
 } catch (e: Throwable) {
     logger.error("Failed to load project paths from local.properties. Assuming defaults.", e)
     listOf(file("../smithy-kotlin"))
