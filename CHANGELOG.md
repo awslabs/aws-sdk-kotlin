@@ -1,5 +1,50 @@
 # Changelog
 
+## [1.1.12] - 04/04/2024
+
+### Features
+* (**b2bi**) Adding support for X12 5010 HIPAA EDI version and associated transaction sets.
+* (**cleanrooms**) Feature: New schemaStatusDetails field to the existing Schema object that displays a status on Schema API responses to show whether a schema is queryable or not. New BatchGetSchemaAnalysisRule API to retrieve multiple schemaAnalysisRules using a single API call.
+* (**ec2**) Amazon EC2 G6 instances powered by NVIDIA L4 Tensor Core GPUs can be used for a wide range of graphics-intensive and machine learning use cases. Gr6 instances also feature NVIDIA L4 GPUs and can be used for graphics workloads with higher memory requirements.
+* (**emrcontainers**) This release adds support for integration with EKS AccessEntry APIs to enable automatic Cluster Access for EMR on EKS.
+* (**ivs**) API update to include an SRT ingest endpoint and passphrase for all channels.
+* (**verifiedpermissions**) Adds GroupConfiguration field to Identity Source API's
+
+## [1.1.11] - 04/03/2024
+
+### Features
+* (**cleanroomsml**) The release includes a public SDK for AWS Clean Rooms ML APIs, making them globally available to developers worldwide.
+* (**cloudformation**) This release would return a new field - PolicyAction in cloudformation's existed DescribeChangeSetResponse, showing actions we are going to apply on the physical resource (e.g., Delete, Retain) according to the user's template
+* (**datazone**) This release supports the feature of dataQuality to enrich asset with dataQualityResult in Amazon DataZone.
+* (**docdb**) This release adds Global Cluster Switchover capability which enables you to change your global cluster's primary AWS Region, the region that serves writes, while preserving the replication between all regions in the global cluster.
+* (**groundstation**) This release adds visibilityStartTime and visibilityEndTime to DescribeContact and ListContacts responses.
+* (**lambda**) Add Ruby 3.3 (ruby3.3) support to AWS Lambda
+* (**medialive**) Cmaf Ingest outputs are now supported in Media Live
+* (**medicalimaging**) SearchImageSets API now supports following enhancements - Additional support for searching on UpdatedAt and SeriesInstanceUID - Support for searching existing filters between dates/times - Support for sorting the search result by Ascending/Descending - Additional parameters returned in the response
+* (**transfer**) Add ability to specify Security Policies for SFTP Connectors
+
+## [1.1.10] - 04/02/2024
+
+### Features
+* (**glue**) Adding View related fields to responses of read-only Table APIs.
+* (**rolesanywhere**) This release increases the limit on the roleArns request parameter for the *Profile APIs that support it. This parameter can now take up to 250 role ARNs.
+
+### Documentation
+* (**ecs**) Documentation only update for Amazon ECS.
+* (**ivschat**) Doc-only update. Changed "Resources" to "Key Concepts" in docs and updated text.
+* (**securityhub**) Documentation updates for AWS Security Hub
+
+## [1.1.9] - 04/01/2024
+
+### Features
+* (**cloudwatch**) This release adds support for CloudWatch Anomaly Detection on cross-account metrics. SingleMetricAnomalyDetector and MetricDataQuery inputs to Anomaly Detection APIs now take an optional AccountId field.
+* (**datazone**) This release supports the feature of AI recommendations for descriptions to enrich the business data catalog in Amazon DataZone.
+* (**deadline**) AWS Deadline Cloud is a new fully managed service that helps customers set up, deploy, and scale rendering projects in minutes, so they can improve the efficiency of their rendering pipelines and take on more projects.
+* (**lightsail**) This release adds support to upgrade the TLS version of the distribution.
+
+### Documentation
+* (**emr**) This release fixes a broken link in the documentation.
+
 ## [1.1.8] - 03/29/2024
 
 ### Features
