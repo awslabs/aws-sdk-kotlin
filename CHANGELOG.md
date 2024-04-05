@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.13] - 04/05/2024
+
+### Features
+* (**quicksight**) Adding IAMIdentityCenterInstanceArn parameter to CreateAccountSubscription
+* (**resourcegroups**) Added a new QueryErrorCode RESOURCE_TYPE_NOT_SUPPORTED that is returned by the ListGroupResources operation if the group query contains unsupported resource types.
+* (**verifiedpermissions**) Adding BatchIsAuthorizedWithToken API which supports multiple authorization requests against a PolicyStore given a bearer token.
+
 ## [1.1.12] - 04/04/2024
 
 ### Features
