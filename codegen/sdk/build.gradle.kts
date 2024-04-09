@@ -151,6 +151,7 @@ dependencies {
     codegen(libs.smithy.cli)
     codegen(libs.smithy.model)
     codegen(libs.smithy.smoke.test.traits)
+    codegen(libs.smithy.aws.smoke.test.model)
 }
 
 tasks.generateSmithyProjections {
