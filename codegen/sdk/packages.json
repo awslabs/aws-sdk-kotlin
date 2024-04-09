@@ -523,6 +523,12 @@
             "brazilName": "AwsSdkKotlinConnectparticipant"
         },
         {
+            "sdkId": "ControlCatalog",
+            "namespace": "aws.sdk.kotlin.services.controlcatalog",
+            "artifactName": "controlcatalog",
+            "brazilName": "AwsSdkKotlinControlcatalog"
+        },
+        {
             "sdkId": "ControlTower",
             "namespace": "aws.sdk.kotlin.services.controltower",
             "artifactName": "controltower",
@@ -1103,6 +1109,12 @@
             "namespace": "aws.sdk.kotlin.services.lambda",
             "artifactName": "lambda",
             "brazilName": "AwsSdkKotlinLambda"
+        },
+        {
+            "sdkId": "Launch Wizard",
+            "namespace": "aws.sdk.kotlin.services.launchwizard",
+            "artifactName": "launchwizard",
+            "brazilName": "AwsSdkKotlinLaunchWizard"
         },
         {
             "sdkId": "Lex Model Building Service",

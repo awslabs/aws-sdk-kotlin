@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.15] - 04/09/2024
+
+### Features
+* (**codebuild**) Add new webhook filter types for GitHub webhooks
+* (**mediaconvert**) This release includes support for bringing your own fonts to use for burn-in or DVB-Sub captioning workflows.
+* (**pinpoint**) The OrchestrationSendingRoleArn has been added to the email channel and is used to send emails from campaigns or journeys.
+* (**rds**) This release adds support for specifying the CA certificate to use for the new db instance when restoring from db snapshot, restoring from s3, restoring to point in time, and creating a db instance read replica.
+
 ## [1.1.13] - 04/05/2024
 
 ### Features
