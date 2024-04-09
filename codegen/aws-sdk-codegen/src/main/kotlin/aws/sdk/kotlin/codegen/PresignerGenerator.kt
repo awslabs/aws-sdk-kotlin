@@ -21,6 +21,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointResolve
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
+import software.amazon.smithy.model.knowledge.TopDownIndex
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.ShapeId
@@ -66,8 +67,9 @@ class PresignerGenerator : KotlinIntegration {
         val sig4vTrait = service.getTrait<SigV4Trait>() ?: return
 
         // Scan model for operations decorated with PresignTrait
-        val presignOperations = service.allOperations
-            .map { ctx.model.expectShape<OperationShape>(it) }
+        val presignOperations = TopDownIndex
+            .of(ctx.model)
+            .getContainedOperations(service)
             .filter { it.hasTrait(Presignable.ID) }
             .map { operationShape ->
                 check(AwsSignatureVersion4.hasSigV4AuthScheme(ctx.model, service, operationShape)) {
