@@ -41,22 +41,40 @@ include(":aws-runtime:aws-endpoint")
 include(":aws-runtime:aws-http")
 include(":services")
 include(":tests")
-include(":tests:benchmarks:service-benchmarks")
 include(":tests:codegen:event-stream")
 include(":tests:e2e-test-util")
 
 // generated services
-fun File.isServiceDir(): Boolean {
-    if (isDirectory) {
-        return toPath().resolve("build.gradle.kts").toFile().exists()
-    }
-    return false
-}
+val File.isServiceDir: Boolean
+    get() = isDirectory && toPath().resolve("build.gradle.kts").toFile().exists()
+
+val String.isBootstrappedService: Boolean
+    get() = file("services/$this").isServiceDir
 
 file("services").listFiles().forEach {
-    if (it.isServiceDir()) {
+    if (it.isServiceDir) {
         include(":services:${it.name}")
     }
+}
+
+// Service benchmarks project
+val benchmarkServices = listOf(
+    // keep this list in sync with tests/benchmarks/service-benchmarks/build.gradle.kts
+
+    "s3",
+    "sns",
+    "sts",
+    "cloudwatch",
+    "cloudwatchevents",
+    "dynamodb",
+    "secretsmanager",
+    "iam",
+)
+if (benchmarkServices.all { it.isBootstrappedService }) {
+    include(":tests:benchmarks:service-benchmarks")
+} else {
+    val missing = benchmarkServices.filterNot { it.isBootstrappedService }
+    logger.warn("Skipping :tests:benchmarks:service-benchmarks because these service(s) are not bootstrapped: $missing")
 }
 
 /**
