@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.17] - 04/11/2024
+
+### Features
+* (**batch**) This release adds the task properties field to attempt details and the name field on EKS container detail.
+* (**cloudfront**) CloudFront origin access control extends support to AWS Lambda function URLs and AWS Elemental MediaPackage v2 origins.
+* (**cloudwatch**) This release adds support for Metric Characteristics for CloudWatch Anomaly Detection. Anomaly Detector now takes Metric Characteristics object with Periodic Spikes boolean field that tells Anomaly Detection that spikes that repeat at the same time every week are part of the expected pattern.
+* (**iam**) For CreateOpenIDConnectProvider API, the ThumbprintList parameter is no longer required.
+* (**medialive**) AWS Elemental MediaLive introduces workflow monitor, a new feature that enables the visualization and monitoring of your media workflows. Create signal maps of your existing workflows and monitor them by creating notification and monitoring template groups.
+* (**omics**) This release adds support for retrieval of S3 direct access metadata on sequence stores and read sets, and adds support for SHA256up and SHA512up HealthOmics ETags.
+* (**pipes**) LogConfiguration ARN validation fixes
+* (**wafv2**) Adds an updated version of smoke tests, including smithy trait, for SDK testing.
+
+### Documentation
+* (**codebuild**) Support access tokens for Bitbucket sources
+* (**rds**) Updates Amazon RDS documentation for Standard Edition 2 support in RDS Custom for Oracle.
+* (**s3control**) Documentation updates for Amazon S3-control.
+
 ## [1.1.16] - 04/10/2024
 
 ### Features
