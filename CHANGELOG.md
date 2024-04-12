@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.18] - 04/12/2024
+
+### Features
+* (**cloudformation**) Adding support for the new parameter "IncludePropertyValues" in the CloudFormation DescribeChangeSet API. When this parameter is included, the DescribeChangeSet response will include more detailed information such as before and after values for the resource properties that will change.
+* (**glue**) Modifying request for GetUnfilteredTableMetadata for view-related fields.
+* (**healthlake**) Added new CREATE_FAILED status for data stores. Added new errorCause to DescribeFHIRDatastore API and ListFHIRDatastores API response for additional insights into data store creation and deletion workflows.
+* (**kms**) This feature supports the ability to specify a custom rotation period for automatic key rotations, the ability to perform on-demand key rotations, and visibility into your key material rotations.
+* (**mediatailor**) Added InsertionMode to PlaybackConfigurations. This setting controls whether players can use stitched or guided ad insertion. The default for players that do not specify an insertion mode is stitched.
+* (**outposts**) This release adds EXPEDITORS as a valid shipment carrier.
+* (**redshift**) Adds support for Amazon Redshift DescribeClusterSnapshots API to include Snapshot ARN response field.
+* (**transfer**) This change releases support for importing self signed certificates to the Transfer Family for sending outbound file transfers over TLS/HTTPS.
+
+### Documentation
+* (**configservice**) Updates documentation for AWS Config
+* (**iotfleethub**) Documentation updates for AWS IoT Fleet Hub to clarify that Fleet Hub supports organization instance of IAM Identity Center.
+* (**neptunegraph**) Update to API documentation to resolve customer reported issues.
+
 ## [1.1.17] - 04/11/2024
 
 ### Features
