@@ -5,8 +5,8 @@
 package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.kotlin.codegen.core.*
-import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
-import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
+import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
+import software.amazon.smithy.kotlin.codegen.integration.SectionId
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 import software.amazon.smithy.kotlin.codegen.utils.toPascalCase
 
@@ -15,38 +15,27 @@ import software.amazon.smithy.kotlin.codegen.utils.toPascalCase
  *
  * Includes the ability to extend the config finalizer, which by default handles resolution of endpoint url config.
  */
-class ServiceClientCompanionObjectWriter : SectionWriter {
-    override fun write(writer: KotlinWriter, previousValue: String?) {
-        val serviceSymbol = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
+class ServiceClientCompanionObjectWriter : AppendingSectionWriter {
+    /**
+     * The [SectionId] used for rendering the `finalizeEnvironmentalConfig` method body.
+     */
+    object FinalizeEnvironmentalConfig : SectionId
 
+    override fun append(writer: KotlinWriter) {
+        val funName = "finalizeEnvironmentalConfig"
+        writer.write("")
         writer.withBlock(
-            "public companion object : #T<Config, Config.Builder, #T, Builder>() {",
+            "override suspend fun #1L(builder: Builder, sharedConfig: #2T<#3T>, activeProfile: #2T<#4T>) {",
             "}",
-            AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
-            serviceSymbol,
-        ) {
-            writeBuilder()
-            write("")
-
-            writeFinalizeConfig()
-        }
-    }
-
-    private fun KotlinWriter.writeBuilder() {
-        write("@#T", KotlinTypes.Jvm.JvmStatic)
-        write("override fun builder(): Builder = Builder()")
-    }
-
-    private fun KotlinWriter.writeFinalizeConfig() {
-        withBlock(
-            "override suspend fun finalizeConfig(builder: Builder, sharedConfig: #1T<#2T>, activeProfile: #1T<#3T>) {",
-            "}",
+            funName,
             RuntimeTypes.Core.Utils.LazyAsyncValue,
             AwsRuntimeTypes.Config.Profile.AwsSharedConfig,
             AwsRuntimeTypes.Config.Profile.AwsProfile,
         ) {
-            writeResolveEndpointUrl()
-            declareSection(ServiceClientGenerator.Sections.FinalizeConfig)
+            declareSection(FinalizeEnvironmentalConfig) {
+                write("super.#L(builder, sharedConfig, activeProfile)", funName)
+                writeResolveEndpointUrl()
+            }
         }
     }
 
