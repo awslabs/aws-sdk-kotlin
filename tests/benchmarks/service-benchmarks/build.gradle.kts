@@ -17,14 +17,15 @@ application {
 skipPublishing()
 
 val requiredServices = setOf(
-    // Top 7 services called by Kotlin SDK customers as of 7/25/2023, in descending order of call volume
+    // Top 6 services called by Kotlin SDK customers as of 7/25/2023, in descending order of call volume,
+    // plus Secrets Manager which replaced Pinpoint after new API throttling limits broke our benchmark.
     "s3",
     "sns",
     "sts",
     "cloudwatch",
     "cloudwatchevents",
     "dynamodb",
-    "pinpoint",
+    "secretsmanager",
 
     // Services required as prerequisites for setup
     "iam", // Create roles for STS::AssumeRole

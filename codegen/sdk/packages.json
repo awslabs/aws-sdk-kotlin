@@ -403,6 +403,12 @@
             "brazilName": "AwsSdkKotlinCodecommit"
         },
         {
+            "sdkId": "CodeConnections",
+            "namespace": "aws.sdk.kotlin.services.codeconnections",
+            "artifactName": "codeconnections",
+            "brazilName": "AwsSdkKotlinCodeconnections"
+        },
+        {
             "sdkId": "CodeDeploy",
             "namespace": "aws.sdk.kotlin.services.codedeploy",
             "artifactName": "codedeploy",
@@ -515,6 +521,12 @@
             "namespace": "aws.sdk.kotlin.services.connectparticipant",
             "artifactName": "connectparticipant",
             "brazilName": "AwsSdkKotlinConnectparticipant"
+        },
+        {
+            "sdkId": "ControlCatalog",
+            "namespace": "aws.sdk.kotlin.services.controlcatalog",
+            "artifactName": "controlcatalog",
+            "brazilName": "AwsSdkKotlinControlcatalog"
         },
         {
             "sdkId": "ControlTower",
@@ -1097,6 +1109,12 @@
             "namespace": "aws.sdk.kotlin.services.lambda",
             "artifactName": "lambda",
             "brazilName": "AwsSdkKotlinLambda"
+        },
+        {
+            "sdkId": "Launch Wizard",
+            "namespace": "aws.sdk.kotlin.services.launchwizard",
+            "artifactName": "launchwizard",
+            "brazilName": "AwsSdkKotlinLaunchWizard"
         },
         {
             "sdkId": "Lex Model Building Service",
@@ -2111,6 +2129,12 @@
             "namespace": "aws.sdk.kotlin.services.codestarnotifications",
             "artifactName": "codestarnotifications",
             "brazilName": "AwsSdkKotlinCodestarNotifications"
+        },
+        {
+            "sdkId": "deadline",
+            "namespace": "aws.sdk.kotlin.services.deadline",
+            "artifactName": "deadline",
+            "brazilName": "AwsSdkKotlinDeadline"
         },
         {
             "sdkId": "drs",

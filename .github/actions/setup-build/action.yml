@@ -18,7 +18,7 @@ runs:
       with:
         # checkout smithy-kotlin as a sibling which will automatically make it an included build
         path: 'smithy-kotlin'
-        repository: 'awslabs/smithy-kotlin'
+        repository: 'smithy-lang/smithy-kotlin'
     - name: Configure JDK
       uses: actions/setup-java@v3
       with:

@@ -135,6 +135,29 @@
                 "smithy.api#default": false
             }
         },
+        "com.amazonaws.iotwireless#AggregationPeriod": {
+            "type": "enum",
+            "members": {
+                "OneHour": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "OneHour"
+                    }
+                },
+                "OneDay": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "OneDay"
+                    }
+                },
+                "OneWeek": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "OneWeek"
+                    }
+                }
+            }
+        },
         "com.amazonaws.iotwireless#AmazonId": {
             "type": "string",
             "traits": {
@@ -201,13 +224,13 @@
                 "Type": {
                     "target": "com.amazonaws.iotwireless#ApplicationConfigType",
                     "traits": {
-                        "smithy.api#documentation": "<p>Application type, which can be specified to obtain real-time position information of your LoRaWAN device.</p>"
+                        "smithy.api#documentation": "<p>Application type, which can be specified to obtain real-time position information of\n            your LoRaWAN device.</p>"
                     }
                 },
                 "DestinationName": {
                     "target": "com.amazonaws.iotwireless#DestinationName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the position data destination that describes the AWS IoT rule that processes the device's position data\n         for use by AWS IoT Core for LoRaWAN.</p>"
+                        "smithy.api#documentation": "<p>The name of the position data destination that describes the AWS IoT rule that\n            processes the device's position data for use by AWS IoT Core for LoRaWAN.</p>"
                     }
                 }
             },
@@ -749,6 +772,9 @@
                 "smithy.api#default": false
             }
         },
+        "com.amazonaws.iotwireless#Avg": {
+            "type": "double"
+        },
         "com.amazonaws.iotwireless#BCCH": {
             "type": "integer",
             "traits": {
@@ -959,7 +985,7 @@
                 "PnOffset": {
                     "target": "com.amazonaws.iotwireless#PnOffset",
                     "traits": {
-                        "smithy.api#documentation": "<p>Pseudo-noise offset, which is a characteristic of the signal from a cell on a radio tower.</p>",
+                        "smithy.api#documentation": "<p>Pseudo-noise offset, which is a characteristic of the signal from a cell on a radio\n            tower.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -972,7 +998,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>CDMA local ID information, which corresponds to the local identification parameters of a CDMA cell.</p>"
+                "smithy.api#documentation": "<p>CDMA local ID information, which corresponds to the local identification parameters of\n            a CDMA cell.</p>"
             }
         },
         "com.amazonaws.iotwireless#CdmaNmrList": {
@@ -993,7 +1019,7 @@
                 "PnOffset": {
                     "target": "com.amazonaws.iotwireless#PnOffset",
                     "traits": {
-                        "smithy.api#documentation": "<p>Pseudo-noise offset, which is a characteristic of the signal from a cell on a radio tower.</p>",
+                        "smithy.api#documentation": "<p>Pseudo-noise offset, which is a characteristic of the signal from a cell on a radio\n            tower.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -2307,7 +2333,7 @@
                 "MaxAllowedSignature": {
                     "target": "com.amazonaws.iotwireless#MaxAllowedSignature",
                     "traits": {
-                        "smithy.api#documentation": "<p>The maximum number of signatures that the DAK can sign. A value of <code>-1</code> indicates\n         that there's no device limit.</p>"
+                        "smithy.api#documentation": "<p>The maximum number of signatures that the DAK can sign. A value of <code>-1</code>\n            indicates that there's no device limit.</p>"
                     }
                 },
                 "FactorySupport": {
@@ -2319,7 +2345,7 @@
                 "ApId": {
                     "target": "com.amazonaws.iotwireless#ApId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The advertised product ID (APID) that's used for pre-production and production applications.</p>"
+                        "smithy.api#documentation": "<p>The advertised product ID (APID) that's used for pre-production and production\n            applications.</p>"
                     }
                 },
                 "DeviceTypeId": {
@@ -3098,7 +3124,7 @@
                 "WirelessDeviceType": {
                     "target": "com.amazonaws.iotwireless#WirelessDeviceType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of wireless device to deregister from AWS IoT Wireless, which can be <code>LoRaWAN</code> \n         or <code>Sidewalk</code>.</p>",
+                        "smithy.api#documentation": "<p>The type of wireless device to deregister from AWS IoT Wireless, which can be\n                <code>LoRaWAN</code> or <code>Sidewalk</code>.</p>",
                         "smithy.api#httpQuery": "WirelessDeviceType"
                     }
                 }
@@ -3378,6 +3404,64 @@
                     "min": 0,
                     "max": 2048
                 }
+            }
+        },
+        "com.amazonaws.iotwireless#Dimension": {
+            "type": "structure",
+            "members": {
+                "name": {
+                    "target": "com.amazonaws.iotwireless#DimensionName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the dimension.</p>"
+                    }
+                },
+                "value": {
+                    "target": "com.amazonaws.iotwireless#DimensionValue",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The dimension's value.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The required list of dimensions for the metric.</p>"
+            }
+        },
+        "com.amazonaws.iotwireless#DimensionName": {
+            "type": "enum",
+            "members": {
+                "DeviceId": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceId"
+                    }
+                },
+                "GatewayId": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GatewayId"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 256
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#DimensionValue": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 256
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#Dimensions": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.iotwireless#Dimension"
             }
         },
         "com.amazonaws.iotwireless#DisassociateAwsAccountFromPartnerAccount": {
@@ -4962,6 +5046,129 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.iotwireless#GetMetricConfiguration": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.iotwireless#GetMetricConfigurationRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.iotwireless#GetMetricConfigurationResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.iotwireless#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get the metric configuration status for this account.</p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/metric-configuration",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#GetMetricConfigurationRequest": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.iotwireless#GetMetricConfigurationResponse": {
+            "type": "structure",
+            "members": {
+                "SummaryMetric": {
+                    "target": "com.amazonaws.iotwireless#SummaryMetricConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The account's configuration status for summary metric aggregation.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.iotwireless#GetMetrics": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.iotwireless#GetMetricsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.iotwireless#GetMetricsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.iotwireless#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get metrics.</p>",
+                "smithy.api#http": {
+                    "method": "POST",
+                    "uri": "/metrics",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#GetMetricsRequest": {
+            "type": "structure",
+            "members": {
+                "SummaryMetricQueries": {
+                    "target": "com.amazonaws.iotwireless#SummaryMetricQueries",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of queries to retrieve summary metrics.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.iotwireless#GetMetricsResponse": {
+            "type": "structure",
+            "members": {
+                "SummaryMetricQueryResults": {
+                    "target": "com.amazonaws.iotwireless#SummaryMetricQueryResults",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of retrieved metrics.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.iotwireless#GetMulticastGroup": {
             "type": "operation",
             "input": {
@@ -5158,7 +5365,7 @@
                 "WirelessDevices": {
                     "target": "com.amazonaws.iotwireless#WirelessDeviceList",
                     "traits": {
-                        "smithy.api#documentation": "<p>List of wireless gateway resources that have been added to the network analyzer\n            configuration.</p>"
+                        "smithy.api#documentation": "<p>List of wireless device resources that have been added to the network analyzer\n            configuration.</p>"
                     }
                 },
                 "WirelessGateways": {
@@ -5468,7 +5675,7 @@
                 "GeoJsonPayload": {
                     "target": "com.amazonaws.iotwireless#GeoJsonPayload",
                     "traits": {
-                        "smithy.api#documentation": "<p>The position information of the resource, displayed as a JSON payload. The payload\n            uses the GeoJSON format, which a format that's used to encode geographic data\n            structures. For more information, see <a href=\"https://geojson.org/\">GeoJSON</a>.</p>",
+                        "smithy.api#documentation": "<p>The position information of the resource, displayed as a JSON payload. The payload is\n            of type blob and uses the <a href=\"https://geojson.org/\">GeoJSON</a> format,\n            which a format that's used to encode geographic data structures. A sample payload\n            contains the timestamp information, the WGS84 coordinates of the location, and the\n            accuracy and confidence level. For more information and examples, see <a href=\"https://docs.aws.amazon.com/iot/latest/developerguide/location-resolve-console.html\">Resolve device location (console)</a>.</p>",
                         "smithy.api#httpPayload": {}
                     }
                 }
@@ -6012,7 +6219,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Get information about an import task and count of device onboarding summary information for the\n         import task.</p>",
+                "smithy.api#documentation": "<p>Get information about an import task and count of device onboarding summary\n            information for the import task.</p>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/wireless_device_import_task/{Id}",
@@ -6054,7 +6261,7 @@
                 "DestinationName": {
                     "target": "com.amazonaws.iotwireless#DestinationName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the destination that's assigned to the wireless devices in the import task.</p>"
+                        "smithy.api#documentation": "<p>The name of the destination that's assigned to the wireless devices in the import\n            task.</p>"
                     }
                 },
                 "Sidewalk": {
@@ -6078,31 +6285,31 @@
                 "StatusReason": {
                     "target": "com.amazonaws.iotwireless#StatusReason",
                     "traits": {
-                        "smithy.api#documentation": "<p>The reason for the provided status information, such as a validation error that causes the import\n         task to fail.</p>"
+                        "smithy.api#documentation": "<p>The reason for the provided status information, such as a validation error that causes\n            the import task to fail.</p>"
                     }
                 },
                 "InitializedImportedDeviceCount": {
                     "target": "com.amazonaws.iotwireless#ImportedWirelessDeviceCount",
                     "traits": {
-                        "smithy.api#documentation": "<p>The number of devices in the import task that are waiting for the control log to start processing.</p>"
+                        "smithy.api#documentation": "<p>The number of devices in the import task that are waiting for the control log to start\n            processing.</p>"
                     }
                 },
                 "PendingImportedDeviceCount": {
                     "target": "com.amazonaws.iotwireless#ImportedWirelessDeviceCount",
                     "traits": {
-                        "smithy.api#documentation": "<p>The number of devices in the import task that are waiting in the import task queue to be onboarded.</p>"
+                        "smithy.api#documentation": "<p>The number of devices in the import task that are waiting in the import task queue to\n            be onboarded.</p>"
                     }
                 },
                 "OnboardedImportedDeviceCount": {
                     "target": "com.amazonaws.iotwireless#ImportedWirelessDeviceCount",
                     "traits": {
-                        "smithy.api#documentation": "<p>The number of devices in the import task that have been onboarded to the import task.</p>"
+                        "smithy.api#documentation": "<p>The number of devices in the import task that have been onboarded to the import\n            task.</p>"
                     }
                 },
                 "FailedImportedDeviceCount": {
                     "target": "com.amazonaws.iotwireless#ImportedWirelessDeviceCount",
                     "traits": {
-                        "smithy.api#documentation": "<p>The number of devices in the import task that failed to onboard to the import task.</p>"
+                        "smithy.api#documentation": "<p>The number of devices in the import task that failed to onboard to the import\n            task.</p>"
                     }
                 }
             },
@@ -6807,39 +7014,39 @@
                 "Payload": {
                     "target": "com.amazonaws.iotwireless#GnssNav",
                     "traits": {
-                        "smithy.api#documentation": "<p>Payload that contains the GNSS scan result, or NAV message, in hexadecimal notation.</p>",
+                        "smithy.api#documentation": "<p>Payload that contains the GNSS scan result, or NAV message, in hexadecimal\n            notation.</p>",
                         "smithy.api#required": {}
                     }
                 },
                 "CaptureTime": {
                     "target": "com.amazonaws.iotwireless#GPST",
                     "traits": {
-                        "smithy.api#documentation": "<p>Optional parameter that gives an estimate of the time when the GNSS scan information is \n          taken, in seconds GPS time (GPST). If capture time is not specified, the local server time is used.</p>"
+                        "smithy.api#documentation": "<p>Optional parameter that gives an estimate of the time when the GNSS scan information\n            is taken, in seconds GPS time (GPST). If capture time is not specified, the local server\n            time is used.</p>"
                     }
                 },
                 "CaptureTimeAccuracy": {
                     "target": "com.amazonaws.iotwireless#CaptureTimeAccuracy",
                     "traits": {
-                        "smithy.api#documentation": "<p>Optional value that gives the capture time estimate accuracy, in seconds. If capture time\n          accuracy is not specified, default value of 300 is used.</p>"
+                        "smithy.api#documentation": "<p>Optional value that gives the capture time estimate accuracy, in seconds. If capture\n            time accuracy is not specified, default value of 300 is used.</p>"
                     }
                 },
                 "AssistPosition": {
                     "target": "com.amazonaws.iotwireless#AssistPosition",
                     "traits": {
-                        "smithy.api#documentation": "<p>Optional assistance position information, specified using latitude and longitude values\n            in degrees. The coordinates are inside the WGS84 reference frame.</p>"
+                        "smithy.api#documentation": "<p>Optional assistance position information, specified using latitude and longitude\n            values in degrees. The coordinates are inside the WGS84 reference frame.</p>"
                     }
                 },
                 "AssistAltitude": {
                     "target": "com.amazonaws.iotwireless#Coordinate",
                     "traits": {
-                        "smithy.api#documentation": "<p>Optional assistance altitude, which is the altitude of the device at capture time, specified in meters above \n          the WGS84 reference ellipsoid.</p>"
+                        "smithy.api#documentation": "<p>Optional assistance altitude, which is the altitude of the device at capture time,\n            specified in meters above the WGS84 reference ellipsoid.</p>"
                     }
                 },
                 "Use2DSolver": {
                     "target": "com.amazonaws.iotwireless#Use2DSolver",
                     "traits": {
                         "smithy.api#default": false,
-                        "smithy.api#documentation": "<p>Optional parameter that forces 2D solve, which modifies the positioning algorithm to a 2D solution \n          problem. When this parameter is specified, the assistance altitude should have an accuracy of at least 10 meters.</p>"
+                        "smithy.api#documentation": "<p>Optional parameter that forces 2D solve, which modifies the positioning algorithm to a\n            2D solution problem. When this parameter is specified, the assistance altitude should\n            have an accuracy of at least 10 meters.</p>"
                     }
                 }
             },
@@ -6887,7 +7094,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>GSM local ID information, which corresponds to the local identification parameters of a GSM cell.</p>"
+                "smithy.api#documentation": "<p>GSM local ID information, which corresponds to the local identification parameters of\n            a GSM cell.</p>"
             }
         },
         "com.amazonaws.iotwireless#GsmNmrList": {
@@ -6922,7 +7129,7 @@
                 "RxLevel": {
                     "target": "com.amazonaws.iotwireless#RxLevel",
                     "traits": {
-                        "smithy.api#documentation": "<p>Rx level, which is the received signal power, measured in dBm (decibel-milliwatts).</p>"
+                        "smithy.api#documentation": "<p>Rx level, which is the received signal power, measured in dBm\n            (decibel-milliwatts).</p>"
                     }
                 },
                 "GlobalIdentity": {
@@ -6976,13 +7183,13 @@
                 "GsmTimingAdvance": {
                     "target": "com.amazonaws.iotwireless#GsmTimingAdvance",
                     "traits": {
-                        "smithy.api#documentation": "<p>Timing advance value, which corresponds to the length of time a signal takes to reach the\n         base station from a mobile phone.</p>"
+                        "smithy.api#documentation": "<p>Timing advance value, which corresponds to the length of time a signal takes to reach\n            the base station from a mobile phone.</p>"
                     }
                 },
                 "RxLevel": {
                     "target": "com.amazonaws.iotwireless#RxLevel",
                     "traits": {
-                        "smithy.api#documentation": "<p>Rx level, which is the received signal power, measured in dBm (decibel-milliwatts).</p>"
+                        "smithy.api#documentation": "<p>Rx level, which is the received signal power, measured in dBm\n            (decibel-milliwatts).</p>"
                     }
                 },
                 "GsmNmr": {
@@ -7169,7 +7376,7 @@
                 "Sidewalk": {
                     "target": "com.amazonaws.iotwireless#ImportedSidewalkDevice",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Sidewalk-related information about a device that has been added to an import task.</p>"
+                        "smithy.api#documentation": "<p>The Sidewalk-related information about a device that has been added to an import\n            task.</p>"
                     }
                 }
             },
@@ -7443,7 +7650,7 @@
                 "DeviceProfileType": {
                     "target": "com.amazonaws.iotwireless#DeviceProfileType",
                     "traits": {
-                        "smithy.api#documentation": "<p>A filter to list only device profiles that use this type, which can be <code>LoRaWAN</code>\n         or <code>Sidewalk</code>.</p>",
+                        "smithy.api#documentation": "<p>A filter to list only device profiles that use this type, which can be\n                <code>LoRaWAN</code> or <code>Sidewalk</code>.</p>",
                         "smithy.api#httpQuery": "deviceProfileType"
                     }
                 }
@@ -7530,7 +7737,7 @@
                 "NextToken": {
                     "target": "com.amazonaws.iotwireless#NextToken",
                     "traits": {
-                        "smithy.api#documentation": "<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise\n         <code>null</code> to receive the first set of results.</p>",
+                        "smithy.api#documentation": "<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous\n            response; otherwise <code>null</code> to receive the first set of results.</p>",
                         "smithy.api#httpQuery": "nextToken"
                     }
                 },
@@ -7552,13 +7759,13 @@
                 "NextToken": {
                     "target": "com.amazonaws.iotwireless#NextToken",
                     "traits": {
-                        "smithy.api#documentation": "<p>The token to use to get the next set of results, or <code>null</code> if there are no additional \n         results.</p>"
+                        "smithy.api#documentation": "<p>The token to use to get the next set of results, or <code>null</code> if there are no\n            additional results.</p>"
                     }
                 },
                 "DestinationName": {
                     "target": "com.amazonaws.iotwireless#DestinationName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the Sidewalk destination that describes the IoT rule to route messages received from\n         devices in an import task that are onboarded to AWS IoT Wireless.</p>"
+                        "smithy.api#documentation": "<p>The name of the Sidewalk destination that describes the IoT rule to route messages\n            received from devices in an import task that are onboarded to AWS IoT Wireless.</p>"
                     }
                 },
                 "ImportedWirelessDeviceList": {
@@ -8424,7 +8631,7 @@
                 "NextToken": {
                     "target": "com.amazonaws.iotwireless#NextToken",
                     "traits": {
-                        "smithy.api#documentation": "<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous response; otherwise\n         <code>null</code> to receive the first set of results.</p>",
+                        "smithy.api#documentation": "<p>To retrieve the next set of results, the <code>nextToken</code> value from a previous\n            response; otherwise <code>null</code> to receive the first set of results.</p>",
                         "smithy.api#httpQuery": "nextToken"
                     }
                 }
@@ -8439,13 +8646,13 @@
                 "NextToken": {
                     "target": "com.amazonaws.iotwireless#NextToken",
                     "traits": {
-                        "smithy.api#documentation": "<p>The token to use to get the next set of results, or <code>null</code> if there are no additional \n         results.</p>"
+                        "smithy.api#documentation": "<p>The token to use to get the next set of results, or <code>null</code> if there are no\n            additional results.</p>"
                     }
                 },
                 "WirelessDeviceImportTaskList": {
                     "target": "com.amazonaws.iotwireless#WirelessDeviceImportTaskList",
                     "traits": {
-                        "smithy.api#documentation": "<p>List of import tasks and summary information of onboarding status of devices in each import task.</p>"
+                        "smithy.api#documentation": "<p>List of import tasks and summary information of onboarding status of devices in each\n            import task.</p>"
                     }
                 }
             },
@@ -8955,7 +9162,7 @@
                 "MaxDutyCycle": {
                     "target": "com.amazonaws.iotwireless#MaxDutyCycle",
                     "traits": {
-                        "smithy.api#documentation": "<p>The MaxDutyCycle value.</p>"
+                        "smithy.api#documentation": "<p>The MaxDutyCycle value. It ranges from 0 to 15.</p>"
                     }
                 },
                 "RfRegion": {
@@ -9575,7 +9782,7 @@
                 "Earfcn": {
                     "target": "com.amazonaws.iotwireless#EARFCN",
                     "traits": {
-                        "smithy.api#documentation": "<p>Evolved universal terrestrial radio access (E-UTRA) absolute radio frequency channel number (FCN).</p>",
+                        "smithy.api#documentation": "<p>Evolved universal terrestrial radio access (E-UTRA) absolute radio frequency channel\n            number (FCN).</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -9609,21 +9816,21 @@
                 "Earfcn": {
                     "target": "com.amazonaws.iotwireless#EARFCN",
                     "traits": {
-                        "smithy.api#documentation": "<p>E-UTRA (Evolved universal terrestrial Radio Access) absolute radio frequency channel Number (EARFCN).</p>",
+                        "smithy.api#documentation": "<p>E-UTRA (Evolved universal terrestrial Radio Access) absolute radio frequency channel\n            Number (EARFCN).</p>",
                         "smithy.api#required": {}
                     }
                 },
                 "EutranCid": {
                     "target": "com.amazonaws.iotwireless#EutranCid",
                     "traits": {
-                        "smithy.api#documentation": "<p>E-UTRAN (Evolved Universal Terrestrial Radio Access Network) cell global identifier (EUTRANCID).</p>",
+                        "smithy.api#documentation": "<p>E-UTRAN (Evolved Universal Terrestrial Radio Access Network) cell global identifier\n            (EUTRANCID).</p>",
                         "smithy.api#required": {}
                     }
                 },
                 "Rsrp": {
                     "target": "com.amazonaws.iotwireless#RSRP",
                     "traits": {
-                        "smithy.api#documentation": "<p>Signal power of the reference signal received, measured in dBm (decibel-milliwatts).</p>"
+                        "smithy.api#documentation": "<p>Signal power of the reference signal received, measured in dBm\n            (decibel-milliwatts).</p>"
                     }
                 },
                 "Rsrq": {
@@ -9657,7 +9864,7 @@
                 "EutranCid": {
                     "target": "com.amazonaws.iotwireless#EutranCid",
                     "traits": {
-                        "smithy.api#documentation": "<p>E-UTRAN (Evolved Universal Terrestrial Radio Access Network) Cell Global Identifier.</p>",
+                        "smithy.api#documentation": "<p>E-UTRAN (Evolved Universal Terrestrial Radio Access Network) Cell Global\n            Identifier.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -9682,7 +9889,7 @@
                 "Rsrp": {
                     "target": "com.amazonaws.iotwireless#RSRP",
                     "traits": {
-                        "smithy.api#documentation": "<p>Signal power of the reference signal received, measured in dBm (decibel-milliwatts).</p>"
+                        "smithy.api#documentation": "<p>Signal power of the reference signal received, measured in dBm\n            (decibel-milliwatts).</p>"
                     }
                 },
                 "Rsrq": {
@@ -9695,7 +9902,7 @@
                     "target": "com.amazonaws.iotwireless#NRCapable",
                     "traits": {
                         "smithy.api#default": false,
-                        "smithy.api#documentation": "<p>Parameter that determines whether the LTE object is capable of supporting NR (new radio).</p>"
+                        "smithy.api#documentation": "<p>Parameter that determines whether the LTE object is capable of supporting NR (new\n            radio).</p>"
                     }
                 },
                 "LteNmr": {
@@ -9754,6 +9961,9 @@
                     "max": 64
                 }
             }
+        },
+        "com.amazonaws.iotwireless#Max": {
+            "type": "double"
         },
         "com.amazonaws.iotwireless#MaxAllowedSignature": {
             "type": "integer"
@@ -9869,6 +10079,309 @@
                 "smithy.api#documentation": "<p>Sidewalk device message type. Default value is\n            <code>CUSTOM_COMMAND_ID_NOTIFY</code>.</p>"
             }
         },
+        "com.amazonaws.iotwireless#MetricName": {
+            "type": "enum",
+            "members": {
+                "DeviceRSSI": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceRSSI"
+                    }
+                },
+                "DeviceSNR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceSNR"
+                    }
+                },
+                "DeviceUplinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceUplinkCount"
+                    }
+                },
+                "DeviceDownlinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceDownlinkCount"
+                    }
+                },
+                "DeviceUplinkLostCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceUplinkLostCount"
+                    }
+                },
+                "DeviceUplinkLostRate": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceUplinkLostRate"
+                    }
+                },
+                "DeviceJoinRequestCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceJoinRequestCount"
+                    }
+                },
+                "DeviceJoinAcceptCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceJoinAcceptCount"
+                    }
+                },
+                "DeviceRoamingUplinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceRoamingUplinkCount"
+                    }
+                },
+                "DeviceRoamingDownlinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeviceRoamingDownlinkCount"
+                    }
+                },
+                "GatewayUpTime": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GatewayUpTime"
+                    }
+                },
+                "GatewayDownTime": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GatewayDownTime"
+                    }
+                },
+                "GatewayRSSI": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GatewayRSSI"
+                    }
+                },
+                "GatewaySNR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GatewaySNR"
+                    }
+                },
+                "GatewayUplinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GatewayUplinkCount"
+                    }
+                },
+                "GatewayDownlinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GatewayDownlinkCount"
+                    }
+                },
+                "GatewayJoinRequestCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GatewayJoinRequestCount"
+                    }
+                },
+                "GatewayJoinAcceptCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GatewayJoinAcceptCount"
+                    }
+                },
+                "AwsAccountUplinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountUplinkCount"
+                    }
+                },
+                "AwsAccountDownlinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountDownlinkCount"
+                    }
+                },
+                "AwsAccountUplinkLostCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountUplinkLostCount"
+                    }
+                },
+                "AwsAccountUplinkLostRate": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountUplinkLostRate"
+                    }
+                },
+                "AwsAccountJoinRequestCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountJoinRequestCount"
+                    }
+                },
+                "AwsAccountJoinAcceptCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountJoinAcceptCount"
+                    }
+                },
+                "AwsAccountRoamingUplinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountRoamingUplinkCount"
+                    }
+                },
+                "AwsAccountRoamingDownlinkCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountRoamingDownlinkCount"
+                    }
+                },
+                "AwsAccountDeviceCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountDeviceCount"
+                    }
+                },
+                "AwsAccountGatewayCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountGatewayCount"
+                    }
+                },
+                "AwsAccountActiveDeviceCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountActiveDeviceCount"
+                    }
+                },
+                "AwsAccountActiveGatewayCount": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AwsAccountActiveGatewayCount"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 256
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#MetricQueryEndTimestamp": {
+            "type": "timestamp"
+        },
+        "com.amazonaws.iotwireless#MetricQueryError": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 256
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#MetricQueryId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 256
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#MetricQueryStartTimestamp": {
+            "type": "timestamp"
+        },
+        "com.amazonaws.iotwireless#MetricQueryStatus": {
+            "type": "enum",
+            "members": {
+                "Succeeded": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Succeeded"
+                    }
+                },
+                "Failed": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Failed"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#MetricQueryTimestamp": {
+            "type": "timestamp"
+        },
+        "com.amazonaws.iotwireless#MetricQueryTimestamps": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.iotwireless#MetricQueryTimestamp"
+            }
+        },
+        "com.amazonaws.iotwireless#MetricQueryValue": {
+            "type": "structure",
+            "members": {
+                "Min": {
+                    "target": "com.amazonaws.iotwireless#Min",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The minimum of the values of the all data points collected during the period.</p>"
+                    }
+                },
+                "Max": {
+                    "target": "com.amazonaws.iotwireless#Max",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum of the values of the all data points collected during the period.</p>"
+                    }
+                },
+                "Sum": {
+                    "target": "com.amazonaws.iotwireless#Sum",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The sum of the values of the all data points collected during the period.</p>"
+                    }
+                },
+                "Avg": {
+                    "target": "com.amazonaws.iotwireless#Avg",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The average of the values of the all data points collected during the period.</p>"
+                    }
+                },
+                "Std": {
+                    "target": "com.amazonaws.iotwireless#Std",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The standard deviation of the values of the all data points collected during the period.</p>"
+                    }
+                },
+                "P90": {
+                    "target": "com.amazonaws.iotwireless#P90",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The 90th percentile of the values of the all data points collected during the period.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The aggregated values of the metric.</p>"
+            }
+        },
+        "com.amazonaws.iotwireless#MetricQueryValues": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.iotwireless#MetricQueryValue"
+            }
+        },
+        "com.amazonaws.iotwireless#MetricUnit": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 256
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#Min": {
+            "type": "double"
+        },
         "com.amazonaws.iotwireless#MinGwDiversity": {
             "type": "integer",
             "traits": {
@@ -9913,7 +10426,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>\n            <code>FrameInfo</code> of your multicast group resources for the trace content. Use\n        FrameInfo to debug the multicast communication between your LoRaWAN end devices and the network server.</p>"
+                "smithy.api#documentation": "<p>\n            <code>FrameInfo</code> of your multicast group resources for the trace content. Use\n        FrameInfo to debug the multicast communication between your multicast groups and the network server.</p>"
             }
         },
         "com.amazonaws.iotwireless#MulticastGroup": {
@@ -10202,7 +10715,13 @@
                 "AppEui": {
                     "target": "com.amazonaws.iotwireless#AppEui",
                     "traits": {
-                        "smithy.api#documentation": "<p>The AppEUI value.</p>"
+                        "smithy.api#documentation": "<p>The AppEUI value. You specify this value when using LoRaWAN versions v1.0.2 or v1.0.3.</p>"
+                    }
+                },
+                "JoinEui": {
+                    "target": "com.amazonaws.iotwireless#JoinEui",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The JoinEUI value. You specify this value instead of the AppEUI when using LoRaWAN \n            version v1.0.4.</p>"
                     }
                 },
                 "GenAppKey": {
@@ -10241,6 +10760,9 @@
             "traits": {
                 "smithy.api#documentation": "<p>OTAA device object for v1.1</p>"
             }
+        },
+        "com.amazonaws.iotwireless#P90": {
+            "type": "double"
         },
         "com.amazonaws.iotwireless#PCI": {
             "type": "integer",
@@ -11680,12 +12202,12 @@
                 "Role": {
                     "target": "com.amazonaws.iotwireless#Role",
                     "traits": {
-                        "smithy.api#documentation": "<p>The IAM role that allows AWS IoT Wireless to access the CSV file in the S3 bucket.</p>"
+                        "smithy.api#documentation": "<p>The IAM role that allows AWS IoT Wireless to access the CSV file in the S3\n            bucket.</p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Sidewalk-related information for devices in an import task that are being onboarded.</p>"
+                "smithy.api#documentation": "<p>Sidewalk-related information for devices in an import task that are being\n            onboarded.</p>"
             }
         },
         "com.amazonaws.iotwireless#SidewalkId": {
@@ -11794,7 +12316,7 @@
                 "SidewalkManufacturingSn": {
                     "target": "com.amazonaws.iotwireless#SidewalkManufacturingSn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Sidewalk manufacturing serial number (SMSN) of the device added to the import task.</p>"
+                        "smithy.api#documentation": "<p>The Sidewalk manufacturing serial number (SMSN) of the device added to the import\n            task.</p>"
                     }
                 }
             },
@@ -11808,13 +12330,13 @@
                 "DeviceCreationFile": {
                     "target": "com.amazonaws.iotwireless#DeviceCreationFile",
                     "traits": {
-                        "smithy.api#documentation": "<p>The CSV file contained in an S3 bucket that's used for adding devices to an import task.</p>"
+                        "smithy.api#documentation": "<p>The CSV file contained in an S3 bucket that's used for adding devices to an import\n            task.</p>"
                     }
                 },
                 "Role": {
                     "target": "com.amazonaws.iotwireless#Role",
                     "traits": {
-                        "smithy.api#documentation": "<p>The IAM role that allows AWS IoT Wireless to access the CSV file in the S3 bucket.</p>"
+                        "smithy.api#documentation": "<p>The IAM role that allows AWS IoT Wireless to access the CSV file in the S3\n            bucket.</p>"
                     }
                 }
             },
@@ -11842,7 +12364,7 @@
                 "DeviceCreationFile": {
                     "target": "com.amazonaws.iotwireless#DeviceCreationFile",
                     "traits": {
-                        "smithy.api#documentation": "<p>The CSV file contained in an S3 bucket that's used for appending devices to an existing import task.</p>"
+                        "smithy.api#documentation": "<p>The CSV file contained in an S3 bucket that's used for appending devices to an\n            existing import task.</p>"
                     }
                 }
             },
@@ -12164,7 +12686,7 @@
                 "DestinationName": {
                     "target": "com.amazonaws.iotwireless#DestinationName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the Sidewalk destination that describes the IoT rule to route messages from the device in the import \n         task that will be onboarded to AWS IoT Wireless.</p>",
+                        "smithy.api#documentation": "<p>The name of the Sidewalk destination that describes the IoT rule to route messages\n            from the device in the import task that will be onboarded to AWS IoT Wireless.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -12251,7 +12773,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Start import task for provisioning Sidewalk devices in bulk using an S3 CSV file.</p>",
+                "smithy.api#documentation": "<p>Start import task for provisioning Sidewalk devices in bulk using an S3 CSV\n            file.</p>",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/wireless_device_import_task",
@@ -12265,7 +12787,7 @@
                 "DestinationName": {
                     "target": "com.amazonaws.iotwireless#DestinationName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the Sidewalk destination that describes the IoT rule to route messages from the devices in the import\n         task that are onboarded to AWS IoT Wireless.</p>",
+                        "smithy.api#documentation": "<p>The name of the Sidewalk destination that describes the IoT rule to route messages\n            from the devices in the import task that are onboarded to AWS IoT Wireless.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -12281,7 +12803,7 @@
                 "Sidewalk": {
                     "target": "com.amazonaws.iotwireless#SidewalkStartImportInfo",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Sidewalk-related parameters for importing wireless devices that need to be provisioned in bulk.</p>",
+                        "smithy.api#documentation": "<p>The Sidewalk-related parameters for importing wireless devices that need to be\n            provisioned in bulk.</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -12322,6 +12844,9 @@
         "com.amazonaws.iotwireless#StatusReason": {
             "type": "string"
         },
+        "com.amazonaws.iotwireless#Std": {
+            "type": "double"
+        },
         "com.amazonaws.iotwireless#SubBand": {
             "type": "integer",
             "traits": {
@@ -12343,6 +12868,170 @@
                     "min": 0,
                     "max": 8
                 }
+            }
+        },
+        "com.amazonaws.iotwireless#Sum": {
+            "type": "double"
+        },
+        "com.amazonaws.iotwireless#SummaryMetricConfiguration": {
+            "type": "structure",
+            "members": {
+                "Status": {
+                    "target": "com.amazonaws.iotwireless#SummaryMetricConfigurationStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration of summary metric.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration of summary metric.</p>"
+            }
+        },
+        "com.amazonaws.iotwireless#SummaryMetricConfigurationStatus": {
+            "type": "enum",
+            "members": {
+                "Enabled": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Enabled"
+                    }
+                },
+                "Disabled": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Disabled"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.iotwireless#SummaryMetricQueries": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.iotwireless#SummaryMetricQuery"
+            }
+        },
+        "com.amazonaws.iotwireless#SummaryMetricQuery": {
+            "type": "structure",
+            "members": {
+                "QueryId": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The id of the query.</p>"
+                    }
+                },
+                "MetricName": {
+                    "target": "com.amazonaws.iotwireless#MetricName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the metric.</p>"
+                    }
+                },
+                "Dimensions": {
+                    "target": "com.amazonaws.iotwireless#Dimensions",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The dimensions of the metric.</p>"
+                    }
+                },
+                "AggregationPeriod": {
+                    "target": "com.amazonaws.iotwireless#AggregationPeriod",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The aggregation period of the metric.</p>"
+                    }
+                },
+                "StartTimestamp": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryStartTimestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The start timestamp for summary metric query.</p>"
+                    }
+                },
+                "EndTimestamp": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryEndTimestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The end timestamp for summary metric query.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The metric query object.</p>"
+            }
+        },
+        "com.amazonaws.iotwireless#SummaryMetricQueryResult": {
+            "type": "structure",
+            "members": {
+                "QueryId": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The id of the query.</p>"
+                    }
+                },
+                "QueryStatus": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status of the metric query.</p>"
+                    }
+                },
+                "Error": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryError",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The error message for the summary metric query.</p>"
+                    }
+                },
+                "MetricName": {
+                    "target": "com.amazonaws.iotwireless#MetricName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the metric.</p>"
+                    }
+                },
+                "Dimensions": {
+                    "target": "com.amazonaws.iotwireless#Dimensions",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The dimensions of the metric.</p>"
+                    }
+                },
+                "AggregationPeriod": {
+                    "target": "com.amazonaws.iotwireless#AggregationPeriod",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The aggregation period of the metric.</p>"
+                    }
+                },
+                "StartTimestamp": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryStartTimestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The start timestamp for summary metric query.</p>"
+                    }
+                },
+                "EndTimestamp": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryEndTimestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The end timestamp for summary metric query.</p>"
+                    }
+                },
+                "Timestamps": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryTimestamps",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of each aggregation result.</p>"
+                    }
+                },
+                "Values": {
+                    "target": "com.amazonaws.iotwireless#MetricQueryValues",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of aggregated metrics.</p>"
+                    }
+                },
+                "Unit": {
+                    "target": "com.amazonaws.iotwireless#MetricUnit",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The units of measurement to be used for interpreting the aggregation result.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The result of metrics aggregation operation.</p>"
+            }
+        },
+        "com.amazonaws.iotwireless#SummaryMetricQueryResults": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.iotwireless#SummaryMetricQueryResult"
             }
         },
         "com.amazonaws.iotwireless#SupportedRfRegion": {
@@ -12630,7 +13319,7 @@
                 "Uarfcn": {
                     "target": "com.amazonaws.iotwireless#UARFCN",
                     "traits": {
-                        "smithy.api#documentation": "<p>TD-SCDMA UTRA (Universal Terrestrial Radio Access Network) absolute RF channel number (UARFCN).</p>",
+                        "smithy.api#documentation": "<p>TD-SCDMA UTRA (Universal Terrestrial Radio Access Network) absolute RF channel number\n            (UARFCN).</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -12664,7 +13353,7 @@
                 "Uarfcn": {
                     "target": "com.amazonaws.iotwireless#UARFCN",
                     "traits": {
-                        "smithy.api#documentation": "<p>TD-SCDMA UTRA (Universal Terrestrial Radio Access Network) absolute RF channel number.</p>",
+                        "smithy.api#documentation": "<p>TD-SCDMA UTRA (Universal Terrestrial Radio Access Network) absolute RF channel\n            number.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -12690,7 +13379,7 @@
                 "PathLoss": {
                     "target": "com.amazonaws.iotwireless#PathLoss",
                     "traits": {
-                        "smithy.api#documentation": "<p>Path loss, or path attenuation, is the reduction in power density of an electromagnetic wave as it \n         propagates through space.</p>"
+                        "smithy.api#documentation": "<p>Path loss, or path attenuation, is the reduction in power density of an\n            electromagnetic wave as it propagates through space.</p>"
                     }
                 }
             },
@@ -12743,13 +13432,13 @@
                 "Rscp": {
                     "target": "com.amazonaws.iotwireless#RSCP",
                     "traits": {
-                        "smithy.api#documentation": "<p>Signal power of the received signal (Received Signal Code Power), measured in decibel-milliwatts (dBm).</p>"
+                        "smithy.api#documentation": "<p>Signal power of the received signal (Received Signal Code Power), measured in\n            decibel-milliwatts (dBm).</p>"
                     }
                 },
                 "PathLoss": {
                     "target": "com.amazonaws.iotwireless#PathLoss",
                     "traits": {
-                        "smithy.api#documentation": "<p>Path loss, or path attenuation, is the reduction in power density of an electromagnetic wave as it\n         propagates through space.</p>"
+                        "smithy.api#documentation": "<p>Path loss, or path attenuation, is the reduction in power density of an\n            electromagnetic wave as it propagates through space.</p>"
                     }
                 },
                 "TdscdmaNmr": {
@@ -12885,7 +13574,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Trace content for your wireless gateway and wireless device resources.</p>"
+                "smithy.api#documentation": "<p>Trace content for your wireless devices, gateways, and multicast groups.</p>"
             }
         },
         "com.amazonaws.iotwireless#TransmissionInterval": {
@@ -13222,7 +13911,7 @@
                 "Applications": {
                     "target": "com.amazonaws.iotwireless#Applications",
                     "traits": {
-                        "smithy.api#documentation": "<p>LoRaWAN application, which can be used for geolocation by activating positioning.</p>"
+                        "smithy.api#documentation": "<p>LoRaWAN application, which can be used for geolocation by activating\n            positioning.</p>"
                     }
                 }
             },
@@ -13368,6 +14057,65 @@
             }
         },
         "com.amazonaws.iotwireless#UpdateLogLevelsByResourceTypesResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.iotwireless#UpdateMetricConfiguration": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.iotwireless#UpdateMetricConfigurationRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.iotwireless#UpdateMetricConfigurationResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.iotwireless#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Update the metric configuration.</p>",
+                "smithy.api#http": {
+                    "method": "PUT",
+                    "uri": "/metric-configuration",
+                    "code": 204
+                },
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.iotwireless#UpdateMetricConfigurationRequest": {
+            "type": "structure",
+            "members": {
+                "SummaryMetric": {
+                    "target": "com.amazonaws.iotwireless#SummaryMetricConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The value to be used to set summary metric configuration.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.iotwireless#UpdateMetricConfigurationResponse": {
             "type": "structure",
             "members": {},
             "traits": {
@@ -13525,7 +14273,7 @@
                 "MulticastGroupsToRemove": {
                     "target": "com.amazonaws.iotwireless#NetworkAnalyzerMulticastGroupList",
                     "traits": {
-                        "smithy.api#documentation": "<p>Multicast group resources to remove from the network analyzer configuration. Provide the\n            <code>MulticastGroupId</code> of the resource to remove in the input array.</p>"
+                        "smithy.api#documentation": "<p>Multicast group resources to remove from the network analyzer configuration. Provide the\n            <code>MulticastGroupId</code> of the resources to remove in the input array.</p>"
                     }
                 }
             },
@@ -13835,7 +14583,7 @@
                 "ResourceIdentifier": {
                     "target": "com.amazonaws.iotwireless#PositionResourceIdentifier",
                     "traits": {
-                        "smithy.api#documentation": "<p>The identifier of the resource for which position information is updated. It can be the\n            wireless device ID or the wireless gateway ID, depending on the resource type.</p>",
+                        "smithy.api#documentation": "<p>The identifier of the resource for which position information is updated. It can be\n            the wireless device ID or the wireless gateway ID, depending on the resource\n            type.</p>",
                         "smithy.api#httpLabel": {},
                         "smithy.api#required": {}
                     }
@@ -13843,7 +14591,7 @@
                 "ResourceType": {
                     "target": "com.amazonaws.iotwireless#PositionResourceType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of resource for which position information is updated, which can be a wireless device or a\n           wireless gateway.</p>",
+                        "smithy.api#documentation": "<p>The type of resource for which position information is updated, which can be a\n            wireless device or a wireless gateway.</p>",
                         "smithy.api#httpQuery": "resourceType",
                         "smithy.api#required": {}
                     }
@@ -13851,7 +14599,7 @@
                 "GeoJsonPayload": {
                     "target": "com.amazonaws.iotwireless#GeoJsonPayload",
                     "traits": {
-                        "smithy.api#documentation": "<p>The position information of the resource, displayed as a JSON payload. The payload uses the GeoJSON format, \n           which a format that's used to encode geographic data structures. For more information, see <a href=\"https://geojson.org/\">GeoJSON</a>.</p>",
+                        "smithy.api#documentation": "<p>The position information of the resource, displayed as a JSON payload. The payload\n            uses the GeoJSON format, which a format that's used to encode geographic data\n            structures. For more information, see <a href=\"https://geojson.org/\">GeoJSON</a>.</p>",
                         "smithy.api#httpPayload": {}
                     }
                 }
@@ -14278,7 +15026,7 @@
                 "PathLoss": {
                     "target": "com.amazonaws.iotwireless#PathLoss",
                     "traits": {
-                        "smithy.api#documentation": "<p>Path loss, or path attenuation, is the reduction in power density of an electromagnetic wave as \n         it propagates through space.</p>"
+                        "smithy.api#documentation": "<p>Path loss, or path attenuation, is the reduction in power density of an\n            electromagnetic wave as it propagates through space.</p>"
                     }
                 }
             },
@@ -14331,7 +15079,7 @@
                 "PathLoss": {
                     "target": "com.amazonaws.iotwireless#PathLoss",
                     "traits": {
-                        "smithy.api#documentation": "<p>Path loss, or path attenuation, is the reduction in power density of an electromagnetic wave as \n         it propagates through space.</p>"
+                        "smithy.api#documentation": "<p>Path loss, or path attenuation, is the reduction in power density of an\n            electromagnetic wave as it propagates through space.</p>"
                     }
                 },
                 "WcdmaNmr": {
@@ -14520,7 +15268,7 @@
                 "DestinationName": {
                     "target": "com.amazonaws.iotwireless#DestinationName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The name of the Sidewalk destination that that describes the IoT rule to route messages from the device in \n         the import task that will be onboarded to AWS IoT Wireless</p>"
+                        "smithy.api#documentation": "<p>The name of the Sidewalk destination that that describes the IoT rule to route\n            messages from the device in the import task that will be onboarded to AWS IoT\n            Wireless</p>"
                     }
                 },
                 "Sidewalk": {
@@ -14550,25 +15298,25 @@
                 "InitializedImportedDeviceCount": {
                     "target": "com.amazonaws.iotwireless#ImportedWirelessDeviceCount",
                     "traits": {
-                        "smithy.api#documentation": "<p>The summary information of count of wireless devices that are waiting for the control log to be \n         added to an import task.</p>"
+                        "smithy.api#documentation": "<p>The summary information of count of wireless devices that are waiting for the control\n            log to be added to an import task.</p>"
                     }
                 },
                 "PendingImportedDeviceCount": {
                     "target": "com.amazonaws.iotwireless#ImportedWirelessDeviceCount",
                     "traits": {
-                        "smithy.api#documentation": "<p>The summary information of count of wireless devices in an import task that are waiting in the queue \n         to be onboarded.</p>"
+                        "smithy.api#documentation": "<p>The summary information of count of wireless devices in an import task that are\n            waiting in the queue to be onboarded.</p>"
                     }
                 },
                 "OnboardedImportedDeviceCount": {
                     "target": "com.amazonaws.iotwireless#ImportedWirelessDeviceCount",
                     "traits": {
-                        "smithy.api#documentation": "<p>The summary information of count of wireless devices in an import task that have been onboarded to the\n         import task.</p>"
+                        "smithy.api#documentation": "<p>The summary information of count of wireless devices in an import task that have been\n            onboarded to the import task.</p>"
                     }
                 },
                 "FailedImportedDeviceCount": {
                     "target": "com.amazonaws.iotwireless#ImportedWirelessDeviceCount",
                     "traits": {
-                        "smithy.api#documentation": "<p>The summary information of count of wireless devices in an import task that failed to onboarded to the\n         import task.</p>"
+                        "smithy.api#documentation": "<p>The summary information of count of wireless devices in an import task that failed to\n            onboarded to the import task.</p>"
                     }
                 }
             },
@@ -15202,6 +15950,12 @@
                     "target": "com.amazonaws.iotwireless#GetLogLevelsByResourceTypes"
                 },
                 {
+                    "target": "com.amazonaws.iotwireless#GetMetricConfiguration"
+                },
+                {
+                    "target": "com.amazonaws.iotwireless#GetMetrics"
+                },
+                {
                     "target": "com.amazonaws.iotwireless#GetMulticastGroup"
                 },
                 {
@@ -15373,6 +16127,9 @@
                     "target": "com.amazonaws.iotwireless#UpdateLogLevelsByResourceTypes"
                 },
                 {
+                    "target": "com.amazonaws.iotwireless#UpdateMetricConfiguration"
+                },
+                {
                     "target": "com.amazonaws.iotwireless#UpdateMulticastGroup"
                 },
                 {
@@ -15413,7 +16170,7 @@
                     "name": "iotwireless"
                 },
                 "aws.protocols#restJson1": {},
-                "smithy.api#documentation": "<p>AWS IoT Wireless provides bi-directional communication between internet-connected\n            wireless devices and the AWS Cloud. To onboard both LoRaWAN and Sidewalk devices to AWS\n            IoT, use the IoT Wireless API. These wireless devices use the Low Power Wide Area\n            Networking (LPWAN) communication protocol to communicate with AWS IoT.</p>\n         <p>Using the API, you can perform create, read, update, and delete operations for your\n            wireless devices, gateways, destinations, and profiles. After onboarding your devices,\n            you can use the API operations to set log levels and monitor your devices with\n            CloudWatch.</p>\n         <p>You can also use the API operations to create multicast groups and schedule a\n            multicast session for sending a downlink message to devices in the group. By using\n            Firmware Updates Over-The-Air (FUOTA) API operations, you can create a FUOTA task and\n            schedule a session to update the firmware of individual devices or an entire group of\n            devices in a multicast group.</p>",
+                "smithy.api#documentation": "<p>AWS IoT Wireless provides bi-directional communication between internet-connected\n            wireless devices and the AWS Cloud. To onboard both LoRaWAN and Sidewalk devices to AWS\n            IoT, use the IoT Wireless API. These wireless devices use the Low Power Wide Area\n            Networking (LPWAN) communication protocol to communicate with AWS IoT.</p>\n         <p>Using the API, you can perform create, read, update, and delete operations for your\n            wireless devices, gateways, destinations, and profiles. After onboarding your devices,\n            you can use the API operations to set log levels and monitor your devices with\n            CloudWatch.</p>\n         <p>You can also use the API operations to create multicast groups and schedule a\n            multicast session for sending a downlink message to devices in the group. By using\n            Firmware Updates Over-The-Air (FUOTA) API operations, you can create a FUOTA task and\n            schedule a session to update the firmware of individual devices or an entire group of\n            devices in a multicast group.</p>\n         <p>To connect to the AWS IoT Wireless Service, use the Service endpoints as described in\n                <a href=\"https://docs.aws.amazon.com/general/latest/gr/iot-lorawan.html#iot-wireless_region\">IoT Wireless Service\n                endpoints</a> in the <i>AWS General Reference</i>.</p>",
                 "smithy.api#title": "AWS IoT Wireless",
                 "smithy.rules#endpointRuleSet": {
                     "version": "1.0",

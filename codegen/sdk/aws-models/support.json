@@ -1745,7 +1745,7 @@
                     }
                 },
                 "serviceCode": {
-                    "target": "com.amazonaws.support#ServiceCode",
+                    "target": "com.amazonaws.support#ServiceCode2",
                     "traits": {
                         "smithy.api#documentation": "<p>The code for the Amazon Web Services service. You can use the <a>DescribeServices</a>\n            operation to get the possible <code>serviceCode</code> values.</p>"
                     }
@@ -2137,7 +2137,7 @@
                     }
                 },
                 "serviceCode": {
-                    "target": "com.amazonaws.support#ServiceCode",
+                    "target": "com.amazonaws.support#ServiceCode2",
                     "traits": {
                         "smithy.api#documentation": "<p>The code for the Amazon Web Services service. You can use the <a>DescribeServices</a>\n            operation to get the possible <code>serviceCode</code> values.</p>",
                         "smithy.api#required": {}
@@ -2782,6 +2782,9 @@
             }
         },
         "com.amazonaws.support#ServiceCode": {
+            "type": "string"
+        },
+        "com.amazonaws.support#ServiceCode2": {
             "type": "string",
             "traits": {
                 "smithy.api#pattern": "^[0-9a-z\\-_]+$"
@@ -2790,7 +2793,7 @@
         "com.amazonaws.support#ServiceCodeList": {
             "type": "list",
             "member": {
-                "target": "com.amazonaws.support#ServiceCode"
+                "target": "com.amazonaws.support#ServiceCode2"
             },
             "traits": {
                 "smithy.api#length": {
