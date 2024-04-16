@@ -127,7 +127,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                     AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
                     writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol),
                 )
-            }
+            },
         )
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = buildList {
