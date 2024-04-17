@@ -121,6 +121,13 @@ class AwsServiceConfigIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding> =
         listOf(
             SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject, ServiceClientCompanionObjectWriter()),
+            SectionWriterBinding(ServiceClientGenerator.Sections.CompanionObject.SuperTypes) { writer, _ ->
+                writer.write(
+                    "#T<Config, Config.Builder, #T, Builder>()",
+                    AwsRuntimeTypes.Config.AbstractAwsSdkClientFactory,
+                    writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol),
+                )
+            },
         )
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = buildList {
