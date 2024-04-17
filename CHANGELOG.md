@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.20] - 04/17/2024
+
+### Features
+* (**ec2**) Documentation updates for Elastic Compute Cloud (EC2).
+* (**qbusiness**) This release adds support for IAM Identity Center (IDC) as the identity gateway for Q Business. It also allows users to provide an explicit intent for Q Business to identify how the Chat request should be handled.
+
 ## [1.1.19] - 04/16/2024
 
 ### Features
