@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.codegen
 
+import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
@@ -29,6 +30,9 @@ class ServiceClientCompanionObjectWriter : SectionWriter {
             write("")
 
             writeFinalizeConfig()
+
+            // FIXME remove in v1.2 in favor of https://github.com/awslabs/aws-sdk-kotlin/pull/1284
+            writeInvokeOperator(serviceSymbol)
         }
     }
 
@@ -47,6 +51,19 @@ class ServiceClientCompanionObjectWriter : SectionWriter {
         ) {
             writeResolveEndpointUrl()
             declareSection(ServiceClientGenerator.Sections.FinalizeConfig)
+        }
+    }
+
+    // FIXME remove in v1.2 in favor of https://github.com/awslabs/aws-sdk-kotlin/pull/1284
+    private fun KotlinWriter.writeInvokeOperator(serviceSymbol: Symbol) {
+        write("")
+        withBlock(
+            "override operator fun invoke(block: Config.Builder.() -> Unit): #T = builder().apply {",
+            "}.build()",
+            serviceSymbol,
+        ) {
+            write("config.apply(block)")
+            write("config.interceptors.add(0, #T())", RuntimeTypes.AwsProtocolCore.ClockSkewInterceptor)
         }
     }
 

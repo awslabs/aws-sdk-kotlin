@@ -35,6 +35,11 @@ class ServiceClientCompanionObjectWriterTest {
                         "test_generator",
                     )
                 }
+            
+                override operator fun invoke(block: Config.Builder.() -> Unit): TestGeneratorClient = builder().apply {
+                    config.apply(block)
+                    config.interceptors.add(0, ClockSkewInterceptor())
+                }.build()
             }
         """.trimIndent()
 

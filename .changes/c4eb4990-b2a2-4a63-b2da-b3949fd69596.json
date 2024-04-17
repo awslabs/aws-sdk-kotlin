@@ -1,0 +1,8 @@
+{
+    "id": "c4eb4990-b2a2-4a63-b2da-b3949fd69596",
+    "type": "bugfix",
+    "description": "Apply clock skew interceptor to clients created via `invoke`",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1211"
+    ]
+}
