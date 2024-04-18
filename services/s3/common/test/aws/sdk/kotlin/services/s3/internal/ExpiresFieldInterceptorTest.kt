@@ -17,6 +17,7 @@ import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertEquals
 import kotlin.test.Test
+import kotlin.test.assertNull
 
 class ExpiresFieldInterceptorTest {
     private fun newTestClient(
@@ -53,8 +54,10 @@ class ExpiresFieldInterceptorTest {
 
     @Test
     fun testHandlesUnparsableExpiresField() = runTest {
+        val invalidExpiresField = "Tomorrow or maybe the day after?"
+
         val expectedHeaders = HeadersBuilder().apply {
-            append("Expires", "Tomorrow or maybe the day after?") // invalid, unparsable field
+            append("Expires", invalidExpiresField)
         }.build()
 
         val s3 = newTestClient(headers = expectedHeaders)
@@ -64,7 +67,7 @@ class ExpiresFieldInterceptorTest {
         }) {
             // default to epoch time
             assertNull(it.expires)
-            assertEquals("Tomorrow or maybe the day after?", it.expiresString)
+            assertEquals(invalidExpiresField, it.expiresString)
         }
     }
 }

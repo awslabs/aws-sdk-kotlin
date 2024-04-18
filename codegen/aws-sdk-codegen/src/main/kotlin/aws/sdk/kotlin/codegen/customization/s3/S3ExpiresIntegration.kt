@@ -70,7 +70,7 @@ class S3ExpiresIntegration : KotlinIntegration {
                 val expiresStringMember = MemberShape.builder()
                 expiresStringMember.target(expiresString.id)
                 expiresStringMember.id(expiresMember.id.toString() + "String") // i.e. com.amazonaws.s3.<MEMBER_NAME>$ExpiresString
-                expiresStringMember.addTrait(HttpHeaderTrait("Expires")) // Add HttpHeaderTrait to ensure the field is deserialized
+                expiresStringMember.addTrait(HttpHeaderTrait("ExpiresString")) // Add HttpHeaderTrait to ensure the field is deserialized
                 expiresMember.getTrait<DocumentationTrait>()?.let {
                     expiresStringMember.addTrait(it) // Copy documentation from `Expires`
                 }

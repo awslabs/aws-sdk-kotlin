@@ -18,12 +18,13 @@ import aws.smithy.kotlin.runtime.time.Instant
 internal object ExpiresFieldInterceptor: HttpInterceptor {
     override suspend fun modifyBeforeDeserialization(context: ProtocolResponseInterceptorContext<Any, HttpRequest, HttpResponse>): HttpResponse {
         val response = context.protocolResponse.toBuilder()
-        val responseHeaders = context.protocolResponse.headers
 
-        if (responseHeaders.contains("Expires")) {
+        if (response.headers.contains("Expires")) {
+            response.headers["ExpiresString"] = response.headers["Expires"]!!
+
             // if parsing `Expires` would fail, remove the header value so it deserializes to `null`
             try {
-                Instant.fromRfc5322(responseHeaders["Expires"]!!)
+                Instant.fromRfc5322(response.headers["Expires"]!!)
             } catch (e: Exception) {
                 response.headers.remove("Expires")
             }
