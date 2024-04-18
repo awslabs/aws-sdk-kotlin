@@ -63,8 +63,8 @@ class ExpiresFieldInterceptorTest {
             key = "key"
         }) {
             // default to epoch time
-            assertEquals(Instant.fromEpochSeconds(0), it.expires)
-            assertEquals("Thu, 1 Jan 1970 00:00:00 +0000", it.expiresString)
+            assertNull(it.expires)
+            assertEquals("Tomorrow or maybe the day after?", it.expiresString)
         }
     }
 }

@@ -21,11 +21,11 @@ internal object ExpiresFieldInterceptor: HttpInterceptor {
         val responseHeaders = context.protocolResponse.headers
 
         if (responseHeaders.contains("Expires")) {
-            // if parsing `Expires` would fail, update the value so it doesn't
+            // if parsing `Expires` would fail, remove the header value so it deserializes to `null`
             try {
                 Instant.fromRfc5322(responseHeaders["Expires"]!!)
             } catch (e: Exception) {
-                response.headers["Expires"] = "Thu, 1 Jan 1970 00:00:00 +0000"
+                response.headers.remove("Expires")
             }
         }
 
