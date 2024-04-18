@@ -15,7 +15,7 @@ import aws.smithy.kotlin.runtime.time.Instant
 /**
  * Interceptor to handle special-cased `Expires` field which must not cause deserialization to fail.
  */
-internal object ExpiresFieldInterceptor: HttpInterceptor {
+internal object ExpiresFieldInterceptor : HttpInterceptor {
     override suspend fun modifyBeforeDeserialization(context: ProtocolResponseInterceptorContext<Any, HttpRequest, HttpResponse>): HttpResponse {
         val response = context.protocolResponse.toBuilder()
 

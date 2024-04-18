@@ -63,7 +63,7 @@ class S3ExpiresIntegration : KotlinIntegration {
                 builder.addMember(
                     expiresMember.toBuilder()
                         .addTrait(deprecatedTrait)
-                    .build()
+                        .build(),
                 )
 
                 // Add a synthetic member targeting `ExpiresString`
@@ -76,13 +76,15 @@ class S3ExpiresIntegration : KotlinIntegration {
                 }
                 builder.addMember(expiresStringMember.build())
                 builder.build()
-            } else shape
+            } else {
+                shape
+            }
         }
     }
 
     override fun customizeMiddleware(
         ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>
+        resolved: List<ProtocolMiddleware>,
     ): List<ProtocolMiddleware> = resolved + applyExpiresFieldInterceptor
 
     internal val applyExpiresFieldInterceptor = object : ProtocolMiddleware {

@@ -15,8 +15,8 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.test.runTest
-import kotlin.test.assertEquals
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class ExpiresFieldInterceptorTest {
@@ -35,7 +35,6 @@ class ExpiresFieldInterceptorTest {
             }
         }
 
-
     @Test
     fun testHandlesParsableExpiresField() = runTest {
         val expectedHeaders = HeadersBuilder().apply {
@@ -43,10 +42,12 @@ class ExpiresFieldInterceptorTest {
         }.build()
 
         val s3 = newTestClient(headers = expectedHeaders)
-        s3.getObject(GetObjectRequest {
-            bucket = "test"
-            key = "key"
-        }) {
+        s3.getObject(
+            GetObjectRequest {
+                bucket = "test"
+                key = "key"
+            },
+        ) {
             assertEquals(Instant.fromEpochSeconds(1711929600), it.expires)
             assertEquals("Mon, 1 Apr 2024 00:00:00 +0000", it.expiresString)
         }
@@ -61,10 +62,12 @@ class ExpiresFieldInterceptorTest {
         }.build()
 
         val s3 = newTestClient(headers = expectedHeaders)
-        s3.getObject(GetObjectRequest {
-            bucket = "test"
-            key = "key"
-        }) {
+        s3.getObject(
+            GetObjectRequest {
+                bucket = "test"
+                key = "key"
+            },
+        ) {
             // default to epoch time
             assertNull(it.expires)
             assertEquals(invalidExpiresField, it.expiresString)

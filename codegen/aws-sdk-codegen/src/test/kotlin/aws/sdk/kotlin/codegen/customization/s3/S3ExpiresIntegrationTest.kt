@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.codegen.customization.s3
 
 import aws.sdk.kotlin.codegen.testutil.model
@@ -56,7 +60,6 @@ class S3ExpiresIntegrationTest {
             }
         """.toSmithyModel()
 
-
     @Test
     fun testEnabledForS3() {
         val enabled = S3ExpiresIntegration().enabledForService(testModel, testModel.defaultSettings())
@@ -90,20 +93,21 @@ class S3ExpiresIntegrationTest {
         val expiresShapes = listOf(
             model.expectShape(ShapeId.from("smithy.example#GetFooInput\$expires")),
             model.expectShape(ShapeId.from("smithy.example#GetFooOutput\$expires")),
-            model.expectShape(ShapeId.from("smithy.example#NewGetFooOutput\$expires"))
+            model.expectShape(ShapeId.from("smithy.example#NewGetFooOutput\$expires")),
         )
         // `Expires` members should always be Timestamp, even if its modeled as a string
         assertTrue(expiresShapes.all { it.targetOrSelf(model).isTimestampShape })
 
         // All `Expires` output members should be deprecated
-        assertTrue(expiresShapes
-            .filter { it.id.toString().contains("Output") }
-            .all { it.isDeprecated }
+        assertTrue(
+            expiresShapes
+                .filter { it.id.toString().contains("Output") }
+                .all { it.isDeprecated },
         )
 
         val expiresStringFields = listOf(
             model.expectShape(ShapeId.from("smithy.example#GetFooOutput\$expiresString")),
-            model.expectShape(ShapeId.from("smithy.example#NewGetFooOutput\$expiresString"))
+            model.expectShape(ShapeId.from("smithy.example#NewGetFooOutput\$expiresString")),
         )
         // There should be no `ExpiresString` member added to the input shape
         assertNull(model.getShape(ShapeId.from("smithy.example#GetFooInput\$expiresString")).getOrNull())
