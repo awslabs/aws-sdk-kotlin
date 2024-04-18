@@ -68,7 +68,6 @@ class ExpiresFieldInterceptorTest {
                 key = "key"
             },
         ) {
-            // default to epoch time
             assertNull(it.expires)
             assertEquals(invalidExpiresField, it.expiresString)
         }
