@@ -1,5 +1,0 @@
-{
-    "id": "14eca09d-0ee6-45f3-a758-5e5b2ac471f0",
-    "type": "feature",
-    "description": "Customize S3's `Expires` field, including adding a new `ExpiresString` field for output types."
-}
