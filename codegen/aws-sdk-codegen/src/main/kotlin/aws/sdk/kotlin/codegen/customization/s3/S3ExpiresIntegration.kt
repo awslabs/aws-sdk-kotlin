@@ -34,7 +34,7 @@ class S3ExpiresIntegration : KotlinIntegration {
             .asSequence()
             .mapNotNull { shape ->
                 shape.members()
-                    .singleOrNull { member -> member.memberName.lowercase() == "expires" }
+                    .singleOrNull { member -> member.memberName.equals("Expires", ignoreCase = true) }
                     ?.target
             }
             .associateWith { ShapeType.TIMESTAMP }
@@ -48,11 +48,11 @@ class S3ExpiresIntegration : KotlinIntegration {
 
         // For output shapes only, deprecate `Expires` and add a synthetic member that targets `ExpiresString`
         return transformer.mapShapes(transformedModel) { shape ->
-            if (shape.hasTrait<OutputTrait>() && shape.memberNames.any { it.lowercase() == "expires" }) {
+            if (shape.hasTrait<OutputTrait>() && shape.memberNames.any { it.equals("Expires", ignoreCase = true) }) {
                 val builder = (shape as StructureShape).toBuilder()
 
                 // Deprecate `Expires`
-                val expiresMember = shape.members().single { it.memberName.lowercase() == "expires" }
+                val expiresMember = shape.members().single { it.memberName.equals("Expires", ignoreCase = true) }
 
                 builder.removeMember(expiresMember.memberName)
                 val deprecatedTrait = DeprecatedTrait.builder()
@@ -108,7 +108,7 @@ class S3ExpiresIntegration : KotlinIntegration {
         val output = model.expectShape(this.outputShape)
 
         return (input.memberNames + output.memberNames).any {
-            it.lowercase() == "expires"
+            it.equals("Expires", ignoreCase = true)
         }
     }
 }
