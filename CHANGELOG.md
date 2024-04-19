@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.22] - 04/19/2024
+
+### Features
+* (**glue**) Adding RowFilter in the response for GetUnfilteredTableMetadata API
+* (**internetmonitor**) This update introduces the GetInternetEvent and ListInternetEvents APIs, which provide access to internet events displayed on the Amazon CloudWatch Internet Weather Map.
+* (**personalize**) This releases auto training capability while creating a solution and automatically syncing latest solution versions when creating/updating a campaign
+* Customize S3's `Expires` field, including adding a new `ExpiresString` field for output types.
+
+### Fixes
+* [#1210](https://github.com/awslabs/aws-sdk-kotlin/issues/1210) Service client based identity providers now respect AWS_ENDPOINT_URL_SERVICE environment variables
+
 ## [1.1.21] - 04/18/2024
 
 ### Features
