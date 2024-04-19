@@ -28,7 +28,7 @@ internal object ExpiresFieldInterceptor : HttpInterceptor {
                 Instant.fromRfc5322(response.headers["Expires"]!!)
             } catch (e: Exception) {
                 coroutineContext.logger<ExpiresFieldInterceptor>().warn {
-                    "Failed to parse `expires`=${response.headers["Expires"]} as a timestamp, setting it to `null`. The unparsed value is available in `expiresString`."
+                    "Failed to parse `expires`=\"${response.headers["Expires"]}\" as a timestamp, setting it to `null`. The unparsed value is available in `expiresString`."
                 }
                 response.headers.remove("Expires")
             }
