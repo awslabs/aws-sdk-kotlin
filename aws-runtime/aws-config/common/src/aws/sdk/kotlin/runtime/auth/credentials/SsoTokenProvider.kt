@@ -124,7 +124,7 @@ public class SsoTokenProvider(
 
     private suspend fun refreshToken(oldToken: SsoToken): SsoToken {
         val telemetry = coroutineContext.telemetryProvider
-        SsoOidcClient {
+        SsoOidcClient.fromEnvironment {
             region = ssoRegion
             httpClient = this@SsoTokenProvider.httpClient
             telemetryProvider = telemetry

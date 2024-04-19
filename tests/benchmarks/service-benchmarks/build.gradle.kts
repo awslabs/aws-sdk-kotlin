@@ -17,6 +17,8 @@ application {
 skipPublishing()
 
 val requiredServices = setOf(
+    // keep this list in sync with <rootdir>/settings.gradle.kts
+
     // Top 6 services called by Kotlin SDK customers as of 7/25/2023, in descending order of call volume,
     // plus Secrets Manager which replaced Pinpoint after new API throttling limits broke our benchmark.
     "s3",
@@ -31,48 +33,25 @@ val requiredServices = setOf(
     "iam", // Create roles for STS::AssumeRole
 )
 
-val missingServices = requiredServices.filterNot { rootProject.file("services/$it/build.gradle.kts").exists() }
+val optinAnnotations = listOf("kotlin.RequiresOptIn", "aws.smithy.kotlin.runtime.InternalApi")
 
-if (missingServices.isEmpty()) {
-    val optinAnnotations = listOf("kotlin.RequiresOptIn", "aws.smithy.kotlin.runtime.InternalApi")
+kotlin {
+    sourceSets {
+        all {
+            optinAnnotations.forEach { languageSettings.optIn(it) }
+        }
 
-    kotlin {
-        sourceSets {
-            all {
-                optinAnnotations.forEach { languageSettings.optIn(it) }
-            }
+        jvmMain {
+            dependencies {
+                api(libs.smithy.kotlin.runtime.core)
+                implementation(project(":aws-runtime:aws-core"))
+                implementation(libs.kotlinx.atomicfu)
+                implementation(libs.kotlinx.coroutines.core)
 
-            jvmMain {
-                dependencies {
-                    api(libs.smithy.kotlin.runtime.core)
-                    implementation(project(":aws-runtime:aws-core"))
-                    implementation(libs.kotlinx.atomicfu)
-                    implementation(libs.kotlinx.coroutines.core)
-
-                    requiredServices.forEach { implementation(project(":services:$it")) }
-                }
+                requiredServices.forEach { implementation(project(":services:$it")) }
             }
         }
     }
-} else {
-    logger.warn(
-        "Skipping build for {} project, missing the following services: {}. To ensure this project builds, run the " +
-            "{}:bootstrapAll task.",
-        project.name,
-        missingServices.joinToString(", "),
-        project.path,
-    )
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        enabled = false
-    }
-}
-
-tasks.register("bootstrapAll") {
-    val bootstrapArg = requiredServices.joinToString(",") { "+$it" }
-    val bootstrapProj = project(":codegen:sdk")
-    bootstrapProj.ext.set("aws.services", bootstrapArg)
-    dependsOn(":codegen:sdk:bootstrap")
 }
 
 tasks.named<JavaExec>("run") {

@@ -98,7 +98,7 @@ public class SsoCredentialsProvider public constructor(
         }
 
         val telemetry = coroutineContext.telemetryProvider
-        val client = SsoClient {
+        val client = SsoClient.fromEnvironment {
             region = ssoRegion
             httpClient = this@SsoCredentialsProvider.httpClient
             telemetryProvider = telemetry
