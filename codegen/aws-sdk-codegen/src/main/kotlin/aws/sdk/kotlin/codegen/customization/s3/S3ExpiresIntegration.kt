@@ -57,7 +57,6 @@ class S3ExpiresIntegration : KotlinIntegration {
                 builder.removeMember(expiresMember.memberName)
                 val deprecatedTrait = DeprecatedTrait.builder()
                     .message("Please use `expiresString` which contains the raw, unparsed value of this field.")
-                    .since("2024-04-16")
                     .build()
 
                 builder.addMember(
