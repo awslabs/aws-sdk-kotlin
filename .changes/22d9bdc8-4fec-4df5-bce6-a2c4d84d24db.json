@@ -1,8 +1,0 @@
-{
-    "id": "22d9bdc8-4fec-4df5-bce6-a2c4d84d24db",
-    "type": "bugfix",
-    "description": "Correctly generate presigners, waiters, and paginators for resource operations",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#900"
-    ]
-}

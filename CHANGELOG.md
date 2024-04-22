@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.23] - 04/22/2024
+
+### Features
+* (**bedrockagent**) Releasing the support for simplified configuration and return of control
+* (**bedrockagentruntime**) Releasing the support for simplified configuration and return of control
+* (**paymentcryptography**) Adding support to TR-31/TR-34 exports for optional headers, allowing customers to add additional metadata (such as key version and KSN) when exporting keys from the service.
+* (**route53profiles**) Route 53 Profiles allows you to apply a central DNS configuration across many VPCs regardless of account.
+* (**sagemaker**) This release adds support for Real-Time Collaboration and Shared Space for JupyterLab App on SageMaker Studio.
+* (**transfer**) Adding new API to support remote directory listing using SFTP connector
+
+### Fixes
+* [#900](https://github.com/awslabs/aws-sdk-kotlin/issues/900) Correctly generate presigners, waiters, and paginators for resource operations
+
+### Documentation
+* (**redshiftserverless**) Updates description of schedule field for scheduled actions.
+* (**servicediscovery**) This release adds examples to several Cloud Map actions.
+
 ## [1.1.22] - 04/19/2024
 
 ### Features
