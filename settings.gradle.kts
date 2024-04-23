@@ -62,7 +62,9 @@ file("services").listFiles().forEach {
 
 if (file("services/dynamodb").isServiceDir()) {
     include(":hll:ddb-mapper")
+    include(":hll:ddb-mapper:ddb-mapper-ops-codegen")
     include(":hll:ddb-mapper:dynamodb-mapper")
+    includeBuild("hll/ddb-mapper/dynamodb-mapper/ops-codegen")
     include(":hll:ddb-mapper:dynamodb-mapper-annotation-processor")
     include(":hll:ddb-mapper:dynamodb-mapper-annotations")
     include(":hll:ddb-mapper:tests:ddb-mapper-annotation-processor-test")

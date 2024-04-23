@@ -181,12 +181,8 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/Get
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput$Companion;
 	public abstract fun getDeserializeSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;
 	public abstract fun getLowLevelResponse ()Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput$Companion {
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInputKt {
