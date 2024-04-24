@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.25] - 04/24/2024
+
+### Features
+* (**datasync**) This change allows users to disable and enable the schedules associated with their tasks.
+* (**ec2**) Launching capability for customers to enable or disable automatic assignment of public IPv4 addresses to their network interface
+* (**emrcontainers**) EMRonEKS Service support for SecurityConfiguration enforcement for Spark Jobs.
+* (**entityresolution**) Support Batch Unique IDs Deletion.
+* (**gamelift**) Amazon GameLift releases container fleets support for public preview. Deploy Linux-based containerized game server software for hosting on Amazon GameLift.
+* (**ssm**) Add SSM DescribeInstanceProperties API to public AWS SDK.
+
 ## [1.1.24] - 04/23/2024
 
 ### Features
