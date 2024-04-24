@@ -22,7 +22,6 @@ plugins {
     // ensure the correct version of KGP ends up on our buildscript classpath
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.jvm) apply false
-    alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
     alias(libs.plugins.aws.kotlin.repo.tools.artifactsizemetrics)
 }
 
