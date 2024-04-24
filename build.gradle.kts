@@ -22,13 +22,15 @@ plugins {
     // ensure the correct version of KGP ends up on our buildscript classpath
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.jvm) apply false
-    id("artifact-size-metrics") version "1.0" // TODO: CHANGE TO GET IT FROM REMOTE REPO
+    alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
+    alias(libs.plugins.aws.kotlin.repo.tools.artifactsizemetrics)
 }
 
 artifactSizeMetrics {
     artifactPrefixes = setOf(":services", ":aws-runtime")
     closurePrefixes = setOf(":services")
     significantChangeThresholdPercentage = 5.0
+    projectRepositoryName = "aws-sdk-kotlin"
 }
 
 val testJavaVersion = typedProp<String>("test.java.version")?.let {
