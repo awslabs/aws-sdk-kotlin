@@ -165,11 +165,11 @@ jobs:
             const comments = response.repository.pullRequest.comments.nodes
 
             const mutations = comments
-              .filter(c => c[i].author.login == 'github-actions' && !c[i].isMinimized && c[i].body.startsWith('Affected Artifacts'))
-              .map(c =>
+              .filter(comment => comment.author.login == 'github-actions' && !comment.isMinimized && comment.body.startsWith('Affected Artifacts'))
+              .map(comment =>
                 github.graphql(
                   `mutation {
-                    minimizeComment(input:{subjectId:"${comments[i].id}", classifier:OUTDATED}){
+                    minimizeComment(input:{subjectId:"${comment.id}", classifier:OUTDATED}){
                       clientMutationId
                     }
                   }`
