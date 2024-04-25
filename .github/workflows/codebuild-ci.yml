@@ -86,12 +86,26 @@ jobs:
       - name: Run Service Check Batch and Calculate Artifact Size Metrics
         id: svc-check-batch
         run: | 
-          REPOSITORY=$(echo ${{ github.repository }} | cut -d '/' -f 2) # Remove repo owner from name
+          REPOSITORY=$(echo ${{ github.repository }} | cut -d '/' -f 2)
+          PULL_REQUEST=""
+          INTERNAL=${{ github.event.number }}
+          EXTERNAL=${{ inputs.aws-sdk-kotlin-pr }}
+          
+          if [ ! -z "$INTERNAL" ]; then
+            PULL_REQUEST=${{ github.event.number }}
+            echo "Identified this an internal pull request build: $PULL_REQUEST"
+          elif [ ! -z "$EXTERNAL" ]; then
+            PULL_REQUEST=${{ inputs.aws-sdk-kotlin-pr }}
+            echo "Identified this as an external pull request build: $PULL_REQUEST"
+          else 
+            echo "Couldn't identify this as an internal or external pull request"
+            exit 1
+          fi
           
           .github/scripts/run-codebuild-batch-job.sh \
             --project gh-aws-sdk-kotlin-svc-check-batch \
             --source ${{ github.event.pull_request.head.sha }} \
-            --pr-number ${{ github.event.number }} \
+            --pr-number $PULL_REQUEST \
             --repository $REPOSITORY \
             --external-contributor-sdk-pr-number ${{ inputs.aws-sdk-kotlin-pr }} \
             --external-contributor-smithy-pr-number ${{ inputs.smithy-kotlin-pr }}
@@ -105,7 +119,23 @@ jobs:
             aws codebuild stop-build --id $BUILD_ID
           fi
       - name: Collect Artifact Size Metrics
-        run: ./gradlew collectDelegatedArtifactSizeMetrics -PpullRequest=${{ github.event.number }}
+        run: |
+          PULL_REQUEST=""
+          INTERNAL=${{ github.event.number }}
+          EXTERNAL=${{ inputs.aws-sdk-kotlin-pr }}
+          
+          if [ ! -z "$INTERNAL" ]; then
+            PULL_REQUEST=${{ github.event.number }}
+            echo "Identified this an internal pull request build: $PULL_REQUEST"
+          elif [ ! -z "$EXTERNAL" ]; then
+            PULL_REQUEST=${{ inputs.aws-sdk-kotlin-pr }}
+            echo "Identified this as an external pull request build: $PULL_REQUEST"
+          else 
+            echo "Couldn't identify this as an internal or external pull request"
+            exit 1
+          fi
+          
+          ./gradlew collectDelegatedArtifactSizeMetrics -PpullRequest=$PULL_REQUEST
       - name: Analyze Artifact Size Metrics
         run: ./gradlew analyzeArtifactSizeMetrics
       - name: Show Results
@@ -134,18 +164,19 @@ jobs:
             const response = await github.graphql(getComments)
             const comments = response.repository.pullRequest.comments.nodes
 
-            for (const i in comments) {
-              if (comments[i].author.login == 'github-actions' && !comments[i].isMinimized && comments[i].body.startsWith('Affected Artifacts')) {
-                const hideComment = 
-                  `mutation { 
+            const mutations = comments
+              .filter(c => c[i].author.login == 'github-actions' && !c[i].isMinimized && c[i].body.startsWith('Affected Artifacts'))
+              .map(c =>
+                const hideComment =
+                  `mutation {
                     minimizeComment(input:{subjectId:"${comments[i].id}", classifier:OUTDATED}){
                       clientMutationId
-                    } 
+                    }
                   }`
             
-                await github.graphql(hideComment)
-              }
-            }
+                github.graphql(hideComment)
+              )
+            await Promise.all(mutations)
 
             const fs = require('node:fs')
             const comment = fs.readFileSync('build/reports/metrics/artifact-analysis.md', 'utf8')
@@ -165,6 +196,7 @@ jobs:
           cd build/reports/metrics
           cat has-significant-change.txt | grep false || {
             echo An artifact increased in size by more than allowed or a new artifact was created.
+            echo If this is expected please add the 'acknowledge-artifact-size-increase' label to this pull request.
             exit 1
           }
 
@@ -201,10 +233,6 @@ jobs:
       - name: Collect Artifact Size Metrics
         run: ./gradlew collectDelegatedArtifactSizeMetrics -Prelease=${{ github.event.release.tag_name }}
       - name: Save Artifact Size Metrics
-        run: |
-          cd build/reports/metrics/
-          REPOSITORY=$(echo ${{ github.repository }} | cut -d '/' -f 2) # Remove repo owner from name
-          aws s3 cp artifact-size-metrics.csv s3://${{ secrets.ARTIFACT_METRICS_BUCKET }}/$REPOSITORY-${{ github.event.release.tag_name }}-release.csv
-          aws s3 cp artifact-size-metrics.csv s3://${{ secrets.ARTIFACT_METRICS_BUCKET }}/$REPOSITORY-latest-release.csv
+        run: ./gradlew saveArtifactSizeMetrics
       - name: Put Artifact Size Metrics in CloudWatch
         run: ./gradlew putArtifactSizeMetricsInCloudWatch -Prelease=${{ github.event.release.tag_name }}
