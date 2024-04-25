@@ -167,14 +167,13 @@ jobs:
             const mutations = comments
               .filter(c => c[i].author.login == 'github-actions' && !c[i].isMinimized && c[i].body.startsWith('Affected Artifacts'))
               .map(c =>
-                const hideComment =
+                github.graphql(
                   `mutation {
                     minimizeComment(input:{subjectId:"${comments[i].id}", classifier:OUTDATED}){
                       clientMutationId
                     }
                   }`
-            
-                github.graphql(hideComment)
+                )
               )
             await Promise.all(mutations)
 
