@@ -135,4 +135,4 @@ kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-co
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version"}
 aws-kotlin-repo-tools-kmp = { id = "aws.sdk.kotlin.gradle.kmp", version.ref = "aws-kotlin-repo-tools-version" }
 aws-kotlin-repo-tools-smithybuild = { id = "aws.sdk.kotlin.gradle.smithybuild", version.ref = "aws-kotlin-repo-tools-version" }
-aws-kotlin-repo-tools-artifactsizemetrics = { id = "artifact-size-metrics", version.ref = "aws-kotlin-repo-tools-version" }
+aws-kotlin-repo-tools-artifactsizemetrics = { id = "aws.sdk.kotlin.gradle.artifactsizemetrics", version.ref = "aws-kotlin-repo-tools-version" }
