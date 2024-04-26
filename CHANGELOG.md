@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.27] - 04/26/2024
+
+### Features
+* (**codepipeline**) Add ability to manually and automatically roll back a pipeline stage to a previously successful execution.
+* (**cognitoidentityprovider**) Add LimitExceededException to SignUp errors
+* (**connectcampaigns**) This release adds support for specifying if Answering Machine should wait for prompt sound.
+* (**marketplaceentitlementservice**) Releasing minor endpoint updates.
+* (**oam**) This release introduces support for Source Accounts to define which Metrics and Logs to share with the Monitoring Account
+* (**rds**) SupportsLimitlessDatabase field added to describe-db-engine-versions to indicate whether the DB engine version supports Aurora Limitless Database.
+* (**support**) Releasing minor endpoint updates.
+
 ## [1.1.26] - 04/25/2024
 
 ### Features
