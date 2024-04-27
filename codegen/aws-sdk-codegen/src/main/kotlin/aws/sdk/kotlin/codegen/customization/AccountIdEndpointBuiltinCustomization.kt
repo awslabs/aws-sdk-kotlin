@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
 import aws.sdk.kotlin.codegen.endpoints.AwsBuiltins
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
@@ -13,7 +14,6 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.getEndpointRules
-import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.model.Model
@@ -42,7 +42,12 @@ class AccountIdEndpointBuiltinCustomization : KotlinIntegration {
     }
 
     override val sectionWriters: List<SectionWriterBinding>
-        get() = listOf(SectionWriterBinding(ServiceClientGenerator.Sections.FinalizeConfig, resolveAccountIdEndpointModeSectionWriter))
+        get() = listOf(
+            SectionWriterBinding(
+                ServiceClientCompanionObjectWriter.FinalizeEnvironmentalConfig,
+                resolveAccountIdEndpointModeSectionWriter,
+            ),
+        )
 
     private val resolveAccountIdEndpointModeSectionWriter = AppendingSectionWriter { writer ->
         writer.write(
