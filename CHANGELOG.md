@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0] - 04/27/2024
+
+### Fixes
+* [#1211](https://github.com/awslabs/aws-sdk-kotlin/issues/1211) ⚠️ **IMPORTANT**: Apply clock skew interceptor to clients created via `invoke`
+
+### Miscellaneous
+* ⚠️ **IMPORTANT**: Upgrade to latest versions of OkHttp, Okio, Kotlin
+
 ## [1.1.27] - 04/26/2024
 
 ### Features
