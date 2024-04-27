@@ -1,5 +1,92 @@
 # Changelog
 
+## [1.1.27] - 04/26/2024
+
+### Features
+* (**codepipeline**) Add ability to manually and automatically roll back a pipeline stage to a previously successful execution.
+* (**cognitoidentityprovider**) Add LimitExceededException to SignUp errors
+* (**connectcampaigns**) This release adds support for specifying if Answering Machine should wait for prompt sound.
+* (**marketplaceentitlementservice**) Releasing minor endpoint updates.
+* (**oam**) This release introduces support for Source Accounts to define which Metrics and Logs to share with the Monitoring Account
+* (**rds**) SupportsLimitlessDatabase field added to describe-db-engine-versions to indicate whether the DB engine version supports Aurora Limitless Database.
+* (**support**) Releasing minor endpoint updates.
+
+## [1.1.26] - 04/25/2024
+
+### Features
+* (**appsync**) UpdateGraphQLAPI documentation update and datasource introspection secret arn update
+* (**fms**) AWS Firewall Manager adds support for network ACL policies to manage Amazon Virtual Private Cloud (VPC) network access control lists (ACLs) for accounts in your organization.
+* (**ivs**) Bug Fix: IVS does not support arns with the `svs` prefix
+* (**ivsrealtime**) Bug Fix: IVS Real Time does not support ARNs using the `svs` prefix.
+* (**sfn**) Add new ValidateStateMachineDefinition operation, which performs syntax checking on the definition of a Amazon States Language (ASL) state machine.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation for setting local time zones for RDS for Db2 DB instances.
+
+## [1.1.25] - 04/24/2024
+
+### Features
+* (**datasync**) This change allows users to disable and enable the schedules associated with their tasks.
+* (**ec2**) Launching capability for customers to enable or disable automatic assignment of public IPv4 addresses to their network interface
+* (**emrcontainers**) EMRonEKS Service support for SecurityConfiguration enforcement for Spark Jobs.
+* (**entityresolution**) Support Batch Unique IDs Deletion.
+* (**gamelift**) Amazon GameLift releases container fleets support for public preview. Deploy Linux-based containerized game server software for hosting on Amazon GameLift.
+* (**ssm**) Add SSM DescribeInstanceProperties API to public AWS SDK.
+
+## [1.1.24] - 04/23/2024
+
+### Features
+* (**bedrock**) This release introduces Model Evaluation and Guardrails for Amazon Bedrock.
+* (**bedrockagent**) Introducing the ability to create multiple data sources per knowledge base, specify S3 buckets as data sources from external accounts, and exposing levers to define the deletion behavior of the underlying vector store data.
+* (**bedrockagentruntime**) This release introduces zero-setup file upload support for the RetrieveAndGenerate API. This allows you to chat with your data without setting up a Knowledge Base.
+* (**bedrockruntime**) This release introduces Guardrails for Amazon Bedrock.
+* (**costexplorer**) Added additional metadata that might be applicable to your reservation recommendations.
+* (**ec2**) This release introduces EC2 AMI Deregistration Protection, a new AMI property that can be enabled by customers to protect an AMI against an unintended deregistration. This release also enables the AMI owners to view the AMI 'LastLaunchedTime' in DescribeImages API.
+* (**workspacesweb**) Added InstanceType and MaxConcurrentSessions parameters on CreatePortal and UpdatePortal Operations as well as the ability to read Customer Managed Key & Additional Encryption Context parameters on supported resources (Portal, BrowserSettings, UserSettings, IPAccessSettings)
+
+### Documentation
+* (**pi**) Clarifies how aggregation works for GetResourceMetrics in the Performance Insights API.
+* (**rds**) Fix the example ARN for ModifyActivityStreamRequest
+
+## [1.1.23] - 04/22/2024
+
+### Features
+* (**bedrockagent**) Releasing the support for simplified configuration and return of control
+* (**bedrockagentruntime**) Releasing the support for simplified configuration and return of control
+* (**paymentcryptography**) Adding support to TR-31/TR-34 exports for optional headers, allowing customers to add additional metadata (such as key version and KSN) when exporting keys from the service.
+* (**route53profiles**) Route 53 Profiles allows you to apply a central DNS configuration across many VPCs regardless of account.
+* (**sagemaker**) This release adds support for Real-Time Collaboration and Shared Space for JupyterLab App on SageMaker Studio.
+* (**transfer**) Adding new API to support remote directory listing using SFTP connector
+
+### Fixes
+* [#900](https://github.com/awslabs/aws-sdk-kotlin/issues/900) Correctly generate presigners, waiters, and paginators for resource operations
+
+### Documentation
+* (**redshiftserverless**) Updates description of schedule field for scheduled actions.
+* (**servicediscovery**) This release adds examples to several Cloud Map actions.
+
+## [1.1.22] - 04/19/2024
+
+### Features
+* (**glue**) Adding RowFilter in the response for GetUnfilteredTableMetadata API
+* (**internetmonitor**) This update introduces the GetInternetEvent and ListInternetEvents APIs, which provide access to internet events displayed on the Amazon CloudWatch Internet Weather Map.
+* (**personalize**) This releases auto training capability while creating a solution and automatically syncing latest solution versions when creating/updating a campaign
+* Customize S3's `Expires` field, including adding a new `ExpiresString` field for output types.
+
+### Fixes
+* [#1210](https://github.com/awslabs/aws-sdk-kotlin/issues/1210) Service client based identity providers now respect AWS_ENDPOINT_URL_SERVICE environment variables
+
+## [1.1.21] - 04/18/2024
+
+### Features
+* (**drs**) Outpost ARN added to Source Server and Recovery Instance
+* (**emrserverless**) This release adds the capability to publish detailed Spark engine metrics to Amazon Managed Service for Prometheus (AMP) for  enhanced monitoring for Spark jobs.
+* (**guardduty**) Added IPv6Address fields for local and remote IP addresses
+* (**quicksight**) This release adds support for the Cross Sheet Filter and Control features, and support for warnings in asset imports for any permitted errors encountered during execution
+* (**rolesanywhere**) This release introduces the PutAttributeMapping and DeleteAttributeMapping APIs. IAM Roles Anywhere now provides the capability to define a set of mapping rules, allowing customers to specify which data is extracted from their X.509 end-entity certificates.
+* (**sagemaker**) Removed deprecated enum values and updated API documentation.
+* (**workspaces**) Adds new APIs for managing and sharing WorkSpaces BYOL configuration across accounts.
+
 ## [1.1.20] - 04/17/2024
 
 ### Features

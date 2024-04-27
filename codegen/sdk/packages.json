@@ -1687,6 +1687,12 @@
             "brazilName": "AwsSdkKotlinRoute53RecoveryReadiness"
         },
         {
+            "sdkId": "Route53Profiles",
+            "namespace": "aws.sdk.kotlin.services.route53profiles",
+            "artifactName": "route53profiles",
+            "brazilName": "AwsSdkKotlinRoute53profiles"
+        },
+        {
             "sdkId": "Route53Resolver",
             "namespace": "aws.sdk.kotlin.services.route53resolver",
             "artifactName": "route53resolver",
