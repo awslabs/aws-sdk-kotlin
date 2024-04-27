@@ -1,5 +1,5 @@
 [versions]
-kotlin-version = "1.9.21"
+kotlin-version = "1.9.23"
 dokka-version = "1.9.10"
 
 aws-kotlin-repo-tools-version = "0.4.0"
