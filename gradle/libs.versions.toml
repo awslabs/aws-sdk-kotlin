@@ -71,6 +71,7 @@ smithy-kotlin-serde = { module = "aws.smithy.kotlin:serde", version.ref = "smith
 smithy-kotlin-serde-form-url = { module = "aws.smithy.kotlin:serde-form-url", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-serde-json = { module = "aws.smithy.kotlin:serde-json", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-serde-xml = { module = "aws.smithy.kotlin:serde-xml", version.ref = "smithy-kotlin-runtime-version" }
+smithy-kotlin-serde-cbor = { module = "aws.smithy.kotlin:serde-cbor", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-smithy-client = { module = "aws.smithy.kotlin:smithy-client", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-smithy-test = { module = "aws.smithy.kotlin:smithy-test", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-telemetry-api = { module = "aws.smithy.kotlin:telemetry-api", version.ref = "smithy-kotlin-runtime-version" }
