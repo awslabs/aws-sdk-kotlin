@@ -1,5 +1,46 @@
 # Changelog
 
+## [1.2.1] - 04/29/2024
+
+### Features
+* (**amplify**) Updating max results limit for listing any resources (Job, Artifacts, Branch, BackendResources, DomainAssociation) to 50 with the exception of list apps that where max results can be up to 100.
+* (**connectcases**) This feature releases DeleteField, DeletedLayout, and DeleteTemplate API's
+* (**inspector2**) Update Inspector2 to include new Agentless API parameters.
+* (**timestreamquery**) This change allows users to update and describe account settings associated with their accounts.
+* (**transcribe**) This update provides error messaging for generative call summarization in Transcribe Call Analytics
+* (**trustedadvisor**) This release adds the BatchUpdateRecommendationResourceExclusion API to support batch updates of Recommendation Resource exclusion statuses and introduces a new exclusion status filter to the ListRecommendationResources and ListOrganizationRecommendationResources APIs.
+
+## [1.2.0] - 04/27/2024
+
+### Fixes
+* [#1211](https://github.com/awslabs/aws-sdk-kotlin/issues/1211) ⚠️ **IMPORTANT**: Apply clock skew interceptor to clients created via `invoke`
+
+### Miscellaneous
+* ⚠️ **IMPORTANT**: Upgrade to latest versions of OkHttp, Okio, Kotlin
+
+## [1.1.27] - 04/26/2024
+
+### Features
+* (**codepipeline**) Add ability to manually and automatically roll back a pipeline stage to a previously successful execution.
+* (**cognitoidentityprovider**) Add LimitExceededException to SignUp errors
+* (**connectcampaigns**) This release adds support for specifying if Answering Machine should wait for prompt sound.
+* (**marketplaceentitlementservice**) Releasing minor endpoint updates.
+* (**oam**) This release introduces support for Source Accounts to define which Metrics and Logs to share with the Monitoring Account
+* (**rds**) SupportsLimitlessDatabase field added to describe-db-engine-versions to indicate whether the DB engine version supports Aurora Limitless Database.
+* (**support**) Releasing minor endpoint updates.
+
+## [1.1.26] - 04/25/2024
+
+### Features
+* (**appsync**) UpdateGraphQLAPI documentation update and datasource introspection secret arn update
+* (**fms**) AWS Firewall Manager adds support for network ACL policies to manage Amazon Virtual Private Cloud (VPC) network access control lists (ACLs) for accounts in your organization.
+* (**ivs**) Bug Fix: IVS does not support arns with the `svs` prefix
+* (**ivsrealtime**) Bug Fix: IVS Real Time does not support ARNs using the `svs` prefix.
+* (**sfn**) Add new ValidateStateMachineDefinition operation, which performs syntax checking on the definition of a Amazon States Language (ASL) state machine.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation for setting local time zones for RDS for Db2 DB instances.
+
 ## [1.1.25] - 04/24/2024
 
 ### Features
