@@ -8,8 +8,11 @@ error_exit() {
 PROJECT_NAME=gh-aws-sdk-kotlin-svc-check-batch
 # get the source version to be built (defaults to main branch if not specified)
 SOURCE_VERSION=main
-SDK_PR=""
-SMITHY_PR=""
+GITHUB_RELEASE=""
+GITHUB_PULL_REQUEST_NUMBER=""
+GITHUB_REPOSITORY_NO_ORG=""
+EXTERNAL_CONTRIBUTOR_SDK_PR=""
+EXTERNAL_CONTRIBUTOR_SMITHY_PR=""
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -29,19 +32,43 @@ while [[ $# -gt 0 ]]; do
             shift 2
           fi
           ;;
-        --sdk-pr)
+        --release)
           if [[ "$2" == --* ]]; then
             shift 1
           else
-            SDK_PR="$2"
+            GITHUB_RELEASE="$2"
             shift 2
           fi
           ;;
-        --smithy-pr)
+        --pr-number)
+          if [[ "$2" == --* ]]; then
+            shift 1
+          else
+            GITHUB_PULL_REQUEST_NUMBER="$2"
+            shift 2
+          fi
+          ;;
+        --repository)
+          if [[ "$2" == --* ]]; then
+            shift 1
+          else
+            GITHUB_REPOSITORY_NO_ORG="$2"
+            shift 2
+          fi
+          ;;
+        --external-contributor-sdk-pr-number)
+          if [[ "$2" == --* ]]; then
+            shift 1
+          else
+            EXTERNAL_CONTRIBUTOR_SDK_PR="$2"
+            shift 2
+          fi
+          ;;
+        --external-contributor-smithy-pr-number)
           if [[ "$2" == --* || -z "$2" ]]; then
             shift 1
           else
-            SMITHY_PR="$2"
+            EXTERNAL_CONTRIBUTOR_SMITHY_PR="$2"
             shift 2
           fi
           ;;
@@ -52,8 +79,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-export SDK_PR
-export SMITHY_PR
+export GITHUB_RELEASE
+export GITHUB_PULL_REQUEST_NUMBER
+export GITHUB_REPOSITORY_NO_ORG
+export EXTERNAL_CONTRIBUTOR_SDK_PR
+export EXTERNAL_CONTRIBUTOR_SMITHY_PR
 
 echo "Starting CodeBuild project ${PROJECT_NAME}"
 

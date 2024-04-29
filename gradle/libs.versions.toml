@@ -2,7 +2,7 @@
 kotlin-version = "1.9.23"
 dokka-version = "1.9.10"
 
-aws-kotlin-repo-tools-version = "0.4.0"
+aws-kotlin-repo-tools-version = "0.4.4"
 
 # libs
 coroutines-version = "1.7.3"
@@ -135,3 +135,4 @@ kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-co
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version"}
 aws-kotlin-repo-tools-kmp = { id = "aws.sdk.kotlin.gradle.kmp", version.ref = "aws-kotlin-repo-tools-version" }
 aws-kotlin-repo-tools-smithybuild = { id = "aws.sdk.kotlin.gradle.smithybuild", version.ref = "aws-kotlin-repo-tools-version" }
+aws-kotlin-repo-tools-artifactsizemetrics = { id = "aws.sdk.kotlin.gradle.artifactsizemetrics", version.ref = "aws-kotlin-repo-tools-version" }
