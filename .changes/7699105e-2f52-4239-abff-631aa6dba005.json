@@ -1,8 +1,0 @@
-{
-    "id": "7699105e-2f52-4239-abff-631aa6dba005",
-    "type": "bugfix",
-    "description": "Service client based identity providers now respect AWS_ENDPOINT_URL_SERVICE environment variables",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1210"
-    ]
-}
