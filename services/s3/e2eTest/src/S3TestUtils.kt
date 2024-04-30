@@ -159,6 +159,10 @@ object S3TestUtils {
             jobs.joinAll()
 
             client.deleteBucket { bucket = bucketName }
+
+            client.waitUntilBucketExists {
+                bucket = bucketName
+            }
         } catch (ex: Exception) {
             println("Failed to delete bucket: $bucketName")
             throw ex
