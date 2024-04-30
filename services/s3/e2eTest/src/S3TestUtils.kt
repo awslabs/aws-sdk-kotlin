@@ -13,6 +13,7 @@ import aws.sdk.kotlin.services.s3.model.LifecycleRule
 import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
+import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketNotExists
 import aws.sdk.kotlin.services.s3control.*
 import aws.sdk.kotlin.services.s3control.model.*
 import aws.sdk.kotlin.services.sts.StsClient
@@ -160,7 +161,7 @@ object S3TestUtils {
 
             client.deleteBucket { bucket = bucketName }
 
-            client.waitUntilBucketExists {
+            client.waitUntilBucketNotExists {
                 bucket = bucketName
             }
         } catch (ex: Exception) {
