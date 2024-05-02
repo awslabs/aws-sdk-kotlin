@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.4] - 05/02/2024
+
+### Features
+* (**dynamodb**) This release adds support to specify an optional, maximum OnDemandThroughput for DynamoDB tables and global secondary indexes in the CreateTable or UpdateTable APIs. You can also override the OnDemandThroughput settings by calling the ImportTable, RestoreFromPointInTime, or RestoreFromBackup APIs.
+* (**ec2**) This release includes a new API for retrieving the public endorsement key of the EC2 instance's Nitro Trusted Platform Module (NitroTPM).
+* (**personalize**) This releases ability to delete users and their data, including their metadata and interactions data, from a dataset group.
+* (**redshiftserverless**) Update Redshift Serverless List Scheduled Actions Output Response to include Namespace Name.
+
 ## [1.2.3] - 05/01/2024
 
 ### Features
