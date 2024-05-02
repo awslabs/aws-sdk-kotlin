@@ -145,7 +145,7 @@ jobs:
             const getComments = 
               `query { 
                 repository(owner:"${context.repo.owner}", name:"${context.repo.repo}"){
-                  pullRequest(number: ${context.issue.number}) {
+                  pullRequest(number: ${context.issue.number ?? process.env.SDK_PR}) {
                     id
                     comments(last:100) {
                       nodes {
@@ -232,6 +232,6 @@ jobs:
       - name: Collect Artifact Size Metrics
         run: ./gradlew collectDelegatedArtifactSizeMetrics -Prelease=${{ github.event.release.tag_name }}
       - name: Save Artifact Size Metrics
-        run: ./gradlew saveArtifactSizeMetrics
+        run: ./gradlew saveArtifactSizeMetrics -Prelease=${{ github.event.release.tag_name }}
       - name: Put Artifact Size Metrics in CloudWatch
         run: ./gradlew putArtifactSizeMetricsInCloudWatch -Prelease=${{ github.event.release.tag_name }}
