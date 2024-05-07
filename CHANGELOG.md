@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.7] - 05/07/2024
+
+### Features
+* (**budgets**) This release adds tag support for budgets and budget actions.
+* (**resiliencehub**) AWS Resilience Hub has expanded its drift detection capabilities by introducing a new type of drift detection - application resource drift. This new enhancement detects changes, such as the addition or deletion of resources within the application's input sources.
+
+### Documentation
+* (**b2bi**) Documentation update to clarify the MappingTemplate definition.
+* (**route53profiles**) Doc only update for Route 53 profiles that fixes some link  issues
+
 ## [1.2.6] - 05/06/2024
 
 ### Features
