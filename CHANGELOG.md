@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.8] - 05/08/2024
+
+### Features
+* (**cognitoidentityprovider**) Add EXTERNAL_PROVIDER enum value to UserStatusType.
+* (**ec2**) Adding Precision Hardware Clock (PHC) to public API DescribeInstanceTypes
+* (**ecr**) This release adds pull through cache rules support for GitLab container registry in Amazon ECR.
+* (**polly**) Add new engine - generative - that builds the most expressive conversational voices.
+* (**sqs**) This release adds MessageSystemAttributeNames to ReceiveMessageRequest to replace AttributeNames.
+
+### Documentation
+* (**fms**) The policy scope resource tag is always a string value, either a non-empty string or an empty string.
+
 ## [1.2.7] - 05/07/2024
 
 ### Features
