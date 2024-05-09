@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.9] - 05/09/2024
+
+### Features
+* (**bedrockagentruntime**) This release adds support to provide guardrail configuration and modify inference parameters that are then used in RetrieveAndGenerate API in Agents for Amazon Bedrock.
+* (**pinpoint**) This release adds support for specifying email message headers for Email Templates, Campaigns, Journeys and Send Messages.
+* (**ssmsap**) Added support for application-aware start/stop of SAP applications running on EC2 instances, with SSM for SAP
+* (**verifiedpermissions**) Adds policy effect and actions fields to Policy API's.
+
+### Documentation
+* (**route53resolver**) Update the DNS Firewall settings to correct a spelling issue.
+
 ## [1.2.8] - 05/08/2024
 
 ### Features
