@@ -37,12 +37,6 @@
             "brazilName": "AwsSdkKotlinAccount"
         },
         {
-            "sdkId": "Alexa For Business",
-            "namespace": "aws.sdk.kotlin.services.alexaforbusiness",
-            "artifactName": "alexaforbusiness",
-            "brazilName": "AwsSdkKotlinAlexaForBusiness"
-        },
-        {
             "sdkId": "Amplify",
             "namespace": "aws.sdk.kotlin.services.amplify",
             "artifactName": "amplify",

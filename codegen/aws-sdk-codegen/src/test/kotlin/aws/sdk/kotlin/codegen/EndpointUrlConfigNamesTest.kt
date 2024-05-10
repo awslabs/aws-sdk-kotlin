@@ -74,11 +74,6 @@ private const val testSuiteJson = """
     "service_envvar_name": "AWS_ENDPOINT_URL_ACM_PCA"
   },
   {
-    "service_id": "Alexa For Business",
-    "services_section_name": "alexa_for_business",
-    "service_envvar_name": "AWS_ENDPOINT_URL_ALEXA_FOR_BUSINESS"
-  },
-  {
     "service_id": "amp",
     "services_section_name": "amp",
     "service_envvar_name": "AWS_ENDPOINT_URL_AMP"
@@ -1713,7 +1708,6 @@ private const val javaClientNamesJson = """
   "nimble": "NimbleClient",
   "Lex Model Building Service": "LexModelBuildingClient",
   "Medical Imaging": "MedicalImagingClient",
-  "Alexa For Business": "AlexaForBusinessClient",
   "Auto Scaling": "AutoScalingClient",
   "RoboMaker": "RoboMakerClient",
   "SES": "SesClient",
