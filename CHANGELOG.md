@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.10] - 05/10/2024
+
+### Features
+* (**applicationdiscoveryservice**) add v2 smoke tests and smithy smokeTests trait for SDK testing
+* (**greengrassv2**) Mark ComponentVersion in ComponentDeploymentSpecification as required.
+* (**sagemaker**) Introduced support for G6 instance types on Sagemaker Notebook Instances and on SageMaker Studio for JupyterLab and CodeEditor applications.
+* (**ssooidc**) Updated request parameters for PKCE support.
+
 ## [1.2.9] - 05/09/2024
 
 ### Features
