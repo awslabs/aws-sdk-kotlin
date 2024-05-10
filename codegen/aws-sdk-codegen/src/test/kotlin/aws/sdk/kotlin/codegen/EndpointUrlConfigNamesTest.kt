@@ -729,11 +729,6 @@ private const val testSuiteJson = """
     "service_envvar_name": "AWS_ENDPOINT_URL_HEALTHLAKE"
   },
   {
-    "service_id": "Honeycode",
-    "services_section_name": "honeycode",
-    "service_envvar_name": "AWS_ENDPOINT_URL_HONEYCODE"
-  },
-  {
     "service_id": "IAM",
     "services_section_name": "iam",
     "service_envvar_name": "AWS_ENDPOINT_URL_IAM"
@@ -1861,7 +1856,6 @@ private const val javaClientNamesJson = """
   "IoT Events Data": "IotEventsDataClient",
   "Storage Gateway": "StorageGatewayClient",
   "grafana": "GrafanaClient",
-  "Honeycode": "HoneycodeClient",
   "rbin": "RbinClient",
   "S3Outposts": "S3OutpostsClient",
   "Application Auto Scaling": "ApplicationAutoScalingClient",

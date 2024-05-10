@@ -883,12 +883,6 @@
             "brazilName": "AwsSdkKotlinHealthlake"
         },
         {
-            "sdkId": "Honeycode",
-            "namespace": "aws.sdk.kotlin.services.honeycode",
-            "artifactName": "honeycode",
-            "brazilName": "AwsSdkKotlinHoneycode"
-        },
-        {
             "sdkId": "IAM",
             "namespace": "aws.sdk.kotlin.services.iam",
             "artifactName": "iam",
