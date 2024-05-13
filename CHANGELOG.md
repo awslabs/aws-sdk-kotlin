@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.11] - 05/13/2024
+
+### Features
+* (**eventbridge**) Amazon EventBridge introduces KMS customer-managed key (CMK) encryption support for custom and partner events published on EventBridge Event Bus (including default bus) and UpdateEventBus API.
+* (**vpclattice**) This release adds TLS Passthrough support. It also increases max number of target group per rule to 10.
+
 ## [1.2.10] - 05/10/2024
 
 ### Features
