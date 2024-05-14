@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.12] - 05/14/2024
+
+### Features
+* (**connect**) Amazon Connect provides enhanced search capabilities for flows & flow modules on the Connect admin website and programmatically using APIs. You can search for flows and flow modules by name, description, type, status, and tags, to filter and identify a specific flow in your Connect instances.
+* (**s3**) Updated a few x-id in the http uri traits
+
+### Miscellaneous
+* Remove Alexa for Business service
+* Remove Honeycode service
+
 ## [1.2.11] - 05/13/2024
 
 ### Features
