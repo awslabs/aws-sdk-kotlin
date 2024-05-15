@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.13] - 05/15/2024
+
+### Features
+* (**bedrockagentruntime**) Updating Bedrock Knowledge Base Metadata & Filters feature with two new filters listContains and stringContains
+* (**codebuild**) CodeBuild Reserved Capacity VPC Support
+* (**datasync**) Task executions now display a CANCELLING status when an execution is in the process of being cancelled.
+* (**grafana**) This release adds new ServiceAccount and ServiceAccountToken APIs.
+* (**medicalimaging**) Added support for importing medical imaging data from Amazon S3 buckets across accounts and regions.
+
+### Documentation
+* (**securityhub**) Documentation-only update for AWS Security Hub
+
 ## [1.2.12] - 05/14/2024
 
 ### Features
