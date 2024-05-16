@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.14] - 05/16/2024
+
+### Features
+* (**acmpca**) This release adds support for waiters to fail on AccessDeniedException when having insufficient permissions
+* (**kafka**) AWS MSK support for Broker Removal.
+* (**mwaa**) Amazon MWAA now supports Airflow web server auto scaling to automatically handle increased demand from REST APIs, Command Line Interface (CLI), or more Airflow User Interface (UI) users. Customers can specify maximum and minimum web server instances during environment creation and update workflow.
+* (**quicksight**) This release adds DescribeKeyRegistration and UpdateKeyRegistration APIs to manage QuickSight Customer Managed Keys (CMK).
+* (**sagemaker**) Introduced WorkerAccessConfiguration to SageMaker Workteam. This allows customers to configure resource access for workers in a workteam.
+
+### Documentation
+* (**connect**) Adding Contact Flow metrics to the GetMetricDataV2 API
+* (**secretsmanager**) Documentation updates for AWS Secrets Manager
+
 ## [1.2.13] - 05/15/2024
 
 ### Features
