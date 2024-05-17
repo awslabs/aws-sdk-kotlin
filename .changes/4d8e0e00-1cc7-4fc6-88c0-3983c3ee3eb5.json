@@ -1,0 +1,8 @@
+{
+    "id": "4d8e0e00-1cc7-4fc6-88c0-3983c3ee3eb5",
+    "type": "misc",
+    "description": "Upgrade to version [**1.2.4**](https://github.com/smithy-lang/smithy-kotlin/releases/tag/v1.2.4) of **smithy-kotlin** to pick up fix for `http.nonProxyHosts` wildcards",
+    "issues": [
+        "smithy-lang/smithy-kotlin#1092"
+    ]
+}
