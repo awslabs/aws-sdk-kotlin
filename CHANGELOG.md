@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.15] - 05/17/2024
+
+### Features
+* (**applicationautoscaling**) add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**codebuild**) Aws CodeBuild now supports 36 hours build timeout
+* (**elasticloadbalancingv2**) This release adds dualstack-without-public-ipv4 IP address type for ALB.
+* (**lakeformation**) Introduces a new API, GetDataLakePrincipal, that returns the identity of the invoking principal
+* (**transfer**) Enable use of CloudFormation traits in Smithy model to improve generated CloudFormation schema from the Smithy API model.
+
+### Miscellaneous
+* [#1092](https://github.com/smithy-lang/smithy-kotlin/issues/1092) Upgrade to version [**1.2.4**](https://github.com/smithy-lang/smithy-kotlin/releases/tag/v1.2.4) of **smithy-kotlin** to pick up fix for `http.nonProxyHosts` wildcards
+
 ## [1.2.14] - 05/16/2024
 
 ### Features
