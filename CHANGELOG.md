@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.16] - 05/20/2024
+
+### Features
+* (**bedrockagent**) This release adds support for using Guardrails with Bedrock Agents.
+* (**bedrockagentruntime**) This release adds support for using Guardrails with Bedrock Agents.
+* (**controltower**) Added ListControlOperations API and filtering support for ListEnabledControls API. Updates also includes added metadata for enabled controls and control operations.
+* (**osis**) Add support for creating an OpenSearch Ingestion pipeline that is attached to a provided VPC. Add information about the destinations of an OpenSearch Ingestion pipeline to the GetPipeline and ListPipelines APIs.
+* (**rds**) This release adds support for EngineLifecycleSupport on DBInstances, DBClusters, and GlobalClusters.
+* (**secretsmanager**) add v2 smoke tests and smithy smokeTests trait for SDK testing
+
 ## [1.2.15] - 05/17/2024
 
 ### Features
