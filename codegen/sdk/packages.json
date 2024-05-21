@@ -1201,6 +1201,12 @@
             "brazilName": "AwsSdkKotlinMacie2"
         },
         {
+            "sdkId": "MailManager",
+            "namespace": "aws.sdk.kotlin.services.mailmanager",
+            "artifactName": "mailmanager",
+            "brazilName": "AwsSdkKotlinMailmanager"
+        },
+        {
             "sdkId": "ManagedBlockchain",
             "namespace": "aws.sdk.kotlin.services.managedblockchain",
             "artifactName": "managedblockchain",
