@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.19] - 05/23/2024
+
+### Features
+* (**emrserverless**) This release adds the capability to run interactive workloads using Apache Livy Endpoint.
+
+### Documentation
+* (**opsworks**) Documentation-only update for OpsWorks Stacks.
+
 ## [1.2.18] - 05/22/2024
 
 ### Features
