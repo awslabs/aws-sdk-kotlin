@@ -101,7 +101,7 @@ public class StsAssumeRoleCredentialsProvider(
         // NOTE: multi region access points require regional STS endpoints
         val provider = this
         val telemetry = coroutineContext.telemetryProvider
-        val client = StsClient {
+        val client = StsClient.fromEnvironment {
             region = provider.region ?: GLOBAL_STS_PARTITION_ENDPOINT
             credentialsProvider = provider.bootstrapCredentialsProvider
             httpClient = provider.httpClient

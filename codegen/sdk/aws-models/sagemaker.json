@@ -1374,6 +1374,54 @@
                         "smithy.api#enumValue": "ml.g5.48xlarge"
                     }
                 },
+                "ML_G6_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.xlarge"
+                    }
+                },
+                "ML_G6_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.2xlarge"
+                    }
+                },
+                "ML_G6_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.4xlarge"
+                    }
+                },
+                "ML_G6_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.8xlarge"
+                    }
+                },
+                "ML_G6_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.12xlarge"
+                    }
+                },
+                "ML_G6_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.16xlarge"
+                    }
+                },
+                "ML_G6_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.24xlarge"
+                    }
+                },
+                "ML_G6_48XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.48xlarge"
+                    }
+                },
                 "ML_GEOSPATIAL_INTERACTIVE": {
                     "target": "smithy.api#Unit",
                     "traits": {
@@ -4356,24 +4404,6 @@
                     "traits": {
                         "smithy.api#enumValue": "AWS/Textract/AnalyzeDocument/Forms/V1"
                     }
-                },
-                "TEXTRACT_ANALYZE_EXPENSE": {
-                    "target": "smithy.api#Unit",
-                    "traits": {
-                        "smithy.api#enumValue": "AWS/Textract/AnalyzeExpense"
-                    }
-                },
-                "HANDSHAKE_VERIFY_IDENTITY": {
-                    "target": "smithy.api#Unit",
-                    "traits": {
-                        "smithy.api#enumValue": "AWS/Handshake/VerifyIdentity"
-                    }
-                },
-                "BEDROCK_MODEL_EVALUATION": {
-                    "target": "smithy.api#Unit",
-                    "traits": {
-                        "smithy.api#enumValue": "AWS/Bedrock/ModelEvaluation"
-                    }
                 }
             }
         },
@@ -6513,7 +6543,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 1,
-                    "max": 5
+                    "max": 20
                 }
             }
         },
@@ -6814,7 +6844,7 @@
                     "target": "com.amazonaws.sagemaker#S3Uri",
                     "traits": {
                         "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>An Amazon S3 bucket path where your LifeCycle scripts are stored.</p>",
+                        "smithy.api#documentation": "<p>An Amazon S3 bucket path where your lifecycle scripts are stored.</p>\n         <important>\n            <p>Make sure that the S3 bucket path starts with <code>s3://sagemaker-</code>. The\n               <a href=\"https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-hyperpod-prerequisites.html#sagemaker-hyperpod-prerequisites-iam-role-for-hyperpod\">IAM role for SageMaker HyperPod</a> has the managed <a href=\"https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol-cluster.html\">\n                  <code>AmazonSageMakerClusterInstanceRolePolicy</code>\n               </a> attached, which\n            allows access to S3 buckets with the specific prefix <code>sagemaker-</code>.</p>\n         </important>",
                         "smithy.api#required": {}
                     }
                 },
@@ -6822,13 +6852,13 @@
                     "target": "com.amazonaws.sagemaker#ClusterLifeCycleConfigFileName",
                     "traits": {
                         "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The directory of the LifeCycle script under <code>SourceS3Uri</code>. This LifeCycle\n         script runs during cluster creation.</p>",
+                        "smithy.api#documentation": "<p>The file name of the entrypoint script of lifecycle scripts under\n            <code>SourceS3Uri</code>. This entrypoint script runs during cluster creation.</p>",
                         "smithy.api#required": {}
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The LifeCycle configuration for a SageMaker HyperPod cluster.</p>"
+                "smithy.api#documentation": "<p>The lifecycle configuration for a SageMaker HyperPod cluster.</p>"
             }
         },
         "com.amazonaws.sagemaker#ClusterLifeCycleConfigFileName": {
@@ -9899,7 +9929,7 @@
                     "target": "com.amazonaws.sagemaker#FeatureGroupName",
                     "traits": {
                         "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The name of the <code>FeatureGroup</code>. The name must be unique within an Amazon Web Services Region in an Amazon Web Services account.</p>\n         <p>The name:</p>\n         <ul>\n            <li>\n               <p>Must start and end with an alphanumeric character.</p>\n            </li>\n            <li>\n               <p>Can only include alphanumeric characters, underscores, and hyphens. Spaces are not\n               allowed.</p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>The name of the <code>FeatureGroup</code>. The name must be unique within an Amazon Web Services Region in an Amazon Web Services account.</p>\n         <p>The name:</p>\n         <ul>\n            <li>\n               <p>Must start with an alphanumeric character.</p>\n            </li>\n            <li>\n               <p>Can only include alphanumeric characters, underscores, and hyphens. Spaces are not\n               allowed.</p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
@@ -9907,7 +9937,7 @@
                     "target": "com.amazonaws.sagemaker#FeatureName",
                     "traits": {
                         "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The name of the <code>Feature</code> whose value uniquely identifies a\n            <code>Record</code> defined in the <code>FeatureStore</code>. Only the latest record per\n         identifier value will be stored in the <code>OnlineStore</code>.\n            <code>RecordIdentifierFeatureName</code> must be one of feature definitions'\n         names.</p>\n         <p>You use the <code>RecordIdentifierFeatureName</code> to access data in a\n            <code>FeatureStore</code>.</p>\n         <p>This name:</p>\n         <ul>\n            <li>\n               <p>Must start and end with an alphanumeric character.</p>\n            </li>\n            <li>\n               <p>Can only contains alphanumeric characters, hyphens, underscores. Spaces are not\n               allowed. </p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>The name of the <code>Feature</code> whose value uniquely identifies a\n            <code>Record</code> defined in the <code>FeatureStore</code>. Only the latest record per\n         identifier value will be stored in the <code>OnlineStore</code>.\n            <code>RecordIdentifierFeatureName</code> must be one of feature definitions'\n         names.</p>\n         <p>You use the <code>RecordIdentifierFeatureName</code> to access data in a\n            <code>FeatureStore</code>.</p>\n         <p>This name:</p>\n         <ul>\n            <li>\n               <p>Must start with an alphanumeric character.</p>\n            </li>\n            <li>\n               <p>Can only contains alphanumeric characters, hyphens, underscores. Spaces are not\n               allowed. </p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
@@ -12446,7 +12476,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Creates a space used for real time collaboration in a domain.</p>"
+                "smithy.api#documentation": "<p>Creates a private space or a space used for real time collaboration in a domain.</p>"
             }
         },
         "com.amazonaws.sagemaker#CreateSpaceRequest": {
@@ -12754,6 +12784,12 @@
                     "target": "com.amazonaws.sagemaker#InfraCheckConfig",
                     "traits": {
                         "smithy.api#documentation": "<p>Contains information about the infrastructure health check configuration for the training job.</p>"
+                    }
+                },
+                "SessionChainingConfig": {
+                    "target": "com.amazonaws.sagemaker#SessionChainingConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains information about attribute-based access control (ABAC) for the training\n            job.</p>"
                     }
                 }
             },
@@ -13298,6 +13334,12 @@
                         "smithy.api#documentation": "<p>Configures notification of workers regarding available or expiring work items.</p>"
                     }
                 },
+                "WorkerAccessConfiguration": {
+                    "target": "com.amazonaws.sagemaker#WorkerAccessConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Use this optional parameter to constrain access to an Amazon S3 resource based on the IP address using supported IAM global condition keys. The Amazon S3 resource is accessed in the worker portal using a Amazon S3 presigned URL.</p>"
+                    }
+                },
                 "Tags": {
                     "target": "com.amazonaws.sagemaker#TagList",
                     "traits": {
@@ -13401,7 +13443,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 0,
-                    "max": 2
+                    "max": 10
                 }
             }
         },
@@ -13413,7 +13455,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 0,
-                    "max": 1
+                    "max": 5
                 }
             }
         },
@@ -14099,7 +14141,7 @@
                     "target": "com.amazonaws.sagemaker#SpaceEbsVolumeSizeInGb",
                     "traits": {
                         "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The default size of the EBS storage volume for a private space.</p>",
+                        "smithy.api#documentation": "<p>The default size of the EBS storage volume for a space.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -14107,13 +14149,13 @@
                     "target": "com.amazonaws.sagemaker#SpaceEbsVolumeSizeInGb",
                     "traits": {
                         "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The maximum size of the EBS storage volume for a private space.</p>",
+                        "smithy.api#documentation": "<p>The maximum size of the EBS storage volume for a space.</p>",
                         "smithy.api#required": {}
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A collection of default EBS storage settings that applies to private spaces created within a domain or user profile.</p>"
+                "smithy.api#documentation": "<p>A collection of default EBS storage settings that apply to spaces created within a domain or user profile.</p>"
             }
         },
         "com.amazonaws.sagemaker#DefaultGid": {
@@ -14145,6 +14187,21 @@
                 },
                 "KernelGatewayAppSettings": {
                     "target": "com.amazonaws.sagemaker#KernelGatewayAppSettings"
+                },
+                "JupyterLabAppSettings": {
+                    "target": "com.amazonaws.sagemaker#JupyterLabAppSettings"
+                },
+                "SpaceStorageSettings": {
+                    "target": "com.amazonaws.sagemaker#DefaultSpaceStorageSettings"
+                },
+                "CustomPosixUserConfig": {
+                    "target": "com.amazonaws.sagemaker#CustomPosixUserConfig"
+                },
+                "CustomFileSystemConfigs": {
+                    "target": "com.amazonaws.sagemaker#CustomFileSystemConfigs",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The settings for assigning a custom file system to a domain. Permitted users can access this file system in Amazon SageMaker Studio.</p>"
+                    }
                 }
             },
             "traits": {
@@ -14157,12 +14214,12 @@
                 "DefaultEbsStorageSettings": {
                     "target": "com.amazonaws.sagemaker#DefaultEbsStorageSettings",
                     "traits": {
-                        "smithy.api#documentation": "<p>The default EBS storage settings for a private space.</p>"
+                        "smithy.api#documentation": "<p>The default EBS storage settings for a space.</p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The default storage settings for a private space.</p>"
+                "smithy.api#documentation": "<p>The default storage settings for a space.</p>"
             }
         },
         "com.amazonaws.sagemaker#DefaultUid": {
@@ -25384,13 +25441,13 @@
                     "target": "com.amazonaws.sagemaker#SpaceEbsVolumeSizeInGb",
                     "traits": {
                         "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The size of an EBS storage volume for a private space.</p>",
+                        "smithy.api#documentation": "<p>The size of an EBS storage volume for a space.</p>",
                         "smithy.api#required": {}
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>A collection of EBS storage settings that applies to private spaces.</p>"
+                "smithy.api#documentation": "<p>A collection of EBS storage settings that apply to both private and shared spaces.</p>"
             }
         },
         "com.amazonaws.sagemaker#Edge": {
@@ -26021,6 +26078,26 @@
             "members": {},
             "traits": {
                 "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.sagemaker#EnableSessionTagChaining": {
+            "type": "boolean"
+        },
+        "com.amazonaws.sagemaker#EnabledOrDisabled": {
+            "type": "enum",
+            "members": {
+                "Enabled": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Enabled"
+                    }
+                },
+                "Disabled": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Disabled"
+                    }
+                }
             }
         },
         "com.amazonaws.sagemaker#Endpoint": {
@@ -27129,7 +27206,7 @@
                     "target": "com.amazonaws.sagemaker#FeatureName",
                     "traits": {
                         "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The name of a feature. The type must be a string. <code>FeatureName</code> cannot be any\n         of the following: <code>is_deleted</code>, <code>write_time</code>,\n            <code>api_invocation_time</code>.</p>\n         <p>The name:</p>\n         <ul>\n            <li>\n               <p>Must start and end with an alphanumeric character.</p>\n            </li>\n            <li>\n               <p>Can only include alphanumeric characters, underscores, and hyphens. Spaces are not\n               allowed.</p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>The name of a feature. The type must be a string. <code>FeatureName</code> cannot be any\n         of the following: <code>is_deleted</code>, <code>write_time</code>,\n            <code>api_invocation_time</code>.</p>\n         <p>The name:</p>\n         <ul>\n            <li>\n               <p>Must start with an alphanumeric character.</p>\n            </li>\n            <li>\n               <p>Can only include alphanumeric characters, underscores, and hyphens. Spaces are not\n               allowed.</p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
@@ -30753,6 +30830,26 @@
                 "smithy.api#documentation": "<p>The IAM Identity details associated with the user. These details are\n      associated with model package groups, model packages and project entities only.</p>"
             }
         },
+        "com.amazonaws.sagemaker#IamPolicyConstraints": {
+            "type": "structure",
+            "members": {
+                "SourceIp": {
+                    "target": "com.amazonaws.sagemaker#EnabledOrDisabled",
+                    "traits": {
+                        "smithy.api#documentation": "<p>When <code>SourceIp</code> is <code>Enabled</code> the worker's IP address when a task is rendered in the worker portal is added to the IAM policy as a <code>Condition</code> used to generate the Amazon S3 presigned URL. This IP address is checked by Amazon S3 and must match in order for the Amazon S3 resource to be rendered in the worker portal.</p>"
+                    }
+                },
+                "VpcSourceIp": {
+                    "target": "com.amazonaws.sagemaker#EnabledOrDisabled",
+                    "traits": {
+                        "smithy.api#documentation": "<p>When <code>VpcSourceIp</code> is <code>Enabled</code> the worker's IP address when a task is rendered in private worker portal inside the VPC is added to the IAM policy as a <code>Condition</code> used to generate the Amazon S3 presigned URL. To render the task successfully Amazon S3 checks that the presigned URL is being accessed over an Amazon S3 VPC Endpoint, and that the worker's IP address matches the IP address in the IAM policy. To learn more about configuring private worker portal, see <a href=\"https://docs.aws.amazon.com/sagemaker/latest/dg/samurai-vpc-worker-portal.html\">Use Amazon VPC mode from a private worker portal</a>.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Use this parameter to specify a supported global condition key that is added to the IAM policy.</p>"
+            }
+        },
         "com.amazonaws.sagemaker#IdempotencyToken": {
             "type": "string",
             "traits": {
@@ -33504,6 +33601,54 @@
                     "traits": {
                         "smithy.api#enumValue": "ml.r6id.32xlarge"
                     }
+                },
+                "ML_G6_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.xlarge"
+                    }
+                },
+                "ML_G6_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.2xlarge"
+                    }
+                },
+                "ML_G6_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.4xlarge"
+                    }
+                },
+                "ML_G6_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.8xlarge"
+                    }
+                },
+                "ML_G6_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.12xlarge"
+                    }
+                },
+                "ML_G6_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.16xlarge"
+                    }
+                },
+                "ML_G6_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.24xlarge"
+                    }
+                },
+                "ML_G6_48XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.48xlarge"
+                    }
                 }
             }
         },
@@ -35051,7 +35196,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.sagemaker#MaxResults",
                     "traits": {
-                        "smithy.api#documentation": "<p>The total number of items to return in the response. If the total\n          number of items available is more than the value specified, a <code>NextToken</code>\n          is provided in the response. To resume pagination, provide the <code>NextToken</code>\n          value in the as part of a subsequent call. The default value is 10.</p>"
+                        "smithy.api#documentation": "<p>This parameter defines the maximum number of results that can be returned in a single response. The <code>MaxResults</code> parameter is an upper bound, not a target. If there are\n          more results available than the value specified, a <code>NextToken</code>\n        is provided in the response. The <code>NextToken</code> indicates that the user should get the next set of results by providing this token as a part of a subsequent call. The default value for <code>MaxResults</code> is 10.</p>"
                     }
                 },
                 "SortOrder": {
@@ -36376,7 +36521,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.sagemaker#MaxResults",
                     "traits": {
-                        "smithy.api#documentation": "<p>The total number of items to return in the response. If the total number of items\n      available is more than the value specified, a <code>NextToken</code> is provided in the\n      response. To resume pagination, provide the <code>NextToken</code> value in the as part of a\n      subsequent call. The default value is 10.</p>"
+                        "smithy.api#documentation": "<p>This parameter defines the maximum number of results that can be returned in a single response. The <code>MaxResults</code> parameter is an upper bound, not a target. If there are\n      more results available than the value specified, a <code>NextToken</code>\n      is provided in the response. The <code>NextToken</code> indicates that the user should get the next set of results by providing this token as a part of a subsequent call. The default value for <code>MaxResults</code> is 10.</p>"
                     }
                 }
             },
@@ -40902,7 +41047,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.sagemaker#MaxResults",
                     "traits": {
-                        "smithy.api#documentation": "<p>The total number of items to return in the response. If the total number of items\n      available is more than the value specified, a <code>NextToken</code> is provided in the\n      response. To resume pagination, provide the <code>NextToken</code> value in the as part\n      of a subsequent call. The default value is 10.</p>"
+                        "smithy.api#documentation": "<p>This parameter defines the maximum number of results that can be returned in a single response. The <code>MaxResults</code> parameter is an upper bound, not a target. If there are\n      more results available than the value specified, a <code>NextToken</code>\n      is provided in the response. The <code>NextToken</code> indicates that the user should get the next set of results by providing this token as a part of a subsequent call. The default value for <code>MaxResults</code> is 10.</p>"
                     }
                 },
                 "SortOrder": {
@@ -41840,7 +41985,7 @@
                 "MaxResults": {
                     "target": "com.amazonaws.sagemaker#MaxResults",
                     "traits": {
-                        "smithy.api#documentation": "<p>The total number of items to return in the response. If the total\n          number of items available is more than the value specified, a <code>NextToken</code>\n          is provided in the response. To resume pagination, provide the <code>NextToken</code>\n          value in the as part of a subsequent call. The default value is 10.</p>"
+                        "smithy.api#documentation": "<p>This parameter defines the maximum number of results that can be returned in a single response. The <code>MaxResults</code> parameter is an upper bound, not a target. If there are\n        more results available than the value specified, a <code>NextToken</code>\n        is provided in the response. The <code>NextToken</code> indicates that the user should get the next set of results by providing this token as a part of a subsequent call. The default value for <code>MaxResults</code> is 10.</p>"
                     }
                 },
                 "SortOrder": {
@@ -47640,7 +47785,7 @@
                     "target": "com.amazonaws.sagemaker#UserProfileName",
                     "traits": {
                         "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The user profile who is the owner of the private space.</p>",
+                        "smithy.api#documentation": "<p>The user profile who is the owner of the space.</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -47655,7 +47800,7 @@
                 "OwnerUserProfileName": {
                     "target": "com.amazonaws.sagemaker#UserProfileName",
                     "traits": {
-                        "smithy.api#documentation": "<p>The user profile who is the owner of the private space.</p>"
+                        "smithy.api#documentation": "<p>The user profile who is the owner of the space.</p>"
                     }
                 }
             },
@@ -50485,6 +50630,54 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "ml.g5.48xlarge"
+                    }
+                },
+                "ML_G6_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.xlarge"
+                    }
+                },
+                "ML_G6_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.2xlarge"
+                    }
+                },
+                "ML_G6_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.4xlarge"
+                    }
+                },
+                "ML_G6_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.8xlarge"
+                    }
+                },
+                "ML_G6_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.12xlarge"
+                    }
+                },
+                "ML_G6_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.16xlarge"
+                    }
+                },
+                "ML_G6_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.24xlarge"
+                    }
+                },
+                "ML_G6_48XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g6.48xlarge"
                     }
                 },
                 "ML_P4D_24XLARGE": {
@@ -54417,6 +54610,20 @@
                 "smithy.api#pattern": "^(https|s3)://([^/]+)/?(.*)$"
             }
         },
+        "com.amazonaws.sagemaker#S3Presign": {
+            "type": "structure",
+            "members": {
+                "IamPolicyConstraints": {
+                    "target": "com.amazonaws.sagemaker#IamPolicyConstraints",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Use this parameter to specify the allowed request source. Possible sources are either <code>SourceIp</code> or <code>VpcSourceIp</code>.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>This object defines the access restrictions to Amazon S3 resources that are included in custom worker task templates using the Liquid filter, <code>grant_read_access</code>.</p>\n         <p>To learn more about how custom templates are created, see <a href=\"https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-custom-templates.html\">Create custom worker task templates</a>.</p>"
+            }
+        },
         "com.amazonaws.sagemaker#S3StorageConfig": {
             "type": "structure",
             "members": {
@@ -57364,6 +57571,20 @@
                 "smithy.api#documentation": "<p>Details that you specify to provision a service catalog product. \n            For information about service catalog, see <a href=\"https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html\">What is Amazon Web Services Service Catalog</a>.\n        </p>"
             }
         },
+        "com.amazonaws.sagemaker#SessionChainingConfig": {
+            "type": "structure",
+            "members": {
+                "EnableSessionTagChaining": {
+                    "target": "com.amazonaws.sagemaker#EnableSessionTagChaining",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Set to <code>True</code> to allow SageMaker to extract session tags from a \n            training job creation role and reuse these tags when assuming the training \n            job execution role.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains information about attribute-based access control (ABAC) for a training job.\n            The session chaining configuration uses Amazon Security Token Service (STS) for your\n            training job to request temporary, limited-privilege credentials to tenants. For more\n            information, see <a href=\"https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html#model-access-training-data-abac\">Attribute-based access control (ABAC) for multi-tenancy\n                training</a>.</p>"
+            }
+        },
         "com.amazonaws.sagemaker#SessionExpirationDurationInSeconds": {
             "type": "integer",
             "traits": {
@@ -58022,7 +58243,7 @@
                 "SpaceStorageSettings": {
                     "target": "com.amazonaws.sagemaker#SpaceStorageSettings",
                     "traits": {
-                        "smithy.api#documentation": "<p>The storage settings for a private space.</p>"
+                        "smithy.api#documentation": "<p>The storage settings for a space.</p>"
                     }
                 },
                 "CustomFileSystems": {
@@ -58048,7 +58269,7 @@
                 "SpaceStorageSettings": {
                     "target": "com.amazonaws.sagemaker#SpaceStorageSettings",
                     "traits": {
-                        "smithy.api#documentation": "<p>The storage settings for a private space.</p>"
+                        "smithy.api#documentation": "<p>The storage settings for a space.</p>"
                     }
                 }
             },
@@ -58156,12 +58377,12 @@
                 "EbsStorageSettings": {
                     "target": "com.amazonaws.sagemaker#EbsStorageSettings",
                     "traits": {
-                        "smithy.api#documentation": "<p>A collection of EBS storage settings for a private space.</p>"
+                        "smithy.api#documentation": "<p>A collection of EBS storage settings for a space.</p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The storage settings for a private space.</p>"
+                "smithy.api#documentation": "<p>The storage settings for a space.</p>"
             }
         },
         "com.amazonaws.sagemaker#SpawnRate": {
@@ -62150,6 +62371,330 @@
                         "smithy.api#enumValue": "ml.m5.24xlarge"
                     }
                 },
+                "ML_M6I_LARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m6i.large"
+                    }
+                },
+                "ML_M6I_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m6i.xlarge"
+                    }
+                },
+                "ML_M6I_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m6i.2xlarge"
+                    }
+                },
+                "ML_M6I_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m6i.4xlarge"
+                    }
+                },
+                "ML_M6I_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m6i.8xlarge"
+                    }
+                },
+                "ML_M6I_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m6i.12xlarge"
+                    }
+                },
+                "ML_M6I_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m6i.16xlarge"
+                    }
+                },
+                "ML_M6I_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m6i.24xlarge"
+                    }
+                },
+                "ML_M6I_32XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m6i.32xlarge"
+                    }
+                },
+                "ML_C6I_LARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c6i.large"
+                    }
+                },
+                "ML_C6I_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c6i.xlarge"
+                    }
+                },
+                "ML_C6I_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c6i.2xlarge"
+                    }
+                },
+                "ML_C6I_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c6i.4xlarge"
+                    }
+                },
+                "ML_C6I_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c6i.8xlarge"
+                    }
+                },
+                "ML_C6I_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c6i.12xlarge"
+                    }
+                },
+                "ML_C6I_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c6i.16xlarge"
+                    }
+                },
+                "ML_C6I_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c6i.24xlarge"
+                    }
+                },
+                "ML_C6I_32XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c6i.32xlarge"
+                    }
+                },
+                "ML_R6I_LARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r6i.large"
+                    }
+                },
+                "ML_R6I_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r6i.xlarge"
+                    }
+                },
+                "ML_R6I_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r6i.2xlarge"
+                    }
+                },
+                "ML_R6I_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r6i.4xlarge"
+                    }
+                },
+                "ML_R6I_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r6i.8xlarge"
+                    }
+                },
+                "ML_R6I_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r6i.12xlarge"
+                    }
+                },
+                "ML_R6I_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r6i.16xlarge"
+                    }
+                },
+                "ML_R6I_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r6i.24xlarge"
+                    }
+                },
+                "ML_R6I_32XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r6i.32xlarge"
+                    }
+                },
+                "ML_M7I_LARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m7i.large"
+                    }
+                },
+                "ML_M7I_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m7i.xlarge"
+                    }
+                },
+                "ML_M7I_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m7i.2xlarge"
+                    }
+                },
+                "ML_M7I_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m7i.4xlarge"
+                    }
+                },
+                "ML_M7I_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m7i.8xlarge"
+                    }
+                },
+                "ML_M7I_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m7i.12xlarge"
+                    }
+                },
+                "ML_M7I_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m7i.16xlarge"
+                    }
+                },
+                "ML_M7I_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m7i.24xlarge"
+                    }
+                },
+                "ML_M7I_48XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.m7i.48xlarge"
+                    }
+                },
+                "ML_C7I_LARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c7i.large"
+                    }
+                },
+                "ML_C7I_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c7i.xlarge"
+                    }
+                },
+                "ML_C7I_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c7i.2xlarge"
+                    }
+                },
+                "ML_C7I_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c7i.4xlarge"
+                    }
+                },
+                "ML_C7I_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c7i.8xlarge"
+                    }
+                },
+                "ML_C7I_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c7i.12xlarge"
+                    }
+                },
+                "ML_C7I_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c7i.16xlarge"
+                    }
+                },
+                "ML_C7I_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c7i.24xlarge"
+                    }
+                },
+                "ML_C7I_48XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.c7i.48xlarge"
+                    }
+                },
+                "ML_R7I_LARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r7i.large"
+                    }
+                },
+                "ML_R7I_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r7i.xlarge"
+                    }
+                },
+                "ML_R7I_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r7i.2xlarge"
+                    }
+                },
+                "ML_R7I_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r7i.4xlarge"
+                    }
+                },
+                "ML_R7I_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r7i.8xlarge"
+                    }
+                },
+                "ML_R7I_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r7i.12xlarge"
+                    }
+                },
+                "ML_R7I_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r7i.16xlarge"
+                    }
+                },
+                "ML_R7I_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r7i.24xlarge"
+                    }
+                },
+                "ML_R7I_48XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.r7i.48xlarge"
+                    }
+                },
                 "ML_G4DN_XLARGE": {
                     "target": "smithy.api#Unit",
                     "traits": {
@@ -62184,6 +62729,54 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "ml.g4dn.16xlarge"
+                    }
+                },
+                "ML_G5_XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g5.xlarge"
+                    }
+                },
+                "ML_G5_2XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g5.2xlarge"
+                    }
+                },
+                "ML_G5_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g5.4xlarge"
+                    }
+                },
+                "ML_G5_8XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g5.8xlarge"
+                    }
+                },
+                "ML_G5_12XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g5.12xlarge"
+                    }
+                },
+                "ML_G5_16XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g5.16xlarge"
+                    }
+                },
+                "ML_G5_24XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g5.24xlarge"
+                    }
+                },
+                "ML_G5_48XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.g5.48xlarge"
                     }
                 }
             }
@@ -66120,6 +66713,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Configures SNS topic notifications for available or expiring work items</p>"
                     }
+                },
+                "WorkerAccessConfiguration": {
+                    "target": "com.amazonaws.sagemaker#WorkerAccessConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Use this optional parameter to constrain access to an Amazon S3 resource based on the IP address using supported IAM global condition keys. The Amazon S3 resource is accessed in the worker portal using a Amazon S3 presigned URL.</p>"
+                    }
                 }
             },
             "traits": {
@@ -66384,7 +66983,7 @@
                 "SpaceStorageSettings": {
                     "target": "com.amazonaws.sagemaker#DefaultSpaceStorageSettings",
                     "traits": {
-                        "smithy.api#documentation": "<p>The storage settings for a private space.</p>"
+                        "smithy.api#documentation": "<p>The storage settings for a space.</p>"
                     }
                 },
                 "DefaultLandingUri": {
@@ -66845,6 +67444,20 @@
                 "smithy.api#documentation": "<p>Status and billing information about the warm pool.</p>"
             }
         },
+        "com.amazonaws.sagemaker#WorkerAccessConfiguration": {
+            "type": "structure",
+            "members": {
+                "S3Presign": {
+                    "target": "com.amazonaws.sagemaker#S3Presign",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Defines any Amazon S3 resource constraints.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Use this optional parameter to constrain access to an Amazon S3 resource based on the IP address using supported IAM global condition keys. The Amazon S3 resource is accessed in the worker portal using a Amazon S3 presigned URL.</p>"
+            }
+        },
         "com.amazonaws.sagemaker#Workforce": {
             "type": "structure",
             "members": {
@@ -67211,6 +67824,12 @@
                     "target": "com.amazonaws.sagemaker#NotificationConfiguration",
                     "traits": {
                         "smithy.api#documentation": "<p>Configures SNS notifications of available or expiring work items for work\n            teams.</p>"
+                    }
+                },
+                "WorkerAccessConfiguration": {
+                    "target": "com.amazonaws.sagemaker#WorkerAccessConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes any access constraints that have been defined for Amazon S3 resources.</p>"
                     }
                 }
             },

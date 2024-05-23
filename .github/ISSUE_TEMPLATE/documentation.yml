@@ -1,5 +1,5 @@
 name: "\U0001F4D5 Documentation Issue"
-description: Report an issue in the API Reference documentation or Developer Guide
+description: Report an issue in the API Reference Documentation or Developer Guide
 title: "(short issue description)"
 labels: [documentation, needs-triage]
 body:

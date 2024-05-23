@@ -990,6 +990,9 @@
                 "smithy.api#sensitive": {}
             }
         },
+        "com.amazonaws.ssooidc#ArnType": {
+            "type": "string"
+        },
         "com.amazonaws.ssooidc#Assertion": {
             "type": "string",
             "traits": {
@@ -1035,6 +1038,12 @@
         },
         "com.amazonaws.ssooidc#ClientType": {
             "type": "string"
+        },
+        "com.amazonaws.ssooidc#CodeVerifier": {
+            "type": "string",
+            "traits": {
+                "smithy.api#sensitive": {}
+            }
         },
         "com.amazonaws.ssooidc#CreateToken": {
             "type": "operation",
@@ -1180,6 +1189,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Used only when calling this API for the Authorization Code grant type. This value specifies\n      the location of the client or application that has registered to receive the authorization\n        code.</p>"
                     }
+                },
+                "codeVerifier": {
+                    "target": "com.amazonaws.ssooidc#CodeVerifier",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Used only when calling this API for the Authorization Code grant type. This value is generated\n      by the client and presented to validate the original code challenge value the client passed at\n      authorization time.</p>"
+                    }
                 }
             },
             "traits": {
@@ -1192,7 +1207,7 @@
                 "accessToken": {
                     "target": "com.amazonaws.ssooidc#AccessToken",
                     "traits": {
-                        "smithy.api#documentation": "<p>A bearer token to access AWS accounts and applications assigned to a user.</p>"
+                        "smithy.api#documentation": "<p>A bearer token to access Amazon Web Services accounts and applications assigned to a user.</p>"
                     }
                 },
                 "tokenType": {
@@ -1272,7 +1287,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Creates and returns access and refresh tokens for clients and applications that are\n      authenticated using IAM entities. The access token can be used to fetch short-term credentials\n      for the assigned AWS accounts or to access application APIs using <code>bearer</code>\n      authentication.</p>",
+                "smithy.api#documentation": "<p>Creates and returns access and refresh tokens for clients and applications that are\n      authenticated using IAM entities. The access token can be used to fetch short-term credentials\n      for the assigned Amazon Web Services accounts or to access application APIs using <code>bearer</code>\n      authentication.</p>",
                 "smithy.api#examples": [
                     {
                         "title": "Call OAuth/OIDC /token endpoint for Authorization Code grant with IAM authentication",
@@ -1440,6 +1455,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Used only when calling this API for the Token Exchange grant type. This value specifies\n      the type of token that the requester can receive. The following values are supported:</p>\n         <p>* Access Token - <code>urn:ietf:params:oauth:token-type:access_token</code>\n         </p>\n         <p>* Refresh Token - <code>urn:ietf:params:oauth:token-type:refresh_token</code>\n         </p>"
                     }
+                },
+                "codeVerifier": {
+                    "target": "com.amazonaws.ssooidc#CodeVerifier",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Used only when calling this API for the Authorization Code grant type. This value is generated\n      by the client and presented to validate the original code challenge value the client passed at\n      authorization time.</p>"
+                    }
                 }
             },
             "traits": {
@@ -1452,7 +1473,7 @@
                 "accessToken": {
                     "target": "com.amazonaws.ssooidc#AccessToken",
                     "traits": {
-                        "smithy.api#documentation": "<p>A bearer token to access AWS accounts and applications assigned to a user.</p>"
+                        "smithy.api#documentation": "<p>A bearer token to access Amazon Web Services accounts and applications assigned to a user.</p>"
                     }
                 },
                 "tokenType": {
@@ -1536,6 +1557,12 @@
         },
         "com.amazonaws.ssooidc#GrantType": {
             "type": "string"
+        },
+        "com.amazonaws.ssooidc#GrantTypes": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.ssooidc#GrantType"
+            }
         },
         "com.amazonaws.ssooidc#IdToken": {
             "type": "string",
@@ -1637,6 +1664,28 @@
                 "smithy.api#httpError": 400
             }
         },
+        "com.amazonaws.ssooidc#InvalidRedirectUriException": {
+            "type": "structure",
+            "members": {
+                "error": {
+                    "target": "com.amazonaws.ssooidc#Error",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Single error code.\n      For this exception the value will be <code>invalid_redirect_uri</code>.</p>"
+                    }
+                },
+                "error_description": {
+                    "target": "com.amazonaws.ssooidc#ErrorDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Human-readable text providing additional information, used to assist the\n      client developer in understanding the error that occurred.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Indicates that one or more redirect URI in the request is not supported for this operation.</p>",
+                "smithy.api#error": "client",
+                "smithy.api#httpError": 400
+            }
+        },
         "com.amazonaws.ssooidc#InvalidRequestException": {
             "type": "structure",
             "members": {
@@ -1724,6 +1773,12 @@
                 "smithy.api#default": 0
             }
         },
+        "com.amazonaws.ssooidc#RedirectUris": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.ssooidc#URI"
+            }
+        },
         "com.amazonaws.ssooidc#RefreshToken": {
             "type": "string",
             "traits": {
@@ -1749,10 +1804,16 @@
                     "target": "com.amazonaws.ssooidc#InvalidClientMetadataException"
                 },
                 {
+                    "target": "com.amazonaws.ssooidc#InvalidRedirectUriException"
+                },
+                {
                     "target": "com.amazonaws.ssooidc#InvalidRequestException"
                 },
                 {
                     "target": "com.amazonaws.ssooidc#InvalidScopeException"
+                },
+                {
+                    "target": "com.amazonaws.ssooidc#UnsupportedGrantTypeException"
                 }
             ],
             "traits": {
@@ -1768,7 +1829,16 @@
                             "scopes": [
                                 "sso:account:access",
                                 "codewhisperer:completions"
-                            ]
+                            ],
+                            "redirectUris": [
+                                "127.0.0.1:PORT/oauth/callback"
+                            ],
+                            "grantTypes": [
+                                "authorization_code",
+                                "refresh_token"
+                            ],
+                            "issuerUrl": "https://identitycenter.amazonaws.com/ssoins-1111111111111111",
+                            "entitledApplicationArn": "arn:aws:sso::ACCOUNTID:application/ssoins-1111111111111111/apl-1111111111111111"
                         },
                         "output": {
                             "clientId": "_yzkThXVzLWVhc3QtMQEXAMPLECLIENTID",
@@ -1807,6 +1877,30 @@
                     "target": "com.amazonaws.ssooidc#Scopes",
                     "traits": {
                         "smithy.api#documentation": "<p>The list of scopes that are defined by the client. Upon authorization, this list is used\n      to restrict permissions when granting an access token.</p>"
+                    }
+                },
+                "redirectUris": {
+                    "target": "com.amazonaws.ssooidc#RedirectUris",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of redirect URI that are defined by the client. At completion of authorization,\n      this list is used to restrict what locations the user agent can be redirected back to.</p>"
+                    }
+                },
+                "grantTypes": {
+                    "target": "com.amazonaws.ssooidc#GrantTypes",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of OAuth 2.0 grant types that are defined by the client. This list is used to\n      restrict the token granting flows available to the client.</p>"
+                    }
+                },
+                "issuerUrl": {
+                    "target": "com.amazonaws.ssooidc#URI",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The IAM Identity Center Issuer URL associated with an instance of IAM Identity Center. This value is needed for user access to resources through the client.</p>"
+                    }
+                },
+                "entitledApplicationArn": {
+                    "target": "com.amazonaws.ssooidc#ArnType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>This IAM Identity Center application ARN is used to define administrator-managed configuration for public client access to resources. At\n      authorization, the scopes, grants, and redirect URI available to this client will be restricted by this application resource.</p>"
                     }
                 }
             },

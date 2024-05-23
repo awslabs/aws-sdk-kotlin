@@ -6,12 +6,9 @@ package aws.sdk.kotlin.benchmarks.service.telemetry
 
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.collections.Attributes
-import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
+import aws.smithy.kotlin.runtime.telemetry.AbstractTelemetryProvider
 import aws.smithy.kotlin.runtime.telemetry.context.Context
-import aws.smithy.kotlin.runtime.telemetry.context.ContextManager
-import aws.smithy.kotlin.runtime.telemetry.logging.LoggerProvider
 import aws.smithy.kotlin.runtime.telemetry.metrics.*
-import aws.smithy.kotlin.runtime.telemetry.trace.TracerProvider
 
 private val capturedMetrics = mapOf(
     "smithy.client.call.attempt_overhead_duration" to "Overhead",
@@ -23,45 +20,11 @@ private val capturedMetrics = mapOf(
 )
 
 @ExperimentalApi
-class BenchmarkTelemetryProvider(private val metricAggregator: MetricAggregator) : TelemetryProvider {
-    override val contextManager = ContextManager.None
-    override val loggerProvider = LoggerProvider.None
-    override val tracerProvider = TracerProvider.None
-
-    override val meterProvider = object : MeterProvider {
-        override fun getOrCreateMeter(scope: String) = object : Meter {
-            override fun createUpDownCounter(name: String, units: String?, description: String?) =
-                NoOpUpDownCounter
-
-            override fun createAsyncUpDownCounter(
-                name: String,
-                callback: LongUpDownCounterCallback,
-                units: String?,
-                description: String?,
-            ) = NoOpAsyncMeasurementHandle
-
-            override fun createMonotonicCounter(name: String, units: String?, description: String?) =
-                NoOpMonotonicCounter
-
-            override fun createLongHistogram(name: String, units: String?, description: String?) =
-                NoOpLongHistogram
-
+class BenchmarkTelemetryProvider(private val metricAggregator: MetricAggregator) : AbstractTelemetryProvider() {
+    override val meterProvider = object : AbstractMeterProvider() {
+        override fun getOrCreateMeter(scope: String) = object : AbstractMeter() {
             override fun createDoubleHistogram(name: String, units: String?, description: String?) =
-                capturedMetrics[name]?.let { BenchmarkDoubleHistogram(it, units) } ?: NoOpDoubleHistogram
-
-            override fun createLongGauge(
-                name: String,
-                callback: LongGaugeCallback,
-                units: String?,
-                description: String?,
-            ) = NoOpAsyncMeasurementHandle
-
-            override fun createDoubleGauge(
-                name: String,
-                callback: DoubleGaugeCallback,
-                units: String?,
-                description: String?,
-            ) = NoOpAsyncMeasurementHandle
+                capturedMetrics[name]?.let { BenchmarkDoubleHistogram(it, units) } ?: Histogram.DoubleNone
         }
     }
 
@@ -91,24 +54,4 @@ class BenchmarkTelemetryProvider(private val metricAggregator: MetricAggregator)
             metricAggregator.add(formattedName, transform(value))
         }
     }
-}
-
-private object NoOpAsyncMeasurementHandle : AsyncMeasurementHandle {
-    override fun stop() { }
-}
-
-private object NoOpDoubleHistogram : DoubleHistogram {
-    override fun record(value: Double, attributes: Attributes, context: Context?) { }
-}
-
-private object NoOpLongHistogram : LongHistogram {
-    override fun record(value: Long, attributes: Attributes, context: Context?) { }
-}
-
-private object NoOpMonotonicCounter : MonotonicCounter {
-    override fun add(value: Long, attributes: Attributes, context: Context?) { }
-}
-
-private object NoOpUpDownCounter : UpDownCounter {
-    override fun add(value: Long, attributes: Attributes, context: Context?) { }
 }
