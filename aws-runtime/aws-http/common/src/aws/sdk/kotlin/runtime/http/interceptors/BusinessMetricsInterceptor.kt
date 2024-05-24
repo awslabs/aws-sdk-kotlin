@@ -10,7 +10,6 @@ import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.request.toBuilder
-import kotlin.text.toByteArray
 
 /**
  * Appends business metrics to the `User-Agent` header.
@@ -35,7 +34,7 @@ public class BusinessMetricsInterceptor : HttpInterceptor {
  */
 private fun formatMetrics(metrics: MutableSet<String>): String {
     val metricsString = metrics.joinToString(",", "m/")
-    val metricsByteArray = metricsString.toByteArray()
+    val metricsByteArray = metricsString.encodeToByteArray()
     val maxSize = 1024
 
     if (metricsByteArray.size <= maxSize) return metricsString
