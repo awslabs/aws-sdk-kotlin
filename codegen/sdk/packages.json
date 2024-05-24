@@ -37,12 +37,6 @@
             "brazilName": "AwsSdkKotlinAccount"
         },
         {
-            "sdkId": "Alexa For Business",
-            "namespace": "aws.sdk.kotlin.services.alexaforbusiness",
-            "artifactName": "alexaforbusiness",
-            "brazilName": "AwsSdkKotlinAlexaForBusiness"
-        },
-        {
             "sdkId": "Amplify",
             "namespace": "aws.sdk.kotlin.services.amplify",
             "artifactName": "amplify",
@@ -883,12 +877,6 @@
             "brazilName": "AwsSdkKotlinHealthlake"
         },
         {
-            "sdkId": "Honeycode",
-            "namespace": "aws.sdk.kotlin.services.honeycode",
-            "artifactName": "honeycode",
-            "brazilName": "AwsSdkKotlinHoneycode"
-        },
-        {
             "sdkId": "IAM",
             "namespace": "aws.sdk.kotlin.services.iam",
             "artifactName": "iam",
@@ -1211,6 +1199,12 @@
             "namespace": "aws.sdk.kotlin.services.macie2",
             "artifactName": "macie2",
             "brazilName": "AwsSdkKotlinMacie2"
+        },
+        {
+            "sdkId": "MailManager",
+            "namespace": "aws.sdk.kotlin.services.mailmanager",
+            "artifactName": "mailmanager",
+            "brazilName": "AwsSdkKotlinMailmanager"
         },
         {
             "sdkId": "ManagedBlockchain",
