@@ -27,14 +27,14 @@ class BusinessMetricsIntegration : KotlinIntegration {
         writer.write(
             "if (endpoint.attributes.contains(#T)) request.context.#T(#T.SERVICE_ENDPOINT_OVERRIDE)",
             RuntimeTypes.Core.BusinessMetrics.serviceEndpointOverride,
-            RuntimeTypes.Core.BusinessMetrics.EmitBusinessMetrics,
+            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetrics,
             RuntimeTypes.Core.BusinessMetrics.BusinessMetrics,
         )
 
         writer.write(
             "if (endpoint.attributes.contains(#T)) request.context.#T(#T.ACCOUNT_ID_BASED_ENDPOINT)",
             RuntimeTypes.Core.BusinessMetrics.accountIdBasedEndPoint,
-            RuntimeTypes.Core.BusinessMetrics.EmitBusinessMetrics,
+            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetrics,
             RuntimeTypes.Core.BusinessMetrics.BusinessMetrics,
         )
     }
