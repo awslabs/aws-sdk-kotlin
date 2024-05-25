@@ -19,7 +19,7 @@ smithy-version = "1.47.0"
 junit-version = "5.10.1"
 kotest-version = "5.8.0"
 kotlinx-benchmark-version = "0.4.9"
-kotlinx-serialization-version = "1.6.3"
+kotlinx-serialization-version = "1.6.2"
 mockk-version = "1.13.7"
 slf4j-version = "2.0.9"
 
