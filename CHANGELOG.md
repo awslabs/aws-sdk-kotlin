@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.21] - 05/28/2024
+
+### Features
+* (**ec2**) Providing support to accept BgpAsnExtended attribute
+* (**kafka**) Adds ControllerNodeInfo in ListNodes response to support Raft mode for MSK
+* (**swf**) This release adds new APIs for deleting activity type and workflow type resources.
+
+### Documentation
+* (**dynamodb**) Doc-only update for DynamoDB. Specified the IAM actions needed to authorize a user to create a table with a resource-based policy.
+
 ## [1.2.20] - 05/24/2024
 
 ### Features
