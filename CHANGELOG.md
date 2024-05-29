@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.22] - 05/29/2024
+
+### Features
+* (**athena**) Throwing validation errors on CreateNotebook with Name containing `/`,`:`,`\`
+* (**codebuild**) AWS CodeBuild now supports manually creating GitHub webhooks
+* (**connect**) This release includes changes to DescribeContact API's response by including ConnectedToSystemTimestamp, RoutingCriteria, Customer, Campaign, AnsweringMachineDetectionStatus, CustomerVoiceActivity, QualityMetrics, DisconnectDetails, and SegmentAttributes information from a contact in Amazon Connect.
+* (**glue**) Add optional field JobMode to CreateJob and UpdateJob APIs.
+* (**securityhub**) Add ROOT type for TargetType model
+
 ## [1.2.21] - 05/28/2024
 
 ### Features
