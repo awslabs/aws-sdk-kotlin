@@ -1,0 +1,8 @@
+{
+    "id": "8248143a-7a11-46c0-a44d-7bbeabe34c82",
+    "type": "misc",
+    "description": "Add trailing slash to base IMDS endpoint",
+    "issues": [
+        "https://github.com/awslabs/aws-sdk-kotlin/issues/1303"
+    ]
+}
