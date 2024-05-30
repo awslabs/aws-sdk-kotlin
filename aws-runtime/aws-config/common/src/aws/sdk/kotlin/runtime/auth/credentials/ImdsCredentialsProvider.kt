@@ -30,7 +30,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.coroutineContext
 import kotlin.time.Duration.Companion.seconds
 
-private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/security-credentials"
+private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/security-credentials/"
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
 private const val PROVIDER_NAME = "IMDSv2"
 
@@ -43,7 +43,7 @@ private const val PROVIDER_NAME = "IMDSv2"
  * information.
  *
  * @param profileOverride override the instance profile name. When retrieving credentials, a call must first be made to
- * `<IMDS_BASE_URL>/latest/meta-data/iam/security-credentials`. This returns the instance profile used. If
+ * `<IMDS_BASE_URL>/latest/meta-data/iam/security-credentials/`. This returns the instance profile used. If
  * [profileOverride] is set, the initial call to retrieve the profile is skipped and the provided value is used instead.
  * @param client the IMDS client to use to resolve credentials information with. This provider takes ownership over
  * the lifetime of the given [ImdsClient] and will close it when the provider is closed.
