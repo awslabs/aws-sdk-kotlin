@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.24] - 05/31/2024
+
+### Features
+* (**codegurusecurity**) This release includes minor model updates and documentation updates.
+* (**launchwizard**) This release adds support for describing workload deployment specifications, deploying additional workload types, and managing tags for Launch Wizard resources with API operations.
+
+### Fixes
+* [#1315](https://github.com/awslabs/aws-sdk-kotlin/issues/1315) Disable proxying of requests made to EC2 IMDS
+
+### Documentation
+* (**codebuild**) AWS CodeBuild now supports Self-hosted GitHub Actions runners for Github Enterprise
+* (**elasticache**) Update to attributes of TestFailover and minor revisions.
+
+### Miscellaneous
+* [#1303](https://github.com/awslabs/aws-sdk-kotlin/issues/1303) Add trailing slash to base IMDS endpoint
+
 ## [1.2.23] - 05/30/2024
 
 ### Features

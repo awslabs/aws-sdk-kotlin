@@ -1,8 +1,0 @@
-{
-    "id": "16007c74-7831-42d2-8a3b-01e4868da600",
-    "type": "bugfix",
-    "description": "Disable proxying of requests made to EC2 IMDS",
-    "issues": [
-        "https://github.com/awslabs/aws-sdk-kotlin/issues/1315"
-    ]
-}
