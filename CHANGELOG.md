@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.25] - 06/03/2024
+
+### Features
+* (**batch**) This release adds support for the AWS Batch GetJobQueueSnapshot API operation.
+* (**eks**) Adds support for EKS add-ons pod identity associations integration
+* (**iottwinmaker**) Support RESET_VALUE UpdateType for PropertyUpdates to reset property value to default or null
+
+### Documentation
+* (**amplify**) This doc-only update identifies fields that are specific to Gen 1 and Gen 2 applications.
+
 ## [1.2.24] - 05/31/2024
 
 ### Features
