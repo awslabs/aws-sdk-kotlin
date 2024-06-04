@@ -1945,6 +1945,12 @@
             "brazilName": "AwsSdkKotlinSupportApp"
         },
         {
+            "sdkId": "TaxSettings",
+            "namespace": "aws.sdk.kotlin.services.taxsettings",
+            "artifactName": "taxsettings",
+            "brazilName": "AwsSdkKotlinTaxsettings"
+        },
+        {
             "sdkId": "Textract",
             "namespace": "aws.sdk.kotlin.services.textract",
             "artifactName": "textract",
