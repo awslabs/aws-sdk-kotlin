@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.27] - 06/05/2024
+
+### Features
+* (**globalaccelerator**) This release contains a new optional ip-addresses input field for the update accelerator and update custom routing accelerator apis. This input enables consumers to replace IPv4 addresses on existing accelerators with addresses provided in the input.
+* (**glue**) AWS Glue now supports native SaaS connectivity: Salesforce connector available now
+* (**s3**) Added new params copySource and key to copyObject API for supporting S3 Access Grants plugin. These changes will not change any of the existing S3 API functionality.
+
 ## [1.2.26] - 06/04/2024
 
 ### Features
