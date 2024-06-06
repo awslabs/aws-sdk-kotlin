@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.28] - 06/06/2024
+
+### Features
+* (**account**) This release adds 3 new APIs (AcceptPrimaryEmailUpdate, GetPrimaryEmail, and StartPrimaryEmailUpdate) used to centrally manage the root user email address of member accounts within an AWS organization.
+* (**firehose**) Adds integration with Secrets Manager for Redshift, Splunk, HttpEndpoint, and Snowflake destinations
+* (**fsx**) This release adds support to increase metadata performance on FSx for Lustre file systems beyond the default level provisioned when a file system is created. This can be done by specifying MetadataConfiguration during the creation of Persistent_2 file systems or by updating it on demand.
+* (**glue**) This release adds support for creating and updating Glue Data Catalog Views.
+* (**iotwireless**) Adds support for wireless device to be in Conflict FUOTA Device Status due to a FUOTA Task, so it couldn't be attached to a new one.
+* (**location**) Added two new APIs, VerifyDevicePosition and ForecastGeofenceEvents. Added support for putting larger geofences up to 100,000 vertices with Geobuf fields.
+* (**storagegateway**) Adds SoftwareUpdatePreferences to DescribeMaintenanceStartTime and UpdateMaintenanceStartTime, a structure which contains AutomaticUpdatePolicy.
+
+### Documentation
+* (**sns**) Doc-only update for SNS. These changes include customer-reported issues and TXC3 updates.
+* (**sqs**) Doc only updates for SQS. These updates include customer-reported issues and TCX3 modifications.
+
 ## [1.2.27] - 06/05/2024
 
 ### Features
