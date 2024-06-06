@@ -74,11 +74,6 @@ private const val testSuiteJson = """
     "service_envvar_name": "AWS_ENDPOINT_URL_ACM_PCA"
   },
   {
-    "service_id": "Alexa For Business",
-    "services_section_name": "alexa_for_business",
-    "service_envvar_name": "AWS_ENDPOINT_URL_ALEXA_FOR_BUSINESS"
-  },
-  {
     "service_id": "amp",
     "services_section_name": "amp",
     "service_envvar_name": "AWS_ENDPOINT_URL_AMP"
@@ -727,11 +722,6 @@ private const val testSuiteJson = """
     "service_id": "HealthLake",
     "services_section_name": "healthlake",
     "service_envvar_name": "AWS_ENDPOINT_URL_HEALTHLAKE"
-  },
-  {
-    "service_id": "Honeycode",
-    "services_section_name": "honeycode",
-    "service_envvar_name": "AWS_ENDPOINT_URL_HONEYCODE"
   },
   {
     "service_id": "IAM",
@@ -1718,7 +1708,6 @@ private const val javaClientNamesJson = """
   "nimble": "NimbleClient",
   "Lex Model Building Service": "LexModelBuildingClient",
   "Medical Imaging": "MedicalImagingClient",
-  "Alexa For Business": "AlexaForBusinessClient",
   "Auto Scaling": "AutoScalingClient",
   "RoboMaker": "RoboMakerClient",
   "SES": "SesClient",
@@ -1861,7 +1850,6 @@ private const val javaClientNamesJson = """
   "IoT Events Data": "IotEventsDataClient",
   "Storage Gateway": "StorageGatewayClient",
   "grafana": "GrafanaClient",
-  "Honeycode": "HoneycodeClient",
   "rbin": "RbinClient",
   "S3Outposts": "S3OutpostsClient",
   "Application Auto Scaling": "ApplicationAutoScalingClient",

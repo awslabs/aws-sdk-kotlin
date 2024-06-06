@@ -1,5 +1,115 @@
 # Changelog
 
+## [1.2.20] - 05/24/2024
+
+### Features
+* (**iotfleetwise**) AWS IoT FleetWise now supports listing vehicles with attributes filter, ListVehicles API is updated to support additional attributes filter.
+
+### Documentation
+* (**dynamodb**) Documentation only updates for DynamoDB.
+* (**managedblockchain**) This is a minor documentation update to address the impact of the shut down of the Goerli and Polygon networks.
+
+## [1.2.19] - 05/23/2024
+
+### Features
+* (**emrserverless**) This release adds the capability to run interactive workloads using Apache Livy Endpoint.
+
+### Documentation
+* (**opsworks**) Documentation-only update for OpsWorks Stacks.
+
+## [1.2.18] - 05/22/2024
+
+### Features
+* (**chatbot**) This change adds support for tagging Chatbot configurations.
+* (**cloudformation**) Added DeletionMode FORCE_DELETE_STACK for deleting a stack that is stuck in DELETE_FAILED state due to resource deletion failure.
+* (**kms**) This release includes feature to import customer's asymmetric (RSA, ECC and SM2) and HMAC keys into KMS in China.
+* (**opensearch**) This release adds support for enabling or disabling a data source configured as part of Zero-ETL integration with Amazon S3, by setting its status.
+* (**wafv2**) You can now use Security Lake to collect web ACL traffic data.
+
+## [1.2.17] - 05/21/2024
+
+### Features
+* (**cloudfront**) Model update; no change to SDK functionality.
+* (**glue**) Add Maintenance window to CreateJob and UpdateJob APIs and JobRun response. Add a new Job Run State for EXPIRED.
+* (**lightsail**) This release adds support for Amazon Lightsail instances to switch between dual-stack or IPv4 only and IPv6-only public IP address types.
+* (**mailmanager**) This release includes a new Amazon SES feature called Mail Manager, which is a set of email gateway capabilities designed to help customers strengthen their organization's email infrastructure, simplify email workflow management, and streamline email compliance control.
+* (**pi**) Performance Insights added a new input parameter called AuthorizedActions to support the fine-grained access feature. Performance Insights also restricted the acceptable input characters.
+* (**storagegateway**) Added new SMBSecurityStrategy enum named MandatoryEncryptionNoAes128, new mode enforces encryption and disables AES 128-bit algorithums.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation for Db2 license through AWS Marketplace.
+
+## [1.2.16] - 05/20/2024
+
+### Features
+* (**bedrockagent**) This release adds support for using Guardrails with Bedrock Agents.
+* (**bedrockagentruntime**) This release adds support for using Guardrails with Bedrock Agents.
+* (**controltower**) Added ListControlOperations API and filtering support for ListEnabledControls API. Updates also includes added metadata for enabled controls and control operations.
+* (**osis**) Add support for creating an OpenSearch Ingestion pipeline that is attached to a provided VPC. Add information about the destinations of an OpenSearch Ingestion pipeline to the GetPipeline and ListPipelines APIs.
+* (**rds**) This release adds support for EngineLifecycleSupport on DBInstances, DBClusters, and GlobalClusters.
+* (**secretsmanager**) add v2 smoke tests and smithy smokeTests trait for SDK testing
+
+## [1.2.15] - 05/17/2024
+
+### Features
+* (**applicationautoscaling**) add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**codebuild**) Aws CodeBuild now supports 36 hours build timeout
+* (**elasticloadbalancingv2**) This release adds dualstack-without-public-ipv4 IP address type for ALB.
+* (**lakeformation**) Introduces a new API, GetDataLakePrincipal, that returns the identity of the invoking principal
+* (**transfer**) Enable use of CloudFormation traits in Smithy model to improve generated CloudFormation schema from the Smithy API model.
+
+### Miscellaneous
+* [#1092](https://github.com/smithy-lang/smithy-kotlin/issues/1092) Upgrade to version [**1.2.4**](https://github.com/smithy-lang/smithy-kotlin/releases/tag/v1.2.4) of **smithy-kotlin** to pick up fix for `http.nonProxyHosts` wildcards
+
+## [1.2.14] - 05/16/2024
+
+### Features
+* (**acmpca**) This release adds support for waiters to fail on AccessDeniedException when having insufficient permissions
+* (**kafka**) AWS MSK support for Broker Removal.
+* (**mwaa**) Amazon MWAA now supports Airflow web server auto scaling to automatically handle increased demand from REST APIs, Command Line Interface (CLI), or more Airflow User Interface (UI) users. Customers can specify maximum and minimum web server instances during environment creation and update workflow.
+* (**quicksight**) This release adds DescribeKeyRegistration and UpdateKeyRegistration APIs to manage QuickSight Customer Managed Keys (CMK).
+* (**sagemaker**) Introduced WorkerAccessConfiguration to SageMaker Workteam. This allows customers to configure resource access for workers in a workteam.
+
+### Documentation
+* (**connect**) Adding Contact Flow metrics to the GetMetricDataV2 API
+* (**secretsmanager**) Documentation updates for AWS Secrets Manager
+
+## [1.2.13] - 05/15/2024
+
+### Features
+* (**bedrockagentruntime**) Updating Bedrock Knowledge Base Metadata & Filters feature with two new filters listContains and stringContains
+* (**codebuild**) CodeBuild Reserved Capacity VPC Support
+* (**datasync**) Task executions now display a CANCELLING status when an execution is in the process of being cancelled.
+* (**grafana**) This release adds new ServiceAccount and ServiceAccountToken APIs.
+* (**medicalimaging**) Added support for importing medical imaging data from Amazon S3 buckets across accounts and regions.
+
+### Documentation
+* (**securityhub**) Documentation-only update for AWS Security Hub
+
+## [1.2.12] - 05/14/2024
+
+### Features
+* (**connect**) Amazon Connect provides enhanced search capabilities for flows & flow modules on the Connect admin website and programmatically using APIs. You can search for flows and flow modules by name, description, type, status, and tags, to filter and identify a specific flow in your Connect instances.
+* (**s3**) Updated a few x-id in the http uri traits
+
+### Miscellaneous
+* Remove Alexa for Business service
+* Remove Honeycode service
+
+## [1.2.11] - 05/13/2024
+
+### Features
+* (**eventbridge**) Amazon EventBridge introduces KMS customer-managed key (CMK) encryption support for custom and partner events published on EventBridge Event Bus (including default bus) and UpdateEventBus API.
+* (**vpclattice**) This release adds TLS Passthrough support. It also increases max number of target group per rule to 10.
+
+## [1.2.10] - 05/10/2024
+
+### Features
+* (**applicationdiscoveryservice**) add v2 smoke tests and smithy smokeTests trait for SDK testing
+* (**greengrassv2**) Mark ComponentVersion in ComponentDeploymentSpecification as required.
+* (**sagemaker**) Introduced support for G6 instance types on Sagemaker Notebook Instances and on SageMaker Studio for JupyterLab and CodeEditor applications.
+* (**ssooidc**) Updated request parameters for PKCE support.
+
 ## [1.2.9] - 05/09/2024
 
 ### Features
