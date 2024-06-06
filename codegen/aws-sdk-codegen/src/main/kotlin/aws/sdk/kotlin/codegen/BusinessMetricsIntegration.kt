@@ -33,7 +33,7 @@ class BusinessMetricsIntegration : KotlinIntegration {
 
         writer.write(
             "if (endpoint.attributes.contains(#T)) request.context.#T(#T.ACCOUNT_ID_BASED_ENDPOINT)",
-            RuntimeTypes.Core.BusinessMetrics.accountIdBasedEndPoint,
+            RuntimeTypes.Core.BusinessMetrics.accountIdBasedEndPointAccountId,
             RuntimeTypes.Core.BusinessMetrics.emitBusinessMetrics,
             RuntimeTypes.Core.BusinessMetrics.BusinessMetrics,
         )
