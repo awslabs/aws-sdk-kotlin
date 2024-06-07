@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.29] - 06/07/2024
+
+### Features
+* (**auditmanager**) New feature: common controls. When creating custom controls, you can now use pre-grouped AWS data sources based on common compliance themes. Also, the awsServices parameter is deprecated because we now manage services in scope for you. If used, the input is ignored and an empty list is returned.
+* (**b2bi**) Added exceptions to B2Bi List operations and ConflictException to B2Bi StartTransformerJob operation. Also made capabilities field explicitly required when creating a Partnership.
+* (**codepipeline**) CodePipeline now supports overriding S3 Source Object Key during StartPipelineExecution, as part of Source Overrides.
+* (**sagemaker**) This release introduces a new optional parameter: InferenceAmiVersion, in ProductionVariant.
+* (**verifiedpermissions**) This release adds OpenIdConnect (OIDC) configuration support for IdentitySources, allowing for external IDPs to be used in authorization requests.
+
 ## [1.2.28] - 06/06/2024
 
 ### Features
