@@ -139,6 +139,12 @@
             "brazilName": "AwsSdkKotlinApplicationInsights"
         },
         {
+            "sdkId": "Application Signals",
+            "namespace": "aws.sdk.kotlin.services.applicationsignals",
+            "artifactName": "applicationsignals",
+            "brazilName": "AwsSdkKotlinApplicationSignals"
+        },
+        {
             "sdkId": "ApplicationCostProfiler",
             "namespace": "aws.sdk.kotlin.services.applicationcostprofiler",
             "artifactName": "applicationcostprofiler",

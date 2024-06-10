@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.30] - 06/10/2024
+
+### Features
+* (**applicationsignals**) This is the initial SDK release for Amazon CloudWatch Application Signals. Amazon CloudWatch Application Signals provides curated application performance monitoring for developers to monitor and troubleshoot application health using pre-built dashboards and Service Level Objectives.
+* (**ecs**) This release introduces a new cluster configuration to support the customer-managed keys for ECS managed storage encryption.
+* (**imagebuilder**) This release updates the regex pattern for Image Builder ARNs.
+
 ## [1.2.29] - 06/07/2024
 
 ### Features
