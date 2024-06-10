@@ -13,7 +13,7 @@ smithy-kotlin-runtime-version = "1.2.2"
 smithy-kotlin-codegen-version = "0.32.2"
 
 # codegen
-smithy-version = "1.47.0"
+smithy-version = "1.49.0"
 
 # testing
 junit-version = "5.10.1"
@@ -89,6 +89,7 @@ smithy-cli = { module = "software.amazon.smithy:smithy-cli", version.ref = "smit
 smithy-waiters = { module = "software.amazon.smithy:smithy-waiters", version.ref = "smithy-version" }
 smithy-aws-endpoints = { module = "software.amazon.smithy:smithy-aws-endpoints", version.ref = "smithy-version" }
 smithy-aws-traits = { module = "software.amazon.smithy:smithy-aws-traits", version.ref = "smithy-version" }
+smithy-protocol-traits = { module = "software.amazon.smithy:smithy-protocol-traits", version.ref = "smithy-version" }
 smithy-aws-protocol-tests = { module = "software.amazon.smithy:smithy-aws-protocol-tests", version.ref = "smithy-version" }
 smithy-aws-iam-traits = { module = "software.amazon.smithy:smithy-aws-iam-traits", version.ref = "smithy-version" }
 smithy-aws-cloudformation-traits = { module = "software.amazon.smithy:smithy-aws-cloudformation-traits", version.ref = "smithy-version" }
