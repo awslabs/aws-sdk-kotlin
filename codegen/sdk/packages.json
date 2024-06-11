@@ -139,6 +139,12 @@
             "brazilName": "AwsSdkKotlinApplicationInsights"
         },
         {
+            "sdkId": "Application Signals",
+            "namespace": "aws.sdk.kotlin.services.applicationsignals",
+            "artifactName": "applicationsignals",
+            "brazilName": "AwsSdkKotlinApplicationSignals"
+        },
+        {
             "sdkId": "ApplicationCostProfiler",
             "namespace": "aws.sdk.kotlin.services.applicationcostprofiler",
             "artifactName": "applicationcostprofiler",
@@ -1943,6 +1949,12 @@
             "namespace": "aws.sdk.kotlin.services.supportapp",
             "artifactName": "supportapp",
             "brazilName": "AwsSdkKotlinSupportApp"
+        },
+        {
+            "sdkId": "TaxSettings",
+            "namespace": "aws.sdk.kotlin.services.taxsettings",
+            "artifactName": "taxsettings",
+            "brazilName": "AwsSdkKotlinTaxsettings"
         },
         {
             "sdkId": "Textract",
