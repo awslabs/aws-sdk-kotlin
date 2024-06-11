@@ -1477,6 +1477,12 @@
             "brazilName": "AwsSdkKotlinPcaConnectorAd"
         },
         {
+            "sdkId": "Pca Connector Scep",
+            "namespace": "aws.sdk.kotlin.services.pcaconnectorscep",
+            "artifactName": "pcaconnectorscep",
+            "brazilName": "AwsSdkKotlinPcaConnectorScep"
+        },
+        {
             "sdkId": "Personalize",
             "namespace": "aws.sdk.kotlin.services.personalize",
             "artifactName": "personalize",
