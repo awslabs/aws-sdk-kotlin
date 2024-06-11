@@ -199,12 +199,6 @@
             "brazilName": "AwsSdkKotlinBackupGateway"
         },
         {
-            "sdkId": "BackupStorage",
-            "namespace": "aws.sdk.kotlin.services.backupstorage",
-            "artifactName": "backupstorage",
-            "brazilName": "AwsSdkKotlinBackupstorage"
-        },
-        {
             "sdkId": "Batch",
             "namespace": "aws.sdk.kotlin.services.batch",
             "artifactName": "batch",
