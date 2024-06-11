@@ -6,6 +6,7 @@ package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
@@ -24,19 +25,27 @@ class BusinessMetricsIntegration : KotlinIntegration {
         )
 
     private val endpointBusinessMetricsSectionWriter = SectionWriter { writer, _ ->
+        writer.write("")
         writer.write(
             "if (endpoint.attributes.contains(#T)) request.context.#T(#T.SERVICE_ENDPOINT_OVERRIDE)",
-            RuntimeTypes.Core.BusinessMetrics.serviceEndpointOverride,
+            RuntimeTypes.Core.BusinessMetrics.ServiceEndpointOverride,
             RuntimeTypes.Core.BusinessMetrics.emitBusinessMetrics,
-            RuntimeTypes.Core.BusinessMetrics.BusinessMetrics,
+            RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
         )
-
         writer.write(
             "if (endpoint.attributes.contains(#T)) request.context.#T(#T.ACCOUNT_ID_BASED_ENDPOINT)",
-            RuntimeTypes.Core.BusinessMetrics.accountIdBasedEndPointAccountId,
+            RuntimeTypes.Core.BusinessMetrics.AccountIdBasedEndpointAccountId,
             RuntimeTypes.Core.BusinessMetrics.emitBusinessMetrics,
-            RuntimeTypes.Core.BusinessMetrics.BusinessMetrics,
+            RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
         )
+        writer.write(
+            "if (endpoint.attributes.contains(#T.SigningService) && endpoint.attributes[#T.SigningService] == \"s3express\") request.context.#T(#T.S3_EXPRESS_BUCKET)",
+            AwsSigningAttributes,
+            AwsSigningAttributes,
+            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetrics,
+            AwsRuntimeTypes.Http.Interceptors.SdkBusinessMetric,
+        )
+        writer.write("")
     }
 
     override fun customizeMiddleware(

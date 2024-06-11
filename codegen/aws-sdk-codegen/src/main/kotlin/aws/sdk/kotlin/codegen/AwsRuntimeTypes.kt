@@ -61,6 +61,7 @@ object AwsRuntimeTypes {
             val AddUserAgentMetadataInterceptor = symbol("AddUserAgentMetadataInterceptor")
             val UnsupportedSigningAlgorithmInterceptor = symbol("UnsupportedSigningAlgorithmInterceptor")
             val BusinessMetricsInterceptor = symbol("BusinessMetricsInterceptor")
+            val SdkBusinessMetric = symbol("SdkBusinessMetric")
         }
 
         object Retries {

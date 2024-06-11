@@ -48,6 +48,7 @@ public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion {
 public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadataKt {
 	public static final field AWS_APP_ID_ENV Ljava/lang/String;
 	public static final field AWS_APP_ID_PROP Ljava/lang/String;
+	public static final field BUSINESS_METRICS_MAX_SIZE I
 }
 
 public final class aws/sdk/kotlin/runtime/http/ExecutionEnvMetadata {
@@ -183,6 +184,14 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/BusinessMetricsInter
 	public fun readBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
 	public fun readBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
 	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+}
+
+public final class aws/sdk/kotlin/runtime/http/interceptors/SdkBusinessMetric : java/lang/Enum, aws/smithy/kotlin/runtime/businessmetrics/BusinessMetric {
+	public static final field S3_EXPRESS_BUCKET Laws/sdk/kotlin/runtime/http/interceptors/SdkBusinessMetric;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getIdentifier ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/interceptors/SdkBusinessMetric;
+	public static fun values ()[Laws/sdk/kotlin/runtime/http/interceptors/SdkBusinessMetric;
 }
 
 public final class aws/sdk/kotlin/runtime/http/interceptors/UnsupportedSigningAlgorithmInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
