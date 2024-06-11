@@ -6,7 +6,6 @@ package aws.sdk.kotlin.runtime.http.interceptors
 
 import aws.sdk.kotlin.runtime.http.BUSINESS_METRICS_MAX_SIZE
 import aws.sdk.kotlin.runtime.http.middleware.USER_AGENT
-import aws.smithy.kotlin.runtime.businessmetrics.SdkBusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.SmithyBusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
