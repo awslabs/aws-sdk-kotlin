@@ -115,6 +115,12 @@
             "brazilName": "AwsSdkKotlinAppsync"
         },
         {
+            "sdkId": "AppTest",
+            "namespace": "aws.sdk.kotlin.services.apptest",
+            "artifactName": "apptest",
+            "brazilName": "AwsSdkKotlinApptest"
+        },
+        {
             "sdkId": "Appflow",
             "namespace": "aws.sdk.kotlin.services.appflow",
             "artifactName": "appflow",

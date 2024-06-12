@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.32] - 06/12/2024
+
+### Features
+* (**apptest**) AWS Mainframe Modernization Application Testing is an AWS Mainframe Modernization service feature that automates functional equivalence testing for mainframe application modernization and migration to AWS, and regression testing.
+* (**ec2**) Tagging support for Traffic Mirroring FilterRule resource
+* (**osis**) SDK changes for self-managed vpc endpoint to OpenSearch ingestion pipelines.
+* (**secretsmanager**) Introducing RotationToken parameter for PutSecretValue API
+* (**securitylake**) This release updates request validation regex to account for non-commercial aws partitions.
+* (**sesv2**) This release adds support for Amazon EventBridge as an email sending events destination.
+
+### Documentation
+* (**redshift**) Updates to remove DC1 and DS2 node types.
+
+### Miscellaneous
+* Deprecation of AWS Backup Storage
+
 ## [1.2.31] - 06/11/2024
 
 ### Features
