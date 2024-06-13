@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.runtime.http.interceptors
 
-import aws.sdk.kotlin.runtime.http.BUSINESS_METRICS_MAX_SIZE
+import aws.sdk.kotlin.runtime.http.BUSINESS_METRICS_MAX_LENGTH
 import aws.sdk.kotlin.runtime.http.middleware.USER_AGENT
 import aws.smithy.kotlin.runtime.businessmetrics.SmithyBusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
@@ -34,7 +34,7 @@ class BusinessMetricsInterceptorTest {
     @Test
     fun businessMetrics() = runTest {
         val executionContext = ExecutionContext()
-        executionContext.emitBusinessMetric(SdkBusinessMetric.S3_EXPRESS_BUCKET)
+        executionContext.emitBusinessMetric(AwsBusinessMetric.S3_EXPRESS_BUCKET)
 
         val interceptor = BusinessMetricsInterceptor()
         val request = interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
@@ -42,7 +42,7 @@ class BusinessMetricsInterceptorTest {
 
         assertTrue(
             userAgentHeader.endsWith(
-                "m/${SdkBusinessMetric.S3_EXPRESS_BUCKET.identifier}",
+                "m/${AwsBusinessMetric.S3_EXPRESS_BUCKET.identifier}",
             ),
         )
     }
@@ -50,7 +50,7 @@ class BusinessMetricsInterceptorTest {
     @Test
     fun multipleBusinessMetrics() = runTest {
         val executionContext = ExecutionContext()
-        executionContext.emitBusinessMetric(SdkBusinessMetric.S3_EXPRESS_BUCKET)
+        executionContext.emitBusinessMetric(AwsBusinessMetric.S3_EXPRESS_BUCKET)
         executionContext.emitBusinessMetric(SmithyBusinessMetric.GZIP_REQUEST_COMPRESSION)
 
         val interceptor = BusinessMetricsInterceptor()
@@ -59,7 +59,7 @@ class BusinessMetricsInterceptorTest {
 
         assertTrue(
             userAgentHeader.endsWith(
-                "m/${SdkBusinessMetric.S3_EXPRESS_BUCKET.identifier},${SmithyBusinessMetric.GZIP_REQUEST_COMPRESSION.identifier}",
+                "m/${AwsBusinessMetric.S3_EXPRESS_BUCKET.identifier},${SmithyBusinessMetric.GZIP_REQUEST_COMPRESSION.identifier}",
             ),
         )
     }
@@ -77,14 +77,14 @@ class BusinessMetricsInterceptorTest {
         val rawMetricsString = rawMetrics.joinToString(",", "m/")
         val rawMetricsByteArray = rawMetricsString.toByteArray()
 
-        assertTrue(rawMetricsByteArray.size >= BUSINESS_METRICS_MAX_SIZE)
+        assertTrue(rawMetricsByteArray.size >= BUSINESS_METRICS_MAX_LENGTH)
 
         val interceptor = BusinessMetricsInterceptor()
         val request = interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
         val userAgentHeader = request.headers[USER_AGENT]!!
         val truncatedMetrics = "m/" + userAgentHeader.substringAfter("m/")
 
-        assertTrue(truncatedMetrics.toByteArray().size <= BUSINESS_METRICS_MAX_SIZE)
+        assertTrue(truncatedMetrics.toByteArray().size <= BUSINESS_METRICS_MAX_LENGTH)
         assertFalse(truncatedMetrics.endsWith(","))
     }
 
@@ -93,7 +93,7 @@ class BusinessMetricsInterceptorTest {
         val executionContext = ExecutionContext()
 
         executionContext.attributes[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics] = mutableSetOf(
-            "A".repeat(BUSINESS_METRICS_MAX_SIZE),
+            "A".repeat(BUSINESS_METRICS_MAX_LENGTH),
         )
 
         val interceptor = BusinessMetricsInterceptor()

@@ -15,7 +15,7 @@ import kotlin.jvm.JvmInline
 internal const val AWS_EXECUTION_ENV = "AWS_EXECUTION_ENV"
 public const val AWS_APP_ID_ENV: String = "AWS_SDK_UA_APP_ID"
 private const val USER_AGENT_SPEC_VERSION = "2.1"
-public const val BUSINESS_METRICS_MAX_SIZE: Int = 1024
+public const val BUSINESS_METRICS_MAX_LENGTH: Int = 1024
 
 // non-standard environment variables/properties
 public const val AWS_APP_ID_PROP: String = "aws.userAgentAppId"

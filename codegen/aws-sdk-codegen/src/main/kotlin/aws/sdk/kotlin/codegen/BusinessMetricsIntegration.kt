@@ -19,6 +19,9 @@ import software.amazon.smithy.model.shapes.OperationShape
  * Renders the addition of the [BusinessMetricsInterceptor] and endpoint business metrics emitters
  */
 class BusinessMetricsIntegration : KotlinIntegration {
+    override val order: Byte
+        get() = super.order
+
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
             SectionWriterBinding(EndpointBusinessMetrics, endpointBusinessMetricsSectionWriter),
@@ -29,21 +32,21 @@ class BusinessMetricsIntegration : KotlinIntegration {
         writer.write(
             "if (endpoint.attributes.contains(#T)) request.context.#T(#T.SERVICE_ENDPOINT_OVERRIDE)",
             RuntimeTypes.Core.BusinessMetrics.ServiceEndpointOverride,
-            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetrics,
+            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
             RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
         )
         writer.write(
             "if (endpoint.attributes.contains(#T)) request.context.#T(#T.ACCOUNT_ID_BASED_ENDPOINT)",
             RuntimeTypes.Core.BusinessMetrics.AccountIdBasedEndpointAccountId,
-            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetrics,
+            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
             RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
         )
         writer.write(
             "if (endpoint.attributes.contains(#T.SigningService) && endpoint.attributes[#T.SigningService] == \"s3express\") request.context.#T(#T.S3_EXPRESS_BUCKET)",
             AwsSigningAttributes,
             AwsSigningAttributes,
-            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetrics,
-            AwsRuntimeTypes.Http.Interceptors.SdkBusinessMetric,
+            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
+            AwsRuntimeTypes.Http.Interceptors.AwsBusinessMetric,
         )
         writer.write("")
     }

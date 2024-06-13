@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.runtime.http.interceptors
 
-import aws.sdk.kotlin.runtime.http.BUSINESS_METRICS_MAX_SIZE
+import aws.sdk.kotlin.runtime.http.BUSINESS_METRICS_MAX_LENGTH
 import aws.sdk.kotlin.runtime.http.middleware.USER_AGENT
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
@@ -40,7 +40,7 @@ private fun formatMetrics(metrics: MutableSet<String>): String {
     val metricsString = metrics.joinToString(",", "m/")
     val metricsByteArray = metricsString.encodeToByteArray()
 
-    if (metricsByteArray.size <= BUSINESS_METRICS_MAX_SIZE) return metricsString
+    if (metricsByteArray.size <= BUSINESS_METRICS_MAX_LENGTH) return metricsString
 
     val lastCommaIndex = metricsByteArray
         .sliceArray(0 until 1024)
@@ -59,9 +59,9 @@ private fun formatMetrics(metrics: MutableSet<String>): String {
 }
 
 /**
- * SDK specific business metrics
+ * AWS SDK specific business metrics
  */
 @InternalApi
-public enum class SdkBusinessMetric(public override val identifier: String) : BusinessMetric {
+public enum class AwsBusinessMetric(public override val identifier: String) : BusinessMetric {
     S3_EXPRESS_BUCKET("J"),
 }
