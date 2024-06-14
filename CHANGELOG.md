@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.2.33] - 06/13/2024
+
+### Features
+* (**cloudhsmv2**) Added support for hsm type hsm2m.medium. Added supported for creating a cluster in FIPS or NON_FIPS mode.
+* (**glue**) This release adds support for configuration of evaluation method for composite rules in Glue Data Quality rulesets.
+* (**iotwireless**) Add RoamingDeviceSNR and RoamingDeviceRSSI to Customer Metrics.
+* (**kms**) This feature allows customers to use their keys stored in KMS to derive a shared secret which can then be used to establish a secured channel for communication, provide proof of possession, or establish trust with other parties.
+* (**mediapackagev2**) This release adds support for CMAF ingest (DASH-IF live media ingest protocol interface 1)
+
+## [1.2.32] - 06/12/2024
+
+### Features
+* (**apptest**) AWS Mainframe Modernization Application Testing is an AWS Mainframe Modernization service feature that automates functional equivalence testing for mainframe application modernization and migration to AWS, and regression testing.
+* (**ec2**) Tagging support for Traffic Mirroring FilterRule resource
+* (**osis**) SDK changes for self-managed vpc endpoint to OpenSearch ingestion pipelines.
+* (**secretsmanager**) Introducing RotationToken parameter for PutSecretValue API
+* (**securitylake**) This release updates request validation regex to account for non-commercial aws partitions.
+* (**sesv2**) This release adds support for Amazon EventBridge as an email sending events destination.
+
+### Documentation
+* (**redshift**) Updates to remove DC1 and DS2 node types.
+
+### Miscellaneous
+* Deprecation of AWS Backup Storage
+
+## [1.2.31] - 06/11/2024
+
+### Features
+* (**accessanalyzer**) IAM Access Analyzer now provides policy recommendations to help resolve unused permissions for IAM roles and users. Additionally, IAM Access Analyzer now extends its custom policy checks to detect when IAM policies grant public access or access to critical resources ahead of deployments.
+* (**guardduty**) Added API support for GuardDuty Malware Protection for S3.
+* (**networkmanager**) This is model changes & documentation update for Service Insertion feature for AWS Cloud WAN. This feature allows insertion of AWS/3rd party security services on Cloud WAN. This allows to steer inter/intra segment traffic via security appliances and provide visibility to the route updates.
+* (**pcaconnectorscep**) Connector for SCEP allows you to use a managed, cloud CA to enroll mobile devices and networking gear. SCEP is a widely-adopted protocol used by mobile device management (MDM) solutions for enrolling mobile devices. With the connector, you can use AWS Private CA with popular MDM solutions.
+* (**sagemaker**) Introduced Scope and AuthenticationRequestExtraParams to SageMaker Workforce OIDC configuration; this allows customers to modify these options for their private Workforce IdP integration. Model Registry Cross-account model package groups are discoverable.
+
 ## [1.2.30] - 06/10/2024
 
 ### Features

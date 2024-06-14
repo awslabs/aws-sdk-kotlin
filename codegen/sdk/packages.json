@@ -115,6 +115,12 @@
             "brazilName": "AwsSdkKotlinAppsync"
         },
         {
+            "sdkId": "AppTest",
+            "namespace": "aws.sdk.kotlin.services.apptest",
+            "artifactName": "apptest",
+            "brazilName": "AwsSdkKotlinApptest"
+        },
+        {
             "sdkId": "Appflow",
             "namespace": "aws.sdk.kotlin.services.appflow",
             "artifactName": "appflow",
@@ -197,12 +203,6 @@
             "namespace": "aws.sdk.kotlin.services.backupgateway",
             "artifactName": "backupgateway",
             "brazilName": "AwsSdkKotlinBackupGateway"
-        },
-        {
-            "sdkId": "BackupStorage",
-            "namespace": "aws.sdk.kotlin.services.backupstorage",
-            "artifactName": "backupstorage",
-            "brazilName": "AwsSdkKotlinBackupstorage"
         },
         {
             "sdkId": "Batch",
@@ -1475,6 +1475,12 @@
             "namespace": "aws.sdk.kotlin.services.pcaconnectorad",
             "artifactName": "pcaconnectorad",
             "brazilName": "AwsSdkKotlinPcaConnectorAd"
+        },
+        {
+            "sdkId": "Pca Connector Scep",
+            "namespace": "aws.sdk.kotlin.services.pcaconnectorscep",
+            "artifactName": "pcaconnectorscep",
+            "brazilName": "AwsSdkKotlinPcaConnectorScep"
         },
         {
             "sdkId": "Personalize",
