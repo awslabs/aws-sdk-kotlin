@@ -194,11 +194,6 @@ private const val testSuiteJson = """
     "service_envvar_name": "AWS_ENDPOINT_URL_BACKUP_GATEWAY"
   },
   {
-    "service_id": "BackupStorage",
-    "services_section_name": "backupstorage",
-    "service_envvar_name": "AWS_ENDPOINT_URL_BACKUPSTORAGE"
-  },
-  {
     "service_id": "Batch",
     "services_section_name": "batch",
     "service_envvar_name": "AWS_ENDPOINT_URL_BATCH"
@@ -1940,7 +1935,6 @@ private const val javaClientNamesJson = """
   "IoTFleetHub": "IotFleetHubClient",
   "Cognito Sync": "CognitoSyncClient",
   "Outposts": "OutpostsClient",
-  "BackupStorage": "BackupStorageClient",
   "Personalize": "PersonalizeClient",
   "SESv2": "SesV2Client",
   "ARC Zonal Shift": "ArcZonalShiftClient",

@@ -59,7 +59,7 @@ class ImdsCredentialsProviderTest {
                 tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
             )
             expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials", "TOKEN_A"),
+                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/", "TOKEN_A"),
                 imdsResponse("imds-test-role"),
             )
             expect(
@@ -84,7 +84,7 @@ class ImdsCredentialsProviderTest {
 
             // verify that profile is re-retrieved after credentials expiration
             expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials", "TOKEN_A"),
+                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/", "TOKEN_A"),
                 imdsResponse("imds-test-role-2"),
             )
             expect(
@@ -235,7 +235,7 @@ class ImdsCredentialsProviderTest {
                 tokenResponse(DEFAULT_TOKEN_TTL_SECONDS, "TOKEN_A"),
             )
             expect(
-                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials", "TOKEN_A"),
+                imdsRequest("http://169.254.169.254/latest/meta-data/iam/security-credentials/", "TOKEN_A"),
                 HttpResponse(
                     HttpStatusCode.NotFound,
                     Headers.Empty,
