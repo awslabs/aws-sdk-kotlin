@@ -7,5 +7,5 @@ package aws.sdk.kotlin.services.dynamodb
 /**
  * Checks if a Dynamo DB table exists based on its name
  */
-internal suspend fun String.exists(client: DynamoDbClient): Boolean =
-    client.listTables {}.tableNames?.contains(this) ?: false
+internal suspend fun DynamoDbClient.tableExists(name: String): Boolean =
+    this.listTables {}.tableNames?.contains(name) ?: false

@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
@@ -19,11 +20,11 @@ import kotlin.time.Duration.Companion.seconds
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PaginatorTest {
     private val client = DynamoDbClient { region = "us-west-2" }
-    private val table = "testTable"
+    private val table = "testTable${Random.nextInt()}"
 
     @BeforeAll
     private fun setUp(): Unit = runBlocking {
-        if (!table.exists(client)) {
+        if (!client.tableExists(table)) {
             client.createTable {
                 tableName = table
                 attributeDefinitions = listOf(
@@ -61,7 +62,7 @@ class PaginatorTest {
 
     @AfterAll
     private fun cleanUp(): Unit = runBlocking {
-        if (table.exists(client)) {
+        if (client.tableExists(table)) {
             client.deleteTable {
                 tableName = table
             }
@@ -97,18 +98,24 @@ class PaginatorTest {
             )
         }
 
+        val results = mutableListOf<Map<String, AttributeValue>?>()
+
         client.scanPaginated {
             tableName = table
             exclusiveStartKey = mapOf(
                 "Artist" to AttributeValue.S("Foo"),
                 "SongTitle" to AttributeValue.S("Bar"),
             )
+            limit = 1
         }.collect { scan ->
-            assertEquals(2, scan.count)
-
-            // NOTE: Items are returned in alphabetical order
-            assertEquals((AttributeValue.S("Baz")), scan.items?.get(0)?.get("SongTitle"))
-            assertEquals((AttributeValue.S("Qux")), scan.items?.get(1)?.get("SongTitle"))
+            if (scan.items?.isNotEmpty() == true) {
+                results.add(scan.items.first())
+            }
         }
+
+        assertEquals(2, results.size)
+        // NOTE: Items are returned in alphabetical order
+        assertEquals((AttributeValue.S("Baz")), results[0]?.get("SongTitle"))
+        assertEquals((AttributeValue.S("Qux")), results[1]?.get("SongTitle"))
     }
 }
