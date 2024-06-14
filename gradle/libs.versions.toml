@@ -2,15 +2,15 @@
 kotlin-version = "1.9.23"
 dokka-version = "1.9.10"
 
-aws-kotlin-repo-tools-version = "0.4.4"
+aws-kotlin-repo-tools-version = "0.4.6"
 
 # libs
 coroutines-version = "1.7.3"
 atomicfu-version = "0.23.1"
 
 # smithy-kotlin codegen and runtime are versioned separately
-smithy-kotlin-runtime-version = "1.2.2"
-smithy-kotlin-codegen-version = "0.32.2"
+smithy-kotlin-runtime-version = "1.2.3-SNAPSHOT"
+smithy-kotlin-codegen-version = "0.32.3-SNAPSHOT"
 
 # codegen
 smithy-version = "1.49.0"
