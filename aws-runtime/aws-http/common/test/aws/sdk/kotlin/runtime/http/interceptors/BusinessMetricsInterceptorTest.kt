@@ -75,7 +75,7 @@ class BusinessMetricsInterceptorTest {
 
         val rawMetrics = executionContext[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics]
         val rawMetricsString = rawMetrics.joinToString(",", "m/")
-        val rawMetricsByteArray = rawMetricsString.toByteArray()
+        val rawMetricsByteArray = rawMetricsString.encodeToByteArray()
 
         assertTrue(rawMetricsByteArray.size >= BUSINESS_METRICS_MAX_LENGTH)
 
@@ -84,7 +84,7 @@ class BusinessMetricsInterceptorTest {
         val userAgentHeader = request.headers[USER_AGENT]!!
         val truncatedMetrics = "m/" + userAgentHeader.substringAfter("m/")
 
-        assertTrue(truncatedMetrics.toByteArray().size <= BUSINESS_METRICS_MAX_LENGTH)
+        assertTrue(truncatedMetrics.encodeToByteArray().size <= BUSINESS_METRICS_MAX_LENGTH)
         assertFalse(truncatedMetrics.endsWith(","))
     }
 
