@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.35] - 06/17/2024
+
+### Features
+* (**batch**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**codebuild**) AWS CodeBuild now supports global and organization GitHub webhooks
+* (**cognitoidentityprovider**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**directoryservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**efs**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**glue**) This release introduces a new feature, Usage profiles. Usage profiles allow the AWS Glue admin to create different profiles for various classes of users within the account, enforcing limits and defaults for jobs and sessions.
+* (**mediaconvert**) This release includes support for creating I-frame only video segments for DASH trick play.
+* (**waf**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+### Documentation
+* (**acmpca**) Doc-only update that adds name constraints as an allowed extension for ImportCertificateAuthorityCertificate.
+* (**kms**) Updating SDK example for KMS DeriveSharedSecret API.
+* (**secretsmanager**) Doc only update for Secrets Manager
+
 ## [1.2.34] - 06/14/2024
 
 ### Features
