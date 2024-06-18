@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.2.35] - 06/17/2024
+
+### Features
+* (**batch**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**codebuild**) AWS CodeBuild now supports global and organization GitHub webhooks
+* (**cognitoidentityprovider**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**directoryservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**efs**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**glue**) This release introduces a new feature, Usage profiles. Usage profiles allow the AWS Glue admin to create different profiles for various classes of users within the account, enforcing limits and defaults for jobs and sessions.
+* (**mediaconvert**) This release includes support for creating I-frame only video segments for DASH trick play.
+* (**waf**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+### Documentation
+* (**acmpca**) Doc-only update that adds name constraints as an allowed extension for ImportCertificateAuthorityCertificate.
+* (**kms**) Updating SDK example for KMS DeriveSharedSecret API.
+* (**secretsmanager**) Doc only update for Secrets Manager
+
+## [1.2.34] - 06/14/2024
+
+### Features
+* (**datazone**) This release introduces a new default service blueprint for custom environment creation.
+* (**macie2**) This release adds support for managing the status of automated sensitive data discovery for individual accounts in an organization, and determining whether individual S3 buckets are included in the scope of the analyses.
+* (**mediaconvert**) This release adds the ability to search for historical job records within the management console using a search box and/or via the SDK/CLI with partial string matching search on input file name.
+* (**route53domains**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+### Documentation
+* (**ec2**) Documentation updates for Amazon EC2.
+
+### Miscellaneous
+* Upgrade to Smithy 1.49.0
+
 ## [1.2.33] - 06/13/2024
 
 ### Features
