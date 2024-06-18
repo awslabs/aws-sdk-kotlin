@@ -109,7 +109,7 @@ class PaginatorTest {
             limit = 1
         }.collect { scan ->
             if (scan.items?.isNotEmpty() == true) {
-                results.add(scan.items.first())
+                results.add(scan.items.single())
             }
         }
 
