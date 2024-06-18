@@ -16,6 +16,7 @@ import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
+import aws.smithy.kotlin.runtime.http.engine.ProxySelector
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
@@ -72,6 +73,9 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
         engine = builder.engine ?: DefaultHttpEngine {
             connectTimeout = 1.seconds
             socketReadTimeout = 1.seconds
+
+            // don't proxy IMDS requests. https://github.com/awslabs/aws-sdk-kotlin/issues/1315
+            proxySelector = ProxySelector.NoProxy
         }
 
         httpClient = SdkHttpClient(engine)
@@ -114,7 +118,7 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                         val payload = response.body.readAll() ?: throw EC2MetadataError(response.status.value, "no metadata payload")
                         return payload.decodeToString()
                     } else {
-                        throw EC2MetadataError(response.status.value, "error retrieving instance metadata")
+                        throw EC2MetadataError(response.status.value, "error retrieving instance metadata: ${response.status.description}")
                     }
                 }
             }

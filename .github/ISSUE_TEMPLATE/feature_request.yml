@@ -22,7 +22,7 @@ body:
   - type: textarea
     id: problem
     attributes:
-      label: Is your Feature Request related to a problem?
+      label: Is your feature request related to a problem?
       description: |
         A description of the issue, e.g. "It would be great if..."
     validations:
@@ -57,7 +57,7 @@ body:
   - type: input
     id: kotlin-sdk-version
     attributes:
-      label: AWS Kotlin SDK version used
+      label: AWS SDK for Kotlin version
     validations:
       required: true
 
@@ -71,6 +71,6 @@ body:
   - type: input
     id: operating-system
     attributes:
-      label: Operating System and version
+      label: Operating system and version
     validations:
       required: true 
