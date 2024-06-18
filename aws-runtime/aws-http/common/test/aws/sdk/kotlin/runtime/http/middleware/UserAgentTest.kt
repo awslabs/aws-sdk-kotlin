@@ -47,7 +47,7 @@ class UserAgentTest {
         assertTrue(request.headers.contains(X_AMZ_USER_AGENT))
         assertEquals("aws-sdk-kotlin/1.2.3", request.headers[X_AMZ_USER_AGENT])
         assertTrue(
-            request.headers[USER_AGENT]!!.startsWith("aws-sdk-kotlin/1.2.3 ua/2.1 api/test-service#1.2.3"),
+            request.headers[USER_AGENT]!!.startsWith("aws-sdk-kotlin/1.2.3 ua/2.0 api/test-service#1.2.3"),
             "$USER_AGENT header didn't start with expected value. Found: ${request.headers[USER_AGENT]}",
         )
     }
