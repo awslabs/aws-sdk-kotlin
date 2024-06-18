@@ -67,6 +67,7 @@ public data class PartitionConfig(
     public val dualStackDnsSuffix: String? = null,
     public val supportsFIPS: Boolean? = null,
     public val supportsDualStack: Boolean? = null,
+    public val implicitGlobalRegion: String? = null,
 ) {
     public fun mergeWith(other: PartitionConfig): PartitionConfig =
         PartitionConfig(
@@ -75,6 +76,7 @@ public data class PartitionConfig(
             other.dualStackDnsSuffix ?: dualStackDnsSuffix,
             other.supportsFIPS ?: supportsFIPS,
             other.supportsDualStack ?: supportsDualStack,
+            other.implicitGlobalRegion ?: implicitGlobalRegion,
         )
 }
 
