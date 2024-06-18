@@ -42,4 +42,3 @@ aws.sdk.kotlin.codegen.customization.cloudfrontkeyvaluestore.BackfillSigV4ACusto
 aws.sdk.kotlin.codegen.customization.s3.express.SigV4S3ExpressAuthSchemeIntegration
 aws.sdk.kotlin.codegen.customization.s3.express.S3ExpressIntegration
 aws.sdk.kotlin.codegen.customization.s3.S3ExpiresIntegration
-aws.sdk.kotlin.codegen.BusinessMetricsIntegration
