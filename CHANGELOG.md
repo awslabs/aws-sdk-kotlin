@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.2.37] - 06/19/2024
+
+### Features
+* (**artifact**) This release adds an acceptanceType field to the ReportSummary structure (used in the ListReports API response).
+* (**athena**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**costandusagereportservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**directconnect**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**elastictranscoder**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**opensearch**) This release enables customers to use JSON Web Tokens (JWT) for authentication on their Amazon OpenSearch Service domains.
+
+## [1.2.36] - 06/18/2024
+
+### Features
+* (**bedrockruntime**) This release adds support for using Guardrails with the Converse and ConverseStream APIs.
+* (**cloudtrail**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**configservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**eks**) This release adds support to surface async fargate customer errors from async path to customer through describe-fargate-profile API response.
+* (**lightsail**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**polly**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**rekognition**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**sagemaker**) Launched a new feature in SageMaker to provide managed MLflow Tracking Servers for customers to track ML experiments. This release also adds a new capability of attaching additional storage to SageMaker HyperPod cluster instances.
+* (**shield**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**snowball**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
 ## [1.2.35] - 06/17/2024
 
 ### Features
