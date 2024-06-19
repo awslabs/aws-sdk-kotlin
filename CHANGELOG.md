@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.37] - 06/19/2024
+
+### Features
+* (**artifact**) This release adds an acceptanceType field to the ReportSummary structure (used in the ListReports API response).
+* (**athena**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**costandusagereportservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**directconnect**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**elastictranscoder**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**opensearch**) This release enables customers to use JSON Web Tokens (JWT) for authentication on their Amazon OpenSearch Service domains.
+
 ## [1.2.36] - 06/18/2024
 
 ### Features
