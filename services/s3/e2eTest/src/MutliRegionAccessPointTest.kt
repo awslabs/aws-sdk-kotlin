@@ -23,11 +23,13 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@EnabledIfSystemProperty(named = "aws.sdk.kotlin.e2etest.enableMrapTest", matches = "true")
 class MutliRegionAccessPointTest {
     private val s3West = S3Client { region = "us-west-2" }
     private val s3East = s3West.withConfig { region = "us-east-2" }
