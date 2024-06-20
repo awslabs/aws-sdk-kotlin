@@ -14,8 +14,6 @@ import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketNotExists
-import aws.sdk.kotlin.services.s3control.*
-import aws.sdk.kotlin.services.s3control.model.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.text.ensurePrefix
 import kotlinx.coroutines.*
