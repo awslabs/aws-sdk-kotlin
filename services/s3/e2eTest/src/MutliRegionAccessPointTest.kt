@@ -1,37 +1,37 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 // FIXME SDK-KT-214 or re-enable after next release
-///*
-// * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// * SPDX-License-Identifier: Apache-2.0
-// */
-//package aws.sdk.kotlin.e2etest
+// package aws.sdk.kotlin.e2etest
 //
-//import aws.sdk.kotlin.e2etest.S3TestUtils.createMultiRegionAccessPoint
-//import aws.sdk.kotlin.e2etest.S3TestUtils.deleteBucketAndAllContents
-//import aws.sdk.kotlin.e2etest.S3TestUtils.deleteMultiRegionAccessPoint
-//import aws.sdk.kotlin.e2etest.S3TestUtils.getAccountId
-//import aws.sdk.kotlin.e2etest.S3TestUtils.getMultiRegionAccessPointArn
-//import aws.sdk.kotlin.e2etest.S3TestUtils.getTestBucket
-//import aws.sdk.kotlin.e2etest.S3TestUtils.multiRegionAccessPointWasCreated
-//import aws.sdk.kotlin.services.s3.S3Client
-//import aws.sdk.kotlin.services.s3.deleteObject
-//import aws.sdk.kotlin.services.s3.putObject
-//import aws.sdk.kotlin.services.s3.withConfig
-//import aws.sdk.kotlin.services.s3control.S3ControlClient
-//import aws.smithy.kotlin.runtime.auth.awssigning.UnsupportedSigningAlgorithmException
-//import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
-//import aws.smithy.kotlin.runtime.http.auth.SigV4AsymmetricAuthScheme
-//import kotlinx.coroutines.runBlocking
-//import org.junit.jupiter.api.AfterAll
-//import org.junit.jupiter.api.BeforeAll
-//import org.junit.jupiter.api.Disabled
-//import org.junit.jupiter.api.TestInstance
-//import org.junit.jupiter.api.condition.EnabledIfSystemProperty
-//import kotlin.test.Test
-//import kotlin.test.assertEquals
-//import kotlin.test.assertFailsWith
+// import aws.sdk.kotlin.e2etest.S3TestUtils.createMultiRegionAccessPoint
+// import aws.sdk.kotlin.e2etest.S3TestUtils.deleteBucketAndAllContents
+// import aws.sdk.kotlin.e2etest.S3TestUtils.deleteMultiRegionAccessPoint
+// import aws.sdk.kotlin.e2etest.S3TestUtils.getAccountId
+// import aws.sdk.kotlin.e2etest.S3TestUtils.getMultiRegionAccessPointArn
+// import aws.sdk.kotlin.e2etest.S3TestUtils.getTestBucket
+// import aws.sdk.kotlin.e2etest.S3TestUtils.multiRegionAccessPointWasCreated
+// import aws.sdk.kotlin.services.s3.S3Client
+// import aws.sdk.kotlin.services.s3.deleteObject
+// import aws.sdk.kotlin.services.s3.putObject
+// import aws.sdk.kotlin.services.s3.withConfig
+// import aws.sdk.kotlin.services.s3control.S3ControlClient
+// import aws.smithy.kotlin.runtime.auth.awssigning.UnsupportedSigningAlgorithmException
+// import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
+// import aws.smithy.kotlin.runtime.http.auth.SigV4AsymmetricAuthScheme
+// import kotlinx.coroutines.runBlocking
+// import org.junit.jupiter.api.AfterAll
+// import org.junit.jupiter.api.BeforeAll
+// import org.junit.jupiter.api.Disabled
+// import org.junit.jupiter.api.TestInstance
+// import org.junit.jupiter.api.condition.EnabledIfSystemProperty
+// import kotlin.test.Test
+// import kotlin.test.assertEquals
+// import kotlin.test.assertFailsWith
 //
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//class MutliRegionAccessPointTest {
+// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+// class MutliRegionAccessPointTest {
 //    private val s3West = S3Client { region = "us-west-2" }
 //    private val s3East = s3West.withConfig { region = "us-east-2" }
 //    private val s3SigV4a = s3West.withConfig { authSchemes = listOf(SigV4AsymmetricAuthScheme(CrtAwsSigner)) }
@@ -109,4 +109,4 @@
 //            "SIGV4A support is not yet implemented for the default signer. For more information on how to enable it with the CRT signer, please refer to: https://a.co/3sf8533",
 //        )
 //    }
-//}
+// }
