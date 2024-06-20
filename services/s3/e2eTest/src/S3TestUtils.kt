@@ -16,7 +16,6 @@ import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketNotExists
 import aws.sdk.kotlin.services.s3control.*
 import aws.sdk.kotlin.services.s3control.model.*
-import aws.sdk.kotlin.services.sts.StsClient
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.text.ensurePrefix
 import kotlinx.coroutines.*
@@ -26,8 +25,6 @@ import java.io.OutputStreamWriter
 import java.net.URL
 import java.util.*
 import javax.net.ssl.HttpsURLConnection
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 object S3TestUtils {
