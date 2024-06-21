@@ -48,6 +48,7 @@ public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadata$Companion {
 public final class aws/sdk/kotlin/runtime/http/AwsUserAgentMetadataKt {
 	public static final field AWS_APP_ID_ENV Ljava/lang/String;
 	public static final field AWS_APP_ID_PROP Ljava/lang/String;
+	public static final field BUSINESS_METRICS_MAX_LENGTH I
 }
 
 public final class aws/sdk/kotlin/runtime/http/ExecutionEnvMetadata {
@@ -139,8 +140,39 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/AddUserAgentMetadata
 	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
 }
 
+public final class aws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric : java/lang/Enum, aws/smithy/kotlin/runtime/businessmetrics/BusinessMetric {
+	public static final field S3_EXPRESS_BUCKET Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getIdentifier ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
+	public static fun values ()[Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
+}
+
 public final class aws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
 	public static final field INSTANCE Laws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor;
+	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeRetryLoop (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun modifyBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun readAfterAttempt (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterDeserialization (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterExecution (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
+	public fun readAfterSerialization (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readAfterSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readAfterTransmit (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
+	public fun readBeforeAttempt (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
+	public fun readBeforeExecution (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
+	public fun readBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
+	public fun readBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+}
+
+public final class aws/sdk/kotlin/runtime/http/interceptors/BusinessMetricsInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
+	public fun <init> ()V
 	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun modifyBeforeCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun modifyBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
