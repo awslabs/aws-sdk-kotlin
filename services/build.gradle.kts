@@ -90,21 +90,21 @@ subprojects {
 
                         if (project.name == "s3") {
                             dependencies {
-                                val services = project.parent?.subprojects
-
-                                if (services?.any { it.name == "s3control" } == true) {
-                                    implementation(project(":services:s3control"))
-                                } else {
-                                    implementation("aws.sdk.kotlin:s3control:+")
-                                }
-
-                                if (services?.any { it.name == "sts" } == true) {
-                                    implementation(project(":services:sts"))
-                                } else {
-                                    implementation("aws.sdk.kotlin:sts:+")
-                                }
-
-                                implementation(libs.smithy.kotlin.aws.signing.crt)
+                                // FIXME SDK-KT-214 or re-enable after next release
+//                                val services = project.parent?.subprojects
+//
+//                                if (services?.any { it.name == "s3control" } == true) {
+//                                    implementation(project(":services:s3control"))
+//                                } else {
+//                                    implementation("aws.sdk.kotlin:s3control:+")
+//                                }
+//
+//                                if (services?.any { it.name == "sts" } == true) {
+//                                    implementation(project(":services:sts"))
+//                                } else {
+//                                    implementation("aws.sdk.kotlin:sts:+")
+//                                }
+//                                implementation(libs.smithy.kotlin.aws.signing.crt)
                             }
                         }
 

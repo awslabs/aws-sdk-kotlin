@@ -1,5 +1,61 @@
 # Changelog
 
+## [1.2.38] - 06/20/2024
+
+### Features
+* (**bedrockruntime**) This release adds document support to Converse and ConverseStream APIs
+* (**codeartifact**) Add support for the Cargo package format.
+* (**computeoptimizer**) This release enables AWS Compute Optimizer to analyze and generate optimization recommendations for Amazon RDS MySQL and RDS PostgreSQL.
+* (**costoptimizationhub**) This release enables AWS Cost Optimization Hub to show cost optimization recommendations for Amazon RDS MySQL and RDS PostgreSQL.
+* (**glue**) Fix Glue paginators for Jobs, JobRuns, Triggers, Blueprints and Workflows.
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to record individual stage participants to S3.
+* (**sagemaker**) Adds support for model references in Hub service, and adds support for cross-account access of Hubs
+
+### Documentation
+* (**dynamodb**) Doc-only update for DynamoDB. Fixed Important note in 6 Global table APIs - CreateGlobalTable, DescribeGlobalTable, DescribeGlobalTableSettings, ListGlobalTables, UpdateGlobalTable, and UpdateGlobalTableSettings.
+* (**securityhub**) Documentation updates for Security Hub
+
+## [1.2.37] - 06/19/2024
+
+### Features
+* (**artifact**) This release adds an acceptanceType field to the ReportSummary structure (used in the ListReports API response).
+* (**athena**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**costandusagereportservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**directconnect**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**elastictranscoder**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**opensearch**) This release enables customers to use JSON Web Tokens (JWT) for authentication on their Amazon OpenSearch Service domains.
+
+## [1.2.36] - 06/18/2024
+
+### Features
+* (**bedrockruntime**) This release adds support for using Guardrails with the Converse and ConverseStream APIs.
+* (**cloudtrail**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**configservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**eks**) This release adds support to surface async fargate customer errors from async path to customer through describe-fargate-profile API response.
+* (**lightsail**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**polly**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**rekognition**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**sagemaker**) Launched a new feature in SageMaker to provide managed MLflow Tracking Servers for customers to track ML experiments. This release also adds a new capability of attaching additional storage to SageMaker HyperPod cluster instances.
+* (**shield**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**snowball**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+## [1.2.35] - 06/17/2024
+
+### Features
+* (**batch**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**codebuild**) AWS CodeBuild now supports global and organization GitHub webhooks
+* (**cognitoidentityprovider**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**directoryservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**efs**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**glue**) This release introduces a new feature, Usage profiles. Usage profiles allow the AWS Glue admin to create different profiles for various classes of users within the account, enforcing limits and defaults for jobs and sessions.
+* (**mediaconvert**) This release includes support for creating I-frame only video segments for DASH trick play.
+* (**waf**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+### Documentation
+* (**acmpca**) Doc-only update that adds name constraints as an allowed extension for ImportCertificateAuthorityCertificate.
+* (**kms**) Updating SDK example for KMS DeriveSharedSecret API.
+* (**secretsmanager**) Doc only update for Secrets Manager
+
 ## [1.2.34] - 06/14/2024
 
 ### Features
