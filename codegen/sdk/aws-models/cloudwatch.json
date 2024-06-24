@@ -591,10 +591,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "ConcurrentModificationException",
-                    "httpResponseCode": 429
-                },
                 "smithy.api#documentation": "<p>More than one process tried to modify a resource at the same time.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 429
@@ -664,10 +660,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "InvalidParameterInput",
-                    "httpResponseCode": 400
-                },
                 "smithy.api#documentation": "<p>Some part of the dashboard data is invalid.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
@@ -693,10 +685,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "ResourceNotFound",
-                    "httpResponseCode": 404
-                },
                 "smithy.api#documentation": "<p>The specified dashboard does not exist.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 404
@@ -2601,7 +2589,7 @@
                 "aws.auth#sigv4": {
                     "name": "monitoring"
                 },
-                "aws.protocols#awsQuery": {},
+                "smithy.protocols#rpcv2Cbor": {},
                 "smithy.api#documentation": "<p>Amazon CloudWatch monitors your Amazon Web Services (Amazon Web Services) resources and the\n\t\t\tapplications you run on Amazon Web Services in real time. You can use CloudWatch to collect and track\n\t\t\tmetrics, which are the variables you want to measure for your resources and\n\t\t\tapplications.</p>\n         <p>CloudWatch alarms send notifications or automatically change the resources you are monitoring based on rules\n\t\t\tthat you define. For example, you can monitor the CPU usage and disk reads and writes of your Amazon EC2\n\t\t\tinstances. Then, use this data to determine whether you should launch\n\t\t\tadditional instances to handle increased load. You can also use this data to stop\n\t\t\tunder-used instances to save\n\t\t\tmoney.</p>\n         <p>In addition to monitoring the built-in metrics that come with Amazon Web Services, you can monitor\n\t\t\tyour own custom metrics. With CloudWatch, you gain system-wide visibility into resource\n\t\t\tutilization, application performance, and operational health.</p>",
                 "smithy.api#title": "Amazon CloudWatch",
                 "smithy.api#xmlNamespace": {
@@ -3975,10 +3963,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "InternalServiceError",
-                    "httpResponseCode": 500
-                },
                 "smithy.api#documentation": "<p>Request processing has failed due to some unknown error, exception, or failure.</p>",
                 "smithy.api#error": "server",
                 "smithy.api#httpError": 500
@@ -3995,10 +3979,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "InvalidFormat",
-                    "httpResponseCode": 400
-                },
                 "smithy.api#documentation": "<p>Data was not syntactically valid JSON.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
@@ -4015,10 +3995,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "InvalidNextToken",
-                    "httpResponseCode": 400
-                },
                 "smithy.api#documentation": "<p>The next token specified is invalid.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
@@ -4035,10 +4011,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "InvalidParameterCombination",
-                    "httpResponseCode": 400
-                },
                 "smithy.api#documentation": "<p>Parameters were used together that cannot be used together.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
@@ -4055,10 +4027,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "InvalidParameterValue",
-                    "httpResponseCode": 400
-                },
                 "smithy.api#documentation": "<p>The value of an input parameter is bad or out-of-range.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
@@ -4089,10 +4057,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "LimitExceededException",
-                    "httpResponseCode": 400
-                },
                 "smithy.api#documentation": "<p>The operation exceeded one or more limits.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
@@ -4109,10 +4073,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "LimitExceeded",
-                    "httpResponseCode": 400
-                },
                 "smithy.api#documentation": "<p>The quota for alarms for this customer has already been reached.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
@@ -5351,10 +5311,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "MissingParameter",
-                    "httpResponseCode": 400
-                },
                 "smithy.api#documentation": "<p>An input parameter that is required is missing.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
@@ -6199,10 +6155,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "ResourceNotFound",
-                    "httpResponseCode": 404
-                },
                 "smithy.api#documentation": "<p>The named resource does not exist.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 404
@@ -6222,10 +6174,6 @@
                 }
             },
             "traits": {
-                "aws.protocols#awsQueryError": {
-                    "code": "ResourceNotFoundException",
-                    "httpResponseCode": 404
-                },
                 "smithy.api#documentation": "<p>The named resource does not exist.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 404
