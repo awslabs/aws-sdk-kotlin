@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "org.jetbrains.kotlin:kotlin-stdlib-common:2.*.*": "KotlinStdlibCommon-2.x",
+    "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.*.*": "KotlinStdlibJdk8-2.x",
+    "org.jetbrains.kotlin:kotlin-stdlib:2.*.*": "KotlinStdlib-2.x",
+    "org.jetbrains.kotlinx:atomicfu:0.*.*": "Atomicfu-0.x",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.*": "KotlinxCoroutinesCoreJvm-1.8.x",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.*": "KotlinxCoroutinesCore-1.8.x",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.*": "KotlinxCoroutinesJdk8-1.8.x",
+
     "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.*": "KotlinStdlibCommon-1.9.x",
     "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.*": "KotlinStdlibJdk8-1.9.x",
     "org.jetbrains.kotlin:kotlin-stdlib:1.9.*": "KotlinStdlib-1.9.x",
