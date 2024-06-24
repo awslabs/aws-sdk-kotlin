@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.2.38] - 06/20/2024
+
+### Features
+* (**bedrockruntime**) This release adds document support to Converse and ConverseStream APIs
+* (**codeartifact**) Add support for the Cargo package format.
+* (**computeoptimizer**) This release enables AWS Compute Optimizer to analyze and generate optimization recommendations for Amazon RDS MySQL and RDS PostgreSQL.
+* (**costoptimizationhub**) This release enables AWS Cost Optimization Hub to show cost optimization recommendations for Amazon RDS MySQL and RDS PostgreSQL.
+* (**glue**) Fix Glue paginators for Jobs, JobRuns, Triggers, Blueprints and Workflows.
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to record individual stage participants to S3.
+* (**sagemaker**) Adds support for model references in Hub service, and adds support for cross-account access of Hubs
+
+### Documentation
+* (**dynamodb**) Doc-only update for DynamoDB. Fixed Important note in 6 Global table APIs - CreateGlobalTable, DescribeGlobalTable, DescribeGlobalTableSettings, ListGlobalTables, UpdateGlobalTable, and UpdateGlobalTableSettings.
+* (**securityhub**) Documentation updates for Security Hub
+
+## [1.2.37] - 06/19/2024
+
+### Features
+* (**artifact**) This release adds an acceptanceType field to the ReportSummary structure (used in the ListReports API response).
+* (**athena**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**costandusagereportservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**directconnect**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**elastictranscoder**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**opensearch**) This release enables customers to use JSON Web Tokens (JWT) for authentication on their Amazon OpenSearch Service domains.
+
 ## [1.2.36] - 06/18/2024
 
 ### Features
