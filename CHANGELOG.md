@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.39] - 06/24/2024
+
+### Features
+* (**bedrockruntime**) Increases Converse API's document name length
+* (**customerprofiles**) This release includes changes to ProfileObjectType APIs, adds functionality top set and get capacity for profile object types.
+* (**ec2**) Fix EC2 multi-protocol info in models.
+* (**qbusiness**) Allow enable/disable Q Apps when creating/updating a Q application; Return the Q Apps enablement information when getting a Q application.
+* (**ssm**) Add sensitive trait to SSM IPAddress property for CloudTrail redaction
+* (**workspacesweb**) Added ability to enable DeepLinking functionality on a Portal via UserSettings as well as added support for IdentityProvider resource tagging.
+
 ## [1.2.38] - 06/20/2024
 
 ### Features
