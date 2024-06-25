@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.40] - 06/25/2024
+
+### Features
+* (**autoscaling**) Doc only update for Auto Scaling's TargetTrackingMetricDataQuery
+* (**ec2**) This release is for the launch of the new u7ib-12tb.224xlarge, R8g, c7gn.metal and mac2-m1ultra.metal instance types
+* (**networkmanager**) This is model changes & documentation update for the Asynchronous Error Reporting feature for AWS Cloud WAN. This feature allows customers to view errors that occur while their resources are being provisioned, enabling customers to fix their resources without needing external support.
+* (**workspacesthinclient**) This release adds the deviceCreationTags field to CreateEnvironment API input, UpdateEnvironment API input and GetEnvironment API output.
+
 ## [1.2.39] - 06/24/2024
 
 ### Features
