@@ -16,3 +16,4 @@ local.properties
 services/*/generated-src
 services/*/build.gradle.kts
 .kotest/
+*.klib
