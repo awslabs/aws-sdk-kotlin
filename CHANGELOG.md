@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.41] - 06/26/2024
+
+### Features
+* (**controltower**) Added ListLandingZoneOperations API.
+* (**eks**) Added support for disabling unmanaged addons during cluster creation.
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to upload public keys for customer vended participant tokens.
+* (**kinesisanalyticsv2**) This release adds support for new ListApplicationOperations and DescribeApplicationOperation APIs. It adds a new configuration to enable system rollbacks, adds field ApplicationVersionCreateTimestamp for clarity and improves support for pagination for APIs.
+* (**opensearch**) This release adds support for enabling or disabling Natural Language Query Processing feature for Amazon OpenSearch Service domains, and provides visibility into the current state of the setup or tear-down.
+
 ## [1.2.40] - 06/25/2024
 
 ### Features
