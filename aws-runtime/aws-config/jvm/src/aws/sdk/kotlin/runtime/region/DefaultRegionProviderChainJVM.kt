@@ -24,7 +24,7 @@ public actual class DefaultRegionProviderChain actual constructor(
         ImdsRegionProvider(client = imdsClient, platformProvider = platformProvider),
     ) {
 
-    override fun close() {
+    actual override fun close() {
         providers.forEach { provider ->
             if (provider is Closeable) provider.close()
         }

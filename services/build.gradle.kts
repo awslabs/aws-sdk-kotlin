@@ -66,8 +66,8 @@ subprojects {
                     defaultSourceSet {
                         kotlin.srcDir("e2eTest/src")
                         resources.srcDir("e2eTest/test-resources")
-                        dependsOn(sourceSets.getByName("commonMain"))
-                        dependsOn(sourceSets.getByName("jvmMain"))
+                        dependsOn(this@kotlin.sourceSets.getByName("commonMain"))
+                        dependsOn(this@kotlin.sourceSets.getByName("jvmMain"))
 
                         dependencies {
                             api(libraries.smithy.kotlin.testing)
