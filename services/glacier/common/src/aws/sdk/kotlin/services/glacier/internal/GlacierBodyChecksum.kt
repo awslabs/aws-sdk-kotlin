@@ -17,7 +17,7 @@ import aws.smithy.kotlin.runtime.text.encoding.encodeToHex
 private const val DEFAULT_CHUNK_SIZE_BYTES = 1024 * 1024 // 1MB
 
 internal class GlacierBodyChecksum(
-    private val treeHasher: TreeHasher = TreeHasherImpl(defaultChunkSizeBytes, ::Sha256),
+    private val treeHasher: TreeHasher = TreeHasherImpl(DEFAULT_CHUNK_SIZE_BYTES, ::Sha256),
 ) : ModifyRequestMiddleware {
     override fun install(op: SdkHttpOperation<*, *>) {
         // after signing
