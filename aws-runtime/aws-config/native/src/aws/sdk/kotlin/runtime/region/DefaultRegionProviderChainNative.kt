@@ -15,7 +15,8 @@ public actual class DefaultRegionProviderChain actual constructor(
     platformProvider: PlatformProvider,
     imdsClient: Lazy<InstanceMetadataProvider>,
     profile: LazyAsyncValue<AwsProfile>,
-) : RegionProvider, Closeable {
+) : RegionProvider,
+    Closeable {
     override suspend fun getRegion(): String? {
         TODO("Not yet implemented")
     }

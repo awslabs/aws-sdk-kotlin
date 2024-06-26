@@ -118,9 +118,7 @@ public class SsoTokenProvider(
         }
     }
 
-    private fun throwTokenExpired(cause: Throwable? = null): Nothing {
-        throw InvalidSsoTokenException("SSO token for sso-session: $ssoSessionName is expired", cause)
-    }
+    private fun throwTokenExpired(cause: Throwable? = null): Nothing = throw InvalidSsoTokenException("SSO token for sso-session: $ssoSessionName is expired", cause)
 
     private suspend fun refreshToken(oldToken: SsoToken): SsoToken {
         val telemetry = coroutineContext.telemetryProvider

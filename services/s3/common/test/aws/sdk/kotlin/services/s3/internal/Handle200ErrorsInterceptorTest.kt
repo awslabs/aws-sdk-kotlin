@@ -65,7 +65,10 @@ class Handle200ErrorsInterceptorTest {
     fun testHandle200ErrorsWithNoExpectedBody() = runTest {
         val s3 = newTestClient()
         val ex = assertFailsWith<S3Exception> {
-            s3.deleteObject { bucket = "test"; key = "key" }
+            s3.deleteObject {
+                bucket = "test"
+                key = "key"
+            }
         }
         assertException(ex)
     }

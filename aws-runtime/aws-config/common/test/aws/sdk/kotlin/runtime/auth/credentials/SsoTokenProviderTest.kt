@@ -58,7 +58,7 @@ class SsoTokenProviderTest {
     @Test
     fun testCacheLoadingAndRefreshTestSuite() = runTest {
         // these tests are from the SEP
-        val testList = Json.parseToJsonElement(ssoTokenCacheBehaviorTestSuite).jsonObject["cases"]!!.jsonArray
+        val testList = Json.parseToJsonElement(SSO_TOKEN_CACHE_BEHAVIOR_TEST_SUITE).jsonObject["cases"]!!.jsonArray
 
         testList.map { testCase ->
             runCatching {
@@ -123,7 +123,7 @@ class SsoTokenProviderTest {
 }
 
 // language=JSON
-private const val ssoTokenCacheBehaviorTestSuite = """
+private const val SSO_TOKEN_CACHE_BEHAVIOR_TEST_SUITE = """
 {
     "cases": [
         {

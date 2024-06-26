@@ -23,7 +23,7 @@ import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.fail
 
-private const val megabyte = 1024 * 1024
+private const val MEGABYTE = 1024 * 1024
 
 class TreeHasherTest {
     @Test
@@ -59,8 +59,10 @@ class TreeHasherTest {
             override fun readFrom(): SdkByteReadChannel {
                 val byteChannel = SdkByteChannel()
                 async {
-                    withTimeout(10_000) { // For sanity, bail out after 10s
-                        (0 until megabyte).forEach { // This will yield len(payloadBytes) megabytes of content
+                    withTimeout(10_000) {
+                        // For sanity, bail out after 10s
+                        (0 until megabyte).forEach {
+                            // This will yield len(payloadBytes) megabytes of content
                             val source = SdkBuffer().apply { write(payloadBytes) }
                             byteChannel.write(source)
                         }

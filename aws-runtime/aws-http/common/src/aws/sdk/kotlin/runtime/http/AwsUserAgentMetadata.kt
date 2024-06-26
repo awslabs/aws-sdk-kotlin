@@ -59,10 +59,10 @@ public data class AwsUserAgentMetadata(
               language-metadata RWS
               [env-metadata RWS]
                      ; ordering is not strictly required in the following section
-              *(config-metadata RWS)
+         *(config-metadata RWS)
               [appId]
-              *(feat-metadata RWS)
-              *(framework-metadata RWS)
+         *(feat-metadata RWS)
+         *(framework-metadata RWS)
          */
         get() = buildList {
             add(sdkMetadata)

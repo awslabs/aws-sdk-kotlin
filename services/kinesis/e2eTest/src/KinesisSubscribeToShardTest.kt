@@ -18,19 +18,20 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.seconds
 
+private val WAIT_TIMEOUT = 30.seconds
+private val POLLING_RATE = 3.seconds
+
+private val STREAM_NAME_PREFIX = "aws-sdk-kotlin-e2e-test-stream-"
+private val STREAM_CONSUMER_NAME_PREFIX = "aws-sdk-kotlin-e2e-test-"
+
+private val TEST_DATA = "Bees, bees, bees, bees!"
+
 /**
  * Tests for Kinesis SubscribeToShard (an RPC-bound protocol)
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KinesisSubscribeToShardTest {
     private val client = KinesisClient { region = "us-east-1" }
-    private val WAIT_TIMEOUT = 30.seconds
-    private val POLLING_RATE = 3.seconds
-
-    private val STREAM_NAME_PREFIX = "aws-sdk-kotlin-e2e-test-stream-"
-    private val STREAM_CONSUMER_NAME_PREFIX = "aws-sdk-kotlin-e2e-test-"
-
-    private val TEST_DATA = "Bees, bees, bees, bees!"
 
     private lateinit var dataStreamArn: String
     private lateinit var dataStreamConsumerArn: String
