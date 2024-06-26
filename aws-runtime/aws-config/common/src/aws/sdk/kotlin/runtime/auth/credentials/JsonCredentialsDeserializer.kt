@@ -58,16 +58,6 @@ internal sealed class JsonCredentialsResponse {
     data class Error(val code: String?, val message: String?) : JsonCredentialsResponse()
 }
 
-private val ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccessKeyId"))
-private val SECRET_ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("SecretAccessKey"))
-private val SESSION_TOKEN_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("SessionToken"))
-private val EXPIRATION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Timestamp, JsonSerialName("Expiration"))
-private val VERSION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Version"))
-private val ACCOUNT_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccountId"))
-
-private val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Code"))
-private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Message"))
-
 /**
  * In general, the document looks something like:
  *
@@ -83,8 +73,17 @@ private val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSeria
  * }
  * ```
  */
+@Suppress("ktlint:standard:property-naming")
 internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): JsonCredentialsResponse {
-    val objDescriptor = SdkObjectDescriptor.build {
+    val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Code"))
+    val ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccessKeyId"))
+    val SECRET_ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("SecretAccessKey"))
+    val SESSION_TOKEN_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Token"))
+    val EXPIRATION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Timestamp, JsonSerialName("Expiration"))
+    val ACCOUNT_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccountId"))
+    val MESSAGE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Message"))
+
+    val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
         field(CODE_DESCRIPTOR)
         field(ACCESS_KEY_ID_DESCRIPTOR)
         field(SECRET_ACCESS_KEY_ID_DESCRIPTOR)
@@ -103,7 +102,7 @@ internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): Jso
     var accountId: String? = null
 
     try {
-        deserializer.deserializeStruct(objDescriptor) {
+        deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
             loop@while (true) {
                 when (findNextFieldIndex()) {
                     CODE_DESCRIPTOR.index -> code = deserializeString()
@@ -142,8 +141,16 @@ internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): Jso
  * The difference between this and [deserializeJsonCredentials] is that process credentials _must_ provide a version field,
  * the session token field is called `SessionToken` instead of `Token`, and the expiration field is optional.
  */
+@Suppress("ktlint:standard:property-naming")
 internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): JsonCredentialsResponse {
-    val objDescriptor = SdkObjectDescriptor.build {
+    val ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccessKeyId"))
+    val SECRET_ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("SecretAccessKey"))
+    val SESSION_TOKEN_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("SessionToken"))
+    val EXPIRATION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.Timestamp, JsonSerialName("Expiration"))
+    val VERSION_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Version"))
+    val ACCOUNT_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccountId"))
+
+    val OBJ_DESCRIPTOR = SdkObjectDescriptor.build {
         field(ACCESS_KEY_ID_DESCRIPTOR)
         field(SECRET_ACCESS_KEY_ID_DESCRIPTOR)
         field(SESSION_TOKEN_DESCRIPTOR)
@@ -160,7 +167,7 @@ internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): Json
     var accountId: String? = null
 
     try {
-        deserializer.deserializeStruct(objDescriptor) {
+        deserializer.deserializeStruct(OBJ_DESCRIPTOR) {
             loop@while (true) {
                 when (findNextFieldIndex()) {
                     ACCESS_KEY_ID_DESCRIPTOR.index -> accessKeyId = deserializeString()
