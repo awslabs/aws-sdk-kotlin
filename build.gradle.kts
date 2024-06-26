@@ -112,6 +112,9 @@ allprojects {
             )
         }
     }
+
+    // Enables running `./gradlew allDeps` to get a comprehensive list of dependencies for every subproject
+    tasks.register<DependencyReportTask>("allDeps") { }
 }
 
 project.afterEvaluate {
@@ -145,3 +148,13 @@ val lintPaths = listOf(
 )
 
 configureLinting(lintPaths)
+
+// FIXME We are getting a vulnerable dependency pulled in transitively through Dokka
+// https://github.com/Kotlin/dokka/issues/3194
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            force("com.fasterxml.woodstox:woodstox-core:6.4.0")
+        }
+    }
+}
