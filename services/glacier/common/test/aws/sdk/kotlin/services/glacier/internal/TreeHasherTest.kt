@@ -46,7 +46,7 @@ class TreeHasherTest {
 
     private val payloadBytes = "abcdefghijklmnopqrstuvwxyz".encodeToByteArray() // 26 bytes
     private suspend fun testCalculateHashesWithStream(stream: ByteStream) {
-        val hasher = TreeHasherImpl(megabyte, ::Sha256)
+        val hasher = TreeHasherImpl(MEGABYTE, ::Sha256)
         val hashes = hasher.calculateHashes(stream.toHttpBody())
 
         assertEquals("74df7872289a84fa31b6ae4cfdbac34ef911cfe9357e842c600a060da6a899ae", hashes.fullHash.encodeToHex())
@@ -61,7 +61,7 @@ class TreeHasherTest {
                 async {
                     withTimeout(10_000) {
                         // For sanity, bail out after 10s
-                        (0 until megabyte).forEach {
+                        (0 until MEGABYTE).forEach {
                             // This will yield len(payloadBytes) megabytes of content
                             val source = SdkBuffer().apply { write(payloadBytes) }
                             byteChannel.write(source)
@@ -83,7 +83,7 @@ class TreeHasherTest {
             private var buffer = SdkBuffer()
             override fun close() {}
             override fun read(sink: SdkBuffer, limit: Long): Long {
-                if (count == megabyte) return -1L
+                if (count == MEGABYTE) return -1L
 
                 return if (buffer.size > 0L) {
                     // had left over from previous read
