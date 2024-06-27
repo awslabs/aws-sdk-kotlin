@@ -22,6 +22,7 @@ dependencies {
 
     implementation(libs.smithy.model)
     implementation(libs.smithy.aws.traits)
+    implementation(libs.smithy.protocol.traits)
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit.jupiter)
