@@ -23,9 +23,9 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.TestTimeSource
 
-class DefaultS3ExpressCredentialsProviderTest {
-    private val DEFAULT_BASE_CREDENTIALS = Credentials("accessKeyId", "secretAccessKey", "sessionToken")
+private val DEFAULT_BASE_CREDENTIALS = Credentials("accessKeyId", "secretAccessKey", "sessionToken")
 
+class DefaultS3ExpressCredentialsProviderTest {
     @Test
     fun testCreateSessionCredentials() = runTest {
         val timeSource = TestTimeSource()

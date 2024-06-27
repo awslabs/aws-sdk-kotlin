@@ -23,9 +23,10 @@ class HostPrefixFilter : KotlinIntegration {
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
         val transformer = ModelTransformer.create()
         return transformer.removeTraitsIf(model) { _, trait ->
-            trait is EndpointTrait && trait.hostPrefix.labels.any {
-                it.isLabel && it.content == "AccountId"
-            }
+            trait is EndpointTrait &&
+                trait.hostPrefix.labels.any {
+                    it.isLabel && it.content == "AccountId"
+                }
         }
     }
 }

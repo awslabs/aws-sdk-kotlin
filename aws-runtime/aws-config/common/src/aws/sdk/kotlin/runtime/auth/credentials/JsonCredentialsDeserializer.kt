@@ -73,6 +73,7 @@ internal sealed class JsonCredentialsResponse {
  * }
  * ```
  */
+@Suppress("ktlint:standard:property-naming")
 internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): JsonCredentialsResponse {
     val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Code"))
     val ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccessKeyId"))
@@ -140,6 +141,7 @@ internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): Jso
  * The difference between this and [deserializeJsonCredentials] is that process credentials _must_ provide a version field,
  * the session token field is called `SessionToken` instead of `Token`, and the expiration field is optional.
  */
+@Suppress("ktlint:standard:property-naming")
 internal fun deserializeJsonProcessCredentials(deserializer: Deserializer): JsonCredentialsResponse {
     val ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccessKeyId"))
     val SECRET_ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("SecretAccessKey"))

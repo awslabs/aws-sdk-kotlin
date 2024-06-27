@@ -15,14 +15,14 @@ public actual class DefaultRegionProviderChain actual constructor(
     platformProvider: PlatformProvider,
     imdsClient: Lazy<InstanceMetadataProvider>,
     profile: LazyAsyncValue<AwsProfile>,
-) : RegionProvider,
-    Closeable,
-    RegionProviderChain(
-        JvmSystemPropRegionProvider(platformProvider),
-        EnvironmentRegionProvider(platformProvider),
-        ProfileRegionProvider(profile),
-        ImdsRegionProvider(client = imdsClient, platformProvider = platformProvider),
-    ) {
+) : RegionProviderChain(
+    JvmSystemPropRegionProvider(platformProvider),
+    EnvironmentRegionProvider(platformProvider),
+    ProfileRegionProvider(profile),
+    ImdsRegionProvider(client = imdsClient, platformProvider = platformProvider),
+),
+    RegionProvider,
+    Closeable {
 
     override fun close() {
         providers.forEach { provider ->

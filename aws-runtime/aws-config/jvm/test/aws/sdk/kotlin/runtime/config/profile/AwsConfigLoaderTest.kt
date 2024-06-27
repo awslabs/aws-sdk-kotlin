@@ -22,7 +22,7 @@ class AwsConfigLoaderTest {
 
     @Test
     fun canPassTestSuite() {
-        val testCases = Json.parseToJsonElement(loaderTestSuiteJson).jsonObject["tests"]!!.jsonArray
+        val testCases = Json.parseToJsonElement(LOADER_TEST_SUITE_JSON).jsonObject["tests"]!!.jsonArray
 
         testCases
             .map { TestCase.fromJson(it.jsonObject) }
