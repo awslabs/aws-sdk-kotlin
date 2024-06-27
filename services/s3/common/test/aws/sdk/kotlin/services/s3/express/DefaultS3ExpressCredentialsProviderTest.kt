@@ -161,8 +161,8 @@ class DefaultS3ExpressCredentialsProviderTest {
 
         // Entry expires in 30 seconds, refresh buffer is 1 minute. Next `resolve` call should trigger the async refresh
         val cache = S3ExpressCredentialsCache()
-        val successEntry = getCacheEntry(timeSource.markNow() + 30.seconds, bucket = "SuccessfulBucket", bootstrapCredentials = Credentials("1", "1", "1"))
-        val failedEntry = getCacheEntry(timeSource.markNow() + 30.seconds, bucket = "ExceptionBucket", bootstrapCredentials = Credentials("1", "1", "1"))
+        val successEntry = getCacheEntry(timeSource.markNow() + 30.seconds, bucket = "SuccessfulBucket")
+        val failedEntry = getCacheEntry(timeSource.markNow() + 30.seconds, bucket = "ExceptionBucket")
         cache.put(successEntry.key, successEntry.value)
         cache.put(failedEntry.key, failedEntry.value)
 
@@ -173,9 +173,8 @@ class DefaultS3ExpressCredentialsProviderTest {
             expiration = clock.now() + 5.minutes
         }
 
-        // client will throw an exception when `ExceptionBucket` credentials are fetched,
-        // but there should be no crash
-        val testClient = TestS3Client(expectedCredentials, throwExceptionOnBucketNamed = "ExceptionBucket", baseCredentials = Credentials("1", "1", "1"))
+        // client should throw an exception when `ExceptionBucket` credentials are fetched, but it should be caught
+        val testClient = TestS3Client(expectedCredentials, throwExceptionOnBucketNamed = "ExceptionBucket")
 
         val provider = DefaultS3ExpressCredentialsProvider(timeSource, clock, cache, refreshBuffer = 1.minutes)
         val attributes = ExecutionContext.build {
@@ -184,11 +183,21 @@ class DefaultS3ExpressCredentialsProviderTest {
         }
         provider.resolve(attributes)
 
+        withTimeout(5.seconds) {
+            while (testClient.numCreateSession != 1) {
+                yield()
+            }
+        }
+        assertEquals(1, testClient.numCreateSession)
+
         attributes[S3Attributes.Bucket] = "SuccessfulBucket"
         provider.resolve(attributes)
 
-        // allow the async refresh to initiate before closing the provider
-        runBlocking { delay(500.milliseconds) }
+        withTimeout(5.seconds) {
+            while (testClient.numCreateSession != 2) {
+                yield()
+            }
+        }
 
         provider.close()
         provider.coroutineContext.job.join()
