@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.42] - 06/27/2024
+
+### Features
+* (**applicationautoscaling**) Amazon WorkSpaces customers can now use Application Auto Scaling to automatically scale the number of virtual desktops in a WorkSpaces pool.
+* (**chimesdkmediapipelines**) Added Amazon Transcribe multi language identification to Chime SDK call analytics. Enabling customers sending single stream audio to generate call recordings using Chime SDK call analytics
+* (**datazone**) This release supports the data lineage feature of business data catalog in Amazon DataZone.
+* (**elasticache**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**mq**) This release makes the EngineVersion field optional for both broker and configuration and uses the latest available version by default. The AutoMinorVersionUpgrade field is also now optional for broker creation and defaults to 'true'.
+* (**qconnect**) Adds CreateContentAssociation, ListContentAssociations, GetContentAssociation, and DeleteContentAssociation APIs.
+* (**quicksight**) Adding support for Repeating Sections, Nested Filters
+* (**sagemaker**) Add capability for Admins to customize Studio experience for the user by showing or hiding Apps and MLTools.
+* (**workspaces**) Added support for WorkSpaces Pools.
+
+### Documentation
+* (**cloudfront**) Doc only update for CloudFront that fixes customer-reported issue
+* (**rds**) Updates Amazon RDS documentation for TAZ export to S3.
+
 ## [1.2.41] - 06/26/2024
 
 ### Features
