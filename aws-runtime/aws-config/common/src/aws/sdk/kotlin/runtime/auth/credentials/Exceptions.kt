@@ -11,8 +11,7 @@ import aws.sdk.kotlin.runtime.ConfigurationException
 /**
  * No credentials were available from this [CredentialsProvider]
  */
-public class CredentialsNotLoadedException(message: String?, cause: Throwable? = null) :
-    ClientException(message ?: "The provider could not provide credentials or required configuration was not set", cause)
+public class CredentialsNotLoadedException(message: String?, cause: Throwable? = null) : ClientException(message ?: "The provider could not provide credentials or required configuration was not set", cause)
 
 /**
  * The [CredentialsProvider] was given an invalid configuration (e.g. invalid aws configuration file, invalid IMDS endpoint, etc)

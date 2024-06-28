@@ -97,29 +97,29 @@ class S3ExpressIntegration : KotlinIntegration {
 
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
         resolved + listOf(
-            AddClientToExecutionContext,
-            AddBucketToExecutionContext,
-            UseCrc32Checksum,
-            UploadPartDisableChecksum,
+            addClientToExecutionContext,
+            addBucketToExecutionContext,
+            useCrc32Checksum,
+            uploadPartDisableChecksum,
         )
 
-    private val S3AttributesSymbol = buildSymbol {
+    private val s3AttributesSymbol = buildSymbol {
         name = "S3Attributes"
         namespace = "aws.sdk.kotlin.services.s3"
     }
 
-    private val AddClientToExecutionContext = object : ProtocolMiddleware {
+    private val addClientToExecutionContext = object : ProtocolMiddleware {
         override val name: String = "AddClientToExecutionContext"
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
             ctx.model.expectShape<ServiceShape>(ctx.settings.service).isS3
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            writer.write("op.context[#T.ExpressClient] = this", S3AttributesSymbol)
+            writer.write("op.context[#T.ExpressClient] = this", s3AttributesSymbol)
         }
     }
 
-    private val AddBucketToExecutionContext = object : ProtocolMiddleware {
+    private val addBucketToExecutionContext = object : ProtocolMiddleware {
         override val name: String = "AddBucketToExecutionContext"
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
@@ -128,14 +128,14 @@ class S3ExpressIntegration : KotlinIntegration {
                 .any { it.memberName == "Bucket" }
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            writer.write("input.bucket?.let { op.context[#T.Bucket] = it }", S3AttributesSymbol)
+            writer.write("input.bucket?.let { op.context[#T.Bucket] = it }", s3AttributesSymbol)
         }
     }
 
     /**
      * For any operations that require a checksum, set CRC32 if the user has not already configured a checksum.
      */
-    private val UseCrc32Checksum = object : ProtocolMiddleware {
+    private val useCrc32Checksum = object : ProtocolMiddleware {
         override val name: String = "UseCrc32Checksum"
 
         override val order: Byte = -1 // Render before flexible checksums
@@ -165,7 +165,7 @@ class S3ExpressIntegration : KotlinIntegration {
     /**
      * Disable all checksums for s3:UploadPart
      */
-    private val UploadPartDisableChecksum = object : ProtocolMiddleware {
+    private val uploadPartDisableChecksum = object : ProtocolMiddleware {
         override val name: String = "UploadPartDisableChecksum"
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =

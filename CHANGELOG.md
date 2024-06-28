@@ -1,5 +1,184 @@
 # Changelog
 
+## [1.2.42] - 06/27/2024
+
+### Features
+* (**applicationautoscaling**) Amazon WorkSpaces customers can now use Application Auto Scaling to automatically scale the number of virtual desktops in a WorkSpaces pool.
+* (**chimesdkmediapipelines**) Added Amazon Transcribe multi language identification to Chime SDK call analytics. Enabling customers sending single stream audio to generate call recordings using Chime SDK call analytics
+* (**datazone**) This release supports the data lineage feature of business data catalog in Amazon DataZone.
+* (**elasticache**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**mq**) This release makes the EngineVersion field optional for both broker and configuration and uses the latest available version by default. The AutoMinorVersionUpgrade field is also now optional for broker creation and defaults to 'true'.
+* (**qconnect**) Adds CreateContentAssociation, ListContentAssociations, GetContentAssociation, and DeleteContentAssociation APIs.
+* (**quicksight**) Adding support for Repeating Sections, Nested Filters
+* (**sagemaker**) Add capability for Admins to customize Studio experience for the user by showing or hiding Apps and MLTools.
+* (**workspaces**) Added support for WorkSpaces Pools.
+
+### Documentation
+* (**cloudfront**) Doc only update for CloudFront that fixes customer-reported issue
+* (**rds**) Updates Amazon RDS documentation for TAZ export to S3.
+
+## [1.2.41] - 06/26/2024
+
+### Features
+* (**controltower**) Added ListLandingZoneOperations API.
+* (**eks**) Added support for disabling unmanaged addons during cluster creation.
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to upload public keys for customer vended participant tokens.
+* (**kinesisanalyticsv2**) This release adds support for new ListApplicationOperations and DescribeApplicationOperation APIs. It adds a new configuration to enable system rollbacks, adds field ApplicationVersionCreateTimestamp for clarity and improves support for pagination for APIs.
+* (**opensearch**) This release adds support for enabling or disabling Natural Language Query Processing feature for Amazon OpenSearch Service domains, and provides visibility into the current state of the setup or tear-down.
+
+## [1.2.40] - 06/25/2024
+
+### Features
+* (**autoscaling**) Doc only update for Auto Scaling's TargetTrackingMetricDataQuery
+* (**ec2**) This release is for the launch of the new u7ib-12tb.224xlarge, R8g, c7gn.metal and mac2-m1ultra.metal instance types
+* (**networkmanager**) This is model changes & documentation update for the Asynchronous Error Reporting feature for AWS Cloud WAN. This feature allows customers to view errors that occur while their resources are being provisioned, enabling customers to fix their resources without needing external support.
+* (**workspacesthinclient**) This release adds the deviceCreationTags field to CreateEnvironment API input, UpdateEnvironment API input and GetEnvironment API output.
+
+## [1.2.39] - 06/24/2024
+
+### Features
+* (**bedrockruntime**) Increases Converse API's document name length
+* (**customerprofiles**) This release includes changes to ProfileObjectType APIs, adds functionality top set and get capacity for profile object types.
+* (**ec2**) Fix EC2 multi-protocol info in models.
+* (**qbusiness**) Allow enable/disable Q Apps when creating/updating a Q application; Return the Q Apps enablement information when getting a Q application.
+* (**ssm**) Add sensitive trait to SSM IPAddress property for CloudTrail redaction
+* (**workspacesweb**) Added ability to enable DeepLinking functionality on a Portal via UserSettings as well as added support for IdentityProvider resource tagging.
+
+## [1.2.38] - 06/20/2024
+
+### Features
+* (**bedrockruntime**) This release adds document support to Converse and ConverseStream APIs
+* (**codeartifact**) Add support for the Cargo package format.
+* (**computeoptimizer**) This release enables AWS Compute Optimizer to analyze and generate optimization recommendations for Amazon RDS MySQL and RDS PostgreSQL.
+* (**costoptimizationhub**) This release enables AWS Cost Optimization Hub to show cost optimization recommendations for Amazon RDS MySQL and RDS PostgreSQL.
+* (**glue**) Fix Glue paginators for Jobs, JobRuns, Triggers, Blueprints and Workflows.
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to record individual stage participants to S3.
+* (**sagemaker**) Adds support for model references in Hub service, and adds support for cross-account access of Hubs
+
+### Documentation
+* (**dynamodb**) Doc-only update for DynamoDB. Fixed Important note in 6 Global table APIs - CreateGlobalTable, DescribeGlobalTable, DescribeGlobalTableSettings, ListGlobalTables, UpdateGlobalTable, and UpdateGlobalTableSettings.
+* (**securityhub**) Documentation updates for Security Hub
+
+## [1.2.37] - 06/19/2024
+
+### Features
+* (**artifact**) This release adds an acceptanceType field to the ReportSummary structure (used in the ListReports API response).
+* (**athena**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**costandusagereportservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**directconnect**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**elastictranscoder**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**opensearch**) This release enables customers to use JSON Web Tokens (JWT) for authentication on their Amazon OpenSearch Service domains.
+
+## [1.2.36] - 06/18/2024
+
+### Features
+* (**bedrockruntime**) This release adds support for using Guardrails with the Converse and ConverseStream APIs.
+* (**cloudtrail**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**configservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**eks**) This release adds support to surface async fargate customer errors from async path to customer through describe-fargate-profile API response.
+* (**lightsail**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**polly**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**rekognition**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**sagemaker**) Launched a new feature in SageMaker to provide managed MLflow Tracking Servers for customers to track ML experiments. This release also adds a new capability of attaching additional storage to SageMaker HyperPod cluster instances.
+* (**shield**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**snowball**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+## [1.2.35] - 06/17/2024
+
+### Features
+* (**batch**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**codebuild**) AWS CodeBuild now supports global and organization GitHub webhooks
+* (**cognitoidentityprovider**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**directoryservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**efs**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**glue**) This release introduces a new feature, Usage profiles. Usage profiles allow the AWS Glue admin to create different profiles for various classes of users within the account, enforcing limits and defaults for jobs and sessions.
+* (**mediaconvert**) This release includes support for creating I-frame only video segments for DASH trick play.
+* (**waf**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+### Documentation
+* (**acmpca**) Doc-only update that adds name constraints as an allowed extension for ImportCertificateAuthorityCertificate.
+* (**kms**) Updating SDK example for KMS DeriveSharedSecret API.
+* (**secretsmanager**) Doc only update for Secrets Manager
+
+## [1.2.34] - 06/14/2024
+
+### Features
+* (**datazone**) This release introduces a new default service blueprint for custom environment creation.
+* (**macie2**) This release adds support for managing the status of automated sensitive data discovery for individual accounts in an organization, and determining whether individual S3 buckets are included in the scope of the analyses.
+* (**mediaconvert**) This release adds the ability to search for historical job records within the management console using a search box and/or via the SDK/CLI with partial string matching search on input file name.
+* (**route53domains**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+### Documentation
+* (**ec2**) Documentation updates for Amazon EC2.
+
+### Miscellaneous
+* Upgrade to Smithy 1.49.0
+
+## [1.2.33] - 06/13/2024
+
+### Features
+* (**cloudhsmv2**) Added support for hsm type hsm2m.medium. Added supported for creating a cluster in FIPS or NON_FIPS mode.
+* (**glue**) This release adds support for configuration of evaluation method for composite rules in Glue Data Quality rulesets.
+* (**iotwireless**) Add RoamingDeviceSNR and RoamingDeviceRSSI to Customer Metrics.
+* (**kms**) This feature allows customers to use their keys stored in KMS to derive a shared secret which can then be used to establish a secured channel for communication, provide proof of possession, or establish trust with other parties.
+* (**mediapackagev2**) This release adds support for CMAF ingest (DASH-IF live media ingest protocol interface 1)
+
+## [1.2.32] - 06/12/2024
+
+### Features
+* (**apptest**) AWS Mainframe Modernization Application Testing is an AWS Mainframe Modernization service feature that automates functional equivalence testing for mainframe application modernization and migration to AWS, and regression testing.
+* (**ec2**) Tagging support for Traffic Mirroring FilterRule resource
+* (**osis**) SDK changes for self-managed vpc endpoint to OpenSearch ingestion pipelines.
+* (**secretsmanager**) Introducing RotationToken parameter for PutSecretValue API
+* (**securitylake**) This release updates request validation regex to account for non-commercial aws partitions.
+* (**sesv2**) This release adds support for Amazon EventBridge as an email sending events destination.
+
+### Documentation
+* (**redshift**) Updates to remove DC1 and DS2 node types.
+
+### Miscellaneous
+* Deprecation of AWS Backup Storage
+
+## [1.2.31] - 06/11/2024
+
+### Features
+* (**accessanalyzer**) IAM Access Analyzer now provides policy recommendations to help resolve unused permissions for IAM roles and users. Additionally, IAM Access Analyzer now extends its custom policy checks to detect when IAM policies grant public access or access to critical resources ahead of deployments.
+* (**guardduty**) Added API support for GuardDuty Malware Protection for S3.
+* (**networkmanager**) This is model changes & documentation update for Service Insertion feature for AWS Cloud WAN. This feature allows insertion of AWS/3rd party security services on Cloud WAN. This allows to steer inter/intra segment traffic via security appliances and provide visibility to the route updates.
+* (**pcaconnectorscep**) Connector for SCEP allows you to use a managed, cloud CA to enroll mobile devices and networking gear. SCEP is a widely-adopted protocol used by mobile device management (MDM) solutions for enrolling mobile devices. With the connector, you can use AWS Private CA with popular MDM solutions.
+* (**sagemaker**) Introduced Scope and AuthenticationRequestExtraParams to SageMaker Workforce OIDC configuration; this allows customers to modify these options for their private Workforce IdP integration. Model Registry Cross-account model package groups are discoverable.
+
+## [1.2.30] - 06/10/2024
+
+### Features
+* (**applicationsignals**) This is the initial SDK release for Amazon CloudWatch Application Signals. Amazon CloudWatch Application Signals provides curated application performance monitoring for developers to monitor and troubleshoot application health using pre-built dashboards and Service Level Objectives.
+* (**ecs**) This release introduces a new cluster configuration to support the customer-managed keys for ECS managed storage encryption.
+* (**imagebuilder**) This release updates the regex pattern for Image Builder ARNs.
+
+## [1.2.29] - 06/07/2024
+
+### Features
+* (**auditmanager**) New feature: common controls. When creating custom controls, you can now use pre-grouped AWS data sources based on common compliance themes. Also, the awsServices parameter is deprecated because we now manage services in scope for you. If used, the input is ignored and an empty list is returned.
+* (**b2bi**) Added exceptions to B2Bi List operations and ConflictException to B2Bi StartTransformerJob operation. Also made capabilities field explicitly required when creating a Partnership.
+* (**codepipeline**) CodePipeline now supports overriding S3 Source Object Key during StartPipelineExecution, as part of Source Overrides.
+* (**sagemaker**) This release introduces a new optional parameter: InferenceAmiVersion, in ProductionVariant.
+* (**verifiedpermissions**) This release adds OpenIdConnect (OIDC) configuration support for IdentitySources, allowing for external IDPs to be used in authorization requests.
+
+## [1.2.28] - 06/06/2024
+
+### Features
+* (**account**) This release adds 3 new APIs (AcceptPrimaryEmailUpdate, GetPrimaryEmail, and StartPrimaryEmailUpdate) used to centrally manage the root user email address of member accounts within an AWS organization.
+* (**firehose**) Adds integration with Secrets Manager for Redshift, Splunk, HttpEndpoint, and Snowflake destinations
+* (**fsx**) This release adds support to increase metadata performance on FSx for Lustre file systems beyond the default level provisioned when a file system is created. This can be done by specifying MetadataConfiguration during the creation of Persistent_2 file systems or by updating it on demand.
+* (**glue**) This release adds support for creating and updating Glue Data Catalog Views.
+* (**iotwireless**) Adds support for wireless device to be in Conflict FUOTA Device Status due to a FUOTA Task, so it couldn't be attached to a new one.
+* (**location**) Added two new APIs, VerifyDevicePosition and ForecastGeofenceEvents. Added support for putting larger geofences up to 100,000 vertices with Geobuf fields.
+* (**storagegateway**) Adds SoftwareUpdatePreferences to DescribeMaintenanceStartTime and UpdateMaintenanceStartTime, a structure which contains AutomaticUpdatePolicy.
+
+### Documentation
+* (**sns**) Doc-only update for SNS. These changes include customer-reported issues and TXC3 updates.
+* (**sqs**) Doc only updates for SQS. These updates include customer-reported issues and TCX3 modifications.
+
 ## [1.2.27] - 06/05/2024
 
 ### Features

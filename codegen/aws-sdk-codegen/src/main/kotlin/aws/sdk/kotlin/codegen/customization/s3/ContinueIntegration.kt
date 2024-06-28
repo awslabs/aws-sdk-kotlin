@@ -21,10 +21,10 @@ import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.traits.HttpTrait
 
-private const val continueProp = "continueHeaderThresholdBytes"
+private const val CONTINUE_PROP = "continueHeaderThresholdBytes"
 
 private val enableContinueProp = ConfigProperty {
-    name = continueProp
+    name = CONTINUE_PROP
     symbol = KotlinTypes.Long.asNullable()
     documentation = """
         The minimum content length threshold (in bytes) for which to send `Expect: 100-continue` HTTP headers. PUT
@@ -37,11 +37,11 @@ private val enableContinueProp = ConfigProperty {
     // Need a custom property type because property is nullable but has a non-null default
     propertyType = ConfigPropertyType.Custom(
         render = { _, writer ->
-            writer.write("public val $continueProp: Long? = builder.$continueProp")
+            writer.write("public val $CONTINUE_PROP: Long? = builder.$CONTINUE_PROP")
         },
         renderBuilder = { prop, writer ->
             prop.documentation?.let(writer::dokka)
-            writer.write("public var $continueProp: Long? = 2 * 1024 * 1024 // 2MB")
+            writer.write("public var $CONTINUE_PROP: Long? = 2 * 1024 * 1024 // 2MB")
         },
     )
 }
@@ -67,7 +67,7 @@ internal object ContinueMiddleware : ProtocolMiddleware {
         op.getTrait<HttpTrait>()?.method == "PUT"
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-        writer.withBlock("config.$continueProp?.let { threshold ->", "}") {
+        writer.withBlock("config.$CONTINUE_PROP?.let { threshold ->", "}") {
             writer.write("op.interceptors.add(#T(threshold))", RuntimeTypes.HttpClient.Interceptors.ContinueInterceptor)
         }
     }

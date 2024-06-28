@@ -1,7 +1,10 @@
 [*.{kt,kts}]
+ktlint_code_style = intellij_idea
+
 # ktlint rules to disable
 ktlint_standard_no-wildcard-imports = disabled
 ktlint_standard_filename = disabled
+ktlint_standard_backing-property-naming = disabled
 
 # enable trailing commas per JetBrains recommendation
 # (https://kotlinlang.org/docs/coding-conventions.html#trailing-commas)

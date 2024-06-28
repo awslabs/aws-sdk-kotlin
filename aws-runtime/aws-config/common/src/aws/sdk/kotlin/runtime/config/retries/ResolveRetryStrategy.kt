@@ -44,7 +44,9 @@ public suspend fun resolveRetryStrategy(
 
     return factory {
         maxAttempts?.let {
-            if (it < 1) { throw ConfigurationException("max attempts was $it, but should be at least 1") }
+            if (it < 1) {
+                throw ConfigurationException("max attempts was $it, but should be at least 1")
+            }
             this.maxAttempts = it
         }
     }

@@ -14,6 +14,8 @@ import kotlin.jvm.JvmInline
 
 internal const val AWS_EXECUTION_ENV = "AWS_EXECUTION_ENV"
 public const val AWS_APP_ID_ENV: String = "AWS_SDK_UA_APP_ID"
+private const val USER_AGENT_SPEC_VERSION = "2.1"
+public const val BUSINESS_METRICS_MAX_LENGTH: Int = 1024
 
 // non-standard environment variables/properties
 public const val AWS_APP_ID_PROP: String = "aws.userAgentAppId"
@@ -57,15 +59,15 @@ public data class AwsUserAgentMetadata(
               language-metadata RWS
               [env-metadata RWS]
                      ; ordering is not strictly required in the following section
-              *(config-metadata RWS)
+         *(config-metadata RWS)
               [appId]
-              *(feat-metadata RWS)
-              *(framework-metadata RWS)
+         *(feat-metadata RWS)
+         *(framework-metadata RWS)
          */
         get() = buildList {
             add(sdkMetadata)
             customMetadata?.extras?.takeIf { it.containsKey("internal") }?.let { add("md/internal") }
-            add(uaPair("ua", "2.0")) // User agent specification version 2.0
+            add(uaPair("ua", USER_AGENT_SPEC_VERSION))
             add(apiMetadata)
             add(osMetadata)
             add(languageMetadata)
