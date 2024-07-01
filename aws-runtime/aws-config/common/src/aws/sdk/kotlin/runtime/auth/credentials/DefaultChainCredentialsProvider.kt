@@ -24,8 +24,8 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * Resolution order:
  *
  * 1. Environment variables ([EnvironmentCredentialsProvider])
- * 2. Profile ([ProfileCredentialsProvider])
- * 3. Web Identity Tokens ([StsWebIdentityCredentialsProvider]]
+ * 2. Web Identity Tokens ([StsWebIdentityCredentialsProvider]]
+ * 3. Profile ([ProfileCredentialsProvider])
  * 4. ECS (IAM roles for tasks) ([EcsCredentialsProvider])
  * 5. EC2 Instance Metadata (IMDSv2) ([ImdsCredentialsProvider])
  *
@@ -54,9 +54,9 @@ public class DefaultChainCredentialsProvider constructor(
     private val chain = CredentialsProviderChain(
         SystemPropertyCredentialsProvider(platformProvider::getProperty),
         EnvironmentCredentialsProvider(platformProvider::getenv),
-        ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClient = engine, region = region),
         // STS web identity provider can be constructed from either the profile OR 100% from the environment
         StsWebIdentityProvider(platformProvider = platformProvider, httpClient = engine, region = region),
+        ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClient = engine, region = region),
         EcsCredentialsProvider(platformProvider, engine),
         ImdsCredentialsProvider(
             client = lazy {
