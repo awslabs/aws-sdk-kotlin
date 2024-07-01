@@ -29,7 +29,7 @@
     <@resources/>
 
     <script>
-        <#-- Fix for accessibiliy violation: "Provide a mechanism for skipping past repetitive content" -->
+        // Fix for accessibiliy violation: "Provide a mechanism for skipping past repetitive content"
         document.addEventListener('DOMContentLoaded', function() {
             function insertSkipLink(element) {
                 const skipLink = document.createElement('div');
@@ -76,7 +76,7 @@
             observer.observe(document.body, observerConfig);
         });
 
-        <#-- Fix for accessibilty violation: "Ensure all interactive functionality is operable with the keyboard" -->
+        // Fix for accessibilty violation: "Ensure all interactive functionality is operable with the keyboard"
         window.onload = function() {
             const navButtons = document.querySelectorAll('.navButton');
 
@@ -113,6 +113,7 @@
     </script>
 
     <script>
+        // Fix for accessibility violation: "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality"
         document.addEventListener('DOMContentLoaded', function() {
             const MIN_WINDOW_SIZE = 550
 
