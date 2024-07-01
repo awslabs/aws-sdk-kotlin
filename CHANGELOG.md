@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.2.44] - 07/01/2024
+
+### Features
+* (**apigateway**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**cognitoidentity**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**connect**) Authentication profiles are Amazon Connect resources (in gated preview) that allow you to configure authentication settings for users in your contact center. This release adds support for new ListAuthenticationProfiles, DescribeAuthenticationProfile and UpdateAuthenticationProfile APIs.
+* (**docdb**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**eks**) Updates EKS managed node groups to support EC2 Capacity Blocks for ML
+* (**paymentcryptography**) Added further restrictions on logging of potentially sensitive inputs and outputs.
+* (**paymentcryptographydata**) Adding support for dynamic keys for encrypt, decrypt, re-encrypt and translate pin functions.  With this change, customers can use one-time TR-31 keys directly in dataplane operations without the need to first import them into the service.
+* (**sfn**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**swf**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+### Documentation
+* (**wafv2**) JSON body inspection: Update documentation to clarify that JSON parsing doesn't include full validation.
+
+### Miscellaneous
+* Upgrade to ktlint v1.3.0
+* Upgrade to smithy-kotlin v1.2.11
+
 ## [1.2.43] - 06/28/2024
 
 ### Features
