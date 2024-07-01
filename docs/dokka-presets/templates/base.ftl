@@ -27,6 +27,82 @@
     <#-- Resources (scripts, stylesheets) are handled by Dokka.
     Use customStyleSheets and customAssets to change them. -->
     <@resources/>
+
+    <script>
+        <#-- Fix for accessibiliy violation: "Provide a mechanism for skipping past repetitive content" -->
+        document.addEventListener('DOMContentLoaded', function() {
+            function insertSkipLink(element) {
+                const skipLink = document.createElement('div');
+                // Create an anchor element with the href pointing to the main content
+                const anchor = document.createElement('a');
+                anchor.classList.add('skip-to-content');
+                anchor.href = '#content';
+                anchor.innerHTML = 'Skip to Main Content';
+                anchor.setAttribute("tabindex", "0");
+                skipLink.appendChild(anchor);
+                if (element.children.length > 1) {
+                    element.insertBefore(skipLink, element.children[1]);
+                } else {
+                    element.appendChild(skipLink);
+                }
+            }
+
+            const observerConfig = {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class']
+            };
+
+            function handleChanges(mutationsList) {
+                for (const mutation of mutationsList) {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        // Check added nodes for elements with class 'sideMenuPart' and without class 'hidden'
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.nodeType === 1 && node.classList.contains('sideMenuPart') && !node.classList.contains('hidden')) {
+                                insertSkipLink(node);
+                            }
+                        });
+                    } else if (mutation.type === 'attributes' && mutation.target.classList.contains('sideMenuPart') && !mutation.target.classList.contains('hidden')) {
+                        // Handle changes in the 'class' attribute of existing elements
+                        // Check if the element is 'sideMenuPart' and not 'hidden'
+                        insertSkipLink(mutation.target);
+                    }
+                }
+            }
+            // Create a MutationObserver with the callback function
+            const observer = new MutationObserver(handleChanges);
+            // Start observing changes in the document
+            observer.observe(document.body, observerConfig);
+        });
+
+        <#-- Fix for accessibilty violation: "Ensure all interactive functionality is operable with the keyboard" -->
+        window.onload = function() {
+            const navButtons = document.querySelectorAll('.navButton');
+
+            navButtons.forEach(function(navButton) {
+                // Make the navButton focusable, add accessibility information
+                navButton.setAttribute('tabindex', '0');
+                navButton.setAttribute('role', 'button');
+                navButton.setAttribute('aria-expanded', 'false');
+
+                // Add event listener for Enter and Space keys
+                navButton.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault(); // Prevent the default action to avoid navigation
+                        this.click(); // Trigger the onclick event
+                    }
+                });
+
+                // Update aria-expanded attribute on click
+                navButton.addEventListener('click', function() {
+                    const isExpanded = navButton.getAttribute('aria-expanded') === 'true';
+                    navButton.setAttribute('aria-expanded', (!isExpanded).toString());
+                });
+            });
+        }
+    </script>
+
 </head>
 <body>
 <div class="root">

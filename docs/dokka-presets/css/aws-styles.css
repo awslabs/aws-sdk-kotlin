@@ -63,3 +63,18 @@
 div .compiler-info, .fold-button, .run-button {
     display: none;
 }
+
+.skip-to-content {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.skip-to-content:focus,
+.skip-to-content:active {
+    width: auto;
+    height: auto;
+    opacity: 1;
+    z-index: 999; /* Ensure the skip link is on top of other content */
+}
