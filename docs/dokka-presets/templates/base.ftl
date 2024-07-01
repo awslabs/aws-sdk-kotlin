@@ -112,6 +112,58 @@
         }
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const MIN_WINDOW_SIZE = 550
+
+            // Function to insert 'toggle content' button
+            function insertToggleContentButton(element) {
+                const toggleContent = document.createElement('button');
+                toggleContent.className = 'aws-toggle-content-btn';
+                toggleContent.textContent = '☰';
+
+                const initiallyVisible = window.innerWidth >= MIN_WINDOW_SIZE
+
+                toggleContent.setAttribute('aria-expanded', initiallyVisible.toString());
+                toggleContent.setAttribute('aria-label', 'Toggle code block for' + element.getAttribute("data-togglable"));
+                toggleContent.setAttribute('aria-controls', element.id);
+
+                if (!initiallyVisible) {
+                    element.style.display = 'none';
+                }
+
+                toggleContent.onclick = function() {
+                    const isExpanded = toggleContent.getAttribute('aria-expanded') === 'true';
+                    toggleContent.setAttribute('aria-expanded', (!isExpanded).toString());
+                    if (isExpanded) {
+                        element.style.display = 'none';
+                    } else {
+                        element.style.display = 'block';
+                    }
+
+                };
+
+                // Insert the hamburger button before the content element
+                element.parentNode.insertBefore(toggleContent, element);
+            }
+
+            document.querySelectorAll('.content[data-togglable]').forEach(insertToggleContentButton);
+
+            // Update content visibility on resize
+            window.addEventListener('resize', function() {
+                document.querySelectorAll('.content[data-togglable]').forEach(function(element) {
+                    const toggleContent = element.previousSibling;
+                    if (window.innerWidth < MIN_WINDOW_SIZE) {
+                        element.style.display = 'none';
+                        toggleContent.setAttribute('aria-expanded', 'false');
+                    } else {
+                        element.style.display = 'block';
+                        toggleContent.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="root">

@@ -78,3 +78,23 @@ div .compiler-info, .fold-button, .run-button {
     opacity: 1;
     z-index: 999; /* Ensure the skip link is on top of other content */
 }
+
+.content .symbol .monospace {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.aws-toggle-content-btn {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+@media (max-width: 320px) {
+    .content[data-togglable] {
+        display: none;
+    }
+}
