@@ -1,6 +1,12 @@
 // Fix for accessibiliy violation: "Provide a mechanism for skipping past repetitive content"
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', applySkipLinks);
+if (document.readyState === "interactive" || document.readyState === "complete" ) { applySkipLinks() }
+
+function applySkipLinks() {
+    console.log("DOMContentLoaded")
     function insertSkipLink(element) {
+        if (element.querySelectorAll(".skip-to-content").length > 0) { return }
+
         const skipLink = document.createElement('div');
         // Create an anchor element with the href pointing to the main content
         const anchor = document.createElement('a');
@@ -18,19 +24,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleChanges(mutationsList) {
         for (const mutation of mutationsList) {
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                // Check added nodes for elements with class 'sideMenuPart' and without class 'hidden'
-                mutation.addedNodes.forEach(function(node) {
-                    if (node.nodeType === 1 && node.classList.contains('sideMenuPart') && !node.classList.contains('hidden')) {
-                        insertSkipLink(node);
-                    }
-                });
-            } else if (mutation.type === 'attributes' && mutation.target.classList.contains('sideMenuPart') && !mutation.target.classList.contains('hidden')) {
+            if (mutation.type === 'attributes' && mutation.target.classList.contains('sideMenuPart') && !mutation.target.classList.contains('hidden')) {
                 // Handle changes in the 'class' attribute of existing elements
                 // Check if the element is 'sideMenuPart' and not 'hidden'
                 insertSkipLink(mutation.target);
+                console.log("Inserting skip link on mutation.target: " + mutation.target.id)
             }
         }
+
+        // Insert a skip link on all sideMenuParts with [data-active] property
+        document.querySelectorAll('.sideMenuPart[data-active]').forEach(function(sideMenuPart) {
+            insertSkipLink(sideMenuPart)
+        });
     }
 
     const observer = new MutationObserver(handleChanges);
@@ -40,8 +45,9 @@ document.addEventListener('DOMContentLoaded', function() {
         attributes: true,
         attributeFilter: ['class']
     };
+    console.log("observing for changes")
     observer.observe(document.body, observerConfig);
-});
+}
 
 // Fix for accessibilty violation: "Ensure all interactive functionality is operable with the keyboard"
 window.onload = function() {
@@ -79,7 +85,8 @@ window.onload = function() {
 }
 
 // Fix for accessibility violation: "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality"
-document.addEventListener('DOMContentLoaded', function() {
+
+function ensureContentReflow() {
     const MIN_WINDOW_SIZE = 550
 
     // Function to insert 'toggle content' button
@@ -122,4 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
+}
+
+document.addEventListener('DOMContentLoaded', ensureContentReflow)
+if (document.readyState === "interactive" || document.readyState === "complete" ) { applySkipLinks() }
