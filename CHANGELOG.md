@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.2.44] - 07/01/2024
+
+### Features
+* (**apigateway**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**cognitoidentity**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**connect**) Authentication profiles are Amazon Connect resources (in gated preview) that allow you to configure authentication settings for users in your contact center. This release adds support for new ListAuthenticationProfiles, DescribeAuthenticationProfile and UpdateAuthenticationProfile APIs.
+* (**docdb**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**eks**) Updates EKS managed node groups to support EC2 Capacity Blocks for ML
+* (**paymentcryptography**) Added further restrictions on logging of potentially sensitive inputs and outputs.
+* (**paymentcryptographydata**) Adding support for dynamic keys for encrypt, decrypt, re-encrypt and translate pin functions.  With this change, customers can use one-time TR-31 keys directly in dataplane operations without the need to first import them into the service.
+* (**sfn**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**swf**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+### Documentation
+* (**wafv2**) JSON body inspection: Update documentation to clarify that JSON parsing doesn't include full validation.
+
+### Miscellaneous
+* Upgrade to ktlint v1.3.0
+* Upgrade to smithy-kotlin v1.2.11
+
+## [1.2.43] - 06/28/2024
+
+### Features
+* (**acmpca**) Added CCPC_LEVEL_1_OR_HIGHER KeyStorageSecurityStandard and SM2 KeyAlgorithm and SM3WITHSM2 SigningAlgorithm for China regions.
+* (**cloudhsmv2**) Added 3 new APIs to support backup sharing: GetResourcePolicy, PutResourcePolicy, and DeleteResourcePolicy. Added BackupArn to the output of the DescribeBackups API. Added support for BackupArn in the CreateCluster API.
+* (**connect**) This release supports showing PreferredAgentRouting step via DescribeContact API.
+* (**emr**) This release provides the support for new allocation strategies i.e. CAPACITY_OPTIMIZED_PRIORITIZED for Spot and PRIORITIZED for On-Demand by taking input of priority value for each instance type for instance fleet clusters.
+* (**glue**) Added AttributesToGet parameter to Glue GetDatabases, allowing caller to limit output to include only the database name.
+* (**kinesisanalyticsv2**) Support for Flink 1.19 in Managed Service for Apache Flink
+* (**opensearch**) This release removes support for enabling or disabling Natural Language Query Processing feature for Amazon OpenSearch Service domains.
+* (**workspaces**) Added support for Red Hat Enterprise Linux 8 on Amazon WorkSpaces Personal.
+
+### Documentation
+* (**pi**) Noting that the filter db.sql.db_id isn't available for RDS for SQL Server DB instances.
+
 ## [1.2.42] - 06/27/2024
 
 ### Features
