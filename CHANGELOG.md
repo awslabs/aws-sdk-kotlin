@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.45] - 07/02/2024
+
+### Features
+* (**ec2**) Documentation updates for Elastic Compute Cloud (EC2).
+* (**fms**) Increases Customer API's ManagedServiceData length
+* (**s3**) Added response overrides to Head Object requests.
+
 ## [1.2.44] - 07/01/2024
 
 ### Features
