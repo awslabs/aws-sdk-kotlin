@@ -1,7 +1,7 @@
 /**
  * Apply "skip to main content" buttons after each active left sidebar `sideMenuPart`.
  * These are invisible and only accessible via keyboard
- * Fix for accessibility violation: "Provide a mechanism for skipping past repetitive content"
+ * Fixes accessibility violation: "Provide a mechanism for skipping past repetitive content"
  */
 function applySkipLinks() {
     function insertSkipLink(element) {
@@ -50,7 +50,7 @@ if (document.readyState === "interactive" || document.readyState === "complete" 
 
 /**
  * Ensure `navButton` elements are interactable and have proper accessibility properties
- * Fix for accessibilty violation: "Ensure all interactive functionality is operable with the keyboard"
+ * Fixes accessibilty violation: "Ensure all interactive functionality is operable with the keyboard"
  */
 function ensureNavButtonInteractable() {
     const navButtons = document.querySelectorAll('.navButton');
@@ -90,22 +90,20 @@ window.onload = function() {
     ensureNavButtonInteractable()
 }
 
-//
 /**
  * Ensure that content (specifically, code blocks) reflows on small page sizes.
- * Fix for accessibility violation: "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality"
+ * Fixes accessibility violation: "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality"
  */
 function ensureContentReflow() {
     const MIN_WINDOW_SIZE = 550
 
     // Function to insert 'toggle content' button
     function insertToggleContentButton(element) {
-        const toggleContent = document.createElement('button');
-        toggleContent.className = 'aws-toggle-content-btn';
-        toggleContent.textContent = '☰';
-
         const initiallyVisible = window.innerWidth >= MIN_WINDOW_SIZE
 
+        const toggleContent = document.createElement('button');
+        toggleContent.className = 'aws-toggle-content-btn';
+        toggleContent.textContent = initiallyVisible ? '▼' : '▶'
         toggleContent.setAttribute('aria-expanded', initiallyVisible.toString());
         toggleContent.setAttribute('aria-label', 'Toggle code block for' + element.getAttribute("data-togglable"));
         toggleContent.setAttribute('aria-controls', element.id);
@@ -118,6 +116,7 @@ function ensureContentReflow() {
             const isExpanded = toggleContent.getAttribute('aria-expanded') === 'true';
             toggleContent.setAttribute('aria-expanded', (!isExpanded).toString());
             element.style.display = isExpanded ? 'none' : 'block'
+            toggleContent.textContent = isExpanded ? '▶' : '▼'
         };
 
         element.parentNode.insertBefore(toggleContent, element);
@@ -141,4 +140,4 @@ function ensureContentReflow() {
 }
 
 document.addEventListener('DOMContentLoaded', ensureContentReflow)
-if (document.readyState === "interactive" || document.readyState === "complete" ) { applySkipLinks() }
+if (document.readyState === "interactive" || document.readyState === "complete" ) { ensureContentReflow() }

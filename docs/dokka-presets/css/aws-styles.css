@@ -87,7 +87,7 @@ div .compiler-info, .fold-button, .run-button {
     padding: 8px;
 }
 
-@media (max-width: 320px) {
+@media (max-width: 550px) {
     .content[data-togglable] {
         display: none;
     }
