@@ -1,7 +1,8 @@
-// Fix for accessibiliy violation: "Provide a mechanism for skipping past repetitive content"
-document.addEventListener('DOMContentLoaded', applySkipLinks);
-if (document.readyState === "interactive" || document.readyState === "complete" ) { applySkipLinks() }
-
+/**
+ * Apply "skip to main content" buttons after each active left sidebar `sideMenuPart`.
+ * These are invisible and only accessible via keyboard
+ * Fix for accessibility violation: "Provide a mechanism for skipping past repetitive content"
+ */
 function applySkipLinks() {
     console.log("DOMContentLoaded")
     function insertSkipLink(element) {
@@ -25,10 +26,7 @@ function applySkipLinks() {
     function handleChanges(mutationsList) {
         for (const mutation of mutationsList) {
             if (mutation.type === 'attributes' && mutation.target.classList.contains('sideMenuPart') && !mutation.target.classList.contains('hidden')) {
-                // Handle changes in the 'class' attribute of existing elements
-                // Check if the element is 'sideMenuPart' and not 'hidden'
                 insertSkipLink(mutation.target);
-                console.log("Inserting skip link on mutation.target: " + mutation.target.id)
             }
         }
 
@@ -45,12 +43,17 @@ function applySkipLinks() {
         attributes: true,
         attributeFilter: ['class']
     };
-    console.log("observing for changes")
     observer.observe(document.body, observerConfig);
 }
+document.addEventListener('DOMContentLoaded', applySkipLinks);
+if (document.readyState === "interactive" || document.readyState === "complete" ) { applySkipLinks() }
 
-// Fix for accessibilty violation: "Ensure all interactive functionality is operable with the keyboard"
-window.onload = function() {
+
+/**
+ * Ensure `navButton` elements are interactable and have proper accessibility properties
+ * Fix for accessibilty violation: "Ensure all interactive functionality is operable with the keyboard"
+ */
+function ensureNavButtonInteractable() {
     const navButtons = document.querySelectorAll('.navButton');
 
     navButtons.forEach(function(navButton) {
@@ -84,8 +87,15 @@ window.onload = function() {
     });
 }
 
-// Fix for accessibility violation: "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality"
+window.onload = function() {
+    ensureNavButtonInteractable()
+}
 
+//
+/**
+ * Ensure that content (specifically, code blocks) reflows on small page sizes.
+ * Fix for accessibility violation: "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality"
+ */
 function ensureContentReflow() {
     const MIN_WINDOW_SIZE = 550
 
