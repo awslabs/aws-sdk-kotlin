@@ -79,12 +79,6 @@ div .compiler-info, .fold-button, .run-button {
     z-index: 999; /* Ensure the skip link is on top of other content */
 }
 
-.content .symbol .monospace {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
 .aws-toggle-content-btn {
     font-size: 24px;
     background: none;
