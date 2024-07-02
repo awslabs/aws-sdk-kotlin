@@ -4,7 +4,6 @@
  * Fix for accessibility violation: "Provide a mechanism for skipping past repetitive content"
  */
 function applySkipLinks() {
-    console.log("DOMContentLoaded")
     function insertSkipLink(element) {
         if (element.querySelectorAll(".skip-to-content").length > 0) { return }
 
