@@ -38,7 +38,11 @@ private object S3HandleError200ResponseMiddleware : ProtocolMiddleware {
         // Instead of playing whack-a-mole broadly apply this interceptor to everything but streaming responses
         // which adds a small amount of overhead to response processing.
         val output = ctx.model.expectShape(op.output.get())
-        return output.members().none { it.isStreaming || ctx.model.expectShape(it.target).isStreaming }
+        return output.members().none {
+            val isBlob = it.isBlobShape || ctx.model.expectShape(it.target).isBlobShape
+            val isStreaming = it.isStreaming || ctx.model.expectShape(it.target).isStreaming
+            isBlob && isStreaming
+        }
     }
 
     override val name: String = "Handle200ErrorsInterceptor"
