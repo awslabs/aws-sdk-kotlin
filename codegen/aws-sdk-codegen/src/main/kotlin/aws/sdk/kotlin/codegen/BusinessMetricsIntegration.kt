@@ -30,13 +30,13 @@ class BusinessMetricsIntegration : KotlinIntegration {
     private val endpointBusinessMetricsSectionWriter = SectionWriter { writer, _ ->
         writer.write("")
         writer.write(
-            "if (endpoint.attributes.contains(#T)) request.context.#T(#T.SERVICE_ENDPOINT_OVERRIDE)",
+            "if (endpoint.attributes.contains(#T)) request.context.#T(#T.ENDPOINT_OVERRIDE)",
             RuntimeTypes.Core.BusinessMetrics.ServiceEndpointOverride,
             RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
             RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
         )
         writer.write(
-            "if (endpoint.attributes.contains(#T)) request.context.#T(#T.ACCOUNT_ID_BASED_ENDPOINT)",
+            "if (endpoint.attributes.contains(#T)) request.context.#T(#T.ACCOUNT_ID_ENDPOINT)",
             RuntimeTypes.Core.BusinessMetrics.AccountIdBasedEndpointAccountId,
             RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
             RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
