@@ -49,4 +49,4 @@ The AWS SDK for Kotlin supports [native image compilation using GraalVM](https:/
 Compiling native images is easily accomplished by applying [the GraalVM build plugin](https://github.com/graalvm/native-build-tools) to your application and running `./gradlew nativeCompile`.
 View [their getting started guide](https://graalvm.github.io/native-build-tools/latest/gradle-plugin-quickstart.html) for further details.
 
-NOTE: [log4j2 does not currently support](https://github.com/apache/logging-log4j2/issues/1539) GraalVM native image compilation, so you may need to re-configure your logging.
+NOTE: [log4j2 does not currently support](https://github.com/apache/logging-log4j2/issues/1539) GraalVM native image compilation, so we recommend selecting a different logger implementation such as Logback.
