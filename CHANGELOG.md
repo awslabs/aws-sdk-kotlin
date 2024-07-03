@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.46] - 07/03/2024
+
+### Features
+* (**organizations**) Added a new reason under ConstraintViolationException in RegisterDelegatedAdministrator API to prevent registering suspended accounts as delegated administrator of a service.
+* (**rekognition**) This release adds support for tagging projects and datasets with the CreateProject and CreateDataset APIs.
+* (**workspaces**) Fix create workspace bundle RootStorage/UserStorage to accept non null values
+
+### Documentation
+* (**applicationautoscaling**) Doc only update for Application Auto Scaling that fixes resource name.
+* (**directconnect**) This update includes documentation for support of new native 400 GBps ports for Direct Connect.
+
 ## [1.2.45] - 07/02/2024
 
 ### Features
