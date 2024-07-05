@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.47] - 07/05/2024
+
+### Features
+* (**ecr**) This release for Amazon ECR makes change to bring the SDK into sync with the API.
+* (**paymentcryptographydata**) Added further restrictions on logging of potentially sensitive inputs and outputs.
+* (**qbusiness**) Add personalization to Q Applications. Customers can enable or disable personalization when creating or updating a Q application with the personalization configuration.
+
+### Documentation
+* (**acm**) Documentation updates, including fixes for xml formatting, broken links, and ListCertificates description.
+
 ## [1.2.46] - 07/03/2024
 
 ### Features
