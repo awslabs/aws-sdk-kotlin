@@ -1,0 +1,12 @@
+# See https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# for information about dependabot.yml format/options
+
+version: 2
+
+updates:
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: daily
+    allow:
+      - dependency-name: "software.amazon.smithy:*"
