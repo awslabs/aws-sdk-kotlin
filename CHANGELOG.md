@@ -1,5 +1,112 @@
 # Changelog
 
+## [1.2.47] - 07/05/2024
+
+### Features
+* (**ecr**) This release for Amazon ECR makes change to bring the SDK into sync with the API.
+* (**paymentcryptographydata**) Added further restrictions on logging of potentially sensitive inputs and outputs.
+* (**qbusiness**) Add personalization to Q Applications. Customers can enable or disable personalization when creating or updating a Q application with the personalization configuration.
+
+### Documentation
+* (**acm**) Documentation updates, including fixes for xml formatting, broken links, and ListCertificates description.
+
+## [1.2.46] - 07/03/2024
+
+### Features
+* (**organizations**) Added a new reason under ConstraintViolationException in RegisterDelegatedAdministrator API to prevent registering suspended accounts as delegated administrator of a service.
+* (**rekognition**) This release adds support for tagging projects and datasets with the CreateProject and CreateDataset APIs.
+* (**workspaces**) Fix create workspace bundle RootStorage/UserStorage to accept non null values
+
+### Documentation
+* (**applicationautoscaling**) Doc only update for Application Auto Scaling that fixes resource name.
+* (**directconnect**) This update includes documentation for support of new native 400 GBps ports for Direct Connect.
+
+## [1.2.45] - 07/02/2024
+
+### Features
+* (**ec2**) Documentation updates for Elastic Compute Cloud (EC2).
+* (**fms**) Increases Customer API's ManagedServiceData length
+* (**s3**) Added response overrides to Head Object requests.
+
+## [1.2.44] - 07/01/2024
+
+### Features
+* (**apigateway**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**cognitoidentity**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**connect**) Authentication profiles are Amazon Connect resources (in gated preview) that allow you to configure authentication settings for users in your contact center. This release adds support for new ListAuthenticationProfiles, DescribeAuthenticationProfile and UpdateAuthenticationProfile APIs.
+* (**docdb**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**eks**) Updates EKS managed node groups to support EC2 Capacity Blocks for ML
+* (**paymentcryptography**) Added further restrictions on logging of potentially sensitive inputs and outputs.
+* (**paymentcryptographydata**) Adding support for dynamic keys for encrypt, decrypt, re-encrypt and translate pin functions.  With this change, customers can use one-time TR-31 keys directly in dataplane operations without the need to first import them into the service.
+* (**sfn**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**swf**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+### Documentation
+* (**wafv2**) JSON body inspection: Update documentation to clarify that JSON parsing doesn't include full validation.
+
+### Miscellaneous
+* Upgrade to ktlint v1.3.0
+* Upgrade to smithy-kotlin v1.2.11
+
+## [1.2.43] - 06/28/2024
+
+### Features
+* (**acmpca**) Added CCPC_LEVEL_1_OR_HIGHER KeyStorageSecurityStandard and SM2 KeyAlgorithm and SM3WITHSM2 SigningAlgorithm for China regions.
+* (**cloudhsmv2**) Added 3 new APIs to support backup sharing: GetResourcePolicy, PutResourcePolicy, and DeleteResourcePolicy. Added BackupArn to the output of the DescribeBackups API. Added support for BackupArn in the CreateCluster API.
+* (**connect**) This release supports showing PreferredAgentRouting step via DescribeContact API.
+* (**emr**) This release provides the support for new allocation strategies i.e. CAPACITY_OPTIMIZED_PRIORITIZED for Spot and PRIORITIZED for On-Demand by taking input of priority value for each instance type for instance fleet clusters.
+* (**glue**) Added AttributesToGet parameter to Glue GetDatabases, allowing caller to limit output to include only the database name.
+* (**kinesisanalyticsv2**) Support for Flink 1.19 in Managed Service for Apache Flink
+* (**opensearch**) This release removes support for enabling or disabling Natural Language Query Processing feature for Amazon OpenSearch Service domains.
+* (**workspaces**) Added support for Red Hat Enterprise Linux 8 on Amazon WorkSpaces Personal.
+
+### Documentation
+* (**pi**) Noting that the filter db.sql.db_id isn't available for RDS for SQL Server DB instances.
+
+## [1.2.42] - 06/27/2024
+
+### Features
+* (**applicationautoscaling**) Amazon WorkSpaces customers can now use Application Auto Scaling to automatically scale the number of virtual desktops in a WorkSpaces pool.
+* (**chimesdkmediapipelines**) Added Amazon Transcribe multi language identification to Chime SDK call analytics. Enabling customers sending single stream audio to generate call recordings using Chime SDK call analytics
+* (**datazone**) This release supports the data lineage feature of business data catalog in Amazon DataZone.
+* (**elasticache**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**mq**) This release makes the EngineVersion field optional for both broker and configuration and uses the latest available version by default. The AutoMinorVersionUpgrade field is also now optional for broker creation and defaults to 'true'.
+* (**qconnect**) Adds CreateContentAssociation, ListContentAssociations, GetContentAssociation, and DeleteContentAssociation APIs.
+* (**quicksight**) Adding support for Repeating Sections, Nested Filters
+* (**sagemaker**) Add capability for Admins to customize Studio experience for the user by showing or hiding Apps and MLTools.
+* (**workspaces**) Added support for WorkSpaces Pools.
+
+### Documentation
+* (**cloudfront**) Doc only update for CloudFront that fixes customer-reported issue
+* (**rds**) Updates Amazon RDS documentation for TAZ export to S3.
+
+## [1.2.41] - 06/26/2024
+
+### Features
+* (**controltower**) Added ListLandingZoneOperations API.
+* (**eks**) Added support for disabling unmanaged addons during cluster creation.
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to upload public keys for customer vended participant tokens.
+* (**kinesisanalyticsv2**) This release adds support for new ListApplicationOperations and DescribeApplicationOperation APIs. It adds a new configuration to enable system rollbacks, adds field ApplicationVersionCreateTimestamp for clarity and improves support for pagination for APIs.
+* (**opensearch**) This release adds support for enabling or disabling Natural Language Query Processing feature for Amazon OpenSearch Service domains, and provides visibility into the current state of the setup or tear-down.
+
+## [1.2.40] - 06/25/2024
+
+### Features
+* (**autoscaling**) Doc only update for Auto Scaling's TargetTrackingMetricDataQuery
+* (**ec2**) This release is for the launch of the new u7ib-12tb.224xlarge, R8g, c7gn.metal and mac2-m1ultra.metal instance types
+* (**networkmanager**) This is model changes & documentation update for the Asynchronous Error Reporting feature for AWS Cloud WAN. This feature allows customers to view errors that occur while their resources are being provisioned, enabling customers to fix their resources without needing external support.
+* (**workspacesthinclient**) This release adds the deviceCreationTags field to CreateEnvironment API input, UpdateEnvironment API input and GetEnvironment API output.
+
+## [1.2.39] - 06/24/2024
+
+### Features
+* (**bedrockruntime**) Increases Converse API's document name length
+* (**customerprofiles**) This release includes changes to ProfileObjectType APIs, adds functionality top set and get capacity for profile object types.
+* (**ec2**) Fix EC2 multi-protocol info in models.
+* (**qbusiness**) Allow enable/disable Q Apps when creating/updating a Q application; Return the Q Apps enablement information when getting a Q application.
+* (**ssm**) Add sensitive trait to SSM IPAddress property for CloudTrail redaction
+* (**workspacesweb**) Added ability to enable DeepLinking functionality on a Portal via UserSettings as well as added support for IdentityProvider resource tagging.
+
 ## [1.2.38] - 06/20/2024
 
 ### Features

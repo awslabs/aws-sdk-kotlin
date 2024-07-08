@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 // language=JSON
-internal const val imdsTestSuite = """
+internal const val IMDS_TEST_SUITE = """
 {
   "tests": [
     {

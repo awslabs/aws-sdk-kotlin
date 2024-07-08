@@ -19,7 +19,8 @@ public sealed class AwsConfigValue {
 
     @InternalSdkApi
     public data class Map(public val value: kotlin.collections.Map<kotlin.String, kotlin.String>) :
-        AwsConfigValue(), kotlin.collections.Map<kotlin.String, kotlin.String> by value {
+        AwsConfigValue(),
+        kotlin.collections.Map<kotlin.String, kotlin.String> by value {
         override fun toString(): kotlin.String = value.toString()
     }
 }

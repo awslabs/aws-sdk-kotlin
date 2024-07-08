@@ -22,7 +22,7 @@ class AwsProfileParserTest {
 
     @Test
     fun canPassTestSuite() {
-        val testList = Json.parseToJsonElement(parserTestSuiteJson).jsonObject["tests"]!!.jsonArray
+        val testList = Json.parseToJsonElement(PARSER_TEST_SUITE_JSON).jsonObject["tests"]!!.jsonArray
 
         testList
             .map { TestCase.fromJson(it.jsonObject) }
@@ -107,14 +107,11 @@ class AwsProfileParserTest {
             }
         }
 
-        data class MatchConfigOutputCase(override val name: String, val configInput: String, val expectedOutput: String) :
-            TestCase()
+        data class MatchConfigOutputCase(override val name: String, val configInput: String, val expectedOutput: String) : TestCase()
 
-        data class MatchCredentialOutputCase(override val name: String, val credentialInput: String, val expectedOutput: String) :
-            TestCase()
+        data class MatchCredentialOutputCase(override val name: String, val credentialInput: String, val expectedOutput: String) : TestCase()
 
-        data class MatchConfigAndCredentialOutputCase(override val name: String, val configInput: String, val credentialInput: String, val expectedOutput: String) :
-            TestCase()
+        data class MatchConfigAndCredentialOutputCase(override val name: String, val configInput: String, val credentialInput: String, val expectedOutput: String) : TestCase()
 
         data class MatchErrorCase(
             override val name: String,

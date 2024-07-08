@@ -2,8 +2,11 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+package aws.sdk.kotlin.e2etest
+
+class MutliRegionAccessPointTest
+
 // FIXME SDK-KT-214 or re-enable after next release
-// package aws.sdk.kotlin.e2etest
 //
 // import aws.sdk.kotlin.e2etest.S3TestUtils.createMultiRegionAccessPoint
 // import aws.sdk.kotlin.e2etest.S3TestUtils.deleteBucketAndAllContents

@@ -25,7 +25,8 @@ private const val REGION_PATH: String = "/latest/meta-data/placement/region"
 public class ImdsRegionProvider(
     private val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
     private val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
-) : RegionProvider, Closeable {
+) : RegionProvider,
+    Closeable {
     private val resolvedRegion = asyncLazy(::loadRegion)
 
     override suspend fun getRegion(): String? {
