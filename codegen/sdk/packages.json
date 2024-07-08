@@ -1555,6 +1555,12 @@
             "brazilName": "AwsSdkKotlinProton"
         },
         {
+            "sdkId": "QApps",
+            "namespace": "aws.sdk.kotlin.services.qapps",
+            "artifactName": "qapps",
+            "brazilName": "AwsSdkKotlinQapps"
+        },
+        {
             "sdkId": "QBusiness",
             "namespace": "aws.sdk.kotlin.services.qbusiness",
             "artifactName": "qbusiness",
