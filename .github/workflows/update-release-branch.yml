@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  dry_run: ${{ github.event.inputs.dry_run || 'false' }
+  DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }
 
 jobs:
   update-release:
@@ -94,7 +94,7 @@ jobs:
           message=${input_message:-"Merging main into release"}
           echo "message=$message"
           git merge -m "$message" main;
-          if [ "${{ inputs.dry_run }}" == "true" ]; then
+          if [ "${{ env.DRY_RUN }}" == "true" ]; then
             echo "dry run, skipping push to remote";
             git log -n 10 --oneline;
           else
