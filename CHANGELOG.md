@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.49] - 07/09/2024
+
+### Features
+* (**datazone**) This release deprecates dataProductItem field from SearchInventoryResultItem, along with some unused DataProduct shapes
+* (**fsx**) Adds support for FSx for NetApp ONTAP 2nd Generation file systems, and FSx for OpenZFS Single AZ HA file systems.
+* (**opensearch**) This release adds support for enabling or disabling Natural Language Query Processing feature for Amazon OpenSearch Service domains, and provides visibility into the current state of the setup or tear-down.
+* (**sagemaker**) This release 1/ enables optimization jobs that allows customers to perform Ahead-of-time compilation and quantization. 2/ allows customers to control access to Amazon Q integration in SageMaker Studio. 3/ enables AdditionalModelDataSources for CreateModel action.
+
 ## [1.2.48] - 07/08/2024
 
 ### Features
