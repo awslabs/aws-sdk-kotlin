@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.2.48] - 07/08/2024
+
+### Features
+* (**codedeploy**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**databasemigrationservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**devicefarm**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**elasticbeanstalk**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**elasticsearchservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**firehose**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**gamelift**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**qapps**) This is a general availability (GA) release of Amazon Q Apps, a capability of Amazon Q Business. Q Apps leverages data sources your company has provided to enable users to build, share, and customize apps within your organization.
+* (**route53resolver**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**ses**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
 ## [1.2.47] - 07/05/2024
 
 ### Features

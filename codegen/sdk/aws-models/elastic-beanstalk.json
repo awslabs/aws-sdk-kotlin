@@ -5851,6 +5851,19 @@
                             ]
                         }
                     }
+                ],
+                "smithy.test#smokeTests": [
+                    {
+                        "id": "ListAvailableSolutionStacksSuccess",
+                        "params": {},
+                        "vendorParams": {
+                            "region": "us-west-2"
+                        },
+                        "vendorParamsShape": "aws.test#AwsVendorParams",
+                        "expect": {
+                            "success": {}
+                        }
+                    }
                 ]
             }
         },
@@ -8356,32 +8369,6 @@
                 "smithy.api#documentation": "<p>Updates the environment description, deploys a new application version, updates the\n      configuration settings to an entirely new configuration template, or updates select\n      configuration option values in the running environment.</p>\n         <p> Attempting to update both the release and configuration is not allowed and AWS Elastic\n      Beanstalk returns an <code>InvalidParameterCombination</code> error. </p>\n         <p> When updating the configuration settings to a new template or individual settings, a\n      draft configuration is created and <a>DescribeConfigurationSettings</a> for this\n      environment returns two setting descriptions with different <code>DeploymentStatus</code>\n      values. </p>",
                 "smithy.api#examples": [
                     {
-                        "title": "To update an environment to a new version",
-                        "documentation": "The following operation updates an environment named \"my-env\" to version \"v2\" of the application to which it belongs:",
-                        "input": {
-                            "EnvironmentName": "my-env",
-                            "VersionLabel": "v2"
-                        },
-                        "output": {
-                            "ApplicationName": "my-app",
-                            "EnvironmentName": "my-env",
-                            "VersionLabel": "v2",
-                            "Status": "Updating",
-                            "EnvironmentId": "e-szqipays4h",
-                            "EndpointURL": "awseb-e-i-AWSEBLoa-1RDLX6TC9VUAO-0123456789.us-west-2.elb.amazonaws.com",
-                            "SolutionStackName": "64bit Amazon Linux running Tomcat 7",
-                            "CNAME": "my-env.elasticbeanstalk.com",
-                            "Health": "Grey",
-                            "Tier": {
-                                "Version": " ",
-                                "Type": "Standard",
-                                "Name": "WebServer"
-                            },
-                            "DateUpdated": "2015-02-03T23:12:29.119Z",
-                            "DateCreated": "2015-02-03T23:04:54.453Z"
-                        }
-                    },
-                    {
                         "title": "To configure option settings",
                         "documentation": "The following operation configures several options in the aws:elb:loadbalancer namespace:",
                         "input": {
@@ -8427,6 +8414,32 @@
                             },
                             "DateUpdated": "2015-08-12T18:15:23.804Z",
                             "DateCreated": "2015-08-07T20:48:49.599Z"
+                        }
+                    },
+                    {
+                        "title": "To update an environment to a new version",
+                        "documentation": "The following operation updates an environment named \"my-env\" to version \"v2\" of the application to which it belongs:",
+                        "input": {
+                            "EnvironmentName": "my-env",
+                            "VersionLabel": "v2"
+                        },
+                        "output": {
+                            "ApplicationName": "my-app",
+                            "EnvironmentName": "my-env",
+                            "VersionLabel": "v2",
+                            "Status": "Updating",
+                            "EnvironmentId": "e-szqipays4h",
+                            "EndpointURL": "awseb-e-i-AWSEBLoa-1RDLX6TC9VUAO-0123456789.us-west-2.elb.amazonaws.com",
+                            "SolutionStackName": "64bit Amazon Linux running Tomcat 7",
+                            "CNAME": "my-env.elasticbeanstalk.com",
+                            "Health": "Grey",
+                            "Tier": {
+                                "Version": " ",
+                                "Type": "Standard",
+                                "Name": "WebServer"
+                            },
+                            "DateUpdated": "2015-02-03T23:12:29.119Z",
+                            "DateCreated": "2015-02-03T23:04:54.453Z"
                         }
                     }
                 ]
