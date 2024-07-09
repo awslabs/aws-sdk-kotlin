@@ -12,13 +12,16 @@ on:
         description: Dry runs will only attempt to merge but the result will not be pushed to the release branch
         required: true
         type: boolean
-        default: true
+        default: false
   schedule:
     - cron: "0 7 * * 1-5"  # At 07:00 UTC (00:00 PST, 03:00 EST), Monday through Friday
 
 concurrency:
   group: release-manual-${{ github.ref }}
   cancel-in-progress: true
+
+env:
+  dry_run: ${{ github.event.inputs.dry_run || 'false' }
 
 jobs:
   update-release:
