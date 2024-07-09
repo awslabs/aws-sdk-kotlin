@@ -12,11 +12,16 @@ on:
         description: Dry runs will only attempt to merge but the result will not be pushed to the release branch
         required: true
         type: boolean
-        default: true
+        default: false
+  schedule:
+    - cron: "0 7 * * 1-5"  # At 07:00 UTC (00:00 PST, 03:00 EST), Monday through Friday
 
 concurrency:
   group: release-manual-${{ github.ref }}
   cancel-in-progress: true
+
+env:
+  DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }
 
 jobs:
   update-release:
@@ -89,7 +94,7 @@ jobs:
           message=${input_message:-"Merging main into release"}
           echo "message=$message"
           git merge -m "$message" main;
-          if [ "${{ inputs.dry_run }}" == "true" ]; then
+          if [ "${{ env.DRY_RUN }}" == "true" ]; then
             echo "dry run, skipping push to remote";
             git log -n 10 --oneline;
           else
