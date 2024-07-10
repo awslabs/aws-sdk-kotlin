@@ -18,7 +18,9 @@ import aws.sdk.kotlin.services.dynamodb.model.GetItemResponse as LowLevelGetItem
  * @param LReq The type of low-level request object (e.g., [LowLevelGetItemRequest])
  * @param LRes The type of low-level response object (e.g., [LowLevelGetItemResponse])
  */
-public interface LResContext<T, HReq, LReq, LRes> : LReqContext<T, HReq, LReq>, DeserializeInput<T, LRes>
+public interface LResContext<T, HReq, LReq, LRes> :
+    LReqContext<T, HReq, LReq>,
+    DeserializeInput<T, LRes>
 
 /**
  * Creates a new [LResContext]

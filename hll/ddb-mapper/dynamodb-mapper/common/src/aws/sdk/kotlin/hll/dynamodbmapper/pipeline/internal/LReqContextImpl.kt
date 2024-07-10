@@ -14,8 +14,7 @@ internal data class LReqContextImpl<T, HReq, LReq>(
     override val mapperContext: MapperContext<T>,
     override val lowLevelRequest: LReq,
     override val error: Throwable?,
-) :
-    LReqContext<T, HReq, LReq>,
+) : LReqContext<T, HReq, LReq>,
     ErrorCombinable<LReqContextImpl<T, HReq, LReq>>,
     Combinable<LReqContextImpl<T, HReq, LReq>, LReq> {
 

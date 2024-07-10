@@ -32,31 +32,29 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapperKt {
 	public static synthetic fun DynamoDbMapper$default (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/Table : aws/sdk/kotlin/hll/dynamodbmapper/TableOperations, aws/sdk/kotlin/hll/dynamodbmapper/TableSpec {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/Table : aws/sdk/kotlin/hll/dynamodbmapper/TableSpec, aws/sdk/kotlin/hll/dynamodbmapper/operations/TableOperations {
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/Table$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/Table {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/Table$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/Table, aws/sdk/kotlin/hll/dynamodbmapper/TableSpec$CompositeKey {
 	public abstract fun getItem (Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/Table$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/Table {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/Table$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/Table, aws/sdk/kotlin/hll/dynamodbmapper/TableSpec$PartitionKey {
 	public abstract fun getItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public final class aws/sdk/kotlin/hll/dynamodbmapper/TableKt {
-	public static final fun getItem (Laws/sdk/kotlin/hll/dynamodbmapper/Table;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/TableOperations {
-	public abstract fun getItem (Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun putItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun scan ()Lkotlinx/coroutines/flow/Flow;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/TableSpec {
 	public abstract fun getMapper ()Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper;
 	public abstract fun getName ()Ljava/lang/String;
 	public abstract fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/TableSpec$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/TableSpec {
+	public abstract fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$CompositeKey;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/TableSpec$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/TableSpec {
+	public abstract fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionKey;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor {
@@ -132,14 +130,23 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec 
 	public abstract fun toField (Ljava/lang/Object;)Lkotlin/Pair;
 }
 
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec$ByteArray : aws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec {
+}
+
 public final class aws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec$Companion {
-	public final fun ByteArray (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;
-	public final fun Number (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;
-	public final fun String (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec;
+	public final fun ByteArray (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec$ByteArray;
+	public final fun Number (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec$Number;
+	public final fun String (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec$String;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec$Number : aws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec$String : aws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec {
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/items/SimpleItemConverter : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
-	public fun <init> (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Ljava/util/Collection;)V
+	public fun <init> (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;[Laws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor;)V
 	public fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
 	public fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 }
@@ -163,6 +170,38 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/model/MutableItemKt {
 	public static final fun toMutableItem (Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem;
 }
 
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemKt {
+	public static final fun DeleteItemRequest (Ljava/lang/Object;Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;Laws/sdk/kotlin/services/dynamodb/model/ReturnItemCollectionMetrics;Laws/sdk/kotlin/services/dynamodb/model/ReturnValue;Laws/sdk/kotlin/services/dynamodb/model/ReturnValuesOnConditionCheckFailure;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemRequest;
+	public static final fun DeleteItemResponse (Ljava/lang/Object;Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;Laws/sdk/kotlin/services/dynamodb/model/ItemCollectionMetrics;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemResponse;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemRequest {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemRequest$Companion;
+	public abstract fun getKey ()Ljava/lang/Object;
+	public abstract fun getReturnConsumedCapacity ()Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;
+	public abstract fun getReturnItemCollectionMetrics ()Laws/sdk/kotlin/services/dynamodb/model/ReturnItemCollectionMetrics;
+	public abstract fun getReturnValues ()Laws/sdk/kotlin/services/dynamodb/model/ReturnValue;
+	public abstract fun getReturnValuesOnConditionCheckFailure ()Laws/sdk/kotlin/services/dynamodb/model/ReturnValuesOnConditionCheckFailure;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemRequest$Companion {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemResponse {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemResponse$Companion;
+	public abstract fun getAttributes ()Ljava/lang/Object;
+	public abstract fun getConsumedCapacity ()Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;
+	public abstract fun getItemCollectionMetrics ()Laws/sdk/kotlin/services/dynamodb/model/ItemCollectionMetrics;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemResponse$Companion {
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemKt {
+	public static final fun GetItemRequest (Ljava/lang/Boolean;Ljava/lang/Object;Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest;
+	public static final fun GetItemResponse (Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;Ljava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemResponse;
+}
+
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest$Companion;
 	public abstract fun getConsistentRead ()Ljava/lang/Boolean;
@@ -171,22 +210,121 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/Get
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest$Companion {
-	public final fun invoke (Ljava/lang/Object;Ljava/lang/Boolean;Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest;
-	public static synthetic fun invoke$default (Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest$Companion;Ljava/lang/Object;Ljava/lang/Boolean;Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemResponse {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemResponse$Companion;
 	public abstract fun getConsumedCapacity ()Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;
 	public abstract fun getItem ()Ljava/lang/Object;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput {
-	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput$Companion;
-	public abstract fun getDeserializeSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;
-	public abstract fun getLowLevelResponse ()Ljava/lang/Object;
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemResponse$Companion {
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput$Companion {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemKt {
+	public static final fun PutItemRequest (Ljava/lang/Object;Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;Laws/sdk/kotlin/services/dynamodb/model/ReturnItemCollectionMetrics;Laws/sdk/kotlin/services/dynamodb/model/ReturnValue;Laws/sdk/kotlin/services/dynamodb/model/ReturnValuesOnConditionCheckFailure;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemRequest;
+	public static final fun PutItemResponse (Ljava/lang/Object;Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;Laws/sdk/kotlin/services/dynamodb/model/ItemCollectionMetrics;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemResponse;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemRequest {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemRequest$Companion;
+	public abstract fun getItem ()Ljava/lang/Object;
+	public abstract fun getReturnConsumedCapacity ()Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;
+	public abstract fun getReturnItemCollectionMetrics ()Laws/sdk/kotlin/services/dynamodb/model/ReturnItemCollectionMetrics;
+	public abstract fun getReturnValues ()Laws/sdk/kotlin/services/dynamodb/model/ReturnValue;
+	public abstract fun getReturnValuesOnConditionCheckFailure ()Laws/sdk/kotlin/services/dynamodb/model/ReturnValuesOnConditionCheckFailure;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemRequest$Companion {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemResponse {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemResponse$Companion;
+	public abstract fun getAttributes ()Ljava/lang/Object;
+	public abstract fun getConsumedCapacity ()Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;
+	public abstract fun getItemCollectionMetrics ()Laws/sdk/kotlin/services/dynamodb/model/ItemCollectionMetrics;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemResponse$Companion {
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/QueryKt {
+	public static final fun QueryRequest (Ljava/lang/Boolean;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;Ljava/lang/Boolean;Laws/sdk/kotlin/services/dynamodb/model/Select;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/QueryRequest;
+	public static final fun QueryResponse (Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;ILjava/util/List;Ljava/lang/Object;I)Laws/sdk/kotlin/hll/dynamodbmapper/operations/QueryResponse;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/QueryRequest {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/QueryRequest$Companion;
+	public abstract fun getConsistentRead ()Ljava/lang/Boolean;
+	public abstract fun getExclusiveStartKey ()Ljava/lang/Object;
+	public abstract fun getFilterExpression ()Ljava/lang/String;
+	public abstract fun getIndexName ()Ljava/lang/String;
+	public abstract fun getKeyConditionExpression ()Ljava/lang/String;
+	public abstract fun getLimit ()Ljava/lang/Integer;
+	public abstract fun getReturnConsumedCapacity ()Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;
+	public abstract fun getScanIndexForward ()Ljava/lang/Boolean;
+	public abstract fun getSelect ()Laws/sdk/kotlin/services/dynamodb/model/Select;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/QueryRequest$Companion {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/QueryResponse {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/QueryResponse$Companion;
+	public abstract fun getConsumedCapacity ()Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;
+	public abstract fun getCount ()I
+	public abstract fun getItems ()Ljava/util/List;
+	public abstract fun getLastEvaluatedKey ()Ljava/lang/Object;
+	public abstract fun getScannedCount ()I
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/QueryResponse$Companion {
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/ScanKt {
+	public static final fun ScanRequest (Ljava/lang/Boolean;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;Ljava/lang/Integer;Laws/sdk/kotlin/services/dynamodb/model/Select;Ljava/lang/Integer;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanRequest;
+	public static final fun ScanResponse (Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;ILjava/util/List;Ljava/lang/Object;I)Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanResponse;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/ScanRequest {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanRequest$Companion;
+	public abstract fun getConsistentRead ()Ljava/lang/Boolean;
+	public abstract fun getExclusiveStartKey ()Ljava/lang/Object;
+	public abstract fun getFilterExpression ()Ljava/lang/String;
+	public abstract fun getIndexName ()Ljava/lang/String;
+	public abstract fun getLimit ()Ljava/lang/Integer;
+	public abstract fun getReturnConsumedCapacity ()Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;
+	public abstract fun getSegment ()Ljava/lang/Integer;
+	public abstract fun getSelect ()Laws/sdk/kotlin/services/dynamodb/model/Select;
+	public abstract fun getTotalSegments ()Ljava/lang/Integer;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/ScanRequest$Companion {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/ScanResponse {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanResponse$Companion;
+	public abstract fun getConsumedCapacity ()Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;
+	public abstract fun getCount ()I
+	public abstract fun getItems ()Ljava/util/List;
+	public abstract fun getLastEvaluatedKey ()Ljava/lang/Object;
+	public abstract fun getScannedCount ()I
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/ScanResponse$Companion {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/TableOperations {
+	public abstract fun deleteItem (Laws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getItem (Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun putItem (Laws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun query (Laws/sdk/kotlin/hll/dynamodbmapper/operations/QueryRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun scan (Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInput {
+	public abstract fun getDeserializeSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;
+	public abstract fun getLowLevelResponse ()Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/DeserializeInputKt {

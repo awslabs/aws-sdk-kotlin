@@ -6,35 +6,48 @@ package aws.sdk.kotlin.hll.dynamodbmapper.internal
 
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.Table
+import aws.sdk.kotlin.hll.dynamodbmapper.TableSpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.GetItemRequest
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.GetItemResponse
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.getItemOperation
-import kotlinx.coroutines.flow.Flow
+import aws.sdk.kotlin.hll.dynamodbmapper.operations.*
 
-// TODO move operation implementations to codegen
+private data class TableSpecPartitionKeyImpl<T, PK>(
+    override val mapper: DynamoDbMapper,
+    override val name: String,
+    override val schema: ItemSchema.PartitionKey<T, PK>,
+) : TableSpec.PartitionKey<T, PK>
 
-internal abstract class TableImpl<T>(override val mapper: DynamoDbMapper, override val name: String) : Table<T> {
-    override suspend fun getItem(request: GetItemRequest<T>): GetItemResponse<T> =
-        getItemOperation(this).execute(request)
+private data class TableSpecCompositeKeyImpl<T, PK, SK>(
+    override val mapper: DynamoDbMapper,
+    override val name: String,
+    override val schema: ItemSchema.CompositeKey<T, PK, SK>,
+) : TableSpec.CompositeKey<T, PK, SK>
 
-    override suspend fun putItem(obj: T) = TODO("not yet implemented")
-
-    override fun scan(): Flow<T> = TODO("not yet implemented")
-
-    internal class PartitionKeyImpl<T, PK> internal constructor(
-        mapper: DynamoDbMapper,
-        name: String,
-        override val schema: ItemSchema.PartitionKey<T, PK>,
-    ) : TableImpl<T>(mapper, name), Table.PartitionKey<T, PK> {
+internal fun <T, PK> tableImpl(
+    mapper: DynamoDbMapper,
+    name: String,
+    schema: ItemSchema.PartitionKey<T, PK>,
+): Table.PartitionKey<T, PK> {
+    val specImpl = TableSpecPartitionKeyImpl(mapper, name, schema)
+    val opsImpl = TableOperationsImpl(specImpl)
+    return object :
+        Table.PartitionKey<T, PK>,
+        TableSpec.PartitionKey<T, PK> by specImpl,
+        TableOperations<T> by opsImpl {
         override suspend fun getItem(partitionKey: PK) = TODO("not yet implemented")
     }
+}
 
-    internal class CompositeKeyImpl<T, PK, SK> internal constructor(
-        mapper: DynamoDbMapper,
-        name: String,
-        override val schema: ItemSchema.CompositeKey<T, PK, SK>,
-    ) : TableImpl<T>(mapper, name), Table.CompositeKey<T, PK, SK> {
-        override suspend fun getItem(partitionKey: PK, sortKey: SK) = TODO("not yet implemented")
+internal fun <T, PK, SK> tableImpl(
+    mapper: DynamoDbMapper,
+    name: String,
+    schema: ItemSchema.CompositeKey<T, PK, SK>,
+): Table.CompositeKey<T, PK, SK> {
+    val specImpl = TableSpecCompositeKeyImpl(mapper, name, schema)
+    val opsImpl = TableOperationsImpl(specImpl)
+    return object :
+        Table.CompositeKey<T, PK, SK>,
+        TableSpec.CompositeKey<T, PK, SK> by specImpl,
+        TableOperations<T> by opsImpl {
+        override suspend fun getItem(partitionKey: PK, sortKey: SK) = TODO("Not yet implemented")
     }
 }

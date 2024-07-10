@@ -17,8 +17,7 @@ internal data class LResContextImpl<T, HReq, LReq, LRes>(
     override val lowLevelResponse: LRes,
     override val deserializeSchema: ItemSchema<T>,
     override val error: Throwable?,
-) :
-    LResContext<T, HReq, LReq, LRes>,
+) : LResContext<T, HReq, LReq, LRes>,
     ErrorCombinable<LResContextImpl<T, HReq, LReq, LRes>>,
     Combinable<LResContextImpl<T, HReq, LReq, LRes>, DeserializeInput<T, LRes>> {
 

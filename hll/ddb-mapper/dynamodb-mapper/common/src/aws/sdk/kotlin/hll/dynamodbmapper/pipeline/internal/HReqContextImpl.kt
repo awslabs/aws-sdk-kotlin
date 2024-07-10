@@ -14,8 +14,7 @@ internal data class HReqContextImpl<T, HReq>(
     override val serializeSchema: ItemSchema<T>,
     override val mapperContext: MapperContext<T>,
     override val error: Throwable? = null,
-) :
-    HReqContext<T, HReq>,
+) : HReqContext<T, HReq>,
     ErrorCombinable<HReqContextImpl<T, HReq>>,
     Combinable<HReqContextImpl<T, HReq>, SerializeInput<T, HReq>> {
 

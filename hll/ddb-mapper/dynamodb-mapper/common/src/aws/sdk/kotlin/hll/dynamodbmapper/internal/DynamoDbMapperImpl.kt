@@ -14,10 +14,10 @@ internal data class DynamoDbMapperImpl(
     override val config: DynamoDbMapper.Config,
 ) : DynamoDbMapper {
     override fun <T, PK> getTable(name: String, schema: ItemSchema.PartitionKey<T, PK>) =
-        TableImpl.PartitionKeyImpl(this, name, schema)
+        tableImpl(this, name, schema)
 
     override fun <T, PK, SK> getTable(name: String, schema: ItemSchema.CompositeKey<T, PK, SK>) =
-        TableImpl.CompositeKeyImpl(this, name, schema)
+        tableImpl(this, name, schema)
 }
 
 internal data class MapperConfigImpl(

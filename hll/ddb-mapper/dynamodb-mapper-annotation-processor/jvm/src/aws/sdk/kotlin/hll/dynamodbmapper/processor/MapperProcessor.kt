@@ -71,7 +71,7 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
                             |public object $converterName : ItemConverter<$className> by SimpleItemConverter(
                             |    builderFactory = ::$builderName,
                             |    build = $builderName::build,
-                            |    descriptors = listOf(
+                            |    descriptors = arrayOf(
                                      ${generateDescriptors(className, builderName, props)}
                             |    ),
                             |)

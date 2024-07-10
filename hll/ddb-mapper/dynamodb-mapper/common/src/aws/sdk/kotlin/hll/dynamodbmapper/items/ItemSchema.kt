@@ -62,6 +62,7 @@ public interface ItemSchema<T> {
  * @param converter The [ItemConverter] used to convert between objects and items
  * @param partitionKey The [KeySpec] for the partition key
  */
+@Suppress("FunctionName")
 public fun <T, PK> ItemSchema(converter: ItemConverter<T>, partitionKey: KeySpec<PK>): ItemSchema.PartitionKey<T, PK> =
     ItemSchemaPartitionKeyImpl(converter, partitionKey)
 
@@ -74,6 +75,7 @@ public fun <T, PK> ItemSchema(converter: ItemConverter<T>, partitionKey: KeySpec
  * @param partitionKey The [KeySpec] for the partition key
  * @param sortKey The [KeySpec] for the sort key
  */
+@Suppress("FunctionName")
 public fun <T, PK, SK> ItemSchema(
     converter: ItemConverter<T>,
     partitionKey: KeySpec<PK>,

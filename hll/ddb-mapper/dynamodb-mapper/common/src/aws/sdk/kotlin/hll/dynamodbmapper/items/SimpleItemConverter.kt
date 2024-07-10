@@ -24,7 +24,7 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 public class SimpleItemConverter<T, B>(
     private val builderFactory: () -> B,
     private val build: B.() -> T,
-    descriptors: Collection<AttributeDescriptor<*, T, B>>,
+    vararg descriptors: AttributeDescriptor<*, T, B>,
 ) : ItemConverter<T> {
     private val descriptors = descriptors
         .groupBy { it.name }

@@ -25,4 +25,12 @@ public interface TableSpec<T> {
      * The [ItemSchema] for this table which describes how to map objects to items and vice versa
      */
     public val schema: ItemSchema<T>
+
+    public interface PartitionKey<T, PK> : TableSpec<T> {
+        override val schema: ItemSchema.PartitionKey<T, PK>
+    }
+
+    public interface CompositeKey<T, PK, SK> : TableSpec<T> {
+        override val schema: ItemSchema.CompositeKey<T, PK, SK>
+    }
 }

@@ -58,8 +58,9 @@ file("services").listFiles().forEach {
     }
 }
 
-if (file("services/dynamodb").isServiceDir()) {
+if ("dynamodb".isBootstrappedService) {
     include(":hll:ddb-mapper")
+    include(":hll:ddb-mapper:ddb-mapper-ops-codegen")
     include(":hll:ddb-mapper:dynamodb-mapper")
     include(":hll:ddb-mapper:dynamodb-mapper-annotation-processor")
     include(":hll:ddb-mapper:dynamodb-mapper-annotations")
