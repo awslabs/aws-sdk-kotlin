@@ -45,7 +45,7 @@ class AwsUserAgentMetadataTest {
         val expected = listOf(
             "aws-sdk-kotlin/1.2.3",
             "md/internal",
-            "ua/2.0",
+            "ua/2.1",
             "api/test-service#1.2.3",
             "os/linux#ubuntu-20.04",
             "lang/kotlin#1.4.31",

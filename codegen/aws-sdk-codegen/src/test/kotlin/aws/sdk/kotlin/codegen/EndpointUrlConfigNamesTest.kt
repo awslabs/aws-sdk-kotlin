@@ -35,8 +35,8 @@ class EndpointUrlConfigNamesTest {
 
     @Test
     fun runTestSuite() {
-        val javaClientNames = Json.parseToJsonElement(javaClientNamesJson).jsonObject
-        val testCases = Json.parseToJsonElement(testSuiteJson).jsonArray
+        val javaClientNames = Json.parseToJsonElement(JAVA_CLIENT_NAMES_JSON).jsonObject
+        val testCases = Json.parseToJsonElement(TEST_SUITE_JSON).jsonArray
             .filter { !ignoredIds.contains(it.jsonObject["service_id"]!!.jsonPrimitive.content) }
             .map { TestCase.fromJson(it.jsonObject, javaClientNames) }
 
@@ -51,7 +51,7 @@ class EndpointUrlConfigNamesTest {
 }
 
 // language=JSON
-private const val testSuiteJson = """
+private const val TEST_SUITE_JSON = """
 [
   {
     "service_id": "AccessAnalyzer",
@@ -72,11 +72,6 @@ private const val testSuiteJson = """
     "service_id": "ACM PCA",
     "services_section_name": "acm_pca",
     "service_envvar_name": "AWS_ENDPOINT_URL_ACM_PCA"
-  },
-  {
-    "service_id": "Alexa For Business",
-    "services_section_name": "alexa_for_business",
-    "service_envvar_name": "AWS_ENDPOINT_URL_ALEXA_FOR_BUSINESS"
   },
   {
     "service_id": "amp",
@@ -197,11 +192,6 @@ private const val testSuiteJson = """
     "service_id": "Backup Gateway",
     "services_section_name": "backup_gateway",
     "service_envvar_name": "AWS_ENDPOINT_URL_BACKUP_GATEWAY"
-  },
-  {
-    "service_id": "BackupStorage",
-    "services_section_name": "backupstorage",
-    "service_envvar_name": "AWS_ENDPOINT_URL_BACKUPSTORAGE"
   },
   {
     "service_id": "Batch",
@@ -727,11 +717,6 @@ private const val testSuiteJson = """
     "service_id": "HealthLake",
     "services_section_name": "healthlake",
     "service_envvar_name": "AWS_ENDPOINT_URL_HEALTHLAKE"
-  },
-  {
-    "service_id": "Honeycode",
-    "services_section_name": "honeycode",
-    "service_envvar_name": "AWS_ENDPOINT_URL_HONEYCODE"
   },
   {
     "service_id": "IAM",
@@ -1652,7 +1637,7 @@ private const val testSuiteJson = """
 """
 
 // language=JSON
-private const val javaClientNamesJson = """
+private const val JAVA_CLIENT_NAMES_JSON = """
 {
   "LookoutMetrics": "LookoutMetricsClient",
   "AppRunner": "AppRunnerClient",
@@ -1718,7 +1703,6 @@ private const val javaClientNamesJson = """
   "nimble": "NimbleClient",
   "Lex Model Building Service": "LexModelBuildingClient",
   "Medical Imaging": "MedicalImagingClient",
-  "Alexa For Business": "AlexaForBusinessClient",
   "Auto Scaling": "AutoScalingClient",
   "RoboMaker": "RoboMakerClient",
   "SES": "SesClient",
@@ -1861,7 +1845,6 @@ private const val javaClientNamesJson = """
   "IoT Events Data": "IotEventsDataClient",
   "Storage Gateway": "StorageGatewayClient",
   "grafana": "GrafanaClient",
-  "Honeycode": "HoneycodeClient",
   "rbin": "RbinClient",
   "S3Outposts": "S3OutpostsClient",
   "Application Auto Scaling": "ApplicationAutoScalingClient",
@@ -1952,7 +1935,6 @@ private const val javaClientNamesJson = """
   "IoTFleetHub": "IotFleetHubClient",
   "Cognito Sync": "CognitoSyncClient",
   "Outposts": "OutpostsClient",
-  "BackupStorage": "BackupStorageClient",
   "Personalize": "PersonalizeClient",
   "SESv2": "SesV2Client",
   "ARC Zonal Shift": "ArcZonalShiftClient",

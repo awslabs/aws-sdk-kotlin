@@ -37,12 +37,6 @@
             "brazilName": "AwsSdkKotlinAccount"
         },
         {
-            "sdkId": "Alexa For Business",
-            "namespace": "aws.sdk.kotlin.services.alexaforbusiness",
-            "artifactName": "alexaforbusiness",
-            "brazilName": "AwsSdkKotlinAlexaForBusiness"
-        },
-        {
             "sdkId": "Amplify",
             "namespace": "aws.sdk.kotlin.services.amplify",
             "artifactName": "amplify",
@@ -121,6 +115,12 @@
             "brazilName": "AwsSdkKotlinAppsync"
         },
         {
+            "sdkId": "AppTest",
+            "namespace": "aws.sdk.kotlin.services.apptest",
+            "artifactName": "apptest",
+            "brazilName": "AwsSdkKotlinApptest"
+        },
+        {
             "sdkId": "Appflow",
             "namespace": "aws.sdk.kotlin.services.appflow",
             "artifactName": "appflow",
@@ -143,6 +143,12 @@
             "namespace": "aws.sdk.kotlin.services.applicationinsights",
             "artifactName": "applicationinsights",
             "brazilName": "AwsSdkKotlinApplicationInsights"
+        },
+        {
+            "sdkId": "Application Signals",
+            "namespace": "aws.sdk.kotlin.services.applicationsignals",
+            "artifactName": "applicationsignals",
+            "brazilName": "AwsSdkKotlinApplicationSignals"
         },
         {
             "sdkId": "ApplicationCostProfiler",
@@ -197,12 +203,6 @@
             "namespace": "aws.sdk.kotlin.services.backupgateway",
             "artifactName": "backupgateway",
             "brazilName": "AwsSdkKotlinBackupGateway"
-        },
-        {
-            "sdkId": "BackupStorage",
-            "namespace": "aws.sdk.kotlin.services.backupstorage",
-            "artifactName": "backupstorage",
-            "brazilName": "AwsSdkKotlinBackupstorage"
         },
         {
             "sdkId": "Batch",
@@ -521,6 +521,12 @@
             "namespace": "aws.sdk.kotlin.services.connectparticipant",
             "artifactName": "connectparticipant",
             "brazilName": "AwsSdkKotlinConnectparticipant"
+        },
+        {
+            "sdkId": "ControlCatalog",
+            "namespace": "aws.sdk.kotlin.services.controlcatalog",
+            "artifactName": "controlcatalog",
+            "brazilName": "AwsSdkKotlinControlcatalog"
         },
         {
             "sdkId": "ControlTower",
@@ -877,12 +883,6 @@
             "brazilName": "AwsSdkKotlinHealthlake"
         },
         {
-            "sdkId": "Honeycode",
-            "namespace": "aws.sdk.kotlin.services.honeycode",
-            "artifactName": "honeycode",
-            "brazilName": "AwsSdkKotlinHoneycode"
-        },
-        {
             "sdkId": "IAM",
             "namespace": "aws.sdk.kotlin.services.iam",
             "artifactName": "iam",
@@ -1105,6 +1105,12 @@
             "brazilName": "AwsSdkKotlinLambda"
         },
         {
+            "sdkId": "Launch Wizard",
+            "namespace": "aws.sdk.kotlin.services.launchwizard",
+            "artifactName": "launchwizard",
+            "brazilName": "AwsSdkKotlinLaunchWizard"
+        },
+        {
             "sdkId": "Lex Model Building Service",
             "namespace": "aws.sdk.kotlin.services.lexmodelbuildingservice",
             "artifactName": "lexmodelbuildingservice",
@@ -1199,6 +1205,12 @@
             "namespace": "aws.sdk.kotlin.services.macie2",
             "artifactName": "macie2",
             "brazilName": "AwsSdkKotlinMacie2"
+        },
+        {
+            "sdkId": "MailManager",
+            "namespace": "aws.sdk.kotlin.services.mailmanager",
+            "artifactName": "mailmanager",
+            "brazilName": "AwsSdkKotlinMailmanager"
         },
         {
             "sdkId": "ManagedBlockchain",
@@ -1465,6 +1477,12 @@
             "brazilName": "AwsSdkKotlinPcaConnectorAd"
         },
         {
+            "sdkId": "Pca Connector Scep",
+            "namespace": "aws.sdk.kotlin.services.pcaconnectorscep",
+            "artifactName": "pcaconnectorscep",
+            "brazilName": "AwsSdkKotlinPcaConnectorScep"
+        },
+        {
             "sdkId": "Personalize",
             "namespace": "aws.sdk.kotlin.services.personalize",
             "artifactName": "personalize",
@@ -1535,6 +1553,12 @@
             "namespace": "aws.sdk.kotlin.services.proton",
             "artifactName": "proton",
             "brazilName": "AwsSdkKotlinProton"
+        },
+        {
+            "sdkId": "QApps",
+            "namespace": "aws.sdk.kotlin.services.qapps",
+            "artifactName": "qapps",
+            "brazilName": "AwsSdkKotlinQapps"
         },
         {
             "sdkId": "QBusiness",
@@ -1673,6 +1697,12 @@
             "namespace": "aws.sdk.kotlin.services.route53recoveryreadiness",
             "artifactName": "route53recoveryreadiness",
             "brazilName": "AwsSdkKotlinRoute53RecoveryReadiness"
+        },
+        {
+            "sdkId": "Route53Profiles",
+            "namespace": "aws.sdk.kotlin.services.route53profiles",
+            "artifactName": "route53profiles",
+            "brazilName": "AwsSdkKotlinRoute53profiles"
         },
         {
             "sdkId": "Route53Resolver",
@@ -1931,6 +1961,12 @@
             "namespace": "aws.sdk.kotlin.services.supportapp",
             "artifactName": "supportapp",
             "brazilName": "AwsSdkKotlinSupportApp"
+        },
+        {
+            "sdkId": "TaxSettings",
+            "namespace": "aws.sdk.kotlin.services.taxsettings",
+            "artifactName": "taxsettings",
+            "brazilName": "AwsSdkKotlinTaxsettings"
         },
         {
             "sdkId": "Textract",

@@ -103,7 +103,6 @@ subprojects {
                                 } else {
                                     implementation("aws.sdk.kotlin:sts:+")
                                 }
-
                                 implementation(libs.smithy.kotlin.aws.signing.crt)
                             }
                         }

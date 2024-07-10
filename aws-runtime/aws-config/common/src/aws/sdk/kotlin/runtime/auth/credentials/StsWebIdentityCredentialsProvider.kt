@@ -116,7 +116,7 @@ public class StsWebIdentityCredentialsProvider(
 
         val telemetry = coroutineContext.telemetryProvider
 
-        val client = StsClient {
+        val client = StsClient.fromEnvironment {
             region = provider.region
             httpClient = provider.httpClient
             // NOTE: credentials provider not needed for this operation

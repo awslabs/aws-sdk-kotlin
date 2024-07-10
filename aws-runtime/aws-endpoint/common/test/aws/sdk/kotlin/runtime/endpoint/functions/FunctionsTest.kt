@@ -100,6 +100,7 @@ class FunctionsTest {
                 "us-west-2" to PartitionConfig(),
                 "aws-global" to PartitionConfig(
                     dnsSuffix = "override.amazonaws.com",
+                    implicitGlobalRegion = "implicit-global-region",
                 ),
             ),
             baseConfig = PartitionConfig(
@@ -144,6 +145,7 @@ class FunctionsTest {
                 dualStackDnsSuffix = "api.aws",
                 supportsFIPS = true,
                 supportsDualStack = true,
+                implicitGlobalRegion = "implicit-global-region",
             ),
             actual = partition(testPartitions, "aws-global"),
         )

@@ -2689,7 +2689,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "Set Style passthrough to ENABLED to use the available style, color, and position information from your input captions. MediaConvert uses default settings for any missing style and position information in your input captions. Set Style passthrough to DISABLED, or leave blank, to ignore the style and position information from your input captions and use default settings: white text with black outlining, bottom-center positioning, and automatic sizing. Whether you set Style passthrough to enabled or not, you can also choose to manually override any of the individual style and position settings."
+                "smithy.api#documentation": "To use the available style, color, and position information from your input captions: Set Style passthrough to Enabled. Note that MediaConvert uses default settings for any missing style or position information in your input captions To ignore the style and position information from your input captions and use default settings: Leave blank or keep the default value, Disabled. Default settings include white text with black outlining, bottom-center positioning, and automatic sizing. Whether you set Style passthrough to enabled or not, you can also choose to manually override any of the individual style and position settings. You can also override any fonts by manually specifying custom font files."
             }
         },
         "com.amazonaws.mediaconvert#BurninDestinationSettings": {
@@ -2735,6 +2735,34 @@
                     "traits": {
                         "smithy.api#documentation": "Specify the color of the burned-in captions text. Leave Font color blank and set Style passthrough to enabled to use the font color data from your input captions, if present.",
                         "smithy.api#jsonName": "fontColor"
+                    }
+                },
+                "FontFileBold": {
+                    "target": "com.amazonaws.mediaconvert#__stringPatternS3TtfHttpsTtf",
+                    "traits": {
+                        "smithy.api#documentation": "Specify a bold TrueType font file to use when rendering your output captions. Enter an S3, HTTP, or HTTPS URL. When you do, you must also separately specify a regular, an italic, and a bold italic font file.",
+                        "smithy.api#jsonName": "fontFileBold"
+                    }
+                },
+                "FontFileBoldItalic": {
+                    "target": "com.amazonaws.mediaconvert#__string",
+                    "traits": {
+                        "smithy.api#documentation": "Specify a bold italic TrueType font file to use when rendering your output captions.\nEnter an S3, HTTP, or HTTPS URL.\nWhen you do, you must also separately specify a regular, a bold, and an italic font file.",
+                        "smithy.api#jsonName": "fontFileBoldItalic"
+                    }
+                },
+                "FontFileItalic": {
+                    "target": "com.amazonaws.mediaconvert#__stringPatternS3TtfHttpsTtf",
+                    "traits": {
+                        "smithy.api#documentation": "Specify an italic TrueType font file to use when rendering your output captions. Enter an S3, HTTP, or HTTPS URL. When you do, you must also separately specify a regular, a bold, and a bold italic font file.",
+                        "smithy.api#jsonName": "fontFileItalic"
+                    }
+                },
+                "FontFileRegular": {
+                    "target": "com.amazonaws.mediaconvert#__stringPatternS3TtfHttpsTtf",
+                    "traits": {
+                        "smithy.api#documentation": "Specify a regular TrueType font file to use when rendering your output captions. Enter an S3, HTTP, or HTTPS URL. When you do, you must also separately specify a bold, an italic, and a bold italic font file.",
+                        "smithy.api#jsonName": "fontFileRegular"
                     }
                 },
                 "FontOpacity": {
@@ -2817,7 +2845,7 @@
                 "StylePassthrough": {
                     "target": "com.amazonaws.mediaconvert#BurnInSubtitleStylePassthrough",
                     "traits": {
-                        "smithy.api#documentation": "Set Style passthrough to ENABLED to use the available style, color, and position information from your input captions. MediaConvert uses default settings for any missing style and position information in your input captions. Set Style passthrough to DISABLED, or leave blank, to ignore the style and position information from your input captions and use default settings: white text with black outlining, bottom-center positioning, and automatic sizing. Whether you set Style passthrough to enabled or not, you can also choose to manually override any of the individual style and position settings.",
+                        "smithy.api#documentation": "To use the available style, color, and position information from your input captions: Set Style passthrough to Enabled. Note that MediaConvert uses default settings for any missing style or position information in your input captions To ignore the style and position information from your input captions and use default settings: Leave blank or keep the default value, Disabled. Default settings include white text with black outlining, bottom-center positioning, and automatic sizing. Whether you set Style passthrough to enabled or not, you can also choose to manually override any of the individual style and position settings. You can also override any fonts by manually specifying custom font files.",
                         "smithy.api#jsonName": "stylePassthrough"
                     }
                 },
@@ -3863,6 +3891,13 @@
                     "traits": {
                         "smithy.api#documentation": "Specification to use (RFC-6381 or the default RFC-4281) during m3u8 playlist generation.",
                         "smithy.api#jsonName": "codecSpecification"
+                    }
+                },
+                "DashIFrameTrickPlayNameModifier": {
+                    "target": "com.amazonaws.mediaconvert#__stringMin1Max256",
+                    "traits": {
+                        "smithy.api#documentation": "Specify whether MediaConvert generates I-frame only video segments for DASH trick play, also known as trick mode. When specified, the I-frame only video segments are included within an additional AdaptationSet in your DASH output manifest. To generate I-frame only video segments: Enter a name as a text string, up to 256 character long. This name is appended to the end of this output group's base filename, that you specify as part of your destination URI, and used for the I-frame only video segment files. You may also include format identifiers. For more information, see: https://docs.aws.amazon.com/mediaconvert/latest/ug/using-variables-in-your-job-settings.html#using-settings-variables-with-streaming-outputs To not generate I-frame only video segments: Leave blank.",
+                        "smithy.api#jsonName": "dashIFrameTrickPlayNameModifier"
                     }
                 },
                 "DashManifestStyle": {
@@ -5813,6 +5848,13 @@
                         "smithy.api#jsonName": "baseUrl"
                     }
                 },
+                "DashIFrameTrickPlayNameModifier": {
+                    "target": "com.amazonaws.mediaconvert#__stringMin1Max256",
+                    "traits": {
+                        "smithy.api#documentation": "Specify whether MediaConvert generates I-frame only video segments for DASH trick play, also known as trick mode. When specified, the I-frame only video segments are included within an additional AdaptationSet in your DASH output manifest. To generate I-frame only video segments: Enter a name as a text string, up to 256 character long. This name is appended to the end of this output group's base filename, that you specify as part of your destination URI, and used for the I-frame only video segment files. You may also include format identifiers. For more information, see: https://docs.aws.amazon.com/mediaconvert/latest/ug/using-variables-in-your-job-settings.html#using-settings-variables-with-streaming-outputs To not generate I-frame only video segments: Leave blank.",
+                        "smithy.api#jsonName": "dashIFrameTrickPlayNameModifier"
+                    }
+                },
                 "DashManifestStyle": {
                     "target": "com.amazonaws.mediaconvert#DashManifestStyle",
                     "traits": {
@@ -6654,7 +6696,7 @@
                 "smithy.api#deprecated": {
                     "message": "DescribeEndpoints and account specific endpoints are no longer required. We recommend that you send your requests directly to the regional endpoint instead."
                 },
-                "smithy.api#documentation": "Send an request with an empty body to the regional API endpoint to get your account API endpoint.",
+                "smithy.api#documentation": "Send a request with an empty body to the regional API endpoint to get your account API endpoint. Note that DescribeEndpoints is no longer required. We recommend that you send your requests directly to the regional endpoint instead.",
                 "smithy.api#http": {
                     "method": "POST",
                     "uri": "/2017-08-29/endpoints",
@@ -6720,7 +6762,6 @@
                 "smithy.api#deprecated": {
                     "message": "DescribeEndpoints and account specific endpoints are no longer required. We recommend that you send your requests directly to the regional endpoint instead."
                 },
-                "smithy.api#documentation": "DescribeEndpointsRequest",
                 "smithy.api#input": {}
             }
         },
@@ -7099,6 +7140,34 @@
                         "smithy.api#jsonName": "fontColor"
                     }
                 },
+                "FontFileBold": {
+                    "target": "com.amazonaws.mediaconvert#__stringPatternS3TtfHttpsTtf",
+                    "traits": {
+                        "smithy.api#documentation": "Specify a bold TrueType font file to use when rendering your output captions. Enter an S3, HTTP, or HTTPS URL. When you do, you must also separately specify a regular, an italic, and a bold italic font file.",
+                        "smithy.api#jsonName": "fontFileBold"
+                    }
+                },
+                "FontFileBoldItalic": {
+                    "target": "com.amazonaws.mediaconvert#__stringPatternS3TtfHttpsTtf",
+                    "traits": {
+                        "smithy.api#documentation": "Specify a bold italic TrueType font file to use when rendering your output captions.\nEnter an S3, HTTP, or HTTPS URL.\nWhen you do, you must also separately specify a regular, a bold, and an italic font file.",
+                        "smithy.api#jsonName": "fontFileBoldItalic"
+                    }
+                },
+                "FontFileItalic": {
+                    "target": "com.amazonaws.mediaconvert#__stringPatternS3TtfHttpsTtf",
+                    "traits": {
+                        "smithy.api#documentation": "Specify an italic TrueType font file to use when rendering your output captions. Enter an S3, HTTP, or HTTPS URL. When you do, you must also separately specify a regular, a bold, and a bold italic font file.",
+                        "smithy.api#jsonName": "fontFileItalic"
+                    }
+                },
+                "FontFileRegular": {
+                    "target": "com.amazonaws.mediaconvert#__stringPatternS3TtfHttpsTtf",
+                    "traits": {
+                        "smithy.api#documentation": "Specify a regular TrueType font file to use when rendering your output captions. Enter an S3, HTTP, or HTTPS URL. When you do, you must also separately specify a bold, an italic, and a bold italic font file.",
+                        "smithy.api#jsonName": "fontFileRegular"
+                    }
+                },
                 "FontOpacity": {
                     "target": "com.amazonaws.mediaconvert#__integerMin0Max255",
                     "traits": {
@@ -7186,7 +7255,7 @@
                 "StylePassthrough": {
                     "target": "com.amazonaws.mediaconvert#DvbSubtitleStylePassthrough",
                     "traits": {
-                        "smithy.api#documentation": "Set Style passthrough to ENABLED to use the available style, color, and position information from your input captions. MediaConvert uses default settings for any missing style and position information in your input captions. Set Style passthrough to DISABLED, or leave blank, to ignore the style and position information from your input captions and use default settings: white text with black outlining, bottom-center positioning, and automatic sizing. Whether you set Style passthrough to enabled or not, you can also choose to manually override any of the individual style and position settings.",
+                        "smithy.api#documentation": "To use the available style, color, and position information from your input captions: Set Style passthrough to Enabled. Note that MediaConvert uses default settings for any missing style or position information in your input captions To ignore the style and position information from your input captions and use default settings: Leave blank or keep the default value, Disabled. Default settings include white text with black outlining, bottom-center positioning, and automatic sizing. Whether you set Style passthrough to enabled or not, you can also choose to manually override any of the individual style and position settings. You can also override any fonts by manually specifying custom font files.",
                         "smithy.api#jsonName": "stylePassthrough"
                     }
                 },
@@ -7516,7 +7585,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "Set Style passthrough to ENABLED to use the available style, color, and position information from your input captions. MediaConvert uses default settings for any missing style and position information in your input captions. Set Style passthrough to DISABLED, or leave blank, to ignore the style and position information from your input captions and use default settings: white text with black outlining, bottom-center positioning, and automatic sizing. Whether you set Style passthrough to enabled or not, you can also choose to manually override any of the individual style and position settings."
+                "smithy.api#documentation": "To use the available style, color, and position information from your input captions: Set Style passthrough to Enabled. Note that MediaConvert uses default settings for any missing style or position information in your input captions To ignore the style and position information from your input captions and use default settings: Leave blank or keep the default value, Disabled. Default settings include white text with black outlining, bottom-center positioning, and automatic sizing. Whether you set Style passthrough to enabled or not, you can also choose to manually override any of the individual style and position settings. You can also override any fonts by manually specifying custom font files."
             }
         },
         "com.amazonaws.mediaconvert#DvbSubtitleTeletextSpacing": {
@@ -12988,14 +13057,14 @@
             "type": "structure",
             "members": {
                 "EndTimecode": {
-                    "target": "com.amazonaws.mediaconvert#__stringPattern010920405090509092",
+                    "target": "com.amazonaws.mediaconvert#__stringPattern010920405090509092090909",
                     "traits": {
                         "smithy.api#documentation": "Set End timecode to the end of the portion of the input you are clipping. The frame corresponding to the End timecode value is included in the clip. Start timecode or End timecode may be left blank, but not both. Use the format HH:MM:SS:FF or HH:MM:SS;FF, where HH is the hour, MM is the minute, SS is the second, and FF is the frame number. When choosing this value, take into account your setting for timecode source under input settings. For example, if you have embedded timecodes that start at 01:00:00:00 and you want your clip to end six minutes into the video, use 01:06:00:00.",
                         "smithy.api#jsonName": "endTimecode"
                     }
                 },
                 "StartTimecode": {
-                    "target": "com.amazonaws.mediaconvert#__stringPattern010920405090509092",
+                    "target": "com.amazonaws.mediaconvert#__stringPattern010920405090509092090909",
                     "traits": {
                         "smithy.api#documentation": "Set Start timecode to the beginning of the portion of the input you are clipping. The frame corresponding to the Start timecode value is included in the clip. Start timecode or End timecode may be left blank, but not both. Use the format HH:MM:SS:FF or HH:MM:SS;FF, where HH is the hour, MM is the minute, SS is the second, and FF is the frame number. When choosing this value, take into account your setting for Input timecode source. For example, if you have embedded timecodes that start at 01:00:00:00 and you want your clip to begin five minutes into the video, use 01:05:00:00.",
                         "smithy.api#jsonName": "startTimecode"
@@ -13416,11 +13485,39 @@
         "com.amazonaws.mediaconvert#InputVideoGenerator": {
             "type": "structure",
             "members": {
+                "Channels": {
+                    "target": "com.amazonaws.mediaconvert#__integerMin1Max32",
+                    "traits": {
+                        "smithy.api#documentation": "Specify the number of audio channels to include in your video generator input. MediaConvert creates these audio channels as silent audio within a single audio track. Enter an integer from 1 to 32.",
+                        "smithy.api#jsonName": "channels"
+                    }
+                },
                 "Duration": {
                     "target": "com.amazonaws.mediaconvert#__integerMin50Max86400000",
                     "traits": {
-                        "smithy.api#documentation": "Specify an integer value for Black video duration from 50 to 86400000 to generate a black video input for that many milliseconds. Required when you include Video generator.",
+                        "smithy.api#documentation": "Specify the duration, in milliseconds, for your video generator input.\nEnter an integer from 50 to 86400000.",
                         "smithy.api#jsonName": "duration"
+                    }
+                },
+                "FramerateDenominator": {
+                    "target": "com.amazonaws.mediaconvert#__integerMin1Max1001",
+                    "traits": {
+                        "smithy.api#documentation": "Specify the denominator of the fraction that represents the frame rate for your video generator input. When you do, you must also specify a value for Frame rate numerator. MediaConvert uses a default frame rate of 29.97 when you leave Frame rate numerator and Frame rate denominator blank.",
+                        "smithy.api#jsonName": "framerateDenominator"
+                    }
+                },
+                "FramerateNumerator": {
+                    "target": "com.amazonaws.mediaconvert#__integerMin1Max60000",
+                    "traits": {
+                        "smithy.api#documentation": "Specify the numerator of the fraction that represents the frame rate for your video generator input. When you do, you must also specify a value for Frame rate denominator. MediaConvert uses a default frame rate of 29.97 when you leave Frame rate numerator and Frame rate denominator blank.",
+                        "smithy.api#jsonName": "framerateNumerator"
+                    }
+                },
+                "SampleRate": {
+                    "target": "com.amazonaws.mediaconvert#__integerMin32000Max48000",
+                    "traits": {
+                        "smithy.api#documentation": "Specify the audio sample rate, in Hz, for the silent audio in your video generator input.\nEnter an integer from 32000 to 48000.",
+                        "smithy.api#jsonName": "sampleRate"
                     }
                 }
             },
@@ -13798,7 +13895,7 @@
                 "ColorConversion3DLUTSettings": {
                     "target": "com.amazonaws.mediaconvert#__listOfColorConversion3DLUTSetting",
                     "traits": {
-                        "smithy.api#documentation": "Use 3D LUTs to specify custom color mapping behavior when you convert from one color space into another. You can include up to 8 different 3D LUTs.",
+                        "smithy.api#documentation": "Use 3D LUTs to specify custom color mapping behavior when you convert from one color space into another. You can include up to 8 different 3D LUTs. For more information, see: https://docs.aws.amazon.com/mediaconvert/latest/ug/3d-luts.html",
                         "smithy.api#jsonName": "colorConversion3DLUTSettings"
                     }
                 },
@@ -14071,7 +14168,7 @@
                 "ColorConversion3DLUTSettings": {
                     "target": "com.amazonaws.mediaconvert#__listOfColorConversion3DLUTSetting",
                     "traits": {
-                        "smithy.api#documentation": "Use 3D LUTs to specify custom color mapping behavior when you convert from one color space into another. You can include up to 8 different 3D LUTs.",
+                        "smithy.api#documentation": "Use 3D LUTs to specify custom color mapping behavior when you convert from one color space into another. You can include up to 8 different 3D LUTs. For more information, see: https://docs.aws.amazon.com/mediaconvert/latest/ug/3d-luts.html",
                         "smithy.api#jsonName": "colorConversion3DLUTSettings"
                     }
                 },
@@ -16129,6 +16226,26 @@
                 "smithy.api#documentation": "When set to PCR_EVERY_PES_PACKET, a Program Clock Reference value is inserted for every Packetized Elementary Stream (PES) header. This is effective only when the PCR PID is the same as the video or audio elementary stream."
             }
         },
+        "com.amazonaws.mediaconvert#M2tsPreventBufferUnderflow": {
+            "type": "enum",
+            "members": {
+                "DISABLED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DISABLED"
+                    }
+                },
+                "ENABLED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ENABLED"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "Specify whether MediaConvert automatically attempts to prevent decoder buffer underflows in your transport stream output. Use if you are seeing decoder buffer underflows in your output and are unable to increase your transport stream's bitrate. For most workflows: We recommend that you keep the default value, Disabled. To prevent decoder buffer underflows in your output, when possible: Choose Enabled. Note that if MediaConvert prevents a decoder buffer underflow in your output, output video quality is reduced and your job will take longer to complete."
+            }
+        },
         "com.amazonaws.mediaconvert#M2tsRateMode": {
             "type": "enum",
             "members": {
@@ -16438,6 +16555,13 @@
                     "traits": {
                         "smithy.api#documentation": "Specify the packet identifier (PID) for the program map table (PMT) itself. Default is 480.",
                         "smithy.api#jsonName": "pmtPid"
+                    }
+                },
+                "PreventBufferUnderflow": {
+                    "target": "com.amazonaws.mediaconvert#M2tsPreventBufferUnderflow",
+                    "traits": {
+                        "smithy.api#documentation": "Specify whether MediaConvert automatically attempts to prevent decoder buffer underflows in your transport stream output. Use if you are seeing decoder buffer underflows in your output and are unable to increase your transport stream's bitrate. For most workflows: We recommend that you keep the default value, Disabled. To prevent decoder buffer underflows in your output, when possible: Choose Enabled. Note that if MediaConvert prevents a decoder buffer underflow in your output, output video quality is reduced and your job will take longer to complete.",
+                        "smithy.api#jsonName": "preventBufferUnderflow"
                     }
                 },
                 "PrivateMetadataPid": {
@@ -16872,6 +16996,9 @@
                     "target": "com.amazonaws.mediaconvert#PutPolicy"
                 },
                 {
+                    "target": "com.amazonaws.mediaconvert#SearchJobs"
+                },
+                {
                     "target": "com.amazonaws.mediaconvert#TagResource"
                 },
                 {
@@ -16899,6 +17026,9 @@
                     "name": "mediaconvert"
                 },
                 "aws.protocols#restJson1": {},
+                "smithy.api#auth": [
+                    "aws.auth#sigv4"
+                ],
                 "smithy.api#documentation": "AWS Elemental MediaConvert",
                 "smithy.api#title": "AWS Elemental MediaConvert",
                 "smithy.rules#endpointRuleSet": {
@@ -20173,7 +20303,7 @@
                     }
                 },
                 "NameModifier": {
-                    "target": "com.amazonaws.mediaconvert#__stringMin1",
+                    "target": "com.amazonaws.mediaconvert#__stringMin1Max256",
                     "traits": {
                         "smithy.api#documentation": "Use Name modifier to have the service add a string to the end of each output filename. You specify the base filename as part of your destination URI. When you create multiple outputs in the same output group, Name modifier is required. Name modifier also accepts format identifiers. For DASH ISO outputs, if you use the format identifiers $Number$ or $Time$ in one output, you must use them in the same way in all outputs of the output group.",
                         "smithy.api#jsonName": "nameModifier"
@@ -21802,6 +21932,121 @@
             },
             "traits": {
                 "smithy.api#documentation": "Settings related to SCC captions. SCC is a sidecar format that holds captions in a file that is separate from the video container. Set up sidecar captions in the same output group, but different output from your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/scc-srt-output-captions.html."
+            }
+        },
+        "com.amazonaws.mediaconvert#SearchJobs": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mediaconvert#SearchJobsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mediaconvert#SearchJobsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mediaconvert#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.mediaconvert#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.mediaconvert#ForbiddenException"
+                },
+                {
+                    "target": "com.amazonaws.mediaconvert#InternalServerErrorException"
+                },
+                {
+                    "target": "com.amazonaws.mediaconvert#NotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mediaconvert#TooManyRequestsException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "Retrieve a JSON array that includes job details for up to twenty of your most recent jobs. Optionally filter results further according to input file, queue, or status. To retrieve the twenty next most recent jobs, use the nextToken string returned with the array.",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/2017-08-29/search",
+                    "code": 200
+                },
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "items": "Jobs",
+                    "pageSize": "MaxResults"
+                }
+            }
+        },
+        "com.amazonaws.mediaconvert#SearchJobsRequest": {
+            "type": "structure",
+            "members": {
+                "InputFile": {
+                    "target": "com.amazonaws.mediaconvert#__string",
+                    "traits": {
+                        "smithy.api#documentation": "Optional. Provide your input file URL or your partial input file name. The maximum length for an input file is 300 characters.",
+                        "smithy.api#httpQuery": "inputFile"
+                    }
+                },
+                "MaxResults": {
+                    "target": "com.amazonaws.mediaconvert#__integerMin1Max20",
+                    "traits": {
+                        "smithy.api#documentation": "Optional. Number of jobs, up to twenty, that will be returned at one time.",
+                        "smithy.api#httpQuery": "maxResults"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.mediaconvert#__string",
+                    "traits": {
+                        "smithy.api#documentation": "Optional. Use this string, provided with the response to a previous request, to request the next batch of jobs.",
+                        "smithy.api#httpQuery": "nextToken"
+                    }
+                },
+                "Order": {
+                    "target": "com.amazonaws.mediaconvert#Order",
+                    "traits": {
+                        "smithy.api#documentation": "Optional. When you request lists of resources, you can specify whether they are sorted in ASCENDING or DESCENDING order. Default varies by resource.",
+                        "smithy.api#httpQuery": "order"
+                    }
+                },
+                "Queue": {
+                    "target": "com.amazonaws.mediaconvert#__string",
+                    "traits": {
+                        "smithy.api#documentation": "Optional. Provide a queue name, or a queue ARN, to return only jobs from that queue.",
+                        "smithy.api#httpQuery": "queue"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.mediaconvert#JobStatus",
+                    "traits": {
+                        "smithy.api#documentation": "Optional. A job's status can be SUBMITTED, PROGRESSING, COMPLETE, CANCELED, or ERROR.",
+                        "smithy.api#httpQuery": "status"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mediaconvert#SearchJobsResponse": {
+            "type": "structure",
+            "members": {
+                "Jobs": {
+                    "target": "com.amazonaws.mediaconvert#__listOfJob",
+                    "traits": {
+                        "smithy.api#documentation": "List of jobs.",
+                        "smithy.api#jsonName": "jobs"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.mediaconvert#__string",
+                    "traits": {
+                        "smithy.api#documentation": "Use this string to request the next batch of jobs.",
+                        "smithy.api#jsonName": "nextToken"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.mediaconvert#SimulateReservedQueue": {
@@ -26882,6 +27127,12 @@
                 "smithy.api#pattern": "^([01][0-9]|2[0-4]):[0-5][0-9]:[0-5][0-9][:;][0-9]{2}$"
             }
         },
+        "com.amazonaws.mediaconvert#__stringPattern010920405090509092090909": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^([01][0-9]|2[0-4]):[0-5][0-9]:[0-5][0-9][:;][0-9]{2}(@[0-9]+(\\.[0-9]+)?(:[0-9]+)?)?$"
+            }
+        },
         "com.amazonaws.mediaconvert#__stringPattern01D20305D205D": {
             "type": "string",
             "traits": {
@@ -26988,6 +27239,12 @@
             "type": "string",
             "traits": {
                 "smithy.api#pattern": "^s3://([^\\/]+\\/+)+((([^\\/]*)))|^https?://[^\\/].*[^&]$"
+            }
+        },
+        "com.amazonaws.mediaconvert#__stringPatternS3TtfHttpsTtf": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^((s3://(.*?)\\.(ttf))|(https?://(.*?)\\.(ttf)(\\?([^&=]+=[^&]+&)*[^&=]+=[^&]+)?))$"
             }
         },
         "com.amazonaws.mediaconvert#__stringPatternSNManifestConfirmConditionNotificationNS": {

@@ -153,4 +153,5 @@ Please refer to our [security policy](https://github.com/awslabs/aws-sdk-kotlin/
 The SDK supports the following targets:
 
 * [JVM](docs/targets.md#jvm)
-* [Android](docs/targets.md#android) 
+* [Android](docs/targets.md#android)
+* [GraalVM](docs/targets.md#graalvm)

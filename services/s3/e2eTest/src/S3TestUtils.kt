@@ -13,6 +13,7 @@ import aws.sdk.kotlin.services.s3.model.LifecycleRule
 import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
+import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketNotExists
 import aws.sdk.kotlin.services.s3control.*
 import aws.sdk.kotlin.services.s3control.model.*
 import aws.sdk.kotlin.services.sts.StsClient
@@ -159,6 +160,10 @@ object S3TestUtils {
             jobs.joinAll()
 
             client.deleteBucket { bucket = bucketName }
+
+            client.waitUntilBucketNotExists {
+                bucket = bucketName
+            }
         } catch (ex: Exception) {
             println("Failed to delete bucket: $bucketName")
             throw ex
@@ -286,10 +291,12 @@ object S3TestUtils {
                         return@withTimeout
                     }
                     "FAILED" -> throw IllegalStateException("$operation operation failed")
-                    else -> { if (status == null || latestStatus != status) {
-                        println("Waiting on $operation operation. Status: $latestStatus ")
-                        status = latestStatus
-                    } }
+                    else -> {
+                        if (status == null || latestStatus != status) {
+                            println("Waiting on $operation operation. Status: $latestStatus ")
+                            status = latestStatus
+                        }
+                    }
                 }
 
                 delay(10.seconds) // Avoid constant status checks

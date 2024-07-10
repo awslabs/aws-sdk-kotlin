@@ -19,10 +19,7 @@ import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.sdk.kotlin.runtime.region.resolveSigV4aSigningRegionSet
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.SigV4aClientConfig
-import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
-import aws.smithy.kotlin.runtime.client.SdkClient
-import aws.smithy.kotlin.runtime.client.SdkClientConfig
-import aws.smithy.kotlin.runtime.client.SdkClientFactory
+import aws.smithy.kotlin.runtime.client.*
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
 import aws.smithy.kotlin.runtime.client.config.CompressionClientConfig
 import aws.smithy.kotlin.runtime.config.resolve
@@ -46,7 +43,7 @@ public abstract class AbstractAwsSdkClientFactory<
     TConfigBuilder,
     TClient : SdkClient,
     TClientBuilder : SdkClient.Builder<TConfig, TConfigBuilder, TClient>,
-    > : SdkClientFactory<TConfig, TConfigBuilder, TClient, TClientBuilder>
+    > : AbstractSdkClientFactory<TConfig, TConfigBuilder, TClient, TClientBuilder>()
     where TConfig : SdkClientConfig,
           TConfig : AwsSdkClientConfig,
           TConfigBuilder : SdkClientConfig.Builder<TConfig>,
@@ -97,7 +94,8 @@ public abstract class AbstractAwsSdkClientFactory<
                     config.sigV4aSigningRegionSet ?: resolveSigV4aSigningRegionSet(platform, profile)
             }
 
-            finalizeConfig(builder, sharedConfig, profile)
+            finalizeConfig(builder)
+            finalizeEnvironmentalConfig(builder, sharedConfig, profile)
         }
         return builder.build()
     }
@@ -105,7 +103,7 @@ public abstract class AbstractAwsSdkClientFactory<
     /**
      * Inject any client-specific config.
      */
-    protected open suspend fun finalizeConfig(
+    protected open suspend fun finalizeEnvironmentalConfig(
         builder: TClientBuilder,
         sharedConfig: LazyAsyncValue<AwsSharedConfig>,
         activeProfile: LazyAsyncValue<AwsProfile>,

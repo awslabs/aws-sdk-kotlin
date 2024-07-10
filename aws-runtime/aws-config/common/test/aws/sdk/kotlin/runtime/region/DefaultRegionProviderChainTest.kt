@@ -23,7 +23,7 @@ class DefaultRegionProviderChainTest {
 
     @Test
     fun testSuite() = runTest {
-        val tests = Json.parseToJsonElement(regionProviderChainTestSuite).jsonArray
+        val tests = Json.parseToJsonElement(REGION_PROVIDER_CHAIN_TEST_SUITE).jsonArray
             .map { it.jsonObject }
             .map {
                 val name = it["name"]!!.jsonPrimitive.content
@@ -77,7 +77,7 @@ fun TestInstanceMetadataProvider.Companion.fromJsonNode(obj: JsonObject): TestIn
 }
 
 // language=JSON
-private const val regionProviderChainTestSuite = """
+private const val REGION_PROVIDER_CHAIN_TEST_SUITE = """
 [
     {
         "name": "no region configured",

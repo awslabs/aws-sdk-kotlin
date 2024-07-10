@@ -10,6 +10,9 @@ import aws.sdk.kotlin.services.s3.model.*
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.content.ByteStream
 
+private val KEY = "64kb-object"
+private val CONTENTS = "a".repeat(65536) // 64KB
+
 /**
  * Benchmarks for S3 Express One Zone.
  * Note: This benchmark must be run from an EC2 host in the same AZ as the bucket (usw2-az1).
@@ -19,9 +22,6 @@ class S3ExpressBenchmark : ServiceBenchmark<S3Client> {
     private val bucketName = Common.random("sdk-benchmark-bucket-")
         .substring(0 until 47) + // truncate to prevent "bucket name too long" errors
         "--$regionAz--x-s3"
-
-    private val KEY = "64kb-object"
-    private val CONTENTS = "a".repeat(65536) // 64KB
 
     @OptIn(ExperimentalApi::class)
     override suspend fun client() = S3Client.fromEnvironment {

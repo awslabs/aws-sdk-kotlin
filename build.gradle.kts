@@ -22,6 +22,14 @@ plugins {
     // ensure the correct version of KGP ends up on our buildscript classpath
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.aws.kotlin.repo.tools.artifactsizemetrics)
+}
+
+artifactSizeMetrics {
+    artifactPrefixes = setOf(":services", ":aws-runtime")
+    closurePrefixes = setOf(":services")
+    significantChangeThresholdPercentage = 5.0
+    projectRepositoryName = "aws-sdk-kotlin"
 }
 
 val testJavaVersion = typedProp<String>("test.java.version")?.let {
@@ -45,7 +53,8 @@ allprojects {
                     ],
                     "customAssets": [
                         "${rootProject.file("docs/dokka-presets/assets/logo-icon.svg")}",
-                        "${rootProject.file("docs/dokka-presets/assets/aws_logo_white_59x35.png")}"
+                        "${rootProject.file("docs/dokka-presets/assets/aws_logo_white_59x35.png")}",
+                        "${rootProject.file("docs/dokka-presets/scripts/accessibility.js")}"
                     ],
                     "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved.",
                     "separateInheritedMembers" : true,

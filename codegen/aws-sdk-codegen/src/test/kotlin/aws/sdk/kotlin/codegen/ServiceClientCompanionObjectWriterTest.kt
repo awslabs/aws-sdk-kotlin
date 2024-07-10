@@ -23,18 +23,14 @@ class ServiceClientCompanionObjectWriterTest {
         ServiceClientCompanionObjectWriter().write(writer, null)
 
         val expected = """
-            public companion object : AbstractAwsSdkClientFactory<Config, Config.Builder, TestGeneratorClient, Builder>() {
-                @JvmStatic
-                override fun builder(): Builder = Builder()
-
-                override suspend fun finalizeConfig(builder: Builder, sharedConfig: LazyAsyncValue<AwsSharedConfig>, activeProfile: LazyAsyncValue<AwsProfile>) {
-                    builder.config.endpointUrl = builder.config.endpointUrl ?: resolveEndpointUrl(
-                        sharedConfig,
-                        "TestGenerator",
-                        "TEST_GENERATOR",
-                        "test_generator",
-                    )
-                }
+            override suspend fun finalizeEnvironmentalConfig(builder: Builder, sharedConfig: LazyAsyncValue<AwsSharedConfig>, activeProfile: LazyAsyncValue<AwsProfile>) {
+                super.finalizeEnvironmentalConfig(builder, sharedConfig, activeProfile)
+                builder.config.endpointUrl = builder.config.endpointUrl ?: resolveEndpointUrl(
+                    sharedConfig,
+                    "TestGenerator",
+                    "TEST_GENERATOR",
+                    "test_generator",
+                )
             }
         """.trimIndent()
 

@@ -81,6 +81,9 @@ class PartitionsGenerator(
                         regionConfig.getBooleanMember("supportsDualStack").ifPresent {
                             write("supportsDualStack = #L,", it.value)
                         }
+                        regionConfig.getStringMember("implicitGlobalRegion").ifPresent {
+                            write("implicitGlobalRegion = #S,", it.value)
+                        }
                     }
                 }
             }
@@ -90,6 +93,7 @@ class PartitionsGenerator(
                 write("dualStackDnsSuffix = #S,", baseConfig.expectStringMember("dualStackDnsSuffix").value)
                 write("supportsFIPS = #L,", baseConfig.expectBooleanMember("supportsFIPS").value)
                 write("supportsDualStack = #L,", baseConfig.expectBooleanMember("supportsDualStack").value)
+                write("implicitGlobalRegion = #S,", baseConfig.expectStringMember("implicitGlobalRegion").value)
             }
         }
     }
