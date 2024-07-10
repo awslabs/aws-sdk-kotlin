@@ -291,10 +291,12 @@ object S3TestUtils {
                         return@withTimeout
                     }
                     "FAILED" -> throw IllegalStateException("$operation operation failed")
-                    else -> { if (status == null || latestStatus != status) {
-                        println("Waiting on $operation operation. Status: $latestStatus ")
-                        status = latestStatus
-                    } }
+                    else -> {
+                        if (status == null || latestStatus != status) {
+                            println("Waiting on $operation operation. Status: $latestStatus ")
+                            status = latestStatus
+                        }
+                    }
                 }
 
                 delay(10.seconds) // Avoid constant status checks
