@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.51] - 07/12/2024
+
+### Features
+* (**acmpca**) Minor refactoring of C2J model for AWS Private CA
+* (**arczonalshift**) Adds the option to subscribe to get notifications when a zonal autoshift occurs in a region.
+* (**autoscaling**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**codebuild**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**dynamodb**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**globalaccelerator**) This feature adds exceptions to the Customer API to avoid throwing Internal Service errors
+* (**pinpoint**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**quicksight**) Vega ally control options and Support for Reviewed Answers in Topics
+* (**rds**) Update path for CreateDBCluster resource identifier, and Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**sns**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* [#1302](https://github.com/awslabs/aws-sdk-kotlin/issues/1302) Add support for `smithy.protocols#rpcv2Cbor` protocol
+
 ## [1.2.50] - 07/10/2024
 
 ### Features
