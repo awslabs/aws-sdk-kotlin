@@ -40,7 +40,9 @@ internal class DefaultS3ExpressCredentialsProvider(
     private val clock: Clock = Clock.System,
     private val credentialsCache: S3ExpressCredentialsCache = S3ExpressCredentialsCache(),
     private val refreshBuffer: Duration = 1.minutes,
-) : CloseableCredentialsProvider, SdkManagedBase(), CoroutineScope {
+) : SdkManagedBase(),
+    CloseableCredentialsProvider,
+    CoroutineScope {
     override val coroutineContext: CoroutineContext = Job() + CoroutineName("DefaultS3ExpressCredentialsProvider")
 
     override suspend fun resolve(attributes: Attributes): Credentials {

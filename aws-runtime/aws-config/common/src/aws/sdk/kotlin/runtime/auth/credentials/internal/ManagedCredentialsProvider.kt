@@ -11,7 +11,8 @@ import aws.smithy.kotlin.runtime.io.SdkManagedCloseable
 
 private class ManagedCredentialsProvider(
     private val delegate: CloseableCredentialsProvider,
-) : SdkManagedCloseable(delegate), CloseableCredentialsProvider by delegate
+) : SdkManagedCloseable(delegate),
+    CloseableCredentialsProvider by delegate
 
 /**
  * Wraps a [CredentialsProvider] for internal runtime management by the SDK.

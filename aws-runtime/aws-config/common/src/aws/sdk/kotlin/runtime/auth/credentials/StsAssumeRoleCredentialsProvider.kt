@@ -188,7 +188,12 @@ public class AssumeRoleParameters(
     public val sourceIdentity: String? = null,
 ) {
     internal val convertedPolicyArns = policyArns?.map { PolicyDescriptorType { arn = it } }
-    internal val convertedTags = tags?.map { Tag { key = it.key; value = it.value } }
+    internal val convertedTags = tags?.map {
+        Tag {
+            key = it.key
+            value = it.value
+        }
+    }
 }
 
 // role session name must be provided to assume a role, when the user doesn't provide one we choose a name for them

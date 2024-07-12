@@ -30,10 +30,14 @@
     "resolvesConflictDependencies": {
       "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.*": [
         "KotlinStdlibCommon-1.9.x",
-        "KotlinStdlibJdk8-1.9.x"
+        "KotlinStdlibJdk8-1.9.x",
+        "KotlinxCoroutinesCoreJvm-1.7.x"
       ],
       "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.*": [
         "KotlinStdlibJdk8-1.9.x"
+      ],
+      "org.jetbrains.kotlin:kotlin-stdlib:1.9.*": [
+        "KotlinStdlib-1.9.x"
       ]
     }
   }

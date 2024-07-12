@@ -35,8 +35,8 @@ class EndpointUrlConfigNamesTest {
 
     @Test
     fun runTestSuite() {
-        val javaClientNames = Json.parseToJsonElement(javaClientNamesJson).jsonObject
-        val testCases = Json.parseToJsonElement(testSuiteJson).jsonArray
+        val javaClientNames = Json.parseToJsonElement(JAVA_CLIENT_NAMES_JSON).jsonObject
+        val testCases = Json.parseToJsonElement(TEST_SUITE_JSON).jsonArray
             .filter { !ignoredIds.contains(it.jsonObject["service_id"]!!.jsonPrimitive.content) }
             .map { TestCase.fromJson(it.jsonObject, javaClientNames) }
 
@@ -51,7 +51,7 @@ class EndpointUrlConfigNamesTest {
 }
 
 // language=JSON
-private const val testSuiteJson = """
+private const val TEST_SUITE_JSON = """
 [
   {
     "service_id": "AccessAnalyzer",
@@ -1637,7 +1637,7 @@ private const val testSuiteJson = """
 """
 
 // language=JSON
-private const val javaClientNamesJson = """
+private const val JAVA_CLIENT_NAMES_JSON = """
 {
   "LookoutMetrics": "LookoutMetricsClient",
   "AppRunner": "AppRunnerClient",

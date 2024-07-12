@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.config.profile
  * This test suite exercises the parser and continuation merger.
  */
 // language=JSON
-internal const val parserTestSuiteJson = """
+internal const val PARSER_TEST_SUITE_JSON = """
 {
   "description": [
     "These are test descriptions that describe how to convert a raw configuration and credentials file into an ",
@@ -843,7 +843,7 @@ internal const val parserTestSuiteJson = """
 """
 
 // language=JSON
-internal const val loaderTestSuiteJson = """
+internal const val LOADER_TEST_SUITE_JSON = """
 {
   "description": [
     "These are test descriptions that specify which files and profiles should be loaded based on the specified environment ",

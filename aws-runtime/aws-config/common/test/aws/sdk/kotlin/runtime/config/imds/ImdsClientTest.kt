@@ -233,7 +233,7 @@ class ImdsClientTest {
 
     @Test
     fun testConfig() = runTest {
-        val tests = Json.parseToJsonElement(imdsTestSuite).jsonObject["tests"]!!.jsonArray.map { ImdsConfigTest.fromJson(it.jsonObject) }
+        val tests = Json.parseToJsonElement(IMDS_TEST_SUITE).jsonObject["tests"]!!.jsonArray.map { ImdsConfigTest.fromJson(it.jsonObject) }
         tests.forEach { test ->
             val result = runCatching { check(test) }
             when {

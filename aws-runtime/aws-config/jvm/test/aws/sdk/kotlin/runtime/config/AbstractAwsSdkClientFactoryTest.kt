@@ -122,7 +122,10 @@ private interface TestClient : SdkClient {
         override fun newClient(config: Config): TestClient = DefaultTestClient(config)
     }
 
-    class Config private constructor(builder: Builder) : SdkClientConfig, AwsSdkClientConfig, RetryStrategyClientConfig by builder.buildRetryStrategyClientConfig() {
+    class Config private constructor(builder: Builder) :
+        SdkClientConfig,
+        AwsSdkClientConfig,
+        RetryStrategyClientConfig by builder.buildRetryStrategyClientConfig() {
         override val clientName: String = builder.clientName
         override val logMode: LogMode = builder.logMode ?: LogMode.Default
         override val region: String? = builder.region
@@ -131,7 +134,10 @@ private interface TestClient : SdkClient {
         override val applicationId: String? = builder.applicationId
 
         // new: inherits builder equivalents for Config base classes
-        class Builder : AwsSdkClientConfig.Builder, SdkClientConfig.Builder<Config>, RetryStrategyClientConfig.Builder by RetryStrategyClientConfigImpl.BuilderImpl() {
+        class Builder :
+            AwsSdkClientConfig.Builder,
+            SdkClientConfig.Builder<Config>,
+            RetryStrategyClientConfig.Builder by RetryStrategyClientConfigImpl.BuilderImpl() {
             override var clientName: String = "Test"
             override var logMode: LogMode? = LogMode.Default
             override var region: String? = null

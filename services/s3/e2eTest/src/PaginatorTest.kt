@@ -67,7 +67,8 @@ class PaginatorTest {
                 }
             }
 
-            val actualParts = withTimeout(10.seconds) { // Failure behavior is infinite loop so cap at 10 seconds
+            val actualParts = withTimeout(10.seconds) {
+                // Failure behavior is infinite loop so cap at 10 seconds
                 client.listPartsPaginated {
                     bucket = testBucket
                     key = "list-parts-test"

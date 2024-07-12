@@ -18,12 +18,12 @@ internal object Literals {
     const val PROPERTY_SPLITTER = '='
 }
 
-internal const val helpText = "See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for file format details."
+internal const val HELP_TEXT = "See https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html for file format details."
 
 internal fun contextMessage(message: String, lineNumber: Int? = null): String = buildString {
     append(message)
     lineNumber?.let { append(" on line $lineNumber.") }
-    append(" $helpText")
+    append(" $HELP_TEXT")
 }
 
 // what constitutes a "valid" profile/property identifier is not explicitly stated in the SEP (nor is it consistent
