@@ -39,7 +39,7 @@ abstract class DdbLocalTest : AnnotationSpec() {
                 port = DDB_LOCAL_PORT
             }
 
-            region = "us-west-2" // FIXME
+            region = "DUMMY"
 
             credentialsProvider = StaticCredentialsProvider {
                 accessKeyId = "DUMMY"

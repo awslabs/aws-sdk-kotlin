@@ -15,14 +15,14 @@ internal sealed interface MemberCodegenBehavior {
             member.type in attrMapTypes -> if (member.name == "key") MapKeys else MapAll
             member.isTableName -> Hoist
             else -> PassThrough
-        }.also { println("  ${member.name} is $it") }
+        }
     }
 
     data object PassThrough : MemberCodegenBehavior
     data object MapAll : MemberCodegenBehavior
     data object MapKeys : MemberCodegenBehavior
     data object Drop : MemberCodegenBehavior
-    data object Hoist : MemberCodegenBehavior // FIXME Note sure this is useful...get rid of Hoist?
+    data object Hoist : MemberCodegenBehavior
 }
 
 internal val Member.codegenBehavior: MemberCodegenBehavior

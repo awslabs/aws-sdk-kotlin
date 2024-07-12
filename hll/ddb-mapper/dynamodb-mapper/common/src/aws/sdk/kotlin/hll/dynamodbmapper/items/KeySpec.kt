@@ -12,17 +12,17 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  */
 public sealed interface KeySpec<in K> {
     /**
-     * A [KeySpec] which for a [kotlin.ByteArray]-typed field
+     * A [KeySpec] for a [kotlin.ByteArray]-typed field
      */
     public interface ByteArray : KeySpec<kotlin.ByteArray>
 
     /**
-     * A [KeySpec] which for a [kotlin.Number]-typed field
+     * A [KeySpec] for a [kotlin.Number]-typed field
      */
     public interface Number : KeySpec<kotlin.Number>
 
     /**
-     * A [KeySpec] which for a [kotlin.String]-typed field
+     * A [KeySpec] for a [kotlin.String]-typed field
      */
     public interface String : KeySpec<kotlin.String>
 

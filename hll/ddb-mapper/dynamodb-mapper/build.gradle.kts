@@ -9,6 +9,8 @@ import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer
 import com.google.devtools.ksp.gradle.KspTaskJvm
 import com.google.devtools.ksp.gradle.KspTaskMetadata
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 buildscript {
     dependencies {
@@ -76,28 +78,32 @@ if (project.NATIVE_ENABLED) {
     // Start by invoking the JVM-only KSP configuration
     dependencies.kspJvm(project(":hll:ddb-mapper:ddb-mapper-ops-codegen"))
 
-    // Then we need to move the generated source from jvm to common. Gradle lacks a move task so that means a copy...
-    val copyGenSrc by tasks.registering(Copy::class) {
-        // Can't copy until the src is generated
+    // Then we need to move the generated source from jvm to common. Gradle lacks a move task so we roll our own!
+    val moveGenSrc by tasks.registering {
+        // Can't move src until the src is generated
         dependsOn(tasks.named("kspKotlinJvm"))
 
-        // Detecting these paths programmatically is complex; just hardcode them
-        this.from("build/generated/ksp/jvm/jvmMain")
-        into("build/generated/ksp/common/commonMain")
-    }
+        doLast {
+            // Detecting these paths programmatically is complex; just hardcode them
+            val srcDir = file("build/generated/ksp/jvm/jvmMain")
+            val destDir = file("build/generated/ksp/common/commonMain")
 
-    // ...followed by a delete
-    val deleteGenSrc by tasks.registering(Delete::class) {
-        // Don't delete until we've copied
-        dependsOn(copyGenSrc)
+            if (destDir.exists()) {
+                // Clean out the existing destination, otherwise move fails
+                require(destDir.deleteRecursively()) { "Failed to delete $destDir before moving from $srcDir" }
+            } else {
+                // Create the destination directories, otherwise move fails
+                require(destDir.mkdirs()) { "Failed to create path $destDir" }
+            }
 
-        delete("build/generated/ksp/jvm")
+            Files.move(srcDir.toPath(), destDir.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        }
     }
 
     tasks.withType<KotlinCompile<*>> {
         if (this !is KspTaskJvm) {
             // Ensure that any **non-KSP** compile tasks depend on the generated src move
-            dependsOn(copyGenSrc, deleteGenSrc)
+            dependsOn(moveGenSrc)
         }
     }
 

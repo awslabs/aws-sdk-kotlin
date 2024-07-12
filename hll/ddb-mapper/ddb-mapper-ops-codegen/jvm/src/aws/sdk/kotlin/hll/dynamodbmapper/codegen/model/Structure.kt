@@ -45,7 +45,7 @@ internal fun Structure.toHighLevel(pkg: String): Structure {
         }
     }
 
-    val hAttributes = llStructure.attributes + (ModelAttributes.LowLevelStructure to llStructure)
+    val hlAttributes = llStructure.attributes + (ModelAttributes.LowLevelStructure to llStructure)
 
-    return Structure(hlType, hlMembers, hAttributes)
+    return Structure(hlType, hlMembers, hlAttributes)
 }
