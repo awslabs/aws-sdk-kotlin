@@ -13,7 +13,7 @@ smithy-kotlin-runtime-version = "1.2.14"
 smithy-kotlin-codegen-version = "0.32.14"
 
 # codegen
-smithy-version = "1.49.0"
+smithy-version = "1.50.0"
 
 # testing
 junit-version = "5.10.1"

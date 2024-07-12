@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.2.50] - 07/10/2024
+
+### Features
+* (**batch**) This feature allows AWS Batch Jobs with EKS container orchestration type to be run as Multi-Node Parallel Jobs.
+* (**bedrock**) Add support for contextual grounding check for Guardrails for Amazon Bedrock.
+* (**bedrockagent**) Introduces new data sources and chunking strategies for Knowledge bases, advanced parsing logic using FMs, session summary generation, and code interpretation (preview) for Claude V3 Sonnet and Haiku models. Also introduces Prompt Flows (preview) to link prompts, foundational models, and resources.
+* (**bedrockagentruntime**) Introduces query decomposition, enhanced Agents integration with Knowledge bases, session summary generation, and code interpretation (preview) for Claude V3 Sonnet and Haiku models. Also introduces Prompt Flows (preview) to link prompts, foundational models, and resources for end-to-end solutions.
+* (**bedrockruntime**) Add support for contextual grounding check and ApplyGuardrail API for Guardrails for Amazon Bedrock.
+* (**ec2**) Add parameters to enable provisioning IPAM BYOIPv4 space at a Local Zone Network Border Group level
+* (**glue**) Add recipe step support for recipe node
+* (**licensemanagerlinuxsubscriptions**) Add support for third party subscription providers, starting with RHEL subscriptions through Red Hat Subscription Manager (RHSM). Additionally, add support for tagging subscription provider resources, and detect when an instance has more than one Linux subscription and notify the customer.
+* (**mediaconnect**) AWS Elemental MediaConnect introduces the ability to disable outputs. Disabling an output allows you to keep the output attached to the flow, but stop streaming to the output destination. A disabled output does not incur data transfer costs.
+
+### Documentation
+* (**groundstation**) Documentation update specifying OEM ephemeris units of measurement
+
+### Miscellaneous
+* Upgrade Smithy to version **1.50.0**
+
+## [1.2.49] - 07/09/2024
+
+### Features
+* (**datazone**) This release deprecates dataProductItem field from SearchInventoryResultItem, along with some unused DataProduct shapes
+* (**fsx**) Adds support for FSx for NetApp ONTAP 2nd Generation file systems, and FSx for OpenZFS Single AZ HA file systems.
+* (**opensearch**) This release adds support for enabling or disabling Natural Language Query Processing feature for Amazon OpenSearch Service domains, and provides visibility into the current state of the setup or tear-down.
+* (**sagemaker**) This release 1/ enables optimization jobs that allows customers to perform Ahead-of-time compilation and quantization. 2/ allows customers to control access to Amazon Q integration in SageMaker Studio. 3/ enables AdditionalModelDataSources for CreateModel action.
+
 ## [1.2.48] - 07/08/2024
 
 ### Features

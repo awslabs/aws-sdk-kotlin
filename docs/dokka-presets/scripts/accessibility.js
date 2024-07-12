@@ -33,6 +33,10 @@ function applySkipLinks() {
         document.querySelectorAll('.sideMenuPart[data-active]').forEach(function(sideMenuPart) {
             insertSkipLink(sideMenuPart)
         });
+
+        // Insert a skip link on the first sideMenuPart
+        const firstSideMenuPart = document.getElementById("sideMenu").children[0].querySelectorAll(".sideMenuPart")[0]
+        insertSkipLink(firstSideMenuPart)
     }
 
     const observer = new MutationObserver(handleChanges);
@@ -86,9 +90,8 @@ function ensureNavButtonInteractable() {
     });
 }
 
-window.onload = function() {
-    ensureNavButtonInteractable()
-}
+document.addEventListener('DOMContentLoaded', ensureNavButtonInteractable)
+if (document.readyState === "interactive" || document.readyState === "complete" ) { ensureNavButtonInteractable() }
 
 /**
  * Ensure that content (specifically, code blocks) reflows on small page sizes.
@@ -99,6 +102,8 @@ function ensureContentReflow() {
 
     // Function to insert 'toggle content' button
     function insertToggleContentButton(element) {
+        if (element.parentNode.querySelectorAll(".aws-toggle-content-btn").length > 0) { return }
+
         const initiallyVisible = window.innerWidth >= MIN_WINDOW_SIZE
 
         const toggleContent = document.createElement('button');
