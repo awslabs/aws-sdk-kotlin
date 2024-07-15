@@ -1,4 +1,17 @@
 /**
+ * Check for elements with a navButton class, which indicates the sidebar has finished loading.
+ */
+async function dispatchNavigationLoadedEvent() {
+    while (!document.querySelectorAll('.navButton').length > 0) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    window.dispatchEvent(new Event('navigationLoaded'));
+}
+
+document.addEventListener('DOMContentLoaded', dispatchNavigationLoadedEvent);
+if (document.readyState === "interactive" || document.readyState === "complete" ) { dispatchNavigationLoadedEvent() }
+
+/**
  * Apply "skip to main content" buttons after each active left sidebar `sideMenuPart`.
  * These are invisible and only accessible via keyboard
  * Fixes accessibility violation: "Provide a mechanism for skipping past repetitive content"
@@ -48,9 +61,7 @@ function applySkipLinks() {
     };
     observer.observe(document.body, observerConfig);
 }
-document.addEventListener('DOMContentLoaded', applySkipLinks);
-if (document.readyState === "interactive" || document.readyState === "complete" ) { applySkipLinks() }
-
+window.addEventListener('navigationLoaded', applySkipLinks);
 
 /**
  * Ensure `navButton` elements are interactable and have proper accessibility properties
@@ -89,9 +100,7 @@ function ensureNavButtonInteractable() {
         });
     });
 }
-
-document.addEventListener('DOMContentLoaded', ensureNavButtonInteractable)
-if (document.readyState === "interactive" || document.readyState === "complete" ) { ensureNavButtonInteractable() }
+window.addEventListener('navigationLoaded', ensureNavButtonInteractable);
 
 /**
  * Ensure that content (specifically, code blocks) reflows on small page sizes.
@@ -143,6 +152,4 @@ function ensureContentReflow() {
         });
     });
 }
-
-document.addEventListener('DOMContentLoaded', ensureContentReflow)
-if (document.readyState === "interactive" || document.readyState === "complete" ) { ensureContentReflow() }
+window.addEventListener('navigationLoaded', ensureContentReflow);
