@@ -1,13 +1,7 @@
 {
   "dependencies": {
-    "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.*": "KotlinStdlibCommon-1.9.x",
-    "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.*": "KotlinStdlibJdk8-1.9.x",
     "org.jetbrains.kotlin:kotlin-stdlib:1.9.*": "KotlinStdlib-1.9.x",
-    "org.jetbrains.kotlinx:atomicfu-jvm:0.23.1": "AtomicfuJvm-0.23.1",
-    "org.jetbrains.kotlinx:atomicfu:0.23.1": "Atomicfu-0.23.1",
-    "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.*": "KotlinxCoroutinesCoreJvm-1.7.x",
-    "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.*": "KotlinxCoroutinesCore-1.7.x",
-    "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.*": "KotlinxCoroutinesJdk8-1.7.x"
+    "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.*": "KotlinxCoroutinesCoreJvm-1.7.x"
   },
   "packageHandlingRules": {
     "versioning": {
@@ -20,15 +14,14 @@
       "aws.sdk.kotlin:version-catalog"
     ],
     "resolvesConflictDependencies": {
+      "org.jetbrains.kotlin:kotlin-stdlib:1.9.*": [
+        "KotlinStdlib-1.9.x"
+      ],
       "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.*": [
+        "KotlinxCoroutinesCoreJvm-1.7.x",
         "KotlinStdlibCommon-1.9.x",
         "KotlinStdlibJdk8-1.9.x",
-        "KotlinxCoroutinesCoreJvm-1.7.x"
-      ],
-      "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.*": [
-        "KotlinStdlibJdk8-1.9.x"
-      ],
-      "org.jetbrains.kotlin:kotlin-stdlib:1.9.*": [
+        "KotlinStdlibJdk7-1.9.x",
         "KotlinStdlib-1.9.x"
       ]
     }
