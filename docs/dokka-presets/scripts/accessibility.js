@@ -1,13 +1,13 @@
 /**
  * Check for elements with a navButton class, which indicates the sidebar has finished loading.
  */
-function dispatchNavigationLoadedEvent() {
-    if (document.querySelectorAll('.navButton').length > 0) {
-        window.dispatchEvent(new Event('navigationLoaded'));
-    } else {
-        setTimeout(dispatchNavigationLoadedEvent, 100);
+async function dispatchNavigationLoadedEvent() {
+    while (!document.querySelectorAll('.navButton').length > 0) {
+        await new Promise(resolve => setTimeout(resolve, 100));
     }
+    window.dispatchEvent(new Event('navigationLoaded'));
 }
+
 document.addEventListener('DOMContentLoaded', dispatchNavigationLoadedEvent);
 if (document.readyState === "interactive" || document.readyState === "complete" ) { dispatchNavigationLoadedEvent() }
 
