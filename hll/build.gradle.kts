@@ -24,6 +24,7 @@ val sdkVersion: String by project
 val libraries = libs
 
 subprojects {
+    println("Subproject $this needsKmpConfigured? $needsKmpConfigured")
     if (!needsKmpConfigured) return@subprojects
 
     group = "aws.sdk.kotlin"
@@ -85,8 +86,8 @@ apiValidation {
     val availableSubprojects = subprojects.map { it.name }.toSet()
 
     ignoredProjects += listOf(
-        "ddb-mapper-annotation-processor-test",
-        "ddb-mapper-ops-codegen",
         "dynamodb-mapper-annotation-processor",
+        "dynamodb-mapper-annotation-processor-test",
+        "dynamodb-mapper-ops-codegen",
     ).filter { it in availableSubprojects } // Some projects may not be in the build depending on bootstrapping
 }
