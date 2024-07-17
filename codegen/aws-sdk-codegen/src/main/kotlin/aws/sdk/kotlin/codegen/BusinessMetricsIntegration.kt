@@ -31,7 +31,7 @@ class BusinessMetricsIntegration : KotlinIntegration {
         writer.write("")
         writer.write(
             "if (endpoint.attributes.contains(#T)) request.context.#T(#T.ENDPOINT_OVERRIDE)",
-            RuntimeTypes.Core.BusinessMetrics.ServiceEndpointOverride,
+            RuntimeTypes.Core.BusinessMetrics.EndpointOverride,
             RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
             RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
         )
