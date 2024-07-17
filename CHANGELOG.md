@@ -1,5 +1,71 @@
 # Changelog
 
+## [1.2.51] - 07/12/2024
+
+### Features
+* (**acmpca**) Minor refactoring of C2J model for AWS Private CA
+* (**arczonalshift**) Adds the option to subscribe to get notifications when a zonal autoshift occurs in a region.
+* (**autoscaling**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**codebuild**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**dynamodb**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**globalaccelerator**) This feature adds exceptions to the Customer API to avoid throwing Internal Service errors
+* (**pinpoint**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**quicksight**) Vega ally control options and Support for Reviewed Answers in Topics
+* (**rds**) Update path for CreateDBCluster resource identifier, and Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**sns**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* [#1302](https://github.com/awslabs/aws-sdk-kotlin/issues/1302) Add support for `smithy.protocols#rpcv2Cbor` protocol
+
+## [1.2.50] - 07/10/2024
+
+### Features
+* (**batch**) This feature allows AWS Batch Jobs with EKS container orchestration type to be run as Multi-Node Parallel Jobs.
+* (**bedrock**) Add support for contextual grounding check for Guardrails for Amazon Bedrock.
+* (**bedrockagent**) Introduces new data sources and chunking strategies for Knowledge bases, advanced parsing logic using FMs, session summary generation, and code interpretation (preview) for Claude V3 Sonnet and Haiku models. Also introduces Prompt Flows (preview) to link prompts, foundational models, and resources.
+* (**bedrockagentruntime**) Introduces query decomposition, enhanced Agents integration with Knowledge bases, session summary generation, and code interpretation (preview) for Claude V3 Sonnet and Haiku models. Also introduces Prompt Flows (preview) to link prompts, foundational models, and resources for end-to-end solutions.
+* (**bedrockruntime**) Add support for contextual grounding check and ApplyGuardrail API for Guardrails for Amazon Bedrock.
+* (**ec2**) Add parameters to enable provisioning IPAM BYOIPv4 space at a Local Zone Network Border Group level
+* (**glue**) Add recipe step support for recipe node
+* (**licensemanagerlinuxsubscriptions**) Add support for third party subscription providers, starting with RHEL subscriptions through Red Hat Subscription Manager (RHSM). Additionally, add support for tagging subscription provider resources, and detect when an instance has more than one Linux subscription and notify the customer.
+* (**mediaconnect**) AWS Elemental MediaConnect introduces the ability to disable outputs. Disabling an output allows you to keep the output attached to the flow, but stop streaming to the output destination. A disabled output does not incur data transfer costs.
+
+### Documentation
+* (**groundstation**) Documentation update specifying OEM ephemeris units of measurement
+
+### Miscellaneous
+* Upgrade Smithy to version **1.50.0**
+
+## [1.2.49] - 07/09/2024
+
+### Features
+* (**datazone**) This release deprecates dataProductItem field from SearchInventoryResultItem, along with some unused DataProduct shapes
+* (**fsx**) Adds support for FSx for NetApp ONTAP 2nd Generation file systems, and FSx for OpenZFS Single AZ HA file systems.
+* (**opensearch**) This release adds support for enabling or disabling Natural Language Query Processing feature for Amazon OpenSearch Service domains, and provides visibility into the current state of the setup or tear-down.
+* (**sagemaker**) This release 1/ enables optimization jobs that allows customers to perform Ahead-of-time compilation and quantization. 2/ allows customers to control access to Amazon Q integration in SageMaker Studio. 3/ enables AdditionalModelDataSources for CreateModel action.
+
+## [1.2.48] - 07/08/2024
+
+### Features
+* (**codedeploy**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**databasemigrationservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**devicefarm**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**elasticbeanstalk**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**elasticsearchservice**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**firehose**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**gamelift**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**qapps**) This is a general availability (GA) release of Amazon Q Apps, a capability of Amazon Q Business. Q Apps leverages data sources your company has provided to enable users to build, share, and customize apps within your organization.
+* (**route53resolver**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**ses**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+## [1.2.47] - 07/05/2024
+
+### Features
+* (**ecr**) This release for Amazon ECR makes change to bring the SDK into sync with the API.
+* (**paymentcryptographydata**) Added further restrictions on logging of potentially sensitive inputs and outputs.
+* (**qbusiness**) Add personalization to Q Applications. Customers can enable or disable personalization when creating or updating a Q application with the personalization configuration.
+
+### Documentation
+* (**acm**) Documentation updates, including fixes for xml formatting, broken links, and ListCertificates description.
+
 ## [1.2.46] - 07/03/2024
 
 ### Features

@@ -11,6 +11,7 @@ import software.amazon.smithy.aws.traits.protocols.Ec2QueryTrait
 import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
 import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
 import software.amazon.smithy.model.shapes.ServiceShape
+import software.amazon.smithy.protocol.traits.Rpcv2CborTrait
 
 private const val DEPRECATED_SHAPES_CUTOFF_DATE: String = "2023-11-28"
 
@@ -39,4 +40,5 @@ fun ServiceShape.protocolName(): String =
         AwsJson1_1Trait.ID,
         AwsQueryTrait.ID,
         Ec2QueryTrait.ID,
+        Rpcv2CborTrait.ID,
     ).first { hasTrait(it) }.name

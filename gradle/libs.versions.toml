@@ -9,11 +9,11 @@ coroutines-version = "1.7.3"
 atomicfu-version = "0.23.1"
 
 # smithy-kotlin codegen and runtime are versioned separately
-smithy-kotlin-runtime-version = "1.2.11"
-smithy-kotlin-codegen-version = "0.32.11"
+smithy-kotlin-runtime-version = "1.2.16"
+smithy-kotlin-codegen-version = "0.32.16"
 
 # codegen
-smithy-version = "1.49.0"
+smithy-version = "1.50.0"
 
 # testing
 junit-version = "5.10.1"
@@ -71,6 +71,7 @@ smithy-kotlin-serde = { module = "aws.smithy.kotlin:serde", version.ref = "smith
 smithy-kotlin-serde-form-url = { module = "aws.smithy.kotlin:serde-form-url", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-serde-json = { module = "aws.smithy.kotlin:serde-json", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-serde-xml = { module = "aws.smithy.kotlin:serde-xml", version.ref = "smithy-kotlin-runtime-version" }
+smithy-kotlin-serde-cbor = { module = "aws.smithy.kotlin:serde-cbor", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-smithy-client = { module = "aws.smithy.kotlin:smithy-client", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-smithy-test = { module = "aws.smithy.kotlin:smithy-test", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-telemetry-api = { module = "aws.smithy.kotlin:telemetry-api", version.ref = "smithy-kotlin-runtime-version" }
@@ -88,6 +89,7 @@ smithy-cli = { module = "software.amazon.smithy:smithy-cli", version.ref = "smit
 smithy-waiters = { module = "software.amazon.smithy:smithy-waiters", version.ref = "smithy-version" }
 smithy-aws-endpoints = { module = "software.amazon.smithy:smithy-aws-endpoints", version.ref = "smithy-version" }
 smithy-aws-traits = { module = "software.amazon.smithy:smithy-aws-traits", version.ref = "smithy-version" }
+smithy-protocol-traits = { module = "software.amazon.smithy:smithy-protocol-traits", version.ref = "smithy-version" }
 smithy-aws-protocol-tests = { module = "software.amazon.smithy:smithy-aws-protocol-tests", version.ref = "smithy-version" }
 smithy-aws-iam-traits = { module = "software.amazon.smithy:smithy-aws-iam-traits", version.ref = "smithy-version" }
 smithy-aws-cloudformation-traits = { module = "software.amazon.smithy:smithy-aws-cloudformation-traits", version.ref = "smithy-version" }
