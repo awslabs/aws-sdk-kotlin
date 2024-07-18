@@ -58,14 +58,15 @@ file("services").listFiles().forEach {
     }
 }
 
-if (file("services/dynamodb").isServiceDir()) {
-    include(":hll:ddb-mapper")
-    include(":hll:ddb-mapper:dynamodb-mapper")
-    include(":hll:ddb-mapper:dynamodb-mapper-annotation-processor")
-    include(":hll:ddb-mapper:dynamodb-mapper-annotations")
-    include(":hll:ddb-mapper:tests:ddb-mapper-annotation-processor-test")
+if ("dynamodb".isBootstrappedService) {
+    include(":hll:dynamodb-mapper")
+    include(":hll:dynamodb-mapper:dynamodb-mapper")
+    include(":hll:dynamodb-mapper:dynamodb-mapper-annotation-processor")
+    include(":hll:dynamodb-mapper:dynamodb-mapper-annotations")
+    include(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen")
+    include(":hll:dynamodb-mapper:tests:dynamodb-mapper-annotation-processor-test")
 } else {
-    logger.warn(":services:dynamodb is not bootstrapped, skipping :hll:ddb-mapper and subprojects")
+    logger.warn(":services:dynamodb is not bootstrapped, skipping :hll:dynamodb-mapper and subprojects")
 }
 
 // Service benchmarks project

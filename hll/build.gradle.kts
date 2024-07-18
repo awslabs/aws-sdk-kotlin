@@ -86,6 +86,7 @@ apiValidation {
 
     ignoredProjects += listOf(
         "dynamodb-mapper-annotation-processor",
-        "ddb-mapper-annotation-processor-test",
+        "dynamodb-mapper-annotation-processor-test",
+        "dynamodb-mapper-ops-codegen",
     ).filter { it in availableSubprojects } // Some projects may not be in the build depending on bootstrapping
 }

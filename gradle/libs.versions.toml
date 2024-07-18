@@ -11,20 +11,20 @@ coroutines-version = "1.7.3"
 atomicfu-version = "0.23.1"
 
 # smithy-kotlin codegen and runtime are versioned separately
-smithy-kotlin-runtime-version = "1.2.12"
-smithy-kotlin-codegen-version = "0.32.12"
+smithy-kotlin-runtime-version = "1.2.15"
+smithy-kotlin-codegen-version = "0.32.15"
 
 # codegen
 smithy-version = "1.50.0"
 
 # testing
+ddb-local-version = "2.5.2"
 junit-version = "5.10.1"
 kotest-version = "5.8.0"
 kotlinx-benchmark-version = "0.4.9"
 kotlinx-serialization-version = "1.6.2"
 mockk-version = "1.13.7"
 slf4j-version = "2.0.9"
-
 
 [libraries]
 aws-kotlin-repo-tools-build-support = { module="aws.sdk.kotlin.gradle:build-support", version.ref = "aws-kotlin-repo-tools-version" }
@@ -109,6 +109,8 @@ kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref 
 kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinx-benchmark-version" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-version" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk-version" }
+
+ddb-local = { module = "com.amazonaws:DynamoDBLocal", version.ref = "ddb-local-version" }
 
 [bundles]
 # bundle of smithy-kotlin dependencies all AWS service clients have
