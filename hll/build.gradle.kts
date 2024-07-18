@@ -24,7 +24,6 @@ val sdkVersion: String by project
 val libraries = libs
 
 subprojects {
-    println("Subproject $this needsKmpConfigured? $needsKmpConfigured")
     if (!needsKmpConfigured) return@subprojects
 
     group = "aws.sdk.kotlin"
