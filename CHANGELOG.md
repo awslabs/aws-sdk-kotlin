@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.2.52] - 07/18/2024
+
+### Features
+* (**acmpca**) Fix broken waiters for the acm-pca client.  Waiters broke in version 1.13.144 of the Boto3 SDK.
+* (**connect**) Amazon Connect expands search API coverage for additional resources.  Search for hierarchy groups by name, ID, tag, or other criteria (new endpoint). Search for agent statuses by name, ID, tag, or other criteria (new endpoint). Search for users by their assigned proficiencies (enhanced endpoint)
+* (**ec2**) Amazon VPC IP Address Manager (IPAM) now supports Bring-Your-Own-IP (BYOIP) for IP addresses registered with any Internet Registry. This feature uses DNS TXT records to validate ownership of a public IP address range.
+* (**firehose**) This release 1) Add configurable buffering hints for Snowflake as destination. 2) Add ReadFromTimestamp for MSK As Source. Firehose will start reading data from MSK Cluster using offset associated with this timestamp. 3) Gated public beta release to add Apache Iceberg tables as destination.
+* (**medialive**) AWS Elemental MediaLive now supports the SRT protocol via the new SRT Caller input type.
+* (**sagemaker**) SageMaker Training supports R5, T3 and R5D instances family. And SageMaker Processing supports G5 and R5D instances family.
+* (**taxsettings**) Set default endpoint for aws partition. Requests from all regions in aws partition will be forward to us-east-1 endpoint.
+* [#1352](https://github.com/awslabs/aws-sdk-kotlin/issues/1352) Add new Kotlin/JVM methods for converting `InputStream` to `ByteStream` and for writing `ByteStream` to `OutputStream`
+
+### Fixes
+* Correctly redact sensitive data in lists and maps
+
+### Documentation
+* (**ivschat**) Documentation update for IVS Chat API Reference.
+* (**rds**) Updates Amazon RDS documentation to specify an eventual consistency model for DescribePendingMaintenanceActions.
+* (**secretsmanager**) Doc only update for Secrets Manager
+* (**timestreamquery**) Doc-only update for TimestreamQuery. Added guidance about the accepted valid value for the QueryPricingModel parameter.
+* (**workspacesthinclient**) Documentation update for WorkSpaces Thin Client.
+
 ## [1.2.51] - 07/12/2024
 
 ### Features

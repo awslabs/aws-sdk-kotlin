@@ -1,5 +1,0 @@
-{
-    "id": "30110eeb-0708-45b6-973f-960dc6062ce6",
-    "type": "bugfix",
-    "description": "Correctly redact sensitive data in lists and maps"
-}
