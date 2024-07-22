@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.53] - 07/22/2024
+
+### Features
+* (**datazone**) This release adds 1/ support of register S3 locations of assets in AWS Lake Formation hybrid access mode for DefaultDataLake blueprint. 2/ support of CRUD operations for Asset Filters.
+* (**ivs**) Documentation update for IVS Low Latency API Reference.
+* (**neptunegraph**) Amazon Neptune Analytics provides new options for customers to start with smaller graphs at a lower cost. CreateGraph, CreaateGraphImportTask, UpdateGraph and StartImportTask APIs will now allow 32 and 64 for `provisioned-memory`
+* (**redshiftserverless**) Adds dualstack support for Redshift Serverless workgroup.
+
+### Miscellaneous
+* Remove deprecated Mobile service
+
 ## [1.2.52] - 07/18/2024
 
 ### Features
