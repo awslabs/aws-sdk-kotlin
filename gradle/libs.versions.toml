@@ -9,8 +9,8 @@ coroutines-version = "1.7.3"
 atomicfu-version = "0.23.1"
 
 # smithy-kotlin codegen and runtime are versioned separately
-smithy-kotlin-runtime-version = "1.2.17-SNAPSHOT"
-smithy-kotlin-codegen-version = "0.32.17-SNAPSHOT"
+smithy-kotlin-runtime-version = "1.2.17"
+smithy-kotlin-codegen-version = "0.32.17"
 
 # codegen
 smithy-version = "1.50.0"
