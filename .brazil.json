@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "org.jetbrains.kotlin:kotlin-stdlib:1.9.*": "KotlinStdlib-1.9.x",
-    "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.*": "KotlinxCoroutinesCoreJvm-1.7.x"
+    "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.*": "KotlinxCoroutinesCoreJvm-1.7.x",
+    "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.*": "KotlinxCoroutinesCore-1.7.x"
   },
   "packageHandlingRules": {
     "versioning": {
@@ -16,6 +17,9 @@
     "resolvesConflictDependencies": {
       "org.jetbrains.kotlin:kotlin-stdlib:1.9.*": [
         "KotlinStdlib-1.9.x"
+      ],
+      "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.*": [
+        "KotlinxCoroutinesCoreJvm-1.7.x"
       ],
       "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.*": [
         "KotlinxCoroutinesCoreJvm-1.7.x",
