@@ -19,9 +19,6 @@
       ],
       "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.*": [
         "KotlinxCoroutinesCoreJvm-1.7.x",
-        "KotlinStdlibCommon-1.9.x",
-        "KotlinStdlibJdk8-1.9.x",
-        "KotlinStdlibJdk7-1.9.x",
         "KotlinStdlib-1.9.x"
       ]
     }
