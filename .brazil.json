@@ -24,6 +24,9 @@
       "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.*": [
         "KotlinxCoroutinesCoreJvm-1.7.x",
         "KotlinStdlib-1.9.x"
+      ],
+      "aws.smithy.kotlin:aws-event-stream:1.*": [
+        "KotlinxCoroutinesCoreJvm-1.7.x"
       ]
     }
   }
