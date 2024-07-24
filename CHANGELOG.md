@@ -1,5 +1,64 @@
 # Changelog
 
+## [1.2.54] - 07/23/2024
+
+### Features
+* (**appsync**) Adding support for paginators in AppSync list APIs
+* (**cleanrooms**) This release adds AWS Entity Resolution integration to associate ID namespaces & ID mapping workflow resources as part of ID namespace association and  ID mapping table  in AWS Clean Rooms. It also introduces a new ID_MAPPING_TABLE analysis rule to manage the protection on ID mapping table.
+* (**cleanroomsml**) Adds SQL query as the source of seed audience for audience generation job.
+* (**connect**) Added PostContactSummary segment type on ListRealTimeContactAnalysisSegmentsV2 API
+* (**connectcontactlens**) Added PostContactSummary segment type on ListRealTimeContactAnalysisSegments API
+* (**datazone**) This release removes the deprecated dataProductItem field from Search API output.
+* (**entityresolution**) Support First Party ID Mapping
+
+## [1.2.53] - 07/22/2024
+
+### Features
+* (**datazone**) This release adds 1/ support of register S3 locations of assets in AWS Lake Formation hybrid access mode for DefaultDataLake blueprint. 2/ support of CRUD operations for Asset Filters.
+* (**ivs**) Documentation update for IVS Low Latency API Reference.
+* (**neptunegraph**) Amazon Neptune Analytics provides new options for customers to start with smaller graphs at a lower cost. CreateGraph, CreaateGraphImportTask, UpdateGraph and StartImportTask APIs will now allow 32 and 64 for `provisioned-memory`
+* (**redshiftserverless**) Adds dualstack support for Redshift Serverless workgroup.
+
+### Miscellaneous
+* Remove deprecated Mobile service
+
+## [1.2.52] - 07/18/2024
+
+### Features
+* (**acmpca**) Fix broken waiters for the acm-pca client.  Waiters broke in version 1.13.144 of the Boto3 SDK.
+* (**connect**) Amazon Connect expands search API coverage for additional resources.  Search for hierarchy groups by name, ID, tag, or other criteria (new endpoint). Search for agent statuses by name, ID, tag, or other criteria (new endpoint). Search for users by their assigned proficiencies (enhanced endpoint)
+* (**ec2**) Amazon VPC IP Address Manager (IPAM) now supports Bring-Your-Own-IP (BYOIP) for IP addresses registered with any Internet Registry. This feature uses DNS TXT records to validate ownership of a public IP address range.
+* (**firehose**) This release 1) Add configurable buffering hints for Snowflake as destination. 2) Add ReadFromTimestamp for MSK As Source. Firehose will start reading data from MSK Cluster using offset associated with this timestamp. 3) Gated public beta release to add Apache Iceberg tables as destination.
+* (**medialive**) AWS Elemental MediaLive now supports the SRT protocol via the new SRT Caller input type.
+* (**sagemaker**) SageMaker Training supports R5, T3 and R5D instances family. And SageMaker Processing supports G5 and R5D instances family.
+* (**taxsettings**) Set default endpoint for aws partition. Requests from all regions in aws partition will be forward to us-east-1 endpoint.
+* [#1352](https://github.com/awslabs/aws-sdk-kotlin/issues/1352) Add new Kotlin/JVM methods for converting `InputStream` to `ByteStream` and for writing `ByteStream` to `OutputStream`
+
+### Fixes
+* Correctly redact sensitive data in lists and maps
+
+### Documentation
+* (**ivschat**) Documentation update for IVS Chat API Reference.
+* (**rds**) Updates Amazon RDS documentation to specify an eventual consistency model for DescribePendingMaintenanceActions.
+* (**secretsmanager**) Doc only update for Secrets Manager
+* (**timestreamquery**) Doc-only update for TimestreamQuery. Added guidance about the accepted valid value for the QueryPricingModel parameter.
+* (**workspacesthinclient**) Documentation update for WorkSpaces Thin Client.
+
+## [1.2.51] - 07/12/2024
+
+### Features
+* (**acmpca**) Minor refactoring of C2J model for AWS Private CA
+* (**arczonalshift**) Adds the option to subscribe to get notifications when a zonal autoshift occurs in a region.
+* (**autoscaling**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**codebuild**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**dynamodb**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**globalaccelerator**) This feature adds exceptions to the Customer API to avoid throwing Internal Service errors
+* (**pinpoint**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**quicksight**) Vega ally control options and Support for Reviewed Answers in Topics
+* (**rds**) Update path for CreateDBCluster resource identifier, and Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**sns**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* [#1302](https://github.com/awslabs/aws-sdk-kotlin/issues/1302) Add support for `smithy.protocols#rpcv2Cbor` protocol
+
 ## [1.2.50] - 07/10/2024
 
 ### Features

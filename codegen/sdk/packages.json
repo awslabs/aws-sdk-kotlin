@@ -1357,12 +1357,6 @@
             "brazilName": "AwsSdkKotlinMigrationhubstrategy"
         },
         {
-            "sdkId": "Mobile",
-            "namespace": "aws.sdk.kotlin.services.mobile",
-            "artifactName": "mobile",
-            "brazilName": "AwsSdkKotlinMobile"
-        },
-        {
             "sdkId": "Neptune",
             "namespace": "aws.sdk.kotlin.services.neptune",
             "artifactName": "neptune",
