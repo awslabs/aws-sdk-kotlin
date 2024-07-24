@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.55] - 07/24/2024
+
+### Features
+* (**cleanrooms**) Three enhancements to the AWS Clean Rooms: Disallowed Output Columns, Flexible Result Receivers, SQL as a Seed
+* (**iotsitewise**) Adds support for creating SiteWise Edge gateways that run on a Siemens Industrial Edge Device.
+* (**mediapackagev2**) This release adds support for Irdeto DRM encryption in DASH manifests.
+* (**medicalimaging**) CopyImageSet API adds copying selected instances between image sets, and overriding inconsistent metadata with a force parameter. UpdateImageSetMetadata API enables reverting to prior versions; updates to Study, Series, and SOP Instance UIDs; and updates to private elements, with a force parameter.
+
+### Documentation
+* (**dynamodb**) DynamoDB doc only update for July
+* (**pinpointsmsvoicev2**) Update for rebrand to AWS End User Messaging SMS and Voice.
+
 ## [1.2.54] - 07/23/2024
 
 ### Features
