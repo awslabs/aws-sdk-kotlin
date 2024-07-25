@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.56] - 07/25/2024
+
+### Features
+* (**applicationautoscaling**) Application Auto Scaling is now more responsive to the changes in demand of your SageMaker Inference endpoints. To get started, create or update a Target Tracking policy based on High Resolution CloudWatch metrics.
+* (**applicationsignals**) CloudWatch Application Signals now supports application logs correlation with traces and operational health metrics of applications running on EC2 instances. Users can view the most relevant telemetry to troubleshoot application health anomalies such as spikes in latency, errors, and availability.
+* (**bedrockruntime**) Provides ServiceUnavailableException error message
+* (**codecommit**) CreateRepository API now throws OperationNotAllowedException when the account has been restricted from creating a repository.
+* (**datazone**) Introduces GetEnvironmentCredentials operation to SDK
+* (**ec2**) EC2 Fleet now supports using custom identifiers to reference Amazon Machine Images (AMI) in launch requests that are configured to choose from a diversified list of instance types.
+* (**ecr**) API and documentation updates for Amazon ECR, adding support for creating, updating, describing and deleting ECR Repository Creation Template.
+* (**eks**) This release adds support for EKS cluster to manage extended support.
+* (**elasticloadbalancingv2**) This release adds support for sharing trust stores across accounts and organizations through integration with AWS Resource Access Manager.
+* (**networkfirewall**) You can now log events that are related to TLS inspection, in addition to the existing alert and flow logging.
+* (**outposts**) Adding default vCPU information to GetOutpostSupportedInstanceTypes and GetOutpostInstanceTypes responses
+* (**sfn**) This release adds support to customer managed KMS key encryption in AWS Step Functions.
+
 ## [1.2.55] - 07/24/2024
 
 ### Features
