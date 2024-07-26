@@ -1,4 +1,17 @@
 /**
+ * Check for elements with a navButton class, which indicates the sidebar has finished loading.
+ */
+async function dispatchNavigationLoadedEvent() {
+    while (!document.querySelectorAll('.navButton').length > 0) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    window.dispatchEvent(new Event('navigationLoaded'));
+}
+
+document.addEventListener('DOMContentLoaded', dispatchNavigationLoadedEvent);
+if (document.readyState === "interactive" || document.readyState === "complete" ) { dispatchNavigationLoadedEvent() }
+
+/**
  * Apply "skip to main content" buttons after each active left sidebar `sideMenuPart`.
  * These are invisible and only accessible via keyboard
  * Fixes accessibility violation: "Provide a mechanism for skipping past repetitive content"
@@ -33,6 +46,10 @@ function applySkipLinks() {
         document.querySelectorAll('.sideMenuPart[data-active]').forEach(function(sideMenuPart) {
             insertSkipLink(sideMenuPart)
         });
+
+        // Insert a skip link on the first sideMenuPart
+        const firstSideMenuPart = document.getElementById("sideMenu").children[0].querySelectorAll(".sideMenuPart")[0]
+        insertSkipLink(firstSideMenuPart)
     }
 
     const observer = new MutationObserver(handleChanges);
@@ -44,9 +61,7 @@ function applySkipLinks() {
     };
     observer.observe(document.body, observerConfig);
 }
-document.addEventListener('DOMContentLoaded', applySkipLinks);
-if (document.readyState === "interactive" || document.readyState === "complete" ) { applySkipLinks() }
-
+window.addEventListener('navigationLoaded', applySkipLinks);
 
 /**
  * Ensure `navButton` elements are interactable and have proper accessibility properties
@@ -85,10 +100,7 @@ function ensureNavButtonInteractable() {
         });
     });
 }
-
-window.onload = function() {
-    ensureNavButtonInteractable()
-}
+window.addEventListener('navigationLoaded', ensureNavButtonInteractable);
 
 /**
  * Ensure that content (specifically, code blocks) reflows on small page sizes.
@@ -99,6 +111,8 @@ function ensureContentReflow() {
 
     // Function to insert 'toggle content' button
     function insertToggleContentButton(element) {
+        if (element.parentNode.querySelectorAll(".aws-toggle-content-btn").length > 0) { return }
+
         const initiallyVisible = window.innerWidth >= MIN_WINDOW_SIZE
 
         const toggleContent = document.createElement('button');
@@ -138,6 +152,4 @@ function ensureContentReflow() {
         });
     });
 }
-
-document.addEventListener('DOMContentLoaded', ensureContentReflow)
-if (document.readyState === "interactive" || document.readyState === "complete" ) { ensureContentReflow() }
+window.addEventListener('navigationLoaded', ensureContentReflow);

@@ -1089,11 +1089,6 @@ private const val TEST_SUITE_JSON = """
     "service_envvar_name": "AWS_ENDPOINT_URL_MIGRATIONHUBSTRATEGY"
   },
   {
-    "service_id": "Mobile",
-    "services_section_name": "mobile",
-    "service_envvar_name": "AWS_ENDPOINT_URL_MOBILE"
-  },
-  {
     "service_id": "mq",
     "services_section_name": "mq",
     "service_envvar_name": "AWS_ENDPOINT_URL_MQ"
@@ -1751,7 +1746,6 @@ private const val JAVA_CLIENT_NAMES_JSON = """
   "AmplifyBackend": "AmplifyBackendClient",
   "IoT 1Click Projects": "Iot1ClickProjectsClient",
   "CloudHSM V2": "CloudHsmV2Client",
-  "Mobile": "MobileClient",
   "savingsplans": "SavingsplansClient",
   "Batch": "BatchClient",
   "MigrationHubStrategy": "MigrationHubStrategyClient",
