@@ -113,6 +113,9 @@ allprojects {
             )
         }
     }
+
+    // Enables running `./gradlew allDeps` to get a comprehensive list of dependencies for every subproject
+    tasks.register<DependencyReportTask>("allDeps") { }
 }
 
 project.afterEvaluate {

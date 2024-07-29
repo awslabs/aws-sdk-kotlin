@@ -17,11 +17,11 @@ public actual class DefaultRegionProviderChain actual constructor(
     profile: LazyAsyncValue<AwsProfile>,
 ) : RegionProvider,
     Closeable {
-    override suspend fun getRegion(): String? {
+    actual override suspend fun getRegion(): String? {
         TODO("Not yet implemented")
     }
 
-    override fun close() {
+    actual override fun close() {
         TODO("Not yet implemented")
     }
 }

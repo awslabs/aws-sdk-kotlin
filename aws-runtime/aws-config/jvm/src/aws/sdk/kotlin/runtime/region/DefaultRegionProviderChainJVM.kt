@@ -24,7 +24,7 @@ public actual class DefaultRegionProviderChain actual constructor(
     RegionProvider,
     Closeable {
 
-    override fun close() {
+    actual override fun close() {
         providers.forEach { provider ->
             if (provider is Closeable) provider.close()
         }
