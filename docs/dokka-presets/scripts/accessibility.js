@@ -99,9 +99,7 @@ function ensureNavButtonInteractable() {
 
         // Update aria-expanded attribute on click
         navButton.addEventListener('click', function() {
-            console.log("navButton aria-expanded: " + navButton.getAttribute('aria-expanded'))
             const isExpanded = navButton.getAttribute('aria-expanded') === 'true';
-            console.log("navButton isExpanded: " + isExpanded)
             navButton.setAttribute('aria-expanded', (!isExpanded).toString());
         });
     });
