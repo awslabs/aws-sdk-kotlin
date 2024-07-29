@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.0] - 07/29/2024
+
+### Documentation
+* (**elasticache**) Renaming full service name as it appears in developer documentation.
+* (**memorydb**) Renaming full service name as it appears in developer documentation.
+
+### Miscellaneous
+* ⚠️ **IMPORTANT**: Upgrade to Kotlin 2.0.0
+
 ## [1.2.56] - 07/25/2024
 
 ### Features
