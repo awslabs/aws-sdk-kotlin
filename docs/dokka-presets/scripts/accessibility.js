@@ -71,6 +71,10 @@ function ensureNavButtonInteractable() {
     const navButtons = document.querySelectorAll('.navButton');
 
     navButtons.forEach(function(navButton) {
+        if (navButton.hasAttribute('aria-expanded')) {
+            return;
+        }
+
         // Make the navButton focusable, add accessibility information
         navButton.setAttribute('tabindex', '0');
         navButton.setAttribute('role', 'button');
