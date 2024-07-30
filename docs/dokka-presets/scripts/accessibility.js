@@ -120,17 +120,5 @@ function ensureContentReflow() {
     document.querySelectorAll('.content[data-togglable]').forEach(function(content) {
         content.style.display = 'block'
     });
-
-    // Relocate the documentation comment _above_ the code block. Having a different parent ensures the comment can reflow
-    // while the code block can
-    // const mainSubrows = document.querySelectorAll('.main-subrow.keyValue');
-    //
-    // mainSubrows.forEach(subrow => {
-    //     const briefElement = subrow.querySelector('.brief');
-    //
-    //     if (briefElement) {
-    //         subrow.insertBefore(briefElement, subrow.children[1])
-    //     }
-    // });
 }
 window.addEventListener('navigationLoaded', ensureContentReflow);
