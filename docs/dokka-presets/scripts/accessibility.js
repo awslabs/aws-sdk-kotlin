@@ -17,6 +17,11 @@ if (document.readyState === "interactive" || document.readyState === "complete" 
  * Fixes accessibility violation: "Provide a mechanism for skipping past repetitive content"
  */
 function applySkipLinks() {
+    document.querySelectorAll('#content').forEach(function(contentDiv) {
+       contentDiv.setAttribute('role', 'main');
+       contentDiv.setAttribute('tabindex', '-1');
+    });
+
     function insertSkipLink(element) {
         if (element.querySelectorAll(".skip-to-content").length > 0) { return }
 

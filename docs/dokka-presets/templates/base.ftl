@@ -33,6 +33,7 @@
     <@header.display/>
     <div id="container">
         <div class="sidebar" id="leftColumn">
+            <div><a class="skip-to-content" href="#content" tabindex="0">Skip to Main Content</a></div>
             <div class="sidebar--inner" id="sideMenu"></div>
         </div>
         <div id="main">
