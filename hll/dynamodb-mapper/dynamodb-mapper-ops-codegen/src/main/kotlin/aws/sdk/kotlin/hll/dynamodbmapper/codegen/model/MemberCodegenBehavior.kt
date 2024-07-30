@@ -69,12 +69,15 @@ val Member.codegenBehavior: MemberCodegenBehavior
     get() = when {
         this in unsupportedMembers -> MemberCodegenBehavior.Drop
         type in attrMapTypes -> if (name == "key") MemberCodegenBehavior.MapKeys else MemberCodegenBehavior.MapAll
-        isTableName -> MemberCodegenBehavior.Hoist
+        isTableName || isIndexName -> MemberCodegenBehavior.Hoist
         else -> MemberCodegenBehavior.PassThrough
     }
 
 private val Member.isTableName: Boolean
     get() = name == "tableName" && type == Types.StringNullable
+
+private val Member.isIndexName: Boolean
+    get() = name == "indexName" && type == Types.StringNullable
 
 private fun llType(name: String) = TypeRef(Pkg.Ll.Model, name)
 

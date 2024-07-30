@@ -6,7 +6,6 @@ package aws.sdk.kotlin.hll.dynamodbmapper.testutils
 
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
-import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.deleteTable
@@ -75,22 +74,27 @@ abstract class DdbLocalTest : AnnotationSpec() {
      * @param items A collection of maps of strings to values which will be mapped and persisted to the new table before
      * returning. This can be used to pre-populate a table for a test.
      */
-    suspend fun createTable(name: String, schema: ItemSchema.PartitionKey<*, *>, vararg items: Map<String, Any>) =
-        createTable(name, listOf(schema.partitionKey), items.toList())
+    suspend fun createTable(name: String, schema: ItemSchema<*>, vararg items: Map<String, Any>) =
+        createTable(name, schema, mapOf(), mapOf(), items.toList())
 
     /**
      * Creates a table for the given name/schema and optionally persists the given items into it. All tables created via
      * this method will be automatically dropped when the test spec completes (whether successfully or unsuccessfully).
      * @param name The name of the table to create
      * @param schema The schema for the table. This is used to derive the primary key and to map the [items] (if any).
+     * @param gsis A map of GSI names to schemas
+     * @param lsis A map of LSI names to schemas
      * @param items A collection of maps of strings to values which will be mapped and persisted to the new table before
      * returning. This can be used to pre-populate a table for a test.
      */
-    suspend fun createTable(name: String, schema: ItemSchema.CompositeKey<*, *, *>, vararg items: Map<String, Any>) =
-        createTable(name, listOf(schema.partitionKey, schema.sortKey), items.toList())
-
-    private suspend fun createTable(name: String, keys: List<KeySpec<*>>, items: List<Map<String, Any>>) {
-        ddb.createTable(name, keys)
+    suspend fun createTable(
+        name: String,
+        schema: ItemSchema<*>,
+        gsis: Map<String, ItemSchema<*>>,
+        lsis: Map<String, ItemSchema<*>>,
+        items: List<Map<String, Any>>,
+    ) {
+        ddb.createTable(name, schema, gsis, lsis)
         tempTables += name
         ddb.putItems(name, items)
     }

@@ -4,10 +4,10 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.pipeline.internal
 
-import aws.sdk.kotlin.hll.dynamodbmapper.TableSpec
+import aws.sdk.kotlin.hll.dynamodbmapper.model.PersistenceSpec
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.*
 
 internal data class MapperContextImpl<T>(
-    override val tableSpec: TableSpec<T>,
+    override val persistenceSpec: PersistenceSpec<T>,
     override val operation: String,
 ) : MapperContext<T>

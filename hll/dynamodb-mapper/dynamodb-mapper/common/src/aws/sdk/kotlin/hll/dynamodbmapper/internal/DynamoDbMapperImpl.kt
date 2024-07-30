@@ -6,6 +6,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.internal
 
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
+import aws.sdk.kotlin.hll.dynamodbmapper.model.internal.tableImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.InterceptorAny
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 

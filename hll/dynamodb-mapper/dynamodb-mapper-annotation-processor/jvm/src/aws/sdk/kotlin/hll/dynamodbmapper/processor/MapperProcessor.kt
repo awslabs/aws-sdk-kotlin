@@ -60,6 +60,7 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
                             |
                             |import aws.sdk.kotlin.hll.dynamodbmapper.*
                             |import aws.sdk.kotlin.hll.dynamodbmapper.items.*
+                            |import aws.sdk.kotlin.hll.dynamodbmapper.model.*
                             |import aws.sdk.kotlin.hll.dynamodbmapper.values.*
                             |import $basePackageName.$className
                             |

@@ -119,6 +119,6 @@ object Types {
     fun itemSchema(typeVar: String) = TypeRef(Pkg.Hl.Items, "ItemSchema", listOf(TypeVar(typeVar)))
     val MapperContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "MapperContextImpl")
     val Operation = TypeRef(Pkg.Hl.PipelineImpl, "Operation")
-    fun tableSpec(typeVar: String) = TypeRef(Pkg.Hl.Base, "TableSpec", listOf(TypeVar(typeVar)))
+    fun persistenceSpec(typeVar: String) = TypeRef(Pkg.Hl.Model, "PersistenceSpec", listOf(TypeVar(typeVar)))
     val toItem = TypeRef(Pkg.Hl.Model, "toItem")
 }

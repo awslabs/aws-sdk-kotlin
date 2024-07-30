@@ -5,12 +5,12 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.pipeline.internal
 
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
-import aws.sdk.kotlin.hll.dynamodbmapper.TableSpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.withKeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
+import aws.sdk.kotlin.hll.dynamodbmapper.model.PersistenceSpec
 import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.*
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
@@ -28,9 +28,10 @@ private const val TABLE_NAME = "foo-table"
 class OperationTest {
     private val ddbMapper = mockk<DynamoDbMapper>()
 
-    private val fooTable = object : TableSpec<Foo> {
+    private val fooTable = object : PersistenceSpec<Foo> {
         override val mapper = ddbMapper
-        override val name = TABLE_NAME
+        override val tableName = TABLE_NAME
+        override val indexName = null
         override val schema = fooSchema
     }
 
