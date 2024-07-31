@@ -13,6 +13,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.operations.TableOperations
  * @param T The type of objects which will be read from and/or written to this table
  */
 public interface Table<T> :
+    TableSpec<T>,
     TableOperations<T>,
     ItemSource<T> {
 

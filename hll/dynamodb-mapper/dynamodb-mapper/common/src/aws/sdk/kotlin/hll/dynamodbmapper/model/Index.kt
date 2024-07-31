@@ -12,6 +12,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.operations.IndexOperations
  * @param T The type of objects which will be read from this index
  */
 public interface Index<T> :
+    IndexSpec<T>,
     IndexOperations<T>,
     ItemSource<T> {
 

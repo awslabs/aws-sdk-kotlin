@@ -10,19 +10,9 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 /**
  * Specifies how items can be read from and written to a specific DynamoDB location (such as a table or a secondary
  * index)
- * @param T The type of objects which will be read from and/or written to this table/index
+ * @param T The type of objects which will be read from and/or written to this item source
  */
 public interface PersistenceSpec<T> {
-    /**
-     * The name of the table
-     */
-    public val tableName: String
-
-    /**
-     * The name of the secondary index, if any
-     */
-    public val indexName: String?
-
     /**
      * The [DynamoDbMapper] which holds the underlying DynamoDB service client used to invoke operations
      */

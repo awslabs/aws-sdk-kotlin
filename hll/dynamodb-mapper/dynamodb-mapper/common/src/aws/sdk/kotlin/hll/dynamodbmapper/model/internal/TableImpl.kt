@@ -7,8 +7,8 @@ package aws.sdk.kotlin.hll.dynamodbmapper.model.internal
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Index
-import aws.sdk.kotlin.hll.dynamodbmapper.model.PersistenceSpec
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Table
+import aws.sdk.kotlin.hll.dynamodbmapper.model.TableSpec
 import aws.sdk.kotlin.hll.dynamodbmapper.operations.TableOperations
 import aws.sdk.kotlin.hll.dynamodbmapper.operations.TableOperationsImpl
 
@@ -18,11 +18,11 @@ internal fun <T, PK> tableImpl(
     schema: ItemSchema.PartitionKey<T, PK>,
 ): Table.PartitionKey<T, PK> {
     val tableName = name // shadowed below
-    val specImpl = PersistenceSpecPartitionKeyImpl(mapper, tableName, indexName = null, schema)
+    val specImpl = TableSpecPartitionKeyImpl(mapper, tableName, schema)
     val opsImpl = TableOperationsImpl(specImpl)
     return object :
         Table.PartitionKey<T, PK>,
-        PersistenceSpec.PartitionKey<T, PK> by specImpl,
+        TableSpec.PartitionKey<T, PK> by specImpl,
         TableOperations<T> by opsImpl {
 
         override fun <T, PK> getIndex(
@@ -44,11 +44,11 @@ internal fun <T, PK, SK> tableImpl(
     name: String,
     schema: ItemSchema.CompositeKey<T, PK, SK>,
 ): Table.CompositeKey<T, PK, SK> {
-    val specImpl = PersistenceSpecCompositeKeyImpl(mapper, name, indexName = null, schema)
+    val specImpl = TableSpecCompositeKeyImpl(mapper, name, schema)
     val opsImpl = TableOperationsImpl(specImpl)
     return object :
         Table.CompositeKey<T, PK, SK>,
-        PersistenceSpec.CompositeKey<T, PK, SK> by specImpl,
+        TableSpec.CompositeKey<T, PK, SK> by specImpl,
         TableOperations<T> by opsImpl {
 
         override fun <T, PK> getIndex(

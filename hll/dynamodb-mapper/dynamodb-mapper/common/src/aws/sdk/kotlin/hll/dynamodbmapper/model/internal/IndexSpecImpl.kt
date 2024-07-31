@@ -6,18 +6,18 @@ package aws.sdk.kotlin.hll.dynamodbmapper.model.internal
 
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
-import aws.sdk.kotlin.hll.dynamodbmapper.model.PersistenceSpec
+import aws.sdk.kotlin.hll.dynamodbmapper.model.IndexSpec
 
-internal data class PersistenceSpecPartitionKeyImpl<T, PK>(
+internal data class IndexSpecPartitionKeyImpl<T, PK>(
     override val mapper: DynamoDbMapper,
     override val tableName: String,
-    override val indexName: String?,
+    override val indexName: String,
     override val schema: ItemSchema.PartitionKey<T, PK>,
-) : PersistenceSpec.PartitionKey<T, PK>
+) : IndexSpec.PartitionKey<T, PK>
 
-internal data class PersistenceSpecCompositeKeyImpl<T, PK, SK>(
+internal data class IndexSpecCompositeKeyImpl<T, PK, SK>(
     override val mapper: DynamoDbMapper,
     override val tableName: String,
-    override val indexName: String?,
+    override val indexName: String,
     override val schema: ItemSchema.CompositeKey<T, PK, SK>,
-) : PersistenceSpec.CompositeKey<T, PK, SK>
+) : IndexSpec.CompositeKey<T, PK, SK>

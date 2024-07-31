@@ -30,8 +30,6 @@ class OperationTest {
 
     private val fooTable = object : PersistenceSpec<Foo> {
         override val mapper = ddbMapper
-        override val tableName = TABLE_NAME
-        override val indexName = null
         override val schema = fooSchema
     }
 

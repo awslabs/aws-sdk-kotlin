@@ -30,8 +30,12 @@ class OperationsTypeRenderer(
 
     override fun generate() {
         renderInterface()
-        blankLine()
-        renderImpl()
+
+        if (!itemSourceKind.isAbstract) {
+            blankLine()
+            renderImpl()
+        }
+
         // TODO also render DSL extension methods (e.g., table.getItem { key = ... })
     }
 
@@ -42,7 +46,7 @@ class OperationsTypeRenderer(
             "internal class #L<T>(private val spec: #T) : #T {",
             "}",
             implName,
-            Types.persistenceSpec("T"),
+            itemSourceKind.getSpecType("T"),
             interfaceType,
         ) {
             operations.forEach { operation ->

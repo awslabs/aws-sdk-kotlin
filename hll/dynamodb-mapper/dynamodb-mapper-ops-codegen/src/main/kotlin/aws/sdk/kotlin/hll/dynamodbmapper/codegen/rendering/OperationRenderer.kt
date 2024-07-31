@@ -32,35 +32,44 @@ class OperationRenderer(
         renderRequest()
         blankLine()
         renderResponse()
-        blankLine()
+
         renderOperationFactory()
     }
 
     private fun renderOperationFactory() {
         val factoryName = factoryFunctionName(operation)
 
-        withBlock(
-            "internal fun <T> #L(spec: #T) = #T(",
-            ")",
-            factoryName,
-            Types.persistenceSpec("T"),
-            Types.Operation,
-        ) {
-            write(
-                "initialize = { highLevelReq: #T -> #T(highLevelReq, spec.schema, #T(spec, #S)) },",
-                operation.request.type,
-                Types.HReqContextImpl,
-                Types.MapperContextImpl,
-                operation.name,
-            )
+        operation.itemSourceKinds.filterNot { it.isAbstract }.forEach { itemSourceKind ->
+            blankLine()
+            withBlock(
+                "internal fun <T> #L(spec: #T) = #T(",
+                ")",
+                factoryName,
+                itemSourceKind.getSpecType("T"),
+                Types.Operation,
+            ) {
+                write(
+                    "initialize = { highLevelReq: #T -> #T(highLevelReq, spec.schema, #T(spec, #S)) },",
+                    operation.request.type,
+                    Types.HReqContextImpl,
+                    Types.MapperContextImpl,
+                    operation.name,
+                )
 
-            writeInline("serialize = { highLevelReq, schema -> highLevelReq.convert(")
-            members(MemberCodegenBehavior.Hoist) { writeInline("spec.#L, ", name) }
-            write("schema) },")
+                writeInline("serialize = { highLevelReq, schema -> highLevelReq.convert(")
+                members(MemberCodegenBehavior.Hoist) {
+                    if (name in itemSourceKind.hoistedFields) {
+                        writeInline("spec.#L, ", name)
+                    } else {
+                        writeInline("#L = null, ", name)
+                    }
+                }
+                write("schema) },")
 
-            write("lowLevelInvoke = spec.mapper.client::#L,", operation.methodName)
-            write("deserialize = #L::convert,", operation.response.lowLevelName)
-            write("interceptors = spec.mapper.config.interceptors,")
+                write("lowLevelInvoke = spec.mapper.client::#L,", operation.methodName)
+                write("deserialize = #L::convert,", operation.response.lowLevelName)
+                write("interceptors = spec.mapper.config.interceptors,")
+            }
         }
     }
 

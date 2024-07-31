@@ -7,7 +7,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.model.internal
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Index
-import aws.sdk.kotlin.hll.dynamodbmapper.model.PersistenceSpec
+import aws.sdk.kotlin.hll.dynamodbmapper.model.IndexSpec
 import aws.sdk.kotlin.hll.dynamodbmapper.operations.IndexOperations
 import aws.sdk.kotlin.hll.dynamodbmapper.operations.IndexOperationsImpl
 
@@ -17,11 +17,11 @@ internal fun <T, PK> indexImpl(
     indexName: String,
     schema: ItemSchema.PartitionKey<T, PK>,
 ): Index.PartitionKey<T, PK> {
-    val specImpl = PersistenceSpecPartitionKeyImpl(mapper, tableName, indexName, schema)
+    val specImpl = IndexSpecPartitionKeyImpl(mapper, tableName, indexName, schema)
     val opsImpl = IndexOperationsImpl(specImpl)
     return object :
         Index.PartitionKey<T, PK>,
-        PersistenceSpec.PartitionKey<T, PK> by specImpl,
+        IndexSpec.PartitionKey<T, PK> by specImpl,
         IndexOperations<T> by opsImpl { }
 }
 
@@ -31,10 +31,10 @@ internal fun <T, PK, SK> indexImpl(
     indexName: String,
     schema: ItemSchema.CompositeKey<T, PK, SK>,
 ): Index.CompositeKey<T, PK, SK> {
-    val specImpl = PersistenceSpecCompositeKeyImpl(mapper, tableName, indexName, schema)
+    val specImpl = IndexSpecCompositeKeyImpl(mapper, tableName, indexName, schema)
     val opsImpl = IndexOperationsImpl(specImpl)
     return object :
         Index.CompositeKey<T, PK, SK>,
-        PersistenceSpec.CompositeKey<T, PK, SK> by specImpl,
+        IndexSpec.CompositeKey<T, PK, SK> by specImpl,
         IndexOperations<T> by opsImpl { }
 }

@@ -4,24 +4,43 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.model
 
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.util.Pkg
+
 /**
  * Identifies a type in the `ItemSource<T>` hierarchy
+ * @param hoistedFields Which fields should be hoisted from the low-level request type for this item source kind (e.g.,
+ * for `TableSpec<T>` the `tableName` field should be hoisted)
+ * @param parent The parent type of this type (if any)
+ * @param isAbstract Indicates whether this item source kind is purely abstract and should not have an implementation
+ * class (e.g., `ItemSource<T>` should be abstract and non-instantiable)
  */
-enum class ItemSourceKind(val parent: ItemSourceKind? = null) {
+enum class ItemSourceKind(
+    val hoistedFields: List<String>,
+    val parent: ItemSourceKind? = null,
+    val isAbstract: Boolean = false,
+) {
     /**
      * Indicates the `ItemSource<T>` interface
      */
-    ItemSource,
+    ItemSource(listOf(), isAbstract = true),
 
     /**
      * Indicates the `Index<T>` interface
      */
-    Index(ItemSource),
+    Index(listOf("indexName", "tableName"), ItemSource),
 
     /**
      * Indicates the `Table<T>` interface
      */
-    Table(ItemSource),
+    Table(listOf("tableName"), ItemSource),
+
+    ;
+
+    /**
+     * Get the [TypeRef] for the `*Spec` type for this item source kind
+     * @param typeVar The type variable name to use for the generic type
+     */
+    fun getSpecType(typeVar: String): TypeRef = TypeRef(Pkg.Hl.Model, "${name}Spec", listOf(TypeVar(typeVar)))
 }
 
 /**
