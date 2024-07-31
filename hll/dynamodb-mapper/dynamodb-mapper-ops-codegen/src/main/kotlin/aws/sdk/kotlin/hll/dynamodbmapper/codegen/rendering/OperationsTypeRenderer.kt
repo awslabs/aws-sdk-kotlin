@@ -11,20 +11,22 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.util.lowercaseFirstChar
  * Renders the `*Operations` interface and `*OperationsImpl` class which contain a method for each codegenned
  * operation and dispatches to the factory function rendered in [OperationRenderer]
  * @param ctx The active [RenderContext]
- * @param queryableKind The type of queryable for which to render operations
+ * @param itemSourceKind The type of `ItemSource` for which to render operations
  * @param parentType The [Type] of the direct parent interface of the to-be-generated `*Operations` interface (e.g., if
- * [queryableKind] is [QueryableKind.Table], then [parentType] should be the generated `QueryableOperations` interface)
+ * [itemSourceKind] is [ItemSourceKind.Table], then [parentType] should be the generated `ItemSourceOperations`
+ * interface)
  * @param operations A list of the operations in scope for codegen
  */
-class QueryableOperationsRenderer(
+class OperationsTypeRenderer(
     private val ctx: RenderContext,
-    val queryableKind: QueryableKind,
+    val itemSourceKind: ItemSourceKind,
     val parentType: Type?,
     val operations: List<Operation>,
-) : RendererBase(ctx, "${queryableKind.name}Operations") {
-    private val entityName = queryableKind.name.lowercaseFirstChar
-    private val intfName = "${queryableKind.name}Operations"
-    private val intfType = TypeRef(ctx.pkg, intfName, listOf(TypeVar("T")))
+) : RendererBase(ctx, "${itemSourceKind.name}Operations") {
+    private val entityName = itemSourceKind.name.lowercaseFirstChar
+    private val intfName = "${itemSourceKind.name}Operations"
+
+    val interfaceType = TypeRef(ctx.pkg, intfName, listOf(TypeVar("T")))
 
     override fun generate() {
         renderInterface()
@@ -34,14 +36,14 @@ class QueryableOperationsRenderer(
     }
 
     private fun renderImpl() {
-        val implName = "${queryableKind.name}OperationsImpl"
+        val implName = "${itemSourceKind.name}OperationsImpl"
 
         withBlock(
             "internal class #L<T>(private val spec: #T) : #T {",
             "}",
             implName,
             Types.persistenceSpec("T"),
-            intfType,
+            interfaceType,
         ) {
             operations.forEach { operation ->
                 write(
@@ -61,14 +63,16 @@ class QueryableOperationsRenderer(
             write("@param T The type of objects which will be read from and/or written to this #L", entityName)
         }
 
-        writeInline("public interface #T ", intfType)
+        writeInline("public interface #T ", interfaceType)
 
         parentType?.let { writeInline(": #T ", parentType) }
 
         withBlock("{", "}") {
             operations.forEach { operation ->
+                val overrideModifier = if (operation.appliesToAncestorKind()) " override" else ""
                 write(
-                    "public suspend fun #L(request: #T): #T",
+                    "public#L suspend fun #L(request: #T): #T",
+                    overrideModifier,
                     operation.methodName,
                     operation.request.type,
                     operation.response.type,
@@ -76,4 +80,9 @@ class QueryableOperationsRenderer(
             }
         }
     }
+
+    private fun Operation.appliesToAncestorKind() = itemSourceKind.parent?.let { appliesToKindOrAncestor(it) } ?: false
 }
+
+private fun Operation.appliesToKindOrAncestor(kind: ItemSourceKind): Boolean =
+    kind in itemSourceKinds || (kind.parent?.let { appliesToKindOrAncestor(it) } ?: false)

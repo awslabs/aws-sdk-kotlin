@@ -4,9 +4,10 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering
 
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.ItemSourceKind
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Operation
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.QueryableKind
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.queryableKinds
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Type
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.itemSourceKinds
 
 /**
  * The parent renderer for all codegen from this package. This class orchestrates the various sub-renderers.
@@ -17,15 +18,14 @@ class HighLevelRenderer(private val ctx: RenderContext, private val operations: 
     fun render() {
         operations.forEach(::render)
 
-        val operationsRenderers = mutableMapOf<QueryableKind, QueryableOperationsRenderer>()
-        QueryableKind.entries.forEach { qk ->
-            ctx.warn("About to generate hll operations for $qk")
-            val parentType = qk.parent?.let { operationsRenderers[it] }?.parentType
-            val operations = this.operations.filter { qk in it.queryableKinds }
+        val kindTypes = mutableMapOf<ItemSourceKind, Type>()
+        ItemSourceKind.entries.forEach { kind ->
+            val parentType = kind.parent?.let { kindTypes[it] }
+            val operations = this.operations.filter { kind in it.itemSourceKinds }
 
-            val renderer = QueryableOperationsRenderer(ctx, qk, parentType, operations)
+            val renderer = OperationsTypeRenderer(ctx, kind, parentType, operations)
             renderer.render()
-            operationsRenderers += qk to renderer
+            kindTypes += kind to renderer.interfaceType
         }
     }
 

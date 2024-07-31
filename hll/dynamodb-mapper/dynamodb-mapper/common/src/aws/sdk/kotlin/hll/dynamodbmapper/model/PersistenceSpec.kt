@@ -8,7 +8,8 @@ import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 
 /**
- * Represents a table (optionally specialized by a secondary index) in DynamoDB and an associated item schema
+ * Specifies how items can be read from and written to a specific DynamoDB location (such as a table or a secondary
+ * index)
  * @param T The type of objects which will be read from and/or written to this table/index
  */
 public interface PersistenceSpec<T> {
@@ -33,15 +34,16 @@ public interface PersistenceSpec<T> {
     public val schema: ItemSchema<T>
 
     /**
-     * A specialization of [PersistenceSpec] for a table/index with a primary key consisting of a single partition key
+     * Specifies how items can be read from and written to a specific DynamoDB location (such as a table or a secondary
+     * index) whose primary key consists of a single partition key
      */
     public interface PartitionKey<T, PK> : PersistenceSpec<T> {
         override val schema: ItemSchema.PartitionKey<T, PK>
     }
 
     /**
-     * A specialization of [PersistenceSpec] for a table/index with a primary key that is a composite of a partition key
-     * and a sort key
+     * Specifies how items can be read from and written to a specific DynamoDB location (such as a table or a secondary
+     * index) whose primary key consists of a composite of a partition key and a sort key
      */
     public interface CompositeKey<T, PK, SK> : PersistenceSpec<T> {
         override val schema: ItemSchema.CompositeKey<T, PK, SK>

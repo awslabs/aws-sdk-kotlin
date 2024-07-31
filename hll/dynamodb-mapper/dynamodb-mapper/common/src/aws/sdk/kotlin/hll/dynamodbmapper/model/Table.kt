@@ -14,7 +14,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.operations.TableOperations
  */
 public interface Table<T> :
     TableOperations<T>,
-    Queryable<T> {
+    ItemSource<T> {
 
     /**
      * Represents a table whose primary key is a single partition key
@@ -23,7 +23,7 @@ public interface Table<T> :
      */
     public interface PartitionKey<T, PK> :
         Table<T>,
-        Queryable.PartitionKey<T, PK> {
+        ItemSource.PartitionKey<T, PK> {
         // TODO reimplement operations to use pipeline, extension functions where appropriate, docs, etc.
         public suspend fun getItem(partitionKey: PK): T?
     }
@@ -36,7 +36,7 @@ public interface Table<T> :
      */
     public interface CompositeKey<T, PK, SK> :
         Table<T>,
-        Queryable.CompositeKey<T, PK, SK> {
+        ItemSource.CompositeKey<T, PK, SK> {
         // TODO reimplement operations to use pipeline, extension functions where appropriate, docs, etc.
         public suspend fun getItem(partitionKey: PK, sortKey: SK): T?
     }

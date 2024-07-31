@@ -13,7 +13,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.operations.IndexOperations
  */
 public interface Index<T> :
     IndexOperations<T>,
-    Queryable<T> {
+    ItemSource<T> {
 
     /**
      * Represents a secondary index whose primary key is a single partition key

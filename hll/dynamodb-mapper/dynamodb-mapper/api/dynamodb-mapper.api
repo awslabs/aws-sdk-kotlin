@@ -127,7 +127,7 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/items/SimpleItemConverter :
 	public fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Index : aws/sdk/kotlin/hll/dynamodbmapper/model/Queryable, aws/sdk/kotlin/hll/dynamodbmapper/operations/IndexOperations {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Index : aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource, aws/sdk/kotlin/hll/dynamodbmapper/operations/IndexOperations {
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Index$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/model/Index, aws/sdk/kotlin/hll/dynamodbmapper/model/PersistenceSpec$CompositeKey {
@@ -144,6 +144,15 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/model/ItemKt {
 	public static final fun itemOf ([Lkotlin/Pair;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 	public static final fun toItem (Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 	public static final fun toMutableItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Laws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource : aws/sdk/kotlin/hll/dynamodbmapper/model/PersistenceSpec, aws/sdk/kotlin/hll/dynamodbmapper/operations/ItemSourceOperations {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource, aws/sdk/kotlin/hll/dynamodbmapper/model/PersistenceSpec$CompositeKey {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource, aws/sdk/kotlin/hll/dynamodbmapper/model/PersistenceSpec$PartitionKey {
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/MutableItem : java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
@@ -170,25 +179,16 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Persiste
 	public abstract fun getSchema ()Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionKey;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Queryable : aws/sdk/kotlin/hll/dynamodbmapper/model/PersistenceSpec, aws/sdk/kotlin/hll/dynamodbmapper/operations/QueryableOperations {
-}
-
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Queryable$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/model/PersistenceSpec$CompositeKey, aws/sdk/kotlin/hll/dynamodbmapper/model/Queryable {
-}
-
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Queryable$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/model/PersistenceSpec$PartitionKey, aws/sdk/kotlin/hll/dynamodbmapper/model/Queryable {
-}
-
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Table : aws/sdk/kotlin/hll/dynamodbmapper/model/Queryable, aws/sdk/kotlin/hll/dynamodbmapper/operations/TableOperations {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Table : aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource, aws/sdk/kotlin/hll/dynamodbmapper/operations/TableOperations {
 	public abstract fun getIndex (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$CompositeKey;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Index$CompositeKey;
 	public abstract fun getIndex (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema$PartitionKey;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Index$PartitionKey;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Table$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/model/Queryable$CompositeKey, aws/sdk/kotlin/hll/dynamodbmapper/model/Table {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Table$CompositeKey : aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource$CompositeKey, aws/sdk/kotlin/hll/dynamodbmapper/model/Table {
 	public abstract fun getItem (Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Table$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/model/Queryable$PartitionKey, aws/sdk/kotlin/hll/dynamodbmapper/model/Table {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Table$PartitionKey : aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource$PartitionKey, aws/sdk/kotlin/hll/dynamodbmapper/model/Table {
 	public abstract fun getItem (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -243,7 +243,12 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/Get
 public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemResponse$Companion {
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/IndexOperations {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/IndexOperations : aws/sdk/kotlin/hll/dynamodbmapper/operations/ItemSourceOperations {
+	public abstract fun query (Laws/sdk/kotlin/hll/dynamodbmapper/operations/QueryRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun scan (Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/ItemSourceOperations {
 	public abstract fun query (Laws/sdk/kotlin/hll/dynamodbmapper/operations/QueryRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun scan (Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
@@ -307,11 +312,6 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/Que
 public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/QueryResponse$Companion {
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/QueryableOperations {
-	public abstract fun query (Laws/sdk/kotlin/hll/dynamodbmapper/operations/QueryRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun scan (Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
 public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/ScanKt {
 	public static final fun ScanRequest (Ljava/lang/Boolean;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Integer;Laws/sdk/kotlin/services/dynamodb/model/ReturnConsumedCapacity;Ljava/lang/Integer;Laws/sdk/kotlin/services/dynamodb/model/Select;Ljava/lang/Integer;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanRequest;
 	public static final fun ScanResponse (Laws/sdk/kotlin/services/dynamodb/model/ConsumedCapacity;ILjava/util/List;Ljava/lang/Object;I)Laws/sdk/kotlin/hll/dynamodbmapper/operations/ScanResponse;
@@ -344,7 +344,7 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/Sca
 public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/ScanResponse$Companion {
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/TableOperations {
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/TableOperations : aws/sdk/kotlin/hll/dynamodbmapper/operations/ItemSourceOperations {
 	public abstract fun deleteItem (Laws/sdk/kotlin/hll/dynamodbmapper/operations/DeleteItemRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun getItem (Laws/sdk/kotlin/hll/dynamodbmapper/operations/GetItemRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun putItem (Laws/sdk/kotlin/hll/dynamodbmapper/operations/PutItemRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
