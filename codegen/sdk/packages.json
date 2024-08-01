@@ -1777,6 +1777,12 @@
             "brazilName": "AwsSdkKotlinSsmIncidents"
         },
         {
+            "sdkId": "SSM QuickSetup",
+            "namespace": "aws.sdk.kotlin.services.ssmquicksetup",
+            "artifactName": "ssmquicksetup",
+            "brazilName": "AwsSdkKotlinSsmQuicksetup"
+        },
+        {
             "sdkId": "SSO",
             "namespace": "aws.sdk.kotlin.services.sso",
             "artifactName": "sso",

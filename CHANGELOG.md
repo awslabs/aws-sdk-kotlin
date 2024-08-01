@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.2] - 08/01/2024
+
+### Features
+* (**bedrock**) API and Documentation for Bedrock Model Copy feature. This feature lets you share and copy a custom model from one region to another or one account to another.
+* (**controlcatalog**) AWS Control Tower provides two new public APIs controlcatalog:ListControls and controlcatalog:GetControl under controlcatalog service namespace, which enable customers to programmatically retrieve control metadata of available controls.
+* (**iam**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**rds**) This release adds support for specifying optional MinACU parameter in CreateDBShardGroup and ModifyDBShardGroup API. DBShardGroup response will contain MinACU if specified.
+* (**sagemaker**) This release adds support for Amazon EMR Serverless applications in SageMaker Studio for running data processing jobs.
+* (**ssmquicksetup**) This release adds API support for the QuickSetup feature of AWS Systems Manager
+
+### Documentation
+* (**controltower**) Updated Control Tower service documentation for controlcatalog control ARN support with existing Control Tower public APIs
+* (**memorydb**) Doc only update for changes to deletion API.
+* (**support**) Doc only updates to CaseDetails
+
 ## [1.3.1] - 07/30/2024
 
 ### Features
