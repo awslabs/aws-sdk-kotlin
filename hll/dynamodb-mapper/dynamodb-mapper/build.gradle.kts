@@ -8,7 +8,7 @@ import com.amazonaws.services.dynamodbv2.local.main.ServerRunner
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer
 import com.google.devtools.ksp.gradle.KspTaskJvm
 import com.google.devtools.ksp.gradle.KspTaskMetadata
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
@@ -103,7 +103,7 @@ if (project.NATIVE_ENABLED) {
         }
     }
 
-    tasks.withType<KotlinCompile<*>> {
+    tasks.withType<KotlinCompilationTask<*>> {
         if (this !is KspTaskJvm) {
             // Ensure that any **non-KSP** compile tasks depend on the generated src move
             dependsOn(moveGenSrc)

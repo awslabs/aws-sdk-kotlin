@@ -56,6 +56,10 @@
     overflow-wrap: break-word;
 }
 
+.keyValue {
+    display: block;
+}
+
 /*
     Disable the playground run button for generated samples
     https://github.com/Kotlin/dokka/issues/3041

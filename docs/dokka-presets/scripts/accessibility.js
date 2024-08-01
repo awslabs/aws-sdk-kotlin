@@ -17,6 +17,11 @@ if (document.readyState === "interactive" || document.readyState === "complete" 
  * Fixes accessibility violation: "Provide a mechanism for skipping past repetitive content"
  */
 function applySkipLinks() {
+    document.querySelectorAll('#content').forEach(function(contentDiv) {
+       contentDiv.setAttribute('role', 'main');
+       contentDiv.setAttribute('tabindex', '-1');
+    });
+
     function insertSkipLink(element) {
         if (element.querySelectorAll(".skip-to-content").length > 0) { return }
 
@@ -71,6 +76,10 @@ function ensureNavButtonInteractable() {
     const navButtons = document.querySelectorAll('.navButton');
 
     navButtons.forEach(function(navButton) {
+        if (navButton.hasAttribute('aria-expanded')) {
+            return;
+        }
+
         // Make the navButton focusable, add accessibility information
         navButton.setAttribute('tabindex', '0');
         navButton.setAttribute('role', 'button');
@@ -107,49 +116,9 @@ window.addEventListener('navigationLoaded', ensureNavButtonInteractable);
  * Fixes accessibility violation: "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality"
  */
 function ensureContentReflow() {
-    const MIN_WINDOW_SIZE = 550
-
-    // Function to insert 'toggle content' button
-    function insertToggleContentButton(element) {
-        if (element.parentNode.querySelectorAll(".aws-toggle-content-btn").length > 0) { return }
-
-        const initiallyVisible = window.innerWidth >= MIN_WINDOW_SIZE
-
-        const toggleContent = document.createElement('button');
-        toggleContent.className = 'aws-toggle-content-btn';
-        toggleContent.textContent = initiallyVisible ? '▼' : '▶'
-        toggleContent.setAttribute('aria-expanded', initiallyVisible.toString());
-        toggleContent.setAttribute('aria-label', 'Toggle code block for' + element.getAttribute("data-togglable"));
-        toggleContent.setAttribute('aria-controls', element.id);
-
-        // Set initial visibility based on window size
-        element.style.display = initiallyVisible ? 'block' : 'none'
-
-        // Toggle visibility onclick
-        toggleContent.onclick = function() {
-            const isExpanded = toggleContent.getAttribute('aria-expanded') === 'true';
-            toggleContent.setAttribute('aria-expanded', (!isExpanded).toString());
-            element.style.display = isExpanded ? 'none' : 'block'
-            toggleContent.textContent = isExpanded ? '▶' : '▼'
-        };
-
-        element.parentNode.insertBefore(toggleContent, element);
-    }
-
-    document.querySelectorAll('.content[data-togglable]').forEach(insertToggleContentButton);
-
-    // Update content visibility on resize
-    window.addEventListener('resize', function() {
-        document.querySelectorAll('.content[data-togglable]').forEach(function(element) {
-            const toggleContent = element.previousSibling;
-            if (window.innerWidth < MIN_WINDOW_SIZE) {
-                element.style.display = 'none';
-                toggleContent.setAttribute('aria-expanded', 'false');
-            } else {
-                element.style.display = 'block';
-                toggleContent.setAttribute('aria-expanded', 'true');
-            }
-        });
+    // Ensure `content` sections are reflowable
+    document.querySelectorAll('.content[data-togglable]').forEach(function(content) {
+        content.style.display = 'block'
     });
 }
 window.addEventListener('navigationLoaded', ensureContentReflow);
