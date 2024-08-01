@@ -26,7 +26,7 @@ public class SimpleItemConverter<T, B>(
     private val build: B.() -> T,
     vararg descriptors: AttributeDescriptor<*, T, B>,
 ) : ItemConverter<T> {
-    private val descriptors = descriptors
+    public val descriptors: Map<String, AttributeDescriptor<*, T, B>> = descriptors
         .groupBy { it.name }
         .mapValues { (name, descriptor) ->
             requireNotNull(descriptor.singleOrNull()) {

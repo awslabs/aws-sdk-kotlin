@@ -7,9 +7,6 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.core.DataTypeGenerator
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.core.ImportDirective
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.*
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Member
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Operation
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Types
 
 // FIXME handle paginated operations differently (e.g., don't map pagination parameters, provide only Flow API)
 
@@ -23,6 +20,10 @@ class OperationRenderer(
     private val ctx: RenderContext,
     val operation: Operation,
 ) : RendererBase(ctx, operation.name) {
+    val members = operation.request.lowLevel.members.groupBy { m ->
+        m.codegenBehavior.also { ctx.info("  ${m.name} → $it") }
+    }
+
     companion object {
         fun factoryFunctionName(operation: Operation) = "${operation.methodName}Operation"
     }
@@ -31,35 +32,49 @@ class OperationRenderer(
         renderRequest()
         blankLine()
         renderResponse()
-        blankLine()
+
         renderOperationFactory()
     }
 
     private fun renderOperationFactory() {
         val factoryName = factoryFunctionName(operation)
 
-        withBlock("internal fun <T> #L(table: #T) = #T(", ")", factoryName, Types.tableSpec("T"), Types.Operation) {
-            write(
-                "initialize = { highLevelReq: #T -> #T(highLevelReq, table.schema, #T(table, #S)) },",
-                operation.request.type,
-                Types.HReqContextImpl,
-                Types.MapperContextImpl,
-                operation.name,
-            )
+        operation.itemSourceKinds.filterNot { it.isAbstract }.forEach { itemSourceKind ->
+            blankLine()
+            withBlock(
+                "internal fun <T> #L(spec: #T) = #T(",
+                ")",
+                factoryName,
+                itemSourceKind.getSpecType("T"),
+                Types.Operation,
+            ) {
+                write(
+                    "initialize = { highLevelReq: #T -> #T(highLevelReq, spec.schema, #T(spec, #S)) },",
+                    operation.request.type,
+                    Types.HReqContextImpl,
+                    Types.MapperContextImpl,
+                    operation.name,
+                )
 
-            write("serialize = { highLevelReq, schema -> highLevelReq.convert(table.name, schema) },")
-            write("lowLevelInvoke = table.mapper.client::#L,", operation.methodName)
-            write("deserialize = #L::convert,", operation.response.lowLevelName)
-            write("interceptors = table.mapper.config.interceptors,")
+                writeInline("serialize = { highLevelReq, schema -> highLevelReq.convert(")
+                members(MemberCodegenBehavior.Hoist) {
+                    if (name in itemSourceKind.hoistedFields) {
+                        writeInline("spec.#L, ", name)
+                    } else {
+                        writeInline("#L = null, ", name)
+                    }
+                }
+                write("schema) },")
+
+                write("lowLevelInvoke = spec.mapper.client::#L,", operation.methodName)
+                write("deserialize = #L::convert,", operation.response.lowLevelName)
+                write("interceptors = spec.mapper.config.interceptors,")
+            }
         }
     }
 
     private fun renderRequest() {
         ctx.info("For type ${operation.request.lowLevelName}:")
-        val members = operation.request.lowLevel.members.groupBy { m ->
-            m.codegenBehavior.also { ctx.info("  ${m.name} → $it") }
-        }
-
         DataTypeGenerator(ctx, this, operation.request).generate()
         blankLine()
 

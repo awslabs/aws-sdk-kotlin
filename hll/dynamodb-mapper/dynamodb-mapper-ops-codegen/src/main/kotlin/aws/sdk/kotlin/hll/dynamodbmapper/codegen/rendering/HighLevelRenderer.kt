@@ -4,7 +4,10 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering
 
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.ItemSourceKind
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Operation
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Type
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.itemSourceKinds
 
 /**
  * The parent renderer for all codegen from this package. This class orchestrates the various sub-renderers.
@@ -14,7 +17,16 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Operation
 class HighLevelRenderer(private val ctx: RenderContext, private val operations: List<Operation>) {
     fun render() {
         operations.forEach(::render)
-        TableOperationsRenderer(ctx, operations).render()
+
+        val kindTypes = mutableMapOf<ItemSourceKind, Type>()
+        ItemSourceKind.entries.forEach { kind ->
+            val parentType = kind.parent?.let { kindTypes[it] }
+            val operations = this.operations.filter { kind in it.itemSourceKinds }
+
+            val renderer = OperationsTypeRenderer(ctx, kind, parentType, operations)
+            renderer.render()
+            kindTypes += kind to renderer.interfaceType
+        }
     }
 
     private fun render(operation: Operation) {
