@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.3] - 08/02/2024
+
+### Features
+* (**cloudwatch**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**ecs**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**glue**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**ivs**) updates cloudtrail event source for SDKs
+* (**ivschat**) updates cloudtrail event source for SDKs
+* (**ivsrealtime**) updates cloudtrail event source for SDKs
+* (**kinesis**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**resiliencehub**) Customers are presented with the grouping recommendations and can determine if the recommendations are accurate and apply to their case. This feature simplifies onboarding by organizing resources into appropriate AppComponents.
+* (**route53**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**ssm**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**wafregional**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
 ## [1.3.2] - 08/01/2024
 
 ### Features
