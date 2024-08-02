@@ -83,7 +83,10 @@ function ensureNavButtonInteractable() {
         // Make the navButton focusable, add accessibility information
         navButton.setAttribute('tabindex', '0');
         navButton.setAttribute('role', 'button');
-        navButton.setAttribute('aria-expanded', 'false');
+
+        const sideMenuPartParent = navButton.closest(".sideMenuPart")
+        const navButtonExpanded = sideMenuPartParent ? (sideMenuPartParent.classList.contains('hidden') ? 'false' : 'true') : 'false'
+        navButton.setAttribute('aria-expanded', navButtonExpanded);
 
         // Grab the page ID, use it for aria-label and aria-controls
         const sectionName = navButton.parentElement.parentElement.getAttribute('pageid')
