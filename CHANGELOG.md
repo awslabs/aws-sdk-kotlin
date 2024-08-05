@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.4] - 08/05/2024
+
+### Features
+* (**datazone**) This releases Data Product feature. Data Products allow grouping data assets into cohesive, self-contained units for ease of publishing for data producers, and ease of finding and accessing for data consumers.
+* (**ecr**) Released two new APIs along with documentation updates. The GetAccountSetting API is used to view the current basic scan type version setting for your registry, while the PutAccountSetting API is used to update the basic scan type version for your registry.
+* (**kinesisvideowebrtcstorage**) Add JoinStorageSessionAsViewer API
+
+### Documentation
+* (**pi**) Added a description for the Dimension db.sql.tokenized_id on the DimensionGroup data type page.
+
 ## [1.3.3] - 08/02/2024
 
 ### Features
