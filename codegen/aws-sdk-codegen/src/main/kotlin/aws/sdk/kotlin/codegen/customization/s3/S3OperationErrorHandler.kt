@@ -82,7 +82,7 @@ class S3OperationErrorHandler : KotlinIntegration {
         }
 
         writer.withBlock("catch (ex: Exception) {", "}") {
-            withBlock("throw #T(#S).also {", "}", exceptionBaseSymbol, "Failed to parse response as ${ctx.protocol.name}") {
+            withBlock("throw #T(#S).also {", "}", exceptionBaseSymbol, "Failed to parse response as ${ctx.protocol.name} error") {
                 write("#T(it, wrappedCall.response, null)", setS3ErrorMetadata)
             }
         }
