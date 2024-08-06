@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.5] - 08/06/2024
+
+### Features
+* (**bedrockagentruntime**) Introduce model invocation output traces for orchestration traces, which contain the model's raw response and usage.
+* (**cognitoidentityprovider**) Advanced security feature updates to include password history and log export for Cognito user pools.
+* (**costoptimizationhub**) This release adds savings percentage support to the ListRecommendationSummaries API.
+* (**workspaces**) Added support for BYOL_GRAPHICS_G4DN_WSP IngestionProcess
+
 ## [1.3.4] - 08/05/2024
 
 ### Features
