@@ -12,8 +12,8 @@ import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.Interceptor
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.LReqContext
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.DdbLocalTest
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.ddbItem
-import aws.sdk.kotlin.hll.dynamodbmapper.values.IntConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContentEquals
 import kotlin.test.assertNotNull
@@ -38,11 +38,11 @@ class QueryTest : DdbLocalTest() {
         private val empConverter = SimpleItemConverter(
             ::NamedEmp,
             { this },
-            AttributeDescriptor("companyId", NamedEmp::companyId, NamedEmp::companyId::set, StringConverter),
-            AttributeDescriptor("empId", NamedEmp::empId, NamedEmp::empId::set, StringConverter),
-            AttributeDescriptor("name", NamedEmp::name, NamedEmp::name::set, StringConverter),
-            AttributeDescriptor("title", NamedEmp::title, NamedEmp::title::set, StringConverter),
-            AttributeDescriptor("tenureYears", NamedEmp::tenureYears, NamedEmp::tenureYears::set, IntConverter),
+            AttributeDescriptor("companyId", NamedEmp::companyId, NamedEmp::companyId::set, StringConverter.Default),
+            AttributeDescriptor("empId", NamedEmp::empId, NamedEmp::empId::set, StringConverter.Default),
+            AttributeDescriptor("name", NamedEmp::name, NamedEmp::name::set, StringConverter.Default),
+            AttributeDescriptor("title", NamedEmp::title, NamedEmp::title::set, StringConverter.Default),
+            AttributeDescriptor("tenureYears", NamedEmp::tenureYears, NamedEmp::tenureYears::set, IntConverter.Default),
         )
 
         private val namedEmpSchema = ItemSchema(empConverter, KeySpec.String("companyId"), KeySpec.String("empId"))
@@ -58,10 +58,10 @@ class QueryTest : DdbLocalTest() {
         private val titleConverter = SimpleItemConverter(
             ::TitleEmp,
             { this },
-            AttributeDescriptor("title", TitleEmp::title, TitleEmp::title::set, StringConverter),
-            AttributeDescriptor("name", TitleEmp::name, TitleEmp::name::set, StringConverter),
-            AttributeDescriptor("empId", TitleEmp::empId, TitleEmp::empId::set, StringConverter),
-            AttributeDescriptor("companyId", TitleEmp::companyId, TitleEmp::companyId::set, StringConverter),
+            AttributeDescriptor("title", TitleEmp::title, TitleEmp::title::set, StringConverter.Default),
+            AttributeDescriptor("name", TitleEmp::name, TitleEmp::name::set, StringConverter.Default),
+            AttributeDescriptor("empId", TitleEmp::empId, TitleEmp::empId::set, StringConverter.Default),
+            AttributeDescriptor("companyId", TitleEmp::companyId, TitleEmp::companyId::set, StringConverter.Default),
         )
 
         private val titleSchema = ItemSchema(titleConverter, KeySpec.String("title"), KeySpec.String("name"))
