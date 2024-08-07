@@ -1,0 +1,5 @@
+{
+    "id": "2f25d21b-dda1-4189-ade3-d26de91899fb",
+    "type": "bugfix",
+    "description": "Change order of profile and STS web identity credentials providers in default credentials provider chain"
+}
