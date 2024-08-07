@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.6] - 08/07/2024
+
+### Features
+* (**appintegrations**) Updated CreateDataIntegration and CreateDataIntegrationAssociation API to support bulk data export from Amazon Connect Customer Profiles to the customer S3 bucket.
+* (**glue**) Introducing AWS Glue Data Quality anomaly detection, a new functionality that uses ML-based solutions to detect data anomalies users have not explicitly defined rules for.
+
+### Miscellaneous
+* Upgrade to Kotlin 2.0.10
+
 ## [1.3.5] - 08/06/2024
 
 ### Features
