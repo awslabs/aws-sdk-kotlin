@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.7] - 08/08/2024
+
+### Features
+* (**cognitoidentityprovider**) Added support for threat protection for custom authentication in Amazon Cognito user pools.
+* (**connect**) This release fixes a regression in number of access control tags that are allowed to be added to a security profile in Amazon Connect. You can now add up to four access control tags on a single security profile.
+* (**ec2**) Launch of private IPv6 addressing for VPCs and Subnets. VPC IPAM supports the planning and monitoring of private IPv6 usage.
+* (**glue**) This release adds support to retrieve the validation status when creating or updating Glue Data Catalog Views. Also added is support for BasicCatalogTarget partition keys.
+
 ## [1.3.6] - 08/07/2024
 
 ### Features
