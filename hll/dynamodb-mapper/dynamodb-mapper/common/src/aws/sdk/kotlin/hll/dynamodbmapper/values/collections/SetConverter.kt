@@ -13,6 +13,9 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  * @param elementConverter A [ValueConverter] for the elements of sets
  */
 public class SetConverter<T>(private val elementConverter: ValueConverter<T>) : ValueConverter<Set<T>> {
-    override fun fromAv(attr: AttributeValue): Set<T> = attr.asL().map(elementConverter::fromAv).toSet()
-    override fun toAv(value: Set<T>): AttributeValue = AttributeValue.L(value.map(elementConverter::toAv))
+    override fun fromAttributeValue(attr: AttributeValue): Set<T> =
+        attr.asL().map(elementConverter::fromAttributeValue).toSet()
+
+    override fun toAttributeValue(value: Set<T>): AttributeValue =
+        AttributeValue.L(value.map(elementConverter::toAttributeValue))
 }

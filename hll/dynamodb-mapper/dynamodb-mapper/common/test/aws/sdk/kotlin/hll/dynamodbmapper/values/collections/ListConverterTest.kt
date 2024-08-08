@@ -28,14 +28,14 @@ class ListConverterTest : ValueConvertersTest() {
 private data class Foo(val bar: String, val baz: Int)
 
 private object FooConverter : ValueConverter<Foo> {
-    override fun fromAv(attr: AttributeValue): Foo {
+    override fun fromAttributeValue(attr: AttributeValue): Foo {
         val map = attr.asM()
         val bar = map.getValue("bar").asS()
         val baz = map.getValue("baz").asN().toInt()
         return Foo(bar, baz)
     }
 
-    override fun toAv(value: Foo) = AttributeValue.M(
+    override fun toAttributeValue(value: Foo) = AttributeValue.M(
         mapOf(
             "bar" to attr(value.bar),
             "baz" to attr(value.baz),

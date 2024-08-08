@@ -13,6 +13,9 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  * @param elementConverter A [ValueConverter] for the elements of lists
  */
 public class ListConverter<T>(private val elementConverter: ValueConverter<T>) : ValueConverter<List<T>> {
-    override fun fromAv(attr: AttributeValue): List<T> = attr.asL().map(elementConverter::fromAv)
-    override fun toAv(value: List<T>): AttributeValue = AttributeValue.L(value.map(elementConverter::toAv))
+    override fun fromAttributeValue(attr: AttributeValue): List<T> =
+        attr.asL().map(elementConverter::fromAttributeValue)
+
+    override fun toAttributeValue(value: List<T>): AttributeValue =
+        AttributeValue.L(value.map(elementConverter::toAttributeValue))
 }

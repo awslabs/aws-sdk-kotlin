@@ -19,6 +19,6 @@ public class BooleanConverter : ValueConverter<Boolean> {
         public val Default: BooleanConverter = BooleanConverter()
     }
 
-    override fun fromAv(attr: AttributeValue): Boolean = attr.asBool()
-    override fun toAv(value: Boolean): AttributeValue = AttributeValue.Bool(value)
+    override fun fromAttributeValue(attr: AttributeValue): Boolean = attr.asBool()
+    override fun toAttributeValue(value: Boolean): AttributeValue = AttributeValue.Bool(value)
 }

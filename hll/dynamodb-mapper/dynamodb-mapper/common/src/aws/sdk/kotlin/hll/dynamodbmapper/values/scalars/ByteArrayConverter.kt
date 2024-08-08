@@ -19,6 +19,6 @@ public class ByteArrayConverter : ValueConverter<ByteArray> {
         public val Default: ByteArrayConverter = ByteArrayConverter()
     }
 
-    override fun fromAv(attr: AttributeValue): ByteArray = attr.asB()
-    override fun toAv(value: ByteArray): AttributeValue = AttributeValue.B(value)
+    override fun fromAttributeValue(attr: AttributeValue): ByteArray = attr.asB()
+    override fun toAttributeValue(value: ByteArray): AttributeValue = AttributeValue.B(value)
 }

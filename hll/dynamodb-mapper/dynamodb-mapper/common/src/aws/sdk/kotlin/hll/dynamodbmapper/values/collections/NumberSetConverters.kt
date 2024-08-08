@@ -8,12 +8,13 @@ import aws.sdk.kotlin.hll.dynamodbmapper.values.ValueConverter
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 /**
- * Converts between a [Set] of [String] elements and
+ * Converts between a [Set] of [Number] elements and
  * [DynamoDB `NS` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.SetTypes)
+ * @param N The type of high-level values which will be converted
  */
-public abstract class NumberSetConverter<N>(private val fromString: (String) -> N) : ValueConverter<Set<N>> {
-    override fun fromAv(attr: AttributeValue): Set<N> = attr.asNs().map(fromString).toSet()
-    override fun toAv(value: Set<N>): AttributeValue = AttributeValue.Ns(value.map { it.toString() })
+public abstract class NumberSetConverter<N : Any>(private val fromString: (String) -> N) : ValueConverter<Set<N>> {
+    override fun fromAttributeValue(attr: AttributeValue): Set<N> = attr.asNs().map(fromString).toSet()
+    override fun toAttributeValue(value: Set<N>): AttributeValue = AttributeValue.Ns(value.map { it.toString() })
 }
 
 /**

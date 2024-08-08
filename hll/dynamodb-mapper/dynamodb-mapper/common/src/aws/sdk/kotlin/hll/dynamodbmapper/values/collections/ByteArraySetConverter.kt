@@ -19,6 +19,6 @@ public class ByteArraySetConverter : ValueConverter<Set<ByteArray>> {
         public val Default: ByteArraySetConverter = ByteArraySetConverter()
     }
 
-    override fun fromAv(attr: AttributeValue): Set<ByteArray> = attr.asBs().toSet()
-    override fun toAv(value: Set<ByteArray>): AttributeValue = AttributeValue.Bs(value.toList())
+    override fun fromAttributeValue(attr: AttributeValue): Set<ByteArray> = attr.asBs().toSet()
+    override fun toAttributeValue(value: Set<ByteArray>): AttributeValue = AttributeValue.Bs(value.toList())
 }

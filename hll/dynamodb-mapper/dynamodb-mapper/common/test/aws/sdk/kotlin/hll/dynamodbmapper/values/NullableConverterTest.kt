@@ -18,6 +18,6 @@ class NullableConverterTest : ValueConvertersTest() {
 }
 
 private object StringReverseConverter : ValueConverter<String> {
-    override fun fromAv(attr: AttributeValue) = attr.asS().reversed()
-    override fun toAv(value: String) = AttributeValue.S(value.reversed())
+    override fun fromAttributeValue(attr: AttributeValue) = attr.asS().reversed()
+    override fun toAttributeValue(value: String) = AttributeValue.S(value.reversed())
 }

@@ -470,22 +470,22 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInputKt {
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/NullableConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public fun <init> (Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;)V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
-	public abstract fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public abstract fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public abstract fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public abstract fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/ByteArraySetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/collections/ByteArraySetConverter$Companion;
 	public fun <init> ()V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/ByteArraySetConverter$Companion {
@@ -501,26 +501,18 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/ByteSetC
 	public final fun getDefault ()Laws/sdk/kotlin/hll/dynamodbmapper/values/collections/ByteSetConverter;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/CharArraySetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/CharArraySetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/collections/TextSetConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/collections/CharArraySetConverter$Companion;
 	public fun <init> ()V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/CharArraySetConverter$Companion {
 	public final fun getDefault ()Laws/sdk/kotlin/hll/dynamodbmapper/values/collections/CharArraySetConverter;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/CharSetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/CharSetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/collections/TextSetConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/collections/CharSetConverter$Companion;
 	public fun <init> ()V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/CharSetConverter$Companion {
@@ -556,10 +548,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/IntSetCo
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/ListConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public fun <init> (Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;)V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/List;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Ljava/util/List;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/List;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue (Ljava/util/List;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/LongSetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/collections/NumberSetConverter {
@@ -573,26 +565,26 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/LongSetC
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/MapConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public fun <init> (Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;)V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Map;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Ljava/util/Map;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Map;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue (Ljava/util/Map;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public abstract class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/NumberSetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public fun <init> (Lkotlin/jvm/functions/Function1;)V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/SetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public fun <init> (Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;)V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/ShortSetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/collections/NumberSetConverter {
@@ -604,17 +596,22 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/ShortSet
 	public final fun getDefault ()Laws/sdk/kotlin/hll/dynamodbmapper/values/collections/ShortSetConverter;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/StringSetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/StringSetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/collections/TextSetConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/collections/StringSetConverter$Companion;
 	public fun <init> ()V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/StringSetConverter$Companion {
 	public final fun getDefault ()Laws/sdk/kotlin/hll/dynamodbmapper/values/collections/StringSetConverter;
+}
+
+public abstract class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/TextSetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+	public fun <init> (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/util/Set;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue (Ljava/util/Set;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/UByteSetConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/collections/NumberSetConverter {
@@ -656,10 +653,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/UShortSe
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/BooleanConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/BooleanConverter$Companion;
 	public fun <init> ()V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Boolean;
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Z)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Boolean;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue (Z)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/BooleanConverter$Companion {
@@ -669,10 +666,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/BooleanConve
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/ByteArrayConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/ByteArrayConverter$Companion;
 	public fun <init> ()V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)[B
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv ([B)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)[B
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue ([B)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/ByteArrayConverter$Companion {
@@ -688,26 +685,22 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/ByteConverte
 	public final fun getDefault ()Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/ByteConverter;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharArrayConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharArrayConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharArrayConverter$Companion;
 	public fun <init> ()V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)[C
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv ([C)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)[C
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue ([C)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharArrayConverter$Companion {
 	public final fun getDefault ()Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharArrayConverter;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharConverter$Companion;
 	public fun <init> ()V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Character;
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun toAv (C)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharConverter$Companion {
@@ -717,8 +710,8 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/CharConverte
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/DoubleConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/NumberConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/DoubleConverter$Companion;
 	public fun <init> ()V
-	public fun toAv (D)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue (D)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/DoubleConverter$Companion {
@@ -728,10 +721,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/DoubleConver
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/EnumConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/EnumConverter$Companion;
 	public fun <init> (Lkotlin/jvm/functions/Function1;)V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Enum;
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun toAv (Ljava/lang/Enum;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Enum;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAttributeValue (Ljava/lang/Enum;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/EnumConverter$Companion {
@@ -740,8 +733,8 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/EnumConverte
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/FloatConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/NumberConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/FloatConverter$Companion;
 	public fun <init> ()V
-	public fun toAv (F)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun toAttributeValue (F)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/FloatConverter$Companion {
@@ -768,8 +761,8 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/LongConverte
 
 public abstract class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/NumberConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public fun <init> (Lkotlin/jvm/functions/Function1;)V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/ShortConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/NumberConverter {
@@ -781,17 +774,20 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/ShortConvert
 	public final fun getDefault ()Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/ShortConverter;
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/StringConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/StringConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/StringConverter$Companion;
 	public fun <init> ()V
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/String;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public fun toAv (Ljava/lang/String;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/StringConverter$Companion {
 	public final fun getDefault ()Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/StringConverter;
+}
+
+public abstract class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
+	public fun <init> (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/UByteConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/NumberConverter {
@@ -833,10 +829,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/UShortConver
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/DocumentValueConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/DocumentValueConverter$Companion;
 	public fun <init> (Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;Laws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/content/Document;
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun toAv (Laws/smithy/kotlin/runtime/content/Document;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/content/Document;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAttributeValue (Laws/smithy/kotlin/runtime/content/Document;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/DocumentValueConverter$Companion {
@@ -852,10 +848,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantC
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantConverter$EpochMs : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantConverter$EpochMs$Companion;
 	public fun <init> ()V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/time/Instant;
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun toAv (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/time/Instant;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAttributeValue (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantConverter$EpochMs$Companion {
@@ -865,10 +861,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantC
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantConverter$EpochS : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantConverter$EpochS$Companion;
 	public fun <init> ()V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/time/Instant;
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun toAv (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/time/Instant;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAttributeValue (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantConverter$EpochS$Companion {
@@ -878,10 +874,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantC
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantConverter$Iso8601 : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantConverter$Iso8601$Companion;
 	public fun <init> ()V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/time/Instant;
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun toAv (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/time/Instant;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAttributeValue (Laws/smithy/kotlin/runtime/time/Instant;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantConverter$Iso8601$Companion {
@@ -891,10 +887,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/InstantC
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/UrlConverter : aws/sdk/kotlin/hll/dynamodbmapper/values/ValueConverter {
 	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/UrlConverter$Companion;
 	public fun <init> ()V
-	public fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/net/url/Url;
-	public synthetic fun fromAv (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
-	public fun toAv (Laws/smithy/kotlin/runtime/net/url/Url;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
-	public synthetic fun toAv (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/smithy/kotlin/runtime/net/url/Url;
+	public synthetic fun fromAttributeValue (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Ljava/lang/Object;
+	public fun toAttributeValue (Laws/smithy/kotlin/runtime/net/url/Url;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun toAttributeValue (Ljava/lang/Object;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/smithytypes/UrlConverter$Companion {

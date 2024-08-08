@@ -12,20 +12,16 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  * @param N The type of number handled by this converter
  * @param parse A function which parses a [String] into a number of type [N] if possible or `null` if the parsing failed
  */
-public abstract class NumberConverter<N>(private val parse: (String) -> N?) : ValueConverter<N> {
-    override fun fromAv(attr: AttributeValue): N {
-        val n = attr.asN()
-        return requireNotNull(parse(attr.asN())) { "Error parsing $n as a number" }
-    }
-
-    override fun toAv(value: N): AttributeValue = AttributeValue.N(value.toString())
+public abstract class NumberConverter<N>(private val parse: (String) -> N) : ValueConverter<N> {
+    override fun fromAttributeValue(attr: AttributeValue): N = parse(attr.asN())
+    override fun toAttributeValue(value: N): AttributeValue = AttributeValue.N(value.toString())
 }
 
 /**
  * Converts between [Byte] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class ByteConverter : NumberConverter<Byte>(String::toByteOrNull) {
+public class ByteConverter : NumberConverter<Byte>(String::toByte) {
     public companion object {
         /**
          * The default instance of [ByteConverter]
@@ -38,10 +34,10 @@ public class ByteConverter : NumberConverter<Byte>(String::toByteOrNull) {
  * Converts between [Double] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class DoubleConverter : NumberConverter<Double>(String::toDoubleOrNull) {
-    override fun toAv(value: Double): AttributeValue {
+public class DoubleConverter : NumberConverter<Double>(String::toDouble) {
+    override fun toAttributeValue(value: Double): AttributeValue {
         require(value.isFinite()) { "Cannot convert $value: only finite numbers are supported" }
-        return super.toAv(value)
+        return super.toAttributeValue(value)
     }
 
     public companion object {
@@ -56,10 +52,10 @@ public class DoubleConverter : NumberConverter<Double>(String::toDoubleOrNull) {
  * Converts between [Float] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class FloatConverter : NumberConverter<Float>(String::toFloatOrNull) {
-    override fun toAv(value: Float): AttributeValue {
+public class FloatConverter : NumberConverter<Float>(String::toFloat) {
+    override fun toAttributeValue(value: Float): AttributeValue {
         require(value.isFinite()) { "Cannot convert $value: only finite numbers are supported" }
-        return super.toAv(value)
+        return super.toAttributeValue(value)
     }
 
     public companion object {
@@ -74,7 +70,7 @@ public class FloatConverter : NumberConverter<Float>(String::toFloatOrNull) {
  * Converts between [Int] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class IntConverter : NumberConverter<Int>(String::toIntOrNull) {
+public class IntConverter : NumberConverter<Int>(String::toInt) {
     public companion object {
         /**
          * The default instance of [IntConverter]
@@ -87,7 +83,7 @@ public class IntConverter : NumberConverter<Int>(String::toIntOrNull) {
  * Converts between [Long] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class LongConverter : NumberConverter<Long>(String::toLongOrNull) {
+public class LongConverter : NumberConverter<Long>(String::toLong) {
     public companion object {
         /**
          * The default instance of [LongConverter]
@@ -100,7 +96,7 @@ public class LongConverter : NumberConverter<Long>(String::toLongOrNull) {
  * Converts between [Short] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class ShortConverter : NumberConverter<Short>(String::toShortOrNull) {
+public class ShortConverter : NumberConverter<Short>(String::toShort) {
     public companion object {
         /**
          * The default instance of [ShortConverter]
@@ -113,7 +109,7 @@ public class ShortConverter : NumberConverter<Short>(String::toShortOrNull) {
  * Converts between [UByte] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class UByteConverter : NumberConverter<UByte>(String::toUByteOrNull) {
+public class UByteConverter : NumberConverter<UByte>(String::toUByte) {
     public companion object {
         /**
          * The default instance of [UByteConverter]
@@ -126,7 +122,7 @@ public class UByteConverter : NumberConverter<UByte>(String::toUByteOrNull) {
  * Converts between [UInt] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class UIntConverter : NumberConverter<UInt>(String::toUIntOrNull) {
+public class UIntConverter : NumberConverter<UInt>(String::toUInt) {
     public companion object {
         /**
          * The default instance of [UIntConverter]
@@ -139,7 +135,7 @@ public class UIntConverter : NumberConverter<UInt>(String::toUIntOrNull) {
  * Converts between [ULong] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class ULongConverter : NumberConverter<ULong>(String::toULongOrNull) {
+public class ULongConverter : NumberConverter<ULong>(String::toULong) {
     public companion object {
         /**
          * The default instance of [ULongConverter]
@@ -152,7 +148,7 @@ public class ULongConverter : NumberConverter<ULong>(String::toULongOrNull) {
  * Converts between [UShort] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class UShortConverter : NumberConverter<UShort>(String::toUShortOrNull) {
+public class UShortConverter : NumberConverter<UShort>(String::toUShort) {
     public companion object {
         /**
          * The default instance of [UShortConverter]

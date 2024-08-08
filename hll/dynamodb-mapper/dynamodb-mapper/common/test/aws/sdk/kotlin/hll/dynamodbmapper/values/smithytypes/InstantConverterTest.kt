@@ -17,14 +17,14 @@ class InstantConverterTest : ValueConvertersTest() {
     @Test
     fun testEpochS() = given(InstantConverter.EpochS.Default) {
         WHOLE_TIME inDdbIs 1234567890L
-        NS_TIME inDdbIs 1234567890L whenGoing Direction.TO_DDB
+        NS_TIME inDdbIs 1234567890L whenGoing Direction.TO_ATTRIBUTE_VALUE
     }
 
     @Test
     fun testEpochMs() = given(InstantConverter.EpochMs.Default) {
         WHOLE_TIME inDdbIs 1234567890000L
-        NS_TIME inDdbIs 1234567890123L whenGoing Direction.TO_DDB
-        MS_TIME inDdbIs 1234567890123L whenGoing Direction.FROM_DDB
+        NS_TIME inDdbIs 1234567890123L whenGoing Direction.TO_ATTRIBUTE_VALUE
+        MS_TIME inDdbIs 1234567890123L whenGoing Direction.FROM_ATTRIBUTE_VALUE
     }
 
     @Test

@@ -20,6 +20,6 @@ public class UrlConverter : ValueConverter<Url> {
         public val Default: UrlConverter = UrlConverter()
     }
 
-    override fun fromAv(attr: AttributeValue): Url = Url.parse(attr.asS())
-    override fun toAv(value: Url): AttributeValue = AttributeValue.S(value.toString())
+    override fun fromAttributeValue(attr: AttributeValue): Url = Url.parse(attr.asS())
+    override fun toAttributeValue(value: Url): AttributeValue = AttributeValue.S(value.toString())
 }

@@ -20,6 +20,6 @@ public class EnumConverter<E : Enum<E>>(private val fromString: (String) -> E) :
         public inline operator fun <reified E : Enum<E>> invoke(): EnumConverter<E> = EnumConverter(::enumValueOf)
     }
 
-    override fun fromAv(attr: AttributeValue): E = fromString(attr.asS())
-    override fun toAv(value: E): AttributeValue = AttributeValue.S(value.name)
+    override fun fromAttributeValue(attr: AttributeValue): E = fromString(attr.asS())
+    override fun toAttributeValue(value: E): AttributeValue = AttributeValue.S(value.name)
 }

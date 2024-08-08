@@ -43,7 +43,7 @@ public class DocumentValueConverter(
          * * [Long] — Anything else
          */
         public val DefaultNumberConverter: ValueConverter<Number> = object : ValueConverter<Number> {
-            override fun fromAv(attr: AttributeValue): Number {
+            override fun fromAttributeValue(attr: AttributeValue): Number {
                 val numberString = attr.asN()
                 return when {
                     '.' in numberString -> numberString.toDouble()
@@ -54,7 +54,7 @@ public class DocumentValueConverter(
                 }
             }
 
-            override fun toAv(value: Number): AttributeValue = AttributeValue.N(value.toString())
+            override fun toAttributeValue(value: Number): AttributeValue = AttributeValue.N(value.toString())
         }
 
         /**
@@ -70,20 +70,20 @@ public class DocumentValueConverter(
         )
     }
 
-    override fun fromAv(attr: AttributeValue): Document = when (attr) {
-        is AttributeValue.N -> Document.Number(numberConverter.fromAv(attr))
-        is AttributeValue.S -> Document.String(stringConverter.fromAv(attr))
-        is AttributeValue.Bool -> Document.Boolean(booleanConverter.fromAv(attr))
-        is AttributeValue.L -> Document.List(listConverter.fromAv(attr))
-        is AttributeValue.M -> Document.Map(mapConverter.fromAv(attr))
+    override fun fromAttributeValue(attr: AttributeValue): Document = when (attr) {
+        is AttributeValue.N -> Document.Number(numberConverter.fromAttributeValue(attr))
+        is AttributeValue.S -> Document.String(stringConverter.fromAttributeValue(attr))
+        is AttributeValue.Bool -> Document.Boolean(booleanConverter.fromAttributeValue(attr))
+        is AttributeValue.L -> Document.List(listConverter.fromAttributeValue(attr))
+        is AttributeValue.M -> Document.Map(mapConverter.fromAttributeValue(attr))
         else -> throw IllegalArgumentException("Documents do not support ${attr::class.qualifiedName} values")
     }
 
-    override fun toAv(value: Document): AttributeValue = when (value) {
-        is Document.Number -> numberConverter.toAv(value.value)
-        is Document.String -> stringConverter.toAv(value.value)
-        is Document.Boolean -> booleanConverter.toAv(value.value)
-        is Document.List -> listConverter.toAv(value.value)
-        is Document.Map -> mapConverter.toAv(value.value)
+    override fun toAttributeValue(value: Document): AttributeValue = when (value) {
+        is Document.Number -> numberConverter.toAttributeValue(value.value)
+        is Document.String -> stringConverter.toAttributeValue(value.value)
+        is Document.Boolean -> booleanConverter.toAttributeValue(value.value)
+        is Document.List -> listConverter.toAttributeValue(value.value)
+        is Document.Map -> mapConverter.toAttributeValue(value.value)
     }
 }

@@ -27,12 +27,12 @@ private data class Bar(val foo: Boolean, val baz: List<String>) {
 }
 
 private object BarConverter : ValueConverter<Bar> {
-    override fun fromAv(attr: AttributeValue): Bar {
+    override fun fromAttributeValue(attr: AttributeValue): Bar {
         val list = attr.asL()
         val foo = list.first().asBool()
         val baz = list.drop(1).map { it.asS() }
         return Bar(foo, baz)
     }
 
-    override fun toAv(value: Bar) = AttributeValue.L(listOf(attr(value.foo)) + value.baz.map(::attr))
+    override fun toAttributeValue(value: Bar) = AttributeValue.L(listOf(attr(value.foo)) + value.baz.map(::attr))
 }

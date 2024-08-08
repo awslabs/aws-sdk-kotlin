@@ -33,8 +33,11 @@ public object InstantConverter {
             public val Default: EpochMs = EpochMs()
         }
 
-        override fun fromAv(attr: AttributeValue): Instant = Instant.fromEpochMilliseconds(attr.asN().toLong())
-        override fun toAv(value: Instant): AttributeValue = AttributeValue.N(value.epochMilliseconds.toString())
+        override fun fromAttributeValue(attr: AttributeValue): Instant =
+            Instant.fromEpochMilliseconds(attr.asN().toLong())
+
+        override fun toAttributeValue(value: Instant): AttributeValue =
+            AttributeValue.N(value.epochMilliseconds.toString())
     }
 
     /**
@@ -50,8 +53,8 @@ public object InstantConverter {
             public val Default: EpochS = EpochS()
         }
 
-        override fun fromAv(attr: AttributeValue): Instant = Instant.fromEpochSeconds(attr.asN().toLong())
-        override fun toAv(value: Instant): AttributeValue = AttributeValue.N(value.epochSeconds.toString())
+        override fun fromAttributeValue(attr: AttributeValue): Instant = Instant.fromEpochSeconds(attr.asN().toLong())
+        override fun toAttributeValue(value: Instant): AttributeValue = AttributeValue.N(value.epochSeconds.toString())
     }
 
     /**
@@ -67,8 +70,8 @@ public object InstantConverter {
             public val Default: Iso8601 = Iso8601()
         }
 
-        override fun fromAv(attr: AttributeValue): Instant = Instant.fromIso8601(attr.asS())
-        override fun toAv(value: Instant): AttributeValue =
+        override fun fromAttributeValue(attr: AttributeValue): Instant = Instant.fromIso8601(attr.asS())
+        override fun toAttributeValue(value: Instant): AttributeValue =
             AttributeValue.S(value.format(TimestampFormat.ISO_8601_FULL))
     }
 }

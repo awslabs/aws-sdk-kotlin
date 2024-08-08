@@ -53,13 +53,13 @@ abstract class ValueConvertersTest {
         tests.forEachIndexed { index, (steps) ->
             steps.forEach { (direction, highLevel, lowLevel) ->
                 when (direction) {
-                    Direction.TO_DDB -> {
-                        val result = runCatching { converter.toAv(highLevel.requireInput()) }
+                    Direction.TO_ATTRIBUTE_VALUE -> {
+                        val result = runCatching { converter.toAttributeValue(highLevel.requireInput()) }
                         lowLevel.assert(result, "Test $index failed converting to attribute value")
                     }
 
-                    Direction.FROM_DDB -> {
-                        val result = runCatching { converter.fromAv(lowLevel.requireInput()) }
+                    Direction.FROM_ATTRIBUTE_VALUE -> {
+                        val result = runCatching { converter.fromAttributeValue(lowLevel.requireInput()) }
                         highLevel.assert(result, "Test $index failed converting from attribute value")
                     }
                 }
@@ -74,12 +74,12 @@ abstract class ValueConvertersTest {
         /**
          * Specifies conversion from a high-level value to a low-level DynamoDB attribute value
          */
-        TO_DDB,
+        TO_ATTRIBUTE_VALUE,
 
         /**
          * Specifies conversion from a low-level DynamoDB attribute value to a high-level value
          */
-        FROM_DDB,
+        FROM_ATTRIBUTE_VALUE,
     }
 
     /**
@@ -88,9 +88,9 @@ abstract class ValueConvertersTest {
     data class TestCase<T>(val steps: List<TestStep<T>>) {
         companion object {
             fun <T> of(highLevel: TestExpectation<T>, lowLevel: TestExpectation<AttributeValue>): TestCase<T> {
-                val toDdb = highLevel.asSuccessOrNull()?.let { TestStep(Direction.TO_DDB, it, lowLevel) }
-                val fromDdb = lowLevel.asSuccessOrNull()?.let { TestStep(Direction.FROM_DDB, highLevel, it) }
-                return TestCase(listOfNotNull(toDdb, fromDdb))
+                val toAv = highLevel.asSuccessOrNull()?.let { TestStep(Direction.TO_ATTRIBUTE_VALUE, it, lowLevel) }
+                val fromAv = lowLevel.asSuccessOrNull()?.let { TestStep(Direction.FROM_ATTRIBUTE_VALUE, highLevel, it) }
+                return TestCase(listOfNotNull(toAv, fromAv))
             }
         }
     }
@@ -178,7 +178,8 @@ abstract class ValueConvertersTest {
         infix fun T.inDdbIs(value: Set<String>) = addTest(attr(value))
 
         /**
-         * Limits
+         * Limits a test case to only a single direction (i.e., checking one of `fromAttributeValue`/`toAttributeValue`
+         * but not both). Most test cases are bidirectional.
          */
         infix fun TestCase<T>.whenGoing(direction: Direction) {
             val removed = steps.filter { it.direction == direction }

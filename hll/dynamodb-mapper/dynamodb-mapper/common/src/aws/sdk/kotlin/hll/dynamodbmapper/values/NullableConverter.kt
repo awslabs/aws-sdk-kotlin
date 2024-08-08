@@ -10,16 +10,17 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  * Converts between potentially `null` values and
  * [DynamoDB `NULL` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Null).
  * If the value is non-null, the given [delegate] converter will be used.
+ * @param A The non-nullable type
  * @param delegate A [ValueConverter] which will be used for non-null values
  */
-public class NullableConverter<T : Any>(private val delegate: ValueConverter<T>) : ValueConverter<T?> {
-    override fun fromAv(attr: AttributeValue): T? = when (attr) {
+public class NullableConverter<A : Any>(private val delegate: ValueConverter<A>) : ValueConverter<A?> {
+    override fun fromAttributeValue(attr: AttributeValue): A? = when (attr) {
         is AttributeValue.Null -> null
-        else -> delegate.fromAv(attr)
+        else -> delegate.fromAttributeValue(attr)
     }
 
-    override fun toAv(value: T?): AttributeValue = when (value) {
+    override fun toAttributeValue(value: A?): AttributeValue = when (value) {
         null -> AttributeValue.Null(true)
-        else -> delegate.toAv(value)
+        else -> delegate.toAttributeValue(value)
     }
 }

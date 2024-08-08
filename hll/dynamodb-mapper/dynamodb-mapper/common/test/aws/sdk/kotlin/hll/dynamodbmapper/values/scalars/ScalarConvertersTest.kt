@@ -94,7 +94,10 @@ class ScalarConvertersTest : ValueConvertersTest() {
     fun testStringConverter() = given(StringConverter.Default) {
         "The quick brown fox jumped over the lazy dogs" inDdbIs theSame
         "Jackdaws love my big sphinx of quartz" inDdbIs theSame
-        "Benjamín pidió una bebida de kiwi y fresa. Noé, sin vergüenza, la más exquisita champaña del menú." inDdbIs theSame
+        """
+            Benjamín pidió una bebida de kiwi y fresa.
+            Noé, sin vergüenza, la más exquisita champaña del menú.
+        """.trimIndent() inDdbIs theSame
     }
 
     @Test
