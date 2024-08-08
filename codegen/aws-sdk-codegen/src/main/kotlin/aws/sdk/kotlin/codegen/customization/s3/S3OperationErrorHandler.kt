@@ -74,9 +74,7 @@ class S3OperationErrorHandler : KotlinIntegration {
                     write("#T(code = #L)", s3ErrorDetails, "call.response.status.toString()")
                 }
             }
-
             withInlineBlock("else {", "}") {
-                write("checkNotNull(payload) { #S }", "unable to parse error from empty response")
                 write("#T(payload)", parseS3ErrorResponse)
             }
         }
