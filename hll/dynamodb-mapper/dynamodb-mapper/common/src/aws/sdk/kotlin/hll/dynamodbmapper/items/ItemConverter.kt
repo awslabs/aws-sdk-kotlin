@@ -7,7 +7,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.items
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
 
 /**
- * Defines the logic for converting between objects and items
+ * Defines the logic for converting between objects and DynamoDB items
  * @param T The type of objects which will be converted
  */
 public interface ItemConverter<T> {

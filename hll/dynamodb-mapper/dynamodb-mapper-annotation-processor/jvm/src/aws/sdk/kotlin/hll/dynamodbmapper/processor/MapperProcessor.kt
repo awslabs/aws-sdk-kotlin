@@ -62,6 +62,7 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
                             |import aws.sdk.kotlin.hll.dynamodbmapper.items.*
                             |import aws.sdk.kotlin.hll.dynamodbmapper.model.*
                             |import aws.sdk.kotlin.hll.dynamodbmapper.values.*
+                            |import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.*
                             |import $basePackageName.$className
                             |
                             |public class $builderName {
@@ -115,9 +116,9 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
             props.forEach { prop ->
                 val converterType = when (val fqTypeName = prop.typeName.asString()) {
                     "aws.smithy.kotlin.runtime.time.Instant" -> "InstantConverter.Default"
-                    "kotlin.Boolean" -> "BooleanConverter"
-                    "kotlin.Int" -> "IntConverter"
-                    "kotlin.String" -> "StringConverter"
+                    "kotlin.Boolean" -> "BooleanConverter.Default"
+                    "kotlin.Int" -> "IntConverter.Default"
+                    "kotlin.String" -> "StringConverter.Default"
                     else -> error("Unsupported attribute type $fqTypeName")
                 }
 

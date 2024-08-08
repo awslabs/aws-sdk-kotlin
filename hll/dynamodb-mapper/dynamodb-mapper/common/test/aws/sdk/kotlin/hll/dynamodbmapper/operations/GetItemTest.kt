@@ -10,8 +10,8 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Table
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.DdbLocalTest
-import aws.sdk.kotlin.hll.dynamodbmapper.values.IntConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
 import aws.sdk.kotlin.services.dynamodb.model.ReturnConsumedCapacity
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertEquals
@@ -28,8 +28,8 @@ class GetItemTest : DdbLocalTest() {
         private val pkConverter = SimpleItemConverter(
             ::PkItem,
             { this },
-            AttributeDescriptor("id", PkItem::id, PkItem::id::set, IntConverter),
-            AttributeDescriptor("value", PkItem::value, PkItem::value::set, StringConverter),
+            AttributeDescriptor("id", PkItem::id, PkItem::id::set, IntConverter.Default),
+            AttributeDescriptor("value", PkItem::value, PkItem::value::set, StringConverter.Default),
         )
         private val pkSchema = ItemSchema(pkConverter, KeySpec.Number("id"))
 
@@ -38,9 +38,9 @@ class GetItemTest : DdbLocalTest() {
         private val ckConverter = SimpleItemConverter(
             ::CkItem,
             { this },
-            AttributeDescriptor("id", CkItem::id, CkItem::id::set, StringConverter),
-            AttributeDescriptor("version", CkItem::version, CkItem::version::set, IntConverter),
-            AttributeDescriptor("value", CkItem::value, CkItem::value::set, StringConverter),
+            AttributeDescriptor("id", CkItem::id, CkItem::id::set, StringConverter.Default),
+            AttributeDescriptor("version", CkItem::version, CkItem::version::set, IntConverter.Default),
+            AttributeDescriptor("value", CkItem::value, CkItem::value::set, StringConverter.Default),
         )
         private val ckSchema = ItemSchema(ckConverter, KeySpec.String("id"), KeySpec.Number("version"))
     }

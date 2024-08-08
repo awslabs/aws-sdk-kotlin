@@ -4,9 +4,9 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.items
 
-import aws.sdk.kotlin.hll.dynamodbmapper.values.BooleanConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.values.IntConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.BooleanConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -17,9 +17,9 @@ class SimpleItemConverterTest {
         val converter = SimpleItemConverter(
             ::ProductBuilder,
             ProductBuilder::build,
-            AttributeDescriptor("id", Product::id, ProductBuilder::id::set, IntConverter),
-            AttributeDescriptor("name", Product::name, ProductBuilder::name::set, StringConverter),
-            AttributeDescriptor("in-stock", Product::inStock, ProductBuilder::inStock::set, BooleanConverter),
+            AttributeDescriptor("id", Product::id, ProductBuilder::id::set, IntConverter.Default),
+            AttributeDescriptor("name", Product::name, ProductBuilder::name::set, StringConverter.Default),
+            AttributeDescriptor("in-stock", Product::inStock, ProductBuilder::inStock::set, BooleanConverter.Default),
         )
 
         val foo = Product(42, "Foo 2.0", inStock = true)

@@ -9,8 +9,8 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.DdbLocalTest
-import aws.sdk.kotlin.hll.dynamodbmapper.values.IntConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
 import aws.sdk.kotlin.services.dynamodb.model.ReturnConsumedCapacity
 import aws.sdk.kotlin.services.dynamodb.model.ReturnValue
 import kotlinx.coroutines.test.runTest
@@ -26,8 +26,8 @@ class DeleteItemTest : DdbLocalTest() {
         private val converter = SimpleItemConverter(
             ::Item,
             { this },
-            AttributeDescriptor("id", Item::id, Item::id::set, StringConverter),
-            AttributeDescriptor("value", Item::value, Item::value::set, IntConverter),
+            AttributeDescriptor("id", Item::id, Item::id::set, StringConverter.Default),
+            AttributeDescriptor("value", Item::value, Item::value::set, IntConverter.Default),
         )
         private val schema = ItemSchema(converter, KeySpec.String("id"))
     }
