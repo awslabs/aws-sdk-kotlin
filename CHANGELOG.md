@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.8] - 08/09/2024
+
+### Features
+* (**connect**) This release supports adding RoutingCriteria via UpdateContactRoutingData public API.
+
+### Documentation
+* (**cognitoidentityprovider**) Fixed a description of AdvancedSecurityAdditionalFlows in Amazon Cognito user pool configuration.
+* (**ssm**) Systems Manager doc-only updates for August 2024.
+
 ## [1.3.7] - 08/08/2024
 
 ### Features
