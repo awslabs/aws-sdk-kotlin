@@ -7,10 +7,7 @@ package aws.sdk.kotlin.codegen.customization.s3
 
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.aws.protocols.core.AwsHttpBindingProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.getContextValue
-import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
@@ -66,28 +63,27 @@ class S3OperationErrorHandler : KotlinIntegration {
         writer.write("val wrappedResponse = call.response.#T(payload)", RuntimeTypes.AwsProtocolCore.withPayload)
             .write("val wrappedCall = call.copy(response = wrappedResponse)")
             .write("")
-            .write("val errorDetails = try {")
-            .indent()
-            .call {
-                // customize error matching to handle HeadObject/HeadBucket error responses which have no payload
-                writer.write("if (payload == null && call.response.status == #T.NotFound) {", RuntimeTypes.Http.StatusCode)
-                    .indent()
-                    .write("#T(code = #S)", s3ErrorDetails, "NotFound")
-                    .dedent()
-                    .write("} else {")
-                    .indent()
-                    .write("""checkNotNull(payload){ "unable to parse error from empty response" }""")
-                    .write("#T(payload)", parseS3ErrorResponse)
-                    .dedent()
-                    .write("}")
-            }
-            .dedent()
-            .withBlock("} catch (ex: Exception) {", "}") {
-                withBlock("""throw #T("Failed to parse response as '${ctx.protocol.name}' error", ex).also {""", "}", exceptionBaseSymbol) {
-                    write("#T(it, wrappedCall.response, null)", setS3ErrorMetadata)
+
+        writer.withInlineBlock("val errorDetails = try {", "} ") {
+            // customize error matching to handle HeadObject/HeadBucket error responses which have no payload
+            withInlineBlock("if (payload == null) {", "} ") {
+                withInlineBlock("if (call.response.status == #T.NotFound) {", "} ", RuntimeTypes.Http.StatusCode) {
+                    write("#T(code = #S)", s3ErrorDetails, "NotFound")
+                }
+                withInlineBlock("else {", "}") {
+                    write("#T(code = #L)", s3ErrorDetails, "call.response.status.toString()")
                 }
             }
-            .write("")
+            withInlineBlock("else {", "}") {
+                write("#T(payload)", parseS3ErrorResponse)
+            }
+        }
+
+        writer.withBlock("catch (ex: Exception) {", "}") {
+            withBlock("throw #T(#S).also {", "}", exceptionBaseSymbol, "Failed to parse response as ${ctx.protocol.name} error") {
+                write("#T(it, wrappedCall.response, null)", setS3ErrorMetadata)
+            }
+        }
 
         writer.withBlock("val ex = when(errorDetails.code) {", "}") {
             op.errors.forEach { err ->
@@ -96,7 +92,7 @@ class S3OperationErrorHandler : KotlinIntegration {
                     name = "${errSymbol.name}Deserializer"
                     namespace = ctx.settings.pkg.serde
                 }
-                writer.write("#S -> #T().deserialize(context, wrappedCall, payload)", err.name, errDeserializerSymbol)
+                write("#S -> #T().deserialize(context, wrappedCall, payload)", err.name, errDeserializerSymbol)
             }
             write("else -> #T(errorDetails.message)", exceptionBaseSymbol)
         }

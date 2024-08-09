@@ -1,0 +1,8 @@
+{
+    "id": "6894375e-0885-4d23-b22f-b4d53845ae6d",
+    "type": "bugfix",
+    "description": "Correctly handle all empty HeadObject/HeadBucket responses",
+    "issues": [
+        "https://github.com/awslabs/aws-sdk-kotlin/issues/1368"
+    ]
+}

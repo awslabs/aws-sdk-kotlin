@@ -373,6 +373,21 @@ class S3BucketOpsIntegrationTest {
             assertContains(ex.message!!, "$expectedHost")
         }
     }
+
+    @Test
+    fun testHeadObjectForbidden(): Unit = runBlocking {
+        val ex = assertFailsWith<S3Exception> {
+            client.withConfig {
+                region = "us-east-1"
+            }.headObject {
+                bucket = "bucket"
+                key = "any-key.txt"
+            }
+        }
+
+        assertContains(ex.message, "Service returned error code 403: Forbidden")
+        assertEquals("403: Forbidden", ex.sdkErrorMetadata.errorCode!!)
+    }
 }
 
 // generate sequence of "chunks" where each range defines the inclusive start and end bytes
