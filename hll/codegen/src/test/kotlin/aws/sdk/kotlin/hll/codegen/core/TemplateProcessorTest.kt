@@ -2,10 +2,10 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.hll.dynamodbmapper.codegen.core
+package aws.sdk.kotlin.hll.codegen.core
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.TypeRef
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.TypeVar
+import aws.sdk.kotlin.hll.codegen.model.TypeRef
+import aws.sdk.kotlin.hll.codegen.model.TypeVar
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import kotlin.test.assertContains
