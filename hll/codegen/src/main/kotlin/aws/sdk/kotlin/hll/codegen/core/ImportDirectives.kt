@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.hll.codegen.core
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.TypeRef
+import aws.sdk.kotlin.hll.codegen.model.TypeRef
 
 /**
  * A mutable collection of [ImportDirectives] for eventually writing to a code generator

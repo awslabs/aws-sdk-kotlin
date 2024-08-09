@@ -4,8 +4,8 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.model
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.util.capitalizeFirstChar
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.util.plus
+import aws.sdk.kotlin.hll.codegen.util.capitalizeFirstChar
+import aws.sdk.kotlin.hll.codegen.util.plus
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.emptyAttributes
 import aws.smithy.kotlin.runtime.collections.get

@@ -4,8 +4,11 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering
 
+import aws.sdk.kotlin.hll.codegen.model.Type
+import aws.sdk.kotlin.hll.codegen.model.TypeRef
+import aws.sdk.kotlin.hll.codegen.model.TypeVar
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.*
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.util.lowercaseFirstChar
+import aws.sdk.kotlin.hll.codegen.util.lowercaseFirstChar
 
 /**
  * Renders the `*Operations` interface and `*OperationsImpl` class which contain a method for each codegenned

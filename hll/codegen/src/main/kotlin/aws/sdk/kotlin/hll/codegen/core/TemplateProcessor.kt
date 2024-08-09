@@ -4,9 +4,9 @@
  */
 package aws.sdk.kotlin.hll.codegen.core
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Type
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.TypeRef
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.util.quote
+import aws.sdk.kotlin.hll.codegen.model.Type
+import aws.sdk.kotlin.hll.codegen.model.TypeRef
+import aws.sdk.kotlin.hll.codegen.util.quote
 
 /**
  * Defines a template processor which maps an argument value of any type to a string value

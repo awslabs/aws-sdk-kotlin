@@ -4,7 +4,8 @@
  */
 package aws.sdk.kotlin.hll.codegen.model
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.util.Pkg
+import aws.sdk.kotlin.hll.codegen.model.Type.Companion.map
+import aws.sdk.kotlin.hll.codegen.util.Pkg
 import com.google.devtools.ksp.symbol.KSTypeReference
 
 /**
@@ -95,7 +96,7 @@ data class TypeVar(override val shortName: String, override val nullable: Boolea
 /**
  * Derives a nullable [Type] equivalent for this type
  */
-fun Type.nullable() = when {
+public fun Type.nullable() = when {
     nullable -> this
     this is TypeRef -> copy(nullable = true)
     this is TypeVar -> copy(nullable = true)
@@ -109,6 +110,12 @@ object Types {
     // Kotlin standard types
     val String = TypeRef("kotlin", "String")
     val StringNullable = String.nullable()
+
+    /**
+     * Creates a [TypeRef] for a generic [Map] with [String] keys
+     * @param value The type of values in the map
+     */
+    fun StringMap(value: Type) = map(String, value)
 
     // Low-level types
     val AttributeValue = TypeRef(Pkg.Ll.Model, "AttributeValue")

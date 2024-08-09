@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.core.CodeGenerator
+import aws.sdk.kotlin.hll.codegen.core.CodeGenerator
 
 /**
  * The parent class for renderers backed by a [CodeGenerator]

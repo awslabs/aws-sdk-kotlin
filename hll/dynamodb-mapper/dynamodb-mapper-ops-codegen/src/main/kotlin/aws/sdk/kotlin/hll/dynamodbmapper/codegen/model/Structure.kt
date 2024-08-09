@@ -4,7 +4,10 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.model
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.util.plus
+import aws.sdk.kotlin.hll.codegen.model.TypeRef
+import aws.sdk.kotlin.hll.codegen.model.Type
+import aws.sdk.kotlin.hll.codegen.model.TypeVar
+import aws.sdk.kotlin.hll.codegen.util.plus
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.emptyAttributes
 import aws.smithy.kotlin.runtime.collections.get

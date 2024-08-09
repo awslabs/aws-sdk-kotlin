@@ -4,6 +4,10 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.core
 
+import aws.sdk.kotlin.hll.codegen.core.CodeGenerator
+import aws.sdk.kotlin.hll.codegen.model.Type
+import aws.sdk.kotlin.hll.codegen.model.TypeRef
+import aws.sdk.kotlin.hll.codegen.model.TypeVar
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.*
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Member
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Structure

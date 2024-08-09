@@ -9,6 +9,7 @@ plugins {
 
 dependencies {
     implementation(libs.ksp.api)
+    implementation(project(":hll:codegen"))
     implementation(project(":services:dynamodb"))
 
     testImplementation(libs.junit.jupiter)

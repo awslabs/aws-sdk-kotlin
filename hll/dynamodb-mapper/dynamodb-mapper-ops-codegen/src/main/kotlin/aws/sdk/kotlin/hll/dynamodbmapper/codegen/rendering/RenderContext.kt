@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.core.CodeGeneratorFactory
+import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSNode
 

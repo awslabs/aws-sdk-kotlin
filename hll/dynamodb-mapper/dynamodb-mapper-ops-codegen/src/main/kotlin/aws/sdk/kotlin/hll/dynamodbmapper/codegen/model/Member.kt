@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.model
 
+import aws.sdk.kotlin.hll.codegen.model.Type
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 
 /**

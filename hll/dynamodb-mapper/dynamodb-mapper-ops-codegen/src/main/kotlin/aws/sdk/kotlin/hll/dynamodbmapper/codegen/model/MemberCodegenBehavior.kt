@@ -4,7 +4,11 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.model
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.util.Pkg
+import aws.sdk.kotlin.hll.codegen.model.Type
+import aws.sdk.kotlin.hll.codegen.model.TypeRef
+import aws.sdk.kotlin.hll.codegen.model.Types
+import aws.sdk.kotlin.hll.codegen.model.nullable
+import aws.sdk.kotlin.hll.codegen.util.Pkg
 
 private val attrMapTypes = setOf(Types.AttributeMap, Types.AttributeMap.nullable())
 
@@ -84,23 +88,23 @@ private fun llType(name: String) = TypeRef(Pkg.Ll.Model, name)
 private val unsupportedMembers = listOf(
     // superseded by ConditionExpression
     Member("conditionalOperator", llType("ConditionalOperator")),
-    Member("expected", Type.stringMap(llType("ExpectedAttributeValue"))),
+    Member("expected", Types.StringMap(llType("ExpectedAttributeValue"))),
 
     // superseded by FilterExpression
-    Member("queryFilter", Type.stringMap(llType("Condition"))),
-    Member("scanFilter", Type.stringMap(llType("Condition"))),
+    Member("queryFilter", Types.StringMap(llType("Condition"))),
+    Member("scanFilter", Types.StringMap(llType("Condition"))),
 
     // superseded by KeyConditionExpression
-    Member("keyConditions", Type.stringMap(llType("Condition"))),
+    Member("keyConditions", Types.StringMap(llType("Condition"))),
 
     // superseded by ProjectionExpression
     Member("attributesToGet", Type.list(Types.String)),
 
     // superseded by UpdateExpression
-    Member("attributeUpdates", Type.stringMap(llType("AttributeValueUpdate"))),
+    Member("attributeUpdates", Types.StringMap(llType("AttributeValueUpdate"))),
 
     // TODO add support for expressions
-    Member("expressionAttributeNames", Type.stringMap(Types.String)),
+    Member("expressionAttributeNames", Types.StringMap(Types.String)),
     Member("expressionAttributeValues", Types.AttributeMap),
     Member("conditionExpression", Types.String),
     Member("projectionExpression", Types.String),

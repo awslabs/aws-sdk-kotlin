@@ -9,6 +9,7 @@ plugins {
 
 dependencies {
     implementation(libs.ksp.api)
+    implementation(libs.smithy.kotlin.runtime.core)
 
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter.params)
