@@ -108,7 +108,6 @@ public fun Type.nullable() = when {
  */
 object Types {
     // Kotlin standard types
-    val arrayOf = TypeRef("kotlin", "arrayOf")
     val String = TypeRef("kotlin", "String")
     val StringNullable = String.nullable()
 
@@ -125,7 +124,6 @@ object Types {
 
     // High-level types
     val DynamoDbMapper = TypeRef(Pkg.Hl.Base, "DynamoDbMapper")
-    val getTable = TypeRef(Pkg.Hl.Base, "getTable")
 
     val HReqContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "HReqContextImpl")
     fun itemSchema(typeVar: String) = TypeRef(Pkg.Hl.Items, "ItemSchema", listOf(TypeVar(typeVar)))
@@ -137,7 +135,6 @@ object Types {
 
     val KeySpec = TypeRef(Pkg.Hl.Items, "KeySpec")
     val ItemSchema = TypeRef(Pkg.Hl.Items, "ItemSchema")
-    val PartitionKey = TypeRef(Pkg.Hl.Items, "PartitionKey")
     val AttributeDescriptor = TypeRef(Pkg.Hl.Items, "AttributeDescriptor")
     val ItemConverter = TypeRef(Pkg.Hl.Items, "ItemConverter")
     val SimpleItemConverter = TypeRef(Pkg.Hl.Items, "SimpleItemConverter")
