@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.9] - 08/12/2024
+
+### Features
+* (**configservice**) Documentation update for the OrganizationConfigRuleName regex pattern.
+* (**ec2**) This release adds new capabilities to manage On-Demand Capacity Reservations including the ability to split your reservation, move capacity between reservations, and modify the instance eligibility of your reservation.
+* (**eks**) Added support for new AL2023 GPU AMIs to the supported AMITypes.
+* (**medialive**) AWS Elemental MediaLive now supports now supports editing the PID values for a Multiplex.
+* (**sagemaker**) Releasing large data support as part of CreateAutoMLJobV2 in SageMaker Autopilot and CreateDomain API for SageMaker Canvas.
+
+### Documentation
+* (**computeoptimizer**) Doc only update for Compute Optimizer that fixes several customer-reported issues relating to ECS finding classifications
+* (**groundstation**) Updating documentation for OEMEphemeris to link to AWS Ground Station User Guide
+
 ## [1.3.8] - 08/09/2024
 
 ### Features
