@@ -88,23 +88,23 @@ private fun llType(name: String) = TypeRef(Pkg.Ll.Model, name)
 private val unsupportedMembers = listOf(
     // superseded by ConditionExpression
     Member("conditionalOperator", llType("ConditionalOperator")),
-    Member("expected", Types.StringMap(llType("ExpectedAttributeValue"))),
+    Member("expected", Types.stringMap(llType("ExpectedAttributeValue"))),
 
     // superseded by FilterExpression
-    Member("queryFilter", Types.StringMap(llType("Condition"))),
-    Member("scanFilter", Types.StringMap(llType("Condition"))),
+    Member("queryFilter", Types.stringMap(llType("Condition"))),
+    Member("scanFilter", Types.stringMap(llType("Condition"))),
 
     // superseded by KeyConditionExpression
-    Member("keyConditions", Types.StringMap(llType("Condition"))),
+    Member("keyConditions", Types.stringMap(llType("Condition"))),
 
     // superseded by ProjectionExpression
     Member("attributesToGet", Type.list(Types.String)),
 
     // superseded by UpdateExpression
-    Member("attributeUpdates", Types.StringMap(llType("AttributeValueUpdate"))),
+    Member("attributeUpdates", Types.stringMap(llType("AttributeValueUpdate"))),
 
     // TODO add support for expressions
-    Member("expressionAttributeNames", Types.StringMap(Types.String)),
+    Member("expressionAttributeNames", Types.stringMap(Types.String)),
     Member("expressionAttributeValues", Types.AttributeMap),
     Member("conditionExpression", Types.String),
     Member("projectionExpression", Types.String),
