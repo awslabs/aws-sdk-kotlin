@@ -55,11 +55,13 @@ public class AnnotationRenderer(
 
             withBlock("public fun build(): #L {", "}", className) {
                 properties.forEach {
-                    write("val #1L = requireNotNull(#1L) { #2S }", it.name, "Missing value for $className.${it.name}")
+                    write("val #1L = requireNotNull(#1L) { #2S }", it.name, "Missing value for ${it.name}")
                 }
                 blankLine()
                 withBlock("return #L(", ")", className) {
-                    write("#L", properties.joinToString(", ") { it.name })
+                    properties.forEach {
+                        write("#L,", it.name)
+                    }
                 }
             }
         }
