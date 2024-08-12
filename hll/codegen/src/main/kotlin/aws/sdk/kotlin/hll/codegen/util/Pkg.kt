@@ -14,6 +14,7 @@ object Pkg {
         val Model = "$Base.model"
         val Ops = "$Base.operations"
         val PipelineImpl = "$Base.pipeline.internal"
+        val Values = "$Base.values"
     }
 
     object Kotlin {

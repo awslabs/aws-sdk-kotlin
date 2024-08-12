@@ -7,6 +7,8 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.TypeVar
+import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
+import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.*
 import aws.sdk.kotlin.hll.codegen.util.lowercaseFirstChar
 

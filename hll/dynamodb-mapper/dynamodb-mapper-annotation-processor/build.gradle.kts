@@ -7,6 +7,7 @@ kotlin {
     sourceSets {
         jvmMain {
             dependencies {
+                implementation(project(":hll:codegen"))
                 implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-annotations"))
                 implementation(libs.ksp.api)
             }

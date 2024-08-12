@@ -108,6 +108,7 @@ public fun Type.nullable() = when {
  */
 object Types {
     // Kotlin standard types
+    val arrayOf = TypeRef("kotlin", "arrayOf")
     val String = TypeRef("kotlin", "String")
     val StringNullable = String.nullable()
 
@@ -122,9 +123,28 @@ object Types {
     val AttributeMap = Type.map(String, AttributeValue)
 
     // High-level types
+    val DynamoDbMapper = TypeRef(Pkg.Hl.Base, "DynamoDbMapper")
+    val getTable = TypeRef(Pkg.Hl.Base, "getTable")
+
     val HReqContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "HReqContextImpl")
     fun itemSchema(typeVar: String) = TypeRef(Pkg.Hl.Items, "ItemSchema", listOf(TypeVar(typeVar)))
     val MapperContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "MapperContextImpl")
     val Operation = TypeRef(Pkg.Hl.PipelineImpl, "Operation")
+
+    val Table = TypeRef(Pkg.Hl.Model, "Table")
     val toItem = TypeRef(Pkg.Hl.Model, "toItem")
+
+    val KeySpec = TypeRef(Pkg.Hl.Items, "KeySpec")
+    val KeySpecNumber = TypeRef(Pkg.Hl.Items, "KeySpec.Number")
+    val KeySpecString = TypeRef(Pkg.Hl.Items, "KeySpec.String")
+    val ItemSchema = TypeRef(Pkg.Hl.Items, "ItemSchema")
+    val PartitionKey = TypeRef(Pkg.Hl.Items, "PartitionKey")
+    val AttributeDescriptor = TypeRef(Pkg.Hl.Items, "AttributeDescriptor")
+    val ItemConverter = TypeRef(Pkg.Hl.Items, "ItemConverter")
+    val SimpleItemConverter = TypeRef(Pkg.Hl.Items, "SimpleItemConverter")
+
+    val DefaultInstantConverter = TypeRef(Pkg.Hl.Values, "InstantConverter.Default")
+    val BooleanConverter = TypeRef(Pkg.Hl.Values, "BooleanConverter")
+    val IntConverter = TypeRef(Pkg.Hl.Values, "IntConverter")
+    val StringConverter = TypeRef(Pkg.Hl.Values, "StringConverter")
 }

@@ -163,15 +163,76 @@ public final class aws/sdk/kotlin/hll/codegen/model/TypeVar : aws/sdk/kotlin/hll
 public final class aws/sdk/kotlin/hll/codegen/model/Types {
 	public static final field INSTANCE Laws/sdk/kotlin/hll/codegen/model/Types;
 	public final fun StringMap (Laws/sdk/kotlin/hll/codegen/model/Type;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getArrayOf ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getAttributeDescriptor ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getAttributeMap ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getAttributeValue ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getBooleanConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getDefaultInstantConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getDynamoDbMapper ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getGetTable ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getHReqContextImpl ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getIntConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getItemConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getItemSchema ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getKeySpec ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getKeySpecNumber ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getKeySpecString ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getMapperContextImpl ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getOperation ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getPartitionKey ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getSimpleItemConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getString ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getStringConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getStringNullable ()Laws/sdk/kotlin/hll/codegen/model/Type;
+	public final fun getTable ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getToItem ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun itemSchema (Ljava/lang/String;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+}
+
+public final class aws/sdk/kotlin/hll/codegen/rendering/RenderContext {
+	public fun <init> (Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;)V
+	public final fun component1 ()Lcom/google/devtools/ksp/processing/KSPLogger;
+	public final fun component2 ()Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;)Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCodegenFactory ()Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;
+	public final fun getLogger ()Lcom/google/devtools/ksp/processing/KSPLogger;
+	public final fun getPkg ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/codegen/rendering/RenderContextKt {
+	public static final fun error (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Lcom/google/devtools/ksp/symbol/KSNode;)V
+	public static synthetic fun error$default (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Lcom/google/devtools/ksp/symbol/KSNode;ILjava/lang/Object;)V
+	public static final fun exception (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/Throwable;)V
+	public static final fun info (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Lcom/google/devtools/ksp/symbol/KSNode;)V
+	public static synthetic fun info$default (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Lcom/google/devtools/ksp/symbol/KSNode;ILjava/lang/Object;)V
+	public static final fun logging (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Lcom/google/devtools/ksp/symbol/KSNode;)V
+	public static synthetic fun logging$default (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Lcom/google/devtools/ksp/symbol/KSNode;ILjava/lang/Object;)V
+	public static final fun warn (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Lcom/google/devtools/ksp/symbol/KSNode;)V
+	public static synthetic fun warn$default (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Lcom/google/devtools/ksp/symbol/KSNode;ILjava/lang/Object;)V
+}
+
+public abstract class aws/sdk/kotlin/hll/codegen/rendering/RendererBase : aws/sdk/kotlin/hll/codegen/core/CodeGenerator {
+	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;)V
+	public fun blankLine ()V
+	public fun closeAndOpenBlock (Ljava/lang/String;[Ljava/lang/Object;)V
+	public fun closeBlock (Ljava/lang/String;[Ljava/lang/Object;)V
+	public fun dedent (I)V
+	protected abstract fun generate ()V
+	public fun getImports ()Laws/sdk/kotlin/hll/codegen/core/ImportDirectives;
+	public fun indent (I)V
+	public fun openBlock (Ljava/lang/String;[Ljava/lang/Object;)V
+	public fun persist ()V
+	public final fun render ()V
+	public fun withBlock (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;Lkotlin/jvm/functions/Function0;)V
+	public fun withDocs (Lkotlin/jvm/functions/Function0;)V
+	public fun write (Ljava/lang/String;[Ljava/lang/Object;)V
+	public fun writeInline (Ljava/lang/String;[Ljava/lang/Object;)V
 }
 
 public final class aws/sdk/kotlin/hll/codegen/util/AttributesExtKt {
@@ -190,6 +251,7 @@ public final class aws/sdk/kotlin/hll/codegen/util/Pkg$Hl {
 	public final fun getModel ()Ljava/lang/String;
 	public final fun getOps ()Ljava/lang/String;
 	public final fun getPipelineImpl ()Ljava/lang/String;
+	public final fun getValues ()Ljava/lang/String;
 }
 
 public final class aws/sdk/kotlin/hll/codegen/util/Pkg$Kotlin {

@@ -5,10 +5,10 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
+import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Operation
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.toHighLevel
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering.HighLevelRenderer
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.util.Pkg
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import com.google.devtools.ksp.getClassDeclarationByName

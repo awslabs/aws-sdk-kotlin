@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.processor
 
+import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
@@ -16,24 +17,33 @@ import com.google.devtools.ksp.validate
 
 private val annotationName = DynamoDbItem::class.qualifiedName!!
 
-public class MapperProcessor(private val env: SymbolProcessorEnvironment) : SymbolProcessor {
+public class MapperProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
+
+    private var invoked = false
+    private val logger = environment.logger
+    private val codeGenerator = environment.codeGenerator
+    private val codeGeneratorFactory = CodeGeneratorFactory(codeGenerator, logger)
+
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        env.logger.info("Searching for symbols annotated with $annotationName")
+        if (invoked) { return listOf() }
+        invoked = true
+
+        logger.info("Searching for symbols annotated with $annotationName")
         val annotated = resolver.getSymbolsWithAnnotation(annotationName)
         val invalid = annotated.filterNot { it.validate() }.toList()
-        env.logger.info("Found invalid classes $invalid")
+        logger.info("Found invalid classes $invalid")
 
         annotated
             .toList()
-            .also { env.logger.info("Found annotated classes: $it") }
+            .also { logger.info("Found annotated classes: $it") }
             .filterIsInstance<KSClassDeclaration>()
             .filter { it.validate() }
-            .forEach { it.accept(ItemVisitor(), Unit) }
+//            .associateWith {  }
 
         return invalid
     }
 
-    private inner class ItemVisitor : KSVisitorVoid() {
+    private inner class ClassVisitor : KSVisitorVoid() {
         override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
             val basePackageName = classDeclaration.packageName.asString()
             val packageName = "$basePackageName.mapper.schemas"
@@ -49,9 +59,6 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
             }
 
             env.codeGenerator.createNewFile(
-                Dependencies(true, classDeclaration.containingFile!!),
-                packageName,
-                schemaName,
             ).use { file ->
                 file.bufferedWriter().use { writer ->
                     writer.append(
@@ -166,28 +173,3 @@ public class MapperProcessor(private val env: SymbolProcessorEnvironment) : Symb
         }
     }
 }
-
-private data class Property(val name: String, val ddbName: String, val typeName: KSName, val isPk: Boolean) {
-    companion object {
-        @OptIn(KspExperimental::class)
-        fun from(ksProperty: KSPropertyDeclaration) = ksProperty
-            .getter
-            ?.returnType
-            ?.resolve()
-            ?.declaration
-            ?.qualifiedName
-            ?.let { typeName ->
-                val isPk = ksProperty.isAnnotationPresent(DynamoDbPartitionKey::class)
-                val name = ksProperty.simpleName.getShortName()
-                val ddbName = ksProperty.getAnnotationsByType(DynamoDbAttribute::class).singleOrNull()?.name ?: name
-                Property(name, ddbName, typeName, isPk)
-            }
-    }
-}
-
-private val Property.keySpecType: String
-    get() = when (val fqTypeName = typeName.asString()) {
-        "kotlin.Int" -> "Number"
-        "kotlin.String" -> "String"
-        else -> error("Unsupported key type $fqTypeName, expected Int or String")
-    }
