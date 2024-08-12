@@ -116,6 +116,7 @@ object Types {
      * Creates a [TypeRef] for a generic [Map] with [String] keys
      * @param value The type of values in the map
      */
+    @Suppress("ktlint:standard:function-naming")
     fun StringMap(value: Type) = map(String, value)
 
     // Low-level types
