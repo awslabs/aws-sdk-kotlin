@@ -1,16 +1,16 @@
-///*
+// /*
 // * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // * SPDX-License-Identifier: Apache-2.0
 // */
-//package aws.sdk.kotlin.hll.dynamodbmapper.tests.processor.data
+// package aws.sdk.kotlin.hll.dynamodbmapper.tests.processor.data
 //
-//import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-//import aws.sdk.kotlin.hll.dynamodbmapper.tests.processor.data.mapper.schemas.UserConverter
-//import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
-//import kotlin.test.Test
-//import kotlin.test.assertEquals
+// import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
+// import aws.sdk.kotlin.hll.dynamodbmapper.tests.processor.data.mapper.schemas.UserConverter
+// import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+// import kotlin.test.Test
+// import kotlin.test.assertEquals
 //
-//class UserTest {
+// class UserTest {
 //    @Test
 //    fun testConversion() {
 //        val user = User(123, "Steve", "Rogers", 84)
@@ -30,4 +30,4 @@
 //
 //        assertEquals(user, unconverted)
 //    }
-//}
+// }

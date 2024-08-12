@@ -5,17 +5,11 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.processor
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import aws.sdk.kotlin.hll.dynamodbmapper.processor.rendering.HighLevelRenderer
-import com.google.devtools.ksp.KspExperimental
-import com.google.devtools.ksp.getAnnotationsByType
-import com.google.devtools.ksp.isAnnotationPresent
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
-import java.awt.image.renderable.RenderContext
 
 private val annotationName = DynamoDbItem::class.qualifiedName!!
 
@@ -26,7 +20,9 @@ public class MapperProcessor(private val environment: SymbolProcessorEnvironment
     private val codeGeneratorFactory = CodeGeneratorFactory(codeGenerator, logger)
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        if (invoked) { return listOf() }
+        if (invoked) {
+            return listOf()
+        }
         invoked = true
 
         logger.info("Searching for symbols annotated with $annotationName")

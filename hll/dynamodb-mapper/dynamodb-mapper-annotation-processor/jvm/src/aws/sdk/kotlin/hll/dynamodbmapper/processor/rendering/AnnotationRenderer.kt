@@ -20,7 +20,7 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 
 public class AnnotationRenderer(
     private val classDeclaration: KSClassDeclaration,
-    private val ctx: RenderContext
+    private val ctx: RenderContext,
 ) : RendererBase(ctx, "${classDeclaration.qualifiedName!!.getShortName()}Schema") {
     private val className = classDeclaration.qualifiedName!!.getShortName()
     private val builderName = "${className}Builder"
@@ -84,8 +84,8 @@ public class AnnotationRenderer(
     private fun renderAttributeDescriptor(prop: Property) {
         withBlock("#T(", "),", Types.AttributeDescriptor) {
             write("#S,", prop.ddbName) // key
-            write("#L,", "${className}::${prop.name}") // getter
-            write("#L,", "${builderName}::${prop.name}::set") // setter
+            write("#L,", "$className::${prop.name}") // getter
+            write("#L,", "$builderName::${prop.name}::set") // setter
             write("#T", prop.valueConverter) // converter
         }
     }
@@ -118,14 +118,15 @@ public class AnnotationRenderer(
         withDocs {
             write("Returns a reference to a table named [name] containing items representing [#L]", className)
         }
-        write("public fun #1T.get#2LTable(name: String): #3T.#4L<#2L, #5L> = #6L(name, #7L)",
+        write(
+            "public fun #1T.get#2LTable(name: String): #3T.#4L<#2L, #5L> = #6L(name, #7L)",
             Types.DynamoDbMapper,
             className,
             Types.Table,
             "PartitionKey",
             keyProperty.typeName.getShortName(),
             "getTable",
-            schemaName
+            schemaName,
         )
     }
 }

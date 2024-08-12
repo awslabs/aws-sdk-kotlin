@@ -16,7 +16,7 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 public class HighLevelRenderer(
     private val annotations: List<KSClassDeclaration>,
     private val logger: KSPLogger,
-    private val codegenFactory: CodeGeneratorFactory
+    private val codegenFactory: CodeGeneratorFactory,
 ) {
     public fun render() {
         annotations.forEach {

@@ -4,10 +4,10 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.ItemSourceKind
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Operation
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.ItemSourceKind
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.Operation
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.itemSourceKinds
 
 /**

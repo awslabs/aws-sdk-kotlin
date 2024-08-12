@@ -4,12 +4,12 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.rendering
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.core.DataTypeGenerator
 import aws.sdk.kotlin.hll.codegen.core.*
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.codegen.rendering.info
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.core.DataTypeGenerator
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.*
 
 // FIXME handle paginated operations differently (e.g., don't map pagination parameters, provide only Flow API)
