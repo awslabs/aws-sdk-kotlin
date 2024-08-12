@@ -163,15 +163,12 @@ public final class aws/sdk/kotlin/hll/codegen/model/TypeVar : aws/sdk/kotlin/hll
 
 public final class aws/sdk/kotlin/hll/codegen/model/Types {
 	public static final field INSTANCE Laws/sdk/kotlin/hll/codegen/model/Types;
-	public final fun StringMap (Laws/sdk/kotlin/hll/codegen/model/Type;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
-	public final fun getArrayOf ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getAttributeDescriptor ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getAttributeMap ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getAttributeValue ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getBooleanConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getDefaultInstantConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getDynamoDbMapper ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
-	public final fun getGetTable ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getHReqContextImpl ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getIntConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getItemConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
@@ -179,7 +176,6 @@ public final class aws/sdk/kotlin/hll/codegen/model/Types {
 	public final fun getKeySpec ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getMapperContextImpl ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getOperation ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
-	public final fun getPartitionKey ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getSimpleItemConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getString ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getStringConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
@@ -187,6 +183,7 @@ public final class aws/sdk/kotlin/hll/codegen/model/Types {
 	public final fun getTable ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getToItem ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun itemSchema (Ljava/lang/String;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun stringMap (Laws/sdk/kotlin/hll/codegen/model/Type;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 }
 
 public final class aws/sdk/kotlin/hll/codegen/rendering/RenderContext {
