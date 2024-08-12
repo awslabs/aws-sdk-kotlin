@@ -1,0 +1,5 @@
+{
+    "id": "5a460540-14ee-4d26-a860-8cd122323b34",
+    "type": "bugfix",
+    "description": "Stop using double slashes in `ImdsCredentialsProvider` URLs"
+}
