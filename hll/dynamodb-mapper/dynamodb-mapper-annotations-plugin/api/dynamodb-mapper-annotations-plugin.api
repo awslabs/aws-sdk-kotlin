@@ -1,0 +1,6 @@
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/AnnotationsPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
