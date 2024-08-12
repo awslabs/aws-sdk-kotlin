@@ -18,6 +18,11 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSName
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 
+/**
+ * Renders the classes and objects required to make a class usable with the DynamoDbMapper such as schemas, builders, and converters.
+ * @param classDeclaration the [KSClassDeclaration] of the class
+ * @param ctx the [RenderContext] of the renderer
+ */
 public class AnnotationRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
@@ -33,7 +38,7 @@ public class AnnotationRenderer(
     }
 
     override fun generate() {
-        imports.add(ImportDirective(classDeclaration.qualifiedName!!.asString())) // Import the class that's getting processed
+        imports.add(ImportDirective(classDeclaration.qualifiedName!!.asString()))
         renderBuilder()
         renderItemConverter()
         renderSchema()
@@ -49,7 +54,7 @@ public class AnnotationRenderer(
 
         withBlock("public class #L {", "}", builderName) {
             properties.forEach {
-                write("public var #L: #L? = null", it.name, it.typeName.asString().removePrefix("kotlin."))
+                write("public var #L: #L? = null", it.name, it.typeName.asString())
             }
             blankLine()
 
