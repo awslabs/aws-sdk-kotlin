@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+description = "Common code-generation utilities used by AWS SDK for Kotlin's high level libraries"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: Codegen"
+extra["moduleName"] = "aws.sdk.kotlin.hll.codegen"
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
 }

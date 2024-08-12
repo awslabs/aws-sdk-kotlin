@@ -8,6 +8,8 @@ import aws.sdk.kotlin.gradle.kmp.*
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 description = "High-level libraries for the AWS SDK for Kotlin"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL"
+extra["moduleName"] = "aws.sdk.kotlin.hll"
 
 // FIXME 🔽🔽🔽 This is all copied from :aws-runtime and should be commonized 🔽🔽🔽
 
