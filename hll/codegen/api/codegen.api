@@ -59,6 +59,7 @@ public final class aws/sdk/kotlin/hll/codegen/core/ImportDirective {
 public final class aws/sdk/kotlin/hll/codegen/core/ImportDirectives : java/util/Set, kotlin/jvm/internal/markers/KMutableSet {
 	public fun <init> ()V
 	public fun add (Laws/sdk/kotlin/hll/codegen/core/ImportDirective;)Z
+	public final fun add (Laws/sdk/kotlin/hll/codegen/model/TypeRef;)Z
 	public synthetic fun add (Ljava/lang/Object;)Z
 	public fun addAll (Ljava/util/Collection;)Z
 	public fun clear ()V
@@ -176,8 +177,6 @@ public final class aws/sdk/kotlin/hll/codegen/model/Types {
 	public final fun getItemConverter ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getItemSchema ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getKeySpec ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
-	public final fun getKeySpecNumber ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
-	public final fun getKeySpecString ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getMapperContextImpl ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getOperation ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getPartitionKey ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;

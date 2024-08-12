@@ -6,11 +6,9 @@ package aws.sdk.kotlin.hll.dynamodbmapper.processor.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.ImportDirective
 import aws.sdk.kotlin.hll.codegen.model.Type
-import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
-import aws.sdk.kotlin.hll.codegen.util.Pkg
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import com.google.devtools.ksp.KspExperimental
@@ -35,18 +33,7 @@ public class AnnotationRenderer(
     }
 
     override fun generate() {
-        val basePackageName = classDeclaration.packageName.asString()
-
-        write("package #L", "$basePackageName.mapper.schemas")
-        blankLine()
-        // TODO replace with import directives
-        write("import aws.sdk.kotlin.hll.dynamodbmapper.*")
-        write("import aws.sdk.kotlin.hll.dynamodbmapper.items.*")
-        write("import aws.sdk.kotlin.hll.dynamodbmapper.model.*")
-        write("import aws.sdk.kotlin.hll.dynamodbmapper.values.*")
-        write("import $basePackageName.$className")
-        blankLine()
-
+        imports.add(ImportDirective(classDeclaration.qualifiedName!!.asString())) // Import the class that's getting processed
         renderBuilder()
         renderItemConverter()
         renderSchema()
@@ -56,37 +43,44 @@ public class AnnotationRenderer(
     private fun renderBuilder() {
         checkNotNull(properties.singleOrNull { it.isPk }) { "Expected exactly one @DynamoDbPartitionKey annotation on a property" }
 
+        withDocs {
+            write("A DSL-style builder for instances of [#L]", className)
+        }
+
         withBlock("public class #L {", "}", builderName) {
             properties.forEach {
-                write("public var #L: #T? = null", it.name, it.typeName.asString())
+                write("public var #L: #L? = null", it.name, it.typeName.asString().removePrefix("kotlin."))
             }
+            blankLine()
 
-            withBlock("public fun build(): #T {", "}", className) {
+            withBlock("public fun build(): #L {", "}", className) {
                 properties.forEach {
-                    write("val #1L = requireNotNull(#1L) { #S }", it.name, "Missing value for $className.${it.name}")
+                    write("val #1L = requireNotNull(#1L) { #2S }", it.name, "Missing value for $className.${it.name}")
                 }
                 blankLine()
-                withBlock("return $className(", ")") {
-                    properties.joinToString(", ") { it.name }
+                withBlock("return #L(", ")", className) {
+                    write("#L", properties.joinToString(", ") { it.name })
                 }
             }
         }
+        blankLine()
     }
 
     private fun renderItemConverter() {
-        withBlock("public object #L : #T<#L> by #T(", ")", converterName, Types.ItemConverter, className, Types.SimpleItemConverter) {
-            write("builderFactory = ::#L", builderName)
-            write("build = #L::build", builderName)
-            withBlock("descriptors = #L(", ")", Types.arrayOf) {
+        withBlock("internal object #L : #T<#L> by #T(", ")", converterName, Types.ItemConverter, className, Types.SimpleItemConverter) {
+            write("builderFactory = ::#L,", builderName)
+            write("build = #L::build,", builderName)
+            withBlock("descriptors = arrayOf(", "),") {
                 properties.forEach {
                     renderAttributeDescriptor(it)
                 }
             }
         }
+        blankLine()
     }
 
     private fun renderAttributeDescriptor(prop: Property) {
-        withBlock("#T(", ")", Types.AttributeDescriptor) {
+        withBlock("#T(", "),", Types.AttributeDescriptor) {
             write("#S,", prop.ddbName) // key
             write("#L,", "${className}::${prop.name}") // getter
             write("#L,", "${builderName}::${prop.name}::set") // setter
@@ -104,22 +98,32 @@ public class AnnotationRenderer(
         }
 
     private fun renderSchema() {
-        withBlock("public object #L : #T.#T<#L, #L> {", "}", schemaName, Types.ItemSchema, Types.PartitionKey, className, keyProperty.typeName.getShortName()) {
+        withBlock("internal object #L : #T.#L<#L, #L> {", "}", schemaName, Types.ItemSchema, "PartitionKey", className, keyProperty.typeName.getShortName()) {
             write("override val converter : #1L = #1L", converterName)
-            write("override val partitionKey: #T<#2L> = #2L(#S)", Types.KeySpec, keyProperty.keySpec, keyProperty.name)
+            write("override val partitionKey: #1T<#2L> = #1T.#2L(#3S)", Types.KeySpec, keyProperty.keySpec, keyProperty.name)
         }
+        blankLine()
     }
 
-    private val Property.keySpec: Type
+    private val Property.keySpec: String
         get() = when (typeName.asString()) {
-            "kotlin.Int" -> Types.KeySpecNumber
-            "kotlin.String" -> Types.KeySpecString
+            "kotlin.Int" -> "Number"
+            "kotlin.String" -> "String"
             else -> error("Unsupported key type ${typeName.asString()}, expected Int or String")
         }
 
     private fun renderGetTable() {
-        write("public fun #T.get#2LTable(name: #T): #L.#L<#2L, #L> = #L(name, #L)",
-            Types.DynamoDbMapper, className, Types.String, Types.Table, Types.PartitionKey, keyProperty.typeName.getShortName(), Types.getTable, schemaName
+        withDocs {
+            write("Returns a reference to a table named [name] containing items representing [#L]", className)
+        }
+        write("public fun #1T.get#2LTable(name: String): #3T.#4L<#2L, #5L> = #6L(name, #7L)",
+            Types.DynamoDbMapper,
+            className,
+            Types.Table,
+            "PartitionKey",
+            keyProperty.typeName.getShortName(),
+            "getTable",
+            schemaName
         )
     }
 }
@@ -141,5 +145,3 @@ private data class Property(val name: String, val ddbName: String, val typeName:
             }
     }
 }
-
-

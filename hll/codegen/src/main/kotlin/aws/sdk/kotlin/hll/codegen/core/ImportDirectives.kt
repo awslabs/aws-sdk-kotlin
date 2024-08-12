@@ -23,6 +23,8 @@ class ImportDirectives : MutableSet<ImportDirective> by mutableSetOf() {
         get() = buildString {
             sortedWith(importComparator).forEach { appendLine(it.formatted) }
         }
+
+    public fun add(type: TypeRef) = add(ImportDirective(type))
 }
 
 private val specialPrefixes = setOf(

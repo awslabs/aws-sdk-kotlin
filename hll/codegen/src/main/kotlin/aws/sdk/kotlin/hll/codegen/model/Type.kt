@@ -135,8 +135,6 @@ object Types {
     val toItem = TypeRef(Pkg.Hl.Model, "toItem")
 
     val KeySpec = TypeRef(Pkg.Hl.Items, "KeySpec")
-    val KeySpecNumber = TypeRef(Pkg.Hl.Items, "KeySpec.Number")
-    val KeySpecString = TypeRef(Pkg.Hl.Items, "KeySpec.String")
     val ItemSchema = TypeRef(Pkg.Hl.Items, "ItemSchema")
     val PartitionKey = TypeRef(Pkg.Hl.Items, "PartitionKey")
     val AttributeDescriptor = TypeRef(Pkg.Hl.Items, "AttributeDescriptor")
