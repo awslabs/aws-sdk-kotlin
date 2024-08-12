@@ -24,6 +24,9 @@ class ImportDirectives : MutableSet<ImportDirective> by mutableSetOf() {
             sortedWith(importComparator).forEach { appendLine(it.formatted) }
         }
 
+    /**
+     * Add a [type] to this set of [ImportDirectives]
+     */
     public fun add(type: TypeRef) = add(ImportDirective(type))
 }
 
