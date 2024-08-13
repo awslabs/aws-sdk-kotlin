@@ -185,6 +185,11 @@ public final class aws/sdk/kotlin/hll/codegen/model/Types {
 	public final fun stringMap (Laws/sdk/kotlin/hll/codegen/model/Type;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 }
 
+public final class aws/sdk/kotlin/hll/codegen/rendering/BuilderRenderer {
+	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RendererBase;Lcom/google/devtools/ksp/symbol/KSClassDeclaration;)V
+	public final fun render ()V
+}
+
 public final class aws/sdk/kotlin/hll/codegen/rendering/RenderContext {
 	public fun <init> (Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;)V
 	public final fun component1 ()Lcom/google/devtools/ksp/processing/KSPLogger;

@@ -7,6 +7,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.processor.rendering
 import aws.sdk.kotlin.hll.codegen.core.ImportDirective
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.Types
+import aws.sdk.kotlin.hll.codegen.rendering.BuilderRenderer
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
@@ -23,7 +24,7 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
  * @param classDeclaration the [KSClassDeclaration] of the class
  * @param ctx the [RenderContext] of the renderer
  */
-public class AnnotationRenderer(
+public class SchemaRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
 ) : RendererBase(ctx, "${classDeclaration.qualifiedName!!.getShortName()}Schema", "dynamodb-mapper-annotation-processor") {
@@ -32,7 +33,7 @@ public class AnnotationRenderer(
     private val converterName = "${className}Converter"
     private val schemaName = "${className}Schema"
 
-    private val properties = classDeclaration.getAllProperties().mapNotNull(Property.Companion::from)
+    private val properties = classDeclaration.getAllProperties().mapNotNull(AnnotatedClassProperty.Companion::from)
     private val keyProperty = checkNotNull(properties.singleOrNull { it.isPk }) {
         "Expected exactly one @DynamoDbPartitionKey annotation on a property"
     }
@@ -45,33 +46,8 @@ public class AnnotationRenderer(
         renderGetTable()
     }
 
-    private fun renderBuilder() {
-        checkNotNull(properties.singleOrNull { it.isPk }) { "Expected exactly one @DynamoDbPartitionKey annotation on a property" }
-
-        withDocs {
-            write("A DSL-style builder for instances of [#L]", className)
-        }
-
-        withBlock("public class #L {", "}", builderName) {
-            properties.forEach {
-                write("public var #L: #L? = null", it.name, it.typeName.asString())
-            }
-            blankLine()
-
-            withBlock("public fun build(): #L {", "}", className) {
-                properties.forEach {
-                    write("val #1L = requireNotNull(#1L) { #2S }", it.name, "Missing value for ${it.name}")
-                }
-                blankLine()
-                withBlock("return #L(", ")", className) {
-                    properties.forEach {
-                        write("#L,", it.name)
-                    }
-                }
-            }
-        }
-        blankLine()
-    }
+    // TODO Not all classes need builders generated (i.e. the class consists of all public mutable members), add configurability here
+    private fun renderBuilder() = BuilderRenderer(this, classDeclaration).render()
 
     private fun renderItemConverter() {
         withBlock("internal object #L : #T<#L> by #T(", ")", converterName, Types.ItemConverter, className, Types.SimpleItemConverter) {
@@ -86,7 +62,7 @@ public class AnnotationRenderer(
         blankLine()
     }
 
-    private fun renderAttributeDescriptor(prop: Property) {
+    private fun renderAttributeDescriptor(prop: AnnotatedClassProperty) {
         withBlock("#T(", "),", Types.AttributeDescriptor) {
             write("#S,", prop.ddbName) // key
             write("#L,", "$className::${prop.name}") // getter
@@ -95,7 +71,7 @@ public class AnnotationRenderer(
         }
     }
 
-    private val Property.valueConverter: Type
+    private val AnnotatedClassProperty.valueConverter: Type
         get() = when (typeName.asString()) {
             "aws.smithy.kotlin.runtime.time.Instant" -> Types.DefaultInstantConverter
             "kotlin.Boolean" -> Types.BooleanConverter
@@ -112,7 +88,7 @@ public class AnnotationRenderer(
         blankLine()
     }
 
-    private val Property.keySpec: String
+    private val AnnotatedClassProperty.keySpec: String
         get() = when (typeName.asString()) {
             "kotlin.Int" -> "Number"
             "kotlin.String" -> "String"
@@ -136,7 +112,7 @@ public class AnnotationRenderer(
     }
 }
 
-private data class Property(val name: String, val ddbName: String, val typeName: KSName, val isPk: Boolean) {
+private data class AnnotatedClassProperty(val name: String, val ddbName: String, val typeName: KSName, val isPk: Boolean) {
     companion object {
         @OptIn(KspExperimental::class)
         fun from(ksProperty: KSPropertyDeclaration) = ksProperty
@@ -149,7 +125,7 @@ private data class Property(val name: String, val ddbName: String, val typeName:
                 val isPk = ksProperty.isAnnotationPresent(DynamoDbPartitionKey::class)
                 val name = ksProperty.simpleName.getShortName()
                 val ddbName = ksProperty.getAnnotationsByType(DynamoDbAttribute::class).singleOrNull()?.name ?: name
-                Property(name, ddbName, typeName, isPk)
+                AnnotatedClassProperty(name, ddbName, typeName, isPk)
             }
     }
 }

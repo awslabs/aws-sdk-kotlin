@@ -22,7 +22,7 @@ public class HighLevelRenderer(
         annotatedClasses.forEach {
             logger.info("Processing annotation on ${it.simpleName}")
             val renderCtx = RenderContext(logger, codegenFactory, "${it.packageName.asString()}.mapper.schemas")
-            val annotation = AnnotationRenderer(it, renderCtx)
+            val annotation = SchemaRenderer(it, renderCtx)
             annotation.render()
         }
     }
