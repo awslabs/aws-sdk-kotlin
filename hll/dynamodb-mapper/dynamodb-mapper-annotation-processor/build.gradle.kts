@@ -7,7 +7,6 @@ description = "Annotation processor for the DynamoDbMapper, used to code-generat
 extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: DynamoDbMapper :: Annotation Processor"
 extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.processor"
 
-
 kotlin {
     sourceSets {
         jvmMain {

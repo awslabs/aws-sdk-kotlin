@@ -15,9 +15,11 @@ class BuilderRenderer(
     private val properties = classDeclaration.getAllProperties().mapNotNull(KSClassProperty.Companion::from)
 
     private val className = classDeclaration.qualifiedName!!.getShortName()
-    private val classType = Type.from(checkNotNull(classDeclaration.primaryConstructor?.returnType ) {
-        "Failed to determine class type for $className"
-    })
+    private val classType = Type.from(
+        checkNotNull(classDeclaration.primaryConstructor?.returnType) {
+            "Failed to determine class type for $className"
+        },
+    )
 
     fun render() {
         renderer.withDocs {
