@@ -20,12 +20,12 @@ public final class aws/sdk/kotlin/hll/codegen/core/CodeGenerator$DefaultImpls {
 
 public final class aws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory {
 	public fun <init> (Lcom/google/devtools/ksp/processing/CodeGenerator;Lcom/google/devtools/ksp/processing/KSPLogger;)V
-	public final fun generator (Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/hll/codegen/core/CodeGenerator;
+	public final fun generator (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/hll/codegen/core/CodeGenerator;
 }
 
 public final class aws/sdk/kotlin/hll/codegen/core/CodeGeneratorImpl : aws/sdk/kotlin/hll/codegen/core/CodeGenerator {
-	public fun <init> (Ljava/lang/String;Laws/sdk/kotlin/hll/codegen/core/TemplateEngine;Lkotlin/jvm/functions/Function1;Laws/sdk/kotlin/hll/codegen/core/ImportDirectives;)V
-	public synthetic fun <init> (Ljava/lang/String;Laws/sdk/kotlin/hll/codegen/core/TemplateEngine;Lkotlin/jvm/functions/Function1;Laws/sdk/kotlin/hll/codegen/core/ImportDirectives;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Laws/sdk/kotlin/hll/codegen/core/TemplateEngine;Lkotlin/jvm/functions/Function1;Laws/sdk/kotlin/hll/codegen/core/ImportDirectives;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Laws/sdk/kotlin/hll/codegen/core/TemplateEngine;Lkotlin/jvm/functions/Function1;Laws/sdk/kotlin/hll/codegen/core/ImportDirectives;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun blankLine ()V
 	public fun closeAndOpenBlock (Ljava/lang/String;[Ljava/lang/Object;)V
 	public fun closeBlock (Ljava/lang/String;[Ljava/lang/Object;)V
@@ -59,7 +59,6 @@ public final class aws/sdk/kotlin/hll/codegen/core/ImportDirective {
 public final class aws/sdk/kotlin/hll/codegen/core/ImportDirectives : java/util/Set, kotlin/jvm/internal/markers/KMutableSet {
 	public fun <init> ()V
 	public fun add (Laws/sdk/kotlin/hll/codegen/core/ImportDirective;)Z
-	public final fun add (Laws/sdk/kotlin/hll/codegen/model/TypeRef;)Z
 	public synthetic fun add (Ljava/lang/Object;)Z
 	public fun addAll (Ljava/util/Collection;)Z
 	public fun clear ()V
@@ -214,7 +213,8 @@ public final class aws/sdk/kotlin/hll/codegen/rendering/RenderContextKt {
 }
 
 public abstract class aws/sdk/kotlin/hll/codegen/rendering/RendererBase : aws/sdk/kotlin/hll/codegen/core/CodeGenerator {
-	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;)V
+	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun blankLine ()V
 	public fun closeAndOpenBlock (Ljava/lang/String;[Ljava/lang/Object;)V
 	public fun closeBlock (Ljava/lang/String;[Ljava/lang/Object;)V

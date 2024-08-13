@@ -26,7 +26,7 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 public class AnnotationRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
-) : RendererBase(ctx, "${classDeclaration.qualifiedName!!.getShortName()}Schema") {
+) : RendererBase(ctx, "${classDeclaration.qualifiedName!!.getShortName()}Schema", "dynamodb-mapper-annotation-processor") {
     private val className = classDeclaration.qualifiedName!!.getShortName()
     private val builderName = "${className}Builder"
     private val converterName = "${className}Converter"

@@ -9,13 +9,14 @@ import aws.sdk.kotlin.hll.codegen.core.CodeGenerator
 /**
  * The parent class for renderers backed by a [CodeGenerator]
  * @param ctx The active [RenderContext]
- * @param name The name of the file which should be created _without_ parent directory or extension (which is always
+ * @param fileName The name of the file which should be created _without_ parent directory or extension (which is always
  * **.kt**)
  */
 abstract class RendererBase(
     ctx: RenderContext,
-    name: String,
-) : CodeGenerator by ctx.codegenFactory.generator(name, ctx.pkg) {
+    fileName: String,
+    rendererName: String = "aws-sdk-kotlin-hll-codegen",
+) : CodeGenerator by ctx.codegenFactory.generator(fileName, ctx.pkg, rendererName) {
     /**
      * Run this renderer by calling the `abstract` [generate] method and then [persist]
      */
