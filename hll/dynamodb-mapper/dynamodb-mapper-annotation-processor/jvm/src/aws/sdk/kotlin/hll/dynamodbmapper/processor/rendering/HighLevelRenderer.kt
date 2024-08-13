@@ -11,15 +11,15 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
 
 /**
  * The parent renderer for all codegen from this package. This class orchestrates the various sub-renderers.
- * @param annotations A list of annotated classes
+ * @param annotatedClasses A list of annotated classes
  */
 public class HighLevelRenderer(
-    private val annotations: List<KSClassDeclaration>,
+    private val annotatedClasses: List<KSClassDeclaration>,
     private val logger: KSPLogger,
     private val codegenFactory: CodeGeneratorFactory,
 ) {
     public fun render() {
-        annotations.forEach {
+        annotatedClasses.forEach {
             logger.info("Processing annotation on ${it.simpleName}")
             val renderCtx = RenderContext(logger, codegenFactory, "${it.packageName.asString()}.mapper.schemas")
             val annotation = AnnotationRenderer(it, renderCtx)

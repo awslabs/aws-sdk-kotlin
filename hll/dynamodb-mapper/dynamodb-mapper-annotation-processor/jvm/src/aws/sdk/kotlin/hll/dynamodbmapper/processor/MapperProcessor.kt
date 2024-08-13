@@ -30,13 +30,13 @@ public class MapperProcessor(private val environment: SymbolProcessorEnvironment
         val invalid = annotated.filterNot { it.validate() }.toList()
         logger.info("Found invalid classes $invalid")
 
-        val annotations = annotated
+        val annotatedClasses = annotated
             .toList()
             .also { logger.info("Found annotated classes: $it") }
             .filterIsInstance<KSClassDeclaration>()
             .filter { it.validate() }
 
-        HighLevelRenderer(annotations, logger, codeGeneratorFactory).render()
+        HighLevelRenderer(annotatedClasses, logger, codeGeneratorFactory).render()
 
         return invalid
     }
