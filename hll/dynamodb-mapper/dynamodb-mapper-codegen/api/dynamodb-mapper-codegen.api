@@ -1,0 +1,215 @@
+public final class aws/sdk/kotlin/hll/dynamodbmapper/annotations/AnnotationsProcessor : com/google/devtools/ksp/processing/SymbolProcessor {
+	public fun <init> (Lcom/google/devtools/ksp/processing/SymbolProcessorEnvironment;)V
+	public fun process (Lcom/google/devtools/ksp/processing/Resolver;)Ljava/util/List;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/annotations/AnnotationsProcessorProvider : com/google/devtools/ksp/processing/SymbolProcessorProvider {
+	public fun <init> ()V
+	public fun create (Lcom/google/devtools/ksp/processing/SymbolProcessorEnvironment;)Laws/sdk/kotlin/hll/dynamodbmapper/annotations/AnnotationsProcessor;
+	public synthetic fun create (Lcom/google/devtools/ksp/processing/SymbolProcessorEnvironment;)Lcom/google/devtools/ksp/processing/SymbolProcessor;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/annotations/rendering/HighLevelRenderer {
+	public fun <init> (Ljava/util/List;Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;)V
+	public final fun render ()V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/annotations/rendering/SchemaRenderer : aws/sdk/kotlin/hll/codegen/rendering/RendererBase {
+	public fun <init> (Lcom/google/devtools/ksp/symbol/KSClassDeclaration;Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;)V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/HighLevelOpsProcessor : com/google/devtools/ksp/processing/SymbolProcessor {
+	public fun <init> (Lcom/google/devtools/ksp/processing/SymbolProcessorEnvironment;)V
+	public fun process (Lcom/google/devtools/ksp/processing/Resolver;)Ljava/util/List;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/HighLevelOpsProcessorProvider : com/google/devtools/ksp/processing/SymbolProcessorProvider {
+	public fun <init> ()V
+	public fun create (Lcom/google/devtools/ksp/processing/SymbolProcessorEnvironment;)Lcom/google/devtools/ksp/processing/SymbolProcessor;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKind : java/lang/Enum {
+	public static final field Index Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKind;
+	public static final field ItemSource Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKind;
+	public static final field Table Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKind;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getHoistedFields ()Ljava/util/List;
+	public final fun getParent ()Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKind;
+	public final fun getSpecType (Ljava/lang/String;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun isAbstract ()Z
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKind;
+	public static fun values ()[Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKind;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKindKt {
+	public static final fun getItemSourceKinds (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;)Ljava/util/Set;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/Member {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Member$Companion;
+	public fun <init> (Ljava/lang/String;Laws/sdk/kotlin/hll/codegen/model/Type;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Laws/sdk/kotlin/hll/codegen/model/Type;
+	public final fun copy (Ljava/lang/String;Laws/sdk/kotlin/hll/codegen/model/Type;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Member;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Member;Ljava/lang/String;Laws/sdk/kotlin/hll/codegen/model/Type;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Member;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getType ()Laws/sdk/kotlin/hll/codegen/model/Type;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/Member$Companion {
+	public final fun from (Lcom/google/devtools/ksp/symbol/KSPropertyDeclaration;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Member;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$Companion;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$Companion {
+	public final fun identifyFor (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Member;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$Drop : aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$Drop;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$Hoist : aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$Hoist;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$MapAll : aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$MapAll;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$MapKeys : aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$MapKeys;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$PassThrough : aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior$PassThrough;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehaviorKt {
+	public static final fun getCodegenBehavior (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Member;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/MemberCodegenBehavior;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/ModelAttributes {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/ModelAttributes;
+	public final fun getLowLevelOperation ()Laws/smithy/kotlin/runtime/collections/AttributeKey;
+	public final fun getLowLevelStructure ()Laws/smithy/kotlin/runtime/collections/AttributeKey;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation$Companion;
+	public fun <init> (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Laws/smithy/kotlin/runtime/collections/Attributes;)V
+	public synthetic fun <init> (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Laws/smithy/kotlin/runtime/collections/Attributes;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+	public final fun component3 ()Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+	public final fun component4 ()Laws/smithy/kotlin/runtime/collections/Attributes;
+	public final fun copy (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Laws/smithy/kotlin/runtime/collections/Attributes;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Laws/smithy/kotlin/runtime/collections/Attributes;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAttributes ()Laws/smithy/kotlin/runtime/collections/Attributes;
+	public final fun getMethodName ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getRequest ()Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+	public final fun getResponse ()Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation$Companion {
+	public final fun from (Lcom/google/devtools/ksp/symbol/KSFunctionDeclaration;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/OperationKt {
+	public static final fun getLowLevel (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;
+	public static final fun toHighLevel (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure$Companion;
+	public fun <init> (Laws/sdk/kotlin/hll/codegen/model/TypeRef;Ljava/util/List;Laws/smithy/kotlin/runtime/collections/Attributes;)V
+	public synthetic fun <init> (Laws/sdk/kotlin/hll/codegen/model/TypeRef;Ljava/util/List;Laws/smithy/kotlin/runtime/collections/Attributes;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Laws/smithy/kotlin/runtime/collections/Attributes;
+	public final fun copy (Laws/sdk/kotlin/hll/codegen/model/TypeRef;Ljava/util/List;Laws/smithy/kotlin/runtime/collections/Attributes;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Laws/sdk/kotlin/hll/codegen/model/TypeRef;Ljava/util/List;Laws/smithy/kotlin/runtime/collections/Attributes;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAttributes ()Laws/smithy/kotlin/runtime/collections/Attributes;
+	public final fun getMembers ()Ljava/util/List;
+	public final fun getType ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure$Companion {
+	public final fun from (Lcom/google/devtools/ksp/symbol/KSTypeReference;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/model/StructureKt {
+	public static final fun getLowLevel (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+	public static final fun toHighLevel (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/rendering/DataTypeGenerator : aws/sdk/kotlin/hll/codegen/core/CodeGenerator {
+	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Laws/sdk/kotlin/hll/codegen/core/CodeGenerator;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;)V
+	public fun blankLine ()V
+	public fun closeAndOpenBlock (Ljava/lang/String;[Ljava/lang/Object;)V
+	public fun closeBlock (Ljava/lang/String;[Ljava/lang/Object;)V
+	public fun dedent (I)V
+	public final fun generate ()V
+	public fun getImports ()Laws/sdk/kotlin/hll/codegen/core/ImportDirectives;
+	public final fun getStructure ()Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Structure;
+	public fun indent (I)V
+	public fun openBlock (Ljava/lang/String;[Ljava/lang/Object;)V
+	public fun persist ()V
+	public fun withBlock (Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;Lkotlin/jvm/functions/Function0;)V
+	public fun withDocs (Lkotlin/jvm/functions/Function0;)V
+	public fun write (Ljava/lang/String;[Ljava/lang/Object;)V
+	public fun writeInline (Ljava/lang/String;[Ljava/lang/Object;)V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/rendering/HighLevelRenderer {
+	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/util/List;)V
+	public final fun render ()V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/rendering/OperationRenderer : aws/sdk/kotlin/hll/codegen/rendering/RendererBase {
+	public static final field Companion Laws/sdk/kotlin/hll/dynamodbmapper/operations/rendering/OperationRenderer$Companion;
+	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;)V
+	public final fun getMembers ()Ljava/util/Map;
+	public final fun getOperation ()Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/rendering/OperationRenderer$Companion {
+	public final fun factoryFunctionName (Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/Operation;)Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/operations/rendering/OperationsTypeRenderer : aws/sdk/kotlin/hll/codegen/rendering/RendererBase {
+	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKind;Laws/sdk/kotlin/hll/codegen/model/Type;Ljava/util/List;)V
+	public final fun getInterfaceType ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun getItemSourceKind ()Laws/sdk/kotlin/hll/dynamodbmapper/operations/model/ItemSourceKind;
+	public final fun getOperations ()Ljava/util/List;
+	public final fun getParentType ()Laws/sdk/kotlin/hll/codegen/model/Type;
+}
+

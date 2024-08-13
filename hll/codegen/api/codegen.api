@@ -236,6 +236,10 @@ public abstract class aws/sdk/kotlin/hll/codegen/rendering/RendererBase : aws/sd
 	public fun writeInline (Ljava/lang/String;[Ljava/lang/Object;)V
 }
 
+public final class aws/sdk/kotlin/hll/codegen/rendering/RendererBaseKt {
+	public static final fun use (Laws/sdk/kotlin/hll/codegen/rendering/RendererBase;Lkotlin/jvm/functions/Function1;)V
+}
+
 public final class aws/sdk/kotlin/hll/codegen/util/AttributesExtKt {
 	public static final fun plus (Laws/smithy/kotlin/runtime/collections/Attributes;Laws/smithy/kotlin/runtime/collections/Attributes;)Laws/smithy/kotlin/runtime/collections/Attributes;
 	public static final fun plus (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/Pair;)Laws/smithy/kotlin/runtime/collections/Attributes;
