@@ -50,7 +50,7 @@ public class SchemaRenderer(
     private fun renderBuilder() = BuilderRenderer(this, classDeclaration).render()
 
     private fun renderItemConverter() {
-        withBlock("internal object #L : #T<#L> by #T(", ")", converterName, Types.ItemConverter, className, Types.SimpleItemConverter) {
+        withBlock("public object #L : #T<#L> by #T(", ")", converterName, Types.ItemConverter, className, Types.SimpleItemConverter) {
             write("builderFactory = ::#L,", builderName)
             write("build = #L::build,", builderName)
             withBlock("descriptors = arrayOf(", "),") {
@@ -81,7 +81,7 @@ public class SchemaRenderer(
         }
 
     private fun renderSchema() {
-        withBlock("internal object #L : #T.#L<#L, #L> {", "}", schemaName, Types.ItemSchema, "PartitionKey", className, keyProperty.typeName.getShortName()) {
+        withBlock("public object #L : #T.#L<#L, #L> {", "}", schemaName, Types.ItemSchema, "PartitionKey", className, keyProperty.typeName.getShortName()) {
             write("override val converter : #1L = #1L", converterName)
             write("override val partitionKey: #1T<#2L> = #1T.#2L(#3S)", Types.KeySpec, keyProperty.keySpec, keyProperty.name)
         }
