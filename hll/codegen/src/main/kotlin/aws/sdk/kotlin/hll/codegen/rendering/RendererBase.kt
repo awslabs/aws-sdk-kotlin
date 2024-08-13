@@ -27,3 +27,10 @@ abstract class RendererBase(
 
     protected abstract fun generate()
 }
+
+/**
+ * Use an instance of [RendererBase] to execute a [block]
+ */
+fun RendererBase.use(block: RendererBase.() -> Unit) {
+    block()
+}

@@ -21,34 +21,34 @@ class BuilderRenderer(
         },
     )
 
-    fun render() {
-        renderer.withDocs {
-            renderer.write("A DSL-style builder for instances of [#L]", className)
+    fun render() = renderer.use {
+        withDocs {
+            write("A DSL-style builder for instances of [#L]", className)
         }
 
-        renderer.withBlock("public class #L {", "}", "${className}Builder") {
+        withBlock("public class #L {", "}", "${className}Builder") {
             properties.forEach {
-                renderer.write("public var #L: #L? = null", it.name, it.typeName.asString())
+                write("public var #L: #L? = null", it.name, it.typeName.asString())
             }
-            renderer.blankLine()
+            blankLine()
 
-            renderer.withBlock("public fun build(): #T {", "}", classType) {
+            withBlock("public fun build(): #T {", "}", classType) {
                 properties.forEach {
                     if (it.nullable) {
-                        renderer.write("val #1L = #1L", it.name)
+                        write("val #1L = #1L", it.name)
                     } else {
-                        renderer.write("val #1L = requireNotNull(#1L) { #2S }", it.name, "Missing value for ${it.name}")
+                        write("val #1L = requireNotNull(#1L) { #2S }", it.name, "Missing value for ${it.name}")
                     }
                 }
-                renderer.blankLine()
-                renderer.withBlock("return #T(", ")", classType) {
+                blankLine()
+                withBlock("return #T(", ")", classType) {
                     properties.forEach {
-                        renderer.write("#L,", it.name)
+                        write("#L,", it.name)
                     }
                 }
             }
         }
-        renderer.blankLine()
+        blankLine()
     }
 }
 
