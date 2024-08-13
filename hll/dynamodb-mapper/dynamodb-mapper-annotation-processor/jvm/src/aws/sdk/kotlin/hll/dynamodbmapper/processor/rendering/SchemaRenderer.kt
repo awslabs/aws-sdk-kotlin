@@ -77,12 +77,14 @@ public class SchemaRenderer(
             "kotlin.Boolean" -> Types.BooleanConverter
             "kotlin.Int" -> Types.IntConverter
             "kotlin.String" -> Types.StringConverter
+            // TODO Add additional "standard" item converters
             else -> error("Unsupported attribute type ${typeName.asString()}")
         }
 
     private fun renderSchema() {
         withBlock("public object #L : #T.#L<#L, #L> {", "}", schemaName, Types.ItemSchema, "PartitionKey", className, keyProperty.typeName.getShortName()) {
             write("override val converter : #1L = #1L", converterName)
+            // TODO Handle composite keys
             write("override val partitionKey: #1T<#2L> = #1T.#2L(#3S)", Types.KeySpec, keyProperty.keySpec, keyProperty.name)
         }
         blankLine()
@@ -92,6 +94,7 @@ public class SchemaRenderer(
         get() = when (typeName.asString()) {
             "kotlin.Int" -> "Number"
             "kotlin.String" -> "String"
+            // TODO Handle ByteArray
             else -> error("Unsupported key type ${typeName.asString()}, expected Int or String")
         }
 
