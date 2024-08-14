@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
-import aws.sdk.kotlin.hll.codegen.core.ImportDirective
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
