@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.11] - 08/14/2024
+
+### Features
+* (**codebuild**) AWS CodeBuild now supports using Secrets Manager to store git credentials and using multiple source credentials in a single project.
+
+### Fixes
+* [#1368](https://github.com/awslabs/aws-sdk-kotlin/issues/1368) Correctly handle all empty HeadObject/HeadBucket responses
+
 ## [1.3.10] - 08/13/2024
 
 ### Features
