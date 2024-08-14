@@ -1,0 +1,8 @@
+{
+    "id": "e58cd6d1-a4b8-42a8-b03e-459d67aeb7c1",
+    "type": "bugfix",
+    "description": "Correctly terminate pagination for CloudWatch Logs `GetLogEvents` operation",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1326"
+    ]
+}
