@@ -2,15 +2,14 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.hll.dynamodbmapper.operations.rendering
+package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.*
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.codegen.rendering.info
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.rendering.DataTypeGenerator
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.*
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.*
 
 // FIXME handle paginated operations differently (e.g., don't map pagination parameters, provide only Flow API)
 

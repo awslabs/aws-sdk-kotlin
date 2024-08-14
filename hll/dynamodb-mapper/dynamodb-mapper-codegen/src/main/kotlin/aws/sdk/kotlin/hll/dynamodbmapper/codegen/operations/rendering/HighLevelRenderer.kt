@@ -2,13 +2,13 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.hll.dynamodbmapper.operations.rendering
+package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering
 
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.ItemSourceKind
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.Operation
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.itemSourceKinds
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ItemSourceKind
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Operation
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.itemSourceKinds
 
 /**
  * The parent renderer for all codegen from this package. This class orchestrates the various sub-renderers.

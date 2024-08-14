@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.hll.dynamodbmapper.operations.rendering
+package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering
 
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
@@ -10,7 +10,9 @@ import aws.sdk.kotlin.hll.codegen.model.TypeVar
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.codegen.util.lowercaseFirstChar
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.*
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ItemSourceKind
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Operation
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.itemSourceKinds
 
 /**
  * Renders the `*Operations` interface and `*OperationsImpl` class which contain a method for each codegenned

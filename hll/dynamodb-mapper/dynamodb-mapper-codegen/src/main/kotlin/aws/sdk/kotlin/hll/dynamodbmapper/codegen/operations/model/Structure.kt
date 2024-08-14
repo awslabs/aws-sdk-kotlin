@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.hll.dynamodbmapper.operations.model
+package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
@@ -34,7 +34,7 @@ data class Structure(
             type = Type.from(ksTypeRef),
             members = (ksTypeRef.resolve().declaration as KSClassDeclaration)
                 .getDeclaredProperties()
-                .map(Member::from)
+                .map(Member.Companion::from)
                 .toList(),
         )
     }

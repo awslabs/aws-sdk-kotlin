@@ -2,16 +2,15 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.hll.dynamodbmapper.operations.rendering
+package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGenerator
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.TypeVar
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.*
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.Member
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.Structure
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Member
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Structure
 
 /**
  * Generates immutable data types from a [Structure] into an underlying [CodeGenerator]. These data types consist of a

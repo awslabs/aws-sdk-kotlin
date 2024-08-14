@@ -2,14 +2,14 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.hll.dynamodbmapper.operations
+package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.util.Pkg
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.Operation
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.model.toHighLevel
-import aws.sdk.kotlin.hll.dynamodbmapper.operations.rendering.HighLevelRenderer
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Operation
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.toHighLevel
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering.HighLevelRenderer
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import com.google.devtools.ksp.getClassDeclarationByName
 import com.google.devtools.ksp.getDeclaredFunctions

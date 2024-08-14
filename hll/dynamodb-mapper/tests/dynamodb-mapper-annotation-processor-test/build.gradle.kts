@@ -27,5 +27,5 @@ dependencies {
 
 ksp {
     // annotation-processor-test does not need the ops-codegen processor loaded
-    excludeProcessor("aws.sdk.kotlin.hll.dynamodbmapper.operations.HighLevelOpsProcessorProvider")
+    excludeProcessor("aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.HighLevelOpsProcessorProvider")
 }

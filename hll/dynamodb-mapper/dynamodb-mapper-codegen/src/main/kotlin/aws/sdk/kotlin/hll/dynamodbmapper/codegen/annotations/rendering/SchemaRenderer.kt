@@ -2,7 +2,7 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.hll.dynamodbmapper.annotations.rendering
+package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.ImportDirective
 import aws.sdk.kotlin.hll.codegen.model.Type
