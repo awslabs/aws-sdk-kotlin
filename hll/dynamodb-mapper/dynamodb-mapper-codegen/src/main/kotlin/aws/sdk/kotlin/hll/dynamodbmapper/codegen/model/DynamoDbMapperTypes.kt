@@ -19,20 +19,25 @@ object DynamoDbMapperTypes {
 
     val HReqContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "HReqContextImpl")
     fun itemSchema(typeVar: String) = TypeRef(Pkg.Hl.Items, "ItemSchema", listOf(TypeVar(typeVar)))
+    fun itemSchemaPartitionKey(objectType: TypeRef, keyType: TypeRef) = TypeRef(Pkg.Hl.Items, "ItemSchema.PartitionKey", listOf(objectType, keyType))
     val MapperContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "MapperContextImpl")
     val Operation = TypeRef(Pkg.Hl.PipelineImpl, "Operation")
 
-    fun tablePartitionKey(objectType: TypeRef, partitionKeyType: TypeRef) = TypeRef(
+    fun tablePartitionKey(objectType: TypeRef, keyType: TypeRef) = TypeRef(
         Pkg.Hl.Model,
         "Table.PartitionKey",
-        genericArgs = listOf(objectType, partitionKeyType),
+        genericArgs = listOf(objectType, keyType),
     )
     val toItem = TypeRef(Pkg.Hl.Model, "toItem")
 
     val KeySpec = TypeRef(Pkg.Hl.Items, "KeySpec")
+    fun keySpec(keyType: TypeRef) = TypeRef(Pkg.Hl.Items, "KeySpec", genericArgs = listOf(keyType))
+    val KeySpecNumber = TypeRef(Pkg.Hl.Items, "KeySpec.Number")
+    val KeySpecString = TypeRef(Pkg.Hl.Items, "KeySpec.String")
     val ItemSchema = TypeRef(Pkg.Hl.Items, "ItemSchema")
     val AttributeDescriptor = TypeRef(Pkg.Hl.Items, "AttributeDescriptor")
     val ItemConverter = TypeRef(Pkg.Hl.Items, "ItemConverter")
+    fun itemConverter(objectType: TypeRef) = TypeRef(Pkg.Hl.Items, "ItemConverter", genericArgs = listOf(objectType))
     val SimpleItemConverter = TypeRef(Pkg.Hl.Items, "SimpleItemConverter")
 
     val DefaultInstantConverter = TypeRef(Pkg.Hl.Values, "InstantConverter.Default")

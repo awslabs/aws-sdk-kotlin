@@ -7,6 +7,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 import aws.sdk.kotlin.hll.codegen.core.ImportDirective
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
+import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.rendering.BuilderRenderer
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
@@ -57,7 +58,7 @@ public class SchemaRenderer(
     private fun renderBuilder() = BuilderRenderer(this, classDeclaration).render()
 
     private fun renderItemConverter() {
-        withBlock("public object #L : #T<#L> by #T(", ")", converterName, DynamoDbMapperTypes.ItemConverter, className, DynamoDbMapperTypes.SimpleItemConverter) {
+        withBlock("public object #L : #T by #T(", ")", converterName, DynamoDbMapperTypes.itemConverter(classType), DynamoDbMapperTypes.SimpleItemConverter) {
             write("builderFactory = ::#L,", builderName)
             write("build = #L::build,", builderName)
             withBlock("descriptors = arrayOf(", "),") {
@@ -89,18 +90,26 @@ public class SchemaRenderer(
         }
 
     private fun renderSchema() {
-        withBlock("public object #L : #T.#L<#L, #L> {", "}", schemaName, DynamoDbMapperTypes.ItemSchema, "PartitionKey", className, keyProperty.typeName.getShortName()) {
+        withBlock("public object #L : #T {", "}", schemaName, DynamoDbMapperTypes.itemSchemaPartitionKey(classType, keyProperty.typeRef)) {
             write("override val converter : #1L = #1L", converterName)
             // TODO Handle composite keys
-            write("override val partitionKey: #1T<#2L> = #1T.#2L(#3S)", DynamoDbMapperTypes.KeySpec, keyProperty.keySpec, keyProperty.name)
+            write("override val partitionKey: #T = #T(#S)", DynamoDbMapperTypes.keySpec(keyProperty.keySpec), keyProperty.keySpecType, keyProperty.name)
         }
         blankLine()
     }
 
-    private val AnnotatedClassProperty.keySpec: String
+    private val AnnotatedClassProperty.keySpec: TypeRef
         get() = when (typeName.asString()) {
-            "kotlin.Int" -> "Number"
-            "kotlin.String" -> "String"
+            "kotlin.Int" -> Types.Kotlin.Number
+            "kotlin.String" -> Types.Kotlin.String
+            // TODO Handle ByteArray
+            else -> error("Unsupported key type ${typeName.asString()}, expected Int or String")
+        }
+
+    private val AnnotatedClassProperty.keySpecType: TypeRef
+        get() = when (typeName.asString()) {
+            "kotlin.Int" -> DynamoDbMapperTypes.KeySpecNumber
+            "kotlin.String" -> DynamoDbMapperTypes.KeySpecString
             // TODO Handle ByteArray
             else -> error("Unsupported key type ${typeName.asString()}, expected Int or String")
         }

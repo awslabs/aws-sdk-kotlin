@@ -162,6 +162,7 @@ public final class aws/sdk/kotlin/hll/codegen/model/Types {
 
 public final class aws/sdk/kotlin/hll/codegen/model/Types$Kotlin {
 	public static final field INSTANCE Laws/sdk/kotlin/hll/codegen/model/Types$Kotlin;
+	public final fun getNumber ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getString ()Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun getStringNullable ()Laws/sdk/kotlin/hll/codegen/model/Type;
 	public final fun kotlin (Ljava/lang/String;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;

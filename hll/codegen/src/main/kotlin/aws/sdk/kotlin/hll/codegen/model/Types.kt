@@ -8,6 +8,7 @@ import aws.sdk.kotlin.hll.codegen.util.Pkg
 object Types {
     object Kotlin {
         val String = TypeRef("kotlin", "String")
+        val Number = TypeRef("kotlin", "Number")
         val StringNullable = String.nullable()
 
         /**
