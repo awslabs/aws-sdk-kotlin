@@ -6,6 +6,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.ImportDirective
 import aws.sdk.kotlin.hll.codegen.model.Type
+import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.rendering.BuilderRenderer
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
@@ -29,6 +30,12 @@ public class SchemaRenderer(
     private val ctx: RenderContext,
 ) : RendererBase(ctx, "${classDeclaration.qualifiedName!!.getShortName()}Schema", "dynamodb-mapper-annotation-processor") {
     private val className = classDeclaration.qualifiedName!!.getShortName()
+    private val classType = Type.from(
+        checkNotNull(classDeclaration.primaryConstructor?.returnType) {
+            "Failed to determine class type for $className"
+        },
+    )
+
     private val builderName = "${className}Builder"
     private val converterName = "${className}Converter"
     private val schemaName = "${className}Schema"
@@ -102,20 +109,20 @@ public class SchemaRenderer(
         withDocs {
             write("Returns a reference to a table named [name] containing items representing [#L]", className)
         }
+
+        val fnName = "get${className}Table"
         write(
-            "public fun #1T.get#2LTable(name: String): #3T.#4L<#2L, #5L> = #6L(name, #7L)",
+            "public fun #T.#L(name: String): #T = #L(name, #L)",
             DynamoDbMapperTypes.DynamoDbMapper,
-            className,
-            DynamoDbMapperTypes.Table,
-            "PartitionKey",
-            keyProperty.typeName.getShortName(),
+            fnName,
+            DynamoDbMapperTypes.tablePartitionKey(classType, keyProperty.typeRef),
             "getTable",
-            schemaName,
+            schemaName
         )
     }
 }
 
-private data class AnnotatedClassProperty(val name: String, val ddbName: String, val typeName: KSName, val isPk: Boolean) {
+private data class AnnotatedClassProperty(val name: String, val typeRef: TypeRef, val ddbName: String, val typeName: KSName, val isPk: Boolean) {
     companion object {
         @OptIn(KspExperimental::class)
         fun from(ksProperty: KSPropertyDeclaration) = ksProperty
@@ -127,8 +134,9 @@ private data class AnnotatedClassProperty(val name: String, val ddbName: String,
             ?.let { typeName ->
                 val isPk = ksProperty.isAnnotationPresent(DynamoDbPartitionKey::class)
                 val name = ksProperty.simpleName.getShortName()
+                val typeRef = Type.from(checkNotNull(ksProperty.type) { "Failed to determine class type for $name" })
                 val ddbName = ksProperty.getAnnotationsByType(DynamoDbAttribute::class).singleOrNull()?.name ?: name
-                AnnotatedClassProperty(name, ddbName, typeName, isPk)
+                AnnotatedClassProperty(name, typeRef, ddbName, typeName, isPk)
             }
     }
 }

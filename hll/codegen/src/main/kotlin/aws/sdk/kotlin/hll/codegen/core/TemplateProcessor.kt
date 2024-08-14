@@ -72,10 +72,10 @@ private open class TypeProcessor {
 private class ImportingTypeProcessor(private val pkg: String, private val imports: ImportDirectives) : TypeProcessor() {
     override fun format(type: Type): String = buildString {
         if (type is TypeRef && type.pkg != pkg) {
-            val existingImport = imports[type.shortName]
+            val existingImport = imports[type.shortName.substringBefore(".")]
 
             if (existingImport == null) {
-                imports += ImportDirective(type)
+                imports += ImportDirective(type.copy(shortName = type.shortName.substringBefore(".")))
             } else if (existingImport.fullName != type.fullName) {
                 append(type.pkg)
                 append('.')

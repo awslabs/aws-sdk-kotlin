@@ -22,7 +22,12 @@ object DynamoDbMapperTypes {
     val MapperContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "MapperContextImpl")
     val Operation = TypeRef(Pkg.Hl.PipelineImpl, "Operation")
 
-    val Table = TypeRef(Pkg.Hl.Model, "Table")
+
+    fun tablePartitionKey(objectType: TypeRef, partitionKeyType: TypeRef) = TypeRef(
+        Pkg.Hl.Model,
+        "Table.PartitionKey",
+        genericArgs = listOf(objectType, partitionKeyType)
+    )
     val toItem = TypeRef(Pkg.Hl.Model, "toItem")
 
     val KeySpec = TypeRef(Pkg.Hl.Items, "KeySpec")
