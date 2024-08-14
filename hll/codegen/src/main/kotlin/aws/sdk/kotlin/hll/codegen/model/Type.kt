@@ -44,7 +44,7 @@ sealed interface Type {
  * representing [kotlin.collections.List] would have a single generic argument, which may either be a concrete [TypeRef]
  * itself (e.g., `List<String>`) or a generic [TypeVar] (e.g., `List<T>`).
  * @param pkg The Kotlin package for this type
- * @param shortName The short name (i.e., not include the kotlin package) for this type
+ * @param shortName The short name (i.e., not including the kotlin package) for this type
  * @param genericArgs Zero or more [Type] generic arguments to this type
  * @param nullable Indicates whether instances of this type allow nullable references
  */
