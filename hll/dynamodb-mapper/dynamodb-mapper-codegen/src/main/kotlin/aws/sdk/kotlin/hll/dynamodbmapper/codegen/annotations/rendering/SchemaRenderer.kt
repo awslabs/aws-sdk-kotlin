@@ -117,7 +117,7 @@ public class SchemaRenderer(
             fnName,
             DynamoDbMapperTypes.tablePartitionKey(classType, keyProperty.typeRef),
             "getTable",
-            schemaName
+            schemaName,
         )
     }
 }
