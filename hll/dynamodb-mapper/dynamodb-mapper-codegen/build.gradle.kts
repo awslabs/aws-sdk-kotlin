@@ -7,7 +7,6 @@ description = "DynamoDbMapper code generation"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: DynamoDbMapper :: Codegen"
 extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.codegen"
 
-
 plugins {
     alias(libs.plugins.kotlin.jvm)
 }
