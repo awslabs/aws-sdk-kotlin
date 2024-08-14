@@ -1,6 +1,7 @@
 package aws.sdk.kotlin.hll.codegen.rendering
 
 import aws.sdk.kotlin.hll.codegen.model.Type
+import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import com.google.devtools.ksp.symbol.*
 
 /**
@@ -28,7 +29,7 @@ class BuilderRenderer(
 
         withBlock("public class #L {", "}", "${className}Builder") {
             properties.forEach {
-                write("public var #L: #L? = null", it.name, it.typeName.asString())
+                write("public var #L: #T? = null", it.name, it.typeRef)
             }
             blankLine()
 
@@ -52,16 +53,17 @@ class BuilderRenderer(
     }
 }
 
-private data class KSClassProperty(val name: String, val typeName: KSName, val nullable: Boolean) {
+private data class KSClassProperty(val name: String, val typeRef: TypeRef, val typeName: KSName, val nullable: Boolean) {
     companion object {
         fun from(ksProperty: KSPropertyDeclaration): KSClassProperty? {
             val type: KSType = ksProperty.getter?.returnType?.resolve() ?: return null
 
             val name = ksProperty.simpleName.getShortName()
+            val typeRef = Type.from(checkNotNull(ksProperty.type) { "Failed to determine class type for $name" })
             val typeName = type.declaration.qualifiedName ?: return null
             val nullable = type.nullability != Nullability.NOT_NULL
 
-            return KSClassProperty(name, typeName, nullable)
+            return KSClassProperty(name, typeRef, typeName, nullable)
         }
     }
 }
