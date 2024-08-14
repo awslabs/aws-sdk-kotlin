@@ -4,8 +4,6 @@
  */
 package aws.sdk.kotlin.hll.codegen.model
 
-import aws.sdk.kotlin.hll.codegen.model.Type.Companion.map
-import aws.sdk.kotlin.hll.codegen.util.Pkg
 import com.google.devtools.ksp.symbol.KSTypeReference
 
 /**
@@ -26,30 +24,6 @@ sealed interface Type {
                 nullable = resolved.isMarkedNullable,
             )
         }
-
-        /**
-         * Creates a [TypeRef] for a generic [List]
-         * @param element The type of elements in the list
-         */
-        fun list(element: Type) = TypeRef(Pkg.Kotlin.Collections, "List", listOf(element))
-
-        /**
-         * Creates a [TypeRef] for a named Kotlin type (e.g., `String`)
-         */
-        fun kotlin(name: String) = TypeRef(Pkg.Kotlin.Base, name)
-
-        /**
-         * Creates a [TypeRef] for a generic [Map]
-         * @param key The type of keys in the map
-         * @param value The type of values in the map
-         */
-        fun map(key: Type, value: Type) = TypeRef(Pkg.Kotlin.Collections, "Map", listOf(key, value))
-
-        /**
-         * Creates a [TypeRef] for a generic [Map] with [String] keys
-         * @param value The type of values in the map
-         */
-        fun stringMap(value: Type) = map(Types.String, value)
     }
 
     /**
@@ -101,45 +75,4 @@ public fun Type.nullable() = when {
     this is TypeRef -> copy(nullable = true)
     this is TypeVar -> copy(nullable = true)
     else -> error("Unknown Type ${this::class}") // Should be unreachable, only here to make compiler happy
-}
-
-/**
- * A container/factory object for various [Type] instances
- */
-object Types {
-    // Kotlin standard types
-    val String = TypeRef("kotlin", "String")
-    val StringNullable = String.nullable()
-
-    /**
-     * Creates a [TypeRef] for a generic [Map] with [String] keys
-     * @param value The type of values in the map
-     */
-    fun stringMap(value: Type) = map(String, value)
-
-    // Low-level types
-    val AttributeValue = TypeRef(Pkg.Ll.Model, "AttributeValue")
-    val AttributeMap = Type.map(String, AttributeValue)
-
-    // High-level types
-    val DynamoDbMapper = TypeRef(Pkg.Hl.Base, "DynamoDbMapper")
-
-    val HReqContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "HReqContextImpl")
-    fun itemSchema(typeVar: String) = TypeRef(Pkg.Hl.Items, "ItemSchema", listOf(TypeVar(typeVar)))
-    val MapperContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "MapperContextImpl")
-    val Operation = TypeRef(Pkg.Hl.PipelineImpl, "Operation")
-
-    val Table = TypeRef(Pkg.Hl.Model, "Table")
-    val toItem = TypeRef(Pkg.Hl.Model, "toItem")
-
-    val KeySpec = TypeRef(Pkg.Hl.Items, "KeySpec")
-    val ItemSchema = TypeRef(Pkg.Hl.Items, "ItemSchema")
-    val AttributeDescriptor = TypeRef(Pkg.Hl.Items, "AttributeDescriptor")
-    val ItemConverter = TypeRef(Pkg.Hl.Items, "ItemConverter")
-    val SimpleItemConverter = TypeRef(Pkg.Hl.Items, "SimpleItemConverter")
-
-    val DefaultInstantConverter = TypeRef(Pkg.Hl.Values, "InstantConverter.Default")
-    val BooleanConverter = TypeRef(Pkg.Hl.Values, "BooleanConverter")
-    val IntConverter = TypeRef(Pkg.Hl.Values, "IntConverter")
-    val StringConverter = TypeRef(Pkg.Hl.Values, "StringConverter")
 }

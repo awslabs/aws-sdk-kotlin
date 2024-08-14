@@ -4,13 +4,13 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
-import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.model.nullable
 import aws.sdk.kotlin.hll.codegen.util.Pkg
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.DynamoDbMapperTypes
 
-private val attrMapTypes = setOf(Types.AttributeMap, Types.AttributeMap.nullable())
+private val attrMapTypes = setOf(DynamoDbMapperTypes.AttributeMap, DynamoDbMapperTypes.AttributeMap.nullable())
 
 /**
  * Describes a behavior to apply for a given [Member] in a low-level structure when generating code for an equivalent
@@ -78,37 +78,37 @@ val Member.codegenBehavior: MemberCodegenBehavior
     }
 
 private val Member.isTableName: Boolean
-    get() = name == "tableName" && type == Types.StringNullable
+    get() = name == "tableName" && type == Types.Kotlin.StringNullable
 
 private val Member.isIndexName: Boolean
-    get() = name == "indexName" && type == Types.StringNullable
+    get() = name == "indexName" && type == Types.Kotlin.StringNullable
 
 private fun llType(name: String) = TypeRef(Pkg.Ll.Model, name)
 
 private val unsupportedMembers = listOf(
     // superseded by ConditionExpression
     Member("conditionalOperator", llType("ConditionalOperator")),
-    Member("expected", Types.stringMap(llType("ExpectedAttributeValue"))),
+    Member("expected", Types.Kotlin.stringMap(llType("ExpectedAttributeValue"))),
 
     // superseded by FilterExpression
-    Member("queryFilter", Types.stringMap(llType("Condition"))),
-    Member("scanFilter", Types.stringMap(llType("Condition"))),
+    Member("queryFilter", Types.Kotlin.stringMap(llType("Condition"))),
+    Member("scanFilter", Types.Kotlin.stringMap(llType("Condition"))),
 
     // superseded by KeyConditionExpression
-    Member("keyConditions", Types.stringMap(llType("Condition"))),
+    Member("keyConditions", Types.Kotlin.stringMap(llType("Condition"))),
 
     // superseded by ProjectionExpression
-    Member("attributesToGet", Type.list(Types.String)),
+    Member("attributesToGet", Types.Kotlin.list(Types.Kotlin.String)),
 
     // superseded by UpdateExpression
-    Member("attributeUpdates", Types.stringMap(llType("AttributeValueUpdate"))),
+    Member("attributeUpdates", Types.Kotlin.stringMap(llType("AttributeValueUpdate"))),
 
     // TODO add support for expressions
-    Member("expressionAttributeNames", Types.stringMap(Types.String)),
-    Member("expressionAttributeValues", Types.AttributeMap),
-    Member("conditionExpression", Types.String),
-    Member("projectionExpression", Types.String),
-    Member("updateExpression", Types.String),
+    Member("expressionAttributeNames", Types.Kotlin.stringMap(Types.Kotlin.String)),
+    Member("expressionAttributeValues", DynamoDbMapperTypes.AttributeMap),
+    Member("conditionExpression", Types.Kotlin.String),
+    Member("projectionExpression", Types.Kotlin.String),
+    Member("updateExpression", Types.Kotlin.String),
 ).map { member ->
     if (member.type is TypeRef) {
         member.copy(type = member.type.nullable())

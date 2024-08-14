@@ -6,12 +6,12 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.ImportDirective
 import aws.sdk.kotlin.hll.codegen.model.Type
-import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.rendering.BuilderRenderer
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.DynamoDbMapperTypes
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.isAnnotationPresent
@@ -50,7 +50,7 @@ public class SchemaRenderer(
     private fun renderBuilder() = BuilderRenderer(this, classDeclaration).render()
 
     private fun renderItemConverter() {
-        withBlock("public object #L : #T<#L> by #T(", ")", converterName, Types.ItemConverter, className, Types.SimpleItemConverter) {
+        withBlock("public object #L : #T<#L> by #T(", ")", converterName, DynamoDbMapperTypes.ItemConverter, className, DynamoDbMapperTypes.SimpleItemConverter) {
             write("builderFactory = ::#L,", builderName)
             write("build = #L::build,", builderName)
             withBlock("descriptors = arrayOf(", "),") {
@@ -63,7 +63,7 @@ public class SchemaRenderer(
     }
 
     private fun renderAttributeDescriptor(prop: AnnotatedClassProperty) {
-        withBlock("#T(", "),", Types.AttributeDescriptor) {
+        withBlock("#T(", "),", DynamoDbMapperTypes.AttributeDescriptor) {
             write("#S,", prop.ddbName) // key
             write("#L,", "$className::${prop.name}") // getter
             write("#L,", "$builderName::${prop.name}::set") // setter
@@ -73,19 +73,19 @@ public class SchemaRenderer(
 
     private val AnnotatedClassProperty.valueConverter: Type
         get() = when (typeName.asString()) {
-            "aws.smithy.kotlin.runtime.time.Instant" -> Types.DefaultInstantConverter
-            "kotlin.Boolean" -> Types.BooleanConverter
-            "kotlin.Int" -> Types.IntConverter
-            "kotlin.String" -> Types.StringConverter
+            "aws.smithy.kotlin.runtime.time.Instant" -> DynamoDbMapperTypes.DefaultInstantConverter
+            "kotlin.Boolean" -> DynamoDbMapperTypes.BooleanConverter
+            "kotlin.Int" -> DynamoDbMapperTypes.IntConverter
+            "kotlin.String" -> DynamoDbMapperTypes.StringConverter
             // TODO Add additional "standard" item converters
             else -> error("Unsupported attribute type ${typeName.asString()}")
         }
 
     private fun renderSchema() {
-        withBlock("public object #L : #T.#L<#L, #L> {", "}", schemaName, Types.ItemSchema, "PartitionKey", className, keyProperty.typeName.getShortName()) {
+        withBlock("public object #L : #T.#L<#L, #L> {", "}", schemaName, DynamoDbMapperTypes.ItemSchema, "PartitionKey", className, keyProperty.typeName.getShortName()) {
             write("override val converter : #1L = #1L", converterName)
             // TODO Handle composite keys
-            write("override val partitionKey: #1T<#2L> = #1T.#2L(#3S)", Types.KeySpec, keyProperty.keySpec, keyProperty.name)
+            write("override val partitionKey: #1T<#2L> = #1T.#2L(#3S)", DynamoDbMapperTypes.KeySpec, keyProperty.keySpec, keyProperty.name)
         }
         blankLine()
     }
@@ -104,9 +104,9 @@ public class SchemaRenderer(
         }
         write(
             "public fun #1T.get#2LTable(name: String): #3T.#4L<#2L, #5L> = #6L(name, #7L)",
-            Types.DynamoDbMapper,
+            DynamoDbMapperTypes.DynamoDbMapper,
             className,
-            Types.Table,
+            DynamoDbMapperTypes.Table,
             "PartitionKey",
             keyProperty.typeName.getShortName(),
             "getTable",
