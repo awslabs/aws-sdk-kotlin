@@ -19,11 +19,12 @@ class CodeGeneratorFactory(private val ksCodeGenerator: KSCodeGenerator, private
     /**
      * Creates a new [CodeGenerator] backed by a [KSCodeGenerator]. The returned generator starts with no imports and
      * uses a configured [TemplateEngine] with the default set of processors.
-     * @param name The name of the file which should be created _without_ parent directory or extension (which is always
+     * @param fileName The name of the file which should be created _without_ parent directory or extension (which is always
      * **.kt**)
      * @param pkg The Kotlin package for the generated code (e.g., `aws.sdk.kotlin.hll.dynamodbmapper.operations`)
+     * @param codeGeneratorName The name of this [CodeGenerator]
      */
-    fun generator(name: String, pkg: String): CodeGenerator {
+    fun generator(fileName: String, pkg: String, codeGeneratorName: String): CodeGenerator {
         val imports = ImportDirectives()
         val processors = listOf(
             TemplateProcessor.Literal,
@@ -33,15 +34,15 @@ class CodeGeneratorFactory(private val ksCodeGenerator: KSCodeGenerator, private
         val engine = TemplateEngine(processors)
 
         val persistCallback: (String) -> Unit = { content ->
-            logger.info("Checking out code generator for class $pkg.$name")
+            logger.info("Checking out code generator for class $pkg.$fileName")
 
             ksCodeGenerator
-                .createNewFile(dependencies, pkg, name) // FIXME don't depend on ALL_FILES
+                .createNewFile(dependencies, pkg, fileName) // FIXME don't depend on ALL_FILES
                 .use { outputStream ->
                     outputStream.writer().use { writer -> writer.append(content) }
                 }
         }
 
-        return CodeGeneratorImpl(pkg, engine, persistCallback, imports)
+        return CodeGeneratorImpl(pkg, engine, persistCallback, imports, codeGeneratorName)
     }
 }

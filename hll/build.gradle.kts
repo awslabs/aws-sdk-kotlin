@@ -8,6 +8,8 @@ import aws.sdk.kotlin.gradle.kmp.*
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 description = "High-level libraries for the AWS SDK for Kotlin"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL"
+extra["moduleName"] = "aws.sdk.kotlin.hll"
 
 // FIXME 🔽🔽🔽 This is all copied from :aws-runtime and should be commonized 🔽🔽🔽
 
@@ -85,8 +87,7 @@ apiValidation {
     val availableSubprojects = subprojects.map { it.name }.toSet()
 
     ignoredProjects += listOf(
-        "dynamodb-mapper-annotations-processor",
-        "dynamodb-mapper-annotations-processor-test",
-        "dynamodb-mapper-ops-codegen",
+        "dynamodb-mapper-annotation-processor-test",
+        "dynamodb-mapper-codegen",
     ).filter { it in availableSubprojects } // Some projects may not be in the build depending on bootstrapping
 }

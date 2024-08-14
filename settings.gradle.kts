@@ -62,11 +62,9 @@ file("services").listFiles().forEach {
 if ("dynamodb".isBootstrappedService) {
     include(":hll:dynamodb-mapper")
     include(":hll:dynamodb-mapper:dynamodb-mapper")
-    include(":hll:dynamodb-mapper:dynamodb-mapper-annotations-processor")
+    include(":hll:dynamodb-mapper:dynamodb-mapper-codegen")
     include(":hll:dynamodb-mapper:dynamodb-mapper-annotations")
-    include(":hll:dynamodb-mapper:dynamodb-mapper-annotations-plugin")
-    include(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen")
-    include(":hll:dynamodb-mapper:tests:dynamodb-mapper-annotations-processor-test")
+    include(":hll:dynamodb-mapper:tests:dynamodb-mapper-annotation-processor-test")
 } else {
     logger.warn(":services:dynamodb is not bootstrapped, skipping :hll:dynamodb-mapper and subprojects")
 }
@@ -74,6 +72,7 @@ if ("dynamodb".isBootstrappedService) {
 // Service benchmarks project
 val benchmarkServices = listOf(
     // keep this list in sync with tests/benchmarks/service-benchmarks/build.gradle.kts
+
     "s3",
     "sns",
     "sts",

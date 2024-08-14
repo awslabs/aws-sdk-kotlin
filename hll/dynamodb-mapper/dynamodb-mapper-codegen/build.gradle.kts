@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-description = "Common code-generation utilities used by AWS SDK for Kotlin's high level libraries"
-extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: Codegen"
-extra["moduleName"] = "aws.sdk.kotlin.hll.codegen"
+description = "DynamoDbMapper code generation"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: DynamoDbMapper :: Codegen"
+extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.codegen"
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -13,7 +13,9 @@ plugins {
 
 dependencies {
     implementation(libs.ksp.api)
-    implementation(libs.smithy.kotlin.runtime.core)
+    implementation(project(":hll:codegen"))
+    implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-annotations"))
+    implementation(project(":services:dynamodb"))
 
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter.params)
