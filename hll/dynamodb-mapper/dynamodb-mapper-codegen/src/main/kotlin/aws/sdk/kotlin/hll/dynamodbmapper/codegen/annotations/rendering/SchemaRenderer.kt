@@ -47,7 +47,6 @@ public class SchemaRenderer(
     }
 
     override fun generate() {
-        imports.add(ImportDirective(classDeclaration.qualifiedName!!.asString()))
         renderBuilder()
         renderItemConverter()
         renderSchema()
