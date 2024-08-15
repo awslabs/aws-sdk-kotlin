@@ -12,10 +12,3 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlug
 	public static final field SCHEMA_GENERATOR_PLUGIN_EXTENSION Ljava/lang/String;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/plugins/dsl/AnnotationsPluginSettings {
-}
-
-public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/tasks/ProcessAnnotationsTask : org/gradle/api/DefaultTask {
-	public fun <init> ()V
-}
-

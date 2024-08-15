@@ -2,15 +2,19 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+description = "Plugin used to generate DynamoDbMapper schemas from user classes"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: DynamoDbMapper :: Schema Generator Plugin"
+extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.plugins"
+
 plugins {
     `kotlin-dsl`
     alias(libs.plugins.plugin.publish)
-    id("com.google.devtools.ksp") version "2.0.10-1.0.24"
+    alias(libs.plugins.ksp)
 }
 
-repositories {
-    gradlePluginPortal()
-}
+// TODO Do we want this plugin to be manually versioned?
+val sdkVersion: String by project
+version = sdkVersion
 
 dependencies {
     implementation(gradleApi())
@@ -23,10 +27,12 @@ dependencies {
     testImplementation(libs.kotlin.test)
 }
 
+// FIXME publishToMavenLocal drops this plugin in ~/.m2/repository/aws-sdk-kotlin/... instead of
+// ~/.m2/repository/aws/sdk/kotlin/...?
 gradlePlugin {
     plugins {
-        create("dynamodb-mapper-annotations-plugin") {
-            id = "aws.sdk.kotlin.hll.dynamodbmapper.schemagenerator"
+        create("dynamodb-mapper-schema-generator") {
+            id = "aws.sdk.kotlin.hll.dynamodbmapper.schema.generator"
             implementationClass = "aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPlugin"
             description = "Plugin used to generate DynamoDbMapper schemas from user classes"
         }
