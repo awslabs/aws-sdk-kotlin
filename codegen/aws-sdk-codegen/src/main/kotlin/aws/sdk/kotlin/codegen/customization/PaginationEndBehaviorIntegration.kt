@@ -19,12 +19,12 @@ private val TRUNCATION_MEMBER_IDS = mapOf(
 )
 
 private val IDENTICAL_TOKEN_OPERATION_IDS = setOf(
-    "com.amazonaws.cloudwatchlogs#GetLogEvents",
+    "com.amazonaws.cloudwatchlogs#GetLogEvents", // https://github.com/awslabs/aws-sdk-kotlin/issues/1326
 )
 
 /**
- * Applies [PaginationEndBehaviorTrait] to a manually-curated list of operations/members to handle for non-standard
- * pagination termination behavior.
+ * Applies [PaginationEndBehaviorTrait] to a manually-curated list of operations/members for which pagination terminates
+ * in a non-standard manner
  */
 class PaginationEndBehaviorIntegration : KotlinIntegration {
     override fun preprocessModel(model: Model, settings: KotlinSettings): Model = ModelTransformer
