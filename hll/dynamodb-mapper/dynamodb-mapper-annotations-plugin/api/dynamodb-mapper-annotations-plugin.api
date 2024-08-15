@@ -1,6 +1,21 @@
-public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/AnnotationsPlugin : org/gradle/api/Plugin {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
 	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginExtension {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginKt {
+	public static final field SCHEMA_GENERATOR_PLUGIN_EXTENSION Ljava/lang/String;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/plugins/dsl/AnnotationsPluginSettings {
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/tasks/ProcessAnnotationsTask : org/gradle/api/DefaultTask {
+	public fun <init> ()V
 }
 
