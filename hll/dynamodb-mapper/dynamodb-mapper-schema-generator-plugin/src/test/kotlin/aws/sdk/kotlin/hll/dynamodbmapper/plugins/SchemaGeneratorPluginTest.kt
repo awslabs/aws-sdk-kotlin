@@ -29,7 +29,7 @@ class SchemaGeneratorPluginTest {
     }
 
     @Test
-    fun `prints the value defined in the extension to the cmdline`() {
+    fun `applies and configures the plugin`() {
         val buildFileContent = """
          plugins {
             id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
