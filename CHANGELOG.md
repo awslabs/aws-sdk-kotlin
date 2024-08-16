@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.13] - 08/16/2024
+
+### Features
+* (**batch**) Improvements of integration between AWS Batch and EC2.
+* (**inspector2**) Update the correct format of key and values for resource tags
+* (**quicksight**) Amazon QuickSight launches Customer Managed Key (CMK) encryption for Data Source metadata
+* (**sagemaker**) Introduce Endpoint and EndpointConfig Arns in sagemaker:ListPipelineExecutionSteps API response
+* (**sesv2**) Marking use case description field of account details as deprecated.
+
 ## [1.3.12] - 08/15/2024
 
 ### Features
