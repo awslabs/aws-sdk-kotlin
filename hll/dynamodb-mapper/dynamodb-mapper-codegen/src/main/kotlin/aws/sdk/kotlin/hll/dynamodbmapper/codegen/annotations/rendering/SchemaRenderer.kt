@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
+import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
@@ -12,7 +13,7 @@ import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.DynamoDbMapperTypes
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.isAnnotationPresent
@@ -25,16 +26,12 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
  * @param classDeclaration the [KSClassDeclaration] of the class
  * @param ctx the [RenderContext] of the renderer
  */
-public class SchemaRenderer(
+class SchemaRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
-) : RendererBase(ctx, "${classDeclaration.qualifiedName!!.getShortName()}Schema", "dynamodb-mapper-annotation-processor") {
+) : RendererBase(ctx, "${classDeclaration.qualifiedName!!.getShortName()}Schema") {
     private val className = classDeclaration.qualifiedName!!.getShortName()
-    private val classType = Type.from(
-        checkNotNull(classDeclaration.primaryConstructor?.returnType) {
-            "Failed to determine class type for $className"
-        },
-    )
+    private val classType = Type.from(classDeclaration)
 
     private val builderName = "${className}Builder"
     private val converterName = "${className}Converter"
@@ -52,11 +49,14 @@ public class SchemaRenderer(
         renderGetTable()
     }
 
-    // TODO Not all classes need builders generated (i.e. the class consists of all public mutable members), add configurability here
-    private fun renderBuilder() = BuilderRenderer(this, classDeclaration).render()
+    private fun renderBuilder() {
+        // TODO Not all classes need builders generated (i.e. the class consists of all public mutable members), add configurability here
+        val members = classDeclaration.getAllProperties().map(Member.Companion::from).toSet()
+        BuilderRenderer(this, classType, members).render()
+    }
 
     private fun renderItemConverter() {
-        withBlock("public object #L : #T by #T(", ")", converterName, DynamoDbMapperTypes.itemConverter(classType), DynamoDbMapperTypes.SimpleItemConverter) {
+        withBlock("public object #L : #T by #T(", ")", converterName, MapperTypes.Items.itemConverter(classType), MapperTypes.Items.SimpleItemConverter) {
             write("builderFactory = ::#L,", builderName)
             write("build = #L::build,", builderName)
             withBlock("descriptors = arrayOf(", "),") {
@@ -69,7 +69,7 @@ public class SchemaRenderer(
     }
 
     private fun renderAttributeDescriptor(prop: AnnotatedClassProperty) {
-        withBlock("#T(", "),", DynamoDbMapperTypes.AttributeDescriptor) {
+        withBlock("#T(", "),", MapperTypes.Items.AttributeDescriptor) {
             write("#S,", prop.ddbName) // key
             write("#L,", "$className::${prop.name}") // getter
             write("#L,", "$builderName::${prop.name}::set") // setter
@@ -79,19 +79,19 @@ public class SchemaRenderer(
 
     private val AnnotatedClassProperty.valueConverter: Type
         get() = when (typeName.asString()) {
-            "aws.smithy.kotlin.runtime.time.Instant" -> DynamoDbMapperTypes.DefaultInstantConverter
-            "kotlin.Boolean" -> DynamoDbMapperTypes.BooleanConverter
-            "kotlin.Int" -> DynamoDbMapperTypes.IntConverter
-            "kotlin.String" -> DynamoDbMapperTypes.StringConverter
+            "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.DefaultInstantConverter
+            "kotlin.Boolean" -> MapperTypes.Values.BooleanConverter
+            "kotlin.Int" -> MapperTypes.Values.IntConverter
+            "kotlin.String" -> MapperTypes.Values.StringConverter
             // TODO Add additional "standard" item converters
             else -> error("Unsupported attribute type ${typeName.asString()}")
         }
 
     private fun renderSchema() {
-        withBlock("public object #L : #T {", "}", schemaName, DynamoDbMapperTypes.itemSchemaPartitionKey(classType, keyProperty.typeRef)) {
+        withBlock("public object #L : #T {", "}", schemaName, MapperTypes.Items.itemSchemaPartitionKey(classType, keyProperty.typeRef)) {
             write("override val converter : #1L = #1L", converterName)
             // TODO Handle composite keys
-            write("override val partitionKey: #T = #T(#S)", DynamoDbMapperTypes.keySpec(keyProperty.keySpec), keyProperty.keySpecType, keyProperty.name)
+            write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(keyProperty.keySpec), keyProperty.keySpecType, keyProperty.name)
         }
         blankLine()
     }
@@ -106,23 +106,21 @@ public class SchemaRenderer(
 
     private val AnnotatedClassProperty.keySpecType: TypeRef
         get() = when (typeName.asString()) {
-            "kotlin.Int" -> DynamoDbMapperTypes.KeySpecNumber
-            "kotlin.String" -> DynamoDbMapperTypes.KeySpecString
+            "kotlin.Int" -> MapperTypes.Items.KeySpecNumber
+            "kotlin.String" -> MapperTypes.Items.KeySpecString
             // TODO Handle ByteArray
             else -> error("Unsupported key type ${typeName.asString()}, expected Int or String")
         }
 
     private fun renderGetTable() {
-        withDocs {
-            write("Returns a reference to a table named [name] containing items representing [#L]", className)
-        }
+        docs("Returns a reference to a table named [name] containing items representing [#T]", classType)
 
         val fnName = "get${className}Table"
         write(
             "public fun #T.#L(name: String): #T = #L(name, #L)",
-            DynamoDbMapperTypes.DynamoDbMapper,
+            MapperTypes.DynamoDbMapper,
             fnName,
-            DynamoDbMapperTypes.tablePartitionKey(classType, keyProperty.typeRef),
+            MapperTypes.Model.tablePartitionKey(classType, keyProperty.typeRef),
             "getTable",
             schemaName,
         )

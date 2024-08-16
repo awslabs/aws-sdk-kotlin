@@ -58,6 +58,8 @@ ksp {
         "scan",
     )
     arg("op-allowlist", allowlist.joinToString(";"))
+
+    excludeProcessor("aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessor")
 }
 
 if (project.NATIVE_ENABLED) {

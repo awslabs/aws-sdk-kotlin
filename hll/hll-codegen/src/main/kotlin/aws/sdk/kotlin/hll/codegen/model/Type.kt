@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.hll.codegen.model
 
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeReference
 
 /**
@@ -12,16 +14,25 @@ import com.google.devtools.ksp.symbol.KSTypeReference
 sealed interface Type {
     companion object {
         /**
+         * Derives a [TypeRef] from a [KSClassDeclaration]
+         */
+        fun from(ksClassDeclaration: KSClassDeclaration): TypeRef = from(ksClassDeclaration.asStarProjectedType())
+
+        /**
          * Derives a [TypeRef] from a [KSTypeReference]
          */
-        fun from(ksTypeRef: KSTypeReference): TypeRef {
-            val resolved = ksTypeRef.resolve()
-            val name = resolved.declaration.qualifiedName!!
+        fun from(ksTypeRef: KSTypeReference): TypeRef = from(ksTypeRef.resolve())
+
+        /**
+         * Derives a [TypeRef] from a [KSType]
+         */
+        fun from(ksType: KSType): TypeRef {
+            val name = ksType.declaration.qualifiedName!!
             return TypeRef(
                 pkg = name.getQualifier(),
                 shortName = name.getShortName(),
-                genericArgs = resolved.arguments.map { from(it.type!!) },
-                nullable = resolved.isMarkedNullable,
+                genericArgs = ksType.arguments.map { from(it.type!!) },
+                nullable = ksType.isMarkedNullable,
             )
         }
     }
@@ -58,6 +69,12 @@ data class TypeRef(
      * The full name of this type, including the Kotlin package
      */
     val fullName: String = "$pkg.$shortName"
+
+    /**
+     * The base name of this type. In most cases, this will be the same as the short name, but for nested types, this
+     * will only include the top-level name. For example, the base name of a type Foo.Bar.Baz is Foo.
+     */
+    val baseName: String = shortName.substringBefore(".")
 }
 
 /**
@@ -70,7 +87,7 @@ data class TypeVar(override val shortName: String, override val nullable: Boolea
 /**
  * Derives a nullable [Type] equivalent for this type
  */
-public fun Type.nullable() = when {
+fun Type.nullable() = when {
     nullable -> this
     this is TypeRef -> copy(nullable = true)
     this is TypeVar -> copy(nullable = true)

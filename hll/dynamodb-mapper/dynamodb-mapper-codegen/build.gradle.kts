@@ -13,7 +13,7 @@ plugins {
 
 dependencies {
     implementation(libs.ksp.api)
-    implementation(project(":hll:codegen"))
+    implementation(project(":hll:hll-codegen"))
     implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-annotations"))
     implementation(project(":services:dynamodb"))
 

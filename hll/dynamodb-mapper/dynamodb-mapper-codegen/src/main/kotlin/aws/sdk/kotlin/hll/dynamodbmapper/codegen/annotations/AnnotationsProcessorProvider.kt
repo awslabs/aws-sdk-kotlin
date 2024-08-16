@@ -7,6 +7,6 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
 import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.processing.SymbolProcessorProvider
 
-public class AnnotationsProcessorProvider : SymbolProcessorProvider {
+class AnnotationsProcessorProvider : SymbolProcessorProvider {
     override fun create(environment: SymbolProcessorEnvironment): AnnotationsProcessor = AnnotationsProcessor(environment)
 }

@@ -15,7 +15,7 @@ import com.google.devtools.ksp.symbol.KSNode
  * @param codegenFactory A factory that creates code generator instances for specific files
  * @param pkg The Kotlin package for the generated code (e.g., `aws.sdk.kotlin.hll.dynamodbmapper.operations`)
  */
-data class RenderContext(val logger: KSPLogger, val codegenFactory: CodeGeneratorFactory, val pkg: String)
+data class RenderContext(val logger: KSPLogger, val codegenFactory: CodeGeneratorFactory, val pkg: String, val rendererName: String = "aws-sdk-kotlin-hll-codegen")
 
 fun RenderContext.logging(message: String, symbol: KSNode? = null) = logger.logging(message, symbol)
 fun RenderContext.info(message: String, symbol: KSNode? = null) = logger.info(message, symbol)

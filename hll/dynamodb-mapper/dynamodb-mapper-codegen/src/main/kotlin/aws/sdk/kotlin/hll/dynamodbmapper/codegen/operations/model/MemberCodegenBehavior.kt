@@ -4,13 +4,14 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
+import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.model.nullable
 import aws.sdk.kotlin.hll.codegen.util.Pkg
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.DynamoDbMapperTypes
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 
-private val attrMapTypes = setOf(DynamoDbMapperTypes.AttributeMap, DynamoDbMapperTypes.AttributeMap.nullable())
+private val attrMapTypes = setOf(MapperTypes.AttributeMap, MapperTypes.AttributeMap.nullable())
 
 /**
  * Describes a behavior to apply for a given [Member] in a low-level structure when generating code for an equivalent
@@ -105,7 +106,7 @@ private val unsupportedMembers = listOf(
 
     // TODO add support for expressions
     Member("expressionAttributeNames", Types.Kotlin.stringMap(Types.Kotlin.String)),
-    Member("expressionAttributeValues", DynamoDbMapperTypes.AttributeMap),
+    Member("expressionAttributeValues", MapperTypes.AttributeMap),
     Member("conditionExpression", Types.Kotlin.String),
     Member("projectionExpression", Types.Kotlin.String),
     Member("updateExpression", Types.Kotlin.String),

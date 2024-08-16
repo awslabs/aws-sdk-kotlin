@@ -37,7 +37,7 @@ class HighLevelOpsProcessor(environment: SymbolProcessorEnvironment) : SymbolPro
             val operations = getOperations(resolver)
 
             val codegenFactory = CodeGeneratorFactory(codeGenerator, logger)
-            val ctx = RenderContext(logger, codegenFactory, pkg)
+            val ctx = RenderContext(logger, codegenFactory, pkg, "dynamodb-mapper-ops-codegen")
 
             HighLevelRenderer(ctx, operations).render()
         }
