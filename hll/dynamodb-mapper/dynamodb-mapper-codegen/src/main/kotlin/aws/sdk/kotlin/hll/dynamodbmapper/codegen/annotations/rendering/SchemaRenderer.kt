@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
+import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
@@ -48,8 +49,11 @@ public class SchemaRenderer(
         renderGetTable()
     }
 
-    // TODO Not all classes need builders generated (i.e. the class consists of all public mutable members), add configurability here
-    private fun renderBuilder() = BuilderRenderer(this, classDeclaration).render()
+    private fun renderBuilder() {
+        // TODO Not all classes need builders generated (i.e. the class consists of all public mutable members), add configurability here
+        val members = classDeclaration.getAllProperties().map(Member.Companion::from).toSet()
+        BuilderRenderer(this, classType, members).render()
+    }
 
     private fun renderItemConverter() {
         withBlock("public object #L : #T by #T(", ")", converterName, MapperTypes.Items.itemConverter(classType), MapperTypes.Items.SimpleItemConverter) {

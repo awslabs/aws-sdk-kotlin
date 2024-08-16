@@ -5,11 +5,11 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGenerator
+import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.TypeVar
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Member
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Structure
 
 /**
