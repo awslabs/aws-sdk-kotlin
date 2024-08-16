@@ -1,7 +1,6 @@
 package aws.sdk.kotlin.hll.codegen.rendering
 
 import aws.sdk.kotlin.hll.codegen.model.Member
-import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import com.google.devtools.ksp.symbol.*
 
@@ -14,7 +13,7 @@ import com.google.devtools.ksp.symbol.*
 class BuilderRenderer(
     private val renderer: RendererBase,
     private val classType: TypeRef,
-    private val members: Set<Member>
+    private val members: Set<Member>,
 ) {
     private val className = classType.shortName
 
