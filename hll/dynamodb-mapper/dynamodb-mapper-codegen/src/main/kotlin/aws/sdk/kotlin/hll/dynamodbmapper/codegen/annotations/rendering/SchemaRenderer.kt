@@ -30,11 +30,7 @@ public class SchemaRenderer(
     private val ctx: RenderContext,
 ) : RendererBase(ctx, "${classDeclaration.qualifiedName!!.getShortName()}Schema", "dynamodb-mapper-annotation-processor") {
     private val className = classDeclaration.qualifiedName!!.getShortName()
-    private val classType = Type.from(
-        checkNotNull(classDeclaration.primaryConstructor?.returnType) {
-            "Failed to determine class type for $className"
-        },
-    )
+    private val classType = Type.from(classDeclaration)
 
     private val builderName = "${className}Builder"
     private val converterName = "${className}Converter"
