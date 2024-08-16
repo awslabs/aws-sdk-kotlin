@@ -8,7 +8,7 @@ import aws.sdk.kotlin.hll.codegen.core.*
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.codegen.rendering.info
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.DynamoDbMapperTypes
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.*
 
 // FIXME handle paginated operations differently (e.g., don't map pagination parameters, provide only Flow API)
@@ -49,13 +49,13 @@ class OperationRenderer(
                 ")",
                 factoryName,
                 itemSourceKind.getSpecType("T"),
-                DynamoDbMapperTypes.Operation,
+                MapperTypes.PipelineImpl.Operation,
             ) {
                 write(
                     "initialize = { highLevelReq: #T -> #T(highLevelReq, spec.schema, #T(spec, #S)) },",
                     operation.request.type,
-                    DynamoDbMapperTypes.HReqContextImpl,
-                    DynamoDbMapperTypes.MapperContextImpl,
+                    MapperTypes.PipelineImpl.HReqContextImpl,
+                    MapperTypes.PipelineImpl.MapperContextImpl,
                     operation.name,
                 )
 
@@ -85,7 +85,7 @@ class OperationRenderer(
 
         openBlock("private fun <T> #T.convert(", operation.request.type)
         members(MemberCodegenBehavior.Hoist) { write("#L: #T, ", name, type) }
-        write("schema: #T,", DynamoDbMapperTypes.itemSchema("T"))
+        write("schema: #T,", MapperTypes.Items.itemSchema("T"))
         closeAndOpenBlock(") = #L {", operation.request.lowLevelName)
         members(MemberCodegenBehavior.PassThrough) { write("#1L = this@convert.#1L", name) }
         members(MemberCodegenBehavior.MapKeys) {
@@ -113,13 +113,13 @@ class OperationRenderer(
             "private fun <T> #L.convert(schema: #T) = #T(",
             ")",
             operation.response.lowLevelName,
-            DynamoDbMapperTypes.itemSchema("T"),
+            MapperTypes.Items.itemSchema("T"),
             operation.response.type,
         ) {
             members(MemberCodegenBehavior.PassThrough) { write("#1L = this@convert.#1L,", name) }
 
             members(MemberCodegenBehavior.MapKeys, MemberCodegenBehavior.MapAll) {
-                write("#1L = this@convert.#1L?.#2T()?.let(schema.converter::fromItem),", name, DynamoDbMapperTypes.toItem)
+                write("#1L = this@convert.#1L?.#2T()?.let(schema.converter::fromItem),", name, MapperTypes.Model.toItem)
             }
         }
     }
