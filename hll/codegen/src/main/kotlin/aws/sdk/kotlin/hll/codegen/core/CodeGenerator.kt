@@ -106,6 +106,13 @@ interface CodeGenerator {
     fun withDocs(block: () -> Unit)
 
     /**
+     * Writes a single line of documentation, wrapping it with KDoc-style comment tokens.
+     * @param template The templated string of documentation to write
+     * @param args The arguments to the templated string, if any
+     */
+    fun docs(template: String, vararg args: Any)
+
+    /**
      * Writes a line of text, including a terminating newline (i.e., `\n`)
      * @param template The string template or literal to append
      * @param args The arguments to substitute into the [template] (if any). See [TemplateEngine] for more details on
@@ -211,6 +218,8 @@ class CodeGeneratorImpl(
         indent = indent.removeSuffix(" * ")
         write(" */")
     }
+
+    override fun docs(template: String, vararg args: Any) = withDocs { write(template, *args) }
 
     override fun write(template: String, vararg args: Any) {
         writeInline(template, *args)

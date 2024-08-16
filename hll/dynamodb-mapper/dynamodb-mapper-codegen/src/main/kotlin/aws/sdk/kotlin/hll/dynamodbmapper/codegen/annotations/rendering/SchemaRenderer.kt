@@ -109,9 +109,7 @@ public class SchemaRenderer(
         }
 
     private fun renderGetTable() {
-        withDocs {
-            write("Returns a reference to a table named [name] containing items representing [#L]", className)
-        }
+        docs("Returns a reference to a table named [name] containing items representing [#T]", classType)
 
         val fnName = "get${className}Table"
         write(

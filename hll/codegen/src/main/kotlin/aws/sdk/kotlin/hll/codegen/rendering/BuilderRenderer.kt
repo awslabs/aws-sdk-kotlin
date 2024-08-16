@@ -16,12 +16,10 @@ class BuilderRenderer(
     private val properties = classDeclaration.getAllProperties().mapNotNull(KSClassProperty.Companion::from)
 
     private val className = classDeclaration.qualifiedName!!.getShortName()
-    private val classType = Type.from(classDeclaration)
+    private val classType: TypeRef = Type.from(classDeclaration)
 
-    fun render() = renderer.use {
-        withDocs {
-            write("A DSL-style builder for instances of [#T]", classType)
-        }
+    fun render() = renderer.apply {
+        docs("A DSL-style builder for instances of [#T]", classType)
 
         withBlock("public class #L {", "}", "${className}Builder") {
             properties.forEach {
