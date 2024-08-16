@@ -72,10 +72,10 @@ private open class TypeProcessor {
 private class ImportingTypeProcessor(private val pkg: String, private val imports: ImportDirectives) : TypeProcessor() {
     override fun format(type: Type): String = buildString {
         if (type is TypeRef && type.pkg != pkg && type.pkg != "kotlin") {
-            val existingImport = imports[type.shortName.substringBefore(".")]
+            val existingImport = imports[type.baseName]
 
             if (existingImport == null) {
-                imports += ImportDirective(type.copy(shortName = type.shortName.substringBefore(".")))
+                imports += ImportDirective("${type.pkg}.${type.baseName}")
             } else if (existingImport.fullName != type.fullName) {
                 append(type.pkg)
                 append('.')

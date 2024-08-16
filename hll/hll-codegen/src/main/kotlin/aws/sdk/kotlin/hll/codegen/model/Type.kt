@@ -69,6 +69,12 @@ data class TypeRef(
      * The full name of this type, including the Kotlin package
      */
     val fullName: String = "$pkg.$shortName"
+
+    /**
+     * The base name of this type. In most cases, this will be the same as the short name, but for nested types, this
+     * will only include the top-level name. For example, the base name of a type Foo.Bar.Baz is Foo.
+     */
+    val baseName: String = shortName.substringBefore(".")
 }
 
 /**
