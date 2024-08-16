@@ -116,6 +116,8 @@ public abstract interface class aws/sdk/kotlin/hll/codegen/model/Type {
 }
 
 public final class aws/sdk/kotlin/hll/codegen/model/Type$Companion {
+	public final fun from (Lcom/google/devtools/ksp/symbol/KSClassDeclaration;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
+	public final fun from (Lcom/google/devtools/ksp/symbol/KSType;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 	public final fun from (Lcom/google/devtools/ksp/symbol/KSTypeReference;)Laws/sdk/kotlin/hll/codegen/model/TypeRef;
 }
 
