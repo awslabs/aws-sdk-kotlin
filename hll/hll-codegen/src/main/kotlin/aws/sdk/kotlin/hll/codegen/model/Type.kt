@@ -87,7 +87,7 @@ data class TypeVar(override val shortName: String, override val nullable: Boolea
 /**
  * Derives a nullable [Type] equivalent for this type
  */
-public fun Type.nullable() = when {
+fun Type.nullable() = when {
     nullable -> this
     this is TypeRef -> copy(nullable = true)
     this is TypeVar -> copy(nullable = true)
