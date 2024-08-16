@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.hll.codegen.model
 
+import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeReference
 
 /**
@@ -12,16 +14,25 @@ import com.google.devtools.ksp.symbol.KSTypeReference
 sealed interface Type {
     companion object {
         /**
+         * Derives a [TypeRef] from a [KSClassDeclaration]
+         */
+        fun from(ksClassDeclaration: KSClassDeclaration): TypeRef = from(ksClassDeclaration.asStarProjectedType())
+
+        /**
          * Derives a [TypeRef] from a [KSTypeReference]
          */
-        fun from(ksTypeRef: KSTypeReference): TypeRef {
-            val resolved = ksTypeRef.resolve()
-            val name = resolved.declaration.qualifiedName!!
+        fun from(ksTypeRef: KSTypeReference): TypeRef = from(ksTypeRef.resolve())
+
+        /**
+         * Derives a [TypeRef] from a [KSType]
+         */
+        fun from(ksType: KSType): TypeRef {
+            val name = ksType.declaration.qualifiedName!!
             return TypeRef(
                 pkg = name.getQualifier(),
                 shortName = name.getShortName(),
-                genericArgs = resolved.arguments.map { from(it.type!!) },
-                nullable = resolved.isMarkedNullable,
+                genericArgs = ksType.arguments.map { from(it.type!!) },
+                nullable = ksType.isMarkedNullable,
             )
         }
     }
