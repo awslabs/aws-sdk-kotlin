@@ -7,7 +7,7 @@ import aws.sdk.kotlin.hll.codegen.util.Pkg
  */
 object Types {
     object Kotlin {
-        val String = kotlin( "String")
+        val String = kotlin("String")
         val Number = kotlin("Number")
         val StringNullable = String.nullable()
 
