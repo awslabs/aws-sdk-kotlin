@@ -179,16 +179,19 @@ public final class aws/sdk/kotlin/hll/codegen/rendering/BuilderRenderer {
 }
 
 public final class aws/sdk/kotlin/hll/codegen/rendering/RenderContext {
-	public fun <init> (Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;)V
+	public fun <init> (Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lcom/google/devtools/ksp/processing/KSPLogger;
 	public final fun component2 ()Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;
 	public final fun component3 ()Ljava/lang/String;
-	public final fun copy (Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;)Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;
-	public static synthetic fun copy$default (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;Ljava/lang/String;)Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;
+	public static synthetic fun copy$default (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Lcom/google/devtools/ksp/processing/KSPLogger;Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCodegenFactory ()Laws/sdk/kotlin/hll/codegen/core/CodeGeneratorFactory;
 	public final fun getLogger ()Lcom/google/devtools/ksp/processing/KSPLogger;
 	public final fun getPkg ()Ljava/lang/String;
+	public final fun getRendererName ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -206,8 +209,7 @@ public final class aws/sdk/kotlin/hll/codegen/rendering/RenderContextKt {
 }
 
 public abstract class aws/sdk/kotlin/hll/codegen/rendering/RendererBase : aws/sdk/kotlin/hll/codegen/core/CodeGenerator {
-	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Laws/sdk/kotlin/hll/codegen/rendering/RenderContext;Ljava/lang/String;)V
 	public fun blankLine ()V
 	public fun closeAndOpenBlock (Ljava/lang/String;[Ljava/lang/Object;)V
 	public fun closeBlock (Ljava/lang/String;[Ljava/lang/Object;)V

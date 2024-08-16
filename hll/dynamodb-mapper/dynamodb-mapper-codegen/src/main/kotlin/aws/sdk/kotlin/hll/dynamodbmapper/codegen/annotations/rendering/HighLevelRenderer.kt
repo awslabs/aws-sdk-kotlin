@@ -21,7 +21,7 @@ public class HighLevelRenderer(
     public fun render() {
         annotatedClasses.forEach {
             logger.info("Processing annotation on ${it.simpleName}")
-            val renderCtx = RenderContext(logger, codegenFactory, "${it.packageName.asString()}.mapper.schemas")
+            val renderCtx = RenderContext(logger, codegenFactory, "${it.packageName.asString()}.mapper.schemas", "dynamodb-mapper-annotation-processor")
             val annotation = SchemaRenderer(it, renderCtx)
             annotation.render()
         }

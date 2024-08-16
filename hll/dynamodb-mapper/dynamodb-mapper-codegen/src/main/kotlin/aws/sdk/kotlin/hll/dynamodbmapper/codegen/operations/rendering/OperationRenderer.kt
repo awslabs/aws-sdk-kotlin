@@ -22,7 +22,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.*
 class OperationRenderer(
     private val ctx: RenderContext,
     val operation: Operation,
-) : RendererBase(ctx, operation.name, "dynamodb-mapper-ops-codegen") {
+) : RendererBase(ctx, operation.name) {
     val members = operation.request.lowLevel.members.groupBy { m ->
         m.codegenBehavior.also { ctx.info("  ${m.name} → $it") }
     }

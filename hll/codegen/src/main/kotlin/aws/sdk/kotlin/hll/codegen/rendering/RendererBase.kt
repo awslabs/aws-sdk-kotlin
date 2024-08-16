@@ -15,8 +15,7 @@ import aws.sdk.kotlin.hll.codegen.core.CodeGenerator
 abstract class RendererBase(
     ctx: RenderContext,
     fileName: String,
-    rendererName: String = "aws-sdk-kotlin-hll-codegen",
-) : CodeGenerator by ctx.codegenFactory.generator(fileName, ctx.pkg, rendererName) {
+) : CodeGenerator by ctx.codegenFactory.generator(fileName, ctx.pkg, ctx.rendererName) {
     /**
      * Run this renderer by calling the `abstract` [generate] method and then [persist]
      */

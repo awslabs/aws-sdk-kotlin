@@ -29,7 +29,7 @@ class OperationsTypeRenderer(
     val itemSourceKind: ItemSourceKind,
     val parentType: Type?,
     val operations: List<Operation>,
-) : RendererBase(ctx, "${itemSourceKind.name}Operations", "dynamodb-mapper-ops-codegen") {
+) : RendererBase(ctx, "${itemSourceKind.name}Operations") {
     private val entityName = itemSourceKind.name.lowercaseFirstChar
     private val intfName = "${itemSourceKind.name}Operations"
 
