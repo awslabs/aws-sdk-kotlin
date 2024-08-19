@@ -17,6 +17,8 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 
 class GetItemTest : DdbLocalTest() {
     companion object {
@@ -45,7 +47,7 @@ class GetItemTest : DdbLocalTest() {
         private val ckSchema = ItemSchema(ckConverter, KeySpec.String("id"), KeySpec.Number("version"))
     }
 
-    @BeforeAll
+    @BeforeTest
     fun setUp() = runTest {
         createTable(PK_TABLE_NAME, pkSchema, mapOf("id" to 1, "value" to "foo"))
         createTable(CK_TABLE_NAME, ckSchema, mapOf("id" to "abcd", "version" to 42, "value" to "foo"))

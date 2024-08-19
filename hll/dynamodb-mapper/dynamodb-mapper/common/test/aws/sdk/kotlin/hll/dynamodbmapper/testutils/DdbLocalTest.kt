@@ -13,8 +13,8 @@ import aws.sdk.kotlin.services.dynamodb.waiters.waitUntilTableNotExists
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.net.Scheme
 import aws.smithy.kotlin.runtime.net.url.Url
-import io.kotest.core.spec.style.AnnotationSpec
 import kotlinx.coroutines.runBlocking
+import kotlin.test.AfterTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -30,7 +30,7 @@ private const val DDB_LOCAL_PORT = 44212 // Keep in sync with build.gradle.kts
  *   unsuccessfully).
  * * [mapper] — Returns a [DynamoDbMapper] instance utilizing the DynamoDB Local instance
  */
-abstract class DdbLocalTest : AnnotationSpec() {
+abstract class DdbLocalTest {
     companion object {
         private const val DOUBLE_TOLERANCE = 0.000001
 
@@ -105,7 +105,7 @@ abstract class DdbLocalTest : AnnotationSpec() {
      */
     fun mapper(config: DynamoDbMapper.Config.Builder.() -> Unit = { }) = DynamoDbMapper(ddb, config)
 
-    @AfterAll
+    @AfterTest
     fun cleanUp() {
         if (ddbHolder.isInitialized()) {
             runBlocking {

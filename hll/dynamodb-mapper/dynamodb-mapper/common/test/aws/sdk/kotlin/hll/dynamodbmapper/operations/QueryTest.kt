@@ -17,6 +17,8 @@ import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContentEquals
 import kotlin.test.assertNotNull
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import aws.sdk.kotlin.services.dynamodb.model.QueryRequest as LowLevelQueryRequest
 
 // FIXME This whole test class is temporary because Query/Scan don't yet have pagination, object mapping, or conditions
@@ -67,7 +69,7 @@ class QueryTest : DdbLocalTest() {
         private val titleSchema = ItemSchema(titleConverter, KeySpec.String("title"), KeySpec.String("name"))
     }
 
-    @BeforeAll
+    @BeforeTest
     fun setUp() = runTest {
         createTable(
             name = TABLE_NAME,
