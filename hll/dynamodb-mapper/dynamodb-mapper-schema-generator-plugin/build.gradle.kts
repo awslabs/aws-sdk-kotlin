@@ -8,38 +8,39 @@ extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.plugins"
 
 plugins {
     `kotlin-dsl`
+    `java-gradle-plugin`
     alias(libs.plugins.plugin.publish)
     alias(libs.plugins.ksp)
-}
-
-// TODO Do we want this plugin to be manually versioned?
-val sdkVersion: String by project
-version = sdkVersion
-
-dependencies {
-    implementation(gradleApi())
-    implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen"))
-    implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-annotations"))
-
-    testImplementation(gradleTestKit())
-    testImplementation(libs.junit.jupiter)
-    testImplementation(libs.junit.jupiter.params)
-    testImplementation(libs.kotlin.test)
-}
-
-// FIXME publishToMavenLocal drops this plugin in ~/.m2/repository/aws-sdk-kotlin/... instead of
-// ~/.m2/repository/aws/sdk/kotlin/...?
-gradlePlugin {
-    plugins {
-        create("dynamodb-mapper-schema-generator") {
-            id = "aws.sdk.kotlin.hll.dynamodbmapper.schema.generator"
-            implementationClass = "aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPlugin"
-            description = "Plugin used to generate DynamoDbMapper schemas from user classes"
-        }
-    }
 }
 
 ksp {
     excludeProcessor("aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.HighLevelOpsProcessorProvider")
 }
 
+dependencies {
+//    api(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen"))
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.kotlin.test)
+}
+
+gradlePlugin {
+    plugins {
+        create("dynamodb-mapper-schema-generator") {
+            id = "aws.sdk.kotlin.hll.dynamodbmapper.plugins"
+            implementationClass = "aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPlugin"
+            description = "Plugin used to generate DynamoDbMapper schemas from user classes"
+        }
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = true
+        showStackTraces = true
+        showExceptions = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+}

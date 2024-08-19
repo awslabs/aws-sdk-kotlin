@@ -7,7 +7,6 @@ package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.create
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 
 open class SchemaGeneratorPluginExtension {}
 
@@ -23,7 +22,7 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
 
     private fun Project.registerTasks() {
         task("generateSchemas") {
-            println("Generating schemas for classes annotated with ${DynamoDbItem::class.java}...")
+            println("Generating schemas for classes annotated with DynamoDbItem...")
         }
     }
 }

@@ -25,19 +25,25 @@ val sdkVersion: String by project
 // capture locally - scope issue with custom KMP plugin
 val libraries = libs
 
+// General subproject configuration
 subprojects {
-    if (!needsKmpConfigured) return@subprojects
-
     group = "aws.sdk.kotlin"
     version = sdkVersion
+
+    configurePublishing("aws-sdk-kotlin")
+}
+
+// KMP-specific configuration
+subprojects {
+    if (!needsKmpConfigured) {
+        return@subprojects
+    }
 
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
         plugin("org.jetbrains.dokka")
         plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
-
-    configurePublishing("aws-sdk-kotlin")
 
     kotlin {
         explicitApi()
