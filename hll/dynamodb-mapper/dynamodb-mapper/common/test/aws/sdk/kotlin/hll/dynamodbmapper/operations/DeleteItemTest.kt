@@ -14,10 +14,10 @@ import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
 import aws.sdk.kotlin.services.dynamodb.model.ReturnConsumedCapacity
 import aws.sdk.kotlin.services.dynamodb.model.ReturnValue
 import kotlinx.coroutines.test.runTest
-import kotlin.test.assertNotNull
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class DeleteItemTest : DdbLocalTest() {
     companion object {

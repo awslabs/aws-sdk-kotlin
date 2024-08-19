@@ -28,7 +28,6 @@ kotlin {
                 implementation(libs.junit.jupiter.params)
                 implementation(libs.kotest.assertions.core.jvm)
                 implementation(libs.kotlin.test.junit5)
-
             }
         }
     }

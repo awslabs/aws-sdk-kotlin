@@ -10,4 +10,3 @@ public class SanityCheckTest {
         assertTrue(1 == 1)
     }
 }
-

@@ -3,8 +3,8 @@ package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import kotlin.test.assertContains
@@ -24,8 +24,12 @@ class SchemaGeneratorPluginTest {
 
     @AfterEach
     fun cleanup() {
-        if (settingsFile.exists()) { settingsFile.delete() }
-        if (buildFile.exists()) { buildFile.delete() }
+        if (settingsFile.exists()) {
+            settingsFile.delete()
+        }
+        if (buildFile.exists()) {
+            buildFile.delete()
+        }
     }
 
     @Test
@@ -35,7 +39,7 @@ class SchemaGeneratorPluginTest {
             id("aws.sdk.kotlin.hll.dynamodbmapper.plugins")
          }
          configure<aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPluginExtension>{ }
-      """.trimIndent()
+        """.trimIndent()
 
         buildFile.writeText(buildFileContent)
 
