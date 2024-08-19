@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.14] - 08/19/2024
+
+### Features
+* (**bedrock**) Amazon Bedrock Batch Inference/ Model Invocation is a feature which allows customers to asynchronously run inference on a large set of records/files stored in S3.
+* (**codebuild**) AWS CodeBuild now supports creating fleets with macOS platform for running builds.
+* (**deadline**) This release adds additional search fields and provides sorting by multiple fields.
+* (**lambda**) Release Lambda FunctionRecursiveConfig, enabling customers to turn recursive loop detection on or off on individual functions. This release adds two new APIs, GetFunctionRecursionConfig and PutFunctionRecursionConfig.
+* (**ssmsap**) Add new attributes to the outputs of GetApplication and GetDatabase APIs.
+
+### Fixes
+* [#1326](https://github.com/awslabs/aws-sdk-kotlin/issues/1326) Correctly terminate pagination for CloudWatch Logs `GetLogEvents` operation
+
 ## [1.3.13] - 08/16/2024
 
 ### Features
