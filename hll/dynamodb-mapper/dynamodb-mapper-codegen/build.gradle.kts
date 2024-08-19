@@ -12,10 +12,10 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.ksp.api)
-    implementation(project(":hll:hll-codegen"))
-    implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-annotations"))
-    implementation(project(":services:dynamodb"))
+    api(libs.ksp.api)
+    api(project(":hll:hll-codegen"))
+    api(project(":hll:dynamodb-mapper:dynamodb-mapper-annotations"))
+    api(project(":services:dynamodb"))
 
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter.params)
