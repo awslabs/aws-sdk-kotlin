@@ -20,7 +20,7 @@ aws.sdk.kotlin.codegen.customization.s3.ClientConfigIntegration
 aws.sdk.kotlin.codegen.customization.s3.ContinueIntegration
 aws.sdk.kotlin.codegen.customization.s3.GetObjectResponseLengthValidationIntegration
 aws.sdk.kotlin.codegen.customization.s3.HttpPathFilter
-aws.sdk.kotlin.codegen.customization.s3.TruncatablePaginationIntegration
+aws.sdk.kotlin.codegen.customization.PaginationEndBehaviorIntegration
 aws.sdk.kotlin.codegen.customization.s3.HostPrefixRequestRouteFilter
 aws.sdk.kotlin.codegen.customization.s3.UnwrappedXmlOutputIntegration
 aws.sdk.kotlin.codegen.customization.s3control.HostPrefixFilter
