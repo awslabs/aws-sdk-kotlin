@@ -22,5 +22,10 @@ dependencies {
     listOf(
         "kspCommonMainMetadata",
         "kspJvm", // FIXME Generating common code is hard for KSP: https://github.com/google/ksp/issues/567
-    ).forEach { configuration -> add(configuration, project(":hll:dynamodb-mapper:dynamodb-mapper-annotation-processor")) }
+    ).forEach { configuration -> add(configuration, project(":hll:dynamodb-mapper:dynamodb-mapper-codegen")) }
+}
+
+ksp {
+    // annotation-processor-test does not need the ops-codegen processor loaded
+    excludeProcessor("aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.HighLevelOpsProcessorProvider")
 }
