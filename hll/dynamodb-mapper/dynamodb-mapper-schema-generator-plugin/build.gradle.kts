@@ -46,6 +46,8 @@ tasks.test {
 }
 
 /**
+ * FIXME This fixes the following error seen while trying to publish the plugin.
+ *
  * * What went wrong:
  * A problem was found with the configuration of task ':hll:dynamodb-mapper:dynamodb-mapper-schema-generator-plugin:javadocJar' (type 'Jar').
  *   - Gradle detected a problem with the following location: '/Users/lauzmata/aws-sdk-kotlin/hll/dynamodb-mapper/dynamodb-mapper-schema-generator-plugin/build/libs/dynamodb-mapper-schema-generator-plugin-1.3.2-SNAPSHOT-javadoc.jar'.
@@ -74,11 +76,4 @@ afterEvaluate {
             }
         }
     }
-
-    /**
-     * Execution failed for task ':hll:dynamodb-mapper:dynamodb-mapper-schema-generator-plugin:publishPluginMavenPublicationToMavenLocal'.
-     * > Failed to publish publication 'pluginMaven' to repository 'mavenLocal'
-     *    > Invalid publication 'pluginMaven': multiple artifacts with the identical extension and classifier ('jar', 'javadoc').
-     */
 }
-
