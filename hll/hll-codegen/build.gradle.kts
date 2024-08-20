@@ -20,3 +20,32 @@ dependencies {
     testImplementation(libs.kotest.assertions.core.jvm)
     testImplementation(libs.kotlin.test.junit5)
 }
+
+// Reusable license copySpec
+val licenseSpec = copySpec {
+    from("${project.rootDir}/LICENSE")
+    from("${project.rootDir}/NOTICE")
+}
+
+tasks.jar {
+    metaInf.with(licenseSpec)
+    inputs.property("moduleName", project.name)
+    manifest {
+        attributes["Automatic-Module-Name"] = project.name
+    }
+}
+
+val sourcesJar by tasks.creating(Jar::class) {
+    group = "publishing"
+    description = "Assembles Kotlin sources jar"
+    archiveClassifier.set("sources")
+    from(sourceSets.getByName("main").allSource)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("hll-codegen") {
+            from(components["java"])
+        }
+    }
+}
