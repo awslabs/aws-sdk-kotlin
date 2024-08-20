@@ -35,7 +35,7 @@ data class Operation(
         /**
          * Derive an [Operation] from a [KSFunctionDeclaration]
          */
-        fun from(declaration: KSFunctionDeclaration): Operation = Operation(
+        fun from(declaration: KSFunctionDeclaration) = Operation(
             methodName = declaration.simpleName.getShortName(),
             request = Structure.from(declaration.parameters.single().type),
             response = Structure.from(declaration.returnType!!),

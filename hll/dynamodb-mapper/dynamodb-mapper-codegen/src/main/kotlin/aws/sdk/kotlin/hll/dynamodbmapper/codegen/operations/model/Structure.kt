@@ -31,7 +31,7 @@ data class Structure(
         /**
          * Derives a [Structure] from the given [KSTypeReference]
          */
-        fun from(ksTypeRef: KSTypeReference): Structure = Structure(
+        fun from(ksTypeRef: KSTypeReference) = Structure(
             type = Type.from(ksTypeRef),
             members = (ksTypeRef.resolve().declaration as KSClassDeclaration)
                 .getDeclaredProperties()

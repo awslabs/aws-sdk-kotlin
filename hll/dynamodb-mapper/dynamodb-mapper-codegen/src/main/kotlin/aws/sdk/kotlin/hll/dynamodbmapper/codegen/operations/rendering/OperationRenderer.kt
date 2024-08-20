@@ -20,16 +20,16 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.*
  * @param ctx The active [RenderContext]
  * @param operation The [Operation] to codegen
  */
-public class OperationRenderer(
+class OperationRenderer(
     private val ctx: RenderContext,
-    public val operation: Operation,
+    val operation: Operation,
 ) : RendererBase(ctx, operation.name) {
-    private val members: Map<MemberCodegenBehavior, List<Member>> = operation.request.lowLevel.members.groupBy { m ->
+    val members = operation.request.lowLevel.members.groupBy { m ->
         m.codegenBehavior.also { ctx.info("  ${m.name} → $it") }
     }
 
-    public companion object {
-        public fun factoryFunctionName(operation: Operation): String = "${operation.methodName}Operation"
+    companion object {
+        fun factoryFunctionName(operation: Operation) = "${operation.methodName}Operation"
     }
 
     override fun generate() {

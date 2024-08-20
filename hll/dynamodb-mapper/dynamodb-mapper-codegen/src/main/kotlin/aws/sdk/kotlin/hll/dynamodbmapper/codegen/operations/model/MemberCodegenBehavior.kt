@@ -24,7 +24,7 @@ sealed interface MemberCodegenBehavior {
          * Identifies a [MemberCodegenBehavior] for the given [Member] by way of various heuristics
          * @param member The [Member] for which to identify a codegen behavior
          */
-        fun identifyFor(member: Member): MemberCodegenBehavior = when {
+        fun identifyFor(member: Member) = when {
             member in unsupportedMembers -> Drop
             member.type in attrMapTypes -> if (member.name == "key") MapKeys else MapAll
             member.isTableName -> Hoist
