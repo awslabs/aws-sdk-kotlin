@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.15] - 08/20/2024
+
+### Features
+* (**opensearchserverless**) Added FailureCode and FailureMessage to BatchGetCollectionResponse for BatchGetVPCEResponse for non-Active Collection and VPCE.
+* (**s3**) Amazon Simple Storage Service / Features : Add support for conditional writes for PutObject and CompleteMultipartUpload APIs.
+
+### Documentation
+* (**ecs**) Documentation only release to address various tickets
+
 ## [1.3.14] - 08/19/2024
 
 ### Features
