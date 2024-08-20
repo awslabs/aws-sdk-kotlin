@@ -12,6 +12,6 @@ import com.google.devtools.ksp.processing.SymbolProcessorProvider
  * The main entry point for KSP. See https://kotlinlang.org/docs/ksp-quickstart.html#create-a-processor-of-your-own for
  * more details.
  */
-public class HighLevelOpsProcessorProvider : SymbolProcessorProvider {
+class HighLevelOpsProcessorProvider : SymbolProcessorProvider {
     override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor = HighLevelOpsProcessor(environment)
 }

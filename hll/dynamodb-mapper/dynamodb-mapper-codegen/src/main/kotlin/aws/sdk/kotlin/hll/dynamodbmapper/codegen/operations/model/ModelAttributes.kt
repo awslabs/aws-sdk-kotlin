@@ -9,14 +9,14 @@ import aws.smithy.kotlin.runtime.collections.AttributeKey
 /**
  * Defines [AttributeKey] instances that relate to the data model of low-level to high-level codegen
  */
-public object ModelAttributes {
+object ModelAttributes {
     /**
      * For a given high-level [Operation], this attribute key identifies the associated low-level [Operation]
      */
-    public val LowLevelOperation: AttributeKey<Operation> = AttributeKey("aws.sdk.kotlin.ddbmapper#LowLevelOperation")
+    val LowLevelOperation: AttributeKey<Operation> = AttributeKey("aws.sdk.kotlin.ddbmapper#LowLevelOperation")
 
     /**
      * For a given high-level [Structure], this attribute key identifies the associated low-level [Structure]
      */
-    public val LowLevelStructure: AttributeKey<Structure> = AttributeKey("aws.sdk.kotlin.ddbmapper#LowLevelStructure")
+    val LowLevelStructure: AttributeKey<Structure> = AttributeKey("aws.sdk.kotlin.ddbmapper#LowLevelStructure")
 }

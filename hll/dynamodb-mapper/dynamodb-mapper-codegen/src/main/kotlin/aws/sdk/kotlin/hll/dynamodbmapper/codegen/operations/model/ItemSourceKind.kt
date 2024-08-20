@@ -16,10 +16,10 @@ import aws.sdk.kotlin.hll.codegen.util.Pkg
  * @param isAbstract Indicates whether this item source kind is purely abstract and should not have an implementation
  * class (e.g., `ItemSource<T>` should be abstract and non-instantiable)
  */
-public enum class ItemSourceKind(
-    public val hoistedFields: List<String>,
-    public val parent: ItemSourceKind? = null,
-    public val isAbstract: Boolean = false,
+enum class ItemSourceKind(
+    val hoistedFields: List<String>,
+    val parent: ItemSourceKind? = null,
+    val isAbstract: Boolean = false,
 ) {
     /**
      * Indicates the `ItemSource<T>` interface
@@ -42,14 +42,14 @@ public enum class ItemSourceKind(
      * Get the [TypeRef] for the `*Spec` type for this item source kind
      * @param typeVar The type variable name to use for the generic type
      */
-    public fun getSpecType(typeVar: String): TypeRef = TypeRef(Pkg.Hl.Model, "${name}Spec", listOf(TypeVar(typeVar)))
+    fun getSpecType(typeVar: String): TypeRef = TypeRef(Pkg.Hl.Model, "${name}Spec", listOf(TypeVar(typeVar)))
 }
 
 /**
  * Identifies the types of `ItemSource` on which an operation can be invoked (e.g., `Scan` can be invoked on a table,
  * index, or any generic item source, whereas `GetItem` can only be invoked on a table)
  */
-public val Operation.itemSourceKinds: Set<ItemSourceKind>
+val Operation.itemSourceKinds: Set<ItemSourceKind>
     get() = when (name) {
         "Query", "Scan" -> setOf(ItemSourceKind.ItemSource, ItemSourceKind.Index, ItemSourceKind.Table)
         else -> setOf(ItemSourceKind.Table)

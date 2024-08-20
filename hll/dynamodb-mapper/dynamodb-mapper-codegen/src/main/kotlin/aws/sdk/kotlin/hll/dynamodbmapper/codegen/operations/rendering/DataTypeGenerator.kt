@@ -52,12 +52,12 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Structure
  * @param generator The underlying generator for the context into which the data type should be written
  * @param structure The [Structure] which describes the data type for which to generate code
  */
-public class DataTypeGenerator(
+class DataTypeGenerator(
     private val ctx: RenderContext,
     generator: CodeGenerator,
-    public val structure: Structure,
+    val structure: Structure,
 ) : CodeGenerator by generator {
-    public fun generate() {
+    fun generate() {
         withBlock("public interface #T {", "}", structure.type) {
             write("public companion object { }") // leave room for future expansion
             blankLine()

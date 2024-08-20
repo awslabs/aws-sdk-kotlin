@@ -19,7 +19,7 @@ import com.google.devtools.ksp.symbol.KSFunctionDeclaration
  * @param response The [Structure] for responses/output from this operation
  * @param attributes An [Attributes] collection for associating typed attributes with this operation
  */
-public data class Operation(
+data class Operation(
     val methodName: String,
     val request: Structure,
     val response: Structure,
@@ -29,13 +29,13 @@ public data class Operation(
      * The capitalized name of this operation's [methodName]. For example, if [methodName] is `getItem` then [name]
      * would be `GetItem`.
      */
-    val name: String = methodName.capitalizeFirstChar // e.g., "GetItem" vs "getItem"
+    val name = methodName.capitalizeFirstChar // e.g., "GetItem" vs "getItem"
 
-    public companion object {
+    companion object {
         /**
          * Derive an [Operation] from a [KSFunctionDeclaration]
          */
-        public fun from(declaration: KSFunctionDeclaration): Operation = Operation(
+        fun from(declaration: KSFunctionDeclaration): Operation = Operation(
             methodName = declaration.simpleName.getShortName(),
             request = Structure.from(declaration.parameters.single().type),
             response = Structure.from(declaration.returnType!!),
@@ -46,14 +46,14 @@ public data class Operation(
 /**
  * Gets the low-level [Operation] equivalent for this high-level operation
  */
-public val Operation.lowLevel: Operation
+val Operation.lowLevel: Operation
     get() = attributes[ModelAttributes.LowLevelOperation]
 
 /**
  * Derives a high-level [Operation] equivalent for this low-level operation
  * @param pkg The Kotlin package to use for the high-level operation's request and response structures
  */
-public fun Operation.toHighLevel(pkg: String): Operation {
+fun Operation.toHighLevel(pkg: String): Operation {
     val llOperation = this@toHighLevel
     val hlRequest = llOperation.request.toHighLevel(pkg)
     val hlResponse = llOperation.response.toHighLevel(pkg)

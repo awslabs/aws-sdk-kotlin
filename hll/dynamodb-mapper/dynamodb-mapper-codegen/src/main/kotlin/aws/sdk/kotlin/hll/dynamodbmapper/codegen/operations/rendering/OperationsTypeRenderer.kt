@@ -24,16 +24,16 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.itemSourceKind
  * interface)
  * @param operations A list of the operations in scope for codegen
  */
-public class OperationsTypeRenderer(
+class OperationsTypeRenderer(
     private val ctx: RenderContext,
-    private val itemSourceKind: ItemSourceKind,
-    private val parentType: Type?,
-    private val operations: List<Operation>,
+    val itemSourceKind: ItemSourceKind,
+    val parentType: Type?,
+    val operations: List<Operation>,
 ) : RendererBase(ctx, "${itemSourceKind.name}Operations") {
     private val entityName = itemSourceKind.name.lowercaseFirstChar
     private val intfName = "${itemSourceKind.name}Operations"
 
-    internal val interfaceType = TypeRef(ctx.pkg, intfName, listOf(TypeVar("T")))
+    val interfaceType = TypeRef(ctx.pkg, intfName, listOf(TypeVar("T")))
 
     override fun generate() {
         renderInterface()
