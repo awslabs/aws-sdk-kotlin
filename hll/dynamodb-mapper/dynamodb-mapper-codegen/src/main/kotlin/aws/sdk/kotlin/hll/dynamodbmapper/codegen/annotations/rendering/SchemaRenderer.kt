@@ -79,10 +79,10 @@ class SchemaRenderer(
 
     private val AnnotatedClassProperty.valueConverter: Type
         get() = when (typeName.asString()) {
-            "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.DefaultInstantConverter
-            "kotlin.Boolean" -> MapperTypes.Values.BooleanConverter
-            "kotlin.Int" -> MapperTypes.Values.IntConverter
-            "kotlin.String" -> MapperTypes.Values.StringConverter
+            "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
+            "kotlin.Boolean" -> MapperTypes.Values.Scalars.DefaultBooleanConverter
+            "kotlin.Int" -> MapperTypes.Values.Scalars.DefaultIntConverter
+            "kotlin.String" -> MapperTypes.Values.Scalars.DefaultStringConverter
             // TODO Add additional "standard" item converters
             else -> error("Unsupported attribute type ${typeName.asString()}")
         }
