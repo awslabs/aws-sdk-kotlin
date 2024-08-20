@@ -18,7 +18,7 @@ ksp {
 }
 
 dependencies {
-    api(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen"))
+    implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen"))
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.kotlin.test)

@@ -7,6 +7,6 @@ public class SanityCheckTest {
     @Test
     public fun x() {
         println("ensuring dynamodb-mapper-codegen tests run!")
-        assertTrue(1 == 2)
+        assertTrue(1 == 1)
     }
 }
