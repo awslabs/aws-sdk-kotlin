@@ -9,44 +9,44 @@ import aws.sdk.kotlin.hll.codegen.util.Pkg
 /**
  * A container object for various DynamoDbMapper [Type] instances
  */
-public object MapperTypes {
+object MapperTypes {
     // Low-level types
-    public val AttributeValue: TypeRef = TypeRef(Pkg.Ll.Model, "AttributeValue")
-    public val AttributeMap: TypeRef = Types.Kotlin.map(Types.Kotlin.String, AttributeValue)
+    val AttributeValue = TypeRef(Pkg.Ll.Model, "AttributeValue")
+    val AttributeMap = Types.Kotlin.map(Types.Kotlin.String, AttributeValue)
 
     // High-level types
-    public val DynamoDbMapper: TypeRef = TypeRef(Pkg.Hl.Base, "DynamoDbMapper")
+    val DynamoDbMapper = TypeRef(Pkg.Hl.Base, "DynamoDbMapper")
 
-    public object Items {
-        public fun itemSchema(typeVar: String): TypeRef = TypeRef(Pkg.Hl.Items, "ItemSchema", listOf(TypeVar(typeVar)))
-        public fun itemSchemaPartitionKey(objectType: TypeRef, keyType: TypeRef): TypeRef = TypeRef(Pkg.Hl.Items, "ItemSchema.PartitionKey", listOf(objectType, keyType))
-        public fun keySpec(keyType: TypeRef): TypeRef = TypeRef(Pkg.Hl.Items, "KeySpec", genericArgs = listOf(keyType))
-        public val KeySpecNumber: TypeRef = TypeRef(Pkg.Hl.Items, "KeySpec.Number")
-        public val KeySpecString: TypeRef = TypeRef(Pkg.Hl.Items, "KeySpec.String")
-        public val AttributeDescriptor: TypeRef = TypeRef(Pkg.Hl.Items, "AttributeDescriptor")
-        public fun itemConverter(objectType: TypeRef): TypeRef = TypeRef(Pkg.Hl.Items, "ItemConverter", genericArgs = listOf(objectType))
-        public val SimpleItemConverter: TypeRef = TypeRef(Pkg.Hl.Items, "SimpleItemConverter")
+    object Items {
+        fun itemSchema(typeVar: String) = TypeRef(Pkg.Hl.Items, "ItemSchema", listOf(TypeVar(typeVar)))
+        fun itemSchemaPartitionKey(objectType: TypeRef, keyType: TypeRef) = TypeRef(Pkg.Hl.Items, "ItemSchema.PartitionKey", listOf(objectType, keyType))
+        fun keySpec(keyType: TypeRef) = TypeRef(Pkg.Hl.Items, "KeySpec", genericArgs = listOf(keyType))
+        val KeySpecNumber = TypeRef(Pkg.Hl.Items, "KeySpec.Number")
+        val KeySpecString = TypeRef(Pkg.Hl.Items, "KeySpec.String")
+        val AttributeDescriptor = TypeRef(Pkg.Hl.Items, "AttributeDescriptor")
+        fun itemConverter(objectType: TypeRef) = TypeRef(Pkg.Hl.Items, "ItemConverter", genericArgs = listOf(objectType))
+        val SimpleItemConverter = TypeRef(Pkg.Hl.Items, "SimpleItemConverter")
     }
 
-    public object Model {
-        public fun tablePartitionKey(objectType: TypeRef, keyType: TypeRef): TypeRef = TypeRef(
+    object Model {
+        fun tablePartitionKey(objectType: TypeRef, keyType: TypeRef) = TypeRef(
             Pkg.Hl.Model,
             "Table.PartitionKey",
             genericArgs = listOf(objectType, keyType),
         )
-        public val toItem: TypeRef = TypeRef(Pkg.Hl.Model, "toItem")
+        val toItem = TypeRef(Pkg.Hl.Model, "toItem")
     }
 
-    public object Values {
-        public val DefaultInstantConverter: TypeRef = TypeRef(Pkg.Hl.Values, "InstantConverter.Default")
-        public val BooleanConverter: TypeRef = TypeRef(Pkg.Hl.Values, "BooleanConverter")
-        public val IntConverter: TypeRef = TypeRef(Pkg.Hl.Values, "IntConverter")
-        public val StringConverter: TypeRef = TypeRef(Pkg.Hl.Values, "StringConverter")
+    object Values {
+        val DefaultInstantConverter = TypeRef(Pkg.Hl.Values, "InstantConverter.Default")
+        val BooleanConverter = TypeRef(Pkg.Hl.Values, "BooleanConverter")
+        val IntConverter = TypeRef(Pkg.Hl.Values, "IntConverter")
+        val StringConverter = TypeRef(Pkg.Hl.Values, "StringConverter")
     }
 
-    public object PipelineImpl {
-        public val HReqContextImpl: TypeRef = TypeRef(Pkg.Hl.PipelineImpl, "HReqContextImpl")
-        public val MapperContextImpl: TypeRef = TypeRef(Pkg.Hl.PipelineImpl, "MapperContextImpl")
-        public val Operation: TypeRef = TypeRef(Pkg.Hl.PipelineImpl, "Operation")
+    object PipelineImpl {
+        val HReqContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "HReqContextImpl")
+        val MapperContextImpl = TypeRef(Pkg.Hl.PipelineImpl, "MapperContextImpl")
+        val Operation = TypeRef(Pkg.Hl.PipelineImpl, "Operation")
     }
 }
