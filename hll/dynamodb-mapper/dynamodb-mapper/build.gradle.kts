@@ -103,6 +103,10 @@ if (project.NATIVE_ENABLED) {
         }
     }
 
+    tasks.named("jvmSourcesJar") {
+        dependsOn(moveGenSrc)
+    }
+
     tasks.withType<KotlinCompilationTask<*>> {
         if (this !is KspTaskJvm) {
             // Ensure that any **non-KSP** compile tasks depend on the generated src move
