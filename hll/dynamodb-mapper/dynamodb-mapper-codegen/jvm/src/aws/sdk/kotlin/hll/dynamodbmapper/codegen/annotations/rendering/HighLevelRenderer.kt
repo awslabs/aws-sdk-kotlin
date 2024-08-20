@@ -13,12 +13,12 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
  * The parent renderer for all codegen from this package. This class orchestrates the various sub-renderers.
  * @param annotatedClasses A list of annotated classes
  */
-class HighLevelRenderer(
+public class HighLevelRenderer(
     private val annotatedClasses: List<KSClassDeclaration>,
     private val logger: KSPLogger,
     private val codegenFactory: CodeGeneratorFactory,
 ) {
-    fun render() {
+    public fun render() {
         annotatedClasses.forEach {
             logger.info("Processing annotation on ${it.simpleName}")
             val renderCtx = RenderContext(logger, codegenFactory, "${it.packageName.asString()}.mapper.schemas", "dynamodb-mapper-annotation-processor")

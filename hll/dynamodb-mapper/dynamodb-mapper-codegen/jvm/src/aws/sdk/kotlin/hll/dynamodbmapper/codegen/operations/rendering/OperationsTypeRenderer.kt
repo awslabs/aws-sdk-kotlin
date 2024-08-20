@@ -33,7 +33,7 @@ public class OperationsTypeRenderer(
     private val entityName = itemSourceKind.name.lowercaseFirstChar
     private val intfName = "${itemSourceKind.name}Operations"
 
-    private val interfaceType = TypeRef(ctx.pkg, intfName, listOf(TypeVar("T")))
+    internal val interfaceType = TypeRef(ctx.pkg, intfName, listOf(TypeVar("T")))
 
     override fun generate() {
         renderInterface()

@@ -27,7 +27,7 @@ dependencies {
 gradlePlugin {
     plugins {
         create("dynamodb-mapper-schema-generator") {
-            id = "aws.sdk.kotlin.hll.dynamodbmapper.plugins"
+            id = "aws.sdk.kotlin.dynamodbmapper.schema.generator"
             implementationClass = "aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPlugin"
             description = "Plugin used to generate DynamoDbMapper schemas from user classes"
         }

@@ -33,6 +33,14 @@ kotlin {
     }
 }
 
+dependencies {
+    add("kspCommonMainMetadata", project(":test-processor"))
+    add("kspJvm", project(":test-processor"))
+    add("kspJvmTest", project(":test-processor")) // Not doing anything because there's no test source set for JVM
+    // There is no processing for the Linux x64 main source set, because kspLinuxX64 isn't specified
+    add("kspLinuxX64Test", project(":test-processor"))
+}
+
 /**
  * Cannot. get. this. project. in. mavenLocal.
  *

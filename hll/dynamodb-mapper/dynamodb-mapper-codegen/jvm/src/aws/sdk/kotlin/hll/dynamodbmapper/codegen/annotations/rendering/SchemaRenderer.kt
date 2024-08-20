@@ -26,7 +26,7 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
  * @param classDeclaration the [KSClassDeclaration] of the class
  * @param ctx the [RenderContext] of the renderer
  */
-class SchemaRenderer(
+public class SchemaRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
 ) : RendererBase(ctx, "${classDeclaration.qualifiedName!!.getShortName()}Schema") {
