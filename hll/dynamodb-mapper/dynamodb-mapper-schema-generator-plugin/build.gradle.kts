@@ -13,6 +13,16 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+gradlePlugin {
+    plugins {
+        create("dynamodb-mapper-schema-generator") {
+            id = "aws.sdk.kotlin.hll.dynamodbmapper.schema.generator"
+            implementationClass = "aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPlugin"
+            description = "Plugin used to generate DynamoDbMapper schemas from user classes"
+        }
+    }
+}
+
 ksp {
     excludeProcessor("aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.HighLevelOpsProcessorProvider")
 }
@@ -24,15 +34,6 @@ dependencies {
     testImplementation(libs.kotlin.test)
 }
 
-gradlePlugin {
-    plugins {
-        create("dynamodb-mapper-schema-generator") {
-            id = "aws.sdk.kotlin.hll.dynamodbmapper.schema.generator"
-            implementationClass = "aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPlugin"
-            description = "Plugin used to generate DynamoDbMapper schemas from user classes"
-        }
-    }
-}
 
 tasks.test {
     useJUnitPlatform()
