@@ -4,13 +4,15 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 
+import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
-import com.google.devtools.ksp.gradle.KspExtension
 
-open class SchemaGeneratorPluginExtension
+class SchemaGeneratorPluginExtension {
+    // TODO Add configuration here (such as codegen configuration)
+}
 
 const val SCHEMA_GENERATOR_PLUGIN_EXTENSION = "schemaGeneratorPluginExtension"
 
