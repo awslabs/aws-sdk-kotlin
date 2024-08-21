@@ -15,8 +15,6 @@ import aws.sdk.kotlin.hll.dynamodbmapper.testutils.ddbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.values.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
 import kotlinx.coroutines.test.runTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertNotNull
 import aws.sdk.kotlin.services.dynamodb.model.QueryRequest as LowLevelQueryRequest
@@ -69,7 +67,7 @@ class QueryTest : DdbLocalTest() {
         private val titleSchema = ItemSchema(titleConverter, KeySpec.String("title"), KeySpec.String("name"))
     }
 
-    @BeforeTest
+    @BeforeAll
     fun setUp() = runTest {
         createTable(
             name = TABLE_NAME,

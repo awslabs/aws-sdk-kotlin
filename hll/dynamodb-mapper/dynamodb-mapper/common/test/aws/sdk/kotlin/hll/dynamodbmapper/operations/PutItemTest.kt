@@ -13,8 +13,6 @@ import aws.sdk.kotlin.hll.dynamodbmapper.testutils.getItem
 import aws.sdk.kotlin.hll.dynamodbmapper.values.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
 import kotlinx.coroutines.test.runTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -33,7 +31,7 @@ class PutItemTest : DdbLocalTest() {
         private val schema = ItemSchema(converter, KeySpec.String("id"))
     }
 
-    @BeforeTest
+    @BeforeAll
     fun setUp() = runTest {
         createTable(TABLE_NAME, schema)
     }

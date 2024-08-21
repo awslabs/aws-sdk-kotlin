@@ -14,8 +14,6 @@ import aws.sdk.kotlin.hll.dynamodbmapper.values.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
 import aws.sdk.kotlin.services.dynamodb.model.ReturnConsumedCapacity
 import kotlinx.coroutines.test.runTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -47,7 +45,7 @@ class GetItemTest : DdbLocalTest() {
         private val ckSchema = ItemSchema(ckConverter, KeySpec.String("id"), KeySpec.Number("version"))
     }
 
-    @BeforeTest
+    @BeforeAll
     fun setUp() = runTest {
         createTable(PK_TABLE_NAME, pkSchema, mapOf("id" to 1, "value" to "foo"))
         createTable(CK_TABLE_NAME, ckSchema, mapOf("id" to "abcd", "version" to 42, "value" to "foo"))
