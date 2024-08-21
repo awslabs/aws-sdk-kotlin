@@ -140,6 +140,8 @@ class ImdsCredentialsProviderTest {
             "IMDSv2",
         )
         assertEquals(expected1, actual1)
+
+        connection.assertRequests()
     }
 
     @Test
@@ -195,6 +197,8 @@ class ImdsCredentialsProviderTest {
             "IMDSv2",
         )
         assertEquals(expected, actual)
+
+        connection.assertRequests()
     }
 
     @Test
@@ -225,6 +229,8 @@ class ImdsCredentialsProviderTest {
         ex.message.shouldContain("failed to load instance profile")
         assertIs<EC2MetadataError>(ex.cause)
         ex.cause!!.message.shouldContain("Request forbidden")
+
+        connection.assertRequests()
     }
 
     @Test
@@ -272,6 +278,8 @@ class ImdsCredentialsProviderTest {
         assertFailsWith<CredentialsProviderException> {
             provider.resolve()
         }.message.shouldContain("failed to load instance profile")
+
+        connection.assertRequests()
     }
 
     // SDK can send a request if expired credentials are available.
@@ -329,6 +337,8 @@ class ImdsCredentialsProviderTest {
         )
 
         assertEquals(expected, actual)
+
+        connection.assertRequests()
     }
 
     @Test
