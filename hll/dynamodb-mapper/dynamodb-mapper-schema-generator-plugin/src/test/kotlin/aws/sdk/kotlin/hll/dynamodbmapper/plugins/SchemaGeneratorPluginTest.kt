@@ -33,9 +33,10 @@ class SchemaGeneratorPluginTest {
     }
 
     @Test
-    fun `applies and configures the plugin`() {
+    fun `applies the plugin`() {
         val buildFileContent = """
          plugins {
+            id("org.jetbrains.kotlin.jvm") version "2.0.0"
             id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
          }
          configure<aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPluginExtension>{ }
@@ -45,12 +46,12 @@ class SchemaGeneratorPluginTest {
 
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir)
-            .withArguments("generateSchemas")
+            .withArguments("--info", "build")
             .withPluginClasspath()
+            .withGradleVersion("8.5")
             .forwardOutput()
             .build()
 
-        assertContains(result.output, "Generating schemas for classes annotated with")
-        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":generateSchemas")?.outcome)
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
     }
 }

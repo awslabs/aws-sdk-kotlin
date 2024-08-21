@@ -10,7 +10,6 @@ plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
     alias(libs.plugins.plugin.publish)
-    alias(libs.plugins.ksp)
 }
 
 gradlePlugin {
@@ -23,12 +22,10 @@ gradlePlugin {
     }
 }
 
-ksp {
-    excludeProcessor("aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.HighLevelOpsProcessorProvider")
-}
-
 dependencies {
-    implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen"))
+    implementation(kotlin("gradle-plugin"))
+    implementation(libs.ksp.gradle.plugin)
+
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.kotlin.test)
