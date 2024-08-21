@@ -9,6 +9,7 @@ extra["moduleName"] = "aws.sdk.kotlin.hll.codegen"
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    `maven-publish`
 }
 
 dependencies {
@@ -20,6 +21,10 @@ dependencies {
     testImplementation(libs.kotest.assertions.core.jvm)
     testImplementation(libs.kotlin.test.junit5)
 }
+
+val sdkVersion: String by project
+group = "aws.sdk.kotlin"
+version = sdkVersion
 
 publishing {
     publications {

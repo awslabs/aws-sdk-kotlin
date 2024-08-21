@@ -10,6 +10,7 @@ plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
     alias(libs.plugins.plugin.publish)
+    `maven-publish`
 }
 
 gradlePlugin {
@@ -18,6 +19,19 @@ gradlePlugin {
             id = "aws.sdk.kotlin.hll.dynamodbmapper.schema.generator"
             implementationClass = "aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPlugin"
             description = "Plugin used to generate DynamoDbMapper schemas from user classes"
+        }
+    }
+}
+
+val sdkVersion: String by project
+group = "aws.sdk.kotlin"
+version = sdkVersion
+
+
+publishing {
+    publications {
+        create<MavenPublication>("dynamodb-mapper-schema-generator-plugin") {
+            from(components["java"])
         }
     }
 }
@@ -70,8 +84,10 @@ afterEvaluate {
     tasks.named("generateMetadataFileForPluginMavenPublication").configure {
         tasks.withType<Jar>().forEach {
             if (it.name.contains("emptyJar")) {
+                println("generateMetadataFileForPluginMavenPublication dependsOn ${it.name}")
                 dependsOn(it)
             }
         }
     }
 }
+

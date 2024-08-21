@@ -9,6 +9,7 @@ extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.codegen"
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    `maven-publish`
 }
 
 dependencies {
@@ -33,6 +34,10 @@ tasks.test {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 }
+
+val sdkVersion: String by project
+group = "aws.sdk.kotlin"
+version = sdkVersion
 
 publishing {
     publications {
