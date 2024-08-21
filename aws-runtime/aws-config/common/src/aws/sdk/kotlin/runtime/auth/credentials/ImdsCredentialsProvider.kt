@@ -84,7 +84,7 @@ public class ImdsCredentialsProvider(
         }
 
         val payload = try {
-            client.value.get("$CREDENTIALS_BASE_PATH/$profileName")
+            client.value.get("$CREDENTIALS_BASE_PATH$profileName")
         } catch (ex: Exception) {
             return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load credentials", ex)
         }
