@@ -10,7 +10,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
 
-class SchemaGeneratorPluginExtension {
+open class SchemaGeneratorPluginExtension {
     // TODO Add configuration here (such as codegen configuration)
 }
 
