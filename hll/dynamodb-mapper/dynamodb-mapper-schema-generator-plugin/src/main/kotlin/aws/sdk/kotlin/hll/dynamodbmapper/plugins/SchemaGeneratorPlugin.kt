@@ -29,6 +29,8 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
         extensions.configure<KspExtension> {
             excludeProcessor("aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.HighLevelOpsProcessorProvider")
         }
+
+        // FIXME Remove hardcoded versioning
         dependencies.add("ksp", "aws.sdk.kotlin:dynamodb-mapper-codegen:1.3.2-SNAPSHOT")
     }
 }
