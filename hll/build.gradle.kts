@@ -25,11 +25,8 @@ val sdkVersion: String by project
 // capture locally - scope issue with custom KMP plugin
 val libraries = libs
 
-// KMP-specific configuration
 subprojects {
-    if (!needsKmpConfigured) {
-        return@subprojects
-    }
+    if (!needsKmpConfigured) return@subprojects
 
     group = "aws.sdk.kotlin"
     version = sdkVersion

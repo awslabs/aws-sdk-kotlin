@@ -9,7 +9,7 @@ extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.plugins"
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    alias(libs.plugins.plugin.publish)
+    alias(libs.plugins.gradle.plugin.publish)
     `maven-publish`
 }
 
