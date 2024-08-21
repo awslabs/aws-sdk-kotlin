@@ -27,7 +27,6 @@ val sdkVersion: String by project
 group = "aws.sdk.kotlin"
 version = sdkVersion
 
-
 publishing {
     publications {
         create<MavenPublication>("dynamodb-mapper-schema-generator-plugin") {
@@ -44,7 +43,6 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testImplementation(libs.kotlin.test)
 }
-
 
 tasks.test {
     useJUnitPlatform()
