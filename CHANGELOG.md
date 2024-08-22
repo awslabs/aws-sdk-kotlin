@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.17] - 08/22/2024
+
+### Features
+* (**bedrock**) Amazon Bedrock Evaluation BatchDeleteEvaluationJob API allows customers to delete evaluation jobs under terminated evaluation job statuses - Stopped, Failed, or Completed. Customers can submit a batch of 25 evaluation jobs to be deleted at once.
+* (**emrcontainers**) Correct endpoint for FIPS is configured for US Gov Regions.
+* (**inspector2**) Add enums for Agentless scan statuses and EC2 enablement error states
+* (**quicksight**) Explicit query for authors and dashboard viewing sharing for embedded users
+* (**route53**) Amazon Route 53 now supports the Asia Pacific (Malaysia) Region (ap-southeast-5) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region.
+
+### Documentation
+* (**autoscaling**) Amazon EC2 Auto Scaling now provides EBS health check to manage EC2 instance replacement
+
 ## [1.3.16] - 08/21/2024
 
 ### Features
