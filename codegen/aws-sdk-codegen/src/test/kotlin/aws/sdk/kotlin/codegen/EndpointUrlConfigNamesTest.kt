@@ -339,11 +339,6 @@ private const val TEST_SUITE_JSON = """
     "service_envvar_name": "AWS_ENDPOINT_URL_CODEPIPELINE"
   },
   {
-    "service_id": "CodeStar",
-    "services_section_name": "codestar",
-    "service_envvar_name": "AWS_ENDPOINT_URL_CODESTAR"
-  },
-  {
     "service_id": "CodeStar connections",
     "services_section_name": "codestar_connections",
     "service_envvar_name": "AWS_ENDPOINT_URL_CODESTAR_CONNECTIONS"
@@ -1730,7 +1725,6 @@ private const val JAVA_CLIENT_NAMES_JSON = """
   "IoT Events": "IotEventsClient",
   "WAF Regional": "WafRegionalClient",
   "WAF": "WafClient",
-  "CodeStar": "CodeStarClient",
   "ManagedBlockchain": "ManagedBlockchainClient",
   "SSO OIDC": "SsoOidcClient",
   "Budgets": "BudgetsClient",
