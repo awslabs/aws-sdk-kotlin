@@ -1,0 +1,19 @@
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlugin$inlined$sam$i$org_gradle_api_Action$0 : org/gradle/api/Action {
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public final synthetic fun execute (Ljava/lang/Object;)V
+}
+
+public class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginExtension {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginKt {
+	public static final field SCHEMA_GENERATOR_PLUGIN_EXTENSION Ljava/lang/String;
+}
+

@@ -80,7 +80,7 @@ if (project.NATIVE_ENABLED) {
     // Start by invoking the JVM-only KSP configuration
     dependencies.kspJvm(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen"))
 
-    // Then we need to move the generated source from jvm to common. Gradle lacks a move task so we roll our own!
+    // Then we need to move the generated source from jvm to common
     val moveGenSrc by tasks.registering {
         // Can't move src until the src is generated
         dependsOn(tasks.named("kspKotlinJvm"))
@@ -103,6 +103,10 @@ if (project.NATIVE_ENABLED) {
 
             Files.move(srcDir.toPath(), destDir.toPath(), StandardCopyOption.REPLACE_EXISTING)
         }
+    }
+
+    tasks.named("jvmSourcesJar") {
+        dependsOn(moveGenSrc)
     }
 
     tasks.withType<KotlinCompilationTask<*>> {
