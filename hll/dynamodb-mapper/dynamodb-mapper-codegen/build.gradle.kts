@@ -39,10 +39,18 @@ val sdkVersion: String by project
 group = "aws.sdk.kotlin"
 version = sdkVersion
 
+val sourcesJar by tasks.creating(Jar::class) {
+    group = "publishing"
+    description = "Assembles Kotlin sources jar"
+    archiveClassifier.set("sources")
+    from(sourceSets.getByName("main").allSource)
+}
+
 publishing {
     publications {
         create<MavenPublication>("dynamodb-mapper-codegen") {
             from(components["java"])
+            artifact(sourcesJar)
         }
     }
 }
