@@ -14,11 +14,15 @@ plugins {
 }
 
 gradlePlugin {
+    website = "https://github.com/awslabs/aws-sdk-kotlin"
+    vcsUrl = "https://github.com/awslabs/aws-sdk-kotlin.git"
     plugins {
         create("dynamodb-mapper-schema-generator") {
             id = "aws.sdk.kotlin.hll.dynamodbmapper.schema.generator"
-            implementationClass = "aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPlugin"
+            displayName = "DynamoDbMapper Schema Generator"
             description = "Plugin used to generate DynamoDbMapper schemas from user classes"
+            tags = setOf("kotlin", "dynamodb", "aws")
+            implementationClass = "aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPlugin"
         }
     }
 }
