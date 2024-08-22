@@ -32,6 +32,7 @@ class SchemaGeneratorPluginTest {
         }
     }
 
+    // TODO Parameterize the test across multiple versions of Kotlin and Gradle
     @Test
     fun `applies the plugin`() {
         val buildFileContent = """
