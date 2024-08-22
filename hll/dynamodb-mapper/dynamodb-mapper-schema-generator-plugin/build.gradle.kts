@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
@@ -11,6 +13,15 @@ plugins {
     `java-gradle-plugin`
     alias(libs.plugins.gradle.plugin.publish)
     `maven-publish`
+}
+
+dependencies {
+    implementation(kotlin("gradle-plugin"))
+    implementation(libs.ksp.gradle.plugin)
+
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.kotlin.test)
 }
 
 gradlePlugin {
@@ -39,15 +50,6 @@ publishing {
     }
 }
 
-dependencies {
-    implementation(kotlin("gradle-plugin"))
-    implementation(libs.ksp.gradle.plugin)
-
-    testImplementation(libs.junit.jupiter)
-    testImplementation(libs.junit.jupiter.params)
-    testImplementation(libs.kotlin.test)
-}
-
 tasks.test {
     useJUnitPlatform()
     testLogging {
@@ -57,4 +59,24 @@ tasks.test {
         showExceptions = true
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
+}
+
+/**
+ * Create a file containing the sdkVersion to use as a resource
+ * This saves us from having to manually change version numbers in multiple places
+ */
+val generateSdkRuntimeVersion by tasks.registering {
+    val resourcesDir = layout.buildDirectory.dir("resources/main/aws/sdk/kotlin/hll/dynamodbmapper/plugins").get()
+    val versionFile = file("$resourcesDir/sdk-version.txt")
+    val gradlePropertiesFile = rootProject.file("gradle.properties")
+    inputs.file(gradlePropertiesFile)
+    outputs.file(versionFile)
+    sourceSets.main.get().output.dir(resourcesDir)
+    doLast {
+        versionFile.writeText(sdkVersion)
+    }
+}
+
+tasks.withType<KotlinCompile> {
+    dependsOn(generateSdkRuntimeVersion)
 }
