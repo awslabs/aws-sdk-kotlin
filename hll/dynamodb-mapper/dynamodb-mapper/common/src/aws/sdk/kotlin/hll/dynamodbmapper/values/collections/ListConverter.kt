@@ -5,17 +5,31 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.values.collections
 
 import aws.sdk.kotlin.hll.dynamodbmapper.values.ValueConverter
+import aws.sdk.kotlin.hll.mapping.core.converters.Converter
+import aws.sdk.kotlin.hll.mapping.core.converters.collections.mapFrom
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 /**
  * Converts between [List] and
- * [DynamoDB `L` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Document.List)
- * @param elementConverter A [ValueConverter] for the elements of lists
+ * [DynamoDB `L` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Document.List).
+ * Note that the lists must contain already-converted [AttributeValue] elements. This converter is typically chained
+ * with another converter which handles converting elements to [AttributeValue] either by using the factory function
+ * [ListConverter] or using the [mapFrom] extension method.
+ *
+ * For example:
+ *
+ * ```kotlin
+ * val intListConv = ListConverter(IntConverter) // ValueConverter<List<Int>>
+ * val intListConv2 = ListConverter.mapFrom(IntConverter) // same as above
+ * ```
  */
-public class ListConverter<T>(private val elementConverter: ValueConverter<T>) : ValueConverter<List<T>> {
-    override fun fromAttributeValue(attr: AttributeValue): List<T> =
-        attr.asL().map(elementConverter::fromAttributeValue)
+public val ListConverter: ValueConverter<List<AttributeValue>> = Converter(AttributeValue::L, AttributeValue::asL)
 
-    override fun toAttributeValue(value: List<T>): AttributeValue =
-        AttributeValue.L(value.map(elementConverter::toAttributeValue))
-}
+/**
+ * Creates a new list converter using the given [elementConverter] as a delegate
+ * @param F The type of elements in the list
+ * @param elementConverter A converter for transforming between values of [F] and [AttributeValue]
+ */
+@Suppress("ktlint:standard:function-naming")
+public fun <F> ListConverter(elementConverter: Converter<F, AttributeValue>): ValueConverter<List<F>> =
+    ListConverter.mapFrom(elementConverter)

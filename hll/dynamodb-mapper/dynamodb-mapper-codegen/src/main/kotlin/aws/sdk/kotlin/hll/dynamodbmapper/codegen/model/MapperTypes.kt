@@ -39,13 +39,13 @@ object MapperTypes {
 
     object Values {
         object Scalars {
-            val DefaultBooleanConverter = TypeRef(Pkg.Hl.ScalarValues, "BooleanConverter.Default")
-            val DefaultIntConverter = TypeRef(Pkg.Hl.ScalarValues, "IntConverter.Default")
-            val DefaultStringConverter = TypeRef(Pkg.Hl.ScalarValues, "StringConverter.Default")
+            val BooleanConverter = TypeRef(Pkg.Hl.ScalarValues, "BooleanConverter")
+            val IntConverter = TypeRef(Pkg.Hl.ScalarValues, "IntConverter")
+            val StringConverter = TypeRef(Pkg.Hl.ScalarValues, "StringConverter")
         }
 
         object SmithyTypes {
-            val DefaultInstantConverter = TypeRef(Pkg.Hl.SmithyTypeValues, "InstantConverter.Default")
+            val DefaultInstantConverter = TypeRef(Pkg.Hl.SmithyTypeValues, "InstantConverters.Default")
         }
     }
 

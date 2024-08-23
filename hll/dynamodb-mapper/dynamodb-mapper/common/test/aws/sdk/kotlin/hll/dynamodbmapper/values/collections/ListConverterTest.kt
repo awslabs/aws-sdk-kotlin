@@ -28,17 +28,17 @@ class ListConverterTest : ValueConvertersTest() {
 private data class Foo(val bar: String, val baz: Int)
 
 private object FooConverter : ValueConverter<Foo> {
-    override fun fromAttributeValue(attr: AttributeValue): Foo {
-        val map = attr.asM()
+    override fun convertFrom(to: AttributeValue): Foo {
+        val map = to.asM()
         val bar = map.getValue("bar").asS()
         val baz = map.getValue("baz").asN().toInt()
         return Foo(bar, baz)
     }
 
-    override fun toAttributeValue(value: Foo) = AttributeValue.M(
+    override fun convertTo(from: Foo) = AttributeValue.M(
         mapOf(
-            "bar" to attr(value.bar),
-            "baz" to attr(value.baz),
+            "bar" to attr(from.bar),
+            "baz" to attr(from.baz),
         ),
     )
 }

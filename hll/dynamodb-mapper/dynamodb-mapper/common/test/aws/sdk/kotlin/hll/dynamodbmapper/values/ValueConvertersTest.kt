@@ -54,12 +54,12 @@ abstract class ValueConvertersTest {
             steps.forEach { (direction, highLevel, lowLevel) ->
                 when (direction) {
                     Direction.TO_ATTRIBUTE_VALUE -> {
-                        val result = runCatching { converter.toAttributeValue(highLevel.requireInput()) }
+                        val result = runCatching { converter.convertTo(highLevel.requireInput()) }
                         lowLevel.assert(result, "Test $index failed converting to attribute value")
                     }
 
                     Direction.FROM_ATTRIBUTE_VALUE -> {
-                        val result = runCatching { converter.fromAttributeValue(lowLevel.requireInput()) }
+                        val result = runCatching { converter.convertFrom(lowLevel.requireInput()) }
                         highLevel.assert(result, "Test $index failed converting from attribute value")
                     }
                 }

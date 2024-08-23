@@ -17,9 +17,9 @@ class SimpleItemConverterTest {
         val converter = SimpleItemConverter(
             ::ProductBuilder,
             ProductBuilder::build,
-            AttributeDescriptor("id", Product::id, ProductBuilder::id::set, IntConverter.Default),
-            AttributeDescriptor("name", Product::name, ProductBuilder::name::set, StringConverter.Default),
-            AttributeDescriptor("in-stock", Product::inStock, ProductBuilder::inStock::set, BooleanConverter.Default),
+            AttributeDescriptor("id", Product::id, ProductBuilder::id::set, IntConverter),
+            AttributeDescriptor("name", Product::name, ProductBuilder::name::set, StringConverter),
+            AttributeDescriptor("in-stock", Product::inStock, ProductBuilder::inStock::set, BooleanConverter),
         )
 
         val foo = Product(42, "Foo 2.0", inStock = true)

@@ -28,8 +28,8 @@ class GetItemTest : DdbLocalTest() {
         private val pkConverter = SimpleItemConverter(
             ::PkItem,
             { this },
-            AttributeDescriptor("id", PkItem::id, PkItem::id::set, IntConverter.Default),
-            AttributeDescriptor("value", PkItem::value, PkItem::value::set, StringConverter.Default),
+            AttributeDescriptor("id", PkItem::id, PkItem::id::set, IntConverter),
+            AttributeDescriptor("value", PkItem::value, PkItem::value::set, StringConverter),
         )
         private val pkSchema = ItemSchema(pkConverter, KeySpec.Number("id"))
 
@@ -38,9 +38,9 @@ class GetItemTest : DdbLocalTest() {
         private val ckConverter = SimpleItemConverter(
             ::CkItem,
             { this },
-            AttributeDescriptor("id", CkItem::id, CkItem::id::set, StringConverter.Default),
-            AttributeDescriptor("version", CkItem::version, CkItem::version::set, IntConverter.Default),
-            AttributeDescriptor("value", CkItem::value, CkItem::value::set, StringConverter.Default),
+            AttributeDescriptor("id", CkItem::id, CkItem::id::set, StringConverter),
+            AttributeDescriptor("version", CkItem::version, CkItem::version::set, IntConverter),
+            AttributeDescriptor("value", CkItem::value, CkItem::value::set, StringConverter),
         )
         private val ckSchema = ItemSchema(ckConverter, KeySpec.String("id"), KeySpec.Number("version"))
     }

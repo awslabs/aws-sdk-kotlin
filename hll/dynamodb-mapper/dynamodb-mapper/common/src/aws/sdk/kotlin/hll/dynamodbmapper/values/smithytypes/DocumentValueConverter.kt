@@ -8,8 +8,12 @@ import aws.sdk.kotlin.hll.dynamodbmapper.values.NullableConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.ValueConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.collections.ListConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.collections.MapConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.AutoNumberConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.BooleanConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
+import aws.sdk.kotlin.hll.mapping.core.converters.collections.mapFrom
+import aws.sdk.kotlin.hll.mapping.core.converters.collections.mapValuesFrom
+import aws.sdk.kotlin.hll.mapping.core.converters.mergeBy
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import aws.smithy.kotlin.runtime.content.Document
 
@@ -23,67 +27,38 @@ import aws.smithy.kotlin.runtime.content.Document
  * * [Document.Map] ↔ [DynamoDB `M` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Document.Map)
  */
 public class DocumentValueConverter(
-    private val numberConverter: ValueConverter<Number>,
-    private val stringConverter: ValueConverter<String>,
-    private val booleanConverter: ValueConverter<Boolean>,
-    nullConverterFactory: (ValueConverter<Document>) -> ValueConverter<Document?>,
-    listConverterFactory: (ValueConverter<Document?>) -> ValueConverter<List<Document?>>,
-    mapConverterFactory: (ValueConverter<Document?>) -> ValueConverter<Map<String, Document?>>,
+    private val numberConverter: ValueConverter<Number> = AutoNumberConverter,
+    private val stringConverter: ValueConverter<String> = StringConverter,
+    private val booleanConverter: ValueConverter<Boolean> = BooleanConverter,
+    nullableConverter: NullableConverter<Document> = NullableConverter(),
+    listConverter: ValueConverter<List<AttributeValue>> = ListConverter,
+    mapConverter: ValueConverter<Map<String, AttributeValue>> = MapConverter,
 ) : ValueConverter<Document> {
-    private val nullConverter = nullConverterFactory(this)
-    private val listConverter = listConverterFactory(nullConverter)
-    private val mapConverter = mapConverterFactory(nullConverter)
+    private val nullableConverter = nullableConverter.mergeBy(this)
+    private val listConverter = listConverter.mapFrom(this.nullableConverter)
+    private val mapConverter = mapConverter.mapValuesFrom(this.nullableConverter)
 
     public companion object {
         /**
-         * The default [ValueConverter] to use for [Document.Number] values. When converting attribute values into
-         * values, the following concrete subclasses of [Number] will be returned:
-         * * [Double] — If the number contains any fractional component
-         * * [Int] — If the number is in the range of [Int.MIN_VALUE] and [Int.MAX_VALUE] (inclusive)
-         * * [Long] — Anything else
-         */
-        public val DefaultNumberConverter: ValueConverter<Number> = object : ValueConverter<Number> {
-            override fun fromAttributeValue(attr: AttributeValue): Number {
-                val numberString = attr.asN()
-                return when {
-                    '.' in numberString -> numberString.toDouble()
-                    else -> when (val longNumber = numberString.toLong()) {
-                        in Int.MIN_VALUE..Int.MAX_VALUE -> longNumber.toInt()
-                        else -> longNumber
-                    }
-                }
-            }
-
-            override fun toAttributeValue(value: Number): AttributeValue = AttributeValue.N(value.toString())
-        }
-
-        /**
          * The default instance of [DocumentValueConverter]
          */
-        public val Default: DocumentValueConverter = DocumentValueConverter(
-            numberConverter = DefaultNumberConverter,
-            stringConverter = StringConverter.Default,
-            booleanConverter = BooleanConverter.Default,
-            nullConverterFactory = ::NullableConverter,
-            listConverterFactory = ::ListConverter,
-            mapConverterFactory = ::MapConverter,
-        )
+        public val Default: DocumentValueConverter = DocumentValueConverter()
     }
 
-    override fun fromAttributeValue(attr: AttributeValue): Document = when (attr) {
-        is AttributeValue.N -> Document.Number(numberConverter.fromAttributeValue(attr))
-        is AttributeValue.S -> Document.String(stringConverter.fromAttributeValue(attr))
-        is AttributeValue.Bool -> Document.Boolean(booleanConverter.fromAttributeValue(attr))
-        is AttributeValue.L -> Document.List(listConverter.fromAttributeValue(attr))
-        is AttributeValue.M -> Document.Map(mapConverter.fromAttributeValue(attr))
-        else -> throw IllegalArgumentException("Documents do not support ${attr::class.qualifiedName} values")
+    override fun convertFrom(to: AttributeValue): Document = when (to) {
+        is AttributeValue.N -> Document.Number(numberConverter.convertFrom(to))
+        is AttributeValue.S -> Document.String(stringConverter.convertFrom(to))
+        is AttributeValue.Bool -> Document.Boolean(booleanConverter.convertFrom(to))
+        is AttributeValue.L -> Document.List(listConverter.convertFrom(to))
+        is AttributeValue.M -> Document.Map(mapConverter.convertFrom(to))
+        else -> throw IllegalArgumentException("Documents do not support ${to::class.qualifiedName} values")
     }
 
-    override fun toAttributeValue(value: Document): AttributeValue = when (value) {
-        is Document.Number -> numberConverter.toAttributeValue(value.value)
-        is Document.String -> stringConverter.toAttributeValue(value.value)
-        is Document.Boolean -> booleanConverter.toAttributeValue(value.value)
-        is Document.List -> listConverter.toAttributeValue(value.value)
-        is Document.Map -> mapConverter.toAttributeValue(value.value)
+    override fun convertTo(from: Document): AttributeValue = when (from) {
+        is Document.Number -> numberConverter.convertTo(from.value)
+        is Document.String -> stringConverter.convertTo(from.value)
+        is Document.Boolean -> booleanConverter.convertTo(from.value)
+        is Document.List -> listConverter.convertTo(from.value)
+        is Document.Map -> mapConverter.convertTo(from.value)
     }
 }

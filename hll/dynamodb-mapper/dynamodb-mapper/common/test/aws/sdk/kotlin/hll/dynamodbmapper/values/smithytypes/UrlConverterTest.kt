@@ -12,7 +12,7 @@ private const val URL = "https://foo.bar.baz/qux?quux=corge#grault"
 
 class UrlConverterTest : ValueConvertersTest() {
     @Test
-    fun testUrlConverter() = given(UrlConverter.Default) {
+    fun testUrlConverter() = given(UrlConverter) {
         Url.parse(URL) inDdbIs URL
     }
 }

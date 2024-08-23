@@ -26,8 +26,8 @@ class DeleteItemTest : DdbLocalTest() {
         private val converter = SimpleItemConverter(
             ::Item,
             { this },
-            AttributeDescriptor("id", Item::id, Item::id::set, StringConverter.Default),
-            AttributeDescriptor("value", Item::value, Item::value::set, IntConverter.Default),
+            AttributeDescriptor("id", Item::id, Item::id::set, StringConverter),
+            AttributeDescriptor("value", Item::value, Item::value::set, IntConverter),
         )
         private val schema = ItemSchema(converter, KeySpec.String("id"))
     }

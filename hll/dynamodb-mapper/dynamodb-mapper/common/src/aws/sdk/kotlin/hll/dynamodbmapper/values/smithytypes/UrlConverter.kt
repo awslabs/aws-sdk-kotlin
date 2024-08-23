@@ -5,21 +5,18 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.values.smithytypes
 
 import aws.sdk.kotlin.hll.dynamodbmapper.values.ValueConverter
-import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
+import aws.sdk.kotlin.hll.mapping.core.converters.Converter
+import aws.sdk.kotlin.hll.mapping.core.converters.andThenTo
 import aws.smithy.kotlin.runtime.net.url.Url
+
+/**
+ * Converts between [Url] and [String] types
+ */
+public val UrlToStringConverter: Converter<Url, String> = Converter(Url::toString, Url::parse)
 
 /**
  * Converts between [Url] and
  * [DynamoDB `S` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.String)
  */
-public class UrlConverter : ValueConverter<Url> {
-    public companion object {
-        /**
-         * The default instance of [UrlConverter]
-         */
-        public val Default: UrlConverter = UrlConverter()
-    }
-
-    override fun fromAttributeValue(attr: AttributeValue): Url = Url.parse(attr.asS())
-    override fun toAttributeValue(value: Url): AttributeValue = AttributeValue.S(value.toString())
-}
+public val UrlConverter: ValueConverter<Url> = UrlToStringConverter.andThenTo(StringConverter)

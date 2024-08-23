@@ -27,6 +27,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":services:dynamodb"))
+                api(project(":hll:hll-mapping-core"))
                 api(libs.kotlinx.coroutines.core)
             }
         }

@@ -5,154 +5,169 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.values.scalars
 
 import aws.sdk.kotlin.hll.dynamodbmapper.values.ValueConverter
+import aws.sdk.kotlin.hll.mapping.core.converters.Converter
+import aws.sdk.kotlin.hll.mapping.core.converters.andThenTo
+import aws.sdk.kotlin.hll.mapping.core.converters.validatingFrom
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 /**
- * The base class for numeric [ValueConverter] instances
- * @param N The type of number handled by this converter
- * @param parse A function which parses a [String] into a number of type [N] if possible or `null` if the parsing failed
+ * Converts between [String] instances which contains numbers and
+ * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public abstract class NumberConverter<N>(private val parse: (String) -> N) : ValueConverter<N> {
-    override fun fromAttributeValue(attr: AttributeValue): N = parse(attr.asN())
-    override fun toAttributeValue(value: N): AttributeValue = AttributeValue.N(value.toString())
-}
+public val StringToAttributeValueNumberConverter: ValueConverter<String> =
+    Converter(AttributeValue::N, AttributeValue::asN)
+
+/**
+ * Creates a [ValueConverter] which converts between number type [N] and
+ * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
+ */
+public fun <N> numberConverter(numberToStringConverter: Converter<N, String>): ValueConverter<N> =
+    numberToStringConverter.andThenTo(StringToAttributeValueNumberConverter)
+
+/**
+ * Converts between [Number] and [String] values
+ */
+public val AutoNumberToStringConverter: Converter<Number, String> = Converter(
+    convertTo = Number::toString,
+    convertFrom = { to: String ->
+        when {
+            '.' in to -> to.toDouble()
+            else -> when (val longNumber = to.toLong()) {
+                in Int.MIN_VALUE..Int.MAX_VALUE -> longNumber.toInt()
+                else -> longNumber
+            }
+        }
+    },
+)
+
+/**
+ * Converts between [Number] and
+ * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number).
+ * When converting attribute values into number values, the following concrete subclasses of [Number] will be returned:
+ * * [Double] — If the number contains any fractional component
+ * * [Int] — If the number is in the range of [Int.MIN_VALUE] and [Int.MAX_VALUE] (inclusive)
+ * * [Long] — Anything else
+ */
+public val AutoNumberConverter: ValueConverter<Number> = numberConverter(AutoNumberToStringConverter)
+
+/**
+ * Converts between [Byte] and [String] values
+ */
+public val ByteToStringConverter: Converter<Byte, String> = Converter(Byte::toString, String::toByte)
 
 /**
  * Converts between [Byte] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class ByteConverter : NumberConverter<Byte>(String::toByte) {
-    public companion object {
-        /**
-         * The default instance of [ByteConverter]
-         */
-        public val Default: ByteConverter = ByteConverter()
+public val ByteConverter: ValueConverter<Byte> = numberConverter(ByteToStringConverter)
+
+/**
+ * Converts between [Double] and [String] values. Because
+ * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
+ * do not support them, this converter throws exceptions for non-finite numbers such as [Double.NEGATIVE_INFINITY],
+ * [Double.POSITIVE_INFINITY], and [Double.NaN].
+ */
+public val DoubleToStringConverter: Converter<Double, String> =
+    Converter(Double::toString, String::toDouble).validatingFrom { from: Double ->
+        require(from.isFinite()) { "Cannot convert $from: only finite numbers are supported" }
     }
-}
 
 /**
  * Converts between [Double] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class DoubleConverter : NumberConverter<Double>(String::toDouble) {
-    override fun toAttributeValue(value: Double): AttributeValue {
-        require(value.isFinite()) { "Cannot convert $value: only finite numbers are supported" }
-        return super.toAttributeValue(value)
-    }
+public val DoubleConverter: ValueConverter<Double> = numberConverter(DoubleToStringConverter)
 
-    public companion object {
-        /**
-         * The default instance of [DoubleConverter]
-         */
-        public val Default: DoubleConverter = DoubleConverter()
+/**
+ * Converts between [Float] and [String] values. Because
+ * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
+ * do not support them, this converter throws exceptions for non-finite numbers such as [Float.NEGATIVE_INFINITY],
+ * [Float.POSITIVE_INFINITY], and [Float.NaN].
+ */
+public val FloatToStringConverter: Converter<Float, String> =
+    Converter(Float::toString, String::toFloat).validatingFrom { from: Float ->
+        require(from.isFinite()) { "Cannot convert $from: only finite numbers are supported" }
     }
-}
 
 /**
  * Converts between [Float] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class FloatConverter : NumberConverter<Float>(String::toFloat) {
-    override fun toAttributeValue(value: Float): AttributeValue {
-        require(value.isFinite()) { "Cannot convert $value: only finite numbers are supported" }
-        return super.toAttributeValue(value)
-    }
+public val FloatConverter: ValueConverter<Float> = numberConverter(FloatToStringConverter)
 
-    public companion object {
-        /**
-         * The default instance of [FloatConverter]
-         */
-        public val Default: FloatConverter = FloatConverter()
-    }
-}
+/**
+ * Converts between [Int] and [String] values
+ */
+public val IntToStringConverter: Converter<Int, String> = Converter(Int::toString, String::toInt)
 
 /**
  * Converts between [Int] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class IntConverter : NumberConverter<Int>(String::toInt) {
-    public companion object {
-        /**
-         * The default instance of [IntConverter]
-         */
-        public val Default: IntConverter = IntConverter()
-    }
-}
+public val IntConverter: ValueConverter<Int> = numberConverter(IntToStringConverter)
+
+/**
+ * Converts between [Long] and [String] values
+ */
+public val LongToStringConverter: Converter<Long, String> = Converter(Long::toString, String::toLong)
 
 /**
  * Converts between [Long] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class LongConverter : NumberConverter<Long>(String::toLong) {
-    public companion object {
-        /**
-         * The default instance of [LongConverter]
-         */
-        public val Default: LongConverter = LongConverter()
-    }
-}
+public val LongConverter: ValueConverter<Long> = numberConverter(LongToStringConverter)
+
+/**
+ * Converts between [Short] and [String] values
+ */
+public val ShortToStringConverter: Converter<Short, String> = Converter(Short::toString, String::toShort)
 
 /**
  * Converts between [Short] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class ShortConverter : NumberConverter<Short>(String::toShort) {
-    public companion object {
-        /**
-         * The default instance of [ShortConverter]
-         */
-        public val Default: ShortConverter = ShortConverter()
-    }
-}
+public val ShortConverter: ValueConverter<Short> = numberConverter(ShortToStringConverter)
+
+/**
+ * Converts between [UByte] and [String] values
+ */
+public val UByteToStringConverter: Converter<UByte, String> = Converter(UByte::toString, String::toUByte)
 
 /**
  * Converts between [UByte] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class UByteConverter : NumberConverter<UByte>(String::toUByte) {
-    public companion object {
-        /**
-         * The default instance of [UByteConverter]
-         */
-        public val Default: UByteConverter = UByteConverter()
-    }
-}
+public val UByteConverter: ValueConverter<UByte> = numberConverter(UByteToStringConverter)
+
+/**
+ * Converts between [UInt] and [String] values
+ */
+public val UIntToStringConverter: Converter<UInt, String> = Converter(UInt::toString, String::toUInt)
 
 /**
  * Converts between [UInt] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class UIntConverter : NumberConverter<UInt>(String::toUInt) {
-    public companion object {
-        /**
-         * The default instance of [UIntConverter]
-         */
-        public val Default: UIntConverter = UIntConverter()
-    }
-}
+public val UIntConverter: ValueConverter<UInt> = numberConverter(UIntToStringConverter)
+
+/**
+ * Converts between [ULong] and [String] values
+ */
+public val ULongToStringConverter: Converter<ULong, String> = Converter(ULong::toString, String::toULong)
 
 /**
  * Converts between [ULong] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class ULongConverter : NumberConverter<ULong>(String::toULong) {
-    public companion object {
-        /**
-         * The default instance of [ULongConverter]
-         */
-        public val Default: ULongConverter = ULongConverter()
-    }
-}
+public val ULongConverter: ValueConverter<ULong> = numberConverter(ULongToStringConverter)
+
+/**
+ * Converts between [UShort] and [String] values
+ */
+public val UShortToStringConverter: Converter<UShort, String> = Converter(UShort::toString, String::toUShort)
 
 /**
  * Converts between [UShort] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
-public class UShortConverter : NumberConverter<UShort>(String::toUShort) {
-    public companion object {
-        /**
-         * The default instance of [UShortConverter]
-         */
-        public val Default: UShortConverter = UShortConverter()
-    }
-}
+public val UShortConverter: ValueConverter<UShort> = numberConverter(UShortToStringConverter)

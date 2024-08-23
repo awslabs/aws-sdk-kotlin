@@ -17,6 +17,9 @@ pluginManagement {
         }
     }
 }
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+}
 
 dependencyResolutionManagement {
     repositories {
@@ -41,6 +44,7 @@ include(":aws-runtime:aws-endpoint")
 include(":aws-runtime:aws-http")
 include(":hll")
 include(":hll:hll-codegen")
+include(":hll:hll-mapping-core")
 include(":services")
 include(":tests")
 include(":tests:codegen:event-stream")

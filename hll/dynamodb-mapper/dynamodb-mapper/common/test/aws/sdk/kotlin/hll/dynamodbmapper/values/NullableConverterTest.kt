@@ -4,12 +4,14 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.values
 
-import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
+import aws.sdk.kotlin.hll.mapping.core.converters.Converter
+import aws.sdk.kotlin.hll.mapping.core.converters.andThenTo
 import kotlin.test.Test
 
 class NullableConverterTest : ValueConvertersTest() {
     @Test
-    fun testNullConverter() = given(NullableConverter(StringReverseConverter)) {
+    fun testNullConverter() = given(NullableConverter(stringReverseConverter)) {
         "foo" inDdbIs "oof"
         "bar" inDdbIs "rab"
         null inDdbIs theSame
@@ -17,7 +19,4 @@ class NullableConverterTest : ValueConvertersTest() {
     }
 }
 
-private object StringReverseConverter : ValueConverter<String> {
-    override fun fromAttributeValue(attr: AttributeValue) = attr.asS().reversed()
-    override fun toAttributeValue(value: String) = AttributeValue.S(value.reversed())
-}
+private val stringReverseConverter = Converter(String::reversed, String::reversed).andThenTo(StringConverter)
