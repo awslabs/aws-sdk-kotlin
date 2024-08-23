@@ -439,12 +439,6 @@
             "brazilName": "AwsSdkKotlinCodepipeline"
         },
         {
-            "sdkId": "CodeStar",
-            "namespace": "aws.sdk.kotlin.services.codestar",
-            "artifactName": "codestar",
-            "brazilName": "AwsSdkKotlinCodestar"
-        },
-        {
             "sdkId": "CodeStar connections",
             "namespace": "aws.sdk.kotlin.services.codestarconnections",
             "artifactName": "codestarconnections",

@@ -1,5 +1,98 @@
 # Changelog
 
+## [1.3.17] - 08/22/2024
+
+### Features
+* (**bedrock**) Amazon Bedrock Evaluation BatchDeleteEvaluationJob API allows customers to delete evaluation jobs under terminated evaluation job statuses - Stopped, Failed, or Completed. Customers can submit a batch of 25 evaluation jobs to be deleted at once.
+* (**emrcontainers**) Correct endpoint for FIPS is configured for US Gov Regions.
+* (**inspector2**) Add enums for Agentless scan statuses and EC2 enablement error states
+* (**quicksight**) Explicit query for authors and dashboard viewing sharing for embedded users
+* (**route53**) Amazon Route 53 now supports the Asia Pacific (Malaysia) Region (ap-southeast-5) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region.
+
+### Documentation
+* (**autoscaling**) Amazon EC2 Auto Scaling now provides EBS health check to manage EC2 instance replacement
+
+## [1.3.16] - 08/21/2024
+
+### Features
+* (**ec2**) DescribeInstanceStatus now returns health information on EBS volumes attached to Nitro instances
+* (**entityresolution**) Increase the mapping attributes in Schema to 35.
+* (**glue**) Add optional field JobRunQueuingEnabled to CreateJob and UpdateJob APIs.
+* (**lambda**) Release FilterCriteria encryption for Lambda EventSourceMapping,  enabling customers to encrypt their filter criteria using a customer-owned KMS key.
+* (**securityhub**) Security Hub documentation and definition updates
+* (**ses**) Enable email receiving customers to provide SES with access to their S3 buckets via an IAM role for "Deliver to S3 Action"
+
+## [1.3.15] - 08/20/2024
+
+### Features
+* (**opensearchserverless**) Added FailureCode and FailureMessage to BatchGetCollectionResponse for BatchGetVPCEResponse for non-Active Collection and VPCE.
+* (**s3**) Amazon Simple Storage Service / Features : Add support for conditional writes for PutObject and CompleteMultipartUpload APIs.
+
+### Documentation
+* (**ecs**) Documentation only release to address various tickets
+
+## [1.3.14] - 08/19/2024
+
+### Features
+* (**bedrock**) Amazon Bedrock Batch Inference/ Model Invocation is a feature which allows customers to asynchronously run inference on a large set of records/files stored in S3.
+* (**codebuild**) AWS CodeBuild now supports creating fleets with macOS platform for running builds.
+* (**deadline**) This release adds additional search fields and provides sorting by multiple fields.
+* (**lambda**) Release Lambda FunctionRecursiveConfig, enabling customers to turn recursive loop detection on or off on individual functions. This release adds two new APIs, GetFunctionRecursionConfig and PutFunctionRecursionConfig.
+* (**ssmsap**) Add new attributes to the outputs of GetApplication and GetDatabase APIs.
+
+### Fixes
+* [#1326](https://github.com/awslabs/aws-sdk-kotlin/issues/1326) Correctly terminate pagination for CloudWatch Logs `GetLogEvents` operation
+
+## [1.3.13] - 08/16/2024
+
+### Features
+* (**batch**) Improvements of integration between AWS Batch and EC2.
+* (**inspector2**) Update the correct format of key and values for resource tags
+* (**quicksight**) Amazon QuickSight launches Customer Managed Key (CMK) encryption for Data Source metadata
+* (**sagemaker**) Introduce Endpoint and EndpointConfig Arns in sagemaker:ListPipelineExecutionSteps API response
+* (**sesv2**) Marking use case description field of account details as deprecated.
+
+## [1.3.12] - 08/15/2024
+
+### Features
+* (**docdb**) This release adds Global Cluster Failover capability which enables you to change your global cluster's primary AWS region, the region that serves writes, during a regional outage. Performing a failover action preserves your Global Cluster setup.
+* (**ecs**) This release introduces a new ContainerDefinition configuration to support the customer-managed keys for ECS container restart feature.
+* (**iam**) Make the LastUsedDate field in the GetAccessKeyLastUsed response optional. This may break customers who only call the API for access keys with a valid LastUsedDate. This fixes a deserialization issue for access keys without a LastUsedDate, because the field was marked as required but could be null.
+* (**s3**) Amazon Simple Storage Service / Features  : Adds support for pagination in the S3 ListBuckets API.
+
+## [1.3.11] - 08/14/2024
+
+### Features
+* (**codebuild**) AWS CodeBuild now supports using Secrets Manager to store git credentials and using multiple source credentials in a single project.
+
+### Fixes
+* [#1368](https://github.com/awslabs/aws-sdk-kotlin/issues/1368) Correctly handle all empty HeadObject/HeadBucket responses
+
+## [1.3.10] - 08/13/2024
+
+### Features
+* (**amplify**) Add a new field "cacheConfig" that enables users to configure the CDN cache settings for an App
+* (**appstream**) This release includes following new APIs: CreateThemeForStack, DescribeThemeForStack, UpdateThemeForStack, DeleteThemeForStack to support custom branding programmatically.
+* (**fis**) This release adds support for additional error information on experiment failure. It adds the error code, location, and account id on relevant failures to the GetExperiment and ListExperiment API responses.
+* (**glue**) Add AttributesToGet parameter support for Glue GetTables
+* (**neptunegraph**) Amazon Neptune Analytics provides a new option for customers to load data into a graph using the RDF (Resource Description Framework) NTRIPLES format. When loading NTRIPLES files, use the value `convertToIri` for the `blankNodeHandling` parameter.
+
+### Fixes
+* Stop using double slashes in `ImdsCredentialsProvider` URLs
+
+## [1.3.9] - 08/12/2024
+
+### Features
+* (**configservice**) Documentation update for the OrganizationConfigRuleName regex pattern.
+* (**ec2**) This release adds new capabilities to manage On-Demand Capacity Reservations including the ability to split your reservation, move capacity between reservations, and modify the instance eligibility of your reservation.
+* (**eks**) Added support for new AL2023 GPU AMIs to the supported AMITypes.
+* (**medialive**) AWS Elemental MediaLive now supports now supports editing the PID values for a Multiplex.
+* (**sagemaker**) Releasing large data support as part of CreateAutoMLJobV2 in SageMaker Autopilot and CreateDomain API for SageMaker Canvas.
+
+### Documentation
+* (**computeoptimizer**) Doc only update for Compute Optimizer that fixes several customer-reported issues relating to ECS finding classifications
+* (**groundstation**) Updating documentation for OEMEphemeris to link to AWS Ground Station User Guide
+
 ## [1.3.8] - 08/09/2024
 
 ### Features
