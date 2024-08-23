@@ -50,6 +50,10 @@ subprojects {
                 kotlin.srcDir("generated-src/main/kotlin")
             }
 
+            getByName("jvmMain") {
+                kotlin.srcDir("generated-src-jvm/main/java")
+            }
+
             getByName("commonTest") {
                 kotlin.srcDir("generated-src/test")
 

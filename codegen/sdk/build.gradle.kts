@@ -177,6 +177,10 @@ val stageSdks = tasks.register("stageSdks") {
                 into("${it.destinationDir}/generated-src")
             }
             copy {
+                from("$projectionOutputDir/jvm-src")
+                into("${it.destinationDir}/generated-src-jvm")
+            }
+            copy {
                 from("$projectionOutputDir/build.gradle.kts")
                 into(it.destinationDir)
             }
