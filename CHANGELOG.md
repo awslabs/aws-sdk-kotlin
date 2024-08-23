@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.18] - 08/23/2024
+
+### Features
+* (**bedrockagent**) Releasing the support for Action User Confirmation.
+* (**bedrockagentruntime**) Releasing the support for Action User Confirmation.
+* (**organizations**) Releasing minor partitional endpoint updates.
+* (**qbusiness**) Amazon QBusiness: Enable support for SAML and OIDC federation through AWS IAM Identity Provider integration.
+
+### Documentation
+* (**codebuild**) Added support for the MAC_ARM environment type for CodeBuild fleets.
+* (**supplychain**) Update API documentation to clarify the event SLA as well as the data model expectations
+
+### Miscellaneous
+* Remove Codestar service
+
 ## [1.3.17] - 08/22/2024
 
 ### Features
