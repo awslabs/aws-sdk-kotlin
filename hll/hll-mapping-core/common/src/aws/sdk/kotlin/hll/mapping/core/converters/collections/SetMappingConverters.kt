@@ -6,6 +6,9 @@ package aws.sdk.kotlin.hll.mapping.core.converters.collections
 
 import aws.sdk.kotlin.hll.mapping.core.converters.*
 
+/**
+ * Namespace for containing various conversion utilities dealing with [Set] mapping
+ */
 public object SetMappingConverters {
     /**
      * Creates a one-way converter for transforming [Set] with elements of type [T] to [Set] with elements of type [F]

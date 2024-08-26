@@ -487,6 +487,13 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/MapConve
 	public static final fun getMapConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 }
 
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/NumberSetConverters {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/collections/NumberSetConverters;
+	public final fun getStringListToAttributeValueNumberSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getStringSetToAttributeValueNumberSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun of (Laws/sdk/kotlin/hll/mapping/core/converters/Converter;)Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+}
+
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/NumberSetConvertersKt {
 	public static final fun getByteSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getDoubleSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
@@ -494,13 +501,10 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/NumberSe
 	public static final fun getIntSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getLongSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getShortSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getStringListToAttributeValueNumberSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getStringSetToAttributeValueNumberSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getUByteSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getUIntSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getULongSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getUShortSetConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun numberSetConverter (Laws/sdk/kotlin/hll/mapping/core/converters/Converter;)Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/PrimitiveSetConvertersKt {
@@ -527,38 +531,46 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/EnumConverte
 	public synthetic fun convertTo (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/NumberConverters {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/NumberConverters;
+	public final fun getAutoNumberToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getByteToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getDoubleToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getFloatToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getIntToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getLongToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getShortToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getStringToAttributeValueNumberConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getUByteToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getUIntToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getULongToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getUShortToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun of (Laws/sdk/kotlin/hll/mapping/core/converters/Converter;)Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+}
+
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/NumberConvertersKt {
 	public static final fun getAutoNumberConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getAutoNumberToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getByteConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getByteToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getDoubleConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getDoubleToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getFloatConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getFloatToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getIntConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getIntToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getLongConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getLongToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getShortConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getShortToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getStringToAttributeValueNumberConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getUByteConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getUByteToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getUIntConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getUIntToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getULongConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getULongToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getUShortConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getUShortToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun numberConverter (Laws/sdk/kotlin/hll/mapping/core/converters/Converter;)Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConverters {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConverters;
+	public final fun getCharArrayToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getCharToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConvertersKt {
 	public static final fun getCharArrayConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getCharArrayToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getCharConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
-	public static final fun getCharToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public static final fun getStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 }
 

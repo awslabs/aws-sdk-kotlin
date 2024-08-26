@@ -34,6 +34,10 @@ public final class aws/sdk/kotlin/hll/mapping/core/converters/SplittingConverter
 	public static final fun mergeBy (Laws/sdk/kotlin/hll/mapping/core/converters/SplittingConverter;Laws/sdk/kotlin/hll/mapping/core/converters/Converter;)Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 }
 
+public final class aws/sdk/kotlin/hll/mapping/core/converters/collections/CollectionTypeConverters {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/mapping/core/converters/collections/CollectionTypeConverters;
+}
+
 public final class aws/sdk/kotlin/hll/mapping/core/converters/collections/ListMappingConverters {
 	public static final field INSTANCE Laws/sdk/kotlin/hll/mapping/core/converters/collections/ListMappingConverters;
 	public final fun mapConvertsFrom (Laws/sdk/kotlin/hll/mapping/core/converters/ConvertsFrom;Laws/sdk/kotlin/hll/mapping/core/converters/ConvertsFrom;)Laws/sdk/kotlin/hll/mapping/core/converters/ConvertsFrom;

@@ -15,7 +15,7 @@ import kotlin.reflect.KClass
  * Converts between potentially `null` values and
  * [DynamoDB `NULL` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Null).
  * Note that this class is a [SplittingConverter] and the logic for handling non-null values is undefined in this class.
- * Thus, it is typically used in conjunction with
+ * Thus, it is typically used in conjunction with the [NullableConverter] factory function or via [mergeBy].
  * @param V The non-nullable type
  */
 public class NullableConverter<V : Any>(klass: KClass<V>) : SplittingConverter<V?, V, AttributeValue, AttributeValue> {

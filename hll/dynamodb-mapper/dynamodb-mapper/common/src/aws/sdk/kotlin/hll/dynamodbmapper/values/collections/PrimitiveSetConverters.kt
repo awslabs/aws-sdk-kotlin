@@ -5,12 +5,11 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.values.collections
 
 import aws.sdk.kotlin.hll.dynamodbmapper.values.ValueConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.CharArrayToStringConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.CharToStringConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.TextConverters
 import aws.sdk.kotlin.hll.mapping.core.converters.Converter
 import aws.sdk.kotlin.hll.mapping.core.converters.andThenFrom
+import aws.sdk.kotlin.hll.mapping.core.converters.collections.CollectionTypeConverters
 import aws.sdk.kotlin.hll.mapping.core.converters.collections.mapFrom
-import aws.sdk.kotlin.hll.mapping.core.converters.collections.setToListConverter
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 /**
@@ -34,17 +33,18 @@ public val StringListToAttributeValueStringSetConverter: ValueConverter<List<Str
  * [DynamoDB `SS` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.SetTypes)
  */
 public val StringSetConverter: ValueConverter<Set<String>> =
-    StringListToAttributeValueStringSetConverter.andThenFrom(setToListConverter())
+    StringListToAttributeValueStringSetConverter.andThenFrom(CollectionTypeConverters.SetToListConverter())
 
 /**
  * Converts between a [Set] of [CharArray] elements and
  * [DynamoDB `SS` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.SetTypes)
  */
 public val CharArraySetConverter: ValueConverter<Set<CharArray>> =
-    StringSetConverter.mapFrom(CharArrayToStringConverter)
+    StringSetConverter.mapFrom(TextConverters.CharArrayToStringConverter)
 
 /**
  * Converts between a [Set] of [Char] elements and
  * [DynamoDB `SS` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.SetTypes)
  */
-public val CharSetConverter: ValueConverter<Set<Char>> = StringSetConverter.mapFrom(CharToStringConverter)
+public val CharSetConverter: ValueConverter<Set<Char>> =
+    StringSetConverter.mapFrom(TextConverters.CharToStringConverter)

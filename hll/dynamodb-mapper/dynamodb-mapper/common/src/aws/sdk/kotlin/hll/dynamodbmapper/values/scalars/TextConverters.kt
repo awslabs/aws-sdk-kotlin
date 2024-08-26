@@ -10,29 +10,35 @@ import aws.sdk.kotlin.hll.mapping.core.converters.andThenTo
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 /**
+ * Namespace for containing various conversion utilities dealing with text conversion
+ */
+public object TextConverters {
+    /**
+     * Converts between [CharArray] and [String]
+     */
+    public val CharArrayToStringConverter: Converter<CharArray, String> = Converter(::String, String::toCharArray)
+
+    /**
+     * Converts between [Char] and [String]
+     */
+    public val CharToStringConverter: Converter<Char, String> = Converter(Char::toString, String::single)
+}
+
+/**
  * Converts between [String] and
  * [DynamoDB `S` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.String)
  */
 public val StringConverter: ValueConverter<String> = Converter(AttributeValue::S, AttributeValue::asS)
 
 /**
- * Converts between [CharArray] and [String]
- */
-public val CharArrayToStringConverter: Converter<CharArray, String> = Converter(::String, String::toCharArray)
-
-/**
  * Converts between [CharArray] and
  * [DynamoDB `S` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.String)
  */
-public val CharArrayConverter: ValueConverter<CharArray> = CharArrayToStringConverter.andThenTo(StringConverter)
-
-/**
- * Converts between [Char] and [String]
- */
-public val CharToStringConverter: Converter<Char, String> = Converter(Char::toString, String::single)
+public val CharArrayConverter: ValueConverter<CharArray> =
+    TextConverters.CharArrayToStringConverter.andThenTo(StringConverter)
 
 /**
  * Converts between [Char] and
  * [DynamoDB `S` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.String)
  */
-public val CharConverter: ValueConverter<Char> = CharToStringConverter.andThenTo(StringConverter)
+public val CharConverter: ValueConverter<Char> = TextConverters.CharToStringConverter.andThenTo(StringConverter)

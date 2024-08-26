@@ -7,8 +7,15 @@ package aws.sdk.kotlin.hll.mapping.core.converters.collections
 import aws.sdk.kotlin.hll.mapping.core.converters.Converter
 
 /**
- * Creates a [Converter] which transforms between [Set] and [List] instances (both of some type [T])
- * @param T The type of elements in the [Set]/[List]
+ * Namespace for containing various conversion utilities dealing with mapping between collection types (e.g., [Set] to
+ * [List])
  */
-public inline fun <reified T> setToListConverter(): Converter<Set<T>, List<T>> =
-    Converter(Set<T>::toList, List<T>::toSet)
+public object CollectionTypeConverters {
+    /**
+     * Creates a [Converter] which transforms between [Set] and [List] instances (both of some type [T])
+     * @param T The type of elements in the [Set]/[List]
+     */
+    @Suppress("ktlint:standard:function-naming")
+    public inline fun <reified T> SetToListConverter(): Converter<Set<T>, List<T>> =
+        Converter(Set<T>::toList, List<T>::toSet)
+}

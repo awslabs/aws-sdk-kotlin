@@ -9,15 +9,6 @@ import aws.sdk.kotlin.hll.mapping.core.converters.Converter
 import aws.sdk.kotlin.hll.mapping.core.converters.andThenFrom
 
 /**
- * Creates a [Converter] between enum type [E] and [String]
- * @param E The [Enum] type to convert
- */
-public inline fun <reified E : Enum<E>> enumToStringConverter(): Converter<E, String> = Converter(
-    convertTo = { from: E -> from.name },
-    convertFrom = { to: String -> enumValueOf(to) },
-)
-
-/**
  * Converts between [Enum] and
  * [DynamoDB `S` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.String)
  * @param E The [Enum] type to convert
@@ -31,4 +22,9 @@ public class EnumConverter<E : Enum<E>>(
  * @param E The [Enum] type for which to create a [ValueConverter]
  */
 public inline fun <reified E : Enum<E>> EnumConverter(): EnumConverter<E> =
-    EnumConverter(enumToStringConverter<E>())
+    EnumConverter(
+        enumToStringConverter = Converter(
+            convertTo = { from: E -> from.name },
+            convertFrom = { to: String -> enumValueOf(to) },
+        ),
+    )
