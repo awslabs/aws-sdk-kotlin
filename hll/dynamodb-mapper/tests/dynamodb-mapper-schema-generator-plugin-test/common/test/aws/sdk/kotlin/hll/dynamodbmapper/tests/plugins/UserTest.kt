@@ -11,6 +11,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class UserTest {
+
+    @Ignore // FIXME Disabled until local plugin build / publish can be untangled. See build.gradle.kts for more details.
     @Test
     fun testConversion() {
         val user = User(123, "Steve", "Rogers", 84)
