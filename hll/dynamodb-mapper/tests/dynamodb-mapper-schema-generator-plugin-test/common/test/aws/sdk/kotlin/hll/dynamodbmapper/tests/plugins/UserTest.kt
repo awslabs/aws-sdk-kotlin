@@ -1,11 +1,13 @@
+@file:Suppress("ktlint:standard:no-empty-file")
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+
 package aws.sdk.kotlin.hll.dynamodbmapper.tests.plugins
 
 // FIXME Disabled until local plugin build / publish can be untangled. See build.gradle.kts for more details.
-//class UserTest {
+// class UserTest {
 //    @Ignore
 //    @Test
 //    fun testConversion() {
@@ -26,4 +28,4 @@ package aws.sdk.kotlin.hll.dynamodbmapper.tests.plugins
 //
 //        assertEquals(user, unconverted)
 //    }
-//}
+// }
