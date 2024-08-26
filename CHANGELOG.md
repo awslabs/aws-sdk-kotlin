@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.19] - 08/26/2024
+
+### Features
+* (**iotsitewise**) AWS IoT SiteWise now supports versioning for asset models. It enables users to retrieve active version of their asset model and perform asset model writes with optimistic lock.
+* (**workspaces**) This release adds support for creating and managing directories that use AWS IAM Identity Center as user identity source. Such directories can be used to create non-Active Directory domain joined WorkSpaces Personal.Updated RegisterWorkspaceDirectory and DescribeWorkspaceDirectories APIs.
+
 ## [1.3.18] - 08/23/2024
 
 ### Features
