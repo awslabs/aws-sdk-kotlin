@@ -6,7 +6,7 @@
 val sdkVersion: String by project
 
 plugins {
-    id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator") version "1.3.17-SNAPSHOT"
+    id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
 }
 
 kotlin {

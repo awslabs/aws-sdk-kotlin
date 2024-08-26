@@ -16,6 +16,11 @@ pluginManagement {
             }
         }
     }
+
+    val sdkVersion: String by settings
+    plugins {
+        id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator") version sdkVersion
+    }
 }
 
 dependencyResolutionManagement {
