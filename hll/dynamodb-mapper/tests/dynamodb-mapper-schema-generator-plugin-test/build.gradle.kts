@@ -20,7 +20,7 @@ tasks.named("preparePlugin").configure {
         repositories {
             mavenLocal()
         }
-        // FIXME Find a way to apply this plugin after it has been published to Maven Local
+        // FIXME Find a way to apply this plugin after it has been published to Maven Local / Test Local
 //        apply(plugin = "aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
     }
 }
