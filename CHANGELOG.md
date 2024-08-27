@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.3.18] - 08/23/2024
+
+### Features
+* (**bedrockagent**) Releasing the support for Action User Confirmation.
+* (**bedrockagentruntime**) Releasing the support for Action User Confirmation.
+* (**organizations**) Releasing minor partitional endpoint updates.
+* (**qbusiness**) Amazon QBusiness: Enable support for SAML and OIDC federation through AWS IAM Identity Provider integration.
+
+### Documentation
+* (**codebuild**) Added support for the MAC_ARM environment type for CodeBuild fleets.
+* (**supplychain**) Update API documentation to clarify the event SLA as well as the data model expectations
+
+### Miscellaneous
+* Remove Codestar service
+
+## [1.3.17] - 08/22/2024
+
+### Features
+* (**bedrock**) Amazon Bedrock Evaluation BatchDeleteEvaluationJob API allows customers to delete evaluation jobs under terminated evaluation job statuses - Stopped, Failed, or Completed. Customers can submit a batch of 25 evaluation jobs to be deleted at once.
+* (**emrcontainers**) Correct endpoint for FIPS is configured for US Gov Regions.
+* (**inspector2**) Add enums for Agentless scan statuses and EC2 enablement error states
+* (**quicksight**) Explicit query for authors and dashboard viewing sharing for embedded users
+* (**route53**) Amazon Route 53 now supports the Asia Pacific (Malaysia) Region (ap-southeast-5) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region.
+
+### Documentation
+* (**autoscaling**) Amazon EC2 Auto Scaling now provides EBS health check to manage EC2 instance replacement
+
 ## [1.3.16] - 08/21/2024
 
 ### Features
