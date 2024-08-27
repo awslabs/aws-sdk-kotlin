@@ -4,9 +4,9 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.items
 
-import aws.sdk.kotlin.hll.dynamodbmapper.values.BooleanConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.values.IntConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.values.StringConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.BooleanConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

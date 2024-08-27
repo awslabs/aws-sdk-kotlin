@@ -15,6 +15,8 @@ object Pkg {
         val Ops = "$Base.operations"
         val PipelineImpl = "$Base.pipeline.internal"
         val Values = "$Base.values"
+        val ScalarValues = "$Values.scalars"
+        val SmithyTypeValues = "$Values.smithytypes"
     }
 
     object Kotlin {

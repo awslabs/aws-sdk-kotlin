@@ -43,16 +43,16 @@ public class SimpleItemConverter<T, B>(
          *
          * ```kotlin
          * val descriptor = descriptors[name] // AttributeDescriptor<*, T, B>
-         * val value = descriptor.converter.fromAv(av) // Any?
+         * val value = descriptor.converter.fromAttributeValue(av) // Any?
          * descriptor.setter(builder, value) // Type mismatch for value. Required: Nothing, Found: Any?
          * ```
          */
-        fun <A> AttributeDescriptor<A, T, B>.fromAv(av: AttributeValue) =
-            builder.setter(converter.fromAv(av))
+        fun <A> AttributeDescriptor<A, T, B>.fromAttributeValue(attr: AttributeValue) =
+            builder.setter(converter.convertFrom(attr))
 
-        item.forEach { (name, av) ->
+        item.forEach { (name, attr) ->
             // TODO make behavior for unknown attributes configurable (ignore, exception, other?)
-            descriptors[name]?.fromAv(av)
+            descriptors[name]?.fromAttributeValue(attr)
         }
 
         return builder.build()
@@ -66,11 +66,11 @@ public class SimpleItemConverter<T, B>(
          * ```kotlin
          * val descriptor = descriptors[name] // AttributeDescriptor<*, T, B>
          * val value = descriptor.getter(obj) // Any?
-         * descriptor.converter.toAv(value) // Type mismatch for value. Required: Nothing, Found: Any?
+         * descriptor.converter.toAttributeValue(value) // Type mismatch for value. Required: Nothing, Found: Any?
          * ```
          */
-        fun <A> AttributeDescriptor<A, T, B>.toAv() =
-            converter.toAv(getter(obj))
+        fun <A> AttributeDescriptor<A, T, B>.toAttributeValue() =
+            converter.convertTo(getter(obj))
 
         val descriptors = if (onlyAttributes == null) {
             this.descriptors.values
@@ -79,7 +79,7 @@ public class SimpleItemConverter<T, B>(
         }
 
         return buildItem {
-            descriptors.forEach { desc -> put(desc.name, desc.toAv()) }
+            descriptors.forEach { desc -> put(desc.name, desc.toAttributeValue()) }
         }
     }
 }

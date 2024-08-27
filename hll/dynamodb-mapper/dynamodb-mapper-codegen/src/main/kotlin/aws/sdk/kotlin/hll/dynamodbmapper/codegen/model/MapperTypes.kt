@@ -38,10 +38,15 @@ object MapperTypes {
     }
 
     object Values {
-        val DefaultInstantConverter = TypeRef(Pkg.Hl.Values, "InstantConverter.Default")
-        val BooleanConverter = TypeRef(Pkg.Hl.Values, "BooleanConverter")
-        val IntConverter = TypeRef(Pkg.Hl.Values, "IntConverter")
-        val StringConverter = TypeRef(Pkg.Hl.Values, "StringConverter")
+        object Scalars {
+            val BooleanConverter = TypeRef(Pkg.Hl.ScalarValues, "BooleanConverter")
+            val IntConverter = TypeRef(Pkg.Hl.ScalarValues, "IntConverter")
+            val StringConverter = TypeRef(Pkg.Hl.ScalarValues, "StringConverter")
+        }
+
+        object SmithyTypes {
+            val DefaultInstantConverter = TypeRef(Pkg.Hl.SmithyTypeValues, "InstantConverters.Default")
+        }
     }
 
     object PipelineImpl {
