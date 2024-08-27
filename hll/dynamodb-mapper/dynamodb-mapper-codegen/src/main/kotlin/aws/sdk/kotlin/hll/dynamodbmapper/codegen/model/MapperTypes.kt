@@ -19,7 +19,8 @@ object MapperTypes {
 
     object Items {
         fun itemSchema(typeVar: String) = TypeRef(Pkg.Hl.Items, "ItemSchema", listOf(TypeVar(typeVar)))
-        fun itemSchemaPartitionKey(objectType: TypeRef, keyType: TypeRef) = TypeRef(Pkg.Hl.Items, "ItemSchema.PartitionKey", listOf(objectType, keyType))
+        fun itemSchemaPartitionKey(objectType: TypeRef, pkType: TypeRef) = TypeRef(Pkg.Hl.Items, "ItemSchema.PartitionKey", listOf(objectType, pkType))
+        fun itemSchemaCompositeKey(objectType: TypeRef, pkType: TypeRef, skType: TypeRef) = TypeRef(Pkg.Hl.Items, "ItemSchema.CompositeKey", listOf(objectType, pkType, skType))
         fun keySpec(keyType: TypeRef) = TypeRef(Pkg.Hl.Items, "KeySpec", genericArgs = listOf(keyType))
         val KeySpecNumber = TypeRef(Pkg.Hl.Items, "KeySpec.Number")
         val KeySpecString = TypeRef(Pkg.Hl.Items, "KeySpec.String")
@@ -29,10 +30,15 @@ object MapperTypes {
     }
 
     object Model {
-        fun tablePartitionKey(objectType: TypeRef, keyType: TypeRef) = TypeRef(
+        fun tablePartitionKey(objectType: TypeRef, pkType: TypeRef) = TypeRef(
             Pkg.Hl.Model,
             "Table.PartitionKey",
-            genericArgs = listOf(objectType, keyType),
+            genericArgs = listOf(objectType, pkType),
+        )
+        fun tableCompositeKey(objectType: TypeRef, pkType: TypeRef, skType: TypeRef) = TypeRef(
+            Pkg.Hl.Model,
+            "Table.CompositeKey",
+            genericArgs = listOf(objectType, pkType, skType),
         )
         val toItem = TypeRef(Pkg.Hl.Model, "toItem")
     }

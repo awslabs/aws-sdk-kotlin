@@ -13,9 +13,12 @@ import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbSortKey
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.CodegenAttributes
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
+import com.google.devtools.ksp.getConstructors
 import com.google.devtools.ksp.isAnnotationPresent
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSName
@@ -38,27 +41,57 @@ class SchemaRenderer(
     private val schemaName = "${className}Schema"
 
     private val properties = classDeclaration.getAllProperties().mapNotNull(AnnotatedClassProperty.Companion::from)
-    private val keyProperty = checkNotNull(properties.singleOrNull { it.isPk }) {
-        "Expected exactly one @DynamoDbPartitionKey annotation on a property"
+
+    init {
+        check(properties.count { it.isPk } == 1) {
+            "Expected exactly one @DynamoDbPartitionKey annotation on a property"
+        }
+        check(properties.count { it.isSk } <= 1) {
+            "Expected at most one @DynamoDbSortKey annotation on a property"
+        }
+    }
+
+    private val partitionKeyProp = properties.single { it.isPk }
+    private val sortKeyProp = properties.singleOrNull { it.isSk }
+
+    /**
+     * We only skip rendering builders if:
+     *   - the user has configured AlwaysGenerateBuilders to false (default value) AND
+     *   - the class has all mutable members AND
+     *   - the class has a zero-arg constructor
+     */
+    private val shouldRenderBuilder: Boolean = run {
+        val alwaysGenerateBuilders = ctx.attributes.getOrNull(CodegenAttributes.AlwaysGenerateBuilders) ?: true
+        val hasAllMutableMembers = classDeclaration.getAllProperties().map(Member.Companion::from).toSet().all { it.mutable }
+        val hasZeroArgConstructor = classDeclaration.getConstructors().any { constructor -> constructor.parameters.all { it.hasDefault } }
+
+        ctx.logger.warn("class $className: alwaysGenerateBuilders=$alwaysGenerateBuilders, hasAllMutableMembers=$hasAllMutableMembers, hasZeroArgConstructor=$hasZeroArgConstructor")
+        !(!alwaysGenerateBuilders && hasAllMutableMembers && hasZeroArgConstructor)
     }
 
     override fun generate() {
-        renderBuilder()
+        if (shouldRenderBuilder) { renderBuilder() }
         renderItemConverter()
         renderSchema()
         renderGetTable()
     }
 
     private fun renderBuilder() {
-        // TODO Not all classes need builders generated (i.e. the class consists of all public mutable members), add configurability here
+        ctx.logger.warn("Rendering a builder class for $className")
         val members = classDeclaration.getAllProperties().map(Member.Companion::from).toSet()
         BuilderRenderer(this, classType, members).render()
     }
 
     private fun renderItemConverter() {
         withBlock("public object #L : #T by #T(", ")", converterName, MapperTypes.Items.itemConverter(classType), MapperTypes.Items.SimpleItemConverter) {
-            write("builderFactory = ::#L,", builderName)
-            write("build = #L::build,", builderName)
+            if (shouldRenderBuilder) {
+                write("builderFactory = ::#L,", builderName)
+                write("build = #L::build,", builderName)
+            } else {
+                write("builderFactory = { $className() },")
+                write("build = { this },")
+            }
+
             withBlock("descriptors = arrayOf(", "),") {
                 properties.forEach {
                     renderAttributeDescriptor(it)
@@ -72,7 +105,13 @@ class SchemaRenderer(
         withBlock("#T(", "),", MapperTypes.Items.AttributeDescriptor) {
             write("#S,", prop.ddbName) // key
             write("#L,", "$className::${prop.name}") // getter
-            write("#L,", "$builderName::${prop.name}::set") // setter
+
+            if (shouldRenderBuilder) {
+                write("#L,", "$builderName::${prop.name}::set") // setter
+            } else {
+                write("#L,", "$className::${prop.name}::set")
+            }
+
             write("#T", prop.valueConverter) // converter
         }
     }
@@ -88,10 +127,16 @@ class SchemaRenderer(
         }
 
     private fun renderSchema() {
-        withBlock("public object #L : #T {", "}", schemaName, MapperTypes.Items.itemSchemaPartitionKey(classType, keyProperty.typeRef)) {
-            write("override val converter : #1L = #1L", converterName)
-            // TODO Handle composite keys
-            write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(keyProperty.keySpec), keyProperty.keySpecType, keyProperty.name)
+        if (sortKeyProp != null) {
+            withBlock("public object #L : #T {", "}", schemaName, MapperTypes.Items.itemSchemaCompositeKey(classType, partitionKeyProp.typeRef, sortKeyProp.typeRef)) {
+                write("override val converter : #1L = #1L", converterName)
+                write("override val sortKey: #T = #T(#S)", MapperTypes.Items.keySpec(sortKeyProp.keySpec), sortKeyProp.keySpecType, sortKeyProp.name)
+            }
+        } else {
+            withBlock("public object #L : #T {", "}", schemaName, MapperTypes.Items.itemSchemaPartitionKey(classType, partitionKeyProp.typeRef)) {
+                write("override val converter : #1L = #1L", converterName)
+                write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyProp.name)
+            }
         }
         blankLine()
     }
@@ -120,14 +165,18 @@ class SchemaRenderer(
             "public fun #T.#L(name: String): #T = #L(name, #L)",
             MapperTypes.DynamoDbMapper,
             fnName,
-            MapperTypes.Model.tablePartitionKey(classType, keyProperty.typeRef),
+            if (sortKeyProp != null) {
+                MapperTypes.Model.tableCompositeKey(classType, partitionKeyProp.typeRef, sortKeyProp.typeRef)
+            } else {
+                MapperTypes.Model.tablePartitionKey(classType, partitionKeyProp.typeRef)
+            },
             "getTable",
             schemaName,
         )
     }
 }
 
-private data class AnnotatedClassProperty(val name: String, val typeRef: TypeRef, val ddbName: String, val typeName: KSName, val isPk: Boolean) {
+private data class AnnotatedClassProperty(val name: String, val typeRef: TypeRef, val ddbName: String, val typeName: KSName, val isPk: Boolean, val isSk: Boolean) {
     companion object {
         @OptIn(KspExperimental::class)
         fun from(ksProperty: KSPropertyDeclaration) = ksProperty
@@ -138,10 +187,11 @@ private data class AnnotatedClassProperty(val name: String, val typeRef: TypeRef
             ?.qualifiedName
             ?.let { typeName ->
                 val isPk = ksProperty.isAnnotationPresent(DynamoDbPartitionKey::class)
+                val isSk = ksProperty.isAnnotationPresent(DynamoDbSortKey::class)
                 val name = ksProperty.simpleName.getShortName()
                 val typeRef = Type.from(checkNotNull(ksProperty.type) { "Failed to determine class type for $name" })
                 val ddbName = ksProperty.getAnnotationsByType(DynamoDbAttribute::class).singleOrNull()?.name ?: name
-                AnnotatedClassProperty(name, typeRef, ddbName, typeName, isPk)
+                AnnotatedClassProperty(name, typeRef, ddbName, typeName, isPk, isSk)
             }
     }
 }

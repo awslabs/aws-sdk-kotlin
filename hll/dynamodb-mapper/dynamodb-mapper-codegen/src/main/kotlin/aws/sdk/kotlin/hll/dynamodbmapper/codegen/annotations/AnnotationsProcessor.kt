@@ -7,6 +7,10 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering.HighLevelRenderer
+import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.collections.AttributeKey
+import aws.smithy.kotlin.runtime.collections.mutableAttributes
+import aws.smithy.kotlin.runtime.collections.putIfAbsent
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
@@ -18,6 +22,7 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
     private val logger = environment.logger
     private val codeGenerator = environment.codeGenerator
     private val codeGeneratorFactory = CodeGeneratorFactory(codeGenerator, logger)
+    private val codegenAttributes = mutableAttributes()
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         if (invoked) {
@@ -30,14 +35,21 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
         val invalid = annotated.filterNot { it.validate() }.toList()
         logger.info("Found invalid classes $invalid")
 
+        logger.warn("Got codegen attribute ${CodegenAttributes.AlwaysGenerateBuilders.name} = ${environment.options[CodegenAttributes.AlwaysGenerateBuilders.name]}")
+        codegenAttributes[CodegenAttributes.AlwaysGenerateBuilders] = environment.options[CodegenAttributes.AlwaysGenerateBuilders.name].equals("ALWAYS", ignoreCase = true)
+
         val annotatedClasses = annotated
             .toList()
             .also { logger.info("Found annotated classes: $it") }
             .filterIsInstance<KSClassDeclaration>()
             .filter { it.validate() }
 
-        HighLevelRenderer(annotatedClasses, logger, codeGeneratorFactory).render()
+        HighLevelRenderer(annotatedClasses, logger, codeGeneratorFactory, codegenAttributes).render()
 
         return invalid
     }
+}
+
+object CodegenAttributes {
+    val AlwaysGenerateBuilders : AttributeKey<Boolean> = AttributeKey("AlwaysGenerateBuilders")
 }

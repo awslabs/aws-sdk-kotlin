@@ -1,7 +1,19 @@
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/GenerateBuilderClasses : java/lang/Enum {
+	public static final field ALWAYS Laws/sdk/kotlin/hll/dynamodbmapper/plugins/GenerateBuilderClasses;
+	public static final field WHEN_REQUIRED Laws/sdk/kotlin/hll/dynamodbmapper/plugins/GenerateBuilderClasses;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/plugins/GenerateBuilderClasses;
+	public static fun values ()[Laws/sdk/kotlin/hll/dynamodbmapper/plugins/GenerateBuilderClasses;
+}
+
 public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
 	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlugin$apply$1$1$inlined$sam$i$org_gradle_api_Action$0 : org/gradle/api/Action {
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public final synthetic fun execute (Ljava/lang/Object;)V
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlugin$inlined$sam$i$org_gradle_api_Action$0 : org/gradle/api/Action {
@@ -11,9 +23,11 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlug
 
 public class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginExtension {
 	public fun <init> ()V
+	public final fun getGenerateBuilderClasses ()Laws/sdk/kotlin/hll/dynamodbmapper/plugins/GenerateBuilderClasses;
+	public final fun setGenerateBuilderClasses (Laws/sdk/kotlin/hll/dynamodbmapper/plugins/GenerateBuilderClasses;)V
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginKt {
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginExtensionKt {
 	public static final field SCHEMA_GENERATOR_PLUGIN_EXTENSION Ljava/lang/String;
 }
 

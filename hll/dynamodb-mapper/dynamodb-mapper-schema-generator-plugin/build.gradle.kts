@@ -16,6 +16,8 @@ plugins {
 }
 
 dependencies {
+    api(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen"))
+    implementation(libs.smithy.kotlin.runtime.core) // for AttributeKey
     implementation(kotlin("gradle-plugin"))
     implementation(libs.ksp.gradle.plugin)
 
