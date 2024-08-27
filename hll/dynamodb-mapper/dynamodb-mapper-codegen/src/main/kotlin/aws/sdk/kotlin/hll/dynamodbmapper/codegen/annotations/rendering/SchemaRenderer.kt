@@ -63,9 +63,9 @@ class SchemaRenderer(
     private val shouldRenderBuilder: Boolean = run {
         val alwaysGenerateBuilders = ctx.attributes.getOrNull(CodegenAttributes.AlwaysGenerateBuilders) ?: true
         val hasAllMutableMembers = classDeclaration.getAllProperties().map(Member.Companion::from).toSet().all { it.mutable }
-        val hasZeroArgConstructor = classDeclaration.getConstructors().any { constructor -> constructor.parameters.all { it.hasDefault } }
 
-        ctx.logger.warn("class $className: alwaysGenerateBuilders=$alwaysGenerateBuilders, hasAllMutableMembers=$hasAllMutableMembers, hasZeroArgConstructor=$hasZeroArgConstructor")
+        // this will catch zero-arg constructors and constructors with all parameters having defaults
+        val hasZeroArgConstructor = classDeclaration.getConstructors().any { constructor -> constructor.parameters.all { it.hasDefault } }
         !(!alwaysGenerateBuilders && hasAllMutableMembers && hasZeroArgConstructor)
     }
 
