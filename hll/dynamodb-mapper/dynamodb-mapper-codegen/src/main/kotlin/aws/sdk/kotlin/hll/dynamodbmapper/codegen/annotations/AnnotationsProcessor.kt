@@ -33,7 +33,6 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
         val invalid = annotated.filterNot { it.validate() }.toList()
         logger.info("Found invalid classes $invalid")
 
-        logger.warn("Got codegen attribute ${CodegenAttributes.AlwaysGenerateBuilders.name} = ${environment.options[CodegenAttributes.AlwaysGenerateBuilders.name]}")
         codegenAttributes[CodegenAttributes.AlwaysGenerateBuilders] = environment.options[CodegenAttributes.AlwaysGenerateBuilders.name].equals("ALWAYS", ignoreCase = true)
 
         val annotatedClasses = annotated

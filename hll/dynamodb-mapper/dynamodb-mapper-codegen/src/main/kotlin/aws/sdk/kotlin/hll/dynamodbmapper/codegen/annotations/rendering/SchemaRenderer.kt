@@ -55,17 +55,16 @@ class SchemaRenderer(
     private val sortKeyProp = properties.singleOrNull { it.isSk }
 
     /**
-     * We only skip rendering builders if:
-     *   - the user has configured AlwaysGenerateBuilders to false (default value) AND
+     * We skip rendering a class builder if:
+     *   - the user has configured GenerateBuilders to WHEN_REQUIRED (default value) AND
      *   - the class has all mutable members AND
      *   - the class has a zero-arg constructor
      */
     private val shouldRenderBuilder: Boolean = run {
         val alwaysGenerateBuilders = ctx.attributes.getOrNull(CodegenAttributes.AlwaysGenerateBuilders) ?: true
-        val hasAllMutableMembers = classDeclaration.getAllProperties().map(Member.Companion::from).toSet().all { it.mutable }
-
-        // this will catch zero-arg constructors and constructors with all parameters having defaults
+        val hasAllMutableMembers = classDeclaration.getAllProperties().all { it.isMutable }
         val hasZeroArgConstructor = classDeclaration.getConstructors().any { constructor -> constructor.parameters.all { it.hasDefault } }
+
         !(!alwaysGenerateBuilders && hasAllMutableMembers && hasZeroArgConstructor)
     }
 
@@ -79,7 +78,6 @@ class SchemaRenderer(
     }
 
     private fun renderBuilder() {
-        ctx.logger.warn("Rendering a builder class for $className")
         val members = classDeclaration.getAllProperties().map(Member.Companion::from).toSet()
         BuilderRenderer(this, classType, members).render()
     }
@@ -108,8 +106,9 @@ class SchemaRenderer(
             write("#S,", prop.ddbName) // key
             write("#L,", "$className::${prop.name}") // getter
 
+            // setter
             if (shouldRenderBuilder) {
-                write("#L,", "$builderName::${prop.name}::set") // setter
+                write("#L,", "$builderName::${prop.name}::set")
             } else {
                 write("#L,", "$className::${prop.name}::set")
             }
