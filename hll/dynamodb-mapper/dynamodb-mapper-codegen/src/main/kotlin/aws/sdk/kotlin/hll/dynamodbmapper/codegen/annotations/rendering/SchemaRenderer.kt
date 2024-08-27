@@ -70,7 +70,9 @@ class SchemaRenderer(
     }
 
     override fun generate() {
-        if (shouldRenderBuilder) { renderBuilder() }
+        if (shouldRenderBuilder) {
+            renderBuilder()
+        }
         renderItemConverter()
         renderSchema()
         renderGetTable()

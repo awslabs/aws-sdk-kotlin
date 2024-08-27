@@ -12,5 +12,5 @@ open class SchemaGeneratorPluginExtension {
 
 enum class GenerateBuilderClasses {
     WHEN_REQUIRED,
-    ALWAYS
+    ALWAYS,
 }

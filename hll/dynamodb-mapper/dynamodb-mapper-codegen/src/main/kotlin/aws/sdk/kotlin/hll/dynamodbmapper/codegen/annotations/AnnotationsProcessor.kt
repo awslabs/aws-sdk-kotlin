@@ -7,10 +7,8 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering.HighLevelRenderer
-import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.collections.AttributeKey
 import aws.smithy.kotlin.runtime.collections.mutableAttributes
-import aws.smithy.kotlin.runtime.collections.putIfAbsent
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
@@ -51,5 +49,5 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
 }
 
 object CodegenAttributes {
-    val AlwaysGenerateBuilders : AttributeKey<Boolean> = AttributeKey("AlwaysGenerateBuilders")
+    val AlwaysGenerateBuilders: AttributeKey<Boolean> = AttributeKey("AlwaysGenerateBuilders")
 }

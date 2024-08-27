@@ -79,6 +79,5 @@ class SchemaGeneratorPluginTest {
             .build()
 
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
-
     }
 }

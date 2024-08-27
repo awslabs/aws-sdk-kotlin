@@ -19,7 +19,7 @@ class HighLevelRenderer(
     private val annotatedClasses: List<KSClassDeclaration>,
     private val logger: KSPLogger,
     private val codegenFactory: CodeGeneratorFactory,
-    private val codegenAttributes: MutableAttributes = mutableAttributes()
+    private val codegenAttributes: MutableAttributes = mutableAttributes(),
 ) {
     fun render() {
         annotatedClasses.forEach {
@@ -30,7 +30,7 @@ class HighLevelRenderer(
                 codegenFactory,
                 "${it.packageName.asString()}.mapper.schemas",
                 "dynamodb-mapper-annotation-processor",
-                codegenAttributes
+                codegenAttributes,
             )
 
             val annotation = SchemaRenderer(it, renderCtx)

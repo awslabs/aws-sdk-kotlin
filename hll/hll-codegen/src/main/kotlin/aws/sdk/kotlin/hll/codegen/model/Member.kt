@@ -19,7 +19,7 @@ data class Member(val name: String, val type: Type, val mutable: Boolean) {
         fun from(prop: KSPropertyDeclaration) = Member(
             name = prop.simpleName.getShortName(),
             type = Type.from(prop.type),
-            mutable = prop.isMutable
+            mutable = prop.isMutable,
         )
     }
 }
