@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.20] - 08/27/2024
+
+### Features
+* (**bedrock**) Amazon Bedrock SDK updates for Inference Profile.
+* (**bedrockruntime**) Amazon Bedrock SDK updates for Inference Profile.
+* (**chatbot**) Update documentation to be consistent with the API docs
+* (**omics**) Adds data provenance to import jobs from read sets and references
+* (**polly**) Amazon Polly adds 2 new voices: Jitka (cs-CZ) and Sabrina (de-CH).
+
+### Miscellaneous
+* Upgrade to **v1.3.6** of **smithy-kotlin**
+
 ## [1.3.19] - 08/26/2024
 
 ### Features
