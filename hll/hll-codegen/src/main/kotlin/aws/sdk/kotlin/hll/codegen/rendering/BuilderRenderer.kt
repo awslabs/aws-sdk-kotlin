@@ -26,26 +26,22 @@ class BuilderRenderer(
             }
             blankLine()
 
-            renderBuildFunction()
+            withBlock("public fun build(): #T {", "}", classType) {
+                members.forEach {
+                    if (it.type.nullable) {
+                        write("val #1L = #1L", it.name)
+                    } else {
+                        write("val #1L = requireNotNull(#1L) { #2S }", it.name, "Missing value for ${it.name}")
+                    }
+                }
+                blankLine()
+                withBlock("return #T(", ")", classType) {
+                    members.forEach {
+                        write("#L,", it.name)
+                    }
+                }
+            }
         }
         blankLine()
-    }
-
-    fun renderBuildFunction() = renderer.apply {
-        withBlock("public fun build(): #T {", "}", classType) {
-            members.forEach {
-                if (it.type.nullable) {
-                    write("val #1L = #1L", it.name)
-                } else {
-                    write("val #1L = requireNotNull(#1L) { #2S }", it.name, "Missing value for ${it.name}")
-                }
-            }
-            blankLine()
-            withBlock("return #T(", ")", classType) {
-                members.forEach {
-                    write("#L,", it.name)
-                }
-            }
-        }
     }
 }
