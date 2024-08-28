@@ -16,10 +16,13 @@ pluginManagement {
             }
         }
     }
-
-    val sdkVersion: String by settings
-    plugins {
-        id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator") version sdkVersion
+    resolutionStrategy {
+        val sdkVersion: String by settings
+        eachPlugin {
+            if (requested.id.id == "aws.sdk.kotlin.hll.dynamodbmapper.schema.generator") {
+                useModule("aws.sdk.kotlin:dynamodb-mapper-schema-generator-plugin:$sdkVersion")
+            }
+        }
     }
 }
 
