@@ -128,15 +128,17 @@ class SchemaRenderer(
         }
 
     private fun renderSchema() {
-        if (sortKeyProp != null) {
-            withBlock("public object #L : #T {", "}", schemaName, MapperTypes.Items.itemSchemaCompositeKey(classType, partitionKeyProp.typeRef, sortKeyProp.typeRef)) {
-                write("override val converter : #1L = #1L", converterName)
-                write("override val sortKey: #T = #T(#S)", MapperTypes.Items.keySpec(sortKeyProp.keySpec), sortKeyProp.keySpecType, sortKeyProp.name)
-            }
+        val schemaType = if (sortKeyProp != null) {
+            MapperTypes.Items.itemSchemaCompositeKey(classType, partitionKeyProp.typeRef, sortKeyProp.typeRef)
         } else {
-            withBlock("public object #L : #T {", "}", schemaName, MapperTypes.Items.itemSchemaPartitionKey(classType, partitionKeyProp.typeRef)) {
-                write("override val converter : #1L = #1L", converterName)
-                write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyProp.name)
+            MapperTypes.Items.itemSchemaPartitionKey(classType, partitionKeyProp.typeRef)
+        }
+
+        withBlock("public object #L : #T {", "}", schemaName, schemaType) {
+            write("override val converter : #1L = #1L", converterName)
+            write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyProp.name)
+            if (sortKeyProp != null) {
+                write("override val sortKey: #T = #T(#S)", MapperTypes.Items.keySpec(sortKeyProp.keySpec), sortKeyProp.keySpecType, sortKeyProp.name)
             }
         }
         blankLine()
