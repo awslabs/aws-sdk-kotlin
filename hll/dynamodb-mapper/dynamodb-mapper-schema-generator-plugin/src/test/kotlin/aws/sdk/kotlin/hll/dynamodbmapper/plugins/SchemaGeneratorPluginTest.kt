@@ -15,6 +15,7 @@ class SchemaGeneratorPluginTest {
 
     private lateinit var settingsFile: File
     private lateinit var buildFile: File
+    private lateinit var runner: GradleRunner
 
     @BeforeEach
     fun setup() {
@@ -28,6 +29,14 @@ class SchemaGeneratorPluginTest {
         }
         """.trimIndent()
         buildFile.appendText(buildFileContent)
+
+        runner = GradleRunner
+            .create()
+            .withProjectDir(testProjectDir)
+            .withPluginClasspath()
+            .withGradleVersion("8.5") // TODO parameterize
+            .forwardOutput()
+
     }
 
     @AfterEach
@@ -55,12 +64,8 @@ class SchemaGeneratorPluginTest {
 
         buildFile.appendText(buildFileContent)
 
-        val result = GradleRunner.create()
-            .withProjectDir(testProjectDir)
+        val result = runner
             .withArguments("--info", "build")
-            .withPluginClasspath()
-            .withGradleVersion("8.5")
-            .forwardOutput()
             .build()
 
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
