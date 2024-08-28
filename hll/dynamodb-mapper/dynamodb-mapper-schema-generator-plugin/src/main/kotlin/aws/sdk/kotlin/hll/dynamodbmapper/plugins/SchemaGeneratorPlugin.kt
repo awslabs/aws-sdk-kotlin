@@ -19,6 +19,9 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
         project.afterEvaluate {
             extensions.configure<KspExtension> {
                 arg(AnnotationsProcessorOptions.GenerateBuilderClassesAttribute.name, extension.generateBuilderClasses.name)
+                arg(AnnotationsProcessorOptions.VisibilityAttribute.name, extension.visibility.name)
+                arg(AnnotationsProcessorOptions.DestinationPackageAttribute.name, extension.destinationPackage.pkg)
+                arg(AnnotationsProcessorOptions.GenerateGetTableMethodAttribute.name, extension.generateGetTableExtension.toString())
             }
         }
     }

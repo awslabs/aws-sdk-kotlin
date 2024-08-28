@@ -1,6 +1,8 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility
 
 const val SCHEMA_GENERATOR_PLUGIN_EXTENSION = "dynamoDbMapper"
 
@@ -11,4 +13,10 @@ open class SchemaGeneratorPluginExtension {
      * and have a zero-arg constructor.
      */
     var generateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
+
+    var visibility = Visibility.IMPLICIT
+
+    var destinationPackage = DestinationPackage.RELATIVE()
+
+    var generateGetTableExtension = true
 }

@@ -11,6 +11,10 @@ import aws.smithy.kotlin.runtime.collections.attributesOf
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions.GenerateBuilderClassesAttribute
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions.VisibilityAttribute
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions.DestinationPackageAttribute
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions.GenerateGetTableMethodAttribute
 
 private val annotationName = DynamoDbItem::class.qualifiedName!!
 
@@ -32,7 +36,10 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
         logger.info("Found invalid classes $invalid")
 
         val codegenAttributes = attributesOf {
-            AnnotationsProcessorOptions.GenerateBuilderClassesAttribute to environment.options[AnnotationsProcessorOptions.GenerateBuilderClassesAttribute.name]
+            GenerateBuilderClassesAttribute to environment.options.getOrDefault(GenerateBuilderClassesAttribute.name, GenerateBuilderClasses.WHEN_REQUIRED)
+            VisibilityAttribute to environment.options.getOrDefault(VisibilityAttribute.name, Visibility.IMPLICIT)
+            DestinationPackageAttribute.name to environment.options.getOrDefault(DestinationPackageAttribute.name, DestinationPackage.RELATIVE())
+            GenerateGetTableMethodAttribute.name to (environment.options.getOrDefault(GenerateGetTableMethodAttribute.name, "true") == "true")
         }
 
         val annotatedClasses = annotated
