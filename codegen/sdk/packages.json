@@ -1435,6 +1435,12 @@
             "brazilName": "AwsSdkKotlinOutposts"
         },
         {
+            "sdkId": "PCS",
+            "namespace": "aws.sdk.kotlin.services.pcs",
+            "artifactName": "pcs",
+            "brazilName": "AwsSdkKotlinPcs"
+        },
+        {
             "sdkId": "PI",
             "namespace": "aws.sdk.kotlin.services.pi",
             "artifactName": "pi",

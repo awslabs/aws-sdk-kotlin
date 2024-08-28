@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.21] - 08/28/2024
+
+### Features
+* (**appconfig**) This release adds support for deletion protection, which is a safety guardrail to prevent the unintentional deletion of a recently used AWS AppConfig Configuration Profile or Environment. This also includes a change to increase the maximum length of the Name parameter in UpdateConfigurationProfile.
+* (**datazone**) Update regex to include dot character to be consistent with IAM role creation in the authorized principal field for create and update subscription target.
+* (**devicefarm**) This release removed support for Calabash, UI Automation, Built-in Explorer, remote access record, remote access replay, and web performance profile framework in ScheduleRun API.
+* (**ec2**) Amazon VPC IP Address Manager (IPAM) now allows customers to provision IPv4 CIDR blocks and allocate Elastic IP Addresses directly from IPAM pools with public IPv4 space
+* (**internetmonitor**) Adds new querying types to show overall traffic suggestion information for monitors
+* (**pcs**) Introducing AWS Parallel Computing Service (AWS PCS), a new service makes it easy to setup and manage high performance computing (HPC) clusters, and build scientific and engineering models at virtually any scale on AWS.
+
+### Documentation
+* (**workspaces**) Documentation-only update that clarifies the StartWorkspaces and StopWorkspaces actions, and a few other minor edits.
+
 ## [1.3.20] - 08/27/2024
 
 ### Features
