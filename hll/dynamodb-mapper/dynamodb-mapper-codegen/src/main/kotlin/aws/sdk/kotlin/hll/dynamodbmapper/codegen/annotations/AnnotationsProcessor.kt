@@ -4,7 +4,6 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
 
-import AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering.HighLevelRenderer
@@ -33,7 +32,7 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
         logger.info("Found invalid classes $invalid")
 
         val codegenAttributes = attributesOf {
-            AnnotationsProcessorOptions.GenerateBuilderClasses to environment.options[AnnotationsProcessorOptions.GenerateBuilderClasses.name]
+            AnnotationsProcessorOptions.GenerateBuilderClassesAttribute to environment.options[AnnotationsProcessorOptions.GenerateBuilderClassesAttribute.name]
         }
 
         val annotatedClasses = annotated

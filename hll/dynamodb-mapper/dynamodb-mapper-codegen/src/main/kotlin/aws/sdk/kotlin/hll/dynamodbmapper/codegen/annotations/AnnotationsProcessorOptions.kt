@@ -1,3 +1,5 @@
+package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
+
 import aws.smithy.kotlin.runtime.collections.AttributeKey
 
 /**
@@ -9,7 +11,7 @@ object AnnotationsProcessorOptions {
      * With this setting, builder classes will not be generated for user classes which consist of only public mutable members
      * and have a zero-arg constructor.
      */
-    val GenerateBuilderClasses: AttributeKey<GenerateBuilderClasses> = AttributeKey("GenerateBuilderClasses")
+    val GenerateBuilderClassesAttribute: AttributeKey<GenerateBuilderClasses> = AttributeKey("GenerateBuilderClasses")
 }
 
 /**

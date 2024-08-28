@@ -62,6 +62,8 @@ class SchemaGeneratorPluginTest {
     @Test
     fun `configures the plugin`() {
         val buildFileContent = """
+         import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
+         
          plugins {
              id("org.jetbrains.kotlin.jvm") version "2.0.10"
              id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")

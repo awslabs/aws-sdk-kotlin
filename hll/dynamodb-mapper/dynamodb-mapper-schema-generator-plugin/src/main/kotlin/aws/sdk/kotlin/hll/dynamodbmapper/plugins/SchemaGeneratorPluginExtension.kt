@@ -1,5 +1,7 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
+
 const val SCHEMA_GENERATOR_PLUGIN_EXTENSION = "dynamoDbMapper"
 
 open class SchemaGeneratorPluginExtension {

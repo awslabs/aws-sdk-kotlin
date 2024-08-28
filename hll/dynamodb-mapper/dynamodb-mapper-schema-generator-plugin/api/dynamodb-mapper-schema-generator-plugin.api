@@ -16,8 +16,8 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlug
 
 public class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginExtension {
 	public fun <init> ()V
-	public final fun getGenerateBuilderClasses ()LGenerateBuilderClasses;
-	public final fun setGenerateBuilderClasses (LGenerateBuilderClasses;)V
+	public final fun getGenerateBuilderClasses ()Laws/sdk/kotlin/hll/dynamodbmapper/codegen/annotations/GenerateBuilderClasses;
+	public final fun setGenerateBuilderClasses (Laws/sdk/kotlin/hll/dynamodbmapper/codegen/annotations/GenerateBuilderClasses;)V
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginExtensionKt {
