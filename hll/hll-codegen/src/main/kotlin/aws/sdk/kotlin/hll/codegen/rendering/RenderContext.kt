@@ -5,8 +5,8 @@
 package aws.sdk.kotlin.hll.codegen.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
-import aws.smithy.kotlin.runtime.collections.MutableAttributes
-import aws.smithy.kotlin.runtime.collections.mutableAttributes
+import aws.smithy.kotlin.runtime.collections.Attributes
+import aws.smithy.kotlin.runtime.collections.emptyAttributes
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSNode
 
@@ -22,7 +22,7 @@ data class RenderContext(
     val codegenFactory: CodeGeneratorFactory,
     val pkg: String,
     val rendererName: String = "aws-sdk-kotlin-hll-codegen",
-    val attributes: MutableAttributes = mutableAttributes(),
+    val attributes: Attributes = emptyAttributes(),
 )
 
 fun RenderContext.logging(message: String, symbol: KSNode? = null) = logger.logging(message, symbol)

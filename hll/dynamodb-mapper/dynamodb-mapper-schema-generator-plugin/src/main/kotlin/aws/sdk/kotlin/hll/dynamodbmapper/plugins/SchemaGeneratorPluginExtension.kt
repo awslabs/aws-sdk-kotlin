@@ -11,7 +11,3 @@ open class SchemaGeneratorPluginExtension {
     var generateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
 }
 
-enum class GenerateBuilderClasses {
-    WHEN_REQUIRED,
-    ALWAYS,
-}

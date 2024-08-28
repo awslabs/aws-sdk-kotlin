@@ -18,7 +18,7 @@ dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation(libs.ksp.gradle.plugin)
 
-    api(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen")) // for CodegenAttributes
+    implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen")) // for CodegenAttributes
     implementation(libs.smithy.kotlin.runtime.core) // for AttributeKey
 
     testImplementation(libs.junit.jupiter)

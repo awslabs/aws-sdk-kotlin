@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.CodegenAttributes
+import AnnotationsProcessorOptions
 import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -18,7 +18,7 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
 
         project.afterEvaluate {
             extensions.configure<KspExtension> {
-                arg(CodegenAttributes.AlwaysGenerateBuilders.name, extension.generateBuilderClasses.name)
+                arg(AnnotationsProcessorOptions.GenerateBuilderClasses.name, extension.generateBuilderClasses.name)
             }
         }
     }

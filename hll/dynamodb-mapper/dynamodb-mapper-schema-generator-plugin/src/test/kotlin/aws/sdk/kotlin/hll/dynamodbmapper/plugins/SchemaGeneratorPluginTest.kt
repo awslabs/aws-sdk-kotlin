@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
+import kotlin.test.Ignore
 import kotlin.test.assertContains
 
 class SchemaGeneratorPluginTest {
@@ -37,7 +38,7 @@ class SchemaGeneratorPluginTest {
     fun `applies the plugin`() {
         val buildFileContent = """
          plugins {
-            id("org.jetbrains.kotlin.jvm") version "2.0.0"
+            id("org.jetbrains.kotlin.jvm") version "2.0.10"
             id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
          }
          configure<aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPluginExtension>{
@@ -62,10 +63,8 @@ class SchemaGeneratorPluginTest {
     @Test
     fun `configures the plugin`() {
         val buildFileContent = """
-        import aws.sdk.kotlin.hll.dynamodbmapper.plugins.GenerateBuilderClasses
-
          plugins {
-             id("org.jetbrains.kotlin.jvm") version "2.0.0"
+             id("org.jetbrains.kotlin.jvm") version "2.0.10"
              id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
          }
          configure<aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPluginExtension>{

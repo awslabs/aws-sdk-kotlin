@@ -4,11 +4,11 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
 
+import AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering.HighLevelRenderer
-import aws.smithy.kotlin.runtime.collections.AttributeKey
-import aws.smithy.kotlin.runtime.collections.mutableAttributes
+import aws.smithy.kotlin.runtime.collections.attributesOf
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
@@ -20,7 +20,6 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
     private val logger = environment.logger
     private val codeGenerator = environment.codeGenerator
     private val codeGeneratorFactory = CodeGeneratorFactory(codeGenerator, logger)
-    private val codegenAttributes = mutableAttributes()
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         if (invoked) {
@@ -33,7 +32,10 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
         val invalid = annotated.filterNot { it.validate() }.toList()
         logger.info("Found invalid classes $invalid")
 
-        codegenAttributes[CodegenAttributes.AlwaysGenerateBuilders] = environment.options[CodegenAttributes.AlwaysGenerateBuilders.name].equals("ALWAYS", ignoreCase = true)
+
+        val codegenAttributes = attributesOf {
+            AnnotationsProcessorOptions.GenerateBuilderClasses to environment.options[AnnotationsProcessorOptions.GenerateBuilderClasses.name]
+        }
 
         val annotatedClasses = annotated
             .toList()
@@ -47,6 +49,3 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
     }
 }
 
-object CodegenAttributes {
-    val AlwaysGenerateBuilders: AttributeKey<Boolean> = AttributeKey("AlwaysGenerateBuilders")
-}

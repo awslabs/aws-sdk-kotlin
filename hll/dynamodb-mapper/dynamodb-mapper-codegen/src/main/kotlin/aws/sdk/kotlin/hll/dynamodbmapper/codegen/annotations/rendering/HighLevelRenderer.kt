@@ -6,8 +6,8 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
-import aws.smithy.kotlin.runtime.collections.MutableAttributes
-import aws.smithy.kotlin.runtime.collections.mutableAttributes
+import aws.smithy.kotlin.runtime.collections.Attributes
+import aws.smithy.kotlin.runtime.collections.emptyAttributes
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 
@@ -19,7 +19,7 @@ class HighLevelRenderer(
     private val annotatedClasses: List<KSClassDeclaration>,
     private val logger: KSPLogger,
     private val codegenFactory: CodeGeneratorFactory,
-    private val codegenAttributes: MutableAttributes = mutableAttributes(),
+    private val codegenAttributes: Attributes = emptyAttributes(),
 ) {
     fun render() {
         annotatedClasses.forEach {

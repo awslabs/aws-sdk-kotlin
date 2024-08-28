@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
+import AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
@@ -14,7 +15,6 @@ import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbSortKey
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.CodegenAttributes
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
@@ -61,7 +61,7 @@ class SchemaRenderer(
      *   - the class has a zero-arg constructor
      */
     private val shouldRenderBuilder: Boolean = run {
-        val alwaysGenerateBuilders = ctx.attributes.getOrNull(CodegenAttributes.AlwaysGenerateBuilders) ?: true
+        val alwaysGenerateBuilders = (ctx.attributes.getOrNull(AnnotationsProcessorOptions.GenerateBuilderClasses) ?: GenerateBuilderClasses.WHEN_REQUIRED) == GenerateBuilderClasses.ALWAYS
         val hasAllMutableMembers = classDeclaration.getAllProperties().all { it.isMutable }
         val hasZeroArgConstructor = classDeclaration.getConstructors().any { constructor -> constructor.parameters.all { it.hasDefault } }
 
