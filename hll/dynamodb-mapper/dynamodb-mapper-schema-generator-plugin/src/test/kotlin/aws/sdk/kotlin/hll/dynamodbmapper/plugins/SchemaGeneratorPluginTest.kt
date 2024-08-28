@@ -20,6 +20,14 @@ class SchemaGeneratorPluginTest {
     fun setup() {
         settingsFile = File(testProjectDir, "settings.gradle.kts")
         buildFile = File(testProjectDir, "build.gradle.kts")
+
+        val buildFileContent = """
+        plugins {
+            id("org.jetbrains.kotlin.jvm") version "2.0.10"
+            id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
+        }
+        """.trimIndent()
+        buildFile.appendText(buildFileContent)
     }
 
     @AfterEach
@@ -32,49 +40,20 @@ class SchemaGeneratorPluginTest {
         }
     }
 
-    // TODO Parameterize the test across multiple versions of Kotlin and Gradle
-    @Test
-    fun `applies the plugin`() {
-        val buildFileContent = """
-         plugins {
-            id("org.jetbrains.kotlin.jvm") version "2.0.10"
-            id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
-         }
-         configure<aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPluginExtension>{
-         
-         }
-        """.trimIndent()
-
-        buildFile.writeText(buildFileContent)
-
-        val result = GradleRunner.create()
-            .withProjectDir(testProjectDir)
-            .withArguments("--info", "build")
-            .withPluginClasspath()
-            .withGradleVersion("8.5")
-            .forwardOutput()
-            .build()
-
-        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
-    }
-
-    // TODO Parameterize the test across multiple versions of Kotlin and Gradle
     @Test
     fun `configures the plugin`() {
         val buildFileContent = """
          import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
-         
-         plugins {
-             id("org.jetbrains.kotlin.jvm") version "2.0.10"
-             id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
-         }
+
          configure<aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPluginExtension>{
-             generateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
              generateBuilderClasses = GenerateBuilderClasses.ALWAYS
+         }
+         dynamoDbMapper {
+             generateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
          }
         """.trimIndent()
 
-        buildFile.writeText(buildFileContent)
+        buildFile.appendText(buildFileContent)
 
         val result = GradleRunner.create()
             .withProjectDir(testProjectDir)
