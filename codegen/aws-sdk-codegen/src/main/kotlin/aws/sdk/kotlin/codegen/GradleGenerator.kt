@@ -4,16 +4,13 @@
  */
 package aws.sdk.kotlin.codegen
 
-import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.GradleWriter
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.smokeTestDenyList
+import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.kotlin.codegen.utils.operations
-import software.amazon.smithy.model.Model
 import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
-import java.util.concurrent.atomic.AtomicBoolean
 
 // TODO - would be nice to allow integrations to define custom settings in the plugin
 // e.g. we could then more consistently apply this integration if we could define a property like: `build.isAwsSdk: true`
@@ -22,14 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean
  * Integration that generates custom gradle build files
  */
 class GradleGenerator : KotlinIntegration {
-
-    private var hasSmokeTests = AtomicBoolean(false)
-
-    // Only used to access settings - will always be true
-    override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
-        hasSmokeTests.set(model.operations(settings.service).any { it.hasTrait<SmokeTestsTrait>() })
-        return super.enabledForService(model, settings)
-    }
 
     // Specify to run last, to ensure all other integrations have had a chance to register dependencies.
     override val order: Byte
@@ -65,10 +54,6 @@ class GradleGenerator : KotlinIntegration {
         writer
             .write("")
             .withBlock("kotlin {", "}") {
-                if (hasSmokeTests.get() && !smokeTestDenyList.contains(ctx.settings.sdkId)) {
-                    generateSmokeTestJarTask(writer)
-                    generateSmokeTestTask(writer)
-                }
                 withBlock("sourceSets {", "}") {
                     allDependencies
                         .sortedWith(compareBy({ it.config }, { it.artifact }))
@@ -83,46 +68,63 @@ class GradleGenerator : KotlinIntegration {
                             }
                         }
                 }
+                if (ctx.model.operations(ctx.settings.service).any { it.hasTrait<SmokeTestsTrait>() }) {
+                    emptyLine()
+                    generateSmokeTestConfig(writer, ctx.settings.sdkId, ctx)
+                }
             }
 
         val contents = writer.toString()
         delegator.fileManifest.writeFile("build.gradle.kts", contents)
     }
 
-    private fun generateSmokeTestJarTask(writer: GradleWriter) {
-        val moneySign = "$"
+    private fun generateSmokeTestConfig(writer: GradleWriter, sdkId: String, ctx: CodegenContext) {
+        val formattedDenyList = smokeTestDenyList.joinToString(",", "setOf(", ")") { it.dq() }
+        writer.withBlock("if (#S !in #L) {", "}", sdkId, formattedDenyList) {
+            generateSmokeTestJarTask(writer, ctx)
+            emptyLine()
+            generateSmokeTestTask(writer)
+        }
+    }
+
+    /**
+     * Generates a gradle task to create smoke test runner JARs
+     */
+    private fun generateSmokeTestJarTask(writer: GradleWriter, ctx: CodegenContext) {
         writer.withBlock("jvm {", "}") {
             withBlock("compilations {", "}") {
-                write("val main = getByName(\"main\")")
+                write("val runtimePath = configurations.getByName(#S).map { if (it.isDirectory) it else zipTree(it) }", "jvmRuntimeClasspath")
+                write("val mainPath = getByName(#S).output.classesDirs", "main")
+                write("val testPath = getByName(#S).output.classesDirs", "test")
                 withBlock("tasks {", "}") {
-                    withBlock("register<Jar>(\"smokeTestJar\") {", "}") {
-                        write("description = \"Creates smoke tests jar\"")
-                        write("group = \"application\"")
+                    withBlock("register<Jar>(#S) {", "}", "smokeTestJar") {
+                        write("description = #S", "Creates smoke tests jar")
+                        write("group = #S", "application")
                         write("dependsOn(build)")
                         withBlock("manifest {", "}") {
-                            write("attributes[\"Main-Class\"] = \"smoketests.SmokeTestsKt\"")
+                            write("attributes[#S] = #S", "Main-Class", "${ctx.settings.pkg.name}.smoketests.SmokeTestsKt")
                         }
                         write("duplicatesStrategy = DuplicatesStrategy.EXCLUDE")
-                        write("from(configurations.getByName(\"jvmRuntimeClasspath\").map { if (it.isDirectory) it else zipTree(it) }, main.output.classesDirs)")
-                        write("archiveBaseName.set(\"$moneySign{project.name}-smoketests\")")
+                        write("from(runtimePath, mainPath, testPath)")
+                        write("archiveBaseName.set(#S)", "\${project.name}-smoketests")
                     }
                 }
             }
         }
-        writer.emptyLine()
     }
 
+    /**
+     * Generates a gradle task to run smoke tests
+     */
     private fun generateSmokeTestTask(writer: GradleWriter) {
-        val moneySign = "$"
-        writer.withBlock("tasks.register<JavaExec>(\"smokeTest\") {", "}") {
-            write("description = \"Runs smoke tests jar\"")
-            write("group = \"verification\"")
-            write("dependsOn(tasks.getByName(\"smokeTestJar\"))")
+        writer.withBlock("tasks.register<JavaExec>(#S) {", "}", "smokeTest") {
+            write("description = #S", "Runs smoke tests jar")
+            write("group = #S", "verification")
+            write("dependsOn(tasks.getByName(#S))", "smokeTestJar")
             emptyLine()
             write("val sdkVersion: String by project")
-            write("val jarFile = file(\"build/libs/$moneySign{project.name}-smoketests-\$sdkVersion.jar\")")
+            write("val jarFile = file(#S)", "build/libs/\${project.name}-smoketests-\$sdkVersion.jar")
             write("classpath = files(jarFile)")
         }
-        writer.emptyLine()
     }
 }
