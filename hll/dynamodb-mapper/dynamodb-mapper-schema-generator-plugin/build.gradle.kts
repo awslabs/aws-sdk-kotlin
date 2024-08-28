@@ -12,7 +12,6 @@ plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
     alias(libs.plugins.gradle.plugin.publish)
-    `maven-publish`
 }
 
 dependencies {
