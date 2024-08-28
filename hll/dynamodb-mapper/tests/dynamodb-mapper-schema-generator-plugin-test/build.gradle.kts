@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-val sdkVersion: String by project
-
 plugins {
     id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
 }
