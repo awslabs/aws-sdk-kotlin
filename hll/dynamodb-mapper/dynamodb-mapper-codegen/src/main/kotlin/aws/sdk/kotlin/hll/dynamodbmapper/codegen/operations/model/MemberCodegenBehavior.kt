@@ -88,28 +88,28 @@ private fun llType(name: String) = TypeRef(Pkg.Ll.Model, name)
 
 private val unsupportedMembers = listOf(
     // superseded by ConditionExpression
-    Member("conditionalOperator", llType("ConditionalOperator"), false),
-    Member("expected", Types.Kotlin.stringMap(llType("ExpectedAttributeValue")), false),
+    Member("conditionalOperator", llType("ConditionalOperator")),
+    Member("expected", Types.Kotlin.stringMap(llType("ExpectedAttributeValue"))),
 
     // superseded by FilterExpression
-    Member("queryFilter", Types.Kotlin.stringMap(llType("Condition")), false),
-    Member("scanFilter", Types.Kotlin.stringMap(llType("Condition")), false),
+    Member("queryFilter", Types.Kotlin.stringMap(llType("Condition"))),
+    Member("scanFilter", Types.Kotlin.stringMap(llType("Condition"))),
 
     // superseded by KeyConditionExpression
-    Member("keyConditions", Types.Kotlin.stringMap(llType("Condition")), false),
+    Member("keyConditions", Types.Kotlin.stringMap(llType("Condition"))),
 
     // superseded by ProjectionExpression
-    Member("attributesToGet", Types.Kotlin.list(Types.Kotlin.String), false),
+    Member("attributesToGet", Types.Kotlin.list(Types.Kotlin.String)),
 
     // superseded by UpdateExpression
-    Member("attributeUpdates", Types.Kotlin.stringMap(llType("AttributeValueUpdate")), false),
+    Member("attributeUpdates", Types.Kotlin.stringMap(llType("AttributeValueUpdate"))),
 
     // TODO add support for expressions
-    Member("expressionAttributeNames", Types.Kotlin.stringMap(Types.Kotlin.String), false),
-    Member("expressionAttributeValues", MapperTypes.AttributeMap, false),
-    Member("conditionExpression", Types.Kotlin.String, false),
-    Member("projectionExpression", Types.Kotlin.String, false),
-    Member("updateExpression", Types.Kotlin.String, false),
+    Member("expressionAttributeNames", Types.Kotlin.stringMap(Types.Kotlin.String)),
+    Member("expressionAttributeValues", MapperTypes.AttributeMap),
+    Member("conditionExpression", Types.Kotlin.String),
+    Member("projectionExpression", Types.Kotlin.String),
+    Member("updateExpression", Types.Kotlin.String),
 ).map { member ->
     if (member.type is TypeRef) {
         member.copy(type = member.type.nullable())
