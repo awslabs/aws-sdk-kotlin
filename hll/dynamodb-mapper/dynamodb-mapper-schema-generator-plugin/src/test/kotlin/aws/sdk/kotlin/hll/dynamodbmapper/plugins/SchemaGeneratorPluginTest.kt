@@ -40,7 +40,9 @@ class SchemaGeneratorPluginTest {
             id("org.jetbrains.kotlin.jvm") version "2.0.0"
             id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
          }
-         configure<aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPluginExtension>{ }
+         configure<aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPluginExtension>{
+         
+         }
         """.trimIndent()
 
         buildFile.writeText(buildFileContent)
@@ -56,15 +58,19 @@ class SchemaGeneratorPluginTest {
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
     }
 
+    // TODO Parameterize the test across multiple versions of Kotlin and Gradle
     @Test
     fun `configures the plugin`() {
         val buildFileContent = """
+        import aws.sdk.kotlin.hll.dynamodbmapper.plugins.GenerateBuilderClasses
+
          plugins {
-            id("org.jetbrains.kotlin.jvm") version "2.0.0"
-            id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
+             id("org.jetbrains.kotlin.jvm") version "2.0.0"
+             id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
          }
          configure<aws.sdk.kotlin.hll.dynamodbmapper.plugins.SchemaGeneratorPluginExtension>{
-         
+             generateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
+             generateBuilderClasses = GenerateBuilderClasses.ALWAYS
          }
         """.trimIndent()
 
