@@ -10,4 +10,3 @@ open class SchemaGeneratorPluginExtension {
      */
     var generateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
 }
-

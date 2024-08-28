@@ -32,7 +32,6 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
         val invalid = annotated.filterNot { it.validate() }.toList()
         logger.info("Found invalid classes $invalid")
 
-
         val codegenAttributes = attributesOf {
             AnnotationsProcessorOptions.GenerateBuilderClasses to environment.options[AnnotationsProcessorOptions.GenerateBuilderClasses.name]
         }
@@ -48,4 +47,3 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
         return invalid
     }
 }
-
