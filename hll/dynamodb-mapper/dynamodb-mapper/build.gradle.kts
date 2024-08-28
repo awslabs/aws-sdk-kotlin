@@ -27,12 +27,14 @@ kotlin {
         commonMain {
             dependencies {
                 api(project(":services:dynamodb"))
+                api(project(":hll:hll-mapping-core"))
                 api(libs.kotlinx.coroutines.core)
             }
         }
 
         commonTest {
             dependencies {
+                implementation(libs.kotlin.reflect)
                 implementation(libs.kotlinx.coroutines.test)
                 implementation(libs.kotest.assertions.core)
                 implementation(libs.kotest.runner.junit5)

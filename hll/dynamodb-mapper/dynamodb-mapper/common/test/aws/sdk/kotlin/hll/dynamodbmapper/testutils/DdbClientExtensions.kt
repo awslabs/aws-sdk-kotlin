@@ -102,25 +102,6 @@ suspend fun DynamoDbClient.putItems(tableName: String, items: List<Map<String, A
 }
 
 /**
- * Converts a map of strings to values to a map of strings to [AttributeValue]
- * @param item The item to convert
- */
-fun ddbItem(item: Map<String, Any>) = item.mapValues { (_, v) ->
-    when (v) {
-        is ByteArray -> AttributeValue.B(v)
-        is Number -> AttributeValue.N(v.toString())
-        is String -> AttributeValue.S(v)
-        else -> TODO("Implement support for ${v::class} types!")
-    }
-}
-
-/**
- * Converts a collection of tuples of strings to values to a map of strings to [AttributeValue]
- * @param attributes The attributes to convert
- */
-fun ddbItem(vararg attributes: Pair<String, Any>) = ddbItem(attributes.toMap())
-
-/**
  * Derives the [AttributeDefinition] instances for a table, taking into account its schema and any secondary indices
  * @param schema The schema of the table
  * @param gsis A map of GSI names to schemas
