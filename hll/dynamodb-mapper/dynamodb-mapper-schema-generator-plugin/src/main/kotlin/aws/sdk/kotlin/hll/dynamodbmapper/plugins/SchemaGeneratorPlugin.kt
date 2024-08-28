@@ -16,8 +16,6 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
         val extension = createExtension()
         configureDependencies()
 
-        logger.warn("Passing KSP arg ${CodegenAttributes.AlwaysGenerateBuilders.name} = ${extension.generateBuilderClasses.name}")
-
         project.afterEvaluate {
             extensions.configure<KspExtension> {
                 arg(CodegenAttributes.AlwaysGenerateBuilders.name, extension.generateBuilderClasses.name)
