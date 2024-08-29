@@ -70,6 +70,7 @@ enum class Visibility {
 
 /**
  * Determines the package where code-generated classes / objects will be placed.
+ * Defaults to [DestinationPackage.RELATIVE] from the package of the class being processed, suffixed with "mapper.schemas".
  */
 sealed class DestinationPackage {
     abstract val pkg: String
