@@ -53,7 +53,7 @@ enum class GenerateBuilderClasses {
  */
 enum class Visibility {
     /**
-     * An implicit visibility will be used. In most cases, this will be `internal`, except where required to be `public`
+     * An implicit visibility will be used, which is recommended for most use-cases.
      */
     IMPLICIT,
 

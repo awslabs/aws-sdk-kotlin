@@ -64,7 +64,7 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
             GenerateBuilderClassesAttribute to GenerateBuilderClasses.valueOf(environment.options[GenerateBuilderClassesAttribute.name] ?: GenerateBuilderClasses.WHEN_REQUIRED.name)
             VisibilityAttribute to Visibility.valueOf(environment.options.getOrDefault(VisibilityAttribute.name, Visibility.IMPLICIT.name))
             DestinationPackageAttribute.name to dstPkg
-            GenerateGetTableMethodAttribute.name to (generateGetTableMethod.equals("true", ignoreCase = true))
+            GenerateGetTableMethodAttribute.name to generateGetTableMethod.equals("true", ignoreCase = true)
         }
     }
 }
