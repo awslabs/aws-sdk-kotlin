@@ -389,12 +389,14 @@ class SchemaGeneratorPluginTest {
 
     @Test
     fun testGeneratedItemConverter() {
-        buildFile.appendText("""
+        buildFile.appendText(
+            """
             dependencies {
                 testImplementation(kotlin("test")) 
             }
 
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
         createClassFile("User")
 
