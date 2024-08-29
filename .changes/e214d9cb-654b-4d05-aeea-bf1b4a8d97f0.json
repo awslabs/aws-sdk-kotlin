@@ -1,0 +1,8 @@
+{
+    "id": "e214d9cb-654b-4d05-aeea-bf1b4a8d97f0",
+    "type": "bugfix",
+    "description": "Upgrade to **1.3.8** version of **smithy-kotlin** to pick up fixes for code-generated deserializers",
+    "issues": [
+        "smithy-lang/smithy-kotlin#1126"
+    ]
+}
