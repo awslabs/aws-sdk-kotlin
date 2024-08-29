@@ -78,10 +78,14 @@ class SchemaRenderer(
     }
 
     override fun generate() {
-        if (shouldRenderBuilder) { renderBuilder() }
+        if (shouldRenderBuilder) {
+            renderBuilder()
+        }
         renderItemConverter()
         renderSchema()
-        if (ctx.attributes[AnnotationsProcessorOptions.GenerateGetTableMethodAttribute]) { renderGetTable() }
+        if (ctx.attributes[AnnotationsProcessorOptions.GenerateGetTableMethodAttribute]) {
+            renderGetTable()
+        }
     }
 
     private fun renderBuilder() {

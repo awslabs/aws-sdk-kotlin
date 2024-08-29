@@ -36,7 +36,6 @@ class SchemaGeneratorPluginTest {
             .withPluginClasspath()
             .withGradleVersion("8.5") // TODO parameterize
             .forwardOutput()
-
     }
 
     @AfterEach

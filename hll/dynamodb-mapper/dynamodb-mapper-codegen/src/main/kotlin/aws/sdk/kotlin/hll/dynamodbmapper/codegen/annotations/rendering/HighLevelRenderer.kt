@@ -11,8 +11,6 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.emptyAttributes
 import aws.smithy.kotlin.runtime.collections.get
-import aws.smithy.kotlin.runtime.text.ensurePrefix
-import aws.smithy.kotlin.runtime.text.ensureSuffix
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 
