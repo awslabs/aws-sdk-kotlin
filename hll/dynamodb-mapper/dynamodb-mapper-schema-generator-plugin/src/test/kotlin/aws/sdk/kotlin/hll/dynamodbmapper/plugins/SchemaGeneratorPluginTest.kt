@@ -120,7 +120,9 @@ class SchemaGeneratorPluginTest {
         val schemaContents = schemaFile.readText()
 
         // Builder
-        assertContains(schemaContents, """
+        assertContains(
+            schemaContents,
+            """
         /**
          * A DSL-style builder for instances of [User]
          */
@@ -144,10 +146,13 @@ class SchemaGeneratorPluginTest {
                 )
             }
         }
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
         // Converter
-        assertContains(schemaContents, """
+        assertContains(
+            schemaContents,
+            """
         public object UserConverter : ItemConverter<User> by SimpleItemConverter(
             builderFactory = ::UserBuilder,
             build = UserBuilder::build,
@@ -178,23 +183,30 @@ class SchemaGeneratorPluginTest {
                 ),
             ),
         )
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
         // Schema
-        assertContains(schemaContents, """
+        assertContains(
+            schemaContents,
+            """
         public object UserSchema : ItemSchema.PartitionKey<User, Int> {
             override val converter : UserConverter = UserConverter
             override val partitionKey: KeySpec<Number> = aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec.Number("id")
         }
-        """.trimIndent())
+            """.trimIndent(),
+        )
 
         // GetTable
-        assertContains(schemaContents, """
+        assertContains(
+            schemaContents,
+            """
         /**
          * Returns a reference to a table named [name] containing items representing [User]
          */
         public fun DynamoDbMapper.getUserTable(name: String): Table.PartitionKey<User, Int> = getTable(name, UserSchema)
-        """.trimIndent())
+            """.trimIndent(),
+        )
     }
 
     @Test
@@ -206,7 +218,6 @@ class SchemaGeneratorPluginTest {
             .build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
 
-
         val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/mapper/schemas/BuilderNotRequiredSchema.kt")
         assertTrue(schemaFile.exists())
 
@@ -216,7 +227,9 @@ class SchemaGeneratorPluginTest {
         assertFalse(schemaContents.contains("public class BuilderNotRequiredBuilder {"))
 
         // Assert that the class itself is used as a builder
-        assertContains(schemaContents, """
+        assertContains(
+            schemaContents,
+            """
         public object BuilderNotRequiredConverter : ItemConverter<BuilderNotRequired> by SimpleItemConverter(
             builderFactory = { BuilderNotRequired() },
             build = { this },
@@ -247,7 +260,8 @@ class SchemaGeneratorPluginTest {
                 ),
             ),
         )
-        """.trimIndent())
+            """.trimIndent(),
+        )
     }
 
     @Test
@@ -268,14 +282,15 @@ class SchemaGeneratorPluginTest {
             .build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
 
-
         val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/mapper/schemas/BuilderNotRequiredSchema.kt")
         assertTrue(schemaFile.exists())
 
         val schemaContents = schemaFile.readText()
 
         // Assert a builder is still generated, because we configured GenerateBuilderClasses.ALWAYS
-        assertContains(schemaContents, """
+        assertContains(
+            schemaContents,
+            """
         /**
          * A DSL-style builder for instances of [BuilderNotRequired]
          */
@@ -299,7 +314,8 @@ class SchemaGeneratorPluginTest {
                 )
             }
         }
-        """.trimIndent())
+            """.trimIndent(),
+        )
     }
 
     @Test
@@ -356,7 +372,7 @@ class SchemaGeneratorPluginTest {
         assertContains(schemaContents, "public class UserBuilder")
         assertContains(schemaContents, "public object UserConverter")
         assertContains(schemaContents, "public object UserSchema")
-        assertFalse(schemaContents.contains( "public fun DynamoDbMapper.getUserTable"))
+        assertFalse(schemaContents.contains("public fun DynamoDbMapper.getUserTable"))
     }
 
     @Test

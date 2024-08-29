@@ -22,7 +22,7 @@ class BuilderRenderer(
     fun render() = renderer.apply {
         docs("A DSL-style builder for instances of [#T]", classType)
 
-        withBlock("#L class #L {", "}", visibility, "${className}Builder", ) {
+        withBlock("#L class #L {", "}", visibility, "${className}Builder") {
             members.forEach {
                 write("#L var #L: #T? = null", visibility, it.name, it.type)
             }

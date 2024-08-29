@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.gradle.tasks.KotlinTest
 
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -92,7 +91,7 @@ tasks.withType<Test> {
  * Set up Maven Local dependencies to be used in the Gradle TestKit
  */
 tasks.register("publishSmithyKotlinToMavenLocal") {
-    if (gradle.includedBuilds.none { it.name == "smithy-kotlin"} ) {
+    if (gradle.includedBuilds.none { it.name == "smithy-kotlin" }) {
         return@register
     }
 

@@ -210,4 +210,3 @@ private data class AnnotatedClassProperty(val name: String, val typeRef: TypeRef
             }
     }
 }
-
