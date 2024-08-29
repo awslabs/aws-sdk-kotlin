@@ -175,7 +175,7 @@ class SchemaGeneratorPluginTest {
              * Returns a reference to a table named [name] containing items representing [User]
              */
              fun DynamoDbMapper.getUserTable(name: String): Table.PartitionKey<User, Int> = getTable(name, UserSchema)
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
