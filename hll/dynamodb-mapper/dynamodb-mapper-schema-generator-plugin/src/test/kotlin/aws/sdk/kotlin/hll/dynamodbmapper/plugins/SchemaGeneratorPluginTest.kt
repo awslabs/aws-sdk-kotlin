@@ -386,4 +386,29 @@ class SchemaGeneratorPluginTest {
 
         assertContains(schemaContents, "package absolutely.my.`package`")
     }
+
+    @Test
+    fun testGeneratedItemConverter() {
+        buildFile.appendText("""
+            dependencies {
+                testImplementation(kotlin("test")) 
+            }
+
+        """.trimIndent())
+
+        createClassFile("User")
+
+        val testFile = File(testProjectDir, "src/test/kotlin/org/example/UserTest.kt")
+        testFile.ensureParentDirsCreated()
+        testFile.createNewFile()
+        testFile.writeText(getResource("/tests/UserTest.kt"))
+
+        val buildResult = runner.build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), buildResult.task(":build")?.outcome)
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/mapper/schemas/UserSchema.kt")
+        assertTrue(schemaFile.exists())
+
+        val testResult = runner.withArguments("test").build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), testResult.task(":test")?.outcome)
+    }
 }
