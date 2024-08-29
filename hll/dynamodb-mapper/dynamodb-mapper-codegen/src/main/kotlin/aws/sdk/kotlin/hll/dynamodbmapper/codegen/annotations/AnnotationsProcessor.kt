@@ -5,7 +5,6 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
-import aws.sdk.kotlin.hll.codegen.util.PACKAGE_REGEX
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions.DestinationPackageAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions.GenerateBuilderClassesAttribute
@@ -52,7 +51,6 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
      */
     private fun getCodegenAttributes(): Attributes {
         val (dstPkgType, pkg) = environment.options.getOrDefault(DestinationPackageAttribute.name, "relative=mapper.schemas").split("=")
-        check(PACKAGE_REGEX.matches(pkg)) { "Invalid package $pkg" }
         val dstPkg = when (dstPkgType) {
             "relative" -> DestinationPackage.RELATIVE(pkg)
             "absolute" -> DestinationPackage.ABSOLUTE(pkg)

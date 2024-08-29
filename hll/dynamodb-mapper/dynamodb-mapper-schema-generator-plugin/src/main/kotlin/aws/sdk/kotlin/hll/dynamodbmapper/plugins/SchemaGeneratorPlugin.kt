@@ -45,11 +45,11 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
         val sdkVersion = getSdkVersion()
         dependencies.add("ksp", "aws.sdk.kotlin:dynamodb-mapper-codegen:$sdkVersion")
     }
+}
 
-    // Reads sdk-version.txt for the SDK version to add dependencies on. The file is created in this module's build.gradle.kts
-    private fun getSdkVersion(): String = try {
-        this.javaClass.getResource("sdk-version.txt")?.readText() ?: throw IllegalStateException("sdk-version.txt does not exist")
-    } catch (ex: Exception) {
-        throw IllegalStateException("Failed to load sdk-version.txt which sets the SDK version", ex)
-    }
+// Reads sdk-version.txt for the SDK version to add dependencies on. The file is created in this module's build.gradle.kts
+internal fun getSdkVersion(): String = try {
+    SchemaGeneratorPlugin::class.java.getResource("sdk-version.txt")?.readText() ?: throw IllegalStateException("sdk-version.txt does not exist")
+} catch (ex: Exception) {
+    throw IllegalStateException("Failed to load sdk-version.txt which sets the SDK version", ex)
 }

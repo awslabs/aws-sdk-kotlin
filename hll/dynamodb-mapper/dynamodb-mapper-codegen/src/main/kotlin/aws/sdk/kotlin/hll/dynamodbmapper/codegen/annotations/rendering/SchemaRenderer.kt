@@ -57,12 +57,6 @@ class SchemaRenderer(
     private val partitionKeyProp = properties.single { it.isPk }
     private val sortKeyProp = properties.singleOrNull { it.isSk }
 
-    private val visibility: String = when (ctx.attributes[AnnotationsProcessorOptions.VisibilityAttribute]) {
-        Visibility.IMPLICIT -> "internal" // except where public is required
-        Visibility.PUBLIC -> "public"
-        Visibility.INTERNAL -> "internal"
-    }
-
     /**
      * We skip rendering a class builder if:
      *   - the user has configured GenerateBuilders to WHEN_REQUIRED (default value) AND
@@ -75,6 +69,12 @@ class SchemaRenderer(
         val hasZeroArgConstructor = classDeclaration.getConstructors().any { constructor -> constructor.parameters.all { it.hasDefault } }
 
         !(!alwaysGenerateBuilders && hasAllMutableMembers && hasZeroArgConstructor)
+    }
+
+    private val visibility: String = when (ctx.attributes[AnnotationsProcessorOptions.VisibilityAttribute]) {
+        Visibility.IMPLICIT -> "public"
+        Visibility.PUBLIC -> "public"
+        Visibility.INTERNAL -> "internal"
     }
 
     override fun generate() {
@@ -90,7 +90,7 @@ class SchemaRenderer(
 
     private fun renderBuilder() {
         val members = classDeclaration.getAllProperties().map(Member.Companion::from).toSet()
-        BuilderRenderer(this, classType, members).render()
+        BuilderRenderer(this, classType, members, visibility).render()
     }
 
     private fun renderItemConverter() {
@@ -210,3 +210,4 @@ private data class AnnotatedClassProperty(val name: String, val typeRef: TypeRef
             }
     }
 }
+

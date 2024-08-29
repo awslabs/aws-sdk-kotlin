@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinTest
 
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -81,4 +82,55 @@ val generateSdkRuntimeVersion by tasks.registering {
 
 tasks.withType<KotlinCompile> {
     dependsOn(generateSdkRuntimeVersion)
+}
+
+tasks.withType<Test> {
+    dependsOn(generateSdkRuntimeVersion)
+}
+
+/**
+ * Set up Maven Local dependencies to be used in the Gradle TestKit
+ */
+tasks.register("publishSmithyKotlinToMavenLocal") {
+    if (gradle.includedBuilds.none { it.name == "smithy-kotlin"} ) {
+        return@register
+    }
+
+    val smithyKotlin = gradle.includedBuild("smithy-kotlin")
+    dependsOn(smithyKotlin.task(":runtime:auth:aws-credentials:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:auth:aws-signing-common:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:auth:aws-signing-default:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:auth:http-auth-api:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:auth:http-auth-aws:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:auth:http-auth:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:auth:identity-api:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:observability:logging-slf4j2:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:observability:telemetry-api:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:observability:telemetry-defaults:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:protocol:aws-json-protocols:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:protocol:aws-protocol-core:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:protocol:http-client-engines:http-client-engine-default:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:protocol:http-client-engines:http-client-engine-okhttp:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:protocol:http-client:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:protocol:http:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:runtime-core:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:serde:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:serde:serde-json:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:smithy-client:publishToMavenLocal"))
+}
+
+tasks.withType<Test> {
+    dependsOn("publishSmithyKotlinToMavenLocal")
+
+    dependsOn(":aws-runtime:aws-config:publishToMavenLocal")
+    dependsOn(":aws-runtime:aws-core:publishToMavenLocal")
+    dependsOn(":aws-runtime:aws-endpoint:publishToMavenLocal")
+    dependsOn(":aws-runtime:aws-http:publishToMavenLocal")
+    dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-annotations:publishToMavenLocal")
+    dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-codegen:publishToMavenLocal")
+    dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-schema-generator-plugin:publishToMavenLocal")
+    dependsOn(":hll:dynamodb-mapper:dynamodb-mapper:publishToMavenLocal")
+    dependsOn(":hll:hll-codegen:publishToMavenLocal")
+    dependsOn(":hll:hll-mapping-core:publishToMavenLocal")
+    dependsOn(":services:dynamodb:publishToMavenLocal")
 }

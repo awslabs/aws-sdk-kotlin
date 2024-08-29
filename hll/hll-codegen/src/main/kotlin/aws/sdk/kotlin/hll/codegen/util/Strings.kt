@@ -44,8 +44,3 @@ val String.lowercaseFirstChar: String
  * Escapes and quotes a string such that it could be used in codegen
  */
 fun String.quote(): String = "\"${escape()}\""
-
-/**
- * Regex expression for validating Kotlin package names
- */
-val PACKAGE_REGEX = Regex("^[a-z]+(?:\\.[a-z][a-z0-9_]*|\\.[a-z])*$")

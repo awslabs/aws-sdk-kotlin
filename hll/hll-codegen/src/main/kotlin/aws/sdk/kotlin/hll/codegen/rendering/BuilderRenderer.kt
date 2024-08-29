@@ -2,6 +2,7 @@ package aws.sdk.kotlin.hll.codegen.rendering
 
 import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
+import aws.smithy.kotlin.runtime.collections.get
 import com.google.devtools.ksp.symbol.*
 
 /**
@@ -14,19 +15,20 @@ class BuilderRenderer(
     private val renderer: RendererBase,
     private val classType: TypeRef,
     private val members: Set<Member>,
+    private val visibility: String,
 ) {
     private val className = classType.shortName
 
     fun render() = renderer.apply {
         docs("A DSL-style builder for instances of [#T]", classType)
 
-        withBlock("public class #L {", "}", "${className}Builder") {
+        withBlock("#L class #L {", "}", visibility, "${className}Builder", ) {
             members.forEach {
-                write("public var #L: #T? = null", it.name, it.type)
+                write("#L var #L: #T? = null", visibility, it.name, it.type)
             }
             blankLine()
 
-            withBlock("public fun build(): #T {", "}", classType) {
+            withBlock("#L fun build(): #T {", "}", visibility, classType) {
                 members.forEach {
                     if (it.type.nullable) {
                         write("val #1L = #1L", it.name)
