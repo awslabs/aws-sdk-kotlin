@@ -74,6 +74,14 @@ enum class Visibility {
  */
 sealed class DestinationPackage {
     abstract val pkg: String
+
+    /**
+     * Constructs should be code-generated into a package RELATIVE to the class being processed. Defaults to mapper.schemas.
+     */
     class RELATIVE(override val pkg: String = "mapper.schemas") : DestinationPackage()
-    class ABSOLUTE(override val pkg: String = "") : DestinationPackage()
+
+    /**
+     * Constructs should be code-generated into an ABSOLUTE package. Defaults to mapper.schemas.
+     */
+    class ABSOLUTE(override val pkg: String = "mapper.schemas") : DestinationPackage()
 }
