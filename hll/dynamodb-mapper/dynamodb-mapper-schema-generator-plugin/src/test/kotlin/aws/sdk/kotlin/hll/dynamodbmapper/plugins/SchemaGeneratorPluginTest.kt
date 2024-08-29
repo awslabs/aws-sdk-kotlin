@@ -93,29 +93,29 @@ class SchemaGeneratorPluginTest {
         assertContains(
             schemaContents,
             """
-        /**
-         * A DSL-style builder for instances of [User]
-         */
-        public class UserBuilder {
-            public var id: Int? = null
-            public var givenName: String? = null
-            public var surname: String? = null
-            public var age: Int? = null
-
-            public fun build(): User {
-                val id = requireNotNull(id) { "Missing value for id" }
-                val givenName = requireNotNull(givenName) { "Missing value for givenName" }
-                val surname = requireNotNull(surname) { "Missing value for surname" }
-                val age = requireNotNull(age) { "Missing value for age" }
-
-                return User(
-                    id,
-                    givenName,
-                    surname,
-                    age,
-                )
+            /**
+             * A DSL-style builder for instances of [User]
+             */
+             class UserBuilder {
+                 var id: Int? = null
+                 var givenName: String? = null
+                 var surname: String? = null
+                 var age: Int? = null
+            
+                 fun build(): User {
+                    val id = requireNotNull(id) { "Missing value for id" }
+                    val givenName = requireNotNull(givenName) { "Missing value for givenName" }
+                    val surname = requireNotNull(surname) { "Missing value for surname" }
+                    val age = requireNotNull(age) { "Missing value for age" }
+            
+                    return User(
+                        id,
+                        givenName,
+                        surname,
+                        age,
+                    )
+                }
             }
-        }
             """.trimIndent(),
         )
 
@@ -123,7 +123,7 @@ class SchemaGeneratorPluginTest {
         assertContains(
             schemaContents,
             """
-        public object UserConverter : ItemConverter<User> by SimpleItemConverter(
+        object UserConverter : ItemConverter<User> by SimpleItemConverter(
             builderFactory = ::UserBuilder,
             build = UserBuilder::build,
             descriptors = arrayOf(
@@ -160,7 +160,7 @@ class SchemaGeneratorPluginTest {
         assertContains(
             schemaContents,
             """
-        public object UserSchema : ItemSchema.PartitionKey<User, Int> {
+        object UserSchema : ItemSchema.PartitionKey<User, Int> {
             override val converter : UserConverter = UserConverter
             override val partitionKey: KeySpec<Number> = aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec.Number("id")
         }
@@ -171,11 +171,11 @@ class SchemaGeneratorPluginTest {
         assertContains(
             schemaContents,
             """
-        /**
-         * Returns a reference to a table named [name] containing items representing [User]
-         */
-        public fun DynamoDbMapper.getUserTable(name: String): Table.PartitionKey<User, Int> = getTable(name, UserSchema)
-            """.trimIndent(),
+            /**
+             * Returns a reference to a table named [name] containing items representing [User]
+             */
+             fun DynamoDbMapper.getUserTable(name: String): Table.PartitionKey<User, Int> = getTable(name, UserSchema)
+            """.trimIndent()
         )
     }
 
@@ -198,7 +198,7 @@ class SchemaGeneratorPluginTest {
         assertContains(
             schemaContents,
             """
-        public object BuilderNotRequiredConverter : ItemConverter<BuilderNotRequired> by SimpleItemConverter(
+        object BuilderNotRequiredConverter : ItemConverter<BuilderNotRequired> by SimpleItemConverter(
             builderFactory = { BuilderNotRequired() },
             build = { this },
             descriptors = arrayOf(
@@ -257,29 +257,29 @@ class SchemaGeneratorPluginTest {
         assertContains(
             schemaContents,
             """
-        /**
-         * A DSL-style builder for instances of [BuilderNotRequired]
-         */
-        public class BuilderNotRequiredBuilder {
-            public var id: Int? = null
-            public var givenName: String? = null
-            public var surname: String? = null
-            public var age: Int? = null
-        
-            public fun build(): BuilderNotRequired {
-                val id = requireNotNull(id) { "Missing value for id" }
-                val givenName = requireNotNull(givenName) { "Missing value for givenName" }
-                val surname = requireNotNull(surname) { "Missing value for surname" }
-                val age = requireNotNull(age) { "Missing value for age" }
-        
-                return BuilderNotRequired(
-                    id,
-                    givenName,
-                    surname,
-                    age,
-                )
+            /**
+             * A DSL-style builder for instances of [BuilderNotRequired]
+             */
+             class BuilderNotRequiredBuilder {
+                 var id: Int? = null
+                 var givenName: String? = null
+                 var surname: String? = null
+                 var age: Int? = null
+            
+                 fun build(): BuilderNotRequired {
+                    val id = requireNotNull(id) { "Missing value for id" }
+                    val givenName = requireNotNull(givenName) { "Missing value for givenName" }
+                    val surname = requireNotNull(surname) { "Missing value for surname" }
+                    val age = requireNotNull(age) { "Missing value for age" }
+            
+                    return BuilderNotRequired(
+                        id,
+                        givenName,
+                        surname,
+                        age,
+                    )
+                }
             }
-        }
             """.trimIndent(),
         )
     }
@@ -333,10 +333,10 @@ class SchemaGeneratorPluginTest {
         val schemaContents = schemaFile.readText()
 
         // getUserTable should not be generated
-        assertContains(schemaContents, "public class UserBuilder")
-        assertContains(schemaContents, "public object UserConverter")
-        assertContains(schemaContents, "public object UserSchema")
-        assertFalse(schemaContents.contains("public fun DynamoDbMapper.getUserTable"))
+        assertContains(schemaContents, "class UserBuilder")
+        assertContains(schemaContents, "object UserConverter")
+        assertContains(schemaContents, "object UserSchema")
+        assertFalse(schemaContents.contains("fun DynamoDbMapper.getUserTable"))
     }
 
     @Test

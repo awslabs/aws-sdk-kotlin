@@ -72,7 +72,7 @@ class SchemaRenderer(
     }
 
     private val visibility: String = when (ctx.attributes[AnnotationsProcessorOptions.VisibilityAttribute]) {
-        Visibility.IMPLICIT -> "public"
+        Visibility.IMPLICIT -> ""
         Visibility.PUBLIC -> "public"
         Visibility.INTERNAL -> "internal"
     }
