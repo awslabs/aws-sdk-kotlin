@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
 import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -17,10 +18,15 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
         configureDependencies()
 
         project.afterEvaluate {
+            val dstPkgSerialized = when (val dstPkg = extension.destinationPackage) {
+                is DestinationPackage.RELATIVE -> "relative=${dstPkg.pkg}"
+                is DestinationPackage.ABSOLUTE -> "absolute=${dstPkg.pkg}"
+            }
+
             extensions.configure<KspExtension> {
                 arg(AnnotationsProcessorOptions.GenerateBuilderClassesAttribute.name, extension.generateBuilderClasses.name)
                 arg(AnnotationsProcessorOptions.VisibilityAttribute.name, extension.visibility.name)
-                arg(AnnotationsProcessorOptions.DestinationPackageAttribute.name, extension.destinationPackage.pkg)
+                arg(AnnotationsProcessorOptions.DestinationPackageAttribute.name, dstPkgSerialized)
                 arg(AnnotationsProcessorOptions.GenerateGetTableMethodAttribute.name, extension.generateGetTableExtension.toString())
             }
         }

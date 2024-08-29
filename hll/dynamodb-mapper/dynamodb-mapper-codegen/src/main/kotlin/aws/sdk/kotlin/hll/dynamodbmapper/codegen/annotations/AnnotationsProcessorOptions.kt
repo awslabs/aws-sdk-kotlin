@@ -21,7 +21,7 @@ object AnnotationsProcessorOptions {
 
     /**
      * Determines the package where code-generated classes / objects will be placed.
-     * Defaults to [DestinationPackage.RELATIVE] with a child package value of "mapper.schemas".
+     * Defaults to [DestinationPackage.RELATIVE] from the package of the class being processed, suffixed with "mapper.schemas".
      */
     val DestinationPackageAttribute: AttributeKey<DestinationPackage> = AttributeKey("DestinationPackage")
 

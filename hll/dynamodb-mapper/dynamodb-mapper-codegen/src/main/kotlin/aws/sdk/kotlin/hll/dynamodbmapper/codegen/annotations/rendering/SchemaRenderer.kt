@@ -16,7 +16,9 @@ import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbSortKey
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
+import aws.smithy.kotlin.runtime.collections.get
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.getConstructors
@@ -55,6 +57,12 @@ class SchemaRenderer(
     private val partitionKeyProp = properties.single { it.isPk }
     private val sortKeyProp = properties.singleOrNull { it.isSk }
 
+    private val visibility: String = when (ctx.attributes[AnnotationsProcessorOptions.VisibilityAttribute]) {
+        Visibility.IMPLICIT -> "internal" // except where public is required
+        Visibility.PUBLIC -> "public"
+        Visibility.INTERNAL -> "internal"
+    }
+
     /**
      * We skip rendering a class builder if:
      *   - the user has configured GenerateBuilders to WHEN_REQUIRED (default value) AND
@@ -62,7 +70,7 @@ class SchemaRenderer(
      *   - the class has a zero-arg constructor
      */
     private val shouldRenderBuilder: Boolean = run {
-        val alwaysGenerateBuilders = (ctx.attributes.getOrNull(AnnotationsProcessorOptions.GenerateBuilderClassesAttribute) ?: GenerateBuilderClasses.WHEN_REQUIRED) == GenerateBuilderClasses.ALWAYS
+        val alwaysGenerateBuilders = ctx.attributes[AnnotationsProcessorOptions.GenerateBuilderClassesAttribute] == GenerateBuilderClasses.ALWAYS
         val hasAllMutableMembers = classDeclaration.getAllProperties().all { it.isMutable }
         val hasZeroArgConstructor = classDeclaration.getConstructors().any { constructor -> constructor.parameters.all { it.hasDefault } }
 
@@ -70,12 +78,10 @@ class SchemaRenderer(
     }
 
     override fun generate() {
-        if (shouldRenderBuilder) {
-            renderBuilder()
-        }
+        if (shouldRenderBuilder) { renderBuilder() }
         renderItemConverter()
         renderSchema()
-        renderGetTable()
+        if (ctx.attributes[AnnotationsProcessorOptions.GenerateGetTableMethodAttribute]) { renderGetTable() }
     }
 
     private fun renderBuilder() {
@@ -84,7 +90,7 @@ class SchemaRenderer(
     }
 
     private fun renderItemConverter() {
-        withBlock("public object #L : #T by #T(", ")", converterName, MapperTypes.Items.itemConverter(classType), MapperTypes.Items.SimpleItemConverter) {
+        withBlock("#L object #L : #T by #T(", ")", visibility, converterName, MapperTypes.Items.itemConverter(classType), MapperTypes.Items.SimpleItemConverter) {
             if (shouldRenderBuilder) {
                 write("builderFactory = ::#L,", builderName)
                 write("build = #L::build,", builderName)
@@ -135,7 +141,7 @@ class SchemaRenderer(
             MapperTypes.Items.itemSchemaPartitionKey(classType, partitionKeyProp.typeRef)
         }
 
-        withBlock("public object #L : #T {", "}", schemaName, schemaType) {
+        withBlock("#L object #L : #T {", "}", visibility, schemaName, schemaType) {
             write("override val converter : #1L = #1L", converterName)
             write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyProp.name)
             if (sortKeyProp != null) {
@@ -166,7 +172,8 @@ class SchemaRenderer(
 
         val fnName = "get${className}Table"
         write(
-            "public fun #T.#L(name: String): #T = #L(name, #L)",
+            "#L fun #T.#L(name: String): #T = #L(name, #L)",
+            visibility,
             MapperTypes.DynamoDbMapper,
             fnName,
             if (sortKeyProp != null) {

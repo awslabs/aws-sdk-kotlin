@@ -6,8 +6,13 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.emptyAttributes
+import aws.smithy.kotlin.runtime.collections.get
+import aws.smithy.kotlin.runtime.text.ensurePrefix
+import aws.smithy.kotlin.runtime.text.ensureSuffix
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 
@@ -25,10 +30,15 @@ class HighLevelRenderer(
         annotatedClasses.forEach {
             logger.info("Processing annotation on ${it.simpleName}")
 
+            val codegenPkg = when (val dstPkg = codegenAttributes[AnnotationsProcessorOptions.DestinationPackageAttribute]) {
+                is DestinationPackage.RELATIVE -> "${it.packageName.asString()}.${dstPkg.pkg}"
+                is DestinationPackage.ABSOLUTE -> dstPkg.pkg
+            }
+
             val renderCtx = RenderContext(
                 logger,
                 codegenFactory,
-                "${it.packageName.asString()}.mapper.schemas",
+                codegenPkg,
                 "dynamodb-mapper-annotation-processor",
                 codegenAttributes,
             )

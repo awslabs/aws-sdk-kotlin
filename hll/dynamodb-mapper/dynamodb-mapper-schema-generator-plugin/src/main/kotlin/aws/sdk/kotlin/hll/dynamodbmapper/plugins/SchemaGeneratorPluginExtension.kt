@@ -12,11 +12,11 @@ open class SchemaGeneratorPluginExtension {
      * With this setting, builder classes will not be generated for user classes which consist of only public mutable members
      * and have a zero-arg constructor.
      */
-    var generateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
+    var generateBuilderClasses: GenerateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
 
-    var visibility = Visibility.IMPLICIT
+    var visibility: Visibility = Visibility.IMPLICIT
 
-    var destinationPackage = DestinationPackage.RELATIVE()
+    var destinationPackage: DestinationPackage = DestinationPackage.RELATIVE()
 
-    var generateGetTableExtension = true
+    var generateGetTableExtension: Boolean = true
 }
