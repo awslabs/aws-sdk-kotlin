@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.23] - 08/30/2024
+
+### Features
+* (**backup**) The latest update introduces two new attributes, VaultType and VaultState, to the DescribeBackupVault and ListBackupVaults APIs. The VaultState attribute reflects the current status of the vault, while the VaultType attribute indicates the specific category of the vault.
+* (**cloudwatchlogs**) This release introduces a new optional parameter: Entity, in PutLogEvents request
+* (**datazone**) Amazon DataZone now adds new governance capabilities of Domain Units for organization within your Data Domains, and Authorization Policies for tighter controls.
+* (**redshiftdata**) The release include the new Redshift DataAPI feature for session use, customer execute query with --session-keep-alive-seconds parameter and can submit follow-up queries to same sessions with returned`session-id`
+
 ## [1.3.22] - 08/29/2024
 
 ### Features
