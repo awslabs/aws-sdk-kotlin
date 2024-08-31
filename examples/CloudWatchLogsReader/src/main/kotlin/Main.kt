@@ -3,15 +3,13 @@ package aws.sdk.kotlin.example
 import aws.sdk.kotlin.services.cloudwatchlogs.CloudWatchLogsClient
 import kotlinx.coroutines.runBlocking
 
-/**
- * Ensure the following environment variables are set:
- * - REGION
- * - LOG_GROUP_NAME
- * - LOG_STREAM_NAME
- */
 fun main(args: Array<String>) = runBlocking {
+
+    val usage = """
+        Usage: Required <region> <logGroupName> <logStreamName>
+    """.trimIndent()
     if (args.size != 3) {
-        throw IllegalArgumentException("Usage: Required <region> <logGroupName> <logStreamName>")
+        throw IllegalArgumentException(usage)
     }
 
     val region = args[0]
@@ -22,13 +20,10 @@ fun main(args: Array<String>) = runBlocking {
     val logReader = CloudWatchLogsReader(client)
 
     try {
-        println("Log Group: $logGroupName")
-        println("  Log Stream: $logStreamName")
-
         // Print log events for the specified log stream
         val logEvents = logReader.getLogEvents(logGroupName, logStreamName)
         logEvents.forEach { logEvent ->
-            println("    Log Event: ${logEvent.message}")
+            println("Log Event: ${logEvent.message}")
         }
     } catch (ex: Exception) {
         println("Error: ${ex.message}")

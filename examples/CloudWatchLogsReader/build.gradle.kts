@@ -28,3 +28,7 @@ graalvmNative {
 
     }
 }
+
+tasks.named<org.graalvm.buildtools.gradle.tasks.NativeRunTask>("nativeRun") {
+    this.runtimeArgs = listOf("my-region", "my-log-group", "my-log-stream")
+}
