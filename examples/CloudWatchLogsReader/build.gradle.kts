@@ -20,3 +20,11 @@ dependencies {
     implementation("aws.sdk.kotlin:cloudwatchlogs:$awsSdkKotlinVersion")
 }
 
+graalvmNative {
+    binaries.all {
+        resources.autodetect()
+        // Add the META-INF/native-image directory to the classpath for reflection configuration
+        configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
+
+    }
+}
