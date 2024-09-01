@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.3.23] - 08/30/2024
+
+### Features
+* (**backup**) The latest update introduces two new attributes, VaultType and VaultState, to the DescribeBackupVault and ListBackupVaults APIs. The VaultState attribute reflects the current status of the vault, while the VaultType attribute indicates the specific category of the vault.
+* (**cloudwatchlogs**) This release introduces a new optional parameter: Entity, in PutLogEvents request
+* (**datazone**) Amazon DataZone now adds new governance capabilities of Domain Units for organization within your Data Domains, and Authorization Policies for tighter controls.
+* (**redshiftdata**) The release include the new Redshift DataAPI feature for session use, customer execute query with --session-keep-alive-seconds parameter and can submit follow-up queries to same sessions with returned`session-id`
+
+## [1.3.22] - 08/29/2024
+
+### Features
+* (**bedrockagentruntime**) Lifting the maximum length on Bedrock KnowledgeBase RetrievalFilter array
+* (**bedrockruntime**) Add support for imported-model in invokeModel and InvokeModelWithResponseStream.
+* (**personalize**) This releases ability to update automatic training scheduler for customer solutions
+* (**quicksight**) Increased Character Limit for Dataset Calculation Field expressions
+* (**sfn**) This release adds support for static analysis to ValidateStateMachineDefinition API, which can now return optional WARNING diagnostics for semantic errors on the definition of an Amazon States Language (ASL) state machine.
+* (**wafv2**) The minimum request rate for a rate-based rule is now 10. Before this, it was 100.
+
+### Fixes
+* [#1126](https://github.com/smithy-lang/smithy-kotlin/issues/1126) Upgrade to **1.3.8** version of **smithy-kotlin** to pick up fixes for code-generated deserializers
+
 ## [1.3.21] - 08/28/2024
 
 ### Features
