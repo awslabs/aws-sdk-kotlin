@@ -15,7 +15,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.itemSourceKind
  * @param ctx The active [RenderContext]
  * @param operations A list of the operations in scope for codegen
  */
-class HighLevelRenderer(private val ctx: RenderContext, private val operations: List<Operation>) {
+internal class HighLevelRenderer(private val ctx: RenderContext, private val operations: List<Operation>) {
     fun render() {
         operations.forEach(::render)
 

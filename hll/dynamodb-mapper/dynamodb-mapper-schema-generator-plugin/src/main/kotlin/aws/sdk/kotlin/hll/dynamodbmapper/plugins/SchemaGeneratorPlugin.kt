@@ -18,15 +18,10 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
         configureDependencies()
 
         project.afterEvaluate {
-            val dstPkgSerialized = when (val dstPkg = extension.destinationPackage) {
-                is DestinationPackage.Relative -> "relative=${dstPkg.pkg}"
-                is DestinationPackage.Absolute -> "absolute=${dstPkg.pkg}"
-            }
-
             extensions.configure<KspExtension> {
                 arg(AnnotationsProcessorOptions.GenerateBuilderClassesAttribute.name, extension.generateBuilderClasses.name)
                 arg(AnnotationsProcessorOptions.VisibilityAttribute.name, extension.visibility.name)
-                arg(AnnotationsProcessorOptions.DestinationPackageAttribute.name, dstPkgSerialized)
+                arg(AnnotationsProcessorOptions.DestinationPackageAttribute.name, extension.destinationPackage.toString())
                 arg(AnnotationsProcessorOptions.GenerateGetTableMethodAttribute.name, extension.generateGetTableExtension.toString())
             }
         }

@@ -9,7 +9,7 @@ import aws.sdk.kotlin.hll.codegen.util.Pkg
 /**
  * A container object for various DynamoDbMapper [Type] instances
  */
-object MapperTypes {
+internal object MapperTypes {
     // Low-level types
     val AttributeValue = TypeRef(Pkg.Ll.Model, "AttributeValue")
     val AttributeMap = Types.Kotlin.map(Types.Kotlin.String, AttributeValue)

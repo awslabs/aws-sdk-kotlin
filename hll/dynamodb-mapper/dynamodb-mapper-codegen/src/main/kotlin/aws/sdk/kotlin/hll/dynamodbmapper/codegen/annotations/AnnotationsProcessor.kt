@@ -18,7 +18,7 @@ import com.google.devtools.ksp.validate
 
 private val annotationName = DynamoDbItem::class.qualifiedName!!
 
-class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
+public class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
     private var invoked = false
     private val logger = environment.logger
     private val codeGenerator = environment.codeGenerator
