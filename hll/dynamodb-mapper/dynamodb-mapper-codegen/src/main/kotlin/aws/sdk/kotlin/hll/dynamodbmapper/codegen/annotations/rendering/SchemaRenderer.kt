@@ -8,15 +8,12 @@ import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
-import aws.sdk.kotlin.hll.codegen.rendering.BuilderRenderer
-import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
-import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
+import aws.sdk.kotlin.hll.codegen.rendering.*
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbSortKey
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import aws.smithy.kotlin.runtime.collections.get
 import com.google.devtools.ksp.KspExperimental
@@ -71,12 +68,6 @@ internal class SchemaRenderer(
         !(!alwaysGenerateBuilders && hasAllMutableMembers && hasZeroArgConstructor)
     }
 
-    private val visibility: String = when (ctx.attributes[AnnotationsProcessorOptions.VisibilityAttribute]) {
-        Visibility.DEFAULT -> ""
-        Visibility.PUBLIC -> "public"
-        Visibility.INTERNAL -> "internal"
-    }
-
     override fun generate() {
         if (shouldRenderBuilder) {
             renderBuilder()
@@ -90,11 +81,11 @@ internal class SchemaRenderer(
 
     private fun renderBuilder() {
         val members = classDeclaration.getAllProperties().map(Member.Companion::from).toSet()
-        BuilderRenderer(this, classType, members, visibility).render()
+        BuilderRenderer(this, classType, members, ctx).render()
     }
 
     private fun renderItemConverter() {
-        withBlock("#L object #L : #T by #T(", ")", visibility, converterName, MapperTypes.Items.itemConverter(classType), MapperTypes.Items.SimpleItemConverter) {
+        withBlock("#Lobject #L : #T by #T(", ")", ctx.attributes.visibility, converterName, MapperTypes.Items.itemConverter(classType), MapperTypes.Items.SimpleItemConverter) {
             if (shouldRenderBuilder) {
                 write("builderFactory = ::#L,", builderName)
                 write("build = #L::build,", builderName)
@@ -145,7 +136,7 @@ internal class SchemaRenderer(
             MapperTypes.Items.itemSchemaPartitionKey(classType, partitionKeyProp.typeRef)
         }
 
-        withBlock("#L object #L : #T {", "}", visibility, schemaName, schemaType) {
+        withBlock("#Lobject #L : #T {", "}", ctx.attributes.visibility, schemaName, schemaType) {
             write("override val converter : #1L = #1L", converterName)
             write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyProp.name)
             if (sortKeyProp != null) {
@@ -176,8 +167,8 @@ internal class SchemaRenderer(
 
         val fnName = "get${className}Table"
         write(
-            "#L fun #T.#L(name: String): #T = #L(name, #L)",
-            visibility,
+            "#Lfun #T.#L(name: String): #T = #L(name, #L)",
+            ctx.attributes.visibility,
             MapperTypes.DynamoDbMapper,
             fnName,
             if (sortKeyProp != null) {

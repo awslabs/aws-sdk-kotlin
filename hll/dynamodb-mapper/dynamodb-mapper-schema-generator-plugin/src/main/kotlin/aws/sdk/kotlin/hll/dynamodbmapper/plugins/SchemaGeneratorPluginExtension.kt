@@ -2,8 +2,8 @@ package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility.DEFAULT
+import aws.sdk.kotlin.hll.codegen.rendering.Visibility
+import aws.sdk.kotlin.hll.codegen.rendering.Visibility.DEFAULT
 
 const val SCHEMA_GENERATOR_PLUGIN_EXTENSION = "dynamoDbMapper"
 

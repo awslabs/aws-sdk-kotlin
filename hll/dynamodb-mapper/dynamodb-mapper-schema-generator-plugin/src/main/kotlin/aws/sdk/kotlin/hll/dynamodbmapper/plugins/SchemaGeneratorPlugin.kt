@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
+import aws.sdk.kotlin.hll.codegen.rendering.RenderOptions
 import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -20,7 +20,7 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
         project.afterEvaluate {
             extensions.configure<KspExtension> {
                 arg(AnnotationsProcessorOptions.GenerateBuilderClassesAttribute.name, extension.generateBuilderClasses.name)
-                arg(AnnotationsProcessorOptions.VisibilityAttribute.name, extension.visibility.name)
+                arg(RenderOptions.VisibilityAttribute.name, extension.visibility.name)
                 arg(AnnotationsProcessorOptions.DestinationPackageAttribute.name, extension.destinationPackage.toString())
                 arg(AnnotationsProcessorOptions.GenerateGetTableMethodAttribute.name, extension.generateGetTableExtension.toString())
             }

@@ -1,6 +1,5 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility.DEFAULT
 import aws.smithy.kotlin.runtime.collections.AttributeKey
 
 /**
@@ -13,11 +12,6 @@ public object AnnotationsProcessorOptions {
      * and have a zero-arg constructor.
      */
     public val GenerateBuilderClassesAttribute: AttributeKey<GenerateBuilderClasses> = AttributeKey("GenerateBuilderClasses")
-
-    /**
-     * Determines the visibility of code-generated classes / objects. Defaults to [Visibility.DEFAULT].
-     */
-    public val VisibilityAttribute: AttributeKey<Visibility> = AttributeKey("Visibility")
 
     /**
      * Determines the package where code-generated classes / objects will be placed.
@@ -38,7 +32,7 @@ public object AnnotationsProcessorOptions {
  */
 public enum class GenerateBuilderClasses {
     /**
-     * Builders will only be generated when required (the class has non-mutable members / does not have a zero-arg constructor)
+     * Builders will be generated when a buildable structure cannot be inferred for a class (e.g., the class has immutable members or is missing a zero-arg constructor)
      */
     WHEN_REQUIRED,
 
@@ -46,26 +40,6 @@ public enum class GenerateBuilderClasses {
      * Builders will always be generated
      */
     ALWAYS,
-}
-
-/**
- * Determines the visibility of code-generated classes / objects. Defaults to [DEFAULT].
- */
-public enum class Visibility {
-    /**
-     * A default, unspecified visibility will be used, which is recommended for most use-cases.
-     */
-    DEFAULT,
-
-    /**
-     * All code-generated constructs will be `public`
-     */
-    PUBLIC,
-
-    /**
-     * All code-generated constructs will be `internal`
-     */
-    INTERNAL,
 }
 
 /**
