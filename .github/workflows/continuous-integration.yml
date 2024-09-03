@@ -41,35 +41,6 @@ jobs:
           ls -lsa
           ./gradlew -Ptest.java.version=${{ matrix.java-version }} jvmTest --stacktrace
 
-  dynamodbmapper:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        # we build with a specific JDK version but source/target compatibility should ensure the jar is usable by
-        # the target versions we want to support
-        java-version:
-          - 8
-          - 11
-          - 17
-          - 21
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-        with:
-          path: 'aws-sdk-kotlin'
-      - name: Setup Build
-        uses: ./aws-sdk-kotlin/.github/actions/setup-build
-      - name: Test
-        working-directory: ./aws-sdk-kotlin
-        shell: bash
-        run: |
-          pwd
-          ls -lsa
-          ./gradlew :codegen:sdk:bootstrap -Paws.services=dynamodb -Paws.kotlin.native=false
-          ./gradlew -Paws.kotlin.native=false -Ptest.java.version=${{ matrix.java-version }} jvmTest --stacktrace
-          ./gradlew -Paws.kotlin.native=false build
-
   all-platforms:
     runs-on: ${{ matrix.os }}
     strategy:
