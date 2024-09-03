@@ -29,8 +29,8 @@ class HighLevelRenderer(
             logger.info("Processing annotation on ${it.simpleName}")
 
             val codegenPkg = when (val dstPkg = codegenAttributes[AnnotationsProcessorOptions.DestinationPackageAttribute]) {
-                is DestinationPackage.RELATIVE -> "${it.packageName.asString()}.${dstPkg.pkg}"
-                is DestinationPackage.ABSOLUTE -> dstPkg.pkg
+                is DestinationPackage.Relative -> "${it.packageName.asString()}.${dstPkg.pkg}"
+                is DestinationPackage.Absolute -> dstPkg.pkg
             }
 
             val renderCtx = RenderContext(

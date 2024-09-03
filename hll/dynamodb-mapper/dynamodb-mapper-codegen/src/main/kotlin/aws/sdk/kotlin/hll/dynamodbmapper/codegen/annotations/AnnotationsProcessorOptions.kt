@@ -1,6 +1,6 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
 
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility.IMPLICIT
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility.DEFAULT
 import aws.smithy.kotlin.runtime.collections.AttributeKey
 
 /**
@@ -15,13 +15,13 @@ object AnnotationsProcessorOptions {
     val GenerateBuilderClassesAttribute: AttributeKey<GenerateBuilderClasses> = AttributeKey("GenerateBuilderClasses")
 
     /**
-     * Determines the visibility of code-generated classes / objects. Defaults to [Visibility.IMPLICIT].
+     * Determines the visibility of code-generated classes / objects. Defaults to [Visibility.DEFAULT].
      */
     val VisibilityAttribute: AttributeKey<Visibility> = AttributeKey("Visibility")
 
     /**
      * Determines the package where code-generated classes / objects will be placed.
-     * Defaults to [DestinationPackage.RELATIVE] from the package of the class being processed, suffixed with "mapper.schemas".
+     * Defaults to [DestinationPackage.Relative] from the package of the class being processed, suffixed with `aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas`.
      */
     val DestinationPackageAttribute: AttributeKey<DestinationPackage> = AttributeKey("DestinationPackage")
 
@@ -49,13 +49,13 @@ enum class GenerateBuilderClasses {
 }
 
 /**
- * Determines the visibility of code-generated classes / objects. Defaults to [IMPLICIT].
+ * Determines the visibility of code-generated classes / objects. Defaults to [DEFAULT].
  */
 enum class Visibility {
     /**
-     * An implicit visibility will be used, which is recommended for most use-cases.
+     * A default, unspecified visibility will be used, which is recommended for most use-cases.
      */
-    IMPLICIT,
+    DEFAULT,
 
     /**
      * All code-generated constructs will be `public`
@@ -70,18 +70,21 @@ enum class Visibility {
 
 /**
  * Determines the package where code-generated classes / objects will be placed.
- * Defaults to [DestinationPackage.RELATIVE] from the package of the class being processed, suffixed with "mapper.schemas".
+ * Defaults to [DestinationPackage.Relative] from the package of the class being processed, suffixed with `aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas`.
  */
 sealed class DestinationPackage {
+    /**
+     * The package where code-generated classes / objects will be placed.
+     */
     abstract val pkg: String
 
     /**
-     * Constructs should be code-generated into a package RELATIVE to the class being processed. Defaults to mapper.schemas.
+     * Constructs should be code-generated into a package relative to the class being processed. Defaults to `aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas`.
      */
-    class RELATIVE(override val pkg: String = "mapper.schemas") : DestinationPackage()
+    class Relative(override val pkg: String = "aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas") : DestinationPackage()
 
     /**
-     * Constructs should be code-generated into an ABSOLUTE package. Defaults to mapper.schemas.
+     * Constructs should be code-generated into an absolute package. Defaults to `aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas`.
      */
-    class ABSOLUTE(override val pkg: String = "mapper.schemas") : DestinationPackage()
+    class Absolute(override val pkg: String = "aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas") : DestinationPackage()
 }

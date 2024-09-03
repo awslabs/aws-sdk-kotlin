@@ -3,7 +3,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility.IMPLICIT
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility.DEFAULT
 
 const val SCHEMA_GENERATOR_PLUGIN_EXTENSION = "dynamoDbMapper"
 
@@ -16,15 +16,15 @@ open class SchemaGeneratorPluginExtension {
     var generateBuilderClasses: GenerateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
 
     /**
-     * Determines the visibility of code-generated classes / objects. Defaults to [IMPLICIT].
+     * Determines the visibility of code-generated classes / objects. Defaults to [DEFAULT].
      */
-    var visibility: Visibility = Visibility.IMPLICIT
+    var visibility: Visibility = Visibility.DEFAULT
 
     /**
      * Determines the package where code-generated classes / objects will be placed.
-     * Defaults to [DestinationPackage.RELATIVE] from the package of the class being processed, suffixed with "mapper.schemas".
+     * Defaults to [DestinationPackage.Relative] from the package of the class being processed, suffixed with `aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas`.
      */
-    var destinationPackage: DestinationPackage = DestinationPackage.RELATIVE()
+    var destinationPackage: DestinationPackage = DestinationPackage.Relative()
 
     /**
      * Determines whether a `DynamoDbMapper.get<CLASS>Table` convenience extension function will be generated. Defaults to true.

@@ -50,10 +50,10 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
      * Parse and validate the KSP environment options, turning them into valid attribute values
      */
     private fun getCodegenAttributes(): Attributes {
-        val (dstPkgType, pkg) = environment.options.getOrDefault(DestinationPackageAttribute.name, "relative=mapper.schemas").split("=")
+        val (dstPkgType, pkg) = environment.options.getOrDefault(DestinationPackageAttribute.name, "relative=aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas").split("=")
         val dstPkg = when (dstPkgType) {
-            "relative" -> DestinationPackage.RELATIVE(pkg)
-            "absolute" -> DestinationPackage.ABSOLUTE(pkg)
+            "relative" -> DestinationPackage.Relative(pkg)
+            "absolute" -> DestinationPackage.Absolute(pkg)
             else -> throw IllegalStateException("Unknown destination package type $dstPkgType")
         }
 
@@ -62,9 +62,9 @@ class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) 
 
         return attributesOf {
             GenerateBuilderClassesAttribute to GenerateBuilderClasses.valueOf(environment.options[GenerateBuilderClassesAttribute.name] ?: GenerateBuilderClasses.WHEN_REQUIRED.name)
-            VisibilityAttribute to Visibility.valueOf(environment.options.getOrDefault(VisibilityAttribute.name, Visibility.IMPLICIT.name))
-            DestinationPackageAttribute.name to dstPkg
-            GenerateGetTableMethodAttribute.name to generateGetTableMethod.equals("true", ignoreCase = true)
+            VisibilityAttribute to Visibility.valueOf(environment.options.getOrDefault(VisibilityAttribute.name, Visibility.DEFAULT.name))
+            DestinationPackageAttribute to dstPkg
+            GenerateGetTableMethodAttribute to generateGetTableMethod.equals("true", ignoreCase = true)
         }
     }
 }

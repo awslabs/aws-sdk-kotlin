@@ -67,7 +67,7 @@ tasks.test {
  * Create a file containing the sdkVersion to use as a resource
  * This saves us from having to manually change version numbers in multiple places
  */
-val generateSdkRuntimeVersion by tasks.registering {
+val generateSdkVersionFile by tasks.registering {
     val resourcesDir = layout.buildDirectory.dir("resources/main/aws/sdk/kotlin/hll/dynamodbmapper/plugins").get()
     val versionFile = file("$resourcesDir/sdk-version.txt")
     val gradlePropertiesFile = rootProject.file("gradle.properties")
@@ -79,12 +79,30 @@ val generateSdkRuntimeVersion by tasks.registering {
     }
 }
 
+/**
+ * Create a file containing the Kotlin version to use as a resource
+ * This saves us from having to manually change version numbers in multiple places
+ */
+val generateKotlinVersionFile by tasks.registering {
+    val resourcesDir = layout.buildDirectory.dir("resources/main/aws/sdk/kotlin/hll/dynamodbmapper/plugins").get()
+    val versionFile = file("$resourcesDir/kotlin-version.txt")
+    val gradlePropertiesFile = rootProject.file("gradle.properties")
+    inputs.file(gradlePropertiesFile)
+    outputs.file(versionFile)
+    sourceSets.main.get().output.dir(resourcesDir)
+    doLast {
+        versionFile.writeText(kotlin.coreLibrariesVersion)
+    }
+}
+
 tasks.withType<KotlinCompile> {
-    dependsOn(generateSdkRuntimeVersion)
+    dependsOn(generateSdkVersionFile)
+    dependsOn(generateKotlinVersionFile)
 }
 
 tasks.withType<Test> {
-    dependsOn(generateSdkRuntimeVersion)
+    dependsOn(generateSdkVersionFile)
+    dependsOn(generateKotlinVersionFile)
 }
 
 /**
