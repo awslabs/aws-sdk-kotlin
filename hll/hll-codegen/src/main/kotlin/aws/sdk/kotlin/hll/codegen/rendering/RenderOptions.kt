@@ -1,8 +1,6 @@
 package aws.sdk.kotlin.hll.codegen.rendering
 
-import aws.sdk.kotlin.hll.codegen.rendering.RenderOptions.VisibilityAttribute
 import aws.smithy.kotlin.runtime.collections.AttributeKey
-import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.get
 
 public object RenderOptions {
