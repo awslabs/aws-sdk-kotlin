@@ -87,4 +87,21 @@ sealed class DestinationPackage {
      * Constructs should be code-generated into an absolute package. Defaults to `aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas`.
      */
     class Absolute(override val pkg: String = "aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas") : DestinationPackage()
+
+    override fun toString(): String = when (this) {
+        is Relative -> "relative=$pkg"
+        is Absolute -> "absolute=$pkg"
+    }
+
+    public companion object {
+        public fun fromString(value: String): DestinationPackage {
+            val (type, pkg) = value.split("=")
+
+            return when (type.lowercase()) {
+                "relative" -> Relative(pkg)
+                "absolute" -> Absolute(pkg)
+                else -> throw IllegalStateException("Expected DestinationPackage type to be `relative` or `absolute`, got $type")
+            }
+        }
+    }
 }
