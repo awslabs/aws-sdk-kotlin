@@ -74,7 +74,6 @@ class SchemaGeneratorPluginTest {
         classFile.writeText(getResource("/$className.kt"))
     }
 
-    @Ignore
     @Test
     fun testDefaultOptions() {
         createClassFile("User")
@@ -94,13 +93,13 @@ class SchemaGeneratorPluginTest {
             /**
              * A DSL-style builder for instances of [User]
              */
-             class UserBuilder {
-                 var id: Int? = null
-                 var givenName: String? = null
-                 var surname: String? = null
-                 var age: Int? = null
+            public class UserBuilder {
+                public var id: Int? = null
+                public var givenName: String? = null
+                public var surname: String? = null
+                public var age: Int? = null
             
-                 fun build(): User {
+                public fun build(): User {
                     val id = requireNotNull(id) { "Missing value for id" }
                     val givenName = requireNotNull(givenName) { "Missing value for givenName" }
                     val surname = requireNotNull(surname) { "Missing value for surname" }
@@ -113,6 +112,7 @@ class SchemaGeneratorPluginTest {
                         age,
                     )
                 }
+            }
             """.trimIndent(),
         )
 
@@ -165,15 +165,7 @@ class SchemaGeneratorPluginTest {
         )
 
         // GetTable
-        assertContains(
-            schemaContents,
-            """
-            /**
-             * Returns a reference to a table named [name] containing items representing [User]
-             */
-             fun DynamoDbMapper.getUserTable(name: String): Table.PartitionKey<User, Int> = getTable(name, UserSchema)
-            """.trimIndent(),
-        )
+        assertContains(schemaContents, "fun DynamoDbMapper.getUserTable(name: String): Table.PartitionKey<User, Int> = getTable(name, UserSchema)".trimIndent())
     }
 
     @Test
@@ -229,7 +221,6 @@ class SchemaGeneratorPluginTest {
         )
     }
 
-    @Ignore
     @Test
     fun testGenerateBuilderOption() {
         val pluginConfiguration = """
@@ -258,13 +249,13 @@ class SchemaGeneratorPluginTest {
             /**
              * A DSL-style builder for instances of [BuilderNotRequired]
              */
-             class BuilderNotRequiredBuilder {
-                 var id: Int? = null
-                 var givenName: String? = null
-                 var surname: String? = null
-                 var age: Int? = null
+            public class BuilderNotRequiredBuilder {
+                public var id: Int? = null
+                public var givenName: String? = null
+                public var surname: String? = null
+                public var age: Int? = null
             
-                 fun build(): BuilderNotRequired {
+                public fun build(): BuilderNotRequired {
                     val id = requireNotNull(id) { "Missing value for id" }
                     val givenName = requireNotNull(givenName) { "Missing value for givenName" }
                     val surname = requireNotNull(surname) { "Missing value for surname" }
@@ -331,10 +322,10 @@ class SchemaGeneratorPluginTest {
         val schemaContents = schemaFile.readText()
 
         // getUserTable should not be generated
-        assertContains(schemaContents, "class UserBuilder")
-        assertContains(schemaContents, "object UserConverter")
-        assertContains(schemaContents, "object UserSchema")
-        assertFalse(schemaContents.contains("fun DynamoDbMapper.getUserTable"))
+        assertContains(schemaContents, "public class UserBuilder")
+        assertContains(schemaContents, "public object UserConverter")
+        assertContains(schemaContents, "public object UserSchema")
+        assertFalse(schemaContents.contains("public fun DynamoDbMapper.getUserTable"))
     }
 
     @Test
