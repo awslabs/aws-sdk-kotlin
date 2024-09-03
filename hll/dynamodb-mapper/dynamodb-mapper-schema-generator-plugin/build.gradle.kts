@@ -115,6 +115,10 @@ tasks.register("publishSmithyKotlinToMavenLocal") {
     }
 
     val smithyKotlin = gradle.includedBuild("smithy-kotlin")
+
+    // FIXME Simply Depend on root project's publishToMavenLocal once https://github.com/gradle/gradle/issues/22335 is fixed
+    // dependsOn(smithyKotlin.task("publishToMavenLocal"))
+
     dependsOn(smithyKotlin.task(":runtime:auth:aws-credentials:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:auth:aws-signing-common:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:auth:aws-signing-default:publishToMavenLocal"))
