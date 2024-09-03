@@ -64,6 +64,7 @@ internal class SchemaRenderer(
     private val shouldRenderBuilder: Boolean = run {
         val alwaysGenerateBuilders = ctx.attributes[AnnotationsProcessorOptions.GenerateBuilderClassesAttribute] == GenerateBuilderClasses.ALWAYS
         val hasAllMutableMembers = classDeclaration.getAllProperties().all { it.isMutable }
+        ctx.logger.warn("MATAS: Class $className hasAllMutableMembers: $hasAllMutableMembers")
         val hasZeroArgConstructor = classDeclaration.getConstructors().any { constructor -> constructor.parameters.all { it.hasDefault } }
 
         !(!alwaysGenerateBuilders && hasAllMutableMembers && hasZeroArgConstructor)

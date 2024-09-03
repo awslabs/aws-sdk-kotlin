@@ -25,7 +25,6 @@ operator fun <T : Any> Attributes.plus(other: Pair<AttributeKey<T>, T?>): Attrib
 
 public val Attributes.visibility: String
     get() = when (this[VisibilityAttribute]) {
-        Visibility.DEFAULT -> ""
         Visibility.PUBLIC -> "public "
         Visibility.INTERNAL -> "internal "
     }

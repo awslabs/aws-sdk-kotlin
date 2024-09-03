@@ -1,7 +1,7 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 
 import aws.sdk.kotlin.hll.codegen.rendering.Visibility
-import aws.sdk.kotlin.hll.codegen.rendering.Visibility.DEFAULT
+import aws.sdk.kotlin.hll.codegen.rendering.Visibility.PUBLIC
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
 
@@ -16,9 +16,9 @@ open class SchemaGeneratorPluginExtension {
     var generateBuilderClasses: GenerateBuilderClasses = GenerateBuilderClasses.WHEN_REQUIRED
 
     /**
-     * Determines the visibility of code-generated classes / objects. Defaults to [DEFAULT].
+     * Determines the visibility of code-generated classes / objects. Defaults to [Visibility.PUBLIC].
      */
-    var visibility: Visibility = Visibility.DEFAULT
+    var visibility: Visibility = Visibility.PUBLIC
 
     /**
      * Determines the package where code-generated classes / objects will be placed.

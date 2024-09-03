@@ -6,20 +6,15 @@ import aws.smithy.kotlin.runtime.collections.get
 public object RenderOptions {
 
     /**
-     * Determines the visibility of code-generated classes / objects. Defaults to [Visibility.DEFAULT].
+     * Determines the visibility of code-generated classes / objects. Defaults to [Visibility.PUBLIC].
      */
     public val VisibilityAttribute: AttributeKey<Visibility> = AttributeKey("Visibility")
 }
 
 /**
- * Determines the visibility of code-generated classes / objects. Defaults to [DEFAULT].
+ * Determines the visibility of code-generated classes / objects. Defaults to [PUBLIC].
  */
 public enum class Visibility {
-    /**
-     * A default, unspecified visibility will be used, which is recommended for most use-cases.
-     */
-    DEFAULT,
-
     /**
      * All code-generated constructs will be `public`
      */
