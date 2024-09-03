@@ -3,7 +3,6 @@ package aws.sdk.kotlin.hll.codegen.rendering
 import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.smithy.kotlin.runtime.collections.get
-import aws.sdk.kotlin.hll.codegen.rendering.RenderOptions
 
 /**
  * A DSL-style builder renderer.
