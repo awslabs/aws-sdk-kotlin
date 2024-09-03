@@ -4,10 +4,9 @@
  */
 package aws.sdk.kotlin.hll.codegen.util
 
-import aws.smithy.kotlin.runtime.collections.AttributeKey
-import aws.smithy.kotlin.runtime.collections.Attributes
-import aws.smithy.kotlin.runtime.collections.merge
-import aws.smithy.kotlin.runtime.collections.toMutableAttributes
+import aws.sdk.kotlin.hll.codegen.rendering.RenderOptions.VisibilityAttribute
+import aws.sdk.kotlin.hll.codegen.rendering.Visibility
+import aws.smithy.kotlin.runtime.collections.*
 
 /**
  * Combines this [Attributes] collection with another collection and returns the new result
@@ -22,4 +21,11 @@ operator fun Attributes.plus(other: Attributes): Attributes = toMutableAttribute
 operator fun <T : Any> Attributes.plus(other: Pair<AttributeKey<T>, T?>): Attributes =
     toMutableAttributes().apply {
         other.second?.let { set(other.first, it) } ?: remove(other.first)
+    }
+
+public val Attributes.visibility: String
+    get() = when (this[VisibilityAttribute]) {
+        Visibility.DEFAULT -> ""
+        Visibility.PUBLIC -> "public "
+        Visibility.INTERNAL -> "internal "
     }

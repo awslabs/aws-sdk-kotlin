@@ -9,6 +9,7 @@ import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.rendering.*
+import aws.sdk.kotlin.hll.codegen.util.visibility
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbSortKey
