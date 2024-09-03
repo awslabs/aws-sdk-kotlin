@@ -66,9 +66,9 @@ jobs:
         run: |
           pwd
           ls -lsa
-          ./gradlew :codegen:sdk:bootstrap -Paws.services=dynamodb
-          ./gradlew -Ptest.java.version=${{ matrix.java-version }} jvmTest --stacktrace
-          ./gradlew build
+          ./gradlew :codegen:sdk:bootstrap -Paws.services=dynamodb -Paws.kotlin.native=false
+          ./gradlew -Paws.kotlin.native=false -Ptest.java.version=${{ matrix.java-version }} jvmTest --stacktrace
+          ./gradlew -Paws.kotlin.native=false build
 
   all-platforms:
     runs-on: ${{ matrix.os }}
