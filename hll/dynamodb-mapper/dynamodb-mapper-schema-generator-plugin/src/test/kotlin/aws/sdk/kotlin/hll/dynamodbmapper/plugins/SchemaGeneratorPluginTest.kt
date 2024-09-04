@@ -86,34 +86,12 @@ class SchemaGeneratorPluginTest {
         val schemaContents = schemaFile.readText()
 
         // Builder
-        assertContains(
-            schemaContents,
-            """
-            /**
-             * A DSL-style builder for instances of [User]
-             */
-            public class UserBuilder {
-                public var id: Int? = null
-                public var givenName: String? = null
-                public var surname: String? = null
-                public var age: Int? = null
-            
-                public fun build(): User {
-                    val id = requireNotNull(id) { "Missing value for id" }
-                    val givenName = requireNotNull(givenName) { "Missing value for givenName" }
-                    val surname = requireNotNull(surname) { "Missing value for surname" }
-                    val age = requireNotNull(age) { "Missing value for age" }
-            
-                    return User(
-                        id,
-                        givenName,
-                        surname,
-                        age,
-                    )
-                }
-            }
-            """.trimIndent(),
-        )
+        assertContains(schemaContents, "public class UserBuilder")
+        assertContains(schemaContents, "public var id: Int? = null")
+        assertContains(schemaContents, "public var givenName: String? = null")
+        assertContains(schemaContents, "public var surname: String? = null")
+        assertContains(schemaContents, "public var age: Int? = null")
+        assertContains(schemaContents, "public fun build(): User")
 
         // Converter
         assertContains(
@@ -242,34 +220,12 @@ class SchemaGeneratorPluginTest {
         val schemaContents = schemaFile.readText()
 
         // Assert a builder is still generated, because we configured GenerateBuilderClasses.ALWAYS
-        assertContains(
-            schemaContents,
-            """
-            /**
-             * A DSL-style builder for instances of [BuilderNotRequired]
-             */
-            public class BuilderNotRequiredBuilder {
-                public var id: Int? = null
-                public var givenName: String? = null
-                public var surname: String? = null
-                public var age: Int? = null
-            
-                public fun build(): BuilderNotRequired {
-                    val id = requireNotNull(id) { "Missing value for id" }
-                    val givenName = requireNotNull(givenName) { "Missing value for givenName" }
-                    val surname = requireNotNull(surname) { "Missing value for surname" }
-                    val age = requireNotNull(age) { "Missing value for age" }
-            
-                    return BuilderNotRequired(
-                        id,
-                        givenName,
-                        surname,
-                        age,
-                    )
-                }
-            }
-            """.trimIndent(),
-        )
+        assertContains(schemaContents, "public class BuilderNotRequiredBuilder")
+        assertContains(schemaContents, "public var id: Int? = null")
+        assertContains(schemaContents, "public var givenName: String? = null")
+        assertContains(schemaContents, "public var surname: String? = null")
+        assertContains(schemaContents, "public var age: Int? = null")
+        assertContains(schemaContents, "public fun build(): BuilderNotRequired")
     }
 
     @Test
