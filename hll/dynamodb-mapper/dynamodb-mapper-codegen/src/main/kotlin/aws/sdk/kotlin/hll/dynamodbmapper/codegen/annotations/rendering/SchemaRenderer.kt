@@ -24,6 +24,7 @@ import com.google.devtools.ksp.isAnnotationPresent
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSName
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
+import com.google.devtools.ksp.symbol.Modifier
 
 /**
  * Renders the classes and objects required to make a class usable with the DynamoDbMapper such as schemas, builders, and converters.
@@ -41,19 +42,20 @@ internal class SchemaRenderer(
     private val converterName = "${className}Converter"
     private val schemaName = "${className}Schema"
 
-    private val properties = classDeclaration.getAllProperties().mapNotNull(AnnotatedClassProperty.Companion::from)
+    private val properties = classDeclaration.getAllProperties().filterNot { it.modifiers.contains(Modifier.PRIVATE) }
+    private val annotatedProperties = properties.mapNotNull(AnnotatedClassProperty.Companion::from)
 
     init {
-        check(properties.count { it.isPk } == 1) {
+        check(annotatedProperties.count { it.isPk } == 1) {
             "Expected exactly one @DynamoDbPartitionKey annotation on a property"
         }
-        check(properties.count { it.isSk } <= 1) {
+        check(annotatedProperties.count { it.isSk } <= 1) {
             "Expected at most one @DynamoDbSortKey annotation on a property"
         }
     }
 
-    private val partitionKeyProp = properties.single { it.isPk }
-    private val sortKeyProp = properties.singleOrNull { it.isSk }
+    private val partitionKeyProp = annotatedProperties.single { it.isPk }
+    private val sortKeyProp = annotatedProperties.singleOrNull { it.isSk }
 
     /**
      * We skip rendering a class builder if:
@@ -63,8 +65,7 @@ internal class SchemaRenderer(
      */
     private val shouldRenderBuilder: Boolean = run {
         val alwaysGenerateBuilders = ctx.attributes[AnnotationsProcessorOptions.GenerateBuilderClassesAttribute] == GenerateBuilderClasses.ALWAYS
-        val hasAllMutableMembers = classDeclaration.getAllProperties().all { it.isMutable }
-        ctx.logger.warn("MATAS: Class $className hasAllMutableMembers: $hasAllMutableMembers")
+        val hasAllMutableMembers = properties.all { it.isMutable }
         val hasZeroArgConstructor = classDeclaration.getConstructors().any { constructor -> constructor.parameters.all { it.hasDefault } }
 
         !(!alwaysGenerateBuilders && hasAllMutableMembers && hasZeroArgConstructor)
@@ -82,7 +83,7 @@ internal class SchemaRenderer(
     }
 
     private fun renderBuilder() {
-        val members = classDeclaration.getAllProperties().map(Member.Companion::from).toSet()
+        val members = properties.map(Member.Companion::from).toSet()
         BuilderRenderer(this, classType, members, ctx).render()
     }
 
@@ -97,7 +98,7 @@ internal class SchemaRenderer(
             }
 
             withBlock("descriptors = arrayOf(", "),") {
-                properties.forEach {
+                annotatedProperties.forEach {
                     renderAttributeDescriptor(it)
                 }
             }
