@@ -50,12 +50,12 @@ public sealed class DestinationPackage {
     /**
      * The package where code-generated classes / objects will be placed.
      */
-    internal abstract val pkg: String
+    public abstract val pkg: String
 
     /**
      * Constructs should be code-generated into a package relative to the class being processed. Defaults to `aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas`.
      */
-    public class Relative(override val pkg: String = "aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas") : DestinationPackage()
+    public class Relative(override val pkg: String = "dynamodbmapper.generatedschemas") : DestinationPackage()
 
     /**
      * Constructs should be code-generated into an absolute package. Defaults to `aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas`.

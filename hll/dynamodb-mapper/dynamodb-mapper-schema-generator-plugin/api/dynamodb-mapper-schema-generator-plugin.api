@@ -26,7 +26,3 @@ public class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginExte
 	public final fun setVisibility (Laws/sdk/kotlin/hll/codegen/rendering/Visibility;)V
 }
 
-public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginExtensionKt {
-	public static final field SCHEMA_GENERATOR_PLUGIN_EXTENSION Ljava/lang/String;
-}
-

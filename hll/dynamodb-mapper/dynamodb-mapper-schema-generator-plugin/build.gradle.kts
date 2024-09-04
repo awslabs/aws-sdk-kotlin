@@ -14,6 +14,10 @@ plugins {
     alias(libs.plugins.gradle.plugin.publish)
 }
 
+kotlin {
+    explicitApi()
+}
+
 dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation(libs.ksp.gradle.plugin)
@@ -64,6 +68,7 @@ tasks.test {
     }
 }
 
+// FIXME Commonize the following functions into the aws-kotlin-repo-tools build-support
 /**
  * Create a file containing the sdkVersion to use as a resource
  * This saves us from having to manually change version numbers in multiple places
@@ -87,8 +92,8 @@ val generateSdkVersionFile by tasks.registering {
 val generateKotlinVersionFile by tasks.registering {
     val resourcesDir = layout.buildDirectory.dir("resources/main/aws/sdk/kotlin/hll/dynamodbmapper/plugins").get()
     val versionFile = file("$resourcesDir/kotlin-version.txt")
-    val gradlePropertiesFile = rootProject.file("gradle.properties")
-    inputs.file(gradlePropertiesFile)
+    val versionCatalogFile = rootProject.file("gradle/libs.versions.toml")
+    inputs.file(versionCatalogFile)
     outputs.file(versionFile)
     sourceSets.main.get().output.dir(resourcesDir)
     doLast {
