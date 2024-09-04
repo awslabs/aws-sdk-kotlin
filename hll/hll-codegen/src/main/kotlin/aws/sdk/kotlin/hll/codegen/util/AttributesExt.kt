@@ -23,6 +23,9 @@ operator fun <T : Any> Attributes.plus(other: Pair<AttributeKey<T>, T?>): Attrib
         other.second?.let { set(other.first, it) } ?: remove(other.first)
     }
 
+/**
+ * Convert this [Attributes]' [VisibilityAttribute] to a string
+ */
 public val Attributes.visibility: String
     get() = when (this[VisibilityAttribute]) {
         Visibility.PUBLIC -> "public "
