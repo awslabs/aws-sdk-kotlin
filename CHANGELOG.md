@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.25] - 09/04/2024
+
+### Features
+* (**appsync**) Adds new logging levels (INFO and DEBUG) for additional log output control
+* (**bedrockagent**) Add support for user metadata inside PromptVariant.
+* (**cloudwatchlogs**) Update to support new APIs for delivery of logs from AWS services.
+* (**fis**) This release adds safety levers, a new mechanism to stop all running experiments and prevent new experiments from starting.
+* (**s3control**) Amazon Simple Storage Service /S3 Access Grants / Features : This release launches new Access Grants API - ListCallerAccessGrants.
+
+### Documentation
+* (**finspace**) Updates Finspace documentation for smaller instances.
+
 ## [1.3.24] - 09/03/2024
 
 ### Features
