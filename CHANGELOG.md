@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.3.25] - 09/04/2024
+
+### Features
+* (**appsync**) Adds new logging levels (INFO and DEBUG) for additional log output control
+* (**bedrockagent**) Add support for user metadata inside PromptVariant.
+* (**cloudwatchlogs**) Update to support new APIs for delivery of logs from AWS services.
+* (**fis**) This release adds safety levers, a new mechanism to stop all running experiments and prevent new experiments from starting.
+* (**s3control**) Amazon Simple Storage Service /S3 Access Grants / Features : This release launches new Access Grants API - ListCallerAccessGrants.
+
+### Documentation
+* (**finspace**) Updates Finspace documentation for smaller instances.
+
+## [1.3.24] - 09/03/2024
+
+### Features
+* (**connect**) Release ReplicaConfiguration as part of DescribeInstance
+* (**datazone**) Add support to let data publisher specify a subset of the data asset that a subscriber will have access to based on the asset filters provided, when accepting a subscription request.
+* (**elasticloadbalancingv2**) This release adds support for configuring TCP idle timeout on NLB and GWLB listeners.
+* (**mediaconnect**) AWS Elemental MediaConnect introduces thumbnails for Flow source monitoring. Thumbnails provide still image previews of the live content feeding your MediaConnect Flow allowing you to easily verify that your source is operating as expected.
+* (**medialive**) Added MinQP as a Rate Control option for H264 and H265 encodes.
+* (**sagemaker**) Amazon SageMaker now supports automatic mounting of a user's home folder in the Amazon Elastic File System (EFS) associated with the SageMaker Studio domain to their Studio Spaces to enable users to share data between their own private spaces.
+* (**timestreaminfluxdb**) Timestream for InfluxDB now supports compute scaling and deployment type conversion. This release adds the DbInstanceType and DeploymentType parameters to the UpdateDbInstance API.
+
 ## [1.3.23] - 08/30/2024
 
 ### Features
