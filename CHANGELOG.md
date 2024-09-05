@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.26] - 09/05/2024
+
+### Features
+* (**applicationsignals**) Amazon CloudWatch Application Signals now supports creating Service Level Objectives using a new calculation type. Users can now create SLOs which are configured with request-based SLIs to help meet their specific business requirements.
+* (**connect**) Amazon Connect Custom Vocabulary now supports Catalan (Spain), Danish (Denmark), Dutch (Netherlands), Finnish (Finland), Indonesian (Indonesia), Malay (Malaysia), Norwegian Bokmal (Norway), Polish (Poland), Swedish (Sweden), and Tagalog/Filipino (Philippines).
+* (**gamelift**) Amazon GameLift provides additional events for tracking the fleet creation process.
+* (**kinesisanalyticsv2**) Support for Flink 1.20 in Managed Service for Apache Flink
+* (**sagemaker**) Amazon SageMaker now supports idle shutdown of JupyterLab and CodeEditor applications on SageMaker Studio.
+
+### Documentation
+* (**codepipeline**) Updates to add recent notes to APIs and to replace example S3 bucket names globally.
+
 ## [1.3.25] - 09/04/2024
 
 ### Features
