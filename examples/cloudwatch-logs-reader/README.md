@@ -3,7 +3,7 @@
 ### Overview
 
 This project is a Kotlin-based application that reads log events from AWS CloudWatch Logs. It uses the AWS SDK for
-Kotlin and is configured to run as a native image using GraalVM. More information about GraalVM native images can be found in the  [official documentation](https://www.graalvm.org/latest/reference-manual/native-image/).
+Kotlin and is configured to run as a native image using GraalVM. More information about GraalVM native images can be found in the [official documentation](https://www.graalvm.org/latest/reference-manual/native-image/).
 
 ### How to Use
 
@@ -49,7 +49,7 @@ tasks.named<org.graalvm.buildtools.gradle.tasks.NativeRunTask>("nativeRun") {
 
 GraalVM doesn’t support reflection automatically. If your code or any library you use relies on reflection, you’ll need to set it up manually when building native images. This is done by creating a reflection configuration file. The configuration file should be placed in the `src/main/resources/META-INF/native-image` directory.
 
-Here is an example of a reflection configuration file (`reflect-config.json`):
+Here is an example of a reflection configuration file [`src/main/resources/META-INF/native-image/reflect-config.json`](src/main/resources/META-INF/native-image/reflect-config.json):
 
 ```json
 [
@@ -62,7 +62,7 @@ Here is an example of a reflection configuration file (`reflect-config.json`):
 ]
 ```
 
-In the build.gradle.kts file, ensure that the META-INF/native-image directory is added to the classpath for reflection configuration:
+In the `build.gradle.kts` file, ensure that the `META-INF/native-image` directory is added to the classpath for reflection configuration:
 ```kotlin
 graalvmNative {
     binaries.all {
