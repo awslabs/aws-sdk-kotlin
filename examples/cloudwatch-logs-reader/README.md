@@ -49,7 +49,7 @@ tasks.named<org.graalvm.buildtools.gradle.tasks.NativeRunTask>("nativeRun") {
 
 GraalVM doesn’t support reflection automatically. If your code or any library you use relies on reflection, you’ll need to set it up manually when building native images. This is done by creating a reflection configuration file. The configuration file should be placed in the `src/main/resources/META-INF/native-image` directory.
 
-Here is an example of a reflection configuration file [`src/main/resources/META-INF/native-image/reflect-config.json`](src/main/resources/META-INF/native-image/reflect-config.json):
+Here is an example of a reflection configuration file [src/main/resources/META-INF/native-image/reflect-config.json](src/main/resources/META-INF/native-image/aws/sdk/kotlin/example/reflect-config.json):
 
 ```json
 [
