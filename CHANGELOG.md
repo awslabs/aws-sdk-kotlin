@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.27] - 09/06/2024
+
+### Features
+* (**qapps**) Adds UpdateLibraryItemMetadata api to change status of app for admin verification feature and returns isVerified field in any api returning the app or library item.
+
 ## [1.3.26] - 09/05/2024
 
 ### Features
