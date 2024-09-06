@@ -4,8 +4,8 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.plugins
 
+import aws.sdk.kotlin.hll.codegen.rendering.RenderOptions
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
 import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -18,15 +18,10 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
         configureDependencies()
 
         project.afterEvaluate {
-            val dstPkgSerialized = when (val dstPkg = extension.destinationPackage) {
-                is DestinationPackage.RELATIVE -> "relative=${dstPkg.pkg}"
-                is DestinationPackage.ABSOLUTE -> "absolute=${dstPkg.pkg}"
-            }
-
             extensions.configure<KspExtension> {
                 arg(AnnotationsProcessorOptions.GenerateBuilderClassesAttribute.name, extension.generateBuilderClasses.name)
-                arg(AnnotationsProcessorOptions.VisibilityAttribute.name, extension.visibility.name)
-                arg(AnnotationsProcessorOptions.DestinationPackageAttribute.name, dstPkgSerialized)
+                arg(RenderOptions.VisibilityAttribute.name, extension.visibility.name)
+                arg(AnnotationsProcessorOptions.DestinationPackageAttribute.name, extension.destinationPackage.toString())
                 arg(AnnotationsProcessorOptions.GenerateGetTableMethodAttribute.name, extension.generateGetTableExtension.toString())
             }
         }
@@ -45,11 +40,7 @@ public class SchemaGeneratorPlugin : Plugin<Project> {
         val sdkVersion = getSdkVersion()
         dependencies.add("ksp", "aws.sdk.kotlin:dynamodb-mapper-codegen:$sdkVersion")
     }
-}
 
-// Reads sdk-version.txt for the SDK version to add dependencies on. The file is created in this module's build.gradle.kts
-internal fun getSdkVersion(): String = try {
-    SchemaGeneratorPlugin::class.java.getResource("sdk-version.txt")?.readText() ?: throw IllegalStateException("sdk-version.txt does not exist")
-} catch (ex: Exception) {
-    throw IllegalStateException("Failed to load sdk-version.txt which sets the SDK version", ex)
+    // Reads sdk-version.txt for the SDK version to add dependencies on. The file is created in this module's build.gradle.kts
+    private fun getSdkVersion(): String = checkNotNull(this::class.java.getResource("sdk-version.txt")?.readText()) { "Could not read sdk-version.txt" }
 }

@@ -9,7 +9,7 @@ import aws.smithy.kotlin.runtime.collections.AttributeKey
 /**
  * Defines [AttributeKey] instances that relate to the data model of low-level to high-level codegen
  */
-object ModelAttributes {
+internal object ModelAttributes {
     /**
      * For a given high-level [Operation], this attribute key identifies the associated low-level [Operation]
      */

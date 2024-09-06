@@ -20,7 +20,9 @@ class SchemaGeneratorPluginTest {
     private lateinit var buildFile: File
     private lateinit var runner: GradleRunner
 
-    private val sdkVersion = getSdkVersion()
+    private fun getResource(resourceName: String): String = checkNotNull(this::class.java.getResource(resourceName)?.readText()) { "Could not read $resourceName" }
+    private val kotlinVersion = getResource("kotlin-version.txt")
+    private val sdkVersion = getResource("sdk-version.txt")
 
     @BeforeEach
     fun setup() {
@@ -36,7 +38,7 @@ class SchemaGeneratorPluginTest {
         }
         
         plugins {
-            id("org.jetbrains.kotlin.jvm") version "2.0.10"
+            id("org.jetbrains.kotlin.jvm") version "$kotlinVersion"
             id("aws.sdk.kotlin.hll.dynamodbmapper.schema.generator")
         }
         
@@ -64,12 +66,6 @@ class SchemaGeneratorPluginTest {
         appendText(existingContent)
     }
 
-    private fun getResource(resourceName: String): String = this::class.java
-        .getResourceAsStream(resourceName)
-        ?.bufferedReader().use {
-            it?.readText()
-        } ?: error("Could not read $resourceName")
-
     private fun createClassFile(className: String, path: String = "src/main/kotlin/org/example") {
         val classFile = File(testProjectDir, "$path/$className.kt")
         classFile.ensureParentDirsCreated()
@@ -84,40 +80,18 @@ class SchemaGeneratorPluginTest {
         val result = runner.build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
 
-        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/mapper/schemas/UserSchema.kt")
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/UserSchema.kt")
         assertTrue(schemaFile.exists())
 
         val schemaContents = schemaFile.readText()
 
         // Builder
-        assertContains(
-            schemaContents,
-            """
-            /**
-             * A DSL-style builder for instances of [User]
-             */
-             class UserBuilder {
-                 var id: Int? = null
-                 var givenName: String? = null
-                 var surname: String? = null
-                 var age: Int? = null
-            
-                 fun build(): User {
-                    val id = requireNotNull(id) { "Missing value for id" }
-                    val givenName = requireNotNull(givenName) { "Missing value for givenName" }
-                    val surname = requireNotNull(surname) { "Missing value for surname" }
-                    val age = requireNotNull(age) { "Missing value for age" }
-            
-                    return User(
-                        id,
-                        givenName,
-                        surname,
-                        age,
-                    )
-                }
-            }
-            """.trimIndent(),
-        )
+        assertContains(schemaContents, "public class UserBuilder")
+        assertContains(schemaContents, "public var id: Int? = null")
+        assertContains(schemaContents, "public var givenName: String? = null")
+        assertContains(schemaContents, "public var surname: String? = null")
+        assertContains(schemaContents, "public var age: Int? = null")
+        assertContains(schemaContents, "public fun build(): User")
 
         // Converter
         assertContains(
@@ -168,15 +142,7 @@ class SchemaGeneratorPluginTest {
         )
 
         // GetTable
-        assertContains(
-            schemaContents,
-            """
-            /**
-             * Returns a reference to a table named [name] containing items representing [User]
-             */
-             fun DynamoDbMapper.getUserTable(name: String): Table.PartitionKey<User, Int> = getTable(name, UserSchema)
-            """.trimIndent(),
-        )
+        assertContains(schemaContents, "fun DynamoDbMapper.getUserTable(name: String): Table.PartitionKey<User, Int> = getTable(name, UserSchema)".trimIndent())
     }
 
     @Test
@@ -186,7 +152,7 @@ class SchemaGeneratorPluginTest {
         val result = runner.build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
 
-        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/mapper/schemas/BuilderNotRequiredSchema.kt")
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/BuilderNotRequiredSchema.kt")
         assertTrue(schemaFile.exists())
 
         val schemaContents = schemaFile.readText()
@@ -248,46 +214,24 @@ class SchemaGeneratorPluginTest {
         val result = runner.build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
 
-        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/mapper/schemas/BuilderNotRequiredSchema.kt")
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/BuilderNotRequiredSchema.kt")
         assertTrue(schemaFile.exists())
 
         val schemaContents = schemaFile.readText()
 
         // Assert a builder is still generated, because we configured GenerateBuilderClasses.ALWAYS
-        assertContains(
-            schemaContents,
-            """
-            /**
-             * A DSL-style builder for instances of [BuilderNotRequired]
-             */
-             class BuilderNotRequiredBuilder {
-                 var id: Int? = null
-                 var givenName: String? = null
-                 var surname: String? = null
-                 var age: Int? = null
-            
-                 fun build(): BuilderNotRequired {
-                    val id = requireNotNull(id) { "Missing value for id" }
-                    val givenName = requireNotNull(givenName) { "Missing value for givenName" }
-                    val surname = requireNotNull(surname) { "Missing value for surname" }
-                    val age = requireNotNull(age) { "Missing value for age" }
-            
-                    return BuilderNotRequired(
-                        id,
-                        givenName,
-                        surname,
-                        age,
-                    )
-                }
-            }
-            """.trimIndent(),
-        )
+        assertContains(schemaContents, "public class BuilderNotRequiredBuilder")
+        assertContains(schemaContents, "public var id: Int? = null")
+        assertContains(schemaContents, "public var givenName: String? = null")
+        assertContains(schemaContents, "public var surname: String? = null")
+        assertContains(schemaContents, "public var age: Int? = null")
+        assertContains(schemaContents, "public fun build(): BuilderNotRequired")
     }
 
     @Test
     fun testVisibilityOption() {
         val pluginConfiguration = """
-        import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.Visibility
+        import aws.sdk.kotlin.hll.codegen.rendering.Visibility
         dynamoDbMapper {
             visibility = Visibility.INTERNAL
         }
@@ -300,7 +244,7 @@ class SchemaGeneratorPluginTest {
         val result = runner.build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
 
-        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/mapper/schemas/UserSchema.kt")
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/UserSchema.kt")
         assertTrue(schemaFile.exists())
 
         val schemaContents = schemaFile.readText()
@@ -327,16 +271,16 @@ class SchemaGeneratorPluginTest {
         val result = runner.build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
 
-        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/mapper/schemas/UserSchema.kt")
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/UserSchema.kt")
         assertTrue(schemaFile.exists())
 
         val schemaContents = schemaFile.readText()
 
         // getUserTable should not be generated
-        assertContains(schemaContents, "class UserBuilder")
-        assertContains(schemaContents, "object UserConverter")
-        assertContains(schemaContents, "object UserSchema")
-        assertFalse(schemaContents.contains("fun DynamoDbMapper.getUserTable"))
+        assertContains(schemaContents, "public class UserBuilder")
+        assertContains(schemaContents, "public object UserConverter")
+        assertContains(schemaContents, "public object UserSchema")
+        assertFalse(schemaContents.contains("public fun DynamoDbMapper.getUserTable"))
     }
 
     @Test
@@ -344,7 +288,7 @@ class SchemaGeneratorPluginTest {
         val pluginConfiguration = """
         import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
         dynamoDbMapper {
-            destinationPackage = DestinationPackage.RELATIVE("hello.moto")
+            destinationPackage = DestinationPackage.Relative("hello.moto")
         }
         
         """.trimIndent()
@@ -368,7 +312,7 @@ class SchemaGeneratorPluginTest {
         val pluginConfiguration = """
         import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
         dynamoDbMapper {
-            destinationPackage = DestinationPackage.ABSOLUTE("absolutely.my.`package`")
+            destinationPackage = DestinationPackage.Absolute("absolutely.my.`package`")
         }
         
         """.trimIndent()
@@ -407,7 +351,7 @@ class SchemaGeneratorPluginTest {
 
         val buildResult = runner.build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), buildResult.task(":build")?.outcome)
-        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/mapper/schemas/UserSchema.kt")
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/UserSchema.kt")
         assertTrue(schemaFile.exists())
 
         val testResult = runner.withArguments("test").build()

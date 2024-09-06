@@ -22,7 +22,7 @@ import com.google.devtools.ksp.symbol.KSFunctionDeclaration
  * symbols to use as codegen input (i.e., the low-level DynamoDB operations/types), wiring up rendering context, and
  * starting the top-level renderer (which may in turn call other renderers).
  */
-class HighLevelOpsProcessor(environment: SymbolProcessorEnvironment) : SymbolProcessor {
+internal class HighLevelOpsProcessor(environment: SymbolProcessorEnvironment) : SymbolProcessor {
     private val codeGenerator = environment.codeGenerator
     private var invoked = false
     private val logger = environment.logger

@@ -6,7 +6,7 @@ package org.example
 
 import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
-import org.example.mapper.schemas.UserConverter
+import org.example.dynamodbmapper.generatedschemas.UserConverter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

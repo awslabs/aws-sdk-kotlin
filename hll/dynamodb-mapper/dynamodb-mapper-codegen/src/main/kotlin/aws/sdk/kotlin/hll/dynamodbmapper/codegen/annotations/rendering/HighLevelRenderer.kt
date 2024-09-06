@@ -18,19 +18,19 @@ import com.google.devtools.ksp.symbol.KSClassDeclaration
  * The parent renderer for all codegen from this package. This class orchestrates the various sub-renderers.
  * @param annotatedClasses A list of annotated classes
  */
-class HighLevelRenderer(
+internal class HighLevelRenderer(
     private val annotatedClasses: List<KSClassDeclaration>,
     private val logger: KSPLogger,
     private val codegenFactory: CodeGeneratorFactory,
     private val codegenAttributes: Attributes = emptyAttributes(),
 ) {
-    fun render() {
+    internal fun render() {
         annotatedClasses.forEach {
             logger.info("Processing annotation on ${it.simpleName}")
 
             val codegenPkg = when (val dstPkg = codegenAttributes[AnnotationsProcessorOptions.DestinationPackageAttribute]) {
-                is DestinationPackage.RELATIVE -> "${it.packageName.asString()}.${dstPkg.pkg}"
-                is DestinationPackage.ABSOLUTE -> dstPkg.pkg
+                is DestinationPackage.Relative -> "${it.packageName.asString()}.${dstPkg.pkg}"
+                is DestinationPackage.Absolute -> dstPkg.pkg
             }
 
             val renderCtx = RenderContext(

@@ -18,7 +18,7 @@ private val attrMapTypes = setOf(MapperTypes.AttributeMap, MapperTypes.Attribute
  * high-level structure. This interface implements no behaviors on its own; it merely gives strongly-typed names to
  * behaviors that will be implemented by calling code.
  */
-sealed interface MemberCodegenBehavior {
+internal sealed interface MemberCodegenBehavior {
     companion object {
         /**
          * Identifies a [MemberCodegenBehavior] for the given [Member] by way of various heuristics
@@ -70,7 +70,7 @@ sealed interface MemberCodegenBehavior {
 /**
  * Identifies a [MemberCodegenBehavior] for this [Member] by way of various heuristics
  */
-val Member.codegenBehavior: MemberCodegenBehavior
+internal val Member.codegenBehavior: MemberCodegenBehavior
     get() = when {
         this in unsupportedMembers -> MemberCodegenBehavior.Drop
         type in attrMapTypes -> if (name == "key") MemberCodegenBehavior.MapKeys else MemberCodegenBehavior.MapAll
