@@ -2,19 +2,13 @@ package aws.sdk.kotlin.example
 
 import aws.sdk.kotlin.services.cloudwatchlogs.CloudWatchLogsClient
 import aws.sdk.kotlin.services.cloudwatchlogs.model.GetLogEventsRequest
-import aws.sdk.kotlin.services.cloudwatchlogs.model.OutputLogEvent
-import aws.sdk.kotlin.services.cloudwatchlogs.paginators.events
 import aws.sdk.kotlin.services.cloudwatchlogs.paginators.getLogEventsPaginated
 import kotlinx.coroutines.flow.buffer
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-//import kotlinx.datetime.Instant
-//import kotlinx.datetime.TimeZone
-//import kotlinx.datetime.toLocalDateTime
 
 /**
  * This program reads log events from a specified AWS CloudWatch Logs stream.
@@ -60,7 +54,7 @@ fun main(args: Array<String>) = runBlocking {
             this.logGroupName = logGroupName
             this.logStreamName = logStreamName
         }
-        client.getLogEventsPaginated(request).buffer(4).collectLatest { response ->
+        client.getLogEventsPaginated(request).buffer(4).collect { response ->
             response.events?.forEach { logEvent ->
                 println("Log Event: ${logEvent.message} ${logEvent.timestamp?.formattedDataTime()}")
             }
