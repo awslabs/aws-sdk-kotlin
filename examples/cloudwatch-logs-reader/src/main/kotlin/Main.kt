@@ -46,31 +46,24 @@ fun main(args: Array<String>) = runBlocking {
     val logGroupName = args[1]
     val logStreamName = args[2]
 
-    val client = CloudWatchLogsClient { this.region = region }
+    val request = GetLogEventsRequest {
+        this.logGroupName = logGroupName
+        this.logStreamName = logStreamName
+    }
 
-    try {
-
-        val request = GetLogEventsRequest {
-            this.logGroupName = logGroupName
-            this.logStreamName = logStreamName
-        }
+    CloudWatchLogsClient { this.region = region }.use { client ->
         client.getLogEventsPaginated(request).buffer(4).collect { response ->
             response.events?.forEach { logEvent ->
-                println("Log Event: ${logEvent.message} ${logEvent.timestamp?.formattedDataTime()}")
+                println("Log Event: ${logEvent.message} ${logEvent.timestamp?.formattedDateTime()}")
             }
-
         }
-
-    } catch (ex: Exception) {
-        println("Error: ${ex.message}")
-    } finally {
-        client.close()
     }
+
 }
 
-fun Long.formattedDataTime(): String {
+fun Long.formattedDateTime(): String {
     val timestamp = Instant.fromEpochMilliseconds(this)
     val dateTime = timestamp.toLocalDateTime(TimeZone.UTC)
-    return "${dateTime.monthNumber}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}"
+    return "${dateTime.dayOfMonth}-${dateTime.monthNumber}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}"
 }
 

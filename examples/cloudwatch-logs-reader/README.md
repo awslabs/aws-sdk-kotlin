@@ -1,9 +1,9 @@
-## CloudWatch Logs Reader
+## CloudWatch Logs Reader with GraalVM Native Image
 
 ### Overview
 
 This project is a Kotlin-based application that reads log events from AWS CloudWatch Logs. It uses the AWS SDK for
-Kotlin and is configured to run as a native image using GraalVM.
+Kotlin and is configured to run as a native image using GraalVM. More information about GraalVM native images can be found in the  [official documentation](https://www.graalvm.org/latest/reference-manual/native-image/).
 
 ### How to Use
 
@@ -13,7 +13,7 @@ Kotlin and is configured to run as a native image using GraalVM.
 <li> JDK 17</li>
 <li> GraalVM</li>
 <li> Gradle</li>
-<li> Aws credentials configured (e.g, using AWS CLI)</li>
+<li> AWS credentials configured (e.g, using AWS CLI)</li>
 </ul>
 
 ### What is GraalVM?
@@ -29,7 +29,7 @@ GraalVM can compile Kotlin applications into native executables, which improves 
 
 ### Running the Application with Configured Gradle Task
 
-The nativeRun Gradle task is configured to run the application as a native image. Here is a brief explanation of the
+The `nativeRun` Gradle task is configured to run the application as a native image. Here is a brief explanation of the
 configuration:
 
 - **Region**: The AWS region where your CloudWatch Logs are located.
@@ -45,11 +45,9 @@ tasks.named<org.graalvm.buildtools.gradle.tasks.NativeRunTask>("nativeRun") {
 }
 ```
 
-This task uses the GraalVM native image plugin to build and run the application with the specified arguments.
-
 ### Reflection Configuration for GraalVM
 
-When building native images with GraalVM, you need to configure reflection manually. This is done by providing a reflection configuration file. The configuration file should be placed in the `src/main/resources/META-INF/native-image` directory.
+GraalVM doesn’t support reflection automatically. If your code or any library you use relies on reflection, you’ll need to set it up manually when building native images. This is done by creating a reflection configuration file. The configuration file should be placed in the `src/main/resources/META-INF/native-image` directory.
 
 Here is an example of a reflection configuration file (`reflect-config.json`):
 
