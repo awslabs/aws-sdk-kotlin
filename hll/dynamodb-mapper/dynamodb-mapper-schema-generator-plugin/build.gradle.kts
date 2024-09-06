@@ -136,13 +136,16 @@ tasks.register("publishSmithyKotlinToMavenLocal") {
     dependsOn(smithyKotlin.task(":runtime:observability:telemetry-defaults:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:aws-json-protocols:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:aws-protocol-core:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:protocol:aws-xml-protocols:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:http-client-engines:http-client-engine-default:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:http-client-engines:http-client-engine-okhttp:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:http-client:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:http:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:runtime-core:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:serde:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:serde:serde-form-url:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:serde:serde-json:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:serde:serde-xml:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:smithy-client:publishToMavenLocal"))
 }
 
