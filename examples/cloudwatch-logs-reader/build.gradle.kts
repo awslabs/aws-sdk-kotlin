@@ -13,6 +13,7 @@ application {
 }
 
 val awsSdkKotlinVersion: String by project
+val kotlinxDatetimeVersion: String by project
 
 kotlin {
     jvmToolchain {
@@ -22,9 +23,8 @@ kotlin {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
     implementation("aws.sdk.kotlin:cloudwatchlogs:$awsSdkKotlinVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDatetimeVersion")
 }
 
 graalvmNative {
