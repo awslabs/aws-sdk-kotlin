@@ -17,6 +17,8 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcesso
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import aws.smithy.kotlin.runtime.collections.get
+import aws.smithy.kotlin.runtime.util.length
+import aws.smithy.kotlin.runtime.util.type
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.getConstructors
@@ -118,7 +120,13 @@ internal class SchemaRenderer(
                 write("#L,", "$className::${prop.name}::set")
             }
 
-            write("#T", prop.valueConverter) // converter
+            when (prop.typeName.asString()) {
+                "kotlin.collections.List" -> write("#T(#T)", MapperTypes.Values.Collections.ListConverter, prop.valueConverter)
+                "kotlin.collections.Map" -> {
+                    check(prop.typeRef.genericArgs.size == 2) { "Expected map type $prop to have 2 generic args, got ${prop.typeRef.genericArgs.size}" }
+                }
+                else -> write("#T", prop.valueConverter)
+            }
         }
     }
 
@@ -148,29 +156,25 @@ internal class SchemaRenderer(
             "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongConverter
 
             // FIXME Should this check the full element name (kotlin.String) instead of just String
-            "kotlin.collections.List" -> {
-                val elementConverter = when (val listElementName = this.typeRef.genericArgs.single().shortName) {
-                    "String" -> MapperTypes.Values.Scalars.StringConverter
-                    "CharArray" -> MapperTypes.Values.Scalars.CharArrayConverter
-                    "Char" -> MapperTypes.Values.Scalars.CharConverter
+            "kotlin.collections.List" -> when (val listElementName = this.typeRef.genericArgs.single().shortName) {
+                "String" -> MapperTypes.Values.Scalars.StringConverter
+                "CharArray" -> MapperTypes.Values.Scalars.CharArrayConverter
+                "Char" -> MapperTypes.Values.Scalars.CharConverter
 
-                    "Byte" -> MapperTypes.Values.Scalars.ByteConverter
-                    "ByteArray" -> MapperTypes.Values.Scalars.ByteArrayConverter
-                    "Short" -> MapperTypes.Values.Scalars.ShortConverter
-                    "Int" -> MapperTypes.Values.Scalars.IntConverter
-                    "Long" -> MapperTypes.Values.Scalars.LongConverter
-                    "Double" -> MapperTypes.Values.Scalars.DoubleConverter
-                    "Float" -> MapperTypes.Values.Scalars.FloatConverter
+                "Byte" -> MapperTypes.Values.Scalars.ByteConverter
+                "ByteArray" -> MapperTypes.Values.Scalars.ByteArrayConverter
+                "Short" -> MapperTypes.Values.Scalars.ShortConverter
+                "Int" -> MapperTypes.Values.Scalars.IntConverter
+                "Long" -> MapperTypes.Values.Scalars.LongConverter
+                "Double" -> MapperTypes.Values.Scalars.DoubleConverter
+                "Float" -> MapperTypes.Values.Scalars.FloatConverter
 
-                    "UByte" -> MapperTypes.Values.Scalars.UByteConverter
-                    "UInt" -> MapperTypes.Values.Scalars.UIntConverter
-                    "UShort" -> MapperTypes.Values.Scalars.UShortConverter
-                    "ULong" -> MapperTypes.Values.Scalars.ULongConverter
+                "UByte" -> MapperTypes.Values.Scalars.UByteConverter
+                "UInt" -> MapperTypes.Values.Scalars.UIntConverter
+                "UShort" -> MapperTypes.Values.Scalars.UShortConverter
+                "ULong" -> MapperTypes.Values.Scalars.ULongConverter
 
-                    else -> error("Unsupported list element $listElementName")
-                }
-
-                MapperTypes.Values.Collections.listConverter(elementConverter)
+                else -> error("Unsupported list element $listElementName")
             }
 
             // FIXME Should this check the full element name (kotlin.String) instead of just String
@@ -268,3 +272,9 @@ private data class AnnotatedClassProperty(val name: String, val typeRef: TypeRef
             }
     }
 }
+
+private fun <T> List<T>.pair(): Pair<T, T> {
+    check (this.size == 2) { "Failed to convert list $this to a pair, expected size 2, got ${this.size}" }
+    return Pair(this[0], this[1])
+}
+
