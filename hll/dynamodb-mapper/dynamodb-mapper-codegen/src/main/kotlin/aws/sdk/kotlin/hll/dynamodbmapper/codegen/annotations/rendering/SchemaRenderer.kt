@@ -147,17 +147,41 @@ internal class SchemaRenderer(
             "kotlin.UShort" -> MapperTypes.Values.Scalars.UShortConverter
             "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongConverter
 
-//            "kotlin.collections.List" -> when (this.typeRef.genericArgs.single().shortName) {
-//                "String" ->
-//            }
+            // FIXME Should this check the full element name (kotlin.String) instead of just String
+            "kotlin.collections.List" -> {
+                val elementConverter = when (val listElementName = this.typeRef.genericArgs.single().shortName) {
+                    "String" -> MapperTypes.Values.Scalars.StringConverter
+                    "CharArray" -> MapperTypes.Values.Scalars.CharArrayConverter
+                    "Char" -> MapperTypes.Values.Scalars.CharConverter
 
-            // FIXME Should this reference the full name (package and short name)?
-            "kotlin.collections.Set" -> when (val setTypeName = this.typeRef.genericArgs.single().shortName) {
+                    "Byte" -> MapperTypes.Values.Scalars.ByteConverter
+                    "ByteArray" -> MapperTypes.Values.Scalars.ByteArrayConverter
+                    "Short" -> MapperTypes.Values.Scalars.ShortConverter
+                    "Int" -> MapperTypes.Values.Scalars.IntConverter
+                    "Long" -> MapperTypes.Values.Scalars.LongConverter
+                    "Double" -> MapperTypes.Values.Scalars.DoubleConverter
+                    "Float" -> MapperTypes.Values.Scalars.FloatConverter
+
+                    "UByte" -> MapperTypes.Values.Scalars.UByteConverter
+                    "UInt" -> MapperTypes.Values.Scalars.UIntConverter
+                    "UShort" -> MapperTypes.Values.Scalars.UShortConverter
+                    "ULong" -> MapperTypes.Values.Scalars.ULongConverter
+
+                    else -> error("Unsupported list element $listElementName")
+                }
+
+                MapperTypes.Values.Collections.listConverter(elementConverter)
+            }
+
+            // FIXME Should this check the full element name (kotlin.String) instead of just String
+            "kotlin.collections.Set" -> when (val setElementName = this.typeRef.genericArgs.single().shortName) {
                 "String" -> MapperTypes.Values.Collections.StringSetConverter
                 "Char" -> MapperTypes.Values.Collections.CharSetConverter
                 "CharArray" -> MapperTypes.Values.Collections.CharArraySetConverter
 
                 "Byte" -> MapperTypes.Values.Collections.ByteSetConverter
+                "Double" -> MapperTypes.Values.Collections.DoubleSetConverter
+                "Float" -> MapperTypes.Values.Collections.FloatSetConverter
                 "Int" -> MapperTypes.Values.Collections.IntSetConverter
                 "Long" -> MapperTypes.Values.Collections.LongSetConverter
                 "Short" -> MapperTypes.Values.Collections.ShortSetConverter
@@ -166,10 +190,9 @@ internal class SchemaRenderer(
                 "ULong" -> MapperTypes.Values.Collections.ULongSetConverter
                 "UShort" -> MapperTypes.Values.Collections.UShortSetConverter
 
-                else -> error("Unsupported set type $setTypeName")
+                else -> error("Unsupported set element $setElementName")
             }
 
-            // TODO Add additional "standard" item converters
             else -> error("Unsupported attribute type ${typeName.asString()}")
         }
 
@@ -192,18 +215,18 @@ internal class SchemaRenderer(
 
     private val AnnotatedClassProperty.keySpec: TypeRef
         get() = when (typeName.asString()) {
+            "kotlin.ByteArray" -> Types.Kotlin.ByteArray
             "kotlin.Int" -> Types.Kotlin.Number
             "kotlin.String" -> Types.Kotlin.String
-            // TODO Handle ByteArray
-            else -> error("Unsupported key type ${typeName.asString()}, expected Int or String")
+            else -> error("Unsupported key type ${typeName.asString()}, expected ByteArray, Int, or String")
         }
 
     private val AnnotatedClassProperty.keySpecType: TypeRef
         get() = when (typeName.asString()) {
+            "kotlin.ByteArray" -> MapperTypes.Items.KeySpecByteArray
             "kotlin.Int" -> MapperTypes.Items.KeySpecNumber
             "kotlin.String" -> MapperTypes.Items.KeySpecString
-            // TODO Handle ByteArray
-            else -> error("Unsupported key type ${typeName.asString()}, expected Int or String")
+            else -> error("Unsupported key type ${typeName.asString()}, expected ByteArray, Int, or String")
         }
 
     private fun renderGetTable() {

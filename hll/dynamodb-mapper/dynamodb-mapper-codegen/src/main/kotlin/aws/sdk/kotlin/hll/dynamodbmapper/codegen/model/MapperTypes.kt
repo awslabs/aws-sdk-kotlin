@@ -24,6 +24,7 @@ internal object MapperTypes {
         fun keySpec(keyType: TypeRef) = TypeRef(Pkg.Hl.Items, "KeySpec", genericArgs = listOf(keyType))
         val KeySpecNumber = TypeRef(Pkg.Hl.Items, "KeySpec.Number")
         val KeySpecString = TypeRef(Pkg.Hl.Items, "KeySpec.String")
+        val KeySpecByteArray = TypeRef(Pkg.Hl.Items, "KeySpec.ByteArray")
         val AttributeDescriptor = TypeRef(Pkg.Hl.Items, "AttributeDescriptor")
         fun itemConverter(objectType: TypeRef) = TypeRef(Pkg.Hl.Items, "ItemConverter", genericArgs = listOf(objectType))
         val SimpleItemConverter = TypeRef(Pkg.Hl.Items, "SimpleItemConverter")
@@ -45,6 +46,8 @@ internal object MapperTypes {
 
     object Values {
         object Collections {
+            fun listConverter(elementConverter: TypeRef) = TypeRef(Pkg.Hl.CollectionValues, "ListConverter", genericArgs = listOf(elementConverter))
+
             val StringSetConverter = TypeRef(Pkg.Hl.CollectionValues, "StringSetConverter")
             val CharSetConverter = TypeRef(Pkg.Hl.CollectionValues, "CharSetConverter")
             val CharArraySetConverter = TypeRef(Pkg.Hl.CollectionValues, "CharArraySetConverter")
