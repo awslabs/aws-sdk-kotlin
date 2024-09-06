@@ -49,7 +49,7 @@ class TemplateProcessorTest {
         assertEquals(1, imports.size) // Size shouldn't have changed since class is already imported
 
         val fig = TypeRef(otherPkg, "Fig")
-        val elderberry = TypeRef(otherPkg, "Elderberry", genericArgs = listOf(TypeRef(otherPkg, "E"), fig))
+        val elderberry = TypeRef(otherPkg, "Elderberry", genericArgs = listOf(TypeVar("E"), fig))
         val date = TypeRef(pkg, "Date")
         val cherry = TypeRef(otherPkg, "Cherry", genericArgs = listOf(date, elderberry))
         assertEquals("Cherry<Date, Elderberry<E, Fig>>", processor.handler(cherry))
