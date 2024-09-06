@@ -24,6 +24,10 @@ dependencies {
     testImplementation(libs.kotlin.test.junit5)
 }
 
+kotlin {
+    explicitApi()
+}
+
 tasks.test {
     useJUnitPlatform()
     testLogging {

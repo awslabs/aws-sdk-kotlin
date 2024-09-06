@@ -19,7 +19,7 @@ import com.google.devtools.ksp.symbol.KSFunctionDeclaration
  * @param response The [Structure] for responses/output from this operation
  * @param attributes An [Attributes] collection for associating typed attributes with this operation
  */
-data class Operation(
+internal data class Operation(
     val methodName: String,
     val request: Structure,
     val response: Structure,
@@ -46,14 +46,14 @@ data class Operation(
 /**
  * Gets the low-level [Operation] equivalent for this high-level operation
  */
-val Operation.lowLevel: Operation
+internal val Operation.lowLevel: Operation
     get() = attributes[ModelAttributes.LowLevelOperation]
 
 /**
  * Derives a high-level [Operation] equivalent for this low-level operation
  * @param pkg The Kotlin package to use for the high-level operation's request and response structures
  */
-fun Operation.toHighLevel(pkg: String): Operation {
+internal fun Operation.toHighLevel(pkg: String): Operation {
     val llOperation = this@toHighLevel
     val hlRequest = llOperation.request.toHighLevel(pkg)
     val hlResponse = llOperation.response.toHighLevel(pkg)

@@ -22,7 +22,7 @@ import com.google.devtools.ksp.symbol.KSTypeReference
  * @param members The [Member] instances which are part of this structure
  * @param attributes An [Attributes] collection for associating typed attributes with this structure
  */
-data class Structure(
+internal data class Structure(
     val type: TypeRef,
     val members: List<Member>,
     val attributes: Attributes = emptyAttributes(),
@@ -44,14 +44,14 @@ data class Structure(
 /**
  * Gets the low-level [Structure] equivalent for this high-level structure
  */
-val Structure.lowLevel: Structure
+internal val Structure.lowLevel: Structure
     get() = attributes[ModelAttributes.LowLevelStructure]
 
 /**
  * Derives a a high-level [Structure] equivalent for this low-level structure
  * @param pkg The Kotlin package to use for the high-level structure
  */
-fun Structure.toHighLevel(pkg: String): Structure {
+internal fun Structure.toHighLevel(pkg: String): Structure {
     val llStructure = this@toHighLevel
 
     val hlType = TypeRef(pkg, llStructure.type.shortName, listOf(TypeVar("T")))

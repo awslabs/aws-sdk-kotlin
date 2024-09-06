@@ -11,7 +11,7 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
  * @param name The name of the member inside its parent [Structure]
  * @param type The [Type] of the member
  */
-data class Member(val name: String, val type: Type) {
+data class Member(val name: String, val type: Type, val mutable: Boolean = false) {
     companion object {
         /**
          * Derive a [Member] from a [KSPropertyDeclaration]
@@ -19,6 +19,7 @@ data class Member(val name: String, val type: Type) {
         fun from(prop: KSPropertyDeclaration) = Member(
             name = prop.simpleName.getShortName(),
             type = Type.from(prop.type),
+            mutable = prop.isMutable,
         )
     }
 }

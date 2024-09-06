@@ -2,11 +2,11 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-package aws.sdk.kotlin.hll.dynamodbmapper.tests.plugins
+package org.example
 
 import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.hll.dynamodbmapper.tests.plugins.mapper.schemas.UserConverter
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import org.example.dynamodbmapper.generatedschemas.UserConverter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
