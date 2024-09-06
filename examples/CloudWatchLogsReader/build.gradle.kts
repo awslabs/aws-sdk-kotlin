@@ -14,10 +14,17 @@ application {
 
 val awsSdkKotlinVersion: String by project
 
+kotlin {
+    jvmToolchain {
+        this.languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
     implementation("aws.sdk.kotlin:cloudwatchlogs:$awsSdkKotlinVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
 }
 
 graalvmNative {
@@ -29,6 +36,7 @@ graalvmNative {
     }
 }
 
+
 tasks.named<org.graalvm.buildtools.gradle.tasks.NativeRunTask>("nativeRun") {
-    this.runtimeArgs = listOf("my-region", "my-log-group", "my-log-stream")
+    this.runtimeArgs = listOf("ap-southeast-1", "my-log-group", "my-log-stream")
 }

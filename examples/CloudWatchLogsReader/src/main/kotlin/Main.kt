@@ -3,7 +3,18 @@ package aws.sdk.kotlin.example
 import aws.sdk.kotlin.services.cloudwatchlogs.CloudWatchLogsClient
 import aws.sdk.kotlin.services.cloudwatchlogs.model.GetLogEventsRequest
 import aws.sdk.kotlin.services.cloudwatchlogs.model.OutputLogEvent
+import aws.sdk.kotlin.services.cloudwatchlogs.paginators.events
+import aws.sdk.kotlin.services.cloudwatchlogs.paginators.getLogEventsPaginated
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+
+//import kotlinx.datetime.Instant
+//import kotlinx.datetime.TimeZone
+//import kotlinx.datetime.toLocalDateTime
 
 /**
  * This program reads log events from a specified AWS CloudWatch Logs stream.
@@ -27,8 +38,9 @@ import kotlinx.coroutines.runBlocking
  * }
  *
  * Ensure that the AWS credentials and necessary permissions are configured properly for accessing CloudWatch Logs. */
-fun main(args: Array<String>) = runBlocking {
 
+
+fun main(args: Array<String>) = runBlocking {
     val usage = """
         Usage: Required <region> <logGroupName> <logStreamName>
     """.trimIndent()
@@ -43,11 +55,18 @@ fun main(args: Array<String>) = runBlocking {
     val client = CloudWatchLogsClient { this.region = region }
 
     try {
-        // Print log events for the specified log stream
-        val logEvents = client.getLogEvents(logGroupName, logStreamName)
-        logEvents.forEach { logEvent ->
-            println("Log Event: ${logEvent.message}")
+
+        val request = GetLogEventsRequest {
+            this.logGroupName = logGroupName
+            this.logStreamName = logStreamName
         }
+        client.getLogEventsPaginated(request).buffer(4).collectLatest { response ->
+            response.events?.forEach { logEvent ->
+                println("Log Event: ${logEvent.message} ${logEvent.timestamp?.formattedDataTime()}")
+            }
+
+        }
+
     } catch (ex: Exception) {
         println("Error: ${ex.message}")
     } finally {
@@ -55,12 +74,9 @@ fun main(args: Array<String>) = runBlocking {
     }
 }
 
-suspend fun CloudWatchLogsClient.getLogEvents(logGroupName: String, logStreamName: String): List<OutputLogEvent> {
-    val request = GetLogEventsRequest {
-        this.logGroupName = logGroupName
-        this.logStreamName = logStreamName
-    }
-
-    val response = this.getLogEvents(request)
-    return response.events ?: emptyList()
+fun Long.formattedDataTime(): String {
+    val timestamp = Instant.fromEpochMilliseconds(this)
+    val dateTime = timestamp.toLocalDateTime(TimeZone.UTC)
+    return "${dateTime.monthNumber}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}"
 }
+
