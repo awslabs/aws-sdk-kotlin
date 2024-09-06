@@ -26,7 +26,7 @@ import aws.smithy.kotlin.runtime.content.Document
  * * [Document.List] ↔ [DynamoDB `L` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Document.List)
  * * [Document.Map] ↔ [DynamoDB `M` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Document.Map)
  */
-public class DocumentValueConverter(
+public class DocumentConverter(
     private val numberConverter: ValueConverter<Number> = AutoNumberConverter,
     private val stringConverter: ValueConverter<String> = StringConverter,
     private val booleanConverter: ValueConverter<Boolean> = BooleanConverter,
@@ -40,9 +40,9 @@ public class DocumentValueConverter(
 
     public companion object {
         /**
-         * The default instance of [DocumentValueConverter]
+         * The default instance of [DocumentConverter]
          */
-        public val Default: DocumentValueConverter = DocumentValueConverter()
+        public val Default: DocumentConverter = DocumentConverter()
     }
 
     override fun convertFrom(to: AttributeValue): Document = when (to) {

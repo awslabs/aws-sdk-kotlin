@@ -16,6 +16,7 @@ object Pkg {
         val PipelineImpl = "$Base.pipeline.internal"
         val Values = "$Base.values"
         val ScalarValues = "$Values.scalars"
+        val CollectionValues = "$Values.collections"
         val SmithyTypeValues = "$Values.smithytypes"
     }
 

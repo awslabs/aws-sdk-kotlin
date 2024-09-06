@@ -131,9 +131,50 @@ class SchemaRenderer(
     private val AnnotatedClassProperty.valueConverter: Type
         get() = when (typeName.asString()) {
             "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
+            "aws.smithy.kotlin.runtime.net.url.Url" -> MapperTypes.Values.SmithyTypes.UrlConverter
+            "aws.smithy.kotlin.runtime.content.Document" -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
+
             "kotlin.Boolean" -> MapperTypes.Values.Scalars.BooleanConverter
-            "kotlin.Int" -> MapperTypes.Values.Scalars.IntConverter
+
             "kotlin.String" -> MapperTypes.Values.Scalars.StringConverter
+            "kotlin.CharArray" -> MapperTypes.Values.Scalars.CharArrayConverter
+            "kotlin.Char" -> MapperTypes.Values.Scalars.CharConverter
+
+            "kotlin.Byte" -> MapperTypes.Values.Scalars.ByteConverter
+            "kotlin.ByteArray" -> MapperTypes.Values.Scalars.ByteArrayConverter
+            "kotlin.Short" -> MapperTypes.Values.Scalars.ShortConverter
+            "kotlin.Int" -> MapperTypes.Values.Scalars.IntConverter
+            "kotlin.Long" -> MapperTypes.Values.Scalars.LongConverter
+            "kotlin.Double" -> MapperTypes.Values.Scalars.DoubleConverter
+            "kotlin.Float" -> MapperTypes.Values.Scalars.FloatConverter
+
+            "kotlin.UByte" -> MapperTypes.Values.Scalars.UByteConverter
+            "kotlin.UInt" -> MapperTypes.Values.Scalars.UIntConverter
+            "kotlin.UShort" -> MapperTypes.Values.Scalars.UShortConverter
+            "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongConverter
+
+//            "kotlin.collections.List" -> when (this.typeRef.genericArgs.single().shortName) {
+//                "String" ->
+//            }
+
+            // FIXME Should this reference the full name (package and short name)?
+            "kotlin.collections.Set" -> when (val setTypeName = this.typeRef.genericArgs.single().shortName) {
+                "String" -> MapperTypes.Values.Collections.StringSetConverter
+                "Char" -> MapperTypes.Values.Collections.CharSetConverter
+                "CharArray" -> MapperTypes.Values.Collections.CharArraySetConverter
+
+                "Byte" -> MapperTypes.Values.Collections.ByteSetConverter
+                "Int" -> MapperTypes.Values.Collections.IntSetConverter
+                "Long" -> MapperTypes.Values.Collections.LongSetConverter
+                "Short" -> MapperTypes.Values.Collections.ShortSetConverter
+                "UByte" -> MapperTypes.Values.Collections.UByteSetConverter
+                "UInt" -> MapperTypes.Values.Collections.UIntSetConverter
+                "ULong" -> MapperTypes.Values.Collections.ULongSetConverter
+                "UShort" -> MapperTypes.Values.Collections.UShortSetConverter
+
+                else -> error("Unsupported set type $setTypeName")
+            }
+
             // TODO Add additional "standard" item converters
             else -> error("Unsupported attribute type ${typeName.asString()}")
         }

@@ -15,7 +15,7 @@ object Types {
          * Creates a [TypeRef] for a generic [List]
          * @param element The type of elements in the list
          */
-        fun list(element: Type) = TypeRef(Pkg.Kotlin.Collections, "List", listOf(element))
+        fun list(element: TypeRef) = TypeRef(Pkg.Kotlin.Collections, "List", listOf(element))
 
         /**
          * Creates a [TypeRef] for a named Kotlin type (e.g., `String`)
@@ -27,12 +27,12 @@ object Types {
          * @param key The type of keys in the map
          * @param value The type of values in the map
          */
-        fun map(key: Type, value: Type) = TypeRef(Pkg.Kotlin.Collections, "Map", listOf(key, value))
+        fun map(key: TypeRef, value: TypeRef) = TypeRef(Pkg.Kotlin.Collections, "Map", listOf(key, value))
 
         /**
          * Creates a [TypeRef] for a generic [Map] with [String] keys
          * @param value The type of values in the map
          */
-        fun stringMap(value: Type) = map(String, value)
+        fun stringMap(value: TypeRef) = map(String, value)
     }
 }
