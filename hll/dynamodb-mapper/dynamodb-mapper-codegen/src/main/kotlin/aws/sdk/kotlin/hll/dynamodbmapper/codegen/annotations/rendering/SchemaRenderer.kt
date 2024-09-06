@@ -17,7 +17,6 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcesso
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import aws.smithy.kotlin.runtime.collections.get
-import aws.smithy.kotlin.runtime.util.length
 import aws.smithy.kotlin.runtime.util.type
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
@@ -274,7 +273,6 @@ private data class AnnotatedClassProperty(val name: String, val typeRef: TypeRef
 }
 
 private fun <T> List<T>.pair(): Pair<T, T> {
-    check (this.size == 2) { "Failed to convert list $this to a pair, expected size 2, got ${this.size}" }
+    check(this.size == 2) { "Failed to convert list $this to a pair, expected size 2, got ${this.size}" }
     return Pair(this[0], this[1])
 }
-
