@@ -30,29 +30,12 @@ internal class HighLevelOpsProcessor(environment: SymbolProcessorEnvironment) : 
     private val pkg = environment.options["pkg"] ?: Pkg.Hl.Ops
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        val kClassDecl = resolver.getClassDeclarationByName<DynamoDbClient>()!!
-        logger.warn("MATAS kClassDecl: $kClassDecl")
-        logger.warn("MATAS kClassDecl.containingFile: ${kClassDecl.containingFile}") // always null
-        logger.warn("MATAS kClassDecl.parentDeclaration: ${kClassDecl.parentDeclaration}") // always null
-        logger.warn("MATAS kClassDecl.parentDeclaration.containingFile: ${kClassDecl.parentDeclaration?.containingFile}") // always null
-
-        val allFiles = resolver.getAllFiles()
-        // does not contain DynamoDbClient (low level)
-        // only contains DynamoDbMapper files
-        logger.warn("MATAS allFiles: ${allFiles.joinToString { it.toString() }}")
-
-        // always empty
-        val dependencies = resolver.getAllFiles().filter {
-            it.packageName.asString().startsWith("aws.sdk.kotlin.services.dynamodb")
-        }
-        logger.warn("MATAS dependencies: ${dependencies.joinToString { it.toString() }}")
-
         if (!invoked) {
             invoked = true
 
             logger.info("Scanning low-level DDB client for operations and types")
             val operations = getOperations(resolver)
-            val codegenFactory = CodeGeneratorFactory(codeGenerator, logger) // FIXME Don't use Dependencies.ALL_FILES
+            val codegenFactory = CodeGeneratorFactory(codeGenerator, logger) // FIXME Pass dependencies
             val ctx = RenderContext(logger, codegenFactory, pkg, "dynamodb-mapper-ops-codegen")
 
             HighLevelRenderer(ctx, operations).render()
