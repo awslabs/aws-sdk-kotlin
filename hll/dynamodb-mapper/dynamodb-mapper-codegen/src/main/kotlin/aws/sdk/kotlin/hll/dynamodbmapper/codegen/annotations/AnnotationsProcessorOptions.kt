@@ -23,6 +23,12 @@ public object AnnotationsProcessorOptions {
      * Determines whether a `DynamoDbMapper.get<CLASS>Table` convenience extension function will be generated. Defaults to true.
      */
     public val GenerateGetTableMethodAttribute: AttributeKey<Boolean> = AttributeKey("GenerateGetTableMethod")
+
+    /**
+     * Determines what the default (simple) item converter should do when encountering an unknown attribute.
+     * Defaults to [UnknownAttributes.WARNING] which will log a warning.
+     */
+    public val UnknownAttributesAttribute: AttributeKey<UnknownAttributes> = AttributeKey("UnknownAttributes")
 }
 
 /**
@@ -78,4 +84,20 @@ public sealed class DestinationPackage {
             }
         }
     }
+}
+
+/**
+ * Determines what the default (simple) item converter should do when encountering an unknown DynamoDb attribute.
+ * Defaults to [UnknownAttributes.WARNING] which will log a warning.
+ */
+public enum class UnknownAttributes {
+    /**
+     * Log a warning when an unknown DynamoDb attribute is encountered
+     */
+    WARNING,
+
+    /**
+     * Throw an exception when an unknown DynamoDb attribute is encountered
+     */
+    EXCEPTION,
 }
