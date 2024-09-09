@@ -197,7 +197,7 @@ internal class SchemaRenderer(
         }
 
     private fun KSType.singleArgument(): KSType = checkNotNull(arguments.single().type?.resolve()) {
-        "Failed to resolve set element type for ${this.declaration.qualifiedName?.asString()}"
+        "Failed to resolve single argument type for ${this.declaration.qualifiedName?.asString()}"
     }
 
     private val KSType.setValueConverter: Type
