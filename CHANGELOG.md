@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.28] - 09/09/2024
+
+### Features
+* (**elasticloadbalancingv2**) Add paginators for the ELBv2 DescribeListenerCertificates and DescribeRules APIs. Fix broken waiter for the ELBv2 DescribeLoadBalancers API.
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to broadcast to Stages using RTMP(S).
+* (**kafka**) Amazon MSK Replicator can now replicate data to identically named topics between MSK clusters within the same AWS Region or across different AWS Regions.
+* (**sagemaker**) Amazon Sagemaker supports orchestrating SageMaker HyperPod clusters with Amazon EKS
+* (**sagemakerruntime**) AWS SageMaker Runtime feature: Add sticky routing to support stateful inference models.
+
+### Documentation
+* (**dynamodb**) Doc-only update for DynamoDB. Added information about async behavior for TagResource and UntagResource APIs and updated the description of ResourceInUseException.
+
 ## [1.3.27] - 09/06/2024
 
 ### Features
