@@ -32,10 +32,8 @@ graalvmNative {
         resources.autodetect()
         // Add the META-INF/native-image directory to the classpath for reflection configuration
         configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
-
     }
 }
-
 
 tasks.named<org.graalvm.buildtools.gradle.tasks.NativeRunTask>("nativeRun") {
     this.runtimeArgs = listOf("ap-southeast-1", "my-log-group", "my-log-stream")
