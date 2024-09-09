@@ -566,6 +566,7 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConverte
 	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConverters;
 	public final fun getCharArrayToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public final fun getCharToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public final fun getStringToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/TextConvertersKt {

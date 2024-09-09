@@ -17,15 +17,11 @@ import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcesso
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import aws.smithy.kotlin.runtime.collections.get
-import aws.smithy.kotlin.runtime.util.type
 import com.google.devtools.ksp.KspExperimental
 import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.getConstructors
 import com.google.devtools.ksp.isAnnotationPresent
-import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSName
-import com.google.devtools.ksp.symbol.KSPropertyDeclaration
-import com.google.devtools.ksp.symbol.Modifier
+import com.google.devtools.ksp.symbol.*
 
 /**
  * Renders the classes and objects required to make a class usable with the DynamoDbMapper such as schemas, builders, and converters.
@@ -118,88 +114,109 @@ internal class SchemaRenderer(
                 write("#L,", "$className::${prop.name}::set")
             }
 
-            when (prop.typeName) {
-                "kotlin.collections.List" -> write("#T(#T)", MapperTypes.Values.Collections.ListConverter, prop.valueConverter)
-                "kotlin.collections.Map" -> {
-                    check(prop.typeRef.genericArgs.size == 2) { "Expected map type $prop to have 2 generic args, got ${prop.typeRef.genericArgs.size}" }
+            // converter
+            when {
+                prop.isEnum -> write("#T()", MapperTypes.Values.Scalars.enumConverter(prop.typeRef))
+                else -> {
+                    write("#T", prop.type.resolve().valueConverter)
                 }
-                else -> write("#T", prop.valueConverter)
             }
         }
     }
 
-    private val KSPropertyDeclaration.valueConverter: Type
-        get() = when (typeName) {
-            "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
-            "aws.smithy.kotlin.runtime.net.url.Url" -> MapperTypes.Values.SmithyTypes.UrlConverter
-            "aws.smithy.kotlin.runtime.content.Document" -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
-
-            "kotlin.Boolean" -> MapperTypes.Values.Scalars.BooleanConverter
-
-            "kotlin.String" -> MapperTypes.Values.Scalars.StringConverter
-            "kotlin.CharArray" -> MapperTypes.Values.Scalars.CharArrayConverter
-            "kotlin.Char" -> MapperTypes.Values.Scalars.CharConverter
-
-            "kotlin.Byte" -> MapperTypes.Values.Scalars.ByteConverter
-            "kotlin.ByteArray" -> MapperTypes.Values.Scalars.ByteArrayConverter
-            "kotlin.Short" -> MapperTypes.Values.Scalars.ShortConverter
-            "kotlin.Int" -> MapperTypes.Values.Scalars.IntConverter
-            "kotlin.Long" -> MapperTypes.Values.Scalars.LongConverter
-            "kotlin.Double" -> MapperTypes.Values.Scalars.DoubleConverter
-            "kotlin.Float" -> MapperTypes.Values.Scalars.FloatConverter
-
-            "kotlin.UByte" -> MapperTypes.Values.Scalars.UByteConverter
-            "kotlin.UInt" -> MapperTypes.Values.Scalars.UIntConverter
-            "kotlin.UShort" -> MapperTypes.Values.Scalars.UShortConverter
-            "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongConverter
-
-            // FIXME Should this check the full element name (kotlin.String) instead of just String
-            // genericArgs don't seem structured to provide a full package name (i.e what is the package in List<T>?)
-            "kotlin.collections.List" -> when (val listElementName = this.typeRef.genericArgs.single().shortName) {
-                "String" -> MapperTypes.Values.Scalars.StringConverter
-                "CharArray" -> MapperTypes.Values.Scalars.CharArrayConverter
-                "Char" -> MapperTypes.Values.Scalars.CharConverter
-
-                "Byte" -> MapperTypes.Values.Scalars.ByteConverter
-                "ByteArray" -> MapperTypes.Values.Scalars.ByteArrayConverter
-                "Short" -> MapperTypes.Values.Scalars.ShortConverter
-                "Int" -> MapperTypes.Values.Scalars.IntConverter
-                "Long" -> MapperTypes.Values.Scalars.LongConverter
-                "Double" -> MapperTypes.Values.Scalars.DoubleConverter
-                "Float" -> MapperTypes.Values.Scalars.FloatConverter
-
-                "UByte" -> MapperTypes.Values.Scalars.UByteConverter
-                "UInt" -> MapperTypes.Values.Scalars.UIntConverter
-                "UShort" -> MapperTypes.Values.Scalars.UShortConverter
-                "ULong" -> MapperTypes.Values.Scalars.ULongConverter
-                // FIXME Handle custom list elements (e.g. List<Foo>)
-
-                else -> error("Unsupported list element $listElementName")
+    private val KSType.valueConverter: Type
+        get() {
+            if (this.isEnum) {
+                return MapperTypes.Values.Scalars.enumConverter(Type.from(this))
             }
 
-            // FIXME Should this check the full element name (kotlin.String) instead of just String
-            "kotlin.collections.Set" -> when (val setElementName = this.typeRef.genericArgs.single().shortName) {
-                "String" -> MapperTypes.Values.Collections.StringSetConverter
-                "Char" -> MapperTypes.Values.Collections.CharSetConverter
-                "CharArray" -> MapperTypes.Values.Collections.CharArraySetConverter
+            return when (this.declaration.qualifiedName?.asString()) {
+                "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
+                "aws.smithy.kotlin.runtime.net.url.Url" -> MapperTypes.Values.SmithyTypes.UrlConverter
+                "aws.smithy.kotlin.runtime.content.Document" -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
 
-                "Byte" -> MapperTypes.Values.Collections.ByteSetConverter
-                "Double" -> MapperTypes.Values.Collections.DoubleSetConverter
-                "Float" -> MapperTypes.Values.Collections.FloatSetConverter
-                "Int" -> MapperTypes.Values.Collections.IntSetConverter
-                "Long" -> MapperTypes.Values.Collections.LongSetConverter
-                "Short" -> MapperTypes.Values.Collections.ShortSetConverter
-                "UByte" -> MapperTypes.Values.Collections.UByteSetConverter
-                "UInt" -> MapperTypes.Values.Collections.UIntSetConverter
-                "ULong" -> MapperTypes.Values.Collections.ULongSetConverter
-                "UShort" -> MapperTypes.Values.Collections.UShortSetConverter
+                "kotlin.Boolean" -> MapperTypes.Values.Scalars.BooleanConverter
+                "kotlin.String" -> MapperTypes.Values.Scalars.StringConverter
+                "kotlin.CharArray" -> MapperTypes.Values.Scalars.CharArrayConverter
+                "kotlin.Char" -> MapperTypes.Values.Scalars.CharConverter
+                "kotlin.Byte" -> MapperTypes.Values.Scalars.ByteConverter
+                "kotlin.ByteArray" -> MapperTypes.Values.Scalars.ByteArrayConverter
+                "kotlin.Short" -> MapperTypes.Values.Scalars.ShortConverter
+                "kotlin.Int" -> MapperTypes.Values.Scalars.IntConverter
+                "kotlin.Long" -> MapperTypes.Values.Scalars.LongConverter
+                "kotlin.Double" -> MapperTypes.Values.Scalars.DoubleConverter
+                "kotlin.Float" -> MapperTypes.Values.Scalars.FloatConverter
+                "kotlin.UByte" -> MapperTypes.Values.Scalars.UByteConverter
+                "kotlin.UInt" -> MapperTypes.Values.Scalars.UIntConverter
+                "kotlin.UShort" -> MapperTypes.Values.Scalars.UShortConverter
+                "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongConverter
 
-                // FIXME Handle custom set elements (e.g. Set<Foo>)
+                "kotlin.collections.Set" -> this.singleArgument().setValueConverter
 
-                else -> error("Unsupported set element $setElementName")
+                "kotlin.collections.List" -> {
+                    val listElementConverter = this.singleArgument().valueConverter
+                    MapperTypes.Values.Collections.listConverter(listElementConverter)
+                }
+
+                "kotlin.collections.Map" -> {
+                    check(arguments.size == 2) { "Expected map type ${declaration.qualifiedName?.asString()} to have 2 arguments, got ${arguments.size}"}
+
+                    val (keyType, valueType) = arguments
+                        .map {
+                            checkNotNull(it.type?.resolve()) {
+                                "Failed to resolved argument type for $it"
+                            }
+                        }
+
+                    val keyConverter = keyType.mapKeyConverter
+                    val valueConverter = valueType.valueConverter
+
+                    MapperTypes.Values.Collections.mapConverter(keyConverter, valueConverter)
+                }
+
+                else -> error("Unsupported attribute type $this")
             }
+        }
 
-            else -> error("Unsupported attribute type $typeName")
+    private val KSType.mapKeyConverter: Type
+        get() = when (val name = this.declaration.qualifiedName?.asString()) {
+            "kotlin.CharArray" -> MapperTypes.Values.Scalars.CharArrayToStringConverter
+            "kotlin.Char" -> MapperTypes.Values.Scalars.CharToStringConverter
+            "kotlin.String" -> MapperTypes.Values.Scalars.StringToStringConverter
+            "kotlin.Byte" -> MapperTypes.Values.Scalars.ByteToStringConverter
+            "kotlin.Double" -> MapperTypes.Values.Scalars.DoubleToStringConverter
+            "kotlin.Float" -> MapperTypes.Values.Scalars.FloatToStringConverter
+            "kotlin.Int" -> MapperTypes.Values.Scalars.IntToStringConverter
+            "kotlin.Long" -> MapperTypes.Values.Scalars.LongToStringConverter
+            "kotlin.Short" -> MapperTypes.Values.Scalars.ShortToStringConverter
+            "kotlin.UByte" -> MapperTypes.Values.Scalars.UByteToStringConverter
+            "kotlin.UInt" -> MapperTypes.Values.Scalars.UIntToStringConverter
+            "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongToStringConverter
+            "kotlin.UShort" -> MapperTypes.Values.Scalars.UShortToStringConverter
+            else -> error("Unsupported key type: $name")
+        }
+
+
+    private fun KSType.singleArgument(): KSType = checkNotNull(arguments.single().type?.resolve()) {
+        "Failed to resolve set element type for ${this.declaration.qualifiedName?.asString()}"
+    }
+
+    private val KSType.setValueConverter: Type
+        get() = when(this.declaration.qualifiedName?.asString()) {
+            "kotlin.String" -> MapperTypes.Values.Collections.StringSetConverter
+            "kotlin.Char" -> MapperTypes.Values.Collections.CharSetConverter
+            "kotlin.CharArray" -> MapperTypes.Values.Collections.CharArraySetConverter
+            "kotlin.Byte" -> MapperTypes.Values.Collections.ByteSetConverter
+            "kotlin.Double" -> MapperTypes.Values.Collections.DoubleSetConverter
+            "kotlin.Float" -> MapperTypes.Values.Collections.FloatSetConverter
+            "kotlin.Int" -> MapperTypes.Values.Collections.IntSetConverter
+            "kotlin.Long" -> MapperTypes.Values.Collections.LongSetConverter
+            "kotlin.Short" -> MapperTypes.Values.Collections.ShortSetConverter
+            "kotlin.UByte" -> MapperTypes.Values.Collections.UByteSetConverter
+            "kotlin.UInt" -> MapperTypes.Values.Collections.UIntSetConverter
+            "kotlin.ULong" -> MapperTypes.Values.Collections.ULongSetConverter
+            "kotlin.UShort" -> MapperTypes.Values.Collections.UShortSetConverter
+            else -> error("Unsupported set element $this")
         }
 
     private fun renderSchema() {
@@ -275,3 +292,9 @@ private val KSPropertyDeclaration.typeRef: TypeRef
 @OptIn(KspExperimental::class)
 private val KSPropertyDeclaration.ddbName: String
     get() = getAnnotationsByType(DynamoDbAttribute::class).singleOrNull()?.name ?: name
+
+private val KSPropertyDeclaration.isEnum: Boolean
+    get() = (type.resolve().declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS
+
+private val KSType.isEnum: Boolean
+    get() = (declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS

@@ -46,7 +46,8 @@ internal object MapperTypes {
 
     object Values {
         object Collections {
-            val ListConverter = TypeRef(Pkg.Hl.CollectionValues, "ListConverter")
+            fun listConverter(elementConverter: Type) = TypeRef(Pkg.Hl.CollectionValues, "ListConverter", args = listOf(elementConverter))
+            fun mapConverter(keyConverter: Type, valueConverter: Type) = TypeRef(Pkg.Hl.CollectionValues, "MapConverter", args = listOf(keyConverter, valueConverter))
 
             val StringSetConverter = TypeRef(Pkg.Hl.CollectionValues, "StringSetConverter")
             val CharSetConverter = TypeRef(Pkg.Hl.CollectionValues, "CharSetConverter")
@@ -66,6 +67,8 @@ internal object MapperTypes {
         }
 
         object Scalars {
+            fun enumConverter(enumType: Type) = TypeRef(Pkg.Hl.ScalarValues, "EnumConverter", genericArgs = listOf(enumType))
+
             val BooleanConverter = TypeRef(Pkg.Hl.ScalarValues, "BooleanConverter")
             val StringConverter = TypeRef(Pkg.Hl.ScalarValues, "StringConverter")
             val CharConverter = TypeRef(Pkg.Hl.ScalarValues, "CharConverter")
@@ -82,6 +85,20 @@ internal object MapperTypes {
             val UIntConverter = TypeRef(Pkg.Hl.ScalarValues, "UIntConverter")
             val ULongConverter = TypeRef(Pkg.Hl.ScalarValues, "ULongConverter")
             val UShortConverter = TypeRef(Pkg.Hl.ScalarValues, "UShortConverter")
+
+            val CharArrayToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "TextConverters.CharArrayToStringConverter")
+            val CharToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "TextConverters.CharToStringConverter")
+            val StringToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "TextConverters.StringToStringConverter")
+            val ByteToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.ByteToStringConverter")
+            val DoubleToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.DoubleToStringConverter")
+            val FloatToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.FloatToStringConverter")
+            val IntToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.IntToStringConverter")
+            val LongToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.LongToStringConverter")
+            val ShortToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.ShortToStringConverter")
+            val UByteToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.UByteToStringConverter")
+            val UIntToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.UIntToStringConverter")
+            val ULongToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.ULongToStringConverter")
+            val UShortToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "NumberConverters.UShortToStringConverter")
         }
 
         object SmithyTypes {
