@@ -63,4 +63,3 @@ fun Long.formattedDateTime(): String {
     val dateTime = timestamp.toLocalDateTime(TimeZone.UTC)
     return "${dateTime.dayOfMonth}-${dateTime.monthNumber}-${dateTime.year} ${dateTime.hour}:${dateTime.minute}:${dateTime.second}"
 }
-
