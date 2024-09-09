@@ -28,7 +28,6 @@ internal sealed interface MemberCodegenBehavior {
             member in unsupportedMembers -> Drop
             member.type in attrMapTypes -> if (member.name == "key") MapKeys else MapAll
             member.isTableName -> Hoist
-            member.isFilterExpression -> FilterExpression
             else -> PassThrough
         }
     }
@@ -66,12 +65,6 @@ internal sealed interface MemberCodegenBehavior {
      * structure).
      */
     data object Hoist : MemberCodegenBehavior
-
-    /**
-     * Indicates that a member from a low-level structure represents a filter expression and should be replaced with a
-     * filter DSL
-     */
-    data object FilterExpression : MemberCodegenBehavior
 }
 
 /**
@@ -84,9 +77,6 @@ internal val Member.codegenBehavior: MemberCodegenBehavior
         isTableName || isIndexName -> MemberCodegenBehavior.Hoist
         else -> MemberCodegenBehavior.PassThrough
     }
-
-private val Member.isFilterExpression: Boolean
-    get() = name == "filterExpression" && type == Types.Kotlin.StringNullable
 
 private val Member.isTableName: Boolean
     get() = name == "tableName" && type == Types.Kotlin.StringNullable
