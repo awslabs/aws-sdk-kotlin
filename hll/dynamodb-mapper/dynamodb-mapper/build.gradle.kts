@@ -20,8 +20,6 @@ buildscript {
 
 plugins {
     alias(libs.plugins.ksp)
-
-    id("org.jetbrains.kotlinx.kover") version "0.9.0-RC" // REMOVE ME
 }
 
 kotlin {
