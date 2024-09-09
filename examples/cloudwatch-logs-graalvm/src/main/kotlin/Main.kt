@@ -9,7 +9,6 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-
 /**
  * This program reads log events from a specified AWS CloudWatch Logs stream.
  *
@@ -32,7 +31,6 @@ import kotlinx.datetime.toLocalDateTime
  * }
  *
  * Ensure that the AWS credentials and necessary permissions are configured properly for accessing CloudWatch Logs. */
-
 
 fun main(args: Array<String>) = runBlocking {
     val usage = """
@@ -58,7 +56,6 @@ fun main(args: Array<String>) = runBlocking {
             }
         }
     }
-
 }
 
 fun Long.formattedDateTime(): String {
