@@ -26,7 +26,7 @@ public object TextConverters {
     /**
      * Converts between [String] and [String]
      */
-    public val StringToStringConverter: Converter<String, String> = Converter( { it }, { it } )
+    public val StringToStringConverter: Converter<String, String> = Converter({ it }, { it })
 }
 
 /**

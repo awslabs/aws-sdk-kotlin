@@ -159,7 +159,7 @@ internal class SchemaRenderer(
                 }
 
                 "kotlin.collections.Map" -> {
-                    check(arguments.size == 2) { "Expected map type ${declaration.qualifiedName?.asString()} to have 2 arguments, got ${arguments.size}"}
+                    check(arguments.size == 2) { "Expected map type ${declaration.qualifiedName?.asString()} to have 2 arguments, got ${arguments.size}" }
 
                     val (keyType, valueType) = arguments
                         .map {
@@ -196,13 +196,12 @@ internal class SchemaRenderer(
             else -> error("Unsupported key type: $name")
         }
 
-
     private fun KSType.singleArgument(): KSType = checkNotNull(arguments.single().type?.resolve()) {
         "Failed to resolve set element type for ${this.declaration.qualifiedName?.asString()}"
     }
 
     private val KSType.setValueConverter: Type
-        get() = when(this.declaration.qualifiedName?.asString()) {
+        get() = when (this.declaration.qualifiedName?.asString()) {
             "kotlin.String" -> MapperTypes.Values.Collections.StringSetConverter
             "kotlin.Char" -> MapperTypes.Values.Collections.CharSetConverter
             "kotlin.CharArray" -> MapperTypes.Values.Collections.CharArraySetConverter
