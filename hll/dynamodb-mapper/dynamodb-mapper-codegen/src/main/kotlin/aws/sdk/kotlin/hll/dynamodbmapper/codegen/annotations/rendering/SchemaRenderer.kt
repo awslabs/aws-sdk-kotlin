@@ -44,19 +44,18 @@ internal class SchemaRenderer(
     private val schemaName = "${className}Schema"
 
     private val properties = classDeclaration.getAllProperties().filterNot { it.modifiers.contains(Modifier.PRIVATE) }
-    private val annotatedProperties = properties.mapNotNull(AnnotatedClassProperty.Companion::from)
 
     init {
-        check(annotatedProperties.count { it.isPk } == 1) {
+        check(properties.count { it.isPk } == 1) {
             "Expected exactly one @DynamoDbPartitionKey annotation on a property"
         }
-        check(annotatedProperties.count { it.isSk } <= 1) {
+        check(properties.count { it.isSk } <= 1) {
             "Expected at most one @DynamoDbSortKey annotation on a property"
         }
     }
 
-    private val partitionKeyProp = annotatedProperties.single { it.isPk }
-    private val sortKeyProp = annotatedProperties.singleOrNull { it.isSk }
+    private val partitionKeyProp = properties.single { it.isPk }
+    private val sortKeyProp = properties.singleOrNull { it.isSk }
 
     /**
      * We skip rendering a class builder if:
@@ -99,7 +98,7 @@ internal class SchemaRenderer(
             }
 
             withBlock("descriptors = arrayOf(", "),") {
-                annotatedProperties.forEach {
+                properties.forEach {
                     renderAttributeDescriptor(it)
                 }
             }
@@ -107,7 +106,7 @@ internal class SchemaRenderer(
         blankLine()
     }
 
-    private fun renderAttributeDescriptor(prop: AnnotatedClassProperty) {
+    private fun renderAttributeDescriptor(prop: KSPropertyDeclaration) {
         withBlock("#T(", "),", MapperTypes.Items.AttributeDescriptor) {
             write("#S,", prop.ddbName) // key
             write("#L,", "$className::${prop.name}") // getter
@@ -119,7 +118,7 @@ internal class SchemaRenderer(
                 write("#L,", "$className::${prop.name}::set")
             }
 
-            when (prop.typeName.asString()) {
+            when (prop.typeName) {
                 "kotlin.collections.List" -> write("#T(#T)", MapperTypes.Values.Collections.ListConverter, prop.valueConverter)
                 "kotlin.collections.Map" -> {
                     check(prop.typeRef.genericArgs.size == 2) { "Expected map type $prop to have 2 generic args, got ${prop.typeRef.genericArgs.size}" }
@@ -129,8 +128,8 @@ internal class SchemaRenderer(
         }
     }
 
-    private val AnnotatedClassProperty.valueConverter: Type
-        get() = when (typeName.asString()) {
+    private val KSPropertyDeclaration.valueConverter: Type
+        get() = when (typeName) {
             "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
             "aws.smithy.kotlin.runtime.net.url.Url" -> MapperTypes.Values.SmithyTypes.UrlConverter
             "aws.smithy.kotlin.runtime.content.Document" -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
@@ -155,6 +154,7 @@ internal class SchemaRenderer(
             "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongConverter
 
             // FIXME Should this check the full element name (kotlin.String) instead of just String
+            // genericArgs don't seem structured to provide a full package name (i.e what is the package in List<T>?)
             "kotlin.collections.List" -> when (val listElementName = this.typeRef.genericArgs.single().shortName) {
                 "String" -> MapperTypes.Values.Scalars.StringConverter
                 "CharArray" -> MapperTypes.Values.Scalars.CharArrayConverter
@@ -172,6 +172,7 @@ internal class SchemaRenderer(
                 "UInt" -> MapperTypes.Values.Scalars.UIntConverter
                 "UShort" -> MapperTypes.Values.Scalars.UShortConverter
                 "ULong" -> MapperTypes.Values.Scalars.ULongConverter
+                // FIXME Handle custom list elements (e.g. List<Foo>)
 
                 else -> error("Unsupported list element $listElementName")
             }
@@ -193,10 +194,12 @@ internal class SchemaRenderer(
                 "ULong" -> MapperTypes.Values.Collections.ULongSetConverter
                 "UShort" -> MapperTypes.Values.Collections.UShortSetConverter
 
+                // FIXME Handle custom set elements (e.g. Set<Foo>)
+
                 else -> error("Unsupported set element $setElementName")
             }
 
-            else -> error("Unsupported attribute type ${typeName.asString()}")
+            else -> error("Unsupported attribute type $typeName")
         }
 
     private fun renderSchema() {
@@ -216,20 +219,20 @@ internal class SchemaRenderer(
         blankLine()
     }
 
-    private val AnnotatedClassProperty.keySpec: TypeRef
-        get() = when (typeName.asString()) {
+    private val KSPropertyDeclaration.keySpec: TypeRef
+        get() = when (typeName) {
             "kotlin.ByteArray" -> Types.Kotlin.ByteArray
             "kotlin.Int" -> Types.Kotlin.Number
             "kotlin.String" -> Types.Kotlin.String
-            else -> error("Unsupported key type ${typeName.asString()}, expected ByteArray, Int, or String")
+            else -> error("Unsupported key type $typeName, expected ByteArray, Int, or String")
         }
 
-    private val AnnotatedClassProperty.keySpecType: TypeRef
-        get() = when (typeName.asString()) {
+    private val KSPropertyDeclaration.keySpecType: TypeRef
+        get() = when (typeName) {
             "kotlin.ByteArray" -> MapperTypes.Items.KeySpecByteArray
             "kotlin.Int" -> MapperTypes.Items.KeySpecNumber
             "kotlin.String" -> MapperTypes.Items.KeySpecString
-            else -> error("Unsupported key type ${typeName.asString()}, expected ByteArray, Int, or String")
+            else -> error("Unsupported key type $typeName, expected ByteArray, Int, or String")
         }
 
     private fun renderGetTable() {
@@ -252,27 +255,23 @@ internal class SchemaRenderer(
     }
 }
 
-private data class AnnotatedClassProperty(val name: String, val typeRef: TypeRef, val ddbName: String, val typeName: KSName, val isPk: Boolean, val isSk: Boolean) {
-    companion object {
-        @OptIn(KspExperimental::class)
-        fun from(ksProperty: KSPropertyDeclaration) = ksProperty
-            .getter
-            ?.returnType
-            ?.resolve()
-            ?.declaration
-            ?.qualifiedName
-            ?.let { typeName ->
-                val isPk = ksProperty.isAnnotationPresent(DynamoDbPartitionKey::class)
-                val isSk = ksProperty.isAnnotationPresent(DynamoDbSortKey::class)
-                val name = ksProperty.simpleName.getShortName()
-                val typeRef = Type.from(checkNotNull(ksProperty.type) { "Failed to determine class type for $name" })
-                val ddbName = ksProperty.getAnnotationsByType(DynamoDbAttribute::class).singleOrNull()?.name ?: name
-                AnnotatedClassProperty(name, typeRef, ddbName, typeName, isPk, isSk)
-            }
-    }
-}
+private val KSPropertyDeclaration.typeName: String
+    get() = checkNotNull(getter?.returnType?.resolve()?.declaration?.qualifiedName?.asString()) { "Failed to determine type name for $this" }
 
-private fun <T> List<T>.pair(): Pair<T, T> {
-    check(this.size == 2) { "Failed to convert list $this to a pair, expected size 2, got ${this.size}" }
-    return Pair(this[0], this[1])
-}
+@OptIn(KspExperimental::class)
+private val KSPropertyDeclaration.isPk: Boolean
+    get() = isAnnotationPresent(DynamoDbPartitionKey::class)
+
+@OptIn(KspExperimental::class)
+private val KSPropertyDeclaration.isSk: Boolean
+    get() = isAnnotationPresent(DynamoDbSortKey::class)
+
+private val KSPropertyDeclaration.name: String
+    get() = simpleName.getShortName()
+
+private val KSPropertyDeclaration.typeRef: TypeRef
+    get() = Type.from(checkNotNull(type) { "Failed to determine class type for $name" })
+
+@OptIn(KspExperimental::class)
+private val KSPropertyDeclaration.ddbName: String
+    get() = getAnnotationsByType(DynamoDbAttribute::class).singleOrNull()?.name ?: name
