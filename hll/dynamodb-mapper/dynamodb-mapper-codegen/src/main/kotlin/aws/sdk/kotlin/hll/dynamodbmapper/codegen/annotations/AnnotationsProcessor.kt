@@ -23,7 +23,6 @@ public class AnnotationsProcessor(private val environment: SymbolProcessorEnviro
     private var invoked = false
     private val logger = environment.logger
     private val codeGenerator = environment.codeGenerator
-    private val codeGeneratorFactory = CodeGeneratorFactory(codeGenerator, logger)
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         if (invoked) {
@@ -41,6 +40,9 @@ public class AnnotationsProcessor(private val environment: SymbolProcessorEnviro
             .also { logger.info("Found annotated classes: $it") }
             .filterIsInstance<KSClassDeclaration>()
             .filter { it.validate() }
+
+        val dependencies = Dependencies(aggregating = true, *(annotatedClasses.mapNotNull { it.containingFile }.toTypedArray()))
+        val codeGeneratorFactory = CodeGeneratorFactory(environment.codeGenerator, logger, dependencies)
 
         HighLevelRenderer(annotatedClasses, logger, codeGeneratorFactory, getCodegenAttributes()).render()
 
