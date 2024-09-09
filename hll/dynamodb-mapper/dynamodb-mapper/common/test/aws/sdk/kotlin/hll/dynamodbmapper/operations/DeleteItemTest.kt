@@ -8,6 +8,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.AttributeDescriptor
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.DdbLocalTest
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
@@ -37,7 +38,7 @@ class DeleteItemTest : DdbLocalTest() {
         createTable(
             TABLE_NAME,
             schema,
-            mapOf("id" to "foo", "value" to 42),
+            itemOf("id" to "foo", "value" to 42),
         )
     }
 

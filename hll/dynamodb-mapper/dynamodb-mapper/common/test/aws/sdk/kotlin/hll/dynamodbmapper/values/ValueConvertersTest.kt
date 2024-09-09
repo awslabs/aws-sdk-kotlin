@@ -4,8 +4,8 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.values
 
-import aws.sdk.kotlin.hll.dynamodbmapper.testutils.attr
-import aws.sdk.kotlin.hll.dynamodbmapper.testutils.dynamicAttr
+import aws.sdk.kotlin.hll.dynamodbmapper.util.attr
+import aws.sdk.kotlin.hll.dynamodbmapper.util.dynamicAttr
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals

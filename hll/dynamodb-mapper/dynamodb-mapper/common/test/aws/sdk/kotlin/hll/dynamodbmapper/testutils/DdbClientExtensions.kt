@@ -7,6 +7,8 @@ package aws.sdk.kotlin.hll.dynamodbmapper.testutils
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
+import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.batchWriteItem
 import aws.sdk.kotlin.services.dynamodb.createTable
@@ -75,9 +77,9 @@ suspend fun DynamoDbClient.createTable(
  * @param tableName The name of the table to fetch from
  * @param keys One or more tuples of string key to value
  */
-suspend fun DynamoDbClient.getItem(tableName: String, vararg keys: Pair<String, Any>) = getItem {
+suspend fun DynamoDbClient.getItem(tableName: String, vararg keys: Pair<String, Any?>) = getItem {
     this.tableName = tableName
-    key = ddbItem(keys.toMap())
+    key = itemOf(*keys)
 }
 
 /**
@@ -85,11 +87,11 @@ suspend fun DynamoDbClient.getItem(tableName: String, vararg keys: Pair<String, 
  * @param tableName The name of the table to insert to
  * @param items A collection of maps of strings to values to be mapped and persisted to the table
  */
-suspend fun DynamoDbClient.putItems(tableName: String, items: List<Map<String, Any>>) {
-    val writeRequests = items.map { mapItem ->
+suspend fun DynamoDbClient.putItems(tableName: String, items: List<Item>) {
+    val writeRequests = items.map { item ->
         WriteRequest {
             putRequest {
-                item = ddbItem(mapItem)
+                this.item = item
             }
         }
     }

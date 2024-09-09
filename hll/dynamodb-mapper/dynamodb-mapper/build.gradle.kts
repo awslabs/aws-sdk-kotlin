@@ -20,6 +20,8 @@ buildscript {
 
 plugins {
     alias(libs.plugins.ksp)
+
+    id("org.jetbrains.kotlinx.kover") version "0.9.0-RC" // REMOVE ME
 }
 
 kotlin {
@@ -34,7 +36,6 @@ kotlin {
 
         commonTest {
             dependencies {
-                implementation(libs.kotlin.reflect)
                 implementation(libs.kotlinx.coroutines.test)
                 implementation(libs.kotest.assertions.core)
                 implementation(libs.kotest.runner.junit5)

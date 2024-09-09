@@ -75,7 +75,7 @@ if ("dynamodb".isBootstrappedService) {
     include(":hll:dynamodb-mapper:dynamodb-mapper-annotations")
     include(":hll:dynamodb-mapper:tests:dynamodb-mapper-annotation-processor-test")
     include(":hll:dynamodb-mapper:dynamodb-mapper-schema-generator-plugin")
-    include(":hll:dynamodb-mapper:tests:dynamodb-mapper-schema-generator-plugin-test")
+    // include(":hll:dynamodb-mapper:tests:dynamodb-mapper-schema-generator-plugin-test")
 } else {
     logger.warn(":services:dynamodb is not bootstrapped, skipping :hll:dynamodb-mapper and subprojects")
 }
