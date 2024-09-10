@@ -12,7 +12,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper
 public annotation class DynamoDbAttribute(val name: String)
 
 /**
- * Specifies that this class/interface describes an item type in a table. All properties of this type will be mapped to
+ * Specifies that this class/interface describes an item type in a table. All public properties of this type will be mapped to
  * attributes unless they are explicitly ignored.
  */
 @Target(AnnotationTarget.CLASS)
@@ -31,3 +31,16 @@ public annotation class DynamoDbPartitionKey
  */
 @Target(AnnotationTarget.PROPERTY)
 public annotation class DynamoDbSortKey
+
+/**
+ * Specifies that this property should be ignored by the DynamoDb Mapper.
+ */
+@Target(AnnotationTarget.PROPERTY)
+public annotation class DynamoDbIgnore
+
+/**
+ * Specifies that a custom ItemConverter should be used to convert this class/interface.
+ * @param qualifiedName The fully qualified name of the item converter.
+ */
+@Target(AnnotationTarget.CLASS)
+public annotation class DynamoDbItemConverter(val qualifiedName: String)

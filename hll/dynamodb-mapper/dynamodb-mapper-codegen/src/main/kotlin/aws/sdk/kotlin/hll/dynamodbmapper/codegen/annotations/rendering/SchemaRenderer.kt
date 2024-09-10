@@ -10,9 +10,7 @@ import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.rendering.*
 import aws.sdk.kotlin.hll.codegen.util.visibility
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbSortKey
+import aws.sdk.kotlin.hll.dynamodbmapper.*
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
@@ -31,6 +29,7 @@ import com.google.devtools.ksp.symbol.Modifier
  * @param classDeclaration the [KSClassDeclaration] of the class
  * @param ctx the [RenderContext] of the renderer
  */
+@OptIn(KspExperimental::class)
 internal class SchemaRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
@@ -42,7 +41,11 @@ internal class SchemaRenderer(
     private val converterName = "${className}Converter"
     private val schemaName = "${className}Schema"
 
-    private val properties = classDeclaration.getAllProperties().filterNot { it.modifiers.contains(Modifier.PRIVATE) }
+    @OptIn(KspExperimental::class)
+    private val properties = classDeclaration.getAllProperties()
+        .filterNot { it.modifiers.contains(Modifier.PRIVATE) }
+        .filterNot { it.isAnnotationPresent(DynamoDbIgnore::class) }
+
     private val annotatedProperties = properties.mapNotNull(AnnotatedClassProperty.Companion::from)
 
     init {
@@ -56,6 +59,17 @@ internal class SchemaRenderer(
 
     private val partitionKeyProp = annotatedProperties.single { it.isPk }
     private val sortKeyProp = annotatedProperties.singleOrNull { it.isSk }
+
+    private val itemConverter: Type
+        get() = run {
+            val qualifiedName = classDeclaration.getAnnotationsByType(DynamoDbItemConverter::class).singleOrNull()?.qualifiedName
+
+            return qualifiedName?.let {
+                val pkg = qualifiedName.substringBeforeLast(".")
+                val shortName = qualifiedName.removePrefix("$pkg.")
+                TypeRef(pkg, shortName)
+            } ?: TypeRef(ctx.pkg, "${className}Converter")
+        }
 
     /**
      * We skip rendering a class builder if:
@@ -75,8 +89,13 @@ internal class SchemaRenderer(
         if (shouldRenderBuilder) {
             renderBuilder()
         }
-        renderItemConverter()
+
+        if (!classDeclaration.isAnnotationPresent(DynamoDbItemConverter::class)) {
+            renderItemConverter()
+        }
+
         renderSchema()
+
         if (ctx.attributes[AnnotationsProcessorOptions.GenerateGetTableMethodAttribute]) {
             renderGetTable()
         }
@@ -140,7 +159,7 @@ internal class SchemaRenderer(
         }
 
         withBlock("#Lobject #L : #T {", "}", ctx.attributes.visibility, schemaName, schemaType) {
-            write("override val converter : #1L = #1L", converterName)
+            write("override val converter : #1T = #1T", itemConverter)
             write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyProp.name)
             if (sortKeyProp != null) {
                 write("override val sortKey: #T = #T(#S)", MapperTypes.Items.keySpec(sortKeyProp.keySpec), sortKeyProp.keySpecType, sortKeyProp.name)
