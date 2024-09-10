@@ -33,7 +33,7 @@ public annotation class DynamoDbPartitionKey
 public annotation class DynamoDbSortKey
 
 /**
- * Specifies that this property should be ignored by the DynamoDb Mapper.
+ * Specifies that this property should be ignored during mapping.
  */
 @Target(AnnotationTarget.PROPERTY)
 public annotation class DynamoDbIgnore
