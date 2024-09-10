@@ -395,11 +395,14 @@ class SchemaGeneratorPluginTest {
 
         val schemaContents = schemaFile.readText()
         assertFalse(schemaContents.contains("public object CustomUserItemConverter : ItemConverter<CustomUser> by SimpleItemConverter"))
-        assertContains(schemaContents, """
+        assertContains(
+            schemaContents,
+            """
             public object CustomUserSchema : ItemSchema.PartitionKey<CustomUser, Int> {
                 override val converter : MyCustomUserConverter = MyCustomUserConverter
                 override val partitionKey: KeySpec<Number> = aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec.Number("id")
             }
-        """.trimIndent())
+            """.trimIndent(),
+        )
     }
 }

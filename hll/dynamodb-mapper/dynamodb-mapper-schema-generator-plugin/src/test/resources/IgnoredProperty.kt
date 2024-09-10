@@ -13,5 +13,5 @@ public data class IgnoredProperty(
     var age: Int,
 
     @DynamoDbIgnore
-    var ssn: String? = null
+    var ssn: String? = null,
 )

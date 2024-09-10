@@ -1,11 +1,11 @@
 package my.custom.item.converter
 
-import org.example.CustomUser
-import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.items.AttributeDescriptor
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
+import org.example.CustomUser
 
 public object MyCustomUserConverter : ItemConverter<CustomUser> by SimpleItemConverter(
     builderFactory = { CustomUser() },
@@ -15,26 +15,25 @@ public object MyCustomUserConverter : ItemConverter<CustomUser> by SimpleItemCon
             "id",
             CustomUser::id,
             CustomUser::id::set,
-            IntConverter
+            IntConverter,
         ),
         AttributeDescriptor(
             "myCustomFirstName",
             CustomUser::givenName,
             CustomUser::givenName::set,
-            StringConverter
+            StringConverter,
         ),
         AttributeDescriptor(
             "myCustomLastName",
             CustomUser::surname,
             CustomUser::surname::set,
-            StringConverter
+            StringConverter,
         ),
         AttributeDescriptor(
             "myCustomAge",
             CustomUser::age,
             CustomUser::age::set,
-            IntConverter
+            IntConverter,
         ),
     ),
 )
-
