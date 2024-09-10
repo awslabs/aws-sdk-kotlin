@@ -41,7 +41,6 @@ internal class SchemaRenderer(
     private val converterName = "${className}Converter"
     private val schemaName = "${className}Schema"
 
-    @OptIn(KspExperimental::class)
     private val properties = classDeclaration.getAllProperties()
         .filterNot { it.modifiers.contains(Modifier.PRIVATE) }
         .filterNot { it.isAnnotationPresent(DynamoDbIgnore::class) }
