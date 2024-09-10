@@ -67,7 +67,7 @@ internal object MapperTypes {
         }
 
         object Scalars {
-            fun enumConverter(enumType: Type) = TypeRef(Pkg.Hl.ScalarValues, "EnumConverter", genericArgs = listOf(enumType))
+            fun enumConverter(enumType: Type) = TypeRef(Pkg.Hl.ScalarValues, "EnumConverter()", genericArgs = listOf(enumType))
 
             val BooleanConverter = TypeRef(Pkg.Hl.ScalarValues, "BooleanConverter")
             val StringConverter = TypeRef(Pkg.Hl.ScalarValues, "StringConverter")
@@ -86,6 +86,7 @@ internal object MapperTypes {
             val ULongConverter = TypeRef(Pkg.Hl.ScalarValues, "ULongConverter")
             val UShortConverter = TypeRef(Pkg.Hl.ScalarValues, "UShortConverter")
 
+            val BooleanToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "BooleanToStringConverter")
             val CharArrayToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "TextConverters.CharArrayToStringConverter")
             val CharToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "TextConverters.CharToStringConverter")
             val StringToStringConverter = TypeRef(Pkg.Hl.ScalarValues, "TextConverters.StringToStringConverter")

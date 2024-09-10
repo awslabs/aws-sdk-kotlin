@@ -115,12 +115,7 @@ internal class SchemaRenderer(
             }
 
             // converter
-            when {
-                prop.isEnum -> write("#T()", MapperTypes.Values.Scalars.enumConverter(prop.typeRef))
-                else -> {
-                    write("#T", prop.type.resolve().valueConverter)
-                }
-            }
+            write("#T", prop.type.resolve().valueConverter)
         }
     }
 
@@ -180,9 +175,12 @@ internal class SchemaRenderer(
 
     private val KSType.mapKeyConverter: Type
         get() = when (val name = this.declaration.qualifiedName?.asString()) {
+            // String
             "kotlin.CharArray" -> MapperTypes.Values.Scalars.CharArrayToStringConverter
             "kotlin.Char" -> MapperTypes.Values.Scalars.CharToStringConverter
             "kotlin.String" -> MapperTypes.Values.Scalars.StringToStringConverter
+
+            // Number
             "kotlin.Byte" -> MapperTypes.Values.Scalars.ByteToStringConverter
             "kotlin.Double" -> MapperTypes.Values.Scalars.DoubleToStringConverter
             "kotlin.Float" -> MapperTypes.Values.Scalars.FloatToStringConverter
@@ -193,6 +191,9 @@ internal class SchemaRenderer(
             "kotlin.UInt" -> MapperTypes.Values.Scalars.UIntToStringConverter
             "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongToStringConverter
             "kotlin.UShort" -> MapperTypes.Values.Scalars.UShortToStringConverter
+
+            // Boolean
+            "kotlin.Boolean" -> MapperTypes.Values.Scalars.BooleanToStringConverter
             else -> error("Unsupported key type: $name")
         }
 
@@ -291,9 +292,6 @@ private val KSPropertyDeclaration.typeRef: TypeRef
 @OptIn(KspExperimental::class)
 private val KSPropertyDeclaration.ddbName: String
     get() = getAnnotationsByType(DynamoDbAttribute::class).singleOrNull()?.name ?: name
-
-private val KSPropertyDeclaration.isEnum: Boolean
-    get() = (type.resolve().declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS
 
 private val KSType.isEnum: Boolean
     get() = (declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS

@@ -517,6 +517,7 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/values/collections/Primitiv
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/BooleanConverterKt {
 	public static final fun getBooleanConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
+	public static final fun getBooleanToStringConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/scalars/ByteArrayConverterKt {
