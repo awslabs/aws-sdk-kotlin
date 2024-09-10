@@ -60,7 +60,7 @@ data class TemplateProcessor(val key: Char, val handler: (Any) -> String) {
 
 private open class TypeProcessor {
     open fun format(type: Type): String = buildString {
-        append(type.shortName)
+        append(type.shortName.removeSuffix("()"))
 
         if (type is TypeRef && type.genericArgs.isNotEmpty()) {
             type.genericArgs.joinToString(", ", "<", ">", transform = ::format).let(::append)
@@ -68,6 +68,10 @@ private open class TypeProcessor {
 
         if (type is TypeRef && type.args.isNotEmpty()) {
             type.args.joinToString(", ", "(", ")", transform = ::format).let(::append)
+        }
+
+        if (type.shortName.endsWith("()")) {
+            append("()")
         }
 
         if (type.nullable) append('?')
@@ -80,7 +84,7 @@ private class ImportingTypeProcessor(private val pkg: String, private val import
             val existingImport = imports[type.baseName]
 
             if (existingImport == null) {
-                imports += ImportDirective("${type.pkg}.${type.baseName}")
+                imports += ImportDirective("${type.pkg}.${type.baseName.removeSuffix("()")}")
             } else if (existingImport.fullName != type.fullName) {
                 append(type.pkg)
                 append('.')

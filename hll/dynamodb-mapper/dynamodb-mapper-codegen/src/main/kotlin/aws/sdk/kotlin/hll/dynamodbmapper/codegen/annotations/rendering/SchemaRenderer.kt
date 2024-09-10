@@ -120,12 +120,13 @@ internal class SchemaRenderer(
     }
 
     private val KSType.valueConverter: Type
-        get() {
-            if (this.isEnum) {
-                return MapperTypes.Values.Scalars.enumConverter(Type.from(this))
-            }
+        get() = when {
+            this.isEnum -> MapperTypes.Values.Scalars.enumConverter(Type.from(this))
 
-            return when (this.declaration.qualifiedName?.asString()) {
+            // Assuming other classes have also been annotated with DynamoDbItem, and they are codegenerated in the same package
+            this.isCustomUserClass -> TypeRef(ctx.pkg, "${this.declaration.simpleName.asString()}Converter")
+
+            else -> when (this.declaration.qualifiedName?.asString()) {
                 "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
                 "aws.smithy.kotlin.runtime.net.url.Url" -> MapperTypes.Values.SmithyTypes.UrlConverter
                 "aws.smithy.kotlin.runtime.content.Document" -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
@@ -270,6 +271,9 @@ internal class SchemaRenderer(
             schemaName,
         )
     }
+
+    private val KSType.isCustomUserClass: Boolean
+        get() = listOf("kotlin", "java", "aws.smithy.kotlin", "aws.sdk.kotlin").none { declaration.packageName.asString().startsWith(it) }
 }
 
 private val KSPropertyDeclaration.typeName: String
@@ -287,7 +291,7 @@ private val KSPropertyDeclaration.name: String
     get() = simpleName.getShortName()
 
 private val KSPropertyDeclaration.typeRef: TypeRef
-    get() = Type.from(checkNotNull(type) { "Failed to determine class type for $name" })
+    get() = Type.from(type)
 
 @OptIn(KspExperimental::class)
 private val KSPropertyDeclaration.ddbName: String
@@ -295,3 +299,4 @@ private val KSPropertyDeclaration.ddbName: String
 
 private val KSType.isEnum: Boolean
     get() = (declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS
+
