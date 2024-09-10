@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.29] - 09/10/2024
+
+### Features
+* (**cognitoidentity**) This release adds sensitive trait to some required shapes.
+* (**pipes**) This release adds support for customer managed KMS keys in Amazon EventBridge Pipe
+
+### Documentation
+* (**chimesdkvoice**) Documentation-only update that clarifies the ValidateE911Address action of the Amazon Chime SDK Voice APIs.
+* (**securityhub**) Documentation update for Security Hub
+
 ## [1.3.28] - 09/09/2024
 
 ### Features
