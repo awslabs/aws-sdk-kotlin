@@ -29,7 +29,6 @@ import com.google.devtools.ksp.symbol.Modifier
  * @param classDeclaration the [KSClassDeclaration] of the class
  * @param ctx the [RenderContext] of the renderer
  */
-@OptIn(KspExperimental::class)
 internal class SchemaRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
@@ -41,6 +40,7 @@ internal class SchemaRenderer(
     private val converterName = "${className}Converter"
     private val schemaName = "${className}Schema"
 
+    @OptIn(KspExperimental::class)
     private val properties = classDeclaration.getAllProperties()
         .filterNot { it.modifiers.contains(Modifier.PRIVATE) }
         .filterNot { it.isAnnotationPresent(DynamoDbIgnore::class) }
@@ -59,6 +59,7 @@ internal class SchemaRenderer(
     private val partitionKeyProp = annotatedProperties.single { it.isPk }
     private val sortKeyProp = annotatedProperties.singleOrNull { it.isSk }
 
+    @OptIn(KspExperimental::class)
     private val itemConverter: Type = run {
             val qualifiedName = classDeclaration.getAnnotationsByType(DynamoDbItemConverter::class).singleOrNull()?.qualifiedName
 
@@ -83,6 +84,7 @@ internal class SchemaRenderer(
         !(!alwaysGenerateBuilders && hasAllMutableMembers && hasZeroArgConstructor)
     }
 
+    @OptIn(KspExperimental::class)
     override fun generate() {
         if (shouldRenderBuilder) {
             renderBuilder()
