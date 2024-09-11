@@ -14,9 +14,11 @@ public annotation class DynamoDbAttribute(val name: String)
 /**
  * Specifies that this class/interface describes an item type in a table. All public properties of this type will be mapped to
  * attributes unless they are explicitly ignored.
+ * @param converterName The fully qualified name of the item converter to be used for converting this class/interface.
+ * If not set, one will be automatically generated.
  */
 @Target(AnnotationTarget.CLASS)
-public annotation class DynamoDbItem
+public annotation class DynamoDbItem(val converterName: String = "")
 
 /**
  * Specifies that this property is the primary key for the item. Every top-level [DynamoDbItem] to be used in a table
@@ -37,10 +39,3 @@ public annotation class DynamoDbSortKey
  */
 @Target(AnnotationTarget.PROPERTY)
 public annotation class DynamoDbIgnore
-
-/**
- * Specifies that a custom ItemConverter should be used to convert this class/interface.
- * @param qualifiedName The fully qualified name of the item converter.
- */
-@Target(AnnotationTarget.CLASS)
-public annotation class DynamoDbItemConverter(val qualifiedName: String)

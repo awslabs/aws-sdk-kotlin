@@ -41,6 +41,18 @@ internal class SchemaRenderer(
     private val schemaName = "${className}Schema"
 
     @OptIn(KspExperimental::class)
+    private val dynamoDbItemAnnotation = classDeclaration.getAnnotationsByType(DynamoDbItem::class).single()
+
+    private val itemConverter: Type = dynamoDbItemAnnotation
+        .converterName
+        .takeIf { it.isNotBlank() }
+        ?.let {
+            val pkg = it.substringBeforeLast(".")
+            val shortName = it.removePrefix("$pkg.")
+            TypeRef(pkg, shortName)
+        } ?: TypeRef(ctx.pkg, converterName)
+
+    @OptIn(KspExperimental::class)
     private val properties = classDeclaration
         .getAllProperties()
         .filterNot { it.modifiers.contains(Modifier.PRIVATE) || it.isAnnotationPresent(DynamoDbIgnore::class) }
@@ -59,19 +71,8 @@ internal class SchemaRenderer(
     private val partitionKeyProp = annotatedProperties.single { it.isPk }
     private val sortKeyProp = annotatedProperties.singleOrNull { it.isSk }
 
-    @OptIn(KspExperimental::class)
-    private val itemConverter: Type = run {
-            val qualifiedName = classDeclaration.getAnnotationsByType(DynamoDbItemConverter::class).singleOrNull()?.qualifiedName
-
-            qualifiedName?.let {
-                val pkg = it.substringBeforeLast(".")
-                val shortName = it.removePrefix("$pkg.")
-                TypeRef(pkg, shortName)
-            } ?: TypeRef(ctx.pkg, converterName)
-        }
-
     /**
-     * We skip rendering a class builder if:
+     * Skip rendering a class builder if:
      *   - the user has configured GenerateBuilders to WHEN_REQUIRED (default value) AND
      *   - the class has all mutable members AND
      *   - the class has a zero-arg constructor
@@ -84,13 +85,12 @@ internal class SchemaRenderer(
         !(!alwaysGenerateBuilders && hasAllMutableMembers && hasZeroArgConstructor)
     }
 
-    @OptIn(KspExperimental::class)
     override fun generate() {
         if (shouldRenderBuilder) {
             renderBuilder()
         }
 
-        if (!classDeclaration.isAnnotationPresent(DynamoDbItemConverter::class)) {
+        if (dynamoDbItemAnnotation.converterName.isBlank()) {
             renderItemConverter()
         }
 
