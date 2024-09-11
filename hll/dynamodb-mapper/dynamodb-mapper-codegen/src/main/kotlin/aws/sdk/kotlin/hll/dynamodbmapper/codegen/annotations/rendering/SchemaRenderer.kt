@@ -41,9 +41,9 @@ internal class SchemaRenderer(
     private val schemaName = "${className}Schema"
 
     @OptIn(KspExperimental::class)
-    private val properties = classDeclaration.getAllProperties()
-        .filterNot { it.modifiers.contains(Modifier.PRIVATE) }
-        .filterNot { it.isAnnotationPresent(DynamoDbIgnore::class) }
+    private val properties = classDeclaration
+        .getAllProperties()
+        .filterNot { it.modifiers.contains(Modifier.PRIVATE) || it.isAnnotationPresent(DynamoDbIgnore::class) }
 
     private val annotatedProperties = properties.mapNotNull(AnnotatedClassProperty.Companion::from)
 
