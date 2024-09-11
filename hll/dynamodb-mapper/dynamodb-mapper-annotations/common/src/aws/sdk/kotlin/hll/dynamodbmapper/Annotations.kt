@@ -39,3 +39,12 @@ public annotation class DynamoDbSortKey
  */
 @Target(AnnotationTarget.PROPERTY)
 public annotation class DynamoDbIgnore
+
+@Target(AnnotationTarget.PROPERTY)
+public annotation class DynamoDbGSIPartitionKey
+
+@Target(AnnotationTarget.PROPERTY)
+public annotation class DynamoDbGSISortKey
+
+//@Target(AnnotationTarget.PROPERTY)
+//public annotation class DynamoDbLSISortKey
