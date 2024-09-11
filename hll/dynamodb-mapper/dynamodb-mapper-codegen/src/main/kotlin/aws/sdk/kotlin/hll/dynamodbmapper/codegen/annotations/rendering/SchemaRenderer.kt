@@ -59,15 +59,14 @@ internal class SchemaRenderer(
     private val partitionKeyProp = annotatedProperties.single { it.isPk }
     private val sortKeyProp = annotatedProperties.singleOrNull { it.isSk }
 
-    private val itemConverter: Type
-        get() = run {
+    private val itemConverter: Type = run {
             val qualifiedName = classDeclaration.getAnnotationsByType(DynamoDbItemConverter::class).singleOrNull()?.qualifiedName
 
-            return qualifiedName?.let {
-                val pkg = qualifiedName.substringBeforeLast(".")
-                val shortName = qualifiedName.removePrefix("$pkg.")
+            qualifiedName?.let {
+                val pkg = it.substringBeforeLast(".")
+                val shortName = it.removePrefix("$pkg.")
                 TypeRef(pkg, shortName)
-            } ?: TypeRef(ctx.pkg, "${className}Converter")
+            } ?: TypeRef(ctx.pkg, converterName)
         }
 
     /**
