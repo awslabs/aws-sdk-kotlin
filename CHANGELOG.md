@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.30] - 09/11/2024
+
+### Features
+* (**bedrockagent**) Amazon Bedrock Knowledge Bases now supports using inference profiles to increase throughput and improve resilience.
+* (**bedrockagentruntime**) Amazon Bedrock Knowledge Bases now supports using inference profiles to increase throughput and improve resilience.
+* (**ecr**) Added KMS_DSSE to EncryptionType
+* (**guardduty**) Add support for new statistic types in GetFindingsStatistics.
+* (**lexmodelsv2**) Support new Polly voice engines in VoiceSettings: long-form and generative
+* (**medialive**) Adds AV1 Codec support, SRT ouputs, and MediaLive Anywhere support.
+
 ## [1.3.29] - 09/10/2024
 
 ### Features
