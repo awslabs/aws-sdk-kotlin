@@ -10,9 +10,7 @@ import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.rendering.*
 import aws.sdk.kotlin.hll.codegen.util.visibility
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbAttribute
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbSortKey
+import aws.sdk.kotlin.hll.dynamodbmapper.*
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
@@ -39,7 +37,24 @@ internal class SchemaRenderer(
     private val converterName = "${className}Converter"
     private val schemaName = "${className}Schema"
 
-    private val properties = classDeclaration.getAllProperties().filterNot { it.modifiers.contains(Modifier.PRIVATE) }
+    @OptIn(KspExperimental::class)
+    private val dynamoDbItemAnnotation = classDeclaration.getAnnotationsByType(DynamoDbItem::class).single()
+
+    private val itemConverter: Type = dynamoDbItemAnnotation
+        .converterName
+        .takeIf { it.isNotBlank() }
+        ?.let {
+            val pkg = it.substringBeforeLast(".")
+            val shortName = it.removePrefix("$pkg.")
+            TypeRef(pkg, shortName)
+        } ?: TypeRef(ctx.pkg, converterName)
+
+    @OptIn(KspExperimental::class)
+    private val properties = classDeclaration
+        .getAllProperties()
+        .filterNot { it.modifiers.contains(Modifier.PRIVATE) || it.isAnnotationPresent(DynamoDbIgnore::class) }
+
+    private val annotatedProperties = properties.mapNotNull(AnnotatedClassProperty.Companion::from)
 
     init {
         check(properties.count { it.isPk } == 1) {
@@ -54,7 +69,7 @@ internal class SchemaRenderer(
     private val sortKeyProp = properties.singleOrNull { it.isSk }
 
     /**
-     * We skip rendering a class builder if:
+     * Skip rendering a class builder if:
      *   - the user has configured GenerateBuilders to WHEN_REQUIRED (default value) AND
      *   - the class has all mutable members AND
      *   - the class has a zero-arg constructor
@@ -71,8 +86,13 @@ internal class SchemaRenderer(
         if (shouldRenderBuilder) {
             renderBuilder()
         }
-        renderItemConverter()
+
+        if (dynamoDbItemAnnotation.converterName.isBlank()) {
+            renderItemConverter()
+        }
+
         renderSchema()
+
         if (ctx.attributes[AnnotationsProcessorOptions.GenerateGetTableMethodAttribute]) {
             renderGetTable()
         }
@@ -249,7 +269,7 @@ internal class SchemaRenderer(
         }
 
         withBlock("#Lobject #L : #T {", "}", ctx.attributes.visibility, schemaName, schemaType) {
-            write("override val converter : #1L = #1L", converterName)
+            write("override val converter : #1T = #1T", itemConverter)
             write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyProp.name)
             if (sortKeyProp != null) {
                 write("override val sortKey: #T = #T(#S)", MapperTypes.Items.keySpec(sortKeyProp.keySpec), sortKeyProp.keySpecType, sortKeyProp.name)
