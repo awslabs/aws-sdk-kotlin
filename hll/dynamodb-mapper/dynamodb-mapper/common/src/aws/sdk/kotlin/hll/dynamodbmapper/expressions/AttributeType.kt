@@ -56,7 +56,7 @@ public enum class AttributeType(public val abbreviation: kotlin.String) {
     String("S"),
 
     /**
-     * String set data type, denoted in DynamoDB as `S`
+     * String set data type, denoted in DynamoDB as `SS`
      */
     StringSet("SS"),
 }

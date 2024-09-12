@@ -35,7 +35,7 @@ public enum class Comparator(public val exprString: String) {
     GREATER_THAN(">"),
 
     /**
-     * A greater-than-or-equal-to comparison, equivalent to `>=` in Kotlin
+     * A greater-than-or-equal-to comparison, equivalent to `>=` in Kotlin and DynamoDB
      */
     GREATER_THAN_OR_EQUAL(">="),
 }

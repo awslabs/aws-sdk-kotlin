@@ -125,7 +125,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.util.dynamicAttr
  * ```
  *
  * This block checks for value of the attribute `foo` equalling `42` and the value of attribute `bar` _not_ equalling
- * `42`. This is roughly equivalent to the Kotlin syntax:
+ * `42`. This is logically equivalent to the Kotlin syntax:
  *
  * ```kotlin
  * (foo == 42 && bar != 42)
@@ -151,7 +151,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.util.dynamicAttr
  * * The value of attribute `bar` is less than the value of `baz` **–and–** the value of `baz` is greater/equal to `42`
  * * The value of attribute `qux` is not one of `"ready"`, `"steady"`, or `"go"`
  *
- * This is roughly equivalent to the Kotlin syntax:
+ * This is logically equivalent to the Kotlin syntax:
  *
  * ```kotlin
  * (foo == "apple") || (bar < baz && baz >= 42) || qux !in setOf("ready", "steady", "go")
@@ -161,12 +161,23 @@ import aws.sdk.kotlin.hll.dynamodbmapper.util.dynamicAttr
  *
  * Several additional filter expressions are possible via the following methods/properties:
  *
- * * [contains] — checks if a string/list attribute value contains the given value
- * * [exists] — checks if _any value_ (including `null`) exists for an attribute
- * * [notExists] — checks if no value is present for an attribute (i.e., the attribute is "undefined" for an item)
- * * [isOfType] — checks if an attribute value is of the given type
- * * [size] — gets the size of an attribute (e.g., number of elements in list/map/set, the length of a string, etc.)
- * * [startsWith] — checks if a string attribute value starts with the given value
+ * * [contains] — Checks if a string/list attribute value contains the given value
+ * * [exists] — Checks if _any value_ (including `null`) exists for an attribute. The low-level DynamoDB function for
+ *   this is `attribute_exists`.
+ * * [notExists] — Checks if no value is present for an attribute (i.e., the attribute is "undefined" for an item). The
+ *   low-level DynamoDB function for this is `attribute_not_exists`.
+ * * [isOfType] — Checks if an attribute value is of the given type. The low-level DynamoDB function for this is
+ *   `attribute_type`.
+ * * [size] — Gets the size of an attribute (e.g., number of elements in list/map/set, the length of a string, etc.)
+ * * [startsWith] — Checks if a string attribute value starts with the given value. The low-level DynamoDB function for
+ *   this is `begins_with`.
+ *
+ * For example:
+ *
+ * ```kotlin
+ * attr("foo") contains 13 // Checks whether the value of attribute `foo` contains the value `13`
+ * attr("bar").exists()    // Checks whether any value exists for `bar` (including `null`)
+ * ```
  */
 public interface Filter {
     // ATTRIBUTES
@@ -648,6 +659,9 @@ public interface Filter {
      * @param max The upper bound expression (inclusive)
      */
     public fun AttributePath.isBetween(min: Expression, max: Expression): BooleanExpr
+
+    // TODO The following overloads support [ClosedRange] but [OpenEndRange] also exists. DynamoDB expressions don't
+    //  support it directly but we may be able to cheese it with two inequalities ANDed together.
 
     /**
      * Creates a range expression for verifying this expression is in the given range
