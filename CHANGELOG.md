@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.31] - 09/12/2024
+
+### Features
+* (**cognitoidentityprovider**) Added email MFA option to user pools with advanced security features.
+* (**elasticloadbalancingv2**) Correct incorrectly mapped error in ELBv2 waiters
+* (**emr**) Update APIs to allow modification of ODCR options, allocation strategy, and InstanceTypeConfigs on running InstanceFleet clusters.
+* (**glue**) AWS Glue is introducing two new optimizers for Apache Iceberg tables: snapshot retention and orphan file deletion. Customers can enable these optimizers and customize their configurations to perform daily maintenance tasks on their Iceberg tables based on their specific requirements.
+* (**mediaconvert**) This release includes support for dynamic video overlay workflows, including picture-in-picture and squeezeback
+* (**storagegateway**) The S3 File Gateway now supports DSSE-KMS encryption. A new parameter EncryptionType is added to these APIs: CreateSmbFileShare, CreateNfsFileShare, UpdateSmbFileShare, UpdateNfsFileShare, DescribeSmbFileShares, DescribeNfsFileShares. Also, in favor of EncryptionType, KmsEncrypted is deprecated.
+* (**synthetics**) This release introduces two features. The first is tag replication, which allows for the propagation of canary tags onto Synthetics related resources, such as Lambda functions. The second is a limit increase in canary name length, which has now been increased from 21 to 255 characters.
+
+### Documentation
+* (**rds**) This release adds support for the os-upgrade pending maintenance action for Amazon Aurora DB clusters.
+
 ## [1.3.30] - 09/11/2024
 
 ### Features
