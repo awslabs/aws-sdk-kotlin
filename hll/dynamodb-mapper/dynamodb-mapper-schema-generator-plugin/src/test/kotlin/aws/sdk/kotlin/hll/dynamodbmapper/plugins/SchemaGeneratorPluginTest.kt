@@ -389,7 +389,6 @@ class SchemaGeneratorPluginTest {
         val result = runner.build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
 
-        // Schema should not exist
         val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/CustomUserSchema.kt")
         assertTrue(schemaFile.exists())
 
