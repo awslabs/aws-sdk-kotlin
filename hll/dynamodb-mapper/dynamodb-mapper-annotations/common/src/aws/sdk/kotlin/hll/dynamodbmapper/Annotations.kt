@@ -17,6 +17,7 @@ public annotation class DynamoDbAttribute(val name: String)
  * @param converterName The fully qualified name of the item converter to be used for converting this class/interface.
  * If not set, one will be automatically generated.
  */
+// FIXME Update to take a KClass<ItemConverter>, which will require splitting codegen modules due to a circular dependency
 @Target(AnnotationTarget.CLASS)
 public annotation class DynamoDbItem(val converterName: String = "")
 
