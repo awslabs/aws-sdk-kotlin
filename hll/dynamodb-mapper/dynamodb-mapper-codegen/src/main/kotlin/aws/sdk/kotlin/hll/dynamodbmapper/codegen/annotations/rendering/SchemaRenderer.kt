@@ -54,8 +54,6 @@ internal class SchemaRenderer(
         .getAllProperties()
         .filterNot { it.modifiers.contains(Modifier.PRIVATE) || it.isAnnotationPresent(DynamoDbIgnore::class) }
 
-    private val annotatedProperties = properties.mapNotNull(AnnotatedClassProperty.Companion::from)
-
     init {
         check(properties.count { it.isPk } == 1) {
             "Expected exactly one @DynamoDbPartitionKey annotation on a property"
