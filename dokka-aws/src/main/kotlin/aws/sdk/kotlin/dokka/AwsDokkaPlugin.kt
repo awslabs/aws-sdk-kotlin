@@ -5,8 +5,10 @@
 
 package aws.sdk.kotlin.dokka
 
+import aws.sdk.kotlin.dokka.transformers.DisablePlaygroundIntegration
 import aws.sdk.kotlin.dokka.transformers.FilterInternalApis
 import aws.sdk.kotlin.dokka.transformers.NoOpSearchbarDataInstaller
+import org.jetbrains.dokka.CoreExtensions
 import org.jetbrains.dokka.base.DokkaBase
 import org.jetbrains.dokka.plugability.DokkaPlugin
 import org.jetbrains.dokka.plugability.DokkaPluginApiPreview
@@ -30,6 +32,12 @@ class AwsDokkaPlugin : DokkaPlugin() {
     // https://github.com/Kotlin/dokka/issues/2741
     val disableSearch by extending {
         dokkaBase.htmlPreprocessors providing ::NoOpSearchbarDataInstaller override dokkaBase.baseSearchbarDataInstaller
+    }
+
+    val disablePlaygroundIntegration by extending {
+        CoreExtensions.pageTransformer providing ::DisablePlaygroundIntegration order {
+            after(dokkaBase.defaultSamplesTransformer)
+        }
     }
 
     @DokkaPluginApiPreview
