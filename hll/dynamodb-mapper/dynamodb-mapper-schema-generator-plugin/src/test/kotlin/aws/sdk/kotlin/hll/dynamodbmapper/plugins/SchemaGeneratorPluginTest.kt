@@ -357,4 +357,51 @@ class SchemaGeneratorPluginTest {
         val testResult = runner.withArguments("test").build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), testResult.task(":test")?.outcome)
     }
+
+    @Test
+    fun testDynamoDbIgnore() {
+        createClassFile("IgnoredProperty")
+
+        val result = runner.build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
+
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/IgnoredPropertySchema.kt")
+        assertTrue(schemaFile.exists())
+
+        val schemaContents = schemaFile.readText()
+
+        assertContains(schemaContents, "public class IgnoredProperty")
+        assertContains(schemaContents, "public var id: Int? = null")
+        assertContains(schemaContents, "public var givenName: String? = null")
+        assertContains(schemaContents, "public var surname: String? = null")
+        assertContains(schemaContents, "public var age: Int? = null")
+        assertContains(schemaContents, "public fun build(): IgnoredProperty")
+
+        // ssn is annotated with DynamoDbIgnore
+        assertFalse(schemaContents.contains("public var ssn: String? = null"))
+    }
+
+    @Test
+    fun testDynamoDbItemConverter() {
+        createClassFile("custom-item-converter/CustomUser")
+        createClassFile("custom-item-converter/CustomItemConverter", "src/main/kotlin/my/custom/item/converter")
+
+        val result = runner.build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
+
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/CustomUserSchema.kt")
+        assertTrue(schemaFile.exists())
+
+        val schemaContents = schemaFile.readText()
+        assertFalse(schemaContents.contains("public object CustomUserItemConverter : ItemConverter<CustomUser> by SimpleItemConverter"))
+        assertContains(
+            schemaContents,
+            """
+            public object CustomUserSchema : ItemSchema.PartitionKey<CustomUser, Int> {
+                override val converter : MyCustomUserConverter = MyCustomUserConverter
+                override val partitionKey: KeySpec<Number> = aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec.Number("id")
+            }
+            """.trimIndent(),
+        )
+    }
 }
