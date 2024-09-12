@@ -100,6 +100,27 @@ internal class SchemaRenderer(
             }
         }
         blankLine()
+
+        if (ctx.attributes[ShouldRenderValueConverterAttribute]) {
+            withBlock("#Lobject #L : #T {", "}",
+                ctx.attributes.visibility,
+                "${className}ValueConverter",
+                MapperTypes.Values.valueConverter(classType)
+            ) {
+                write("override fun convertFrom(to: #T): #T = #T.fromItem(to.asM().#T())",
+                    MapperTypes.AttributeValue,
+                    classType,
+                    TypeRef(ctx.pkg, converterName), // FIXME Use converterType from a different branch
+                    MapperTypes.Model.toItem
+                )
+                write("override fun convertTo(from: #1T): #2T = #2T.M(#3T.toItem(from))",
+                    classType,
+                    MapperTypes.AttributeValue,
+                    TypeRef(ctx.pkg, converterName) // FIXME Use converterType from a different branch
+                )
+            }
+            blankLine()
+        }
     }
 
     private fun renderAttributeDescriptor(prop: KSPropertyDeclaration) {
@@ -124,7 +145,7 @@ internal class SchemaRenderer(
             this.isEnum -> MapperTypes.Values.Scalars.enumConverter(Type.from(this))
 
             // Assuming other classes have also been annotated with DynamoDbItem, and they are codegenerated in the same package
-            this.isCustomUserClass -> TypeRef(ctx.pkg, "${this.declaration.simpleName.asString()}Converter")
+            this.isCustomUserClass -> TypeRef(ctx.pkg, "${this.declaration.simpleName.asString()}ValueConverter")
 
             else -> when (this.declaration.qualifiedName?.asString()) {
                 "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter

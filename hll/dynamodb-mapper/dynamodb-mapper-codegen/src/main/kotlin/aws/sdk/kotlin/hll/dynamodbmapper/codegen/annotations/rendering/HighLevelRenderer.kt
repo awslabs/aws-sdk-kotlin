@@ -6,13 +6,14 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
+import aws.sdk.kotlin.hll.codegen.util.plus
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
-import aws.smithy.kotlin.runtime.collections.Attributes
-import aws.smithy.kotlin.runtime.collections.emptyAttributes
-import aws.smithy.kotlin.runtime.collections.get
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
+import aws.smithy.kotlin.runtime.collections.*
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSDeclaration
 
 /**
  * The parent renderer for all codegen from this package. This class orchestrates the various sub-renderers.
@@ -25,12 +26,31 @@ internal class HighLevelRenderer(
     private val codegenAttributes: Attributes = emptyAttributes(),
 ) {
     internal fun render() {
-        annotatedClasses.forEach {
-            logger.info("Processing annotation on ${it.simpleName}")
+        annotatedClasses.forEach { annotated ->
+            logger.info("Processing annotation on ${annotated.simpleName}")
 
             val codegenPkg = when (val dstPkg = codegenAttributes[AnnotationsProcessorOptions.DestinationPackageAttribute]) {
-                is DestinationPackage.Relative -> "${it.packageName.asString()}.${dstPkg.pkg}"
+                is DestinationPackage.Relative -> "${annotated.packageName.asString()}.${dstPkg.pkg}"
                 is DestinationPackage.Absolute -> dstPkg.pkg
+            }
+
+            // Value converters must be generated for any DynamoDbItem which is referenced by another DynamoDbItem
+            val shouldRenderValueConverter = annotatedClasses.any { otherClass ->
+                val annotatedTypeName = annotated.qualifiedName?.asString()
+
+                otherClass.getAllProperties().any { prop ->
+                    val propType = prop.type.resolve()
+
+                    // If the property OR any of its arguments reference the annotated type
+                    (propType.declaration.qualifiedName?.asString() == annotatedTypeName) || (propType.arguments.any { arg ->
+                        val argType = arg.type?.resolve()
+                        argType?.declaration?.qualifiedName?.asString() == annotatedTypeName
+                    })
+                }
+            }
+
+            val attributes = codegenAttributes + attributesOf {
+                ShouldRenderValueConverterAttribute to shouldRenderValueConverter
             }
 
             val renderCtx = RenderContext(
@@ -38,11 +58,13 @@ internal class HighLevelRenderer(
                 codegenFactory,
                 codegenPkg,
                 "dynamodb-mapper-annotation-processor",
-                codegenAttributes,
+                attributes,
             )
 
-            val annotation = SchemaRenderer(it, renderCtx)
+            val annotation = SchemaRenderer(annotated, renderCtx)
             annotation.render()
         }
     }
 }
+
+internal val ShouldRenderValueConverterAttribute: AttributeKey<Boolean> = AttributeKey("ShouldRenderValueConverter")
