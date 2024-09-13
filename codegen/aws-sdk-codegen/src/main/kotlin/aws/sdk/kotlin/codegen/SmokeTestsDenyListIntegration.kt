@@ -10,11 +10,11 @@ import software.amazon.smithy.model.Model
 /**
  * Will wipe the smoke test runner file for services that are deny listed.
  *
- * Some services model smoke tests incorrectly and the code generated smoke test runner file will not compile.
+ * Some services model smoke tests incorrectly and the code generated file will not compile.
  */
 class SmokeTestsDenyListIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
-        smokeTestDenyList.contains(settings.sdkId)
+        settings.sdkId in smokeTestDenyList
 
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
@@ -28,7 +28,6 @@ class SmokeTestsDenyListIntegration : KotlinIntegration {
 
 /**
  * SDK ID's of services that model smoke tests incorrectly
- * TODO: Add GH issue links
  */
 val smokeTestDenyList = setOf(
     "Application Auto Scaling",

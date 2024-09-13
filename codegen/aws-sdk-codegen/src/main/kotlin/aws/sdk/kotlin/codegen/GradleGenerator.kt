@@ -6,10 +6,14 @@ package aws.sdk.kotlin.codegen
 
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
+import software.amazon.smithy.kotlin.codegen.model.traits.FailedResponseTrait
+import software.amazon.smithy.kotlin.codegen.model.traits.SuccessResponseTrait
 import software.amazon.smithy.kotlin.codegen.rendering.GradleWriter
 import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.kotlin.codegen.utils.operations
+import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
 
 // TODO - would be nice to allow integrations to define custom settings in the plugin
@@ -83,7 +87,7 @@ class GradleGenerator : KotlinIntegration {
         writer.withBlock("if (#S !in #L) {", "}", sdkId, formattedDenyList) {
             generateSmokeTestJarTask(writer, ctx)
             emptyLine()
-            generateSmokeTestTask(writer)
+            generateSmokeTestTask(writer, ctx)
         }
     }
 
@@ -116,14 +120,21 @@ class GradleGenerator : KotlinIntegration {
     /**
      * Generates a gradle task to run smoke tests
      */
-    private fun generateSmokeTestTask(writer: GradleWriter) {
+    private fun generateSmokeTestTask(writer: GradleWriter, ctx: CodegenContext) {
+        val hasSuccessResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(SuccessResponseTrait.ID)
+        val hasFailedResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(FailedResponseTrait.ID)
+
+        // E2E tests don't have sdkVersion in jar names
+        val inTestingEnvironment = hasFailedResponseTrait || hasSuccessResponseTrait
+        val jarName = if (inTestingEnvironment) "\${project.name}-smoketests.jar" else "\${project.name}-smoketests-\$sdkVersion.jar"
+
         writer.withBlock("tasks.register<JavaExec>(#S) {", "}", "smokeTest") {
             write("description = #S", "Runs smoke tests jar")
             write("group = #S", "verification")
             write("dependsOn(tasks.getByName(#S))", "smokeTestJar")
             emptyLine()
             write("val sdkVersion: String by project")
-            write("val jarFile = file(#S)", "build/libs/\${project.name}-smoketests-\$sdkVersion.jar")
+            write("val jarFile = file(#S)", "build/libs/$jarName")
             write("classpath = files(jarFile)")
         }
     }
