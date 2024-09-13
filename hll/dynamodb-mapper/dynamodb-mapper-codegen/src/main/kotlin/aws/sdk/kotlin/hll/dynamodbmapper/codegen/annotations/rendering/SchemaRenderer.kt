@@ -120,21 +120,25 @@ internal class SchemaRenderer(
         blankLine()
 
         if (ctx.attributes[ShouldRenderValueConverterAttribute]) {
-            withBlock("#Lobject #L : #T {", "}",
+            withBlock(
+                "#Lobject #L : #T {",
+                "}",
                 ctx.attributes.visibility,
                 "${className}ValueConverter",
-                MapperTypes.Values.valueConverter(classType)
+                MapperTypes.Values.valueConverter(classType),
             ) {
-                write("override fun convertFrom(to: #T): #T = #T.fromItem(to.asM().#T())",
+                write(
+                    "override fun convertFrom(to: #T): #T = #T.fromItem(to.asM().#T())",
                     MapperTypes.AttributeValue,
                     classType,
-                    TypeRef(ctx.pkg, converterName), // FIXME Use converterType from a different branch
-                    MapperTypes.Model.toItem
+                    itemConverter,
+                    MapperTypes.Model.toItem,
                 )
-                write("override fun convertTo(from: #1T): #2T = #2T.M(#3T.toItem(from))",
+                write(
+                    "override fun convertTo(from: #1T): #2T = #2T.M(#3T.toItem(from))",
                     classType,
                     MapperTypes.AttributeValue,
-                    TypeRef(ctx.pkg, converterName) // FIXME Use converterType from a different branch
+                    itemConverter,
                 )
             }
             blankLine()
@@ -338,4 +342,3 @@ private val KSPropertyDeclaration.ddbName: String
 
 private val KSType.isEnum: Boolean
     get() = (declaration as? KSClassDeclaration)?.classKind == ClassKind.ENUM_CLASS
-

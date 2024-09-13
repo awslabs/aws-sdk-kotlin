@@ -9,11 +9,9 @@ import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.util.plus
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.GenerateBuilderClasses
 import aws.smithy.kotlin.runtime.collections.*
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSDeclaration
 
 /**
  * The parent renderer for all codegen from this package. This class orchestrates the various sub-renderers.
@@ -42,10 +40,13 @@ internal class HighLevelRenderer(
                     val propType = prop.type.resolve()
 
                     // If the property OR any of its arguments reference the annotated type
-                    (propType.declaration.qualifiedName?.asString() == annotatedTypeName) || (propType.arguments.any { arg ->
-                        val argType = arg.type?.resolve()
-                        argType?.declaration?.qualifiedName?.asString() == annotatedTypeName
-                    })
+                    (propType.declaration.qualifiedName?.asString() == annotatedTypeName) ||
+                        (
+                            propType.arguments.any { arg ->
+                                val argType = arg.type?.resolve()
+                                argType?.declaration?.qualifiedName?.asString() == annotatedTypeName
+                            }
+                            )
                 }
             }
 
