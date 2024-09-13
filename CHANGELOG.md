@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.32] - 09/13/2024
+
+### Documentation
+* (**amplify**) Doc only update to Amplify to explain platform setting for Next.js 14 SSG only applications
+* (**ivs**) Updates to all tags descriptions.
+* (**ivschat**) Updates to all tags descriptions.
+
 ## [1.3.31] - 09/12/2024
 
 ### Features
