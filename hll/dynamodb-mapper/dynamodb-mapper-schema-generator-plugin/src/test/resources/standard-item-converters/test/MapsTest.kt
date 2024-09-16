@@ -4,11 +4,9 @@
  */
 package org.example
 
+import org.example.dynamodbmapper.generatedschemas.MapsConverter
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import org.example.dynamodbmapper.generatedschemas.MapsConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 public class MapsTest {
     @Test
@@ -22,19 +20,19 @@ public class MapsTest {
             mapStringBoolean = mapOf("true" to true, "false" to false),
             mapStringListString = mapOf(
                 "fruits" to listOf("apple", "banana", "cherry"),
-                "colors" to listOf("red", "green", "blue")
+                "colors" to listOf("red", "green", "blue"),
             ),
             mapStringListMapStringString = mapOf(
                 "person1" to listOf(
                     mapOf("name" to "John", "age" to "30"),
-                    mapOf("city" to "New York", "country" to "USA")
+                    mapOf("city" to "New York", "country" to "USA"),
                 ),
                 "person2" to listOf(
                     mapOf("name" to "Alice", "age" to "25"),
-                    mapOf("city" to "London", "country" to "UK")
-                )
+                    mapOf("city" to "London", "country" to "UK"),
+                ),
             ),
-            mapEnum = mapOf("pet1" to EnumAnimals.CAT, "pet2" to EnumAnimals.DOG, "pet3" to EnumAnimals.SHEEP)
+            mapEnum = mapOf("pet1" to EnumAnimals.CAT, "pet2" to EnumAnimals.DOG, "pet3" to EnumAnimals.SHEEP),
         )
 
         val item = MapsConverter.toItem(maps)

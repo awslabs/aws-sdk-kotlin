@@ -10,7 +10,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 enum class EnumAnimals {
     CAT,
     DOG,
-    SHEEP
+    SHEEP,
 }
 
 @DynamoDbItem

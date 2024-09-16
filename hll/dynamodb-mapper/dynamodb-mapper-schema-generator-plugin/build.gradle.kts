@@ -117,7 +117,6 @@ val generateSmithyKotlinVersionFile by tasks.registering {
     }
 }
 
-
 tasks.withType<KotlinCompile> {
     dependsOn(generateSdkVersionFile)
     dependsOn(generateKotlinVersionFile)

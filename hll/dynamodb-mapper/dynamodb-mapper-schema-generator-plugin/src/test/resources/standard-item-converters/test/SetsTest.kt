@@ -4,11 +4,9 @@
  */
 package org.example
 
+import org.example.dynamodbmapper.generatedschemas.SetsConverter
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import org.example.dynamodbmapper.generatedschemas.SetsConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 public class SetsTest {
     @Test

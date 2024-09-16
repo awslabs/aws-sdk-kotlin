@@ -4,12 +4,9 @@
  */
 package org.example
 
+import org.example.dynamodbmapper.generatedschemas.ListsConverter
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import org.example.dynamodbmapper.generatedschemas.ListsConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
-import org.example.EnumAnimals
 
 public class ListsTest {
     @Test

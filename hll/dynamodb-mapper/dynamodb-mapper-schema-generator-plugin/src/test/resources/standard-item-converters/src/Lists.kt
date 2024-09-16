@@ -4,13 +4,13 @@
  */
 package org.example
 
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 
 enum class EnumAnimals {
     CAT,
     DOG,
-    SHEEP
+    SHEEP,
 }
 
 @DynamoDbItem

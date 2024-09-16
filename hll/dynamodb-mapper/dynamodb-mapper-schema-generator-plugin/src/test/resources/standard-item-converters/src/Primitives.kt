@@ -13,7 +13,7 @@ import aws.smithy.kotlin.runtime.time.Instant
 enum class EnumAnimals {
     CAT,
     DOG,
-    SHEEP
+    SHEEP,
 }
 
 @DynamoDbItem

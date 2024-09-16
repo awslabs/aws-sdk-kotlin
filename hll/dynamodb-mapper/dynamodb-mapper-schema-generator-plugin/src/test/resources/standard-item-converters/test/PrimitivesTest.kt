@@ -4,16 +4,12 @@
  */
 package org.example
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import org.example.Primitives
-import org.example.dynamodbmapper.generatedschemas.PrimitivesConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import aws.smithy.kotlin.runtime.content.Document
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.time.Instant
-
+import org.example.dynamodbmapper.generatedschemas.PrimitivesConverter
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 public class PrimitivesTest {
     @Test

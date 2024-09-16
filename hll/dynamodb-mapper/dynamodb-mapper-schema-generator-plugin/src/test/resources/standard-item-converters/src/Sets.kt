@@ -8,7 +8,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 
 @DynamoDbItem
-public data class Sets (
+public data class Sets(
     @DynamoDbPartitionKey var id: Int,
 
     /**
