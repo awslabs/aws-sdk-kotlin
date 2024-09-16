@@ -52,7 +52,6 @@ public class SimpleItemConverter<T, B>(
 
         item.forEach { (name, attr) ->
             // TODO make behavior for unknown attributes configurable (ignore, exception, other?)
-            // TODO Using AnnotationsProcessorOptions.UnknownAttributes?
             descriptors[name]?.fromAttributeValue(attr)
         }
 

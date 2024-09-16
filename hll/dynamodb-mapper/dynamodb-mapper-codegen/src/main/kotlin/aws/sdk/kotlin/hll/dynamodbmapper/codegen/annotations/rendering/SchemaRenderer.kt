@@ -119,6 +119,8 @@ internal class SchemaRenderer(
         }
         blankLine()
 
+        // If necessary, render a ValueConverter which is a wrapper over the ItemConverter
+        // TODO Offer alternate serialization options besides AttributeValue.M?
         if (ctx.attributes[ShouldRenderValueConverterAttribute]) {
             withBlock(
                 "#Lobject #L : #T {",
@@ -167,7 +169,7 @@ internal class SchemaRenderer(
             this.isEnum -> MapperTypes.Values.Scalars.enumConverter(Type.from(this))
 
             // Assuming other classes have also been annotated with DynamoDbItem, and they are codegenerated in the same package
-            this.isCustomUserClass -> TypeRef(ctx.pkg, "${this.declaration.simpleName.asString()}ValueConverter")
+            this.isUserClass -> TypeRef(ctx.pkg, "${this.declaration.simpleName.asString()}ValueConverter")
 
             else -> when (this.declaration.qualifiedName?.asString()) {
                 "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
@@ -315,7 +317,7 @@ internal class SchemaRenderer(
         )
     }
 
-    private val KSType.isCustomUserClass: Boolean
+    private val KSType.isUserClass: Boolean
         get() = listOf("kotlin", "java", "aws.smithy.kotlin", "aws.sdk.kotlin").none { declaration.packageName.asString().startsWith(it) }
 }
 
