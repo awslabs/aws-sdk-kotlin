@@ -101,14 +101,33 @@ val generateKotlinVersionFile by tasks.registering {
     }
 }
 
+/**
+ * Create a file containing the smithy-kotlin version to use as a resource
+ * This saves us from having to manually change version numbers in multiple places
+ */
+val generateSmithyKotlinVersionFile by tasks.registering {
+    val resourcesDir = layout.buildDirectory.dir("resources/main/aws/sdk/kotlin/hll/dynamodbmapper/plugins").get()
+    val versionFile = file("$resourcesDir/smithy-kotlin-version.txt")
+    val versionCatalogFile = rootProject.file("gradle/libs.versions.toml")
+    inputs.file(versionCatalogFile)
+    outputs.file(versionFile)
+    sourceSets.main.get().output.dir(resourcesDir)
+    doLast {
+        versionFile.writeText(libs.smithy.kotlin.runtime.core.get().version.toString())
+    }
+}
+
+
 tasks.withType<KotlinCompile> {
     dependsOn(generateSdkVersionFile)
     dependsOn(generateKotlinVersionFile)
+    dependsOn(generateSmithyKotlinVersionFile)
 }
 
 tasks.withType<Test> {
     dependsOn(generateSdkVersionFile)
     dependsOn(generateKotlinVersionFile)
+    dependsOn(generateSmithyKotlinVersionFile)
 }
 
 /**
