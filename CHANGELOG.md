@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.33] - 09/16/2024
+
+### Features
+* (**bedrock**) This feature adds cross account s3 bucket and VPC support to ModelInvocation jobs. To use a cross account bucket, pass in the accountId of the bucket to s3BucketOwner in the ModelInvocationJobInputDataConfig or ModelInvocationJobOutputDataConfig.
+* (**iot**) This release adds additional enhancements to AWS IoT Device Management Software Package Catalog and Jobs. It also adds SBOM support in Software Package Version.
+* (**medialive**) Removing the ON_PREMISE enum from the input settings field.
+* (**rds**) Launching Global Cluster tagging.
+
+### Documentation
+* (**organizations**) Doc only update for AWS Organizations that fixes several customer-reported issues
+* (**pcaconnectorscep**) This is a general availability (GA) release of Connector for SCEP, a feature of AWS Private CA. Connector for SCEP links your SCEP-enabled and mobile device management systems to AWS Private CA for digital signature installation and certificate management.
+
 ## [1.3.32] - 09/13/2024
 
 ### Documentation
