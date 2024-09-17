@@ -32,6 +32,457 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapperKt {
 	public static synthetic fun DynamoDbMapper$default (Laws/sdk/kotlin/services/dynamodb/DynamoDbClient;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/DynamoDbMapper;
 }
 
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AndExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getOperands ()Ljava/util/List;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AndExpr$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AndExpr;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AndExprKt {
+	public static final fun AndExpr (Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AndExpr;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AttrPathElement {
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AttrPathElement$Index : aws/sdk/kotlin/hll/dynamodbmapper/expressions/AttrPathElement {
+	public abstract fun getIndex ()I
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AttrPathElement$Name : aws/sdk/kotlin/hll/dynamodbmapper/expressions/AttrPathElement {
+	public abstract fun getName ()Ljava/lang/String;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath : aws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getElement ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttrPathElement;
+	public abstract fun getParent ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePathKt {
+	public static final fun AttributePath (ILaws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;
+	public static final fun AttributePath (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;
+	public static synthetic fun AttributePath$default (Ljava/lang/String;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType : java/lang/Enum {
+	public static final field Binary Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static final field BinarySet Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static final field Boolean Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static final field List Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static final field Map Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static final field Null Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static final field Number Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static final field NumberSet Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static final field String Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static final field StringSet Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public final fun getAbbreviation ()Ljava/lang/String;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+	public static fun values ()[Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/BetweenExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getMax ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;
+	public abstract fun getMin ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;
+	public abstract fun getValue ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/BetweenExpr$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BetweenExpr;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/BetweenExprKt {
+	public static final fun BetweenExpr (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BetweenExpr;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression {
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc : java/lang/Enum {
+	public static final field ATTRIBUTE_EXISTS Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;
+	public static final field ATTRIBUTE_NOT_EXISTS Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;
+	public static final field ATTRIBUTE_TYPE Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;
+	public static final field BEGINS_WITH Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;
+	public static final field CONTAINS Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getExprString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;
+	public static fun values ()[Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFuncExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getAdditionalOperands ()Ljava/util/List;
+	public abstract fun getFunc ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;
+	public abstract fun getPath ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFuncExpr$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFuncExpr;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFuncExprKt {
+	public static final fun BooleanFuncExpr (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFuncExpr;
+	public static final fun BooleanFuncExpr (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;[Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFuncExpr;
+	public static synthetic fun BooleanFuncExpr$default (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFunc;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/List;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFuncExpr;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator : java/lang/Enum {
+	public static final field EQUALS Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;
+	public static final field GREATER_THAN Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;
+	public static final field GREATER_THAN_OR_EQUAL Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;
+	public static final field LESS_THAN Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;
+	public static final field LESS_THAN_OR_EQUAL Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;
+	public static final field NOT_EQUALS Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getExprString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;
+	public static fun values ()[Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/ComparisonExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getComparator ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;
+	public abstract fun getLeft ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;
+	public abstract fun getRight ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/ComparisonExpr$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ComparisonExpr;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/ComparisonExprKt {
+	public static final fun ComparisonExpr (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Comparator;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ComparisonExpr;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor {
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AndExpr;)Ljava/lang/Object;
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;)Ljava/lang/Object;
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BetweenExpr;)Ljava/lang/Object;
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanFuncExpr;)Ljava/lang/Object;
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ComparisonExpr;)Ljava/lang/Object;
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/InExpr;)Ljava/lang/Object;
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;)Ljava/lang/Object;
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/NotExpr;)Ljava/lang/Object;
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/OrExpr;)Ljava/lang/Object;
+	public abstract fun visit (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFuncExpr;)Ljava/lang/Object;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter {
+	public abstract fun and (Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun and ([Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun attr (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;
+	public abstract fun contains (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun contains (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Boolean;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Void;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq-FrkygD8 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UInt;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq-X7ZSXPM (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UShort;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq-Zf_Lc9A (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/ULong;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eq-tA8902A (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UByte;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eqSetByteArray (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eqSetNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eqSetString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eqSetUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eqSetUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eqSetULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun eqSetUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun exists (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun get (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;I)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;
+	public abstract fun get (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;
+	public abstract fun getSize (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;
+	public abstract fun gt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gt-2TYgG_w (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;J)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gt-EK-6454 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gt-Qn1smSk (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;I)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gt-i8woANY (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;S)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gte-2TYgG_w (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;J)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gte-EK-6454 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gte-Qn1smSk (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;I)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun gte-i8woANY (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;S)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isBetween (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionByteArray (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionExpression (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionList (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionMap (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionSetByteArray (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionSetNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionSetString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionSetUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionSetUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionSetULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionSetUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInCollectionUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInRangeNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInRangeString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInRangeUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInRangeUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInRangeULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isInRangeUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun isOfType (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributeType;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lt-2TYgG_w (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;J)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lt-EK-6454 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lt-Qn1smSk (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;I)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lt-i8woANY (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;S)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lte-2TYgG_w (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;J)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lte-EK-6454 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lte-Qn1smSk (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;I)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun lte-i8woANY (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;S)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Boolean;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Void;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq-FrkygD8 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UInt;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq-X7ZSXPM (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UShort;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq-Zf_Lc9A (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/ULong;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neq-tA8902A (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UByte;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neqSetByteArray (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neqSetNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neqSetString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neqSetUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neqSetUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neqSetULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun neqSetUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun not (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun notExists (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun or (Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun or ([Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun startsWith (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public abstract fun startsWith (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter$DefaultImpls {
+	public static fun and (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;[Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun contains (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Boolean;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Void;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq-FrkygD8 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UInt;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq-X7ZSXPM (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UShort;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq-Zf_Lc9A (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/ULong;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eq-tA8902A (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UByte;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eqSetByteArray (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eqSetNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eqSetString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eqSetUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eqSetUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eqSetULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun eqSetUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gt-2TYgG_w (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;J)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gt-EK-6454 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gt-Qn1smSk (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;I)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gt-i8woANY (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;S)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gte-2TYgG_w (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;J)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gte-EK-6454 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gte-Qn1smSk (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;I)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun gte-i8woANY (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;S)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionByteArray (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionList (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionMap (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionSetByteArray (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionSetNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionSetString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionSetUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionSetUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionSetULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionSetUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInCollectionUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInRangeNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInRangeString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInRangeUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInRangeUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInRangeULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun isInRangeUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Lkotlin/ranges/ClosedRange;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lt-2TYgG_w (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;J)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lt-EK-6454 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lt-Qn1smSk (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;I)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lt-i8woANY (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;S)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lte-2TYgG_w (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;J)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lte-EK-6454 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lte-Qn1smSk (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;I)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun lte-i8woANY (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;S)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Boolean;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/lang/Void;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;[B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq-FrkygD8 (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UInt;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq-X7ZSXPM (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UShort;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq-Zf_Lc9A (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/ULong;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neq-tA8902A (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Lkotlin/UByte;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neqSetByteArray (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neqSetNumber (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neqSetString (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neqSetUByte (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neqSetUInt (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neqSetULong (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun neqSetUShort (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun or (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;[Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+	public static fun startsWith (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Filter;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/InExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getSet ()Ljava/util/Collection;
+	public abstract fun getValue ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/InExpr$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/InExpr;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/InExprKt {
+	public static final fun InExpr (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;Ljava/util/Collection;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/InExpr;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getValue ()Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExprKt {
+	public static final fun LiteralExpr (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr (Ljava/lang/Boolean;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr (Ljava/lang/Number;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr (Ljava/lang/Void;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr (Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr (Ljava/util/Map;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr ([B)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr-3swpYEE (Lkotlin/UByte;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr-ADd3fzo (Lkotlin/ULong;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr-ExVfyTY (Lkotlin/UInt;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExpr-ffyZV3s (Lkotlin/UShort;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExprSetByteArray (Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExprSetNumber (Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExprSetString (Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExprSetUByte (Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExprSetUInt (Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExprSetULong (Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+	public static final fun LiteralExprSetUShort (Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/LiteralExpr;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/NotExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getOperand ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/NotExpr$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/NotExpr;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/NotExprKt {
+	public static final fun NotExpr (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/NotExpr;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/OrExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getOperands ()Ljava/util/List;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/OrExpr$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/OrExpr;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/OrExprKt {
+	public static final fun OrExpr (Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/OrExpr;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFunc : java/lang/Enum {
+	public static final field SIZE Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFunc;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun getExprString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFunc;
+	public static fun values ()[Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFunc;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFuncExpr : aws/sdk/kotlin/hll/dynamodbmapper/expressions/BooleanExpr {
+	public abstract fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+	public abstract fun getAdditionalOperands ()Ljava/util/List;
+	public abstract fun getFunc ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFunc;
+	public abstract fun getPath ()Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFuncExpr$DefaultImpls {
+	public static fun accept (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFuncExpr;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ExpressionVisitor;)Ljava/lang/Object;
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFuncExprKt {
+	public static final fun ScalarFuncExpr (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFunc;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/List;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFuncExpr;
+	public static final fun ScalarFuncExpr (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFunc;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;[Laws/sdk/kotlin/hll/dynamodbmapper/expressions/Expression;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFuncExpr;
+	public static synthetic fun ScalarFuncExpr$default (Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFunc;Laws/sdk/kotlin/hll/dynamodbmapper/expressions/AttributePath;Ljava/util/List;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/expressions/ScalarFuncExpr;
+}
+
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor {
 	public abstract fun getConverter ()Laws/sdk/kotlin/hll/mapping/core/converters/Converter;
 	public abstract fun getGetter ()Lkotlin/jvm/functions/Function1;

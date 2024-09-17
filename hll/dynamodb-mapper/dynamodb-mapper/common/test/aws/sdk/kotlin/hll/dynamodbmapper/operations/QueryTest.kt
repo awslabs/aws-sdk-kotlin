@@ -8,10 +8,11 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.AttributeDescriptor
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
+import aws.sdk.kotlin.hll.dynamodbmapper.model.toItem
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.Interceptor
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.LReqContext
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.DdbLocalTest
-import aws.sdk.kotlin.hll.dynamodbmapper.testutils.ddbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
 import kotlinx.coroutines.test.runTest
@@ -75,28 +76,28 @@ class QueryTest : DdbLocalTest() {
             gsis = mapOf(TITLE_INDEX_NAME to titleSchema),
             lsis = mapOf(NAME_INDEX_NAME to empsByNameSchema),
             items = listOf(
-                mapOf(
+                itemOf(
                     "companyId" to "foo-corp",
                     "empId" to "AB0123",
                     "name" to "Alice Birch",
                     "title" to "SDE",
                     "tenureYears" to 5,
                 ),
-                mapOf(
+                itemOf(
                     "companyId" to "foo-corp",
                     "empId" to "AB0126",
                     "name" to "Adriana Beech",
                     "title" to "Manager",
                     "tenureYears" to 7,
                 ),
-                mapOf(
+                itemOf(
                     "companyId" to "foo-corp",
                     "empId" to "EF0124",
                     "name" to "Eddie Fraser",
                     "title" to "SDE",
                     "tenureYears" to 3,
                 ),
-                mapOf(
+                itemOf(
                     "companyId" to "bar-corp",
                     "empId" to "157X",
                     "name" to "Charlie Douglas",
@@ -128,30 +129,30 @@ class QueryTest : DdbLocalTest() {
         val items = assertNotNull(result.items)
 
         val expected = listOf( // FIXME query/scan don't support object mapping yet
-            mapOf(
+            itemOf(
                 "companyId" to "foo-corp",
                 "empId" to "AB0123",
                 "name" to "Alice Birch",
                 "title" to "SDE",
                 "tenureYears" to 5,
             ),
-            mapOf(
+            itemOf(
                 "companyId" to "foo-corp",
                 "empId" to "AB0126",
                 "name" to "Adriana Beech",
                 "title" to "Manager",
                 "tenureYears" to 7,
             ),
-            mapOf(
+            itemOf(
                 "companyId" to "foo-corp",
                 "empId" to "EF0124",
                 "name" to "Eddie Fraser",
                 "title" to "SDE",
                 "tenureYears" to 3,
             ),
-        ).map(::ddbItem)
+        )
 
-        assertContentEquals(expected, items)
+        assertContentEquals(expected, items.map { it.toItem() })
     }
 
     @Test
@@ -176,21 +177,21 @@ class QueryTest : DdbLocalTest() {
         val items = assertNotNull(result.items)
 
         val expected = listOf( // FIXME query/scan don't support object mapping yet
-            mapOf(
+            itemOf(
                 "companyId" to "foo-corp",
                 "empId" to "AB0126",
                 "name" to "Adriana Beech",
                 "title" to "Manager",
             ),
-            mapOf(
+            itemOf(
                 "companyId" to "bar-corp",
                 "empId" to "157X",
                 "name" to "Charlie Douglas",
                 "title" to "Manager",
             ),
-        ).map(::ddbItem)
+        )
 
-        assertContentEquals(expected, items)
+        assertContentEquals(expected, items.map { it.toItem() })
     }
 
     @Test
@@ -215,39 +216,39 @@ class QueryTest : DdbLocalTest() {
         val items = assertNotNull(result.items)
 
         val expected = listOf( // FIXME query/scan don't support object mapping yet
-            mapOf(
+            itemOf(
                 "companyId" to "foo-corp",
                 "empId" to "AB0126",
                 "name" to "Adriana Beech",
                 "title" to "Manager",
                 "tenureYears" to 7,
             ),
-            mapOf(
+            itemOf(
                 "companyId" to "foo-corp",
                 "empId" to "AB0123",
                 "name" to "Alice Birch",
                 "title" to "SDE",
                 "tenureYears" to 5,
             ),
-            mapOf(
+            itemOf(
                 "companyId" to "foo-corp",
                 "empId" to "EF0124",
                 "name" to "Eddie Fraser",
                 "title" to "SDE",
                 "tenureYears" to 3,
             ),
-        ).map(::ddbItem)
+        )
 
-        assertContentEquals(expected, items)
+        assertContentEquals(expected, items.map { it.toItem() })
     }
 }
 
 // FIXME ugly hack until conditions are implemented
 private class ExpressionAttributeInterceptor(
-    vararg attributeValues: Pair<String, Any>,
+    vararg attributeValues: Pair<String, Any?>,
 ) : Interceptor<Any, Any, LowLevelQueryRequest, Any, Any> {
 
-    val attributeValues = ddbItem(*attributeValues).mapKeys { (k, _) -> ":$k" }
+    val attributeValues = itemOf(*attributeValues).mapKeys { (k, _) -> ":$k" }
 
     override fun modifyBeforeInvocation(ctx: LReqContext<Any, Any, LowLevelQueryRequest>): LowLevelQueryRequest =
         ctx.lowLevelRequest.copy { expressionAttributeValues = attributeValues }

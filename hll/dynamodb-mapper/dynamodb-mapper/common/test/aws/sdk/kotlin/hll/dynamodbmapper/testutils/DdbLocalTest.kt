@@ -6,6 +6,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.testutils
 
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
+import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.deleteTable
@@ -74,7 +75,7 @@ abstract class DdbLocalTest : AnnotationSpec() {
      * @param items A collection of maps of strings to values which will be mapped and persisted to the new table before
      * returning. This can be used to pre-populate a table for a test.
      */
-    suspend fun createTable(name: String, schema: ItemSchema<*>, vararg items: Map<String, Any>) =
+    suspend fun createTable(name: String, schema: ItemSchema<*>, vararg items: Item) =
         createTable(name, schema, mapOf(), mapOf(), items.toList())
 
     /**
@@ -92,7 +93,7 @@ abstract class DdbLocalTest : AnnotationSpec() {
         schema: ItemSchema<*>,
         gsis: Map<String, ItemSchema<*>>,
         lsis: Map<String, ItemSchema<*>>,
-        items: List<Map<String, Any>>,
+        items: List<Item>,
     ) {
         ddb.createTable(name, schema, gsis, lsis)
         tempTables += name

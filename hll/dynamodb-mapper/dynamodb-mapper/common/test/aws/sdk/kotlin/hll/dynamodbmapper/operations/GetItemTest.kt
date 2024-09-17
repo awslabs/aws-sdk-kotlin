@@ -9,6 +9,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Table
+import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.DdbLocalTest
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
@@ -47,8 +48,8 @@ class GetItemTest : DdbLocalTest() {
 
     @BeforeAll
     fun setUp() = runTest {
-        createTable(PK_TABLE_NAME, pkSchema, mapOf("id" to 1, "value" to "foo"))
-        createTable(CK_TABLE_NAME, ckSchema, mapOf("id" to "abcd", "version" to 42, "value" to "foo"))
+        createTable(PK_TABLE_NAME, pkSchema, itemOf("id" to 1, "value" to "foo"))
+        createTable(CK_TABLE_NAME, ckSchema, itemOf("id" to "abcd", "version" to 42, "value" to "foo"))
     }
 
     private fun testGetItem(
