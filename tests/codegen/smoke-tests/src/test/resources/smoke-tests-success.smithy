@@ -1,5 +1,5 @@
 $version: "2"
-namespace com.test
+namespace smithy.kotlin.traits
 
 use aws.protocols#awsJson1_0
 use aws.api#service

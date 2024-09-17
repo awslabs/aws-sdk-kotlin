@@ -7,15 +7,15 @@ import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
 
-description = "Tests for smoke tests runner"
+description = "Tests for smoke tests runners"
 plugins {
     alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
     alias(libs.plugins.kotlin.jvm)
 }
 
 val projections = listOf(
-    ProjectionMetadata("successService", "smoke-tests-success.smithy", "com.test#SuccessService"),
-    ProjectionMetadata("failureService", "smoke-tests-failure.smithy", "com.test#FailureService"),
+    ProjectionMetadata("successService", "smoke-tests-success.smithy", "smithy.kotlin.traits#SuccessService"),
+    ProjectionMetadata("failureService", "smoke-tests-failure.smithy", "smithy.kotlin.traits#FailureService"),
 )
 
 configureProject()
@@ -92,14 +92,6 @@ fun configureTasks() {
 
     tasks.build {
         dependsOn(tasks.getByName("stageServices"))
-    }
-
-    tasks.register<Exec>("unstageServices") {
-        commandLine("git", "clean", "-fdx", "services")
-    }
-
-    tasks.clean {
-        dependsOn(tasks.getByName("unstageServices"))
     }
 }
 

@@ -11,7 +11,6 @@ import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.FailedResponseTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.SuccessResponseTrait
 import software.amazon.smithy.kotlin.codegen.rendering.GradleWriter
-import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.kotlin.codegen.utils.operations
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
@@ -83,10 +82,9 @@ class GradleGenerator : KotlinIntegration {
     }
 
     private fun generateSmokeTestConfig(writer: GradleWriter, sdkId: String, ctx: CodegenContext) {
-        val formattedDenyList = smokeTestDenyList.joinToString(",", "setOf(", ")") { it.dq() }
-        writer.withBlock("if (#S !in #L) {", "}", sdkId, formattedDenyList) {
+        if (sdkId !in smokeTestDenyList) {
             generateSmokeTestJarTask(writer, ctx)
-            emptyLine()
+            writer.emptyLine()
             generateSmokeTestTask(writer, ctx)
         }
     }
