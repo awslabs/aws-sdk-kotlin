@@ -24,8 +24,18 @@ dependencies {
     testImplementation(libs.kotlin.test.junit5)
 }
 
+val optinAnnotations = listOf(
+    "aws.smithy.kotlin.runtime.InternalApi",
+    "aws.sdk.kotlin.runtime.InternalSdkApi",
+    "kotlin.RequiresOptIn",
+)
+
 kotlin {
     explicitApi()
+
+    sourceSets.all {
+        optinAnnotations.forEach(languageSettings::optIn)
+    }
 }
 
 tasks.test {

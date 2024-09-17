@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
+import aws.sdk.kotlin.hll.codegen.model.Operation
+import aws.sdk.kotlin.hll.codegen.model.Structure
 import aws.smithy.kotlin.runtime.collections.AttributeKey
 
 /**
@@ -19,4 +21,6 @@ internal object ModelAttributes {
      * For a given high-level [Structure], this attribute key identifies the associated low-level [Structure]
      */
     val LowLevelStructure: AttributeKey<Structure> = AttributeKey("aws.sdk.kotlin.ddbmapper#LowLevelStructure")
+
+    val PaginationInfo: AttributeKey<PaginationMembers> = AttributeKey("aws.sdk.kotlin.ddbmapper#PaginationInfo")
 }

@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.hll.codegen.core
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
+
 /**
  * A string processing engine that replaces template parameters with passed arguments to form a final string. String
  * templates take the form of string literals containing zero or more **parameters**, which are special sequences
@@ -44,7 +46,8 @@ package aws.sdk.kotlin.hll.codegen.core
  * template, it attempts to match the parameter **key** (an uppercase letter `[A-Z]`) to the key of a processor. If no
  * referenced processor has a matching key, an exception will be thrown.
  */
-class TemplateEngine(processors: List<TemplateProcessor>) {
+@InternalSdkApi
+public class TemplateEngine(processors: List<TemplateProcessor>) {
     private val processors = processors.associate { it.key to it.handler }
     private val parameterRegex = """(?<!#)#([1-9][0-9]*)?([A-Z])""".toRegex()
 
@@ -54,7 +57,7 @@ class TemplateEngine(processors: List<TemplateProcessor>) {
      * @param args A collection of arguments to use in parameter substitution
      * @return A string with all parameters replaced
      */
-    fun process(template: String, args: List<Any>): String {
+    public fun process(template: String, args: List<Any>): String {
         var allIndexed: Boolean? = null
 
         return parameterRegex.replaceIndexed(template) { pos, result ->

@@ -6,13 +6,13 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.*
 import aws.sdk.kotlin.hll.codegen.model.Member
+import aws.sdk.kotlin.hll.codegen.model.Operation
+import aws.sdk.kotlin.hll.codegen.model.Structure
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.codegen.rendering.info
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.*
-
-// FIXME handle paginated operations differently (e.g., don't map pagination parameters, provide only Flow API)
 
 /**
  * Renders a dedicated file for a high-level operation, including request/response types, converters between low/high
@@ -24,7 +24,7 @@ internal class OperationRenderer(
     private val ctx: RenderContext,
     private val operation: Operation,
 ) : RendererBase(ctx, operation.name) {
-    val members = operation.request.lowLevel.members.groupBy { m ->
+    private val members = operation.request.lowLevel.members.groupBy { m ->
         m.codegenBehavior.also { ctx.info("  ${m.name} → $it") }
     }
 
@@ -78,7 +78,6 @@ internal class OperationRenderer(
     }
 
     private fun renderRequest() {
-        ctx.info("For type ${operation.request.lowLevelName}:")
         DataTypeGenerator(ctx, this, operation.request).generate()
         blankLine()
 
@@ -94,6 +93,9 @@ internal class OperationRenderer(
         }
         members(MemberCodegenBehavior.MapAll) {
             write("this@convert.#1L?.let { #1L = schema.converter.toItem(it) }", name)
+        }
+        members(MemberCodegenBehavior.ListMapAll) {
+            write("#1L = this@convert.#1L?.map { schema.converter.toItem(it) }", name)
         }
         members(MemberCodegenBehavior.Hoist) { write("this.#1L = #1L", name) }
         closeBlock("}")
@@ -111,16 +113,28 @@ internal class OperationRenderer(
         imports += ImportDirective(operation.response.lowLevel.type, operation.response.lowLevelName)
 
         withBlock(
-            "private fun <T> #L.convert(schema: #T) = #T(",
-            ")",
+            "private fun <T> #L.convert(schema: #T) = #T {",
+            "}",
             operation.response.lowLevelName,
             MapperTypes.Items.itemSchema("T"),
             operation.response.type,
         ) {
-            members(MemberCodegenBehavior.PassThrough) { write("#1L = this@convert.#1L,", name) }
+            members(MemberCodegenBehavior.PassThrough) { write("#1L = this@convert.#1L", name) }
 
             members(MemberCodegenBehavior.MapKeys, MemberCodegenBehavior.MapAll) {
-                write("#1L = this@convert.#1L?.#2T()?.let(schema.converter::fromItem),", name, MapperTypes.Model.toItem)
+                write(
+                    "#1L = this@convert.#1L?.#2T()?.let(schema.converter::fromItem)",
+                    name,
+                    MapperTypes.Model.toItem,
+                )
+            }
+
+            members(MemberCodegenBehavior.ListMapAll) {
+                write(
+                    "#1L = this@convert.#1L?.map { schema.converter.fromItem(it.#2T()) }",
+                    name,
+                    MapperTypes.Model.toItem,
+                )
             }
         }
     }

@@ -5,9 +5,11 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
+import aws.sdk.kotlin.hll.codegen.model.Operation
+import aws.sdk.kotlin.hll.codegen.model.Pkg
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
-import aws.sdk.kotlin.hll.codegen.util.Pkg
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Operation
+import aws.sdk.kotlin.hll.codegen.util.KspLoggerOutputStream
+import aws.sdk.kotlin.hll.codegen.util.asPrintStream
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.toHighLevel
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering.HighLevelRenderer
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
@@ -33,6 +35,9 @@ internal class HighLevelOpsProcessor(environment: SymbolProcessorEnvironment) : 
         if (!invoked) {
             invoked = true
 
+            val loggerOutStream = KspLoggerOutputStream(logger)
+            System.setOut(loggerOutStream.asPrintStream())
+
             logger.info("Scanning low-level DDB client for operations and types")
             val operations = getOperations(resolver)
 
@@ -45,10 +50,18 @@ internal class HighLevelOpsProcessor(environment: SymbolProcessorEnvironment) : 
         return listOf()
     }
 
-    private fun allow(func: KSFunctionDeclaration) =
-        (opAllowlist?.contains(func.simpleName.getShortName()) ?: true).also {
-            if (!it) logger.warn("${func.simpleName.getShortName()} not in allowlist; skipping codegen")
+    private fun allow(func: KSFunctionDeclaration): Boolean {
+        val name = func.simpleName.getShortName()
+        val allowed = opAllowlist?.contains(name)
+
+        when (allowed) {
+            false -> logger.warn("$name not in allowlist; skipping codegen")
+            true -> logger.info("$name in allowlist; processing...")
+            null -> Unit // There is no allowlist—don't log anything
         }
+
+        return allowed ?: true
+    }
 
     private fun getOperations(resolver: Resolver): List<Operation> = resolver
         .getClassDeclarationByName<DynamoDbClient>()!!

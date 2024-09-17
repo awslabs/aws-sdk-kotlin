@@ -41,15 +41,7 @@ class PutItemTest : DdbLocalTest() {
         val mapper = mapper()
         val table = mapper.getTable(TABLE_NAME, schema)
 
-        table.putItem(
-            PutItemRequest(
-                Item(id = "foo", value = 42),
-                null,
-                null,
-                null,
-                null,
-            ),
-        )
+        table.putItem { item = Item(id = "foo", value = 42) }
 
         val resp = ddb.getItem(TABLE_NAME, "id" to "foo")
 

@@ -4,9 +4,10 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
+import aws.sdk.kotlin.hll.codegen.model.Operation
+import aws.sdk.kotlin.hll.codegen.model.Pkg
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.TypeVar
-import aws.sdk.kotlin.hll.codegen.util.Pkg
 
 /**
  * Identifies a type in the `ItemSource<T>` hierarchy

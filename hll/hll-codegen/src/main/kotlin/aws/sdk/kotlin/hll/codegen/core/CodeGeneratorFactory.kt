@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.codegen.core
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.CodeGenerator as KSCodeGenerator
@@ -13,7 +14,8 @@ import com.google.devtools.ksp.processing.CodeGenerator as KSCodeGenerator
  * @param ksCodeGenerator The underlying KSP [KSCodeGenerator] to use for low-level file access and dependency tracking
  * @param logger A logger instance to use for message
  */
-class CodeGeneratorFactory(private val ksCodeGenerator: KSCodeGenerator, private val logger: KSPLogger) {
+@InternalSdkApi
+public class CodeGeneratorFactory(private val ksCodeGenerator: KSCodeGenerator, private val logger: KSPLogger) {
     private val dependencies = Dependencies.ALL_FILES
 
     /**
@@ -24,7 +26,7 @@ class CodeGeneratorFactory(private val ksCodeGenerator: KSCodeGenerator, private
      * @param pkg The Kotlin package for the generated code (e.g., `aws.sdk.kotlin.hll.dynamodbmapper.operations`)
      * @param codeGeneratorName The name of this [CodeGenerator]
      */
-    fun generator(fileName: String, pkg: String, codeGeneratorName: String): CodeGenerator {
+    public fun generator(fileName: String, pkg: String, codeGeneratorName: String): CodeGenerator {
         val imports = ImportDirectives()
         val processors = listOf(
             TemplateProcessor.Literal,

@@ -47,15 +47,11 @@ class DeleteItemTest : DdbLocalTest() {
         val mapper = mapper()
         val table = mapper.getTable(TABLE_NAME, schema)
 
-        val resp = table.deleteItem(
-            DeleteItemRequest(
-                Item(id = "foo"),
-                ReturnConsumedCapacity.Indexes,
-                null,
-                ReturnValue.AllOld,
-                null,
-            ),
-        )
+        val resp = table.deleteItem {
+            key = Item(id = "foo")
+            returnConsumedCapacity = ReturnConsumedCapacity.Indexes
+            returnValues = ReturnValue.AllOld
+        }
 
         val item = assertNotNull(resp.attributes)
         assertEquals("foo", item.id)

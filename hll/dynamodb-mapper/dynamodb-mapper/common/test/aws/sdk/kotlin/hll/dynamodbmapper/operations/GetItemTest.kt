@@ -71,13 +71,10 @@ class GetItemTest : DdbLocalTest() {
         action: (GetItemResponse<T>) -> Unit,
     ) = runTest {
         keys.forEach { key ->
-            val response = table.getItem(
-                GetItemRequest(
-                    null,
-                    key,
-                    returnConsumedCapacity,
-                ),
-            )
+            val response = table.getItem {
+                this.key = key
+                this.returnConsumedCapacity = returnConsumedCapacity
+            }
 
             action(response)
         }

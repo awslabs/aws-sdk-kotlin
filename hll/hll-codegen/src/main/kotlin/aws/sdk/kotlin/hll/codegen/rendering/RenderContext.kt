@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.hll.codegen.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.emptyAttributes
 import com.google.devtools.ksp.processing.KSPLogger
@@ -17,7 +18,8 @@ import com.google.devtools.ksp.symbol.KSNode
  * @param codegenFactory A factory that creates code generator instances for specific files
  * @param pkg The Kotlin package for the generated code (e.g., `aws.sdk.kotlin.hll.dynamodbmapper.operations`)
  */
-data class RenderContext(
+@InternalSdkApi
+public data class RenderContext(
     val logger: KSPLogger,
     val codegenFactory: CodeGeneratorFactory,
     val pkg: String,
@@ -25,9 +27,9 @@ data class RenderContext(
     val attributes: Attributes = emptyAttributes(),
 )
 
-fun RenderContext.logging(message: String, symbol: KSNode? = null) = logger.logging(message, symbol)
-fun RenderContext.info(message: String, symbol: KSNode? = null) = logger.info(message, symbol)
-fun RenderContext.warn(message: String, symbol: KSNode? = null) = logger.warn(message, symbol)
-fun RenderContext.error(message: String, symbol: KSNode? = null) = logger.error(message, symbol)
+public fun RenderContext.logging(message: String, symbol: KSNode? = null): Unit = logger.logging(message, symbol)
+public fun RenderContext.info(message: String, symbol: KSNode? = null): Unit = logger.info(message, symbol)
+public fun RenderContext.warn(message: String, symbol: KSNode? = null): Unit = logger.warn(message, symbol)
+public fun RenderContext.error(message: String, symbol: KSNode? = null): Unit = logger.error(message, symbol)
 
-fun RenderContext.exception(e: Throwable) = logger.exception(e)
+public fun RenderContext.exception(e: Throwable): Unit = logger.exception(e)

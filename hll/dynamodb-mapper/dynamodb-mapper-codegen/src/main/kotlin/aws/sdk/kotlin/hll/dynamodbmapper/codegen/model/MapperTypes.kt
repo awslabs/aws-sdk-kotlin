@@ -1,10 +1,10 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.model
 
+import aws.sdk.kotlin.hll.codegen.model.Pkg
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.TypeVar
 import aws.sdk.kotlin.hll.codegen.model.Types
-import aws.sdk.kotlin.hll.codegen.util.Pkg
 
 /**
  * A container object for various DynamoDbMapper [Type] instances
@@ -16,6 +16,10 @@ internal object MapperTypes {
 
     // High-level types
     val DynamoDbMapper = TypeRef(Pkg.Hl.Base, "DynamoDbMapper")
+
+    object Annotations {
+        val ManualPagination = TypeRef(Pkg.Hl.Annotations, "ManualPagination")
+    }
 
     object Items {
         fun itemSchema(typeVar: String) = TypeRef(Pkg.Hl.Items, "ItemSchema", listOf(TypeVar(typeVar)))
