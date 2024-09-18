@@ -121,7 +121,7 @@ internal class SchemaRenderer(
 
         // If necessary, render a ValueConverter which is a wrapper over the ItemConverter
         // TODO Offer alternate serialization options besides AttributeValue.M?
-        if (ctx.attributes[ShouldRenderValueConverterAttribute]) {
+        if (ctx.attributes[SchemaAttributes.ShouldRenderValueConverterAttribute]) {
             withBlock(
                 "#Lobject #L : #T {",
                 "}",
@@ -171,35 +171,35 @@ internal class SchemaRenderer(
             // Assuming other classes have also been annotated with DynamoDbItem, and they are codegenerated in the same package
             this.isUserClass -> TypeRef(ctx.pkg, "${this.declaration.simpleName.asString()}ValueConverter")
 
-            else -> when (this.declaration.qualifiedName?.asString()) {
-                "aws.smithy.kotlin.runtime.time.Instant" -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
-                "aws.smithy.kotlin.runtime.net.url.Url" -> MapperTypes.Values.SmithyTypes.UrlConverter
-                "aws.smithy.kotlin.runtime.content.Document" -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
+            else -> when (Type.from(this).copy(genericArgs = listOf())) {
+                Types.Smithy.Instant -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
+                Types.Smithy.Url -> MapperTypes.Values.SmithyTypes.UrlConverter
+                Types.Smithy.Document -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
 
-                "kotlin.Boolean" -> MapperTypes.Values.Scalars.BooleanConverter
-                "kotlin.String" -> MapperTypes.Values.Scalars.StringConverter
-                "kotlin.CharArray" -> MapperTypes.Values.Scalars.CharArrayConverter
-                "kotlin.Char" -> MapperTypes.Values.Scalars.CharConverter
-                "kotlin.Byte" -> MapperTypes.Values.Scalars.ByteConverter
-                "kotlin.ByteArray" -> MapperTypes.Values.Scalars.ByteArrayConverter
-                "kotlin.Short" -> MapperTypes.Values.Scalars.ShortConverter
-                "kotlin.Int" -> MapperTypes.Values.Scalars.IntConverter
-                "kotlin.Long" -> MapperTypes.Values.Scalars.LongConverter
-                "kotlin.Double" -> MapperTypes.Values.Scalars.DoubleConverter
-                "kotlin.Float" -> MapperTypes.Values.Scalars.FloatConverter
-                "kotlin.UByte" -> MapperTypes.Values.Scalars.UByteConverter
-                "kotlin.UInt" -> MapperTypes.Values.Scalars.UIntConverter
-                "kotlin.UShort" -> MapperTypes.Values.Scalars.UShortConverter
-                "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongConverter
+                Types.Kotlin.Boolean -> MapperTypes.Values.Scalars.BooleanConverter
+                Types.Kotlin.String -> MapperTypes.Values.Scalars.StringConverter
+                Types.Kotlin.CharArray -> MapperTypes.Values.Scalars.CharArrayConverter
+                Types.Kotlin.Char -> MapperTypes.Values.Scalars.CharConverter
+                Types.Kotlin.Byte -> MapperTypes.Values.Scalars.ByteConverter
+                Types.Kotlin.ByteArray -> MapperTypes.Values.Scalars.ByteArrayConverter
+                Types.Kotlin.Short -> MapperTypes.Values.Scalars.ShortConverter
+                Types.Kotlin.Int -> MapperTypes.Values.Scalars.IntConverter
+                Types.Kotlin.Long -> MapperTypes.Values.Scalars.LongConverter
+                Types.Kotlin.Double -> MapperTypes.Values.Scalars.DoubleConverter
+                Types.Kotlin.Float -> MapperTypes.Values.Scalars.FloatConverter
+                Types.Kotlin.UByte -> MapperTypes.Values.Scalars.UByteConverter
+                Types.Kotlin.UInt -> MapperTypes.Values.Scalars.UIntConverter
+                Types.Kotlin.UShort -> MapperTypes.Values.Scalars.UShortConverter
+                Types.Kotlin.ULong -> MapperTypes.Values.Scalars.ULongConverter
 
-                "kotlin.collections.Set" -> this.singleArgument().setValueConverter
+                Types.Kotlin.Collections.Set -> this.singleArgument().setValueConverter
 
-                "kotlin.collections.List" -> {
+                Types.Kotlin.Collections.List -> {
                     val listElementConverter = this.singleArgument().valueConverter
                     MapperTypes.Values.Collections.listConverter(listElementConverter)
                 }
 
-                "kotlin.collections.Map" -> {
+                Types.Kotlin.Collections.Map -> {
                     check(arguments.size == 2) { "Expected map type ${declaration.qualifiedName?.asString()} to have 2 arguments, got ${arguments.size}" }
 
                     val (keyType, valueType) = arguments
@@ -220,27 +220,27 @@ internal class SchemaRenderer(
         }
 
     private val KSType.mapKeyConverter: Type
-        get() = when (val name = this.declaration.qualifiedName?.asString()) {
+        get() = when (val type = Type.from(this)) {
             // String
-            "kotlin.CharArray" -> MapperTypes.Values.Scalars.CharArrayToStringConverter
-            "kotlin.Char" -> MapperTypes.Values.Scalars.CharToStringConverter
-            "kotlin.String" -> MapperTypes.Values.Scalars.StringToStringConverter
+            Types.Kotlin.ByteArray -> MapperTypes.Values.Scalars.CharArrayToStringConverter
+            Types.Kotlin.Char -> MapperTypes.Values.Scalars.CharToStringConverter
+            Types.Kotlin.String -> MapperTypes.Values.Scalars.StringToStringConverter
 
             // Number
-            "kotlin.Byte" -> MapperTypes.Values.Scalars.ByteToStringConverter
-            "kotlin.Double" -> MapperTypes.Values.Scalars.DoubleToStringConverter
-            "kotlin.Float" -> MapperTypes.Values.Scalars.FloatToStringConverter
-            "kotlin.Int" -> MapperTypes.Values.Scalars.IntToStringConverter
-            "kotlin.Long" -> MapperTypes.Values.Scalars.LongToStringConverter
-            "kotlin.Short" -> MapperTypes.Values.Scalars.ShortToStringConverter
-            "kotlin.UByte" -> MapperTypes.Values.Scalars.UByteToStringConverter
-            "kotlin.UInt" -> MapperTypes.Values.Scalars.UIntToStringConverter
-            "kotlin.ULong" -> MapperTypes.Values.Scalars.ULongToStringConverter
-            "kotlin.UShort" -> MapperTypes.Values.Scalars.UShortToStringConverter
+            Types.Kotlin.Byte -> MapperTypes.Values.Scalars.ByteToStringConverter
+            Types.Kotlin.Double -> MapperTypes.Values.Scalars.DoubleToStringConverter
+            Types.Kotlin.Float -> MapperTypes.Values.Scalars.FloatToStringConverter
+            Types.Kotlin.Int -> MapperTypes.Values.Scalars.IntToStringConverter
+            Types.Kotlin.Long -> MapperTypes.Values.Scalars.LongToStringConverter
+            Types.Kotlin.Short -> MapperTypes.Values.Scalars.ShortToStringConverter
+            Types.Kotlin.UByte -> MapperTypes.Values.Scalars.UByteToStringConverter
+            Types.Kotlin.UInt -> MapperTypes.Values.Scalars.UIntToStringConverter
+            Types.Kotlin.ULong -> MapperTypes.Values.Scalars.ULongToStringConverter
+            Types.Kotlin.UShort -> MapperTypes.Values.Scalars.UShortToStringConverter
 
             // Boolean
-            "kotlin.Boolean" -> MapperTypes.Values.Scalars.BooleanToStringConverter
-            else -> error("Unsupported key type: $name")
+            Types.Kotlin.Boolean -> MapperTypes.Values.Scalars.BooleanToStringConverter
+            else -> error("Unsupported key type: $type")
         }
 
     private fun KSType.singleArgument(): KSType = checkNotNull(arguments.single().type?.resolve()) {
@@ -248,20 +248,20 @@ internal class SchemaRenderer(
     }
 
     private val KSType.setValueConverter: Type
-        get() = when (this.declaration.qualifiedName?.asString()) {
-            "kotlin.String" -> MapperTypes.Values.Collections.StringSetConverter
-            "kotlin.Char" -> MapperTypes.Values.Collections.CharSetConverter
-            "kotlin.CharArray" -> MapperTypes.Values.Collections.CharArraySetConverter
-            "kotlin.Byte" -> MapperTypes.Values.Collections.ByteSetConverter
-            "kotlin.Double" -> MapperTypes.Values.Collections.DoubleSetConverter
-            "kotlin.Float" -> MapperTypes.Values.Collections.FloatSetConverter
-            "kotlin.Int" -> MapperTypes.Values.Collections.IntSetConverter
-            "kotlin.Long" -> MapperTypes.Values.Collections.LongSetConverter
-            "kotlin.Short" -> MapperTypes.Values.Collections.ShortSetConverter
-            "kotlin.UByte" -> MapperTypes.Values.Collections.UByteSetConverter
-            "kotlin.UInt" -> MapperTypes.Values.Collections.UIntSetConverter
-            "kotlin.ULong" -> MapperTypes.Values.Collections.ULongSetConverter
-            "kotlin.UShort" -> MapperTypes.Values.Collections.UShortSetConverter
+        get() = when (val type = Type.from(this)) {
+            Types.Kotlin.String -> MapperTypes.Values.Collections.StringSetConverter
+            Types.Kotlin.Char -> MapperTypes.Values.Collections.CharSetConverter
+            Types.Kotlin.CharArray -> MapperTypes.Values.Collections.CharArraySetConverter
+            Types.Kotlin.Byte -> MapperTypes.Values.Collections.ByteSetConverter
+            Types.Kotlin.Double -> MapperTypes.Values.Collections.DoubleSetConverter
+            Types.Kotlin.Float -> MapperTypes.Values.Collections.FloatSetConverter
+            Types.Kotlin.Int -> MapperTypes.Values.Collections.IntSetConverter
+            Types.Kotlin.Long -> MapperTypes.Values.Collections.LongSetConverter
+            Types.Kotlin.Short -> MapperTypes.Values.Collections.ShortSetConverter
+            Types.Kotlin.UByte -> MapperTypes.Values.Collections.UByteSetConverter
+            Types.Kotlin.UInt -> MapperTypes.Values.Collections.UIntSetConverter
+            Types.Kotlin.ULong -> MapperTypes.Values.Collections.ULongSetConverter
+            Types.Kotlin.UShort -> MapperTypes.Values.Collections.UShortSetConverter
             else -> error("Unsupported set element $this")
         }
 

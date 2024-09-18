@@ -51,7 +51,7 @@ internal class HighLevelRenderer(
             }
 
             val attributes = codegenAttributes + attributesOf {
-                ShouldRenderValueConverterAttribute to shouldRenderValueConverter
+                SchemaAttributes.ShouldRenderValueConverterAttribute to shouldRenderValueConverter
             }
 
             val renderCtx = RenderContext(
@@ -68,4 +68,3 @@ internal class HighLevelRenderer(
     }
 }
 
-internal val ShouldRenderValueConverterAttribute: AttributeKey<Boolean> = AttributeKey("ShouldRenderValueConverter")
