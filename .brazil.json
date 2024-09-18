@@ -19,6 +19,9 @@
       "aws.sdk.kotlin:version-catalog"
     ],
     "resolvesConflictDependencies": {
+      "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.*" : ["KotlinxCoroutinesCoreJvm-1.x"],
+      "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.*": ["KotlinxCoroutinesCore-1.x"],
+      "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.*": ["KotlinxCoroutinesJdk8-1.x"]
     }
   }
 }
