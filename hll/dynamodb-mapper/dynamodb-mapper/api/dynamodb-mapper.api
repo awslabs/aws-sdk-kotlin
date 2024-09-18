@@ -45,28 +45,35 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptorKt
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/items/DocumentConverter : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
 	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/items/DocumentConverter;
-	public fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Laws/smithy/kotlin/runtime/content/Document;
-	public synthetic fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
-	public fun toItem (Laws/smithy/kotlin/runtime/content/Document;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
-	public synthetic fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public fun convertFrom (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Laws/smithy/kotlin/runtime/content/Document;
+	public synthetic fun convertFrom (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun convertTo (Laws/smithy/kotlin/runtime/content/Document;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public fun convertTo (Laws/smithy/kotlin/runtime/content/Document;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public synthetic fun convertTo (Ljava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public synthetic fun convertTo (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun convertTo (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/items/HeterogeneousItemConverter : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
 	public fun <init> (Lkotlin/jvm/functions/Function1;Ljava/lang/String;Ljava/util/Map;)V
-	public fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
+	public fun convertFrom (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
+	public synthetic fun convertFrom (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun convertTo (Ljava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public synthetic fun convertTo (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun convertTo (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 	public final fun getSubConverters ()Ljava/util/Map;
 	public final fun getTypeAttribute ()Ljava/lang/String;
 	public final fun getTypeMapper ()Lkotlin/jvm/functions/Function1;
-	public fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 }
 
-public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
-	public abstract fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
-	public abstract fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter : aws/sdk/kotlin/hll/mapping/core/converters/Converter {
+	public abstract fun convertTo (Ljava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public abstract fun convertTo (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 }
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter$DefaultImpls {
-	public static synthetic fun toItem$default (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Ljava/lang/Object;Ljava/util/Set;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public static fun convertTo (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Ljava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public static synthetic fun convertTo$default (Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter;Ljava/lang/Object;Ljava/util/Set;ILjava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema {
@@ -122,9 +129,12 @@ public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/items/KeySpec$
 
 public final class aws/sdk/kotlin/hll/dynamodbmapper/items/SimpleItemConverter : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
 	public fun <init> (Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;[Laws/sdk/kotlin/hll/dynamodbmapper/items/AttributeDescriptor;)V
-	public fun fromItem (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
+	public fun convertFrom (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Ljava/lang/Object;
+	public synthetic fun convertFrom (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun convertTo (Ljava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public synthetic fun convertTo (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun convertTo (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 	public final fun getDescriptors ()Ljava/util/Map;
-	public fun toItem (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 }
 
 public abstract interface class aws/sdk/kotlin/hll/dynamodbmapper/model/Index : aws/sdk/kotlin/hll/dynamodbmapper/model/IndexSpec, aws/sdk/kotlin/hll/dynamodbmapper/model/ItemSource, aws/sdk/kotlin/hll/dynamodbmapper/operations/IndexOperations {
