@@ -600,7 +600,7 @@
                     "min": 1,
                     "max": 2048
                 },
-                "smithy.api#pattern": "^arn:aws(-cn|-us-gov)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:algorithm/[\\S]{1,2048}$"
+                "smithy.api#pattern": "^arn:aws(-cn|-us-gov|-iso-f)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:algorithm/[\\S]{1,2048}$"
             }
         },
         "com.amazonaws.sagemaker#AlgorithmImage": {
@@ -2015,6 +2015,20 @@
                         "smithy.api#enumValue": "ml.r6id.32xlarge"
                     }
                 }
+            }
+        },
+        "com.amazonaws.sagemaker#AppLifecycleManagement": {
+            "type": "structure",
+            "members": {
+                "IdleSettings": {
+                    "target": "com.amazonaws.sagemaker#IdleSettings",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Settings related to idle shutdown of Studio applications.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Settings that are used to configure and manage the lifecycle of Amazon SageMaker Studio applications.</p>"
             }
         },
         "com.amazonaws.sagemaker#AppList": {
@@ -4475,6 +4489,29 @@
                 }
             }
         },
+        "com.amazonaws.sagemaker#AutoMountHomeEFS": {
+            "type": "enum",
+            "members": {
+                "ENABLED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Enabled"
+                    }
+                },
+                "DISABLED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Disabled"
+                    }
+                },
+                "DEFAULT_AS_DOMAIN": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DefaultAsDomain"
+                    }
+                }
+            }
+        },
         "com.amazonaws.sagemaker#AutoParameter": {
             "type": "structure",
             "members": {
@@ -6670,6 +6707,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The additional storage configurations for the instances in the SageMaker HyperPod cluster instance\n         group.</p>"
                     }
+                },
+                "OnStartDeepHealthChecks": {
+                    "target": "com.amazonaws.sagemaker#OnStartDeepHealthChecks",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A flag indicating whether deep health checks should be performed when the cluster instance group is created or updated.</p>"
+                    }
                 }
             },
             "traits": {
@@ -6746,6 +6789,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Specifies the additional storage configurations for the instances in the SageMaker HyperPod cluster\n         instance group.</p>"
                     }
+                },
+                "OnStartDeepHealthChecks": {
+                    "target": "com.amazonaws.sagemaker#OnStartDeepHealthChecks",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A flag indicating whether deep health checks should be performed when the cluster instance group is created or updated.</p>"
+                    }
                 }
             },
             "traits": {
@@ -6760,7 +6809,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 1,
-                    "max": 20
+                    "max": 100
                 }
             }
         },
@@ -6815,6 +6864,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "SystemUpdating"
+                    }
+                },
+                "DEEP_HEALTH_CHECK_IN_PROGRESS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DeepHealthCheckInProgress"
                     }
                 }
             }
@@ -7238,6 +7293,23 @@
                 "smithy.api#pattern": "^i-[a-f0-9]{8}(?:[a-f0-9]{9})?$"
             }
         },
+        "com.amazonaws.sagemaker#ClusterNodeRecovery": {
+            "type": "enum",
+            "members": {
+                "AUTOMATIC": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Automatic"
+                    }
+                },
+                "NONE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "None"
+                    }
+                }
+            }
+        },
         "com.amazonaws.sagemaker#ClusterNodeSummaries": {
             "type": "list",
             "member": {
@@ -7298,6 +7370,38 @@
                 "smithy.api#range": {
                     "min": 0
                 }
+            }
+        },
+        "com.amazonaws.sagemaker#ClusterOrchestrator": {
+            "type": "structure",
+            "members": {
+                "Eks": {
+                    "target": "com.amazonaws.sagemaker#ClusterOrchestratorEksConfig",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The Amazon EKS cluster used as the orchestrator for the SageMaker HyperPod cluster.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The type of orchestrator used for the SageMaker HyperPod cluster.</p>"
+            }
+        },
+        "com.amazonaws.sagemaker#ClusterOrchestratorEksConfig": {
+            "type": "structure",
+            "members": {
+                "ClusterArn": {
+                    "target": "com.amazonaws.sagemaker#EksClusterArn",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the Amazon EKS cluster associated with the SageMaker HyperPod cluster.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration settings for the Amazon EKS cluster used as the orchestrator for the SageMaker HyperPod cluster.</p>"
             }
         },
         "com.amazonaws.sagemaker#ClusterPrivateDnsHostname": {
@@ -7462,6 +7566,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the Code Editor application \n      lifecycle configuration.</p>"
                     }
+                },
+                "AppLifecycleManagement": {
+                    "target": "com.amazonaws.sagemaker#AppLifecycleManagement",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Settings that are used to configure and manage the lifecycle of CodeEditor applications.</p>"
+                    }
                 }
             },
             "traits": {
@@ -7503,7 +7613,7 @@
                     "min": 1,
                     "max": 2048
                 },
-                "smithy.api#pattern": "^arn:aws(-cn|-us-gov)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:code-repository/[\\S]{1,2048}$"
+                "smithy.api#pattern": "^arn:aws(-cn|-us-gov|-iso-f)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:code-repository/[\\S]{1,2048}$"
             }
         },
         "com.amazonaws.sagemaker#CodeRepositoryContains": {
@@ -8146,7 +8256,7 @@
                 "Environment": {
                     "target": "com.amazonaws.sagemaker#EnvironmentMap",
                     "traits": {
-                        "smithy.api#documentation": "<p>The environment variables to set in the Docker container.</p>\n         <p>The maximum length of each key and value in the <code>Environment</code> map is\n            1024 bytes. The maximum length of all keys and values in the map, combined, is 32 KB. If\n            you pass multiple containers to a <code>CreateModel</code> request, then the maximum\n            length of all of their maps, combined, is also 32 KB.</p>"
+                        "smithy.api#documentation": "<p>The environment variables to set in the Docker container. Don't include any\n        sensitive data in your environment variables.</p>\n         <p>The maximum length of each key and value in the <code>Environment</code> map is\n            1024 bytes. The maximum length of all keys and values in the map, combined, is 32 KB. If\n            you pass multiple containers to a <code>CreateModel</code> request, then the maximum\n            length of all of their maps, combined, is also 32 KB.</p>"
                     }
                 },
                 "ModelPackageName": {
@@ -9200,6 +9310,18 @@
                     "target": "com.amazonaws.sagemaker#TagList",
                     "traits": {
                         "smithy.api#documentation": "<p>Custom tags for managing the SageMaker HyperPod cluster as an Amazon Web Services resource. You can\n         add tags to your cluster in the same way you add them in other Amazon Web Services services\n         that support tagging. To learn more about tagging Amazon Web Services resources in general,\n         see <a href=\"https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html\">Tagging\n               Amazon Web Services Resources User Guide</a>.</p>"
+                    }
+                },
+                "Orchestrator": {
+                    "target": "com.amazonaws.sagemaker#ClusterOrchestrator",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of orchestrator to use for the SageMaker HyperPod cluster. Currently, the only supported\n         value is <code>\"eks\"</code>, which is to use an Amazon Elastic Kubernetes Service (EKS)\n         cluster as the orchestrator.</p>"
+                    }
+                },
+                "NodeRecovery": {
+                    "target": "com.amazonaws.sagemaker#ClusterNodeRecovery",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The node recovery mode for the SageMaker HyperPod cluster. When set to <code>Automatic</code>,\n         SageMaker HyperPod will automatically reboot or replace faulty nodes when issues are detected. When set\n         to <code>None</code>, cluster administrators will need to manually manage any faulty\n         cluster instances.</p>"
                     }
                 }
             },
@@ -13563,7 +13685,7 @@
                 "Environment": {
                     "target": "com.amazonaws.sagemaker#TransformEnvironmentMap",
                     "traits": {
-                        "smithy.api#documentation": "<p>The environment variables to set in the Docker container. We support up to 16 key and\n            values entries in the map.</p>"
+                        "smithy.api#documentation": "<p>The environment variables to set in the Docker container. Don't include any\n            sensitive data in your environment variables. We support up to 16 key and\n            values entries in the map.</p>"
                     }
                 },
                 "TransformInput": {
@@ -14812,6 +14934,23 @@
                 "smithy.api#length": {
                     "min": 0,
                     "max": 20
+                }
+            }
+        },
+        "com.amazonaws.sagemaker#DeepHealthCheckType": {
+            "type": "enum",
+            "members": {
+                "INSTANCE_STRESS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "InstanceStress"
+                    }
+                },
+                "INSTANCE_CONNECTIVITY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "InstanceConnectivity"
+                    }
                 }
             }
         },
@@ -18278,6 +18417,18 @@
                 },
                 "VpcConfig": {
                     "target": "com.amazonaws.sagemaker#VpcConfig"
+                },
+                "Orchestrator": {
+                    "target": "com.amazonaws.sagemaker#ClusterOrchestrator",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of orchestrator used for the SageMaker HyperPod cluster. </p>"
+                    }
+                },
+                "NodeRecovery": {
+                    "target": "com.amazonaws.sagemaker#ClusterNodeRecovery",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The node recovery mode configured for the SageMaker HyperPod cluster.</p>"
+                    }
                 }
             },
             "traits": {
@@ -27189,6 +27340,16 @@
                 "smithy.api#pattern": "^\\d+$"
             }
         },
+        "com.amazonaws.sagemaker#EksClusterArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 20,
+                    "max": 2048
+                },
+                "smithy.api#pattern": "^arn:aws[a-z\\-]*:eks:[a-z0-9\\-]*:[0-9]{12}:cluster\\/[0-9A-Za-z][A-Za-z0-9\\-_]{0,99}$"
+            }
+        },
         "com.amazonaws.sagemaker#EmrServerlessComputeConfig": {
             "type": "structure",
             "members": {
@@ -32198,6 +32359,47 @@
                 }
             }
         },
+        "com.amazonaws.sagemaker#IdleSettings": {
+            "type": "structure",
+            "members": {
+                "LifecycleManagement": {
+                    "target": "com.amazonaws.sagemaker#LifecycleManagement",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates whether idle shutdown is activated for the application type.</p>"
+                    }
+                },
+                "IdleTimeoutInMinutes": {
+                    "target": "com.amazonaws.sagemaker#IdleTimeoutInMinutes",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The time that SageMaker waits after the application becomes idle before shutting it down.</p>"
+                    }
+                },
+                "MinIdleTimeoutInMinutes": {
+                    "target": "com.amazonaws.sagemaker#IdleTimeoutInMinutes",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The minimum value in minutes that custom idle shutdown can be set to by the user.</p>"
+                    }
+                },
+                "MaxIdleTimeoutInMinutes": {
+                    "target": "com.amazonaws.sagemaker#IdleTimeoutInMinutes",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum value in minutes that custom idle shutdown can be set to by the user.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Settings related to idle shutdown of Studio applications.</p>"
+            }
+        },
+        "com.amazonaws.sagemaker#IdleTimeoutInMinutes": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#range": {
+                    "min": 60,
+                    "max": 525600
+                }
+            }
+        },
         "com.amazonaws.sagemaker#Image": {
             "type": "structure",
             "members": {
@@ -32271,7 +32473,7 @@
                     "min": 0,
                     "max": 256
                 },
-                "smithy.api#pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image/[a-z0-9]([-.]?[a-z0-9])*$"
+                "smithy.api#pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image/[a-zA-Z0-9]([-.]?[a-zA-Z0-9])*$"
             }
         },
         "com.amazonaws.sagemaker#ImageBaseImage": {
@@ -35236,6 +35438,12 @@
                         "smithy.api#documentation": "<p>A list of Git repositories that SageMaker automatically displays to users for cloning in the JupyterLab application.</p>"
                     }
                 },
+                "AppLifecycleManagement": {
+                    "target": "com.amazonaws.sagemaker#AppLifecycleManagement",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates whether idle shutdown is activated for JupyterLab applications.</p>"
+                    }
+                },
                 "EmrSettings": {
                     "target": "com.amazonaws.sagemaker#EmrSettings",
                     "traits": {
@@ -36022,6 +36230,23 @@
             "type": "list",
             "member": {
                 "target": "com.amazonaws.sagemaker#StudioLifecycleConfigArn"
+            }
+        },
+        "com.amazonaws.sagemaker#LifecycleManagement": {
+            "type": "enum",
+            "members": {
+                "Enabled": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ENABLED"
+                    }
+                },
+                "Disabled": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DISABLED"
+                    }
+                }
             }
         },
         "com.amazonaws.sagemaker#LineageEntityParameters": {
@@ -46131,7 +46356,7 @@
                     "min": 1,
                     "max": 2048
                 },
-                "smithy.api#pattern": "^arn:aws(-cn|-us-gov)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:model-package/[\\S]{1,2048}$"
+                "smithy.api#pattern": "^arn:aws(-cn|-us-gov|-iso-f)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:model-package/[\\S]{1,2048}$"
             }
         },
         "com.amazonaws.sagemaker#ModelPackageArnList": {
@@ -46304,7 +46529,7 @@
                     "min": 1,
                     "max": 2048
                 },
-                "smithy.api#pattern": "^arn:aws(-cn|-us-gov)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:model-package-group/[\\S]{1,2048}$"
+                "smithy.api#pattern": "^arn:aws(-cn|-us-gov|-iso-f)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:model-package-group/[\\S]{1,2048}$"
             }
         },
         "com.amazonaws.sagemaker#ModelPackageGroupSortBy": {
@@ -49276,6 +49501,18 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>A list of user groups that exist in your OIDC Identity Provider (IdP). \n            One to ten groups can be used to create a single private work team. \n            When you add a user group to the list of <code>Groups</code>, you can add that user group to one or more\n            private work teams. If you add a user group to a private work team, all workers in that user group \n            are added to the work team.</p>"
+            }
+        },
+        "com.amazonaws.sagemaker#OnStartDeepHealthChecks": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.sagemaker#DeepHealthCheckType"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 2
+                }
             }
         },
         "com.amazonaws.sagemaker#OnlineStoreConfig": {
@@ -54213,7 +54450,7 @@
                     "min": 1,
                     "max": 2048
                 },
-                "smithy.api#pattern": "^arn:aws(-cn|-us-gov)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:project/[\\S]{1,2048}$"
+                "smithy.api#pattern": "^arn:aws(-cn|-us-gov|-iso-f)?:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:project/[\\S]{1,2048}$"
             }
         },
         "com.amazonaws.sagemaker#ProjectEntityName": {
@@ -60608,6 +60845,20 @@
                 "smithy.api#pattern": ".*"
             }
         },
+        "com.amazonaws.sagemaker#SpaceAppLifecycleManagement": {
+            "type": "structure",
+            "members": {
+                "IdleSettings": {
+                    "target": "com.amazonaws.sagemaker#SpaceIdleSettings",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Settings related to idle shutdown of Studio applications.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Settings that are used to configure and manage the lifecycle of Amazon SageMaker Studio applications in a space.</p>"
+            }
+        },
         "com.amazonaws.sagemaker#SpaceArn": {
             "type": "string",
             "traits": {
@@ -60623,6 +60874,12 @@
             "members": {
                 "DefaultResourceSpec": {
                     "target": "com.amazonaws.sagemaker#ResourceSpec"
+                },
+                "AppLifecycleManagement": {
+                    "target": "com.amazonaws.sagemaker#SpaceAppLifecycleManagement",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Settings that are used to configure and manage the lifecycle of CodeEditor applications in a space.</p>"
+                    }
                 }
             },
             "traits": {
@@ -60700,6 +60957,20 @@
                 }
             }
         },
+        "com.amazonaws.sagemaker#SpaceIdleSettings": {
+            "type": "structure",
+            "members": {
+                "IdleTimeoutInMinutes": {
+                    "target": "com.amazonaws.sagemaker#IdleTimeoutInMinutes",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The time that SageMaker waits after the application becomes idle before shutting it down.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Settings related to idle shutdown of Studio applications in a space.</p>"
+            }
+        },
         "com.amazonaws.sagemaker#SpaceJupyterLabAppSettings": {
             "type": "structure",
             "members": {
@@ -60710,6 +60981,12 @@
                     "target": "com.amazonaws.sagemaker#CodeRepositories",
                     "traits": {
                         "smithy.api#documentation": "<p>A list of Git repositories that SageMaker automatically displays to users for cloning in the JupyterLab application.</p>"
+                    }
+                },
+                "AppLifecycleManagement": {
+                    "target": "com.amazonaws.sagemaker#SpaceAppLifecycleManagement",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Settings that are used to configure and manage the lifecycle of JupyterLab applications in a space.</p>"
                     }
                 }
             },
@@ -62210,7 +62487,7 @@
                     "min": 0,
                     "max": 256
                 },
-                "smithy.api#pattern": "^arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:studio-lifecycle-config/"
+                "smithy.api#pattern": "^(arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:studio-lifecycle-config/.*|None)$"
             }
         },
         "com.amazonaws.sagemaker#StudioLifecycleConfigContent": {
@@ -67381,6 +67658,12 @@
                         "smithy.api#documentation": "<p>Specify the instance groups to update.</p>",
                         "smithy.api#required": {}
                     }
+                },
+                "NodeRecovery": {
+                    "target": "com.amazonaws.sagemaker#ClusterNodeRecovery",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The node recovery mode to be applied to the SageMaker HyperPod cluster.</p>"
+                    }
                 }
             },
             "traits": {
@@ -70114,6 +70397,12 @@
                     "target": "com.amazonaws.sagemaker#StudioWebPortalSettings",
                     "traits": {
                         "smithy.api#documentation": "<p>Studio settings. If these settings are applied on a user level, they take priority over\n      the settings applied on a domain level.</p>"
+                    }
+                },
+                "AutoMountHomeEFS": {
+                    "target": "com.amazonaws.sagemaker#AutoMountHomeEFS",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates whether auto-mounting of an EFS volume is supported for the user profile. The <code>DefaultAsDomain</code> value is only supported for user profiles. Do not use the <code>DefaultAsDomain</code> value when setting this parameter for a domain.</p>"
                     }
                 }
             },
