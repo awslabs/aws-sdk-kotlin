@@ -35,8 +35,8 @@ public class MapsTest {
             mapEnum = mapOf("pet1" to EnumAnimals.CAT, "pet2" to EnumAnimals.DOG, "pet3" to EnumAnimals.SHEEP),
         )
 
-        val item = MapsConverter.toItem(maps)
-        val converted = MapsConverter.fromItem(item)
+        val item = MapsConverter.convertTo(maps)
+        val converted = MapsConverter.convertFrom(item)
         assertEquals(maps, converted)
     }
 }

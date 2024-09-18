@@ -28,8 +28,8 @@ public class SetsTest {
             setUShort = setOf(1000u.toUShort(), 2000u.toUShort(), 3000u.toUShort()),
         )
 
-        val item = SetsConverter.toItem(sets)
-        val converted = SetsConverter.fromItem(item)
+        val item = SetsConverter.convertTo(sets)
+        val converted = SetsConverter.convertFrom(item)
         assertEquals(sets, converted)
     }
 }

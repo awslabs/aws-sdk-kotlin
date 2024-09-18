@@ -13,20 +13,21 @@ import aws.smithy.kotlin.runtime.util.toNumber
 
 // FIXME Combine with DocumentValueConverter or refactor to commonize as much code as possible
 public object DocumentConverter : ItemConverter<Document> {
-    override fun fromItem(item: Item): Document = item
+    override fun convertFrom(to: Item): Document = to
         .mapValues { (_, attr) -> fromAttributeValue(attr) }
         .let(Document::Map)
 
-    override fun toItem(obj: Document, onlyAttributes: Set<String>?): Item {
-        require(obj is Document.Map)
+    override fun convertTo(from: Document, onlyAttributes: Set<String>?): Item {
+        require(from is Document.Map)
 
         val map = if (onlyAttributes == null) {
-            obj
+            from
         } else {
-            obj.filterKeys { it in onlyAttributes }
+            from.filterKeys { it in onlyAttributes }
         }
 
         return map.mapValues { (_, value) -> toAttributeValue(value) }.toItem()
+
     }
 }
 

@@ -122,27 +122,14 @@ internal class SchemaRenderer(
         // If necessary, render a ValueConverter which is a wrapper over the ItemConverter
         // TODO Offer alternate serialization options besides AttributeValue.M?
         if (ctx.attributes[SchemaAttributes.ShouldRenderValueConverterAttribute]) {
-            withBlock(
-                "#Lobject #L : #T {",
-                "}",
+            write("#Lval #L : #T = #T.andThen(#T)",
                 ctx.attributes.visibility,
                 "${className}ValueConverter",
                 MapperTypes.Values.valueConverter(classType),
-            ) {
-                write(
-                    "override fun convertFrom(to: #T): #T = #T.fromItem(to.asM().#T())",
-                    MapperTypes.AttributeValue,
-                    classType,
-                    itemConverter,
-                    MapperTypes.Model.toItem,
-                )
-                write(
-                    "override fun convertTo(from: #1T): #2T = #2T.M(#3T.toItem(from))",
-                    classType,
-                    MapperTypes.AttributeValue,
-                    itemConverter,
-                )
-            }
+                itemConverter,
+                MapperTypes.Values.ItemToValueConverter
+            )
+
             blankLine()
         }
     }

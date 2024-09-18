@@ -478,6 +478,14 @@ public final class aws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInputKt {
 	public static final fun SerializeInput (Ljava/lang/Object;Laws/sdk/kotlin/hll/dynamodbmapper/items/ItemSchema;)Laws/sdk/kotlin/hll/dynamodbmapper/pipeline/SerializeInput;
 }
 
+public final class aws/sdk/kotlin/hll/dynamodbmapper/values/ItemToValueConverter : aws/sdk/kotlin/hll/mapping/core/converters/Converter {
+	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/values/ItemToValueConverter;
+	public fun convertFrom (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
+	public synthetic fun convertFrom (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun convertTo (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;
+	public synthetic fun convertTo (Ljava/lang/Object;)Ljava/lang/Object;
+}
+
 public final class aws/sdk/kotlin/hll/dynamodbmapper/values/NullableConverter : aws/sdk/kotlin/hll/mapping/core/converters/SplittingConverter {
 	public fun <init> (Lkotlin/reflect/KClass;)V
 	public fun convertFrom (Laws/sdk/kotlin/services/dynamodb/model/AttributeValue;)Laws/sdk/kotlin/hll/mapping/core/util/Either;

@@ -37,8 +37,8 @@ public class PrimitivesTest {
             document = Document.Number(5),
         )
 
-        val item = PrimitivesConverter.toItem(primitive)
-        val converted = PrimitivesConverter.fromItem(item)
+        val item = PrimitivesConverter.convertTo(primitive)
+        val converted = PrimitivesConverter.convertFrom(item)
         assertEquals(primitive, converted)
     }
 }

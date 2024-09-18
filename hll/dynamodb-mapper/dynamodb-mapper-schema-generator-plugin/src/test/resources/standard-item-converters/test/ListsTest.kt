@@ -31,8 +31,8 @@ public class ListsTest {
             listEnum = listOf(EnumAnimals.CAT, EnumAnimals.DOG, EnumAnimals.SHEEP),
         )
 
-        val item = ListsConverter.toItem(lists)
-        val converted = ListsConverter.fromItem(item)
+        val item = ListsConverter.convertTo(lists)
+        val converted = ListsConverter.convertFrom(item)
         assertEquals(lists, converted)
     }
 }

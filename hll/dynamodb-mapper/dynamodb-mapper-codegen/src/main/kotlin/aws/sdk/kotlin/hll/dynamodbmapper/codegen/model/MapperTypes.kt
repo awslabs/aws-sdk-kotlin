@@ -46,6 +46,7 @@ internal object MapperTypes {
 
     object Values {
         fun valueConverter(value: Type) = TypeRef(Pkg.Hl.Values, "ValueConverter", genericArgs = listOf(value))
+        val ItemToValueConverter = TypeRef(Pkg.Hl.Values, "ItemToValueConverter")
 
         object Collections {
             val ListConverter = TypeRef(Pkg.Hl.CollectionValues, "ListConverter")
