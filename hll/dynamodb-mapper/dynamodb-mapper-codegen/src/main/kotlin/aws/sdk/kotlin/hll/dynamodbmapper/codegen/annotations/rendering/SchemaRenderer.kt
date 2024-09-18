@@ -89,6 +89,10 @@ internal class SchemaRenderer(
             renderItemConverter()
         }
 
+        if (ctx.attributes[SchemaAttributes.ShouldRenderValueConverterAttribute]) {
+            renderValueConverter()
+        }
+
         renderSchema()
 
         if (ctx.attributes[AnnotationsProcessorOptions.GenerateGetTableMethodAttribute]) {
@@ -118,22 +122,24 @@ internal class SchemaRenderer(
             }
         }
         blankLine()
+    }
 
-        // If necessary, render a ValueConverter which is a wrapper over the ItemConverter
+    /**
+     * Render a [ValueConverter] for the current class by wrapping the generated/user-provided [ItemConverter]
+     * with our [ItemToValueConverter]
+     */
+    private fun renderValueConverter() {
         // TODO Offer alternate serialization options besides AttributeValue.M?
-        if (ctx.attributes[SchemaAttributes.ShouldRenderValueConverterAttribute]) {
-            write(
-                "#Lval #L : #T = #T.#T(#T)",
-                ctx.attributes.visibility,
-                "${className}ValueConverter",
-                MapperTypes.Values.valueConverter(classType),
-                itemConverter,
-                TypeRef("aws.sdk.kotlin.hll.mapping.core.converters", "andThenTo"),
-                MapperTypes.Values.ItemToValueConverter,
-            )
-
-            blankLine()
-        }
+        write(
+            "#Lval #L : #T = #T.#T(#T)",
+            ctx.attributes.visibility,
+            "${className}ValueConverter",
+            MapperTypes.Values.valueConverter(classType),
+            itemConverter,
+            TypeRef("aws.sdk.kotlin.hll.mapping.core.converters", "andThenTo"),
+            MapperTypes.Values.ItemToValueConverter,
+        )
+        blankLine()
     }
 
     private fun renderAttributeDescriptor(prop: KSPropertyDeclaration) {
@@ -167,6 +173,8 @@ internal class SchemaRenderer(
 
             when {
                 isEnum -> writeInline("#T()", MapperTypes.Values.Scalars.enumConverter(type))
+
+                // FIXME Handle multi-module codegen rather than assuming nested classes will be in the same [ctx.pkg]
                 isUserClass -> writeInline("#T", TypeRef(ctx.pkg, "${declaration.simpleName.asString()}ValueConverter"))
 
                 type == Types.Kotlin.Collections.List -> {
@@ -316,10 +324,11 @@ internal class SchemaRenderer(
             schemaName,
         )
     }
-
-    private val KSType.isUserClass: Boolean
-        get() = listOf("kotlin", "java", "aws.smithy.kotlin", "aws.sdk.kotlin").none { declaration.packageName.asString().startsWith(it) }
 }
+
+@OptIn(KspExperimental::class)
+private val KSType.isUserClass: Boolean
+    get() = declaration.isAnnotationPresent(DynamoDbItem::class)
 
 private val KSPropertyDeclaration.typeName: String
     get() = checkNotNull(getter?.returnType?.resolve()?.declaration?.qualifiedName?.asString()) { "Failed to determine type name for $this" }
