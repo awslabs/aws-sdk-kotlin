@@ -60,18 +60,10 @@ data class TemplateProcessor(val key: Char, val handler: (Any) -> String) {
 
 private open class TypeProcessor {
     open fun format(type: Type): String = buildString {
-        append(type.shortName.removeSuffix("()"))
+        append(type.shortName)
 
         if (type is TypeRef && type.genericArgs.isNotEmpty()) {
             type.genericArgs.joinToString(", ", "<", ">", transform = ::format).let(::append)
-        }
-
-        if (type is TypeRef && type.args.isNotEmpty()) {
-            type.args.joinToString(", ", "(", ")", transform = ::format).let(::append)
-        }
-
-        if (type.shortName.endsWith("()")) {
-            append("()")
         }
 
         if (type.nullable) append('?')

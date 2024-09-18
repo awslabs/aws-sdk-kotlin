@@ -63,7 +63,6 @@ data class TypeRef(
     val pkg: String,
     override val shortName: String,
     val genericArgs: List<Type> = listOf(),
-    val args: List<Type> = listOf(),
     override val nullable: Boolean = false,
 ) : Type {
     /**

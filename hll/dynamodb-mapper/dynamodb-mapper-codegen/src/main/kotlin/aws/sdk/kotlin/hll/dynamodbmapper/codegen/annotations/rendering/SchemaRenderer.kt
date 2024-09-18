@@ -20,6 +20,7 @@ import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.getConstructors
 import com.google.devtools.ksp.isAnnotationPresent
 import com.google.devtools.ksp.symbol.*
+import kotlin.math.sin
 
 /**
  * Renders the classes and objects required to make a class usable with the DynamoDbMapper such as schemas, builders, and converters.
@@ -160,18 +161,45 @@ internal class SchemaRenderer(
             }
 
             // converter
-            write("#T", prop.type.resolve().valueConverter)
+            prop.type.resolve().renderValueConverter(this)
+            write("")
         }
     }
 
-    private val KSType.valueConverter: Type
-        get() = when {
-            this.isEnum -> MapperTypes.Values.Scalars.enumConverter(Type.from(this))
+    /**
+     * Renders a ValueConverter for the [KSType].
+     *
+     * Note: The ValueConverter(s) will be rendered without a newline in order to support deep recursion.
+     * Callers are responsible for adding a newline after the top-level invocation of this function.
+     */
+    private fun KSType.renderValueConverter(writer: SchemaRenderer): Unit { writer.apply {
+        val ksType = this@renderValueConverter
+        val type = Type.from(ksType).copy(genericArgs = listOf())
 
-            // Assuming other classes have also been annotated with DynamoDbItem, and they are codegenerated in the same package
-            this.isUserClass -> TypeRef(ctx.pkg, "${this.declaration.simpleName.asString()}ValueConverter")
+        when {
+            isEnum -> writeInline("#T()", MapperTypes.Values.Scalars.enumConverter(type))
+            isUserClass -> writeInline("#T", TypeRef(ctx.pkg, "${declaration.simpleName.asString()}ValueConverter"))
 
-            else -> when (Type.from(this).copy(genericArgs = listOf())) {
+            type == Types.Kotlin.Collections.List -> {
+                val listElementType = singleArgument()
+                writeInline("#T(", MapperTypes.Values.Collections.ListConverter)
+                listElementType.renderValueConverter(this)
+                writeInline(")")
+            }
+
+            type == Types.Kotlin.Collections.Map -> {
+                check(arguments.size == 2) { "Expected map type ${declaration.qualifiedName?.asString()} to have 2 arguments, got ${arguments.size}" }
+
+                val (keyType, valueType) = arguments.map {
+                    checkNotNull(it.type?.resolve()) { "Failed to resolved argument type for $it" }
+                }
+
+                writeInline("#T(#T, ", MapperTypes.Values.Collections.MapConverter, keyType.mapKeyConverter)
+                valueType.renderValueConverter(this)
+                writeInline(")")
+            }
+
+            else -> writeInline("#T", when (type) {
                 Types.Smithy.Instant -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
                 Types.Smithy.Url -> MapperTypes.Values.SmithyTypes.UrlConverter
                 Types.Smithy.Document -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
@@ -192,32 +220,11 @@ internal class SchemaRenderer(
                 Types.Kotlin.UShort -> MapperTypes.Values.Scalars.UShortConverter
                 Types.Kotlin.ULong -> MapperTypes.Values.Scalars.ULongConverter
 
-                Types.Kotlin.Collections.Set -> this.singleArgument().setValueConverter
-
-                Types.Kotlin.Collections.List -> {
-                    val listElementConverter = this.singleArgument().valueConverter
-                    MapperTypes.Values.Collections.listConverter(listElementConverter)
-                }
-
-                Types.Kotlin.Collections.Map -> {
-                    check(arguments.size == 2) { "Expected map type ${declaration.qualifiedName?.asString()} to have 2 arguments, got ${arguments.size}" }
-
-                    val (keyType, valueType) = arguments
-                        .map {
-                            checkNotNull(it.type?.resolve()) {
-                                "Failed to resolved argument type for $it"
-                            }
-                        }
-
-                    val keyConverter = keyType.mapKeyConverter
-                    val valueConverter = valueType.valueConverter
-
-                    MapperTypes.Values.Collections.mapConverter(keyConverter, valueConverter)
-                }
-
+                Types.Kotlin.Collections.Set -> singleArgument().setValueConverter
                 else -> error("Unsupported attribute type $this")
-            }
+            })
         }
+    } }
 
     private val KSType.mapKeyConverter: Type
         get() = when (val type = Type.from(this)) {
@@ -248,7 +255,7 @@ internal class SchemaRenderer(
     }
 
     private val KSType.setValueConverter: Type
-        get() = when (val type = Type.from(this)) {
+        get() = when (Type.from(this)) {
             Types.Kotlin.String -> MapperTypes.Values.Collections.StringSetConverter
             Types.Kotlin.Char -> MapperTypes.Values.Collections.CharSetConverter
             Types.Kotlin.CharArray -> MapperTypes.Values.Collections.CharArraySetConverter
