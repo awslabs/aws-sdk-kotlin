@@ -36,7 +36,7 @@ public data class Sets(
         if (id != other.id) return false
         if (setString != other.setString) return false
         if (setCharArray.size != other.setCharArray.size) return false
-        if (!setCharArray.zip(other.setCharArray).all { (a, b) -> a.contentEquals(b) }) return false
+        if (!setCharArray.all { thisArray -> other.setCharArray.any { otherArray -> thisArray.contentEquals(otherArray) } }) return false
         if (setChar != other.setChar) return false
         if (setByte != other.setByte) return false
         if (setDouble != other.setDouble) return false
