@@ -8,7 +8,6 @@ import aws.sdk.kotlin.gradle.sdk.PackageManifest
 import aws.sdk.kotlin.gradle.sdk.PackageMetadata
 import aws.sdk.kotlin.gradle.sdk.orNull
 import aws.sdk.kotlin.gradle.sdk.validate
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.gradle.api.DefaultTask
@@ -46,7 +45,6 @@ abstract class UpdatePackageManifest : DefaultTask() {
     @get:Input
     public abstract val discover: Property<Boolean>
 
-    @OptIn(ExperimentalSerializationApi::class)
     @TaskAction
     fun updatePackageManifest() {
         check(modelFile.isPresent != modelDir.isPresent) { "Exactly one of `model` or `model-dir` must be set" }
