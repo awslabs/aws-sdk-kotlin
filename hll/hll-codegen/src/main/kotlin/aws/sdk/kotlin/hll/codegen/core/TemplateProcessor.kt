@@ -76,7 +76,7 @@ private class ImportingTypeProcessor(private val pkg: String, private val import
             val existingImport = imports[type.baseName]
 
             if (existingImport == null) {
-                imports += ImportDirective("${type.pkg}.${type.baseName.removeSuffix("()")}")
+                imports += ImportDirective("${type.pkg}.${type.baseName}")
             } else if (existingImport.fullName != type.fullName) {
                 append(type.pkg)
                 append('.')
