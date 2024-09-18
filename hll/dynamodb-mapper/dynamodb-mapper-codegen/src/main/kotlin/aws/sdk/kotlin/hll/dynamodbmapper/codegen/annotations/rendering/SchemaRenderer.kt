@@ -122,12 +122,13 @@ internal class SchemaRenderer(
         // If necessary, render a ValueConverter which is a wrapper over the ItemConverter
         // TODO Offer alternate serialization options besides AttributeValue.M?
         if (ctx.attributes[SchemaAttributes.ShouldRenderValueConverterAttribute]) {
-            write("#Lval #L : #T = #T.andThen(#T)",
+            write(
+                "#Lval #L : #T = #T.andThen(#T)",
                 ctx.attributes.visibility,
                 "${className}ValueConverter",
                 MapperTypes.Values.valueConverter(classType),
                 itemConverter,
-                MapperTypes.Values.ItemToValueConverter
+                MapperTypes.Values.ItemToValueConverter,
             )
 
             blankLine()

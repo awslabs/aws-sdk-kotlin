@@ -27,7 +27,6 @@ public object DocumentConverter : ItemConverter<Document> {
         }
 
         return map.mapValues { (_, value) -> toAttributeValue(value) }.toItem()
-
     }
 }
 
