@@ -59,5 +59,6 @@ private fun runSmokeTests(service: String, envVars: Map<String, String> = emptyM
         .bufferedReader()
         .forEachLine { output.append("$it\n") }
 
+    println(output.toString()) // TODO: Remove - this is here only for debugging CI tests
     return output.toString()
 }
