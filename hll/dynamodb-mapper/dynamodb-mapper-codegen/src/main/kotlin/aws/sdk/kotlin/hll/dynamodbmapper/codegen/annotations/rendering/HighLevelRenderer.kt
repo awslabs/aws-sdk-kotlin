@@ -32,27 +32,7 @@ internal class HighLevelRenderer(
                 is DestinationPackage.Absolute -> dstPkg.pkg
             }
 
-            // Value converters must be generated for any DynamoDbItem which is referenced by another DynamoDbItem
-            val shouldRenderValueConverter = annotatedClasses.any { otherClass ->
-                val annotatedTypeName = annotated.qualifiedName?.asString()
-
-                otherClass.getAllProperties().any { prop ->
-                    val propType = prop.type.resolve()
-
-                    // If the property OR any of its arguments reference the annotated type
-                    (propType.declaration.qualifiedName?.asString() == annotatedTypeName) ||
-                        (
-                            propType.arguments.any { arg ->
-                                val argType = arg.type?.resolve()
-                                argType?.declaration?.qualifiedName?.asString() == annotatedTypeName
-                            }
-                            )
-                }
-            }
-
-            val attributes = codegenAttributes + attributesOf {
-                SchemaAttributes.ShouldRenderValueConverterAttribute to shouldRenderValueConverter
-            }
+            val attributes = codegenAttributes + (SchemaAttributes.ShouldRenderValueConverterAttribute to annotated.shouldRenderValueConverter)
 
             val renderCtx = RenderContext(
                 logger,
@@ -66,5 +46,22 @@ internal class HighLevelRenderer(
             annotation.render()
         }
     }
-}
 
+    // Value converters must be generated for any DynamoDbItem which is referenced by another DynamoDbItem
+    private val KSClassDeclaration.shouldRenderValueConverter: Boolean
+        get() = annotatedClasses.any { otherClass ->
+            val name = requireNotNull(qualifiedName).asString()
+
+            otherClass.getAllProperties().any { prop ->
+                val propType = prop.type.resolve()
+                val propName = requireNotNull(propType.declaration.qualifiedName).asString()
+
+                // If the property OR any of its arguments reference the annotated type
+                (propName == name) || (propType.arguments.any { arg ->
+                    val argType = arg.type?.resolve()
+                    val argName = requireNotNull(argType?.declaration?.qualifiedName).asString()
+                    argName == name
+                })
+            }
+        }
+}
