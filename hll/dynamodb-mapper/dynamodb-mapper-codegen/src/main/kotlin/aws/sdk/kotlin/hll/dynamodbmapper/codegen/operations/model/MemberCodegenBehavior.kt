@@ -5,10 +5,10 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
 import aws.sdk.kotlin.hll.codegen.model.Member
-import aws.sdk.kotlin.hll.codegen.model.Pkg
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.model.nullable
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperPkg
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 
 private val attrMapTypes = setOf(MapperTypes.AttributeMap, MapperTypes.AttributeMap.nullable())
@@ -80,7 +80,7 @@ private val Member.isTableName: Boolean
 private val Member.isIndexName: Boolean
     get() = name == "indexName" && type == Types.Kotlin.StringNullable
 
-private fun llType(name: String) = TypeRef(Pkg.Ll.Model, name)
+private fun llType(name: String) = TypeRef(MapperPkg.Ll.Model, name)
 
 private val unsupportedMembers = listOf(
     // superseded by ConditionExpression

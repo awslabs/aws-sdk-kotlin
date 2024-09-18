@@ -22,5 +22,9 @@ internal object ModelAttributes {
      */
     val LowLevelStructure: AttributeKey<Structure> = AttributeKey("aws.sdk.kotlin.ddbmapper#LowLevelStructure")
 
+    /**
+     * For a given [Operation], this attribute key contains relevant pagination members (if applicable) in the request
+     * and response
+     */
     val PaginationInfo: AttributeKey<PaginationMembers> = AttributeKey("aws.sdk.kotlin.ddbmapper#PaginationInfo")
 }

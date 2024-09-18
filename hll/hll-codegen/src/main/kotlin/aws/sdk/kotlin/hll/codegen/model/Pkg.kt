@@ -10,20 +10,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
  * Named constants for various mapper runtime packages
  */
 @InternalSdkApi
-public interface Pkg {
-    @InternalSdkApi
-    public object Hl {
-        public val Base: String = "aws.sdk.kotlin.hll.dynamodbmapper"
-        public val Annotations: String = "$Base.annotations"
-        public val Items: String = "$Base.items"
-        public val Model: String = "$Base.model"
-        public val Ops: String = "$Base.operations"
-        public val PipelineImpl: String = "$Base.pipeline.internal"
-        public val Values: String = "$Base.values"
-        public val ScalarValues: String = "$Values.scalars"
-        public val SmithyTypeValues: String = "$Values.smithytypes"
-    }
-
+public object Pkg {
     @InternalSdkApi
     public object Kotlin {
         public val Base: String = "kotlin"
@@ -40,11 +27,5 @@ public interface Pkg {
             public val Base: String = "${Kotlinx.Base}.coroutines"
             public val Flow: String = "$Base.flow"
         }
-    }
-
-    @InternalSdkApi
-    public object Ll {
-        public val Base: String = "aws.sdk.kotlin.services.dynamodb"
-        public val Model: String = "$Base.model"
     }
 }

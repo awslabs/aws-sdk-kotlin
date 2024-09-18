@@ -6,10 +6,10 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.codegen.model.Operation
-import aws.sdk.kotlin.hll.codegen.model.Pkg
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.util.KspLoggerOutputStream
 import aws.sdk.kotlin.hll.codegen.util.asPrintStream
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperPkg
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.toHighLevel
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering.HighLevelRenderer
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
@@ -29,7 +29,7 @@ internal class HighLevelOpsProcessor(environment: SymbolProcessorEnvironment) : 
     private var invoked = false
     private val logger = environment.logger
     private val opAllowlist = environment.options["op-allowlist"]?.split(";")
-    private val pkg = environment.options["pkg"] ?: Pkg.Hl.Ops
+    private val pkg = environment.options["pkg"] ?: MapperPkg.Hl.Ops
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
         if (!invoked) {
