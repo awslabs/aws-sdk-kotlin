@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.values
 
+import aws.sdk.kotlin.hll.dynamodbmapper.util.NULL_ATTR
 import aws.sdk.kotlin.hll.mapping.core.converters.Converter
 import aws.sdk.kotlin.hll.mapping.core.converters.SplittingConverter
 import aws.sdk.kotlin.hll.mapping.core.converters.mergeBy
@@ -20,7 +21,7 @@ import kotlin.reflect.KClass
  */
 public class NullableConverter<V : Any>(klass: KClass<V>) : SplittingConverter<V?, V, AttributeValue, AttributeValue> {
     override fun convertTo(from: V?): Either<AttributeValue, V> = when (from) {
-        null -> Either.Left(AttributeValue.Null(true))
+        null -> Either.Left(NULL_ATTR)
         else -> Either.Right(from)
     }
 

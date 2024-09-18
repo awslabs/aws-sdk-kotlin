@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.values.collections
 
-import aws.sdk.kotlin.hll.dynamodbmapper.testutils.attr
+import aws.sdk.kotlin.hll.dynamodbmapper.util.attr
 import aws.sdk.kotlin.hll.dynamodbmapper.values.ValueConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.ValueConvertersTest
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue

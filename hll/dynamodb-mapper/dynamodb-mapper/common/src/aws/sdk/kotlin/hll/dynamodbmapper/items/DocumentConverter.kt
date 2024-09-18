@@ -6,6 +6,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.items
 
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
 import aws.sdk.kotlin.hll.dynamodbmapper.model.toItem
+import aws.sdk.kotlin.hll.dynamodbmapper.util.NULL_ATTR
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.content.Document
@@ -42,7 +43,7 @@ private fun fromAttributeValue(attr: AttributeValue): Document? = when (attr) {
 }
 
 private fun toAttributeValue(value: Document?): AttributeValue = when (value) {
-    null -> AttributeValue.Null(true)
+    null -> NULL_ATTR
     is Document.Number -> AttributeValue.N(value.value.toString())
     is Document.String -> AttributeValue.S(value.value)
     is Document.Boolean -> AttributeValue.Bool(value.value)

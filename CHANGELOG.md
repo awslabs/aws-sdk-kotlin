@@ -1,5 +1,109 @@
 # Changelog
 
+## [1.3.28] - 09/09/2024
+
+### Features
+* (**elasticloadbalancingv2**) Add paginators for the ELBv2 DescribeListenerCertificates and DescribeRules APIs. Fix broken waiter for the ELBv2 DescribeLoadBalancers API.
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to broadcast to Stages using RTMP(S).
+* (**kafka**) Amazon MSK Replicator can now replicate data to identically named topics between MSK clusters within the same AWS Region or across different AWS Regions.
+* (**sagemaker**) Amazon Sagemaker supports orchestrating SageMaker HyperPod clusters with Amazon EKS
+* (**sagemakerruntime**) AWS SageMaker Runtime feature: Add sticky routing to support stateful inference models.
+
+### Documentation
+* (**dynamodb**) Doc-only update for DynamoDB. Added information about async behavior for TagResource and UntagResource APIs and updated the description of ResourceInUseException.
+
+## [1.3.27] - 09/06/2024
+
+### Features
+* (**qapps**) Adds UpdateLibraryItemMetadata api to change status of app for admin verification feature and returns isVerified field in any api returning the app or library item.
+
+## [1.3.26] - 09/05/2024
+
+### Features
+* (**applicationsignals**) Amazon CloudWatch Application Signals now supports creating Service Level Objectives using a new calculation type. Users can now create SLOs which are configured with request-based SLIs to help meet their specific business requirements.
+* (**connect**) Amazon Connect Custom Vocabulary now supports Catalan (Spain), Danish (Denmark), Dutch (Netherlands), Finnish (Finland), Indonesian (Indonesia), Malay (Malaysia), Norwegian Bokmal (Norway), Polish (Poland), Swedish (Sweden), and Tagalog/Filipino (Philippines).
+* (**gamelift**) Amazon GameLift provides additional events for tracking the fleet creation process.
+* (**kinesisanalyticsv2**) Support for Flink 1.20 in Managed Service for Apache Flink
+* (**sagemaker**) Amazon SageMaker now supports idle shutdown of JupyterLab and CodeEditor applications on SageMaker Studio.
+
+### Documentation
+* (**codepipeline**) Updates to add recent notes to APIs and to replace example S3 bucket names globally.
+
+## [1.3.25] - 09/04/2024
+
+### Features
+* (**appsync**) Adds new logging levels (INFO and DEBUG) for additional log output control
+* (**bedrockagent**) Add support for user metadata inside PromptVariant.
+* (**cloudwatchlogs**) Update to support new APIs for delivery of logs from AWS services.
+* (**fis**) This release adds safety levers, a new mechanism to stop all running experiments and prevent new experiments from starting.
+* (**s3control**) Amazon Simple Storage Service /S3 Access Grants / Features : This release launches new Access Grants API - ListCallerAccessGrants.
+
+### Documentation
+* (**finspace**) Updates Finspace documentation for smaller instances.
+
+## [1.3.24] - 09/03/2024
+
+### Features
+* (**connect**) Release ReplicaConfiguration as part of DescribeInstance
+* (**datazone**) Add support to let data publisher specify a subset of the data asset that a subscriber will have access to based on the asset filters provided, when accepting a subscription request.
+* (**elasticloadbalancingv2**) This release adds support for configuring TCP idle timeout on NLB and GWLB listeners.
+* (**mediaconnect**) AWS Elemental MediaConnect introduces thumbnails for Flow source monitoring. Thumbnails provide still image previews of the live content feeding your MediaConnect Flow allowing you to easily verify that your source is operating as expected.
+* (**medialive**) Added MinQP as a Rate Control option for H264 and H265 encodes.
+* (**sagemaker**) Amazon SageMaker now supports automatic mounting of a user's home folder in the Amazon Elastic File System (EFS) associated with the SageMaker Studio domain to their Studio Spaces to enable users to share data between their own private spaces.
+* (**timestreaminfluxdb**) Timestream for InfluxDB now supports compute scaling and deployment type conversion. This release adds the DbInstanceType and DeploymentType parameters to the UpdateDbInstance API.
+
+## [1.3.23] - 08/30/2024
+
+### Features
+* (**backup**) The latest update introduces two new attributes, VaultType and VaultState, to the DescribeBackupVault and ListBackupVaults APIs. The VaultState attribute reflects the current status of the vault, while the VaultType attribute indicates the specific category of the vault.
+* (**cloudwatchlogs**) This release introduces a new optional parameter: Entity, in PutLogEvents request
+* (**datazone**) Amazon DataZone now adds new governance capabilities of Domain Units for organization within your Data Domains, and Authorization Policies for tighter controls.
+* (**redshiftdata**) The release include the new Redshift DataAPI feature for session use, customer execute query with --session-keep-alive-seconds parameter and can submit follow-up queries to same sessions with returned`session-id`
+
+## [1.3.22] - 08/29/2024
+
+### Features
+* (**bedrockagentruntime**) Lifting the maximum length on Bedrock KnowledgeBase RetrievalFilter array
+* (**bedrockruntime**) Add support for imported-model in invokeModel and InvokeModelWithResponseStream.
+* (**personalize**) This releases ability to update automatic training scheduler for customer solutions
+* (**quicksight**) Increased Character Limit for Dataset Calculation Field expressions
+* (**sfn**) This release adds support for static analysis to ValidateStateMachineDefinition API, which can now return optional WARNING diagnostics for semantic errors on the definition of an Amazon States Language (ASL) state machine.
+* (**wafv2**) The minimum request rate for a rate-based rule is now 10. Before this, it was 100.
+
+### Fixes
+* [#1126](https://github.com/smithy-lang/smithy-kotlin/issues/1126) Upgrade to **1.3.8** version of **smithy-kotlin** to pick up fixes for code-generated deserializers
+
+## [1.3.21] - 08/28/2024
+
+### Features
+* (**appconfig**) This release adds support for deletion protection, which is a safety guardrail to prevent the unintentional deletion of a recently used AWS AppConfig Configuration Profile or Environment. This also includes a change to increase the maximum length of the Name parameter in UpdateConfigurationProfile.
+* (**datazone**) Update regex to include dot character to be consistent with IAM role creation in the authorized principal field for create and update subscription target.
+* (**devicefarm**) This release removed support for Calabash, UI Automation, Built-in Explorer, remote access record, remote access replay, and web performance profile framework in ScheduleRun API.
+* (**ec2**) Amazon VPC IP Address Manager (IPAM) now allows customers to provision IPv4 CIDR blocks and allocate Elastic IP Addresses directly from IPAM pools with public IPv4 space
+* (**internetmonitor**) Adds new querying types to show overall traffic suggestion information for monitors
+* (**pcs**) Introducing AWS Parallel Computing Service (AWS PCS), a new service makes it easy to setup and manage high performance computing (HPC) clusters, and build scientific and engineering models at virtually any scale on AWS.
+
+### Documentation
+* (**workspaces**) Documentation-only update that clarifies the StartWorkspaces and StopWorkspaces actions, and a few other minor edits.
+
+## [1.3.20] - 08/27/2024
+
+### Features
+* (**bedrock**) Amazon Bedrock SDK updates for Inference Profile.
+* (**bedrockruntime**) Amazon Bedrock SDK updates for Inference Profile.
+* (**chatbot**) Update documentation to be consistent with the API docs
+* (**omics**) Adds data provenance to import jobs from read sets and references
+* (**polly**) Amazon Polly adds 2 new voices: Jitka (cs-CZ) and Sabrina (de-CH).
+
+### Miscellaneous
+* Upgrade to **v1.3.6** of **smithy-kotlin**
+
+## [1.3.19] - 08/26/2024
+
+### Features
+* (**iotsitewise**) AWS IoT SiteWise now supports versioning for asset models. It enables users to retrieve active version of their asset model and perform asset model writes with optimistic lock.
+* (**workspaces**) This release adds support for creating and managing directories that use AWS IAM Identity Center as user identity source. Such directories can be used to create non-Active Directory domain joined WorkSpaces Personal.Updated RegisterWorkspaceDirectory and DescribeWorkspaceDirectories APIs.
+
 ## [1.3.18] - 08/23/2024
 
 ### Features

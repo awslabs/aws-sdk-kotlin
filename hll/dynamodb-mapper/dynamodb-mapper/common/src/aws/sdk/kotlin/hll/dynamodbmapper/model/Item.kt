@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.model
 
 import aws.sdk.kotlin.hll.dynamodbmapper.model.internal.ItemImpl
+import aws.sdk.kotlin.hll.dynamodbmapper.util.dynamicAttr
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 
 /**
@@ -32,8 +33,22 @@ public fun Item.toMutableItem(): MutableItem = toMutableMap().toMutableItem()
 public fun Map<String, AttributeValue>.toItem(): Item = ItemImpl(this)
 
 /**
+ * Dynamically converts this map to an immutable [Item]
+ */
+@JvmName("mapStringAnyToItem")
+internal fun Map<String, Any?>.toItem() = mapValues { (_, v) -> dynamicAttr(v) }.toItem()
+
+/**
  * Returns a new immutable [Item] with the specified attributes, given as name-value pairs
  * @param pairs A collection of [Pair]<[String], [AttributeValue]> where the first value is the attribute name and the
  * second is the attribute value.
  */
-public fun itemOf(vararg pairs: Pair<String, AttributeValue>): Item = ItemImpl(mapOf(*pairs))
+public fun itemOf(vararg pairs: Pair<String, AttributeValue>): Item = mapOf(*pairs).toItem()
+
+/**
+ * Returns a new immutable [Item] with the specified attributes, given as name-value pairs
+ * @param pairs A collection of [Pair]<[String], [Any]`?`> where the first value is the attribute name and the
+ * second is the attribute value.
+ */
+@JvmName("itemOfPairStringAny")
+internal fun itemOf(vararg pairs: Pair<String, Any?>): Item = mapOf(*pairs).toItem()
