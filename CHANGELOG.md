@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.35] - 09/18/2024
+
+### Features
+* (**costexplorer**) This release extends the GetReservationPurchaseRecommendation API to support recommendations for Amazon DynamoDB reservations.
+* (**directoryservice**) Added new APIs for enabling, disabling, and describing access to the AWS Directory Service Data API
+* (**directoryservicedata**) Added new AWS Directory Service Data API, enabling you to manage data stored in AWS Directory Service directories. This includes APIs for creating, reading, updating, and deleting directory users, groups, and group memberships.
+* (**guardduty**) Add `launchType` and `sourceIPs` fields to GuardDuty findings.
+* (**mailmanager**) Introduce a new RuleSet condition evaluation, where customers can set up a StringExpression with a MimeHeader condition. This condition will perform the necessary validation based on the X-header provided by customers.
+* (**s3**) Added SSE-KMS support for directory buckets.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation with information upgrading snapshots with unsupported engine versions for RDS for MySQL and RDS for PostgreSQL.
+
 ## [1.3.34] - 09/17/2024
 
 ### Features
