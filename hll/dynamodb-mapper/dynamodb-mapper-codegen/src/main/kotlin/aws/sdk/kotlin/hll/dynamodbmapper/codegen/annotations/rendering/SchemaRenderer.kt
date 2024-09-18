@@ -123,11 +123,12 @@ internal class SchemaRenderer(
         // TODO Offer alternate serialization options besides AttributeValue.M?
         if (ctx.attributes[SchemaAttributes.ShouldRenderValueConverterAttribute]) {
             write(
-                "#Lval #L : #T = #T.andThen(#T)",
+                "#Lval #L : #T = #T.#T(#T)",
                 ctx.attributes.visibility,
                 "${className}ValueConverter",
                 MapperTypes.Values.valueConverter(classType),
                 itemConverter,
+                TypeRef("aws.sdk.kotlin.hll.mapping.core.converters", "andThenTo"),
                 MapperTypes.Values.ItemToValueConverter,
             )
 
