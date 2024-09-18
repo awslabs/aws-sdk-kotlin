@@ -631,6 +631,12 @@
             "brazilName": "AwsSdkKotlinDirectoryService"
         },
         {
+            "sdkId": "Directory Service Data",
+            "namespace": "aws.sdk.kotlin.services.directoryservicedata",
+            "artifactName": "directoryservicedata",
+            "brazilName": "AwsSdkKotlinDirectoryServiceData"
+        },
+        {
             "sdkId": "DocDB",
             "namespace": "aws.sdk.kotlin.services.docdb",
             "artifactName": "docdb",
