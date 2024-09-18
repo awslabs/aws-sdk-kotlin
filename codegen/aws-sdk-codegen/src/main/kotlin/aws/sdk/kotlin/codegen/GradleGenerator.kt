@@ -95,7 +95,6 @@ class GradleGenerator : KotlinIntegration {
     private fun generateSmokeTestJarTask(writer: GradleWriter, ctx: CodegenContext) {
         writer.withBlock("jvm {", "}") {
             withBlock("compilations {", "}") {
-                write("val runtimePath = configurations.getByName(#S).map { if (it.isDirectory) it else zipTree(it) }", "jvmRuntimeClasspath")
                 write("val mainPath = getByName(#S).output.classesDirs", "main")
                 write("val testPath = getByName(#S).output.classesDirs", "test")
                 withBlock("tasks {", "}") {
@@ -106,6 +105,7 @@ class GradleGenerator : KotlinIntegration {
                         withBlock("manifest {", "}") {
                             write("attributes[#S] = #S", "Main-Class", "${ctx.settings.pkg.name}.smoketests.SmokeTestsKt")
                         }
+                        write("val runtimePath = configurations.getByName(#S).map { if (it.isDirectory) it else zipTree(it) }", "jvmRuntimeClasspath")
                         write("duplicatesStrategy = DuplicatesStrategy.EXCLUDE")
                         write("from(runtimePath, mainPath, testPath)")
                         write("archiveBaseName.set(#S)", "\${project.name}-smoketests")
