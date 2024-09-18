@@ -57,11 +57,14 @@ internal class HighLevelRenderer(
                 val propName = requireNotNull(propType.declaration.qualifiedName).asString()
 
                 // If the property OR any of its arguments reference the annotated type
-                (propName == name) || (propType.arguments.any { arg ->
-                    val argType = arg.type?.resolve()
-                    val argName = requireNotNull(argType?.declaration?.qualifiedName).asString()
-                    argName == name
-                })
+                (propName == name) ||
+                    (
+                        propType.arguments.any { arg ->
+                            val argType = arg.type?.resolve()
+                            val argName = requireNotNull(argType?.declaration?.qualifiedName).asString()
+                            argName == name
+                        }
+                        )
             }
         }
 }
