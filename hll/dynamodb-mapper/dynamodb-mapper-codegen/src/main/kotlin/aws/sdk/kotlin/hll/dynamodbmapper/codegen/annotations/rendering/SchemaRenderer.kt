@@ -217,7 +217,7 @@ internal class SchemaRenderer(
                     Types.Kotlin.ULong -> MapperTypes.Values.Scalars.ULongConverter
 
                     else -> error("Unsupported attribute type $this")
-                }
+                },
             )
         }
     }
