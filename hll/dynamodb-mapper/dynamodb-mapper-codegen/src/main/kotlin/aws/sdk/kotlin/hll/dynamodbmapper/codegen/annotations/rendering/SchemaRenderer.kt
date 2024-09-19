@@ -152,76 +152,73 @@ internal class SchemaRenderer(
             }
 
             // converter
-            prop.type.resolve().renderValueConverter(this)
+            renderValueConverter(prop.type.resolve())
             write("")
         }
     }
 
     /**
-     * Renders a ValueConverter for the [KSType].
+     * Renders a ValueConverter for the [ksType].
      *
      * Note: The ValueConverter(s) will be rendered without a newline in order to support deep recursion.
      * Callers are responsible for adding a newline after the top-level invocation of this function.
      */
-    private fun KSType.renderValueConverter(writer: SchemaRenderer) {
-        writer.apply {
-            val ksType = this@renderValueConverter
-            val type = Type.from(ksType)
+    private fun renderValueConverter(ksType: KSType) {
+        val type = Type.from(ksType)
 
-            when {
-                isEnum -> writeInline("#T()", MapperTypes.Values.Scalars.enumConverter(type))
+        when {
+            ksType.isEnum -> writeInline("#T()", MapperTypes.Values.Scalars.enumConverter(type))
 
-                // FIXME Handle multi-module codegen rather than assuming nested classes will be in the same [ctx.pkg]
-                isUserClass -> writeInline("#T", TypeRef(ctx.pkg, "${declaration.simpleName.asString()}ValueConverter"))
+            // FIXME Handle multi-module codegen rather than assuming nested classes will be in the same [ctx.pkg]
+            ksType.isUserClass -> writeInline("#T", TypeRef(ctx.pkg, "${ksType.declaration.simpleName.asString()}ValueConverter"))
 
-                type.isGenericFor(Types.Kotlin.Collections.List) -> {
-                    val listElementType = singleArgument()
-                    writeInline("#T(", MapperTypes.Values.Collections.ListConverter)
-                    listElementType.renderValueConverter(this)
-                    writeInline(")")
-                }
-
-                type.isGenericFor(Types.Kotlin.Collections.Map) -> {
-                    check(arguments.size == 2) { "Expected map type ${declaration.qualifiedName?.asString()} to have 2 arguments, got ${arguments.size}" }
-
-                    val (keyType, valueType) = arguments.map {
-                        checkNotNull(it.type?.resolve()) { "Failed to resolved argument type for $it" }
-                    }
-
-                    writeInline("#T(#T, ", MapperTypes.Values.Collections.MapConverter, keyType.mapKeyConverter)
-                    valueType.renderValueConverter(this)
-                    writeInline(")")
-                }
-
-                type.isGenericFor(Types.Kotlin.Collections.Set) -> writeInline("#T", singleArgument().setValueConverter)
-
-                else -> writeInline(
-                    "#T",
-                    when (type) {
-                        Types.Smithy.Instant -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
-                        Types.Smithy.Url -> MapperTypes.Values.SmithyTypes.UrlConverter
-                        Types.Smithy.Document -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
-
-                        Types.Kotlin.Boolean -> MapperTypes.Values.Scalars.BooleanConverter
-                        Types.Kotlin.String -> MapperTypes.Values.Scalars.StringConverter
-                        Types.Kotlin.CharArray -> MapperTypes.Values.Scalars.CharArrayConverter
-                        Types.Kotlin.Char -> MapperTypes.Values.Scalars.CharConverter
-                        Types.Kotlin.Byte -> MapperTypes.Values.Scalars.ByteConverter
-                        Types.Kotlin.ByteArray -> MapperTypes.Values.Scalars.ByteArrayConverter
-                        Types.Kotlin.Short -> MapperTypes.Values.Scalars.ShortConverter
-                        Types.Kotlin.Int -> MapperTypes.Values.Scalars.IntConverter
-                        Types.Kotlin.Long -> MapperTypes.Values.Scalars.LongConverter
-                        Types.Kotlin.Double -> MapperTypes.Values.Scalars.DoubleConverter
-                        Types.Kotlin.Float -> MapperTypes.Values.Scalars.FloatConverter
-                        Types.Kotlin.UByte -> MapperTypes.Values.Scalars.UByteConverter
-                        Types.Kotlin.UInt -> MapperTypes.Values.Scalars.UIntConverter
-                        Types.Kotlin.UShort -> MapperTypes.Values.Scalars.UShortConverter
-                        Types.Kotlin.ULong -> MapperTypes.Values.Scalars.ULongConverter
-
-                        else -> error("Unsupported attribute type $this")
-                    },
-                )
+            type.isGenericFor(Types.Kotlin.Collections.List) -> {
+                val listElementType = ksType.singleArgument()
+                writeInline("#T(", MapperTypes.Values.Collections.ListConverter)
+                renderValueConverter(listElementType)
+                writeInline(")")
             }
+
+            type.isGenericFor(Types.Kotlin.Collections.Map) -> {
+                check(ksType.arguments.size == 2) { "Expected map type ${ksType.declaration.qualifiedName?.asString()} to have 2 arguments, got ${ksType.arguments.size}" }
+
+                val (keyType, valueType) = ksType.arguments.map {
+                    checkNotNull(it.type?.resolve()) { "Failed to resolved argument type for $it" }
+                }
+
+                writeInline("#T(#T, ", MapperTypes.Values.Collections.MapConverter, keyType.mapKeyConverter)
+                renderValueConverter(valueType)
+                writeInline(")")
+            }
+
+            type.isGenericFor(Types.Kotlin.Collections.Set) -> writeInline("#T", ksType.singleArgument().setValueConverter)
+
+            else -> writeInline(
+                "#T",
+                when (type) {
+                    Types.Smithy.Instant -> MapperTypes.Values.SmithyTypes.DefaultInstantConverter
+                    Types.Smithy.Url -> MapperTypes.Values.SmithyTypes.UrlConverter
+                    Types.Smithy.Document -> MapperTypes.Values.SmithyTypes.DefaultDocumentConverter
+
+                    Types.Kotlin.Boolean -> MapperTypes.Values.Scalars.BooleanConverter
+                    Types.Kotlin.String -> MapperTypes.Values.Scalars.StringConverter
+                    Types.Kotlin.CharArray -> MapperTypes.Values.Scalars.CharArrayConverter
+                    Types.Kotlin.Char -> MapperTypes.Values.Scalars.CharConverter
+                    Types.Kotlin.Byte -> MapperTypes.Values.Scalars.ByteConverter
+                    Types.Kotlin.ByteArray -> MapperTypes.Values.Scalars.ByteArrayConverter
+                    Types.Kotlin.Short -> MapperTypes.Values.Scalars.ShortConverter
+                    Types.Kotlin.Int -> MapperTypes.Values.Scalars.IntConverter
+                    Types.Kotlin.Long -> MapperTypes.Values.Scalars.LongConverter
+                    Types.Kotlin.Double -> MapperTypes.Values.Scalars.DoubleConverter
+                    Types.Kotlin.Float -> MapperTypes.Values.Scalars.FloatConverter
+                    Types.Kotlin.UByte -> MapperTypes.Values.Scalars.UByteConverter
+                    Types.Kotlin.UInt -> MapperTypes.Values.Scalars.UIntConverter
+                    Types.Kotlin.UShort -> MapperTypes.Values.Scalars.UShortConverter
+                    Types.Kotlin.ULong -> MapperTypes.Values.Scalars.ULongConverter
+
+                    else -> error("Unsupported attribute type $this")
+                }
+            )
         }
     }
 
