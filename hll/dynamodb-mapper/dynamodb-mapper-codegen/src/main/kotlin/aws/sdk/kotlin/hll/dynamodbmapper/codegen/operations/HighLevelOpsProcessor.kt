@@ -35,8 +35,7 @@ internal class HighLevelOpsProcessor(environment: SymbolProcessorEnvironment) : 
 
             logger.info("Scanning low-level DDB client for operations and types")
             val operations = getOperations(resolver)
-
-            val codegenFactory = CodeGeneratorFactory(codeGenerator, logger)
+            val codegenFactory = CodeGeneratorFactory(codeGenerator, logger) // FIXME Pass dependencies
             val ctx = RenderContext(logger, codegenFactory, pkg, "dynamodb-mapper-ops-codegen")
 
             HighLevelRenderer(ctx, operations).render()

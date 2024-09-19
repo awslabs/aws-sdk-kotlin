@@ -23,14 +23,14 @@ class SimpleItemConverterTest {
         )
 
         val foo = Product(42, "Foo 2.0", inStock = true)
-        val item = converter.toItem(foo)
+        val item = converter.convertTo(foo)
 
         assertEquals(3, item.size)
         assertEquals(42, item.getValue("id").asN().toInt())
         assertEquals("Foo 2.0", item.getValue("name").asS())
         assertTrue(item.getValue("in-stock").asBool())
 
-        val unconverted = converter.fromItem(item)
+        val unconverted = converter.convertFrom(item)
         assertEquals(foo, unconverted)
     }
 }

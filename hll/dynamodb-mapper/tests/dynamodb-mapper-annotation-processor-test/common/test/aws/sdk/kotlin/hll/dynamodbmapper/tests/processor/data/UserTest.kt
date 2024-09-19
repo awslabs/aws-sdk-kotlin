@@ -14,7 +14,7 @@ class UserTest {
     @Test
     fun testConversion() {
         val user = User(123, "Steve", "Rogers", 84)
-        val converted = UserConverter.toItem(user)
+        val converted = UserConverter.convertTo(user)
 
         assertEquals(
             itemOf(
@@ -26,7 +26,7 @@ class UserTest {
             converted,
         )
 
-        val unconverted = UserConverter.fromItem(converted)
+        val unconverted = UserConverter.convertFrom(converted)
 
         assertEquals(user, unconverted)
     }

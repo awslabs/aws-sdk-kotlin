@@ -13,15 +13,15 @@ public class HeterogeneousItemConverter<T>(
     public val typeAttribute: String,
     public val subConverters: Map<String, ItemConverter<T>>,
 ) : ItemConverter<T> {
-    override fun fromItem(item: Item): T {
-        val attr = item[typeAttribute] ?: error("Missing $typeAttribute")
+    override fun convertFrom(to: Item): T {
+        val attr = to[typeAttribute] ?: error("Missing $typeAttribute")
         val typeValue = attr.asSOrNull() ?: error("No string value for $attr")
         val converter = subConverters[typeValue] ?: error("No converter for $typeValue")
-        return converter.fromItem(item)
+        return converter.convertFrom(to)
     }
 
-    override fun toItem(obj: T, onlyAttributes: Set<String>?): Item {
-        val typeValue = typeMapper(obj)
+    override fun convertTo(from: T, onlyAttributes: Set<String>?): Item {
+        val typeValue = typeMapper(from)
         val converter = subConverters[typeValue] ?: error("No converter for $typeValue")
 
         return buildItem {
@@ -29,7 +29,7 @@ public class HeterogeneousItemConverter<T>(
                 put(typeAttribute, AttributeValue.S(typeValue))
             }
 
-            putAll(converter.toItem(obj, onlyAttributes))
+            putAll(converter.convertTo(from, onlyAttributes))
         }
     }
 }

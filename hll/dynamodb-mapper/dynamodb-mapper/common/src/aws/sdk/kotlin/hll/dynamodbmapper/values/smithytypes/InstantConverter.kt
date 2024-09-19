@@ -17,7 +17,7 @@ import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
 /**
  * Provides access to [ValueConverter] types for various [Instant] representations
  */
-public object InstantConverters {
+public object InstantConverter {
     /**
      * Converts between [Instant] and
      * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
