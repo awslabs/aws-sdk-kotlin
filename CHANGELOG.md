@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.36] - 09/19/2024
+
+### Features
+* (**codeconnections**) This release adds the PullRequestComment field to CreateSyncConfiguration API input, UpdateSyncConfiguration API input, GetSyncConfiguration API output and ListSyncConfiguration API output
+* (**glue**) This change is for releasing TestConnection api SDK model
+* (**lambda**) Tagging support for Lambda event source mapping, and code signing configuration resources.
+* (**mediaconvert**) This release provides support for additional DRM configurations per SPEKE Version 2.0.
+* (**medialive**) Adds Bandwidth Reduction Filtering for HD AVC and HEVC encodes, multiplex container settings.
+* (**quicksight**) QuickSight: 1. Add new API - ListFoldersForResource. 2. Commit mode adds visibility configuration of Apply button on multi-select controls for authors.
+* (**sagemaker**) Introduced support for G6e instance types on SageMaker Studio for JupyterLab and CodeEditor applications.
+* (**workspacesweb**) WorkSpaces Secure Browser now enables Administrators to view and manage end-user browsing sessions via Session Management APIs.
+
+### Miscellaneous
+* Upgrade to kotlinx.coroutines 1.9.0
+
 ## [1.3.35] - 09/18/2024
 
 ### Features
