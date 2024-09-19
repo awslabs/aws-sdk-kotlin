@@ -22,6 +22,11 @@ public object TextConverters {
      * Converts between [Char] and [String]
      */
     public val CharToStringConverter: Converter<Char, String> = Converter(Char::toString, String::single)
+
+    /**
+     * Converts between [String] and [String]
+     */
+    public val StringToStringConverter: Converter<String, String> = Converter({ it }, { it })
 }
 
 /**

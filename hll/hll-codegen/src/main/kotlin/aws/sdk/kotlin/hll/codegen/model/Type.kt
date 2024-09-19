@@ -102,6 +102,7 @@ public fun Type.nullable(): Type = when {
 }
 
 /**
+<<<<<<< HEAD
  * Gets a collection of all generic variables referenced by this [Type]
  */
 @InternalSdkApi
@@ -124,3 +125,10 @@ public fun List<TypeVar>.asParamsList(postfix: String = ""): String =
         ?.requireAllDistinct()
         ?.joinToString(", ", "<", ">$postfix")
         ?: ""
+
+/**
+ * Returns whether this [TypeRef] is generic for an [other]
+ * For example, List<Boolean>.isGenericFor(List<Int>) returns true.
+ */
+@InternalSdkApi
+public fun TypeRef.isGenericFor(other: TypeRef): Boolean = fullName == other.fullName

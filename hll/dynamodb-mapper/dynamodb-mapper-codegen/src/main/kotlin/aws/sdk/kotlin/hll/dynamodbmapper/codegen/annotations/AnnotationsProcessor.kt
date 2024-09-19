@@ -23,7 +23,6 @@ private val annotationName = DynamoDbItem::class.qualifiedName!!
 public class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) : HllKspProcessor(environment) {
     private val logger = environment.logger
     private val codeGenerator = environment.codeGenerator
-    private val codeGeneratorFactory = CodeGeneratorFactory(codeGenerator, logger)
 
     override fun processImpl(resolver: Resolver): List<KSAnnotated> {
         logger.info("Searching for symbols annotated with $annotationName")
@@ -36,6 +35,9 @@ public class AnnotationsProcessor(private val environment: SymbolProcessorEnviro
             .also { logger.info("Found annotated classes: $it") }
             .filterIsInstance<KSClassDeclaration>()
             .filter { it.validate() }
+
+        val dependencies = Dependencies(aggregating = true, *(annotatedClasses.mapNotNull { it.containingFile }.toTypedArray()))
+        val codeGeneratorFactory = CodeGeneratorFactory(environment.codeGenerator, logger, dependencies)
 
         HighLevelRenderer(annotatedClasses, logger, codeGeneratorFactory, getCodegenAttributes()).render()
 

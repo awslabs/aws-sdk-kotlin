@@ -65,6 +65,7 @@ public data class TemplateProcessor(val key: Char, val handler: (Any) -> String)
 private open class TypeProcessor {
     open fun format(type: Type): String = buildString {
         append(type.shortName)
+
         if (type is TypeRef && type.genericArgs.isNotEmpty()) {
             type.genericArgs.joinToString(", ", "<", ">", transform = ::format).let(::append)
         }

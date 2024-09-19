@@ -89,10 +89,10 @@ internal class OperationRenderer(
         closeAndOpenBlock(") = #L {", operation.request.lowLevelName)
         members(MemberCodegenBehavior.PassThrough) { write("#1L = this@convert.#1L", name) }
         members(MemberCodegenBehavior.MapKeys) {
-            write("this@convert.#1L?.let { #1L = schema.converter.toItem(it, schema.keyAttributeNames) }", name)
+            write("this@convert.#1L?.let { #1L = schema.converter.convertTo(it, schema.keyAttributeNames) }", name)
         }
         members(MemberCodegenBehavior.MapAll) {
-            write("this@convert.#1L?.let { #1L = schema.converter.toItem(it) }", name)
+            write("this@convert.#1L?.let { #1L = schema.converter.convertTo(it) }", name)
         }
         members(MemberCodegenBehavior.ListMapAll) {
             write("#1L = this@convert.#1L?.map { schema.converter.toItem(it) }", name)
@@ -123,7 +123,7 @@ internal class OperationRenderer(
 
             members(MemberCodegenBehavior.MapKeys, MemberCodegenBehavior.MapAll) {
                 write(
-                    "#1L = this@convert.#1L?.#2T()?.let(schema.converter::fromItem)",
+                    "#1L = this@convert.#1L?.#2T()?.let(schema.converter::convertFrom)",
                     name,
                     MapperTypes.Model.toItem,
                 )
@@ -131,7 +131,7 @@ internal class OperationRenderer(
 
             members(MemberCodegenBehavior.ListMapAll) {
                 write(
-                    "#1L = this@convert.#1L?.map { schema.converter.fromItem(it.#2T()) }",
+                    "#1L = this@convert.#1L?.map { schema.converter.convertFrom(it.#2T()) }",
                     name,
                     MapperTypes.Model.toItem,
                 )

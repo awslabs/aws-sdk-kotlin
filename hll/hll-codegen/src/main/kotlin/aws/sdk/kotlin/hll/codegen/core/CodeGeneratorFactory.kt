@@ -15,9 +15,11 @@ import com.google.devtools.ksp.processing.CodeGenerator as KSCodeGenerator
  * @param logger A logger instance to use for message
  */
 @InternalSdkApi
-public class CodeGeneratorFactory(private val ksCodeGenerator: KSCodeGenerator, private val logger: KSPLogger) {
-    private val dependencies = Dependencies.ALL_FILES
-
+public class CodeGeneratorFactory(
+    private val ksCodeGenerator: KSCodeGenerator,
+    private val logger: KSPLogger,
+    private val dependencies: Dependencies = Dependencies.ALL_FILES,
+) {
     /**
      * Creates a new [CodeGenerator] backed by a [KSCodeGenerator]. The returned generator starts with no imports and
      * uses a configured [TemplateEngine] with the default set of processors.
@@ -39,7 +41,7 @@ public class CodeGeneratorFactory(private val ksCodeGenerator: KSCodeGenerator, 
             logger.info("Checking out code generator for class $pkg.$fileName")
 
             ksCodeGenerator
-                .createNewFile(dependencies, pkg, fileName) // FIXME don't depend on ALL_FILES
+                .createNewFile(dependencies, pkg, fileName)
                 .use { outputStream ->
                     outputStream.writer().use { writer -> writer.append(content) }
                 }

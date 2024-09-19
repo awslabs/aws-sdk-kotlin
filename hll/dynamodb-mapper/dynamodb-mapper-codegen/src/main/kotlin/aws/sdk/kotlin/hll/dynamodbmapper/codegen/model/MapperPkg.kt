@@ -17,6 +17,7 @@ public object MapperPkg {
         public val Ops: String = "$Base.operations"
         public val PipelineImpl: String = "$Base.pipeline.internal"
         public val Values: String = "$Base.values"
+        public val CollectionValues: String = "$Values.collections"
         public val ScalarValues: String = "$Values.scalars"
         public val SmithyTypeValues: String = "$Values.smithytypes"
     }

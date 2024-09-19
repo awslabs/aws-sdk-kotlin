@@ -13,3 +13,8 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  * [DynamoDB `BOOL` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Boolean)
  */
 public val BooleanConverter: ValueConverter<Boolean> = Converter(AttributeValue::Bool, AttributeValue::asBool)
+
+/**
+ * Converts between [Boolean] and [String]
+ */
+public val BooleanToStringConverter: Converter<Boolean, String> = Converter({ it.toString() }, { it.toBoolean() })

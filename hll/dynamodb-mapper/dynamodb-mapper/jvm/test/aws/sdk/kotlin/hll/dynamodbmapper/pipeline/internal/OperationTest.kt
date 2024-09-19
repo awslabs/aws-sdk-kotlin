@@ -167,8 +167,8 @@ class OperationTest {
 private data class Foo(val value: String)
 
 private val fooConverter = object : ItemConverter<Foo> {
-    override fun fromItem(item: Item) = Foo(item["foo"]!!.asS())
-    override fun toItem(obj: Foo, onlyAttributes: Set<String>?) = itemOf("foo" to AttributeValue.S(obj.value))
+    override fun convertFrom(to: Item): Foo = Foo(to["foo"]!!.asS())
+    override fun convertTo(from: Foo, onlyAttributes: Set<String>?): Item = itemOf("foo" to AttributeValue.S(from.value))
 }
 private val fooSchema = fooConverter.withKeySpec(KeySpec.String("foo"))
 
@@ -178,9 +178,9 @@ private data class LFooResponse(val foo: Item)
 private data class HFooResponse(val foo: Foo)
 
 private fun HFooRequest.convert(table: String, schema: ItemSchema<Foo>) =
-    LFooRequest(table, schema.converter.toItem(foo))
+    LFooRequest(table, schema.converter.convertTo(foo))
 
 private fun LFooResponse.convert(schema: ItemSchema<Foo>) =
-    HFooResponse(schema.converter.fromItem(foo))
+    HFooResponse(schema.converter.convertFrom(foo))
 
 private suspend fun dummyInvoke(req: LFooRequest) = LFooResponse(req.foo)

@@ -1,0 +1,9 @@
+[
+  {
+    "name": "aws.sdk.kotlin.services.cloudwatchlogs.CloudWatchLogsClient",
+    "allDeclaredConstructors": true,
+    "allPublicConstructors": true,
+    "allDeclaredMethods": true,
+    "allPublicMethods": true
+  }
+]

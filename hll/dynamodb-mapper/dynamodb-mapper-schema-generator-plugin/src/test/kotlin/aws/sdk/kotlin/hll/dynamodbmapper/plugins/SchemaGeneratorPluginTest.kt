@@ -23,6 +23,7 @@ class SchemaGeneratorPluginTest {
     private fun getResource(resourceName: String): String = checkNotNull(this::class.java.getResource(resourceName)?.readText()) { "Could not read $resourceName" }
     private val kotlinVersion = getResource("kotlin-version.txt")
     private val sdkVersion = getResource("sdk-version.txt")
+    private val smithyKotlinVersion = getResource("smithy-kotlin-version.txt")
 
     @BeforeEach
     fun setup() {
@@ -403,5 +404,110 @@ class SchemaGeneratorPluginTest {
             }
             """.trimIndent(),
         )
+    }
+
+    @Test
+    fun testPrimitives() {
+        buildFile.appendText(
+            """
+            dependencies {
+                implementation("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
+                testImplementation(kotlin("test")) 
+            }
+            """.trimIndent(),
+        )
+
+        createClassFile("standard-item-converters/src/Primitives")
+
+        val buildResult = runner.build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), buildResult.task(":build")?.outcome)
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/PrimitivesSchema.kt")
+        assertTrue(schemaFile.exists())
+
+        val testFile = File(testProjectDir, "src/test/kotlin/org/example/standard-item-converters/test/PrimitivesTest.kt")
+        testFile.ensureParentDirsCreated()
+        testFile.createNewFile()
+        testFile.writeText(getResource("/standard-item-converters/test/PrimitivesTest.kt"))
+
+        val testResult = runner.withArguments("test").build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), testResult.task(":test")?.outcome)
+    }
+
+    @Test
+    fun testLists() {
+        buildFile.appendText(
+            """
+            dependencies {
+                testImplementation(kotlin("test")) 
+            }
+            """.trimIndent(),
+        )
+
+        createClassFile("standard-item-converters/src/Lists")
+
+        val buildResult = runner.build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), buildResult.task(":build")?.outcome)
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/ListsSchema.kt")
+        assertTrue(schemaFile.exists())
+
+        val testFile = File(testProjectDir, "src/test/kotlin/org/example/standard-item-converters/test/ListsTest.kt")
+        testFile.ensureParentDirsCreated()
+        testFile.createNewFile()
+        testFile.writeText(getResource("/standard-item-converters/test/ListsTest.kt"))
+
+        val testResult = runner.withArguments("test").build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), testResult.task(":test")?.outcome)
+    }
+
+    @Test
+    fun testSets() {
+        buildFile.appendText(
+            """
+            dependencies {
+                testImplementation(kotlin("test")) 
+            }
+            """.trimIndent(),
+        )
+
+        createClassFile("standard-item-converters/src/Sets")
+
+        val buildResult = runner.build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), buildResult.task(":build")?.outcome)
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/SetsSchema.kt")
+        assertTrue(schemaFile.exists())
+
+        val testFile = File(testProjectDir, "src/test/kotlin/org/example/standard-item-converters/test/SetsTest.kt")
+        testFile.ensureParentDirsCreated()
+        testFile.createNewFile()
+        testFile.writeText(getResource("/standard-item-converters/test/SetsTest.kt"))
+
+        val testResult = runner.withArguments("test").build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), testResult.task(":test")?.outcome)
+    }
+
+    @Test
+    fun testMaps() {
+        buildFile.appendText(
+            """
+            dependencies {
+                testImplementation(kotlin("test")) 
+            }
+            """.trimIndent(),
+        )
+
+        createClassFile("standard-item-converters/src/Maps")
+
+        val buildResult = runner.build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), buildResult.task(":build")?.outcome)
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/MapsSchema.kt")
+        assertTrue(schemaFile.exists())
+
+        val testFile = File(testProjectDir, "src/test/kotlin/org/example/standard-item-converters/test/MapsTest.kt")
+        testFile.ensureParentDirsCreated()
+        testFile.createNewFile()
+        testFile.writeText(getResource("/standard-item-converters/test/MapsTest.kt"))
+
+        val testResult = runner.withArguments("test").build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), testResult.task(":test")?.outcome)
     }
 }

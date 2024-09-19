@@ -8,11 +8,39 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 @InternalSdkApi
 public object Types {
     @InternalSdkApi
+    public object Smithy {
+        public val Instant: TypeRef = TypeRef("aws.smithy.kotlin.runtime.time", "Instant")
+        public val Url: TypeRef = TypeRef("aws.smithy.kotlin.runtime.net.url", "Url")
+        public val Document: TypeRef = TypeRef("aws.smithy.kotlin.runtime.content", "Document")
+    }
+
+    @InternalSdkApi
     public object Kotlin {
+        public val Boolean: TypeRef = kotlin("Boolean")
+        public val Byte: TypeRef = kotlin("Byte")
+        public val ByteArray: TypeRef = kotlin("ByteArray")
+        public val Char: TypeRef = kotlin("Char")
+        public val CharArray: TypeRef = kotlin("CharArray")
+        public val Double: TypeRef = kotlin("Double")
+        public val Float: TypeRef = kotlin("Float")
+        public val Int: TypeRef = kotlin("Int")
+        public val Long: TypeRef = kotlin("Long")
         public val Number: TypeRef = kotlin("Number")
         public val OptIn: TypeRef = kotlin("OptIn")
+        public val Short: TypeRef = kotlin("Short")
         public val String: TypeRef = kotlin("String")
         public val StringNullable: TypeRef = String.nullable() as TypeRef
+        public val UByte: TypeRef = kotlin("UByte")
+        public val UInt: TypeRef = kotlin("UInt")
+        public val ULong: TypeRef = kotlin("ULong")
+        public val UShort: TypeRef = kotlin("UShort")
+
+        @InternalSdkApi
+        public object Collections {
+            public val List: TypeRef = TypeRef(Pkg.Kotlin.Collections, "List")
+            public val Map: TypeRef = TypeRef(Pkg.Kotlin.Collections, "Map")
+            public val Set: TypeRef = TypeRef(Pkg.Kotlin.Collections, "Set")
+        }
 
         /**
          * Creates a [TypeRef] for a generic [List]

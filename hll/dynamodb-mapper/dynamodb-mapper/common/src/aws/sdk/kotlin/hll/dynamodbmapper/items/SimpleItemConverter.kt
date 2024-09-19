@@ -34,7 +34,7 @@ public class SimpleItemConverter<T, B>(
             }
         }
 
-    override fun fromItem(item: Item): T {
+    override fun convertFrom(to: Item): T {
         val builder = builderFactory()
 
         /**
@@ -50,7 +50,7 @@ public class SimpleItemConverter<T, B>(
         fun <A> AttributeDescriptor<A, T, B>.fromAttributeValue(attr: AttributeValue) =
             builder.setter(converter.convertFrom(attr))
 
-        item.forEach { (name, attr) ->
+        to.forEach { (name, attr) ->
             // TODO make behavior for unknown attributes configurable (ignore, exception, other?)
             descriptors[name]?.fromAttributeValue(attr)
         }
@@ -58,7 +58,7 @@ public class SimpleItemConverter<T, B>(
         return builder.build()
     }
 
-    override fun toItem(obj: T, onlyAttributes: Set<String>?): Item {
+    override fun convertTo(from: T, onlyAttributes: Set<String>?): Item {
         /**
          * This is a convenience function to keep the compile-time safety for type param `A`. Without this, the compiler
          * can't track generic types across multiple statements:
@@ -70,7 +70,7 @@ public class SimpleItemConverter<T, B>(
          * ```
          */
         fun <A> AttributeDescriptor<A, T, B>.toAttributeValue() =
-            converter.convertTo(getter(obj))
+            converter.convertTo(getter(from))
 
         val descriptors = if (onlyAttributes == null) {
             this.descriptors.values

@@ -101,14 +101,32 @@ val generateKotlinVersionFile by tasks.registering {
     }
 }
 
+/**
+ * Create a file containing the smithy-kotlin version to use as a resource
+ * This saves us from having to manually change version numbers in multiple places
+ */
+val generateSmithyKotlinVersionFile by tasks.registering {
+    val resourcesDir = layout.buildDirectory.dir("resources/main/aws/sdk/kotlin/hll/dynamodbmapper/plugins").get()
+    val versionFile = file("$resourcesDir/smithy-kotlin-version.txt")
+    val versionCatalogFile = rootProject.file("gradle/libs.versions.toml")
+    inputs.file(versionCatalogFile)
+    outputs.file(versionFile)
+    sourceSets.main.get().output.dir(resourcesDir)
+    doLast {
+        versionFile.writeText(libs.smithy.kotlin.runtime.core.get().version.toString())
+    }
+}
+
 tasks.withType<KotlinCompile> {
     dependsOn(generateSdkVersionFile)
     dependsOn(generateKotlinVersionFile)
+    dependsOn(generateSmithyKotlinVersionFile)
 }
 
 tasks.withType<Test> {
     dependsOn(generateSdkVersionFile)
     dependsOn(generateKotlinVersionFile)
+    dependsOn(generateSmithyKotlinVersionFile)
 }
 
 /**
@@ -136,13 +154,16 @@ tasks.register("publishSmithyKotlinToMavenLocal") {
     dependsOn(smithyKotlin.task(":runtime:observability:telemetry-defaults:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:aws-json-protocols:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:aws-protocol-core:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:protocol:aws-xml-protocols:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:http-client-engines:http-client-engine-default:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:http-client-engines:http-client-engine-okhttp:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:http-client:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:protocol:http:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:runtime-core:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:serde:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:serde:serde-form-url:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:serde:serde-json:publishToMavenLocal"))
+    dependsOn(smithyKotlin.task(":runtime:serde:serde-xml:publishToMavenLocal"))
     dependsOn(smithyKotlin.task(":runtime:smithy-client:publishToMavenLocal"))
 }
 
