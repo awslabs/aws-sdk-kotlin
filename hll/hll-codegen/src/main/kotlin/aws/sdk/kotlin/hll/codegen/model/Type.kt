@@ -93,3 +93,9 @@ fun Type.nullable() = when {
     this is TypeVar -> copy(nullable = true)
     else -> error("Unknown Type ${this::class}") // Should be unreachable, only here to make compiler happy
 }
+
+/**
+ * Returns whether this [TypeRef] is generic for an [other]
+ * For example, List<Boolean>.isGenericFor(List<Int>) returns true.
+ */
+fun TypeRef.isGenericFor(other: TypeRef): Boolean = fullName == other.fullName

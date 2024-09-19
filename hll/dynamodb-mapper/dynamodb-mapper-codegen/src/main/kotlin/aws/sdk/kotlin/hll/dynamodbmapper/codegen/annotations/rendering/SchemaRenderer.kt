@@ -4,10 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 
-import aws.sdk.kotlin.hll.codegen.model.Member
-import aws.sdk.kotlin.hll.codegen.model.Type
-import aws.sdk.kotlin.hll.codegen.model.TypeRef
-import aws.sdk.kotlin.hll.codegen.model.Types
+import aws.sdk.kotlin.hll.codegen.model.*
 import aws.sdk.kotlin.hll.codegen.rendering.*
 import aws.sdk.kotlin.hll.codegen.util.visibility
 import aws.sdk.kotlin.hll.dynamodbmapper.*
@@ -169,7 +166,7 @@ internal class SchemaRenderer(
     private fun KSType.renderValueConverter(writer: SchemaRenderer) {
         writer.apply {
             val ksType = this@renderValueConverter
-            val type = Type.from(ksType).copy(genericArgs = listOf())
+            val type = Type.from(ksType)
 
             when {
                 isEnum -> writeInline("#T()", MapperTypes.Values.Scalars.enumConverter(type))
@@ -177,14 +174,14 @@ internal class SchemaRenderer(
                 // FIXME Handle multi-module codegen rather than assuming nested classes will be in the same [ctx.pkg]
                 isUserClass -> writeInline("#T", TypeRef(ctx.pkg, "${declaration.simpleName.asString()}ValueConverter"))
 
-                type == Types.Kotlin.Collections.List -> {
+                type.isGenericFor(Types.Kotlin.Collections.List) -> {
                     val listElementType = singleArgument()
                     writeInline("#T(", MapperTypes.Values.Collections.ListConverter)
                     listElementType.renderValueConverter(this)
                     writeInline(")")
                 }
 
-                type == Types.Kotlin.Collections.Map -> {
+                type.isGenericFor(Types.Kotlin.Collections.Map) -> {
                     check(arguments.size == 2) { "Expected map type ${declaration.qualifiedName?.asString()} to have 2 arguments, got ${arguments.size}" }
 
                     val (keyType, valueType) = arguments.map {
@@ -195,6 +192,8 @@ internal class SchemaRenderer(
                     valueType.renderValueConverter(this)
                     writeInline(")")
                 }
+
+                type.isGenericFor(Types.Kotlin.Collections.Set) -> writeInline("#T", singleArgument().setValueConverter)
 
                 else -> writeInline(
                     "#T",
@@ -219,7 +218,6 @@ internal class SchemaRenderer(
                         Types.Kotlin.UShort -> MapperTypes.Values.Scalars.UShortConverter
                         Types.Kotlin.ULong -> MapperTypes.Values.Scalars.ULongConverter
 
-                        Types.Kotlin.Collections.Set -> singleArgument().setValueConverter
                         else -> error("Unsupported attribute type $this")
                     },
                 )
