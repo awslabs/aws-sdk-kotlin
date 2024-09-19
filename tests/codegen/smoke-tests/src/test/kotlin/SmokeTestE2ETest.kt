@@ -41,11 +41,11 @@ class SmokeTestE2ETest {
 private fun runSmokeTests(service: String, envVars: Map<String, String> = emptyMap()): String {
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
 
-    setUpGradlew(sdkRootDir)
+//    setUpGradlew(sdkRootDir)
 
     val output = StringBuilder()
     val smokeTests = ProcessBuilder()
-        .command("./gradlew", ":tests:codegen:smoke-tests:services:$service:smokeTest")
+        .command("gradlew.bat", ":tests:codegen:smoke-tests:services:$service:smokeTest")
         .directory(File(sdkRootDir))
         .redirectErrorStream(true)
 
