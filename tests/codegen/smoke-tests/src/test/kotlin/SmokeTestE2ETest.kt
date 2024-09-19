@@ -41,11 +41,9 @@ class SmokeTestE2ETest {
 private fun runSmokeTests(service: String, envVars: Map<String, String> = emptyMap()): String {
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
 
-//    setUpGradlew(sdkRootDir)
-
     val output = StringBuilder()
     val smokeTests = ProcessBuilder()
-        .command("gradlew.bat", ":tests:codegen:smoke-tests:services:$service:smokeTest")
+        .command("ls")
         .directory(File(sdkRootDir))
         .redirectErrorStream(true)
 
@@ -61,12 +59,6 @@ private fun runSmokeTests(service: String, envVars: Map<String, String> = emptyM
         .bufferedReader()
         .forEachLine { output.append("$it\n") }
 
+    throw Exception(output.toString())
     return output.toString()
-}
-
-private fun setUpGradlew(sdkRootDir: String) {
-    ProcessBuilder()
-        .command("chmod", "+x", "gradlew")
-        .directory(File(sdkRootDir))
-        .start()
 }
