@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.hll.codegen.core
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
+
 private const val INDENT = "    "
 
 /**
@@ -25,17 +27,18 @@ private const val INDENT = "    "
  * [dedent]. The indentation level is also adjusted by **block** methods (e.g., [openBlock], [withBlock], etc.), which
  * automatically indent/dedent around logical blocks of code.
  */
-interface CodeGenerator {
+@InternalSdkApi
+public interface CodeGenerator {
     /**
      * The import directives for the current context
      */
-    val imports: ImportDirectives
+    public val imports: ImportDirectives
 
     /**
      * Append a blank line if there isn't already one in the buffer (i.e., invoking this method multiple times
      * sequentially will append _only one_ blank line).
      */
-    fun blankLine()
+    public fun blankLine()
 
     /**
      * Close a manually-opened block of code by dedenting and appending some finalizing text
@@ -43,7 +46,7 @@ interface CodeGenerator {
      * @param args The arguments to substitute into the [template] (if any). See [TemplateEngine] for more details on
      * string templates and argument substitution.
      */
-    fun closeBlock(template: String, vararg args: Any)
+    public fun closeBlock(template: String, vararg args: Any)
 
     /**
      * Close a manually-opened block and open a new one by dedenting, appending some intermediate text, and then
@@ -53,19 +56,19 @@ interface CodeGenerator {
      * @param args The arguments to substitute into the [template] (if any). See [TemplateEngine] for more details on
      * string templates and argument substitution.
      */
-    fun closeAndOpenBlock(template: String, vararg args: Any)
+    public fun closeAndOpenBlock(template: String, vararg args: Any)
 
     /**
      * Decreases the active indentation level
      * @param levels The number of levels to decrement. Defaults to `1` if unspecified.
      */
-    fun dedent(levels: Int = 1)
+    public fun dedent(levels: Int = 1)
 
     /**
      * Increases the active indentation level
      * @param levels The number of levels to increment. Defaults to `1` if unspecified.
      */
-    fun indent(levels: Int = 1)
+    public fun indent(levels: Int = 1)
 
     /**
      * Open a block of code manually by appending some starting text and then indenting
@@ -73,12 +76,12 @@ interface CodeGenerator {
      * @param args The arguments to substitute into the [template] (if any). See [TemplateEngine] for more details on
      * string templates and argument substitution.
      */
-    fun openBlock(template: String, vararg args: Any)
+    public fun openBlock(template: String, vararg args: Any)
 
     /**
      * Sends the accumulated text of this generator to the backing buffer (e.g., writes it to a file)
      */
-    fun persist()
+    public fun persist()
 
     /**
      * Writes a logical block of text by appending some starting text, indenting, executing the [block] function which
@@ -92,7 +95,7 @@ interface CodeGenerator {
      * This function typically writes more code, which will inherit the active indentation level which will have been
      * incremented by `1` by this method.
      */
-    fun withBlock(preTemplate: String, postText: String, vararg args: Any, block: () -> Unit)
+    public fun withBlock(preTemplate: String, postText: String, vararg args: Any, block: () -> Unit)
 
     /**
      * Writes a block of documentation by automatically prepending KDoc-style comment tokens as prefixes. This method
@@ -103,14 +106,14 @@ interface CodeGenerator {
      * token. This function typically writes more code, which will inherit the active indentation prefix and be rendered
      * as a KDoc-style comment.
      */
-    fun withDocs(block: () -> Unit)
+    public fun withDocs(block: () -> Unit)
 
     /**
      * Writes a single line of documentation, wrapping it with KDoc-style comment tokens.
      * @param template The templated string of documentation to write
      * @param args The arguments to the templated string, if any
      */
-    fun docs(template: String, vararg args: Any)
+    public fun docs(template: String, vararg args: Any)
 
     /**
      * Writes a line of text, including a terminating newline (i.e., `\n`)
@@ -118,7 +121,7 @@ interface CodeGenerator {
      * @param args The arguments to substitute into the [template] (if any). See [TemplateEngine] for more details on
      * string templates and argument substitution.
      */
-    fun write(template: String, vararg args: Any)
+    public fun write(template: String, vararg args: Any)
 
     /**
      * Writes a string of text, _not_ including a terminating newline. Invoking this method repeatedly in sequence
@@ -129,7 +132,7 @@ interface CodeGenerator {
      * @param args The arguments to substitute into the [template] (if any). See [TemplateEngine] for more details on
      * string templates and argument substitution.
      */
-    fun writeInline(template: String, vararg args: Any)
+    public fun writeInline(template: String, vararg args: Any)
 }
 
 /**
@@ -153,7 +156,7 @@ interface CodeGenerator {
  * @param persistCallback A callback method to invoke when the [persist] method is called on this class
  * @param imports The import directives for the generator. These may be appended by more lines being written.
  */
-class CodeGeneratorImpl(
+internal class CodeGeneratorImpl(
     private val pkg: String,
     private val engine: TemplateEngine,
     private val persistCallback: (String) -> Unit,
@@ -168,6 +171,8 @@ class CodeGeneratorImpl(
     }
 
     override fun closeBlock(template: String, vararg args: Any) {
+        if (builder.endsWith("\n\n")) builder.deleteAt(builder.length - 1)
+
         dedent()
         write(template, *args)
     }

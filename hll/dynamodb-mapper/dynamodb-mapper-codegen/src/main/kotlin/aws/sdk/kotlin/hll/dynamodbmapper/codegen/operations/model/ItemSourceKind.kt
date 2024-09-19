@@ -4,9 +4,10 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
+import aws.sdk.kotlin.hll.codegen.model.Operation
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.TypeVar
-import aws.sdk.kotlin.hll.codegen.util.Pkg
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperPkg
 
 /**
  * Identifies a type in the `ItemSource<T>` hierarchy
@@ -42,7 +43,7 @@ internal enum class ItemSourceKind(
      * Get the [TypeRef] for the `*Spec` type for this item source kind
      * @param typeVar The type variable name to use for the generic type
      */
-    fun getSpecType(typeVar: String): TypeRef = TypeRef(Pkg.Hl.Model, "${name}Spec", listOf(TypeVar(typeVar)))
+    fun getSpecType(typeVar: String): TypeRef = TypeRef(MapperPkg.Hl.Model, "${name}Spec", listOf(TypeVar(typeVar)))
 }
 
 /**

@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
+import aws.sdk.kotlin.hll.codegen.ksp.processors.HllKspProcessor
 import aws.sdk.kotlin.hll.codegen.rendering.RenderOptions.VisibilityAttribute
 import aws.sdk.kotlin.hll.codegen.rendering.Visibility
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
@@ -19,17 +20,11 @@ import com.google.devtools.ksp.validate
 
 private val annotationName = DynamoDbItem::class.qualifiedName!!
 
-public class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) : SymbolProcessor {
-    private var invoked = false
+public class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) : HllKspProcessor(environment) {
     private val logger = environment.logger
     private val codeGenerator = environment.codeGenerator
 
-    override fun process(resolver: Resolver): List<KSAnnotated> {
-        if (invoked) {
-            return listOf()
-        }
-        invoked = true
-
+    override fun processImpl(resolver: Resolver): List<KSAnnotated> {
         logger.info("Searching for symbols annotated with $annotationName")
         val annotated = resolver.getSymbolsWithAnnotation(annotationName)
         val invalid = annotated.filterNot { it.validate() }.toList()

@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.hll.codegen.rendering
 
 import aws.sdk.kotlin.hll.codegen.core.CodeGenerator
+import aws.sdk.kotlin.runtime.InternalSdkApi
 
 /**
  * The parent class for renderers backed by a [CodeGenerator]
@@ -12,14 +13,15 @@ import aws.sdk.kotlin.hll.codegen.core.CodeGenerator
  * @param fileName The name of the file which should be created _without_ parent directory or extension (which is always
  * **.kt**)
  */
-abstract class RendererBase(
+@InternalSdkApi
+public abstract class RendererBase(
     ctx: RenderContext,
     fileName: String,
 ) : CodeGenerator by ctx.codegenFactory.generator(fileName, ctx.pkg, ctx.rendererName) {
     /**
      * Run this renderer by calling the `abstract` [generate] method and then [persist]
      */
-    fun render() {
+    public fun render() {
         generate()
         persist()
     }

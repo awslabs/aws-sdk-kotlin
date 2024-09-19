@@ -1,64 +1,94 @@
 package aws.sdk.kotlin.hll.codegen.model
 
-import aws.sdk.kotlin.hll.codegen.util.Pkg
+import aws.sdk.kotlin.runtime.InternalSdkApi
 
 /**
  * A container object for various [Type] instances
  */
-object Types {
-    object Smithy {
-        val Instant = TypeRef("aws.smithy.kotlin.runtime.time", "Instant")
-        val Url = TypeRef("aws.smithy.kotlin.runtime.net.url", "Url")
-        val Document = TypeRef("aws.smithy.kotlin.runtime.content", "Document")
+@InternalSdkApi
+public object Types {
+    @InternalSdkApi
+    public object Smithy {
+        public val Instant: TypeRef = TypeRef("aws.smithy.kotlin.runtime.time", "Instant")
+        public val Url: TypeRef = TypeRef("aws.smithy.kotlin.runtime.net.url", "Url")
+        public val Document: TypeRef = TypeRef("aws.smithy.kotlin.runtime.content", "Document")
     }
 
-    object Kotlin {
-        val ByteArray = kotlin("ByteArray")
-        val Boolean = kotlin("Boolean")
-        val Number = kotlin("Number")
-        val String = kotlin("String")
-        val StringNullable = String.nullable()
-        val Char = kotlin("Char")
-        val CharArray = kotlin("CharArray")
-        val Byte = kotlin("Byte")
-        val Short = kotlin("Short")
-        val Int = kotlin("Int")
-        val Long = kotlin("Long")
-        val Float = kotlin("Float")
-        val Double = kotlin("Double")
-        val UByte = kotlin("UByte")
-        val UInt = kotlin("UInt")
-        val ULong = kotlin("ULong")
-        val UShort = kotlin("UShort")
+    @InternalSdkApi
+    public object Kotlin {
+        public val Boolean: TypeRef = kotlin("Boolean")
+        public val Byte: TypeRef = kotlin("Byte")
+        public val ByteArray: TypeRef = kotlin("ByteArray")
+        public val Char: TypeRef = kotlin("Char")
+        public val CharArray: TypeRef = kotlin("CharArray")
+        public val Double: TypeRef = kotlin("Double")
+        public val Float: TypeRef = kotlin("Float")
+        public val Int: TypeRef = kotlin("Int")
+        public val Long: TypeRef = kotlin("Long")
+        public val Number: TypeRef = kotlin("Number")
+        public val OptIn: TypeRef = kotlin("OptIn")
+        public val Short: TypeRef = kotlin("Short")
+        public val String: TypeRef = kotlin("String")
+        public val StringNullable: TypeRef = String.nullable() as TypeRef
+        public val UByte: TypeRef = kotlin("UByte")
+        public val UInt: TypeRef = kotlin("UInt")
+        public val ULong: TypeRef = kotlin("ULong")
+        public val UShort: TypeRef = kotlin("UShort")
 
-        object Collections {
-            val Set = TypeRef(Pkg.Kotlin.Collections, "Set")
-            val List = TypeRef(Pkg.Kotlin.Collections, "List")
-            val Map = TypeRef(Pkg.Kotlin.Collections, "Map")
+        @InternalSdkApi
+        public object Collections {
+            public val List: TypeRef = TypeRef(Pkg.Kotlin.Collections, "List")
+            public val Map: TypeRef = TypeRef(Pkg.Kotlin.Collections, "Map")
+            public val Set: TypeRef = TypeRef(Pkg.Kotlin.Collections, "Set")
         }
 
         /**
          * Creates a [TypeRef] for a generic [List]
          * @param element The type of elements in the list
          */
-        fun list(element: TypeRef) = TypeRef(Pkg.Kotlin.Collections, "List", listOf(element))
+        public fun list(element: Type): TypeRef = TypeRef(Pkg.Kotlin.Collections, "List", listOf(element))
 
         /**
          * Creates a [TypeRef] for a named Kotlin type (e.g., `String`)
          */
-        fun kotlin(name: String) = TypeRef(Pkg.Kotlin.Base, name)
+        public fun kotlin(name: String): TypeRef = TypeRef(Pkg.Kotlin.Base, name)
 
         /**
          * Creates a [TypeRef] for a generic [Map]
          * @param key The type of keys in the map
          * @param value The type of values in the map
          */
-        fun map(key: TypeRef, value: TypeRef) = TypeRef(Pkg.Kotlin.Collections, "Map", listOf(key, value))
+        public fun map(key: Type, value: Type): TypeRef = TypeRef(Pkg.Kotlin.Collections, "Map", listOf(key, value))
 
         /**
          * Creates a [TypeRef] for a generic [Map] with [String] keys
          * @param value The type of values in the map
          */
-        fun stringMap(value: TypeRef) = map(String, value)
+        public fun stringMap(value: Type): TypeRef = map(String, value)
+
+        @InternalSdkApi
+        public object Jvm {
+            public val JvmName: TypeRef = TypeRef(Pkg.Kotlin.Jvm, "JvmName")
+        }
+    }
+
+    @InternalSdkApi
+    public object Kotlinx {
+        @InternalSdkApi
+        public object Coroutines {
+            @InternalSdkApi
+            public object Flow {
+                public val flow: TypeRef = TypeRef(Pkg.Kotlinx.Coroutines.Flow, "flow")
+
+                /**
+                 * Creates a [TypeRef] for a generic `Flow`
+                 * @param element The type of elements in the flow
+                 */
+                public fun flow(element: Type): TypeRef =
+                    TypeRef(Pkg.Kotlinx.Coroutines.Flow, "Flow", listOf(element))
+
+                public val transform: TypeRef = TypeRef(Pkg.Kotlinx.Coroutines.Flow, "transform")
+            }
+        }
     }
 }

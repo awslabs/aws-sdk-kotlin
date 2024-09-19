@@ -9,18 +9,17 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.hll.dynamodbmapper.model.toItem
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.Interceptor
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.LReqContext
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.DdbLocalTest
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContentEquals
-import kotlin.test.assertNotNull
 import aws.sdk.kotlin.services.dynamodb.model.QueryRequest as LowLevelQueryRequest
 
-// FIXME This whole test class is temporary because Query/Scan don't yet have pagination, object mapping, or conditions
+// FIXME Much of this test class is temporary because Query/Scan don't yet have conditions
 
 class QueryTest : DdbLocalTest() {
     companion object {
@@ -113,46 +112,35 @@ class QueryTest : DdbLocalTest() {
         val mapper = mapper { interceptors += ExpressionAttributeInterceptor("c" to "foo-corp") }
         val table = mapper.getTable(TABLE_NAME, namedEmpSchema)
 
-        val result = table.query(
-            QueryRequest(
-                null,
-                null,
-                null,
-                """companyId = :c""", // FIXME ugly hack until conditions are implemented
-                null,
-                null,
-                null,
-                null,
+        val items = table.queryPaginated {
+            keyConditionExpression = """companyId = :c""" // FIXME ugly hack until conditions are implemented
+        }.items().toList()
+
+        val expected = listOf(
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "AB0123",
+                name = "Alice Birch",
+                title = "SDE",
+                tenureYears = 5,
+            ),
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "AB0126",
+                name = "Adriana Beech",
+                title = "Manager",
+                tenureYears = 7,
+            ),
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "EF0124",
+                name = "Eddie Fraser",
+                title = "SDE",
+                tenureYears = 3,
             ),
         )
 
-        val items = assertNotNull(result.items)
-
-        val expected = listOf( // FIXME query/scan don't support object mapping yet
-            itemOf(
-                "companyId" to "foo-corp",
-                "empId" to "AB0123",
-                "name" to "Alice Birch",
-                "title" to "SDE",
-                "tenureYears" to 5,
-            ),
-            itemOf(
-                "companyId" to "foo-corp",
-                "empId" to "AB0126",
-                "name" to "Adriana Beech",
-                "title" to "Manager",
-                "tenureYears" to 7,
-            ),
-            itemOf(
-                "companyId" to "foo-corp",
-                "empId" to "EF0124",
-                "name" to "Eddie Fraser",
-                "title" to "SDE",
-                "tenureYears" to 3,
-            ),
-        )
-
-        assertContentEquals(expected, items.map { it.toItem() })
+        assertContentEquals(expected, items)
     }
 
     @Test
@@ -161,37 +149,26 @@ class QueryTest : DdbLocalTest() {
         val table = mapper.getTable(TABLE_NAME, namedEmpSchema)
         val index = table.getIndex(TITLE_INDEX_NAME, titleSchema)
 
-        val result = index.query(
-            QueryRequest(
-                null,
-                null,
-                null,
-                """title = :t""", // FIXME ugly hack until conditions are implemented
-                null,
-                null,
-                null,
-                null,
+        val items = index.queryPaginated {
+            keyConditionExpression = """title = :t""" // FIXME ugly hack until conditions are implemented
+        }.items().toList()
+
+        val expected = listOf(
+            TitleEmp(
+                companyId = "foo-corp",
+                empId = "AB0126",
+                name = "Adriana Beech",
+                title = "Manager",
+            ),
+            TitleEmp(
+                companyId = "bar-corp",
+                empId = "157X",
+                name = "Charlie Douglas",
+                title = "Manager",
             ),
         )
 
-        val items = assertNotNull(result.items)
-
-        val expected = listOf( // FIXME query/scan don't support object mapping yet
-            itemOf(
-                "companyId" to "foo-corp",
-                "empId" to "AB0126",
-                "name" to "Adriana Beech",
-                "title" to "Manager",
-            ),
-            itemOf(
-                "companyId" to "bar-corp",
-                "empId" to "157X",
-                "name" to "Charlie Douglas",
-                "title" to "Manager",
-            ),
-        )
-
-        assertContentEquals(expected, items.map { it.toItem() })
+        assertContentEquals(expected, items)
     }
 
     @Test
@@ -200,46 +177,35 @@ class QueryTest : DdbLocalTest() {
         val table = mapper.getTable(TABLE_NAME, namedEmpSchema)
         val index = table.getIndex(NAME_INDEX_NAME, empsByNameSchema)
 
-        val result = index.query(
-            QueryRequest(
-                null,
-                null,
-                null,
-                """companyId = :c""", // FIXME ugly hack until conditions are implemented
-                null,
-                null,
-                null,
-                null,
+        val items = index.queryPaginated {
+            keyConditionExpression = """companyId = :c""" // FIXME ugly hack until conditions are implemented
+        }.items().toList()
+
+        val expected = listOf(
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "AB0126",
+                name = "Adriana Beech",
+                title = "Manager",
+                tenureYears = 7,
+            ),
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "AB0123",
+                name = "Alice Birch",
+                title = "SDE",
+                tenureYears = 5,
+            ),
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "EF0124",
+                name = "Eddie Fraser",
+                title = "SDE",
+                tenureYears = 3,
             ),
         )
 
-        val items = assertNotNull(result.items)
-
-        val expected = listOf( // FIXME query/scan don't support object mapping yet
-            itemOf(
-                "companyId" to "foo-corp",
-                "empId" to "AB0126",
-                "name" to "Adriana Beech",
-                "title" to "Manager",
-                "tenureYears" to 7,
-            ),
-            itemOf(
-                "companyId" to "foo-corp",
-                "empId" to "AB0123",
-                "name" to "Alice Birch",
-                "title" to "SDE",
-                "tenureYears" to 5,
-            ),
-            itemOf(
-                "companyId" to "foo-corp",
-                "empId" to "EF0124",
-                "name" to "Eddie Fraser",
-                "title" to "SDE",
-                "tenureYears" to 3,
-            ),
-        )
-
-        assertContentEquals(expected, items.map { it.toItem() })
+        assertContentEquals(expected, items)
     }
 }
 

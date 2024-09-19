@@ -1,7 +1,6 @@
 package aws.sdk.kotlin.hll.codegen.rendering
 
 import aws.smithy.kotlin.runtime.collections.AttributeKey
-import aws.smithy.kotlin.runtime.collections.get
 
 public object RenderOptions {
 

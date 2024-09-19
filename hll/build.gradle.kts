@@ -25,8 +25,16 @@ val sdkVersion: String by project
 // capture locally - scope issue with custom KMP plugin
 val libraries = libs
 
+val optinAnnotations = listOf(
+    "aws.smithy.kotlin.runtime.InternalApi",
+    "aws.sdk.kotlin.runtime.InternalSdkApi",
+    "kotlin.RequiresOptIn",
+)
+
 subprojects {
-    if (!needsKmpConfigured) return@subprojects
+    if (!needsKmpConfigured) {
+        return@subprojects
+    }
 
     group = "aws.sdk.kotlin"
     version = sdkVersion
@@ -45,6 +53,10 @@ subprojects {
         sourceSets {
             // dependencies available for all subprojects
 
+            all {
+                optinAnnotations.forEach(languageSettings::optIn)
+            }
+
             named("commonTest") {
                 dependencies {
                     implementation(libraries.kotest.assertions.core)
@@ -58,12 +70,6 @@ subprojects {
                 }
             }
         }
-    }
-
-    kotlin.sourceSets.all {
-        // Allow subprojects to use internal APIs
-        // See https://kotlinlang.org/docs/reference/opt-in-requirements.html#opting-in-to-using-api
-        listOf("kotlin.RequiresOptIn").forEach { languageSettings.optIn(it) }
     }
 
     dependencies {

@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.hll.codegen.util
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
+
 private val codepointMap = buildMap {
     (0..255).filter(Character::isISOControl).forEach { code -> put(code, unicodeEscape(code)) }
     put(8, "\\b")
@@ -24,23 +26,27 @@ private fun unicodeEscape(code: Int): String {
  * Escape a string to one that is safe for use as a string literal by replacing various reserved characters with escape
  * sequences
  */
-fun String.escape(): String = buildString {
+@InternalSdkApi
+public fun String.escape(): String = buildString {
     this@escape.codePoints().forEach { append(codepointMap.getValue(it)) }
 }
 
 /**
  * Returns a string with the first letter capitalized (if applicable)
  */
-val String.capitalizeFirstChar: String
+@InternalSdkApi
+public val String.capitalizeFirstChar: String
     get() = replaceFirstChar { it.uppercaseChar() }
 
 /**
  * Returns a string with the first letter lowercased (if applicable)
  */
-val String.lowercaseFirstChar: String
+@InternalSdkApi
+public val String.lowercaseFirstChar: String
     get() = replaceFirstChar { it.lowercaseChar() }
 
 /**
  * Escapes and quotes a string such that it could be used in codegen
  */
-fun String.quote(): String = "\"${escape()}\""
+@InternalSdkApi
+public fun String.quote(): String = "\"${escape()}\""

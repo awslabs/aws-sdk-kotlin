@@ -7,6 +7,7 @@ package aws.sdk.kotlin.hll.codegen.core
 import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.util.quote
+import aws.sdk.kotlin.runtime.InternalSdkApi
 
 /**
  * Defines a template processor which maps an argument value of any type to a string value
@@ -14,8 +15,10 @@ import aws.sdk.kotlin.hll.codegen.util.quote
  * this processor
  * @param handler A function that accepts an input argument (as an [Any]) and returns a formatted string
  */
-data class TemplateProcessor(val key: Char, val handler: (Any) -> String) {
-    companion object {
+@InternalSdkApi
+public data class TemplateProcessor(val key: Char, val handler: (Any) -> String) {
+    @InternalSdkApi
+    public companion object {
         /**
          * Instantiate a new typed template processor which only receives arguments of a specific type [T]
          * @param T The type of argument values this processor will accept
@@ -23,22 +26,23 @@ data class TemplateProcessor(val key: Char, val handler: (Any) -> String) {
          * with this processor
          * @param handler A function that accepts an input argument of type [T] and returns a formatted string
          */
-        inline fun <reified T> typed(key: Char, crossinline handler: (T) -> String) = TemplateProcessor(key) { value ->
-            require(value is T) { "Expected argument of type ${T::class} but found $value" }
-            handler(value)
-        }
+        public inline fun <reified T> typed(key: Char, crossinline handler: (T) -> String): TemplateProcessor =
+            TemplateProcessor(key) { value ->
+                require(value is T) { "Expected argument of type ${T::class} but found $value" }
+                handler(value)
+            }
 
         /**
          * A literal template processor. This processor substitutes parameters in the form of `#L` with the [toString]
          * representation of the corresponding argument.
          */
-        val Literal = TemplateProcessor('L') { it.toString() }
+        public val Literal: TemplateProcessor = TemplateProcessor('L') { it.toString() }
 
         /**
          * A quoted string template processor. This processor substitutes parameters in the form of `#S` with the
          * quoted/escaped form of a string argument. See [quote] for more details.
          */
-        val QuotedString = typed<String>('S') { it.quote() }
+        public val QuotedString: TemplateProcessor = typed<String>('S') { it.quote() }
 
         /**
          * Creates a template processor for [Type] values. This processor substitutes parameters in the form of `#T`
@@ -47,7 +51,7 @@ data class TemplateProcessor(val key: Char, val handler: (Any) -> String) {
          * a passed argument has the same package as this processor.
          * @param imports An [ImportDirectives] collection to which new imports will be appended
          */
-        fun forType(pkg: String, imports: ImportDirectives): TemplateProcessor {
+        public fun forType(pkg: String, imports: ImportDirectives): TemplateProcessor {
             val processor = ImportingTypeProcessor(pkg, imports)
             return typed<Type>('T', processor::format)
         }

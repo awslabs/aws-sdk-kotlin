@@ -12,7 +12,22 @@ plugins {
     `maven-publish`
 }
 
+val optinAnnotations = listOf(
+    "aws.smithy.kotlin.runtime.InternalApi",
+    "aws.sdk.kotlin.runtime.InternalSdkApi",
+    "kotlin.RequiresOptIn",
+)
+
+kotlin {
+    explicitApi()
+
+    sourceSets.all {
+        optinAnnotations.forEach(languageSettings::optIn)
+    }
+}
+
 dependencies {
+    api(project(":aws-runtime:aws-core"))
     implementation(libs.ksp.api)
     implementation(libs.smithy.kotlin.runtime.core)
 

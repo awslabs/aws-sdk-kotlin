@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.hll.codegen.model
 
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 
 /**
@@ -11,15 +12,21 @@ import com.google.devtools.ksp.symbol.KSPropertyDeclaration
  * @param name The name of the member inside its parent [Structure]
  * @param type The [Type] of the member
  */
-data class Member(val name: String, val type: Type, val mutable: Boolean = false) {
-    companion object {
+@InternalSdkApi
+public data class Member(val name: String, val type: Type, val mutable: Boolean = false) {
+    @InternalSdkApi
+    public companion object {
         /**
          * Derive a [Member] from a [KSPropertyDeclaration]
          */
-        fun from(prop: KSPropertyDeclaration) = Member(
-            name = prop.simpleName.getShortName(),
-            type = Type.from(prop.type),
-            mutable = prop.isMutable,
-        )
+        public fun from(prop: KSPropertyDeclaration): Member {
+            val member = Member(
+                name = prop.simpleName.getShortName(),
+                type = Type.from(prop.type),
+                mutable = prop.isMutable,
+            )
+
+            return ModelParsingPlugin.transform(member, ModelParsingPlugin::postProcessMember)
+        }
     }
 }

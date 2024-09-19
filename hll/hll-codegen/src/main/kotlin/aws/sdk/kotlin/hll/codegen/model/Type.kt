@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.hll.codegen.model
 
+import aws.sdk.kotlin.hll.codegen.util.requireAllDistinct
+import aws.sdk.kotlin.runtime.InternalSdkApi
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.KSTypeReference
@@ -11,22 +13,24 @@ import com.google.devtools.ksp.symbol.KSTypeReference
 /**
  * Describes a Kotlin data type
  */
-sealed interface Type {
-    companion object {
+@InternalSdkApi
+public sealed interface Type {
+    @InternalSdkApi
+    public companion object {
         /**
          * Derives a [TypeRef] from a [KSClassDeclaration]
          */
-        fun from(ksClassDeclaration: KSClassDeclaration): TypeRef = from(ksClassDeclaration.asStarProjectedType())
+        public fun from(ksClassDecl: KSClassDeclaration): TypeRef = from(ksClassDecl.asStarProjectedType())
 
         /**
          * Derives a [TypeRef] from a [KSTypeReference]
          */
-        fun from(ksTypeRef: KSTypeReference): TypeRef = from(ksTypeRef.resolve())
+        public fun from(ksTypeRef: KSTypeReference): TypeRef = from(ksTypeRef.resolve())
 
         /**
          * Derives a [TypeRef] from a [KSType]
          */
-        fun from(ksType: KSType): TypeRef {
+        public fun from(ksType: KSType): TypeRef {
             val name = ksType.declaration.qualifiedName!!
             return TypeRef(
                 pkg = name.getQualifier(),
@@ -40,12 +44,12 @@ sealed interface Type {
     /**
      * Gets the short name (i.e., not including the Kotlin package) for this type
      */
-    val shortName: String
+    public val shortName: String
 
     /**
      * Indicates whether instances of this type allow nullable references
      */
-    val nullable: Boolean
+    public val nullable: Boolean
 }
 
 /**
@@ -55,11 +59,12 @@ sealed interface Type {
  * representing [kotlin.collections.List] would have a single generic argument, which may either be a concrete [TypeRef]
  * itself (e.g., `List<String>`) or a generic [TypeVar] (e.g., `List<T>`).
  * @param pkg The Kotlin package for this type
- * @param shortName The short name (i.e., not including the kotlin package) for this type
+ * @param shortName The short name (i.e., not including the Kotlin package) for this type
  * @param genericArgs Zero or more [Type] generic arguments to this type
  * @param nullable Indicates whether instances of this type allow nullable references
  */
-data class TypeRef(
+@InternalSdkApi
+public data class TypeRef(
     val pkg: String,
     override val shortName: String,
     val genericArgs: List<Type> = listOf(),
@@ -82,12 +87,14 @@ data class TypeRef(
  * @param shortName The name of this type variable
  * @param nullable Indicates whether instances of this type allow nullable references
  */
-data class TypeVar(override val shortName: String, override val nullable: Boolean = false) : Type
+@InternalSdkApi
+public data class TypeVar(override val shortName: String, override val nullable: Boolean = false) : Type
 
 /**
  * Derives a nullable [Type] equivalent for this type
  */
-fun Type.nullable() = when {
+@InternalSdkApi
+public fun Type.nullable(): Type = when {
     nullable -> this
     this is TypeRef -> copy(nullable = true)
     this is TypeVar -> copy(nullable = true)
@@ -95,7 +102,33 @@ fun Type.nullable() = when {
 }
 
 /**
+<<<<<<< HEAD
+ * Gets a collection of all generic variables referenced by this [Type]
+ */
+@InternalSdkApi
+public fun Type.genericVars(): List<TypeVar> = buildList {
+    when (val type = this@genericVars) {
+        is TypeVar -> add(type)
+        is TypeRef -> type.genericArgs.flatMap { it.genericVars() }
+    }
+}
+
+/**
+ * Formats a collection of [TypeVar] into a Kotlin generics list (e.g., `<A, B, C>`)
+ * @param postfix An optional string to include at the end of the generated string. This can be useful when the intended
+ * destination for the string is codegen and additional spacing may be required.
+ */
+@InternalSdkApi
+public fun List<TypeVar>.asParamsList(postfix: String = ""): String =
+    takeUnless { isEmpty() }
+        ?.map { it.shortName }
+        ?.requireAllDistinct()
+        ?.joinToString(", ", "<", ">$postfix")
+        ?: ""
+
+/**
  * Returns whether this [TypeRef] is generic for an [other]
  * For example, List<Boolean>.isGenericFor(List<Int>) returns true.
  */
-fun TypeRef.isGenericFor(other: TypeRef): Boolean = fullName == other.fullName
+@InternalSdkApi
+public fun TypeRef.isGenericFor(other: TypeRef): Boolean = fullName == other.fullName

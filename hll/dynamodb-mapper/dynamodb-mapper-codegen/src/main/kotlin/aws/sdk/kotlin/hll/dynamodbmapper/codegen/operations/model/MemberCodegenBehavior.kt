@@ -8,10 +8,11 @@ import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.Types
 import aws.sdk.kotlin.hll.codegen.model.nullable
-import aws.sdk.kotlin.hll.codegen.util.Pkg
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperPkg
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 
 private val attrMapTypes = setOf(MapperTypes.AttributeMap, MapperTypes.AttributeMap.nullable())
+private val attrMapListTypes = Types.Kotlin.list(MapperTypes.AttributeMap).let { setOf(it, it.nullable()) }
 
 /**
  * Describes a behavior to apply for a given [Member] in a low-level structure when generating code for an equivalent
@@ -19,19 +20,6 @@ private val attrMapTypes = setOf(MapperTypes.AttributeMap, MapperTypes.Attribute
  * behaviors that will be implemented by calling code.
  */
 internal sealed interface MemberCodegenBehavior {
-    companion object {
-        /**
-         * Identifies a [MemberCodegenBehavior] for the given [Member] by way of various heuristics
-         * @param member The [Member] for which to identify a codegen behavior
-         */
-        fun identifyFor(member: Member) = when {
-            member in unsupportedMembers -> Drop
-            member.type in attrMapTypes -> if (member.name == "key") MapKeys else MapAll
-            member.isTableName -> Hoist
-            else -> PassThrough
-        }
-    }
-
     /**
      * Indicates that a member should be copied as-is from a low-level structure to a high-level equivalent (i.e., no
      * changes to name, type, etc. are required)
@@ -47,10 +35,17 @@ internal sealed interface MemberCodegenBehavior {
 
     /**
      * Indicates that a member is an attribute map which contains _key_ attributes for a data type (as opposed to _all_
-     * attributes) and should be replaced with a generic type (i.e., a `Map<String, AttributeValue>` member
-     * in a low-level structure should be replaced with a generic `T` member in a high-level structure)
+     * attributes) and should be replaced with a generic type (i.e., a `Map<String, AttributeValue>` member in a
+     * low-level structure should be replaced with a generic `T` member in a high-level structure)
      */
     data object MapKeys : MemberCodegenBehavior
+
+    /**
+     * Indicates that a member is a list of attribute maps which may contain attributes for a data type and should be
+     * replaced with a generic list type (i.e., a `List<Map<String, AttributeValue>>` member in a low-level structure
+     * should be replaced with a generic `List<T>` member in a high-level structure)
+     */
+    data object ListMapAll : MemberCodegenBehavior
 
     /**
      * Indicates that a member is unsupported and should not be replicated from a low-level structure to the high-level
@@ -74,6 +69,7 @@ internal val Member.codegenBehavior: MemberCodegenBehavior
     get() = when {
         this in unsupportedMembers -> MemberCodegenBehavior.Drop
         type in attrMapTypes -> if (name == "key") MemberCodegenBehavior.MapKeys else MemberCodegenBehavior.MapAll
+        type in attrMapListTypes -> MemberCodegenBehavior.ListMapAll
         isTableName || isIndexName -> MemberCodegenBehavior.Hoist
         else -> MemberCodegenBehavior.PassThrough
     }
@@ -84,7 +80,7 @@ private val Member.isTableName: Boolean
 private val Member.isIndexName: Boolean
     get() = name == "indexName" && type == Types.Kotlin.StringNullable
 
-private fun llType(name: String) = TypeRef(Pkg.Ll.Model, name)
+private fun llType(name: String) = TypeRef(MapperPkg.Ll.Model, name)
 
 private val unsupportedMembers = listOf(
     // superseded by ConditionExpression

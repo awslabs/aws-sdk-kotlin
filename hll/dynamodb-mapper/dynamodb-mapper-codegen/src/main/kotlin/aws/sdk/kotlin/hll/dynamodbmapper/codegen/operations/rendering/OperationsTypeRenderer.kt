@@ -4,15 +4,15 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering
 
-import aws.sdk.kotlin.hll.codegen.model.Type
-import aws.sdk.kotlin.hll.codegen.model.TypeRef
-import aws.sdk.kotlin.hll.codegen.model.TypeVar
+import aws.sdk.kotlin.hll.codegen.model.*
+import aws.sdk.kotlin.hll.codegen.rendering.BuilderRenderer
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.codegen.util.lowercaseFirstChar
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ItemSourceKind
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.Operation
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.itemSourceKinds
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.paginationInfo
 
 /**
  * Renders the `*Operations` interface and `*OperationsImpl` class which contain a method for each codegenned
@@ -37,13 +37,41 @@ internal class OperationsTypeRenderer(
 
     override fun generate() {
         renderInterface()
+        renderDslOps()
+        renderPaginators(forResponses = true)
 
-        if (!itemSourceKind.isAbstract) {
+        if (itemSourceKind.isAbstract) {
+            blankLine()
+            renderPaginators(forItems = true)
+        } else {
             blankLine()
             renderImpl()
         }
+    }
 
-        // TODO also render DSL extension methods (e.g., table.getItem { key = ... })
+    private fun renderDslOps() = operations
+        .filterNot { it.appliesToAncestorKind() }
+        .forEach(::renderDslOp)
+
+    private fun renderDslOp(op: Operation) {
+        val builderType = BuilderRenderer.builderType(op.request.type)
+        val generics = op.request.genericVars().asParamsList(" ")
+
+        if (op.paginationInfo != null) renderManualPaginationAnnotation(op) else blankLine()
+
+        withBlock(
+            "public suspend inline fun #L#T.#L(crossinline block: #T.() -> Unit): #T =",
+            "",
+            generics,
+            interfaceType,
+            op.methodName,
+            builderType,
+            op.response.type,
+        ) {
+            write("#L(#T().apply(block).build())", op.methodName, builderType)
+        }
+
+        blankLine()
     }
 
     private fun renderImpl() {
@@ -56,13 +84,17 @@ internal class OperationsTypeRenderer(
             itemSourceKind.getSpecType("T"),
             interfaceType,
         ) {
-            operations.forEach { operation ->
+            operations.forEach { op ->
+                if (op.paginationInfo != null) renderManualPaginationAnnotation(op)
+
                 write(
                     "override suspend fun #L(request: #T) = #L(spec).execute(request)",
-                    operation.methodName,
-                    operation.request.type,
-                    OperationRenderer.factoryFunctionName(operation),
+                    op.methodName,
+                    op.request.type,
+                    OperationRenderer.factoryFunctionName(op),
                 )
+
+                if (op.paginationInfo != null) blankLine()
             }
         }
     }
@@ -79,18 +111,38 @@ internal class OperationsTypeRenderer(
         parentType?.let { writeInline(": #T ", parentType) }
 
         withBlock("{", "}") {
-            operations.forEach { operation ->
-                val overrideModifier = if (operation.appliesToAncestorKind()) " override" else ""
-                write(
-                    "public#L suspend fun #L(request: #T): #T",
-                    overrideModifier,
-                    operation.methodName,
-                    operation.request.type,
-                    operation.response.type,
-                )
-            }
+            operations.forEach(::renderOp)
         }
     }
+
+    private fun renderManualPaginationAnnotation(op: Operation) {
+        blankLine()
+        write(
+            "@#T(paginatedEquivalent = #S)",
+            MapperTypes.Annotations.ManualPagination,
+            PaginatorRenderer.paginatorName(op),
+        )
+    }
+
+    private fun renderOp(op: Operation) {
+        val overrideModifier = if (op.appliesToAncestorKind()) " override" else ""
+
+        if (op.paginationInfo != null) renderManualPaginationAnnotation(op)
+
+        write(
+            "public#L suspend fun #L(request: #T): #T",
+            overrideModifier,
+            op.methodName,
+            op.request.type,
+            op.response.type,
+        )
+
+        if (op.paginationInfo != null) blankLine()
+    }
+
+    private fun renderPaginators(forResponses: Boolean = false, forItems: Boolean = false) = operations
+        .filterNot { it.paginationInfo == null }
+        .forEach { op -> PaginatorRenderer(ctx, this, op, interfaceType, forResponses, forItems).render() }
 
     private fun Operation.appliesToAncestorKind() = itemSourceKind.parent?.let { appliesToKindOrAncestor(it) } ?: false
 }
