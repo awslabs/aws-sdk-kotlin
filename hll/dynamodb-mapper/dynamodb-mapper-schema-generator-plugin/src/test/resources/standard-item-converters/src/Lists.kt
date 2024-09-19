@@ -41,15 +41,11 @@ public data class Lists(
         if (listBoolean != other.listBoolean) return false
         if (listString != other.listString) return false
         if (listCharArray.size != other.listCharArray.size) return false
-        for (i in listCharArray.indices) {
-            if (!listCharArray[i].contentEquals(other.listCharArray[i])) return false
-        }
+        if (!listCharArray.zip(other.listCharArray).all { (a, b) -> a.contentEquals(b) }) return false
         if (listChar != other.listChar) return false
         if (listByte != other.listByte) return false
         if (listByteArray.size != other.listByteArray.size) return false
-        for (i in listByteArray.indices) {
-            if (!listByteArray[i].contentEquals(other.listByteArray[i])) return false
-        }
+        if (!listByteArray.zip(other.listByteArray).all { (a, b) -> a.contentEquals(b) }) return false
         if (listShort != other.listShort) return false
         if (listInt != other.listInt) return false
         if (listLong != other.listLong) return false
