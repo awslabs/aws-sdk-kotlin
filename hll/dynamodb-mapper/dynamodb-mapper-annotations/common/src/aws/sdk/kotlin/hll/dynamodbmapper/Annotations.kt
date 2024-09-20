@@ -27,12 +27,6 @@ public annotation class DynamoDbAttribute(val name: String)
 // https://github.com/google/ksp/issues/1129
 public annotation class DynamoDbItem(val converterName: String)
 
-//@InternalSdkApi
-public object UnspecifiedItemConverter: ItemConverter<Item> {
-    override fun convertTo(from: Item, onlyAttributes: Set<String>?): Item = from
-    override fun convertFrom(to: Item): Item = to
-}
-
 /**
  * Specifies that this property is the primary key for the item. Every top-level [DynamoDbItem] to be used in a table
  * must have exactly one partition key.
