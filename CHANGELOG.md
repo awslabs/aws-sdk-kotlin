@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.37] - 09/20/2024
+
+### Features
+* (**dynamodb**) Generate account endpoint for DynamoDB requests when the account ID is available
+* (**neptune**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**sagemaker**) Amazon SageMaker now supports using manifest files to specify the location of uncompressed model artifacts within Model Packages
+* (**sagemakermetrics**) This release introduces support for the SageMaker Metrics BatchGetMetrics API.
+* (**workspaces**) Releasing new ErrorCodes for SysPrep failures during ImageImport and CreateImage process
+
 ## [1.3.36] - 09/19/2024
 
 ### Features
