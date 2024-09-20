@@ -4,10 +4,12 @@ import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.TypeVar
 import aws.sdk.kotlin.hll.codegen.model.Types
+import aws.sdk.kotlin.runtime.InternalSdkApi
 
 /**
  * A container object for various DynamoDbMapper [Type] instances
  */
+@InternalSdkApi
 public object MapperTypes {
     // Low-level types
     public val AttributeValue: TypeRef = TypeRef(MapperPkg.Ll.Model, "AttributeValue")

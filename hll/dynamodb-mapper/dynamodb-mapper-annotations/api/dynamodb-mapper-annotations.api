@@ -6,23 +6,12 @@ public abstract interface annotation class aws/sdk/kotlin/hll/dynamodbmapper/Dyn
 }
 
 public abstract interface annotation class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbItem : java/lang/annotation/Annotation {
-	public abstract fun converter ()Ljava/lang/Class;
+	public abstract fun converterName ()Ljava/lang/String;
 }
 
 public abstract interface annotation class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbPartitionKey : java/lang/annotation/Annotation {
 }
 
 public abstract interface annotation class aws/sdk/kotlin/hll/dynamodbmapper/DynamoDbSortKey : java/lang/annotation/Annotation {
-}
-
-public final class aws/sdk/kotlin/hll/dynamodbmapper/UnspecifiedItemConverter : aws/sdk/kotlin/hll/dynamodbmapper/items/ItemConverter {
-	public static final field INSTANCE Laws/sdk/kotlin/hll/dynamodbmapper/UnspecifiedItemConverter;
-	public fun convertFrom (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
-	public synthetic fun convertFrom (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun convertTo (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
-	public fun convertTo (Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
-	public synthetic fun convertTo (Ljava/lang/Object;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
-	public synthetic fun convertTo (Ljava/lang/Object;)Ljava/lang/Object;
-	public synthetic fun convertTo (Ljava/lang/Object;Ljava/util/Set;)Laws/sdk/kotlin/hll/dynamodbmapper/model/Item;
 }
 

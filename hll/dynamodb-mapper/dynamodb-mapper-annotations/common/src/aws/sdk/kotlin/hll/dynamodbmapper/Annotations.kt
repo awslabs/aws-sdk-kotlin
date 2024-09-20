@@ -4,11 +4,6 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper
 
-import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemConverter
-import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
-import aws.sdk.kotlin.runtime.InternalSdkApi
-import kotlin.reflect.KClass
-
 /**
  * Specifies the attribute name for a property in a [DynamoDbItem]-annotated class/interface. If this annotation is not
  * included then the attribute name matches the property name.

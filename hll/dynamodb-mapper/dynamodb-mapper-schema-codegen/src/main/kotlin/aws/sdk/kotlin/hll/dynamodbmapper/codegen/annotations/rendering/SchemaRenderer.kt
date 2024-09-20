@@ -38,12 +38,6 @@ internal class SchemaRenderer(
     @OptIn(KspExperimental::class)
     private val dynamoDbItemAnnotation = classDeclaration.getAnnotationsByType(DynamoDbItem::class).single()
 
-    init {
-        val anno = classDeclaration.getAnnotationsByType(DynamoDbItem::class).single()
-        ctx.logger.warn("It has a converter ${anno.converter}")
-        ctx.logger.warn("It has a Java class ${anno.javaClass}")
-    }
-
     private val itemConverter: Type = dynamoDbItemAnnotation
         .converterName
         .takeIf { it.isNotBlank() }
@@ -300,7 +294,7 @@ internal class SchemaRenderer(
             else -> error("Unsupported key type $typeName, expected ByteArray, Int, or String")
         }
 
-    private val KSPropertyDeclaration.keySpecType: Type
+    private val KSPropertyDeclaration.keySpecType: TypeRef
         get() = when (typeName) {
             "kotlin.ByteArray" -> MapperTypes.Items.KeySpecByteArray
             "kotlin.Int" -> MapperTypes.Items.KeySpecNumber
