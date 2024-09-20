@@ -23,7 +23,9 @@ public annotation class DynamoDbAttribute(val name: String)
  * If not set, one will be automatically generated.
  */
 @Target(AnnotationTarget.CLASS)
-public annotation class DynamoDbItem(val converter: KClass<*> = UnspecifiedItemConverter::class)
+// FIXME Update to take a KClass<out ItemConverter<*>> once KSP bug is fixed
+// https://github.com/google/ksp/issues/1129
+public annotation class DynamoDbItem(val converterName: String)
 
 //@InternalSdkApi
 public object UnspecifiedItemConverter: ItemConverter<Item> {

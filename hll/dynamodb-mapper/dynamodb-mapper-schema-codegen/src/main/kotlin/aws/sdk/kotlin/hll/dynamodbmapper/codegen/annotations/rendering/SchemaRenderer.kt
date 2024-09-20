@@ -45,11 +45,11 @@ internal class SchemaRenderer(
     }
 
     private val itemConverter: Type = dynamoDbItemAnnotation
-        .takeIf { it.converter != UnspecifiedItemConverter::class }
+        .converterName
+        .takeIf { it.isNotBlank() }
         ?.let {
-            val fullName = checkNotNull(it.converter.qualifiedName) { "DynamoDbItem converter qualified name is unexpectedly null" }
-            val pkg = fullName.substringBeforeLast(".")
-            val shortName = fullName.removePrefix("$pkg.")
+            val pkg = it.substringBeforeLast(".")
+            val shortName = it.removePrefix("$pkg.")
             TypeRef(pkg, shortName)
         } ?: TypeRef(ctx.pkg, converterName)
 
@@ -89,7 +89,7 @@ internal class SchemaRenderer(
             renderBuilder()
         }
 
-        if (dynamoDbItemAnnotation.converter == UnspecifiedItemConverter::class) {
+        if (dynamoDbItemAnnotation.converterName.isBlank()) {
             renderItemConverter()
         }
 
