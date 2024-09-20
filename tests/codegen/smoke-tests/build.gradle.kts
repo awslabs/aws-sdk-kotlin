@@ -27,9 +27,11 @@ fun configureProject() {
 
     dependencies {
         codegen(project(":codegen:aws-sdk-codegen"))
-        implementation(libs.smithy.kotlin.codegen)
         codegen(libs.smithy.cli)
         codegen(libs.smithy.model)
+
+        implementation(libs.smithy.kotlin.codegen)
+        implementation("org.gradle:gradle-tooling-api:+")
 
         testImplementation(libs.kotlin.test)
     }
@@ -92,6 +94,12 @@ fun configureTasks() {
 
     tasks.build {
         dependsOn(tasks.getByName("stageServices"))
+    }
+
+    tasks.clean {
+        this@Build_gradle.projections.forEach { projection ->
+            delete("services/${projection.name}")
+        }
     }
 }
 

@@ -121,9 +121,12 @@ class GradleGenerator : KotlinIntegration {
     private fun generateSmokeTestTask(writer: GradleWriter, ctx: CodegenContext) {
         val hasSuccessResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(SuccessResponseTrait.ID)
         val hasFailedResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(FailedResponseTrait.ID)
-
-        // E2E tests don't have sdkVersion in jar names
         val inTestingEnvironment = hasFailedResponseTrait || hasSuccessResponseTrait
+
+        /**
+         * E2E tests don't have sdkVersion in jar names. They're added later for publishing.
+         * @see SmokeTestE2ETest
+         */
         val jarName = if (inTestingEnvironment) "\${project.name}-smoketests.jar" else "\${project.name}-smoketests-\$sdkVersion.jar"
 
         writer.withBlock("tasks.register<JavaExec>(#S) {", "}", "smokeTest") {
