@@ -293,7 +293,7 @@ internal class SchemaRenderer(
             else -> error("Unsupported key type $typeName, expected ByteArray, Int, or String")
         }
 
-    private val KSPropertyDeclaration.keySpecType: TypeRef
+    private val KSPropertyDeclaration.keySpecType: Type
         get() = when (typeName) {
             "kotlin.ByteArray" -> MapperTypes.Items.KeySpecByteArray
             "kotlin.Int" -> MapperTypes.Items.KeySpecNumber

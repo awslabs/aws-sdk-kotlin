@@ -23,7 +23,7 @@ dependencies {
     implementation(libs.ksp.gradle.plugin)
 
     implementation(project(":hll:hll-codegen")) // for RenderOptions
-    implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen")) // for AnnotationsProcessorOptions
+    implementation(project(":hll:dynamodb-mapper:dynamodb-mapper-schema-codegen")) // for AnnotationsProcessorOptions
     implementation(libs.smithy.kotlin.runtime.core) // for AttributeKey
 
     testImplementation(libs.junit.jupiter)
@@ -176,6 +176,8 @@ tasks.withType<Test> {
     dependsOn(":aws-runtime:aws-http:publishToMavenLocal")
     dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-annotations:publishToMavenLocal")
     dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-codegen:publishToMavenLocal")
+    dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-schema-codegen:publishToMavenLocal")
+    dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen:publishToMavenLocal")
     dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-schema-generator-plugin:publishToMavenLocal")
     dependsOn(":hll:dynamodb-mapper:dynamodb-mapper:publishToMavenLocal")
     dependsOn(":hll:hll-codegen:publishToMavenLocal")

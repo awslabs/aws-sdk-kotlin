@@ -59,14 +59,12 @@ ksp {
         "scan",
     )
     arg("op-allowlist", allowlist.joinToString(";"))
-
-    excludeProcessor("aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessor")
 }
 
 if (project.NATIVE_ENABLED) {
     // Configure KSP for commonMain source generation; https://github.com/google/ksp/issues/963#issuecomment-1894144639
 
-    dependencies.kspCommonMainMetadata(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen"))
+    dependencies.kspCommonMainMetadata(project(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen"))
 
     kotlin.sourceSets.commonMain {
         tasks.withType<KspTaskMetadata> {
@@ -79,7 +77,7 @@ if (project.NATIVE_ENABLED) {
     //  hack follows in narrative, minimally-opinionated comments.
 
     // Start by invoking the JVM-only KSP configuration
-    dependencies.kspJvm(project(":hll:dynamodb-mapper:dynamodb-mapper-codegen"))
+    dependencies.kspJvm(project(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen"))
 
     // Then we need to move the generated source from jvm to common
     val moveGenSrc by tasks.registering {

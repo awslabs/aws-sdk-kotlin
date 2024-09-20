@@ -96,6 +96,8 @@ apiValidation {
         "hll-codegen",
         "dynamodb-mapper-annotation-processor-test",
         "dynamodb-mapper-codegen",
+        "dynamodb-mapper-ops-codegen",
+        "dynamodb-mapper-schema-codegen",
         "dynamodb-mapper-schema-generator-plugin-test",
     ).filter { it in availableSubprojects } // Some projects may not be in the build depending on bootstrapping
 }
