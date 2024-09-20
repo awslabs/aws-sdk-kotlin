@@ -70,6 +70,7 @@ jobs:
           ./gradlew :build-support:test
           ./gradlew publishToMavenLocal
           ./gradlew apiCheck
+          ./gradlew build
           ./gradlew test jvmTest
           ./gradlew testAllProtocols
       - name: Save Test Reports
