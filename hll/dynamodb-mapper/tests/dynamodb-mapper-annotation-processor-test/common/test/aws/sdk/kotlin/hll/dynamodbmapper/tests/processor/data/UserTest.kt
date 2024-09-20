@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.tests.processor.data
 
 import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.hll.dynamodbmapper.tests.processor.data.aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas.UserConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.tests.processor.data.dynamodbmapper.generatedschemas.UserConverter
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import kotlin.test.Test
 import kotlin.test.assertEquals

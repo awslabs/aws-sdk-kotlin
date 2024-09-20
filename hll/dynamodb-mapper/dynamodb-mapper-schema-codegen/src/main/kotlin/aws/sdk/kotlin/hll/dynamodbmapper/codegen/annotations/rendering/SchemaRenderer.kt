@@ -23,6 +23,7 @@ import com.google.devtools.ksp.symbol.*
  * @param classDeclaration the [KSClassDeclaration] of the class
  * @param ctx the [RenderContext] of the renderer
  */
+@OptIn(KspExperimental::class)
 internal class SchemaRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
@@ -37,12 +38,18 @@ internal class SchemaRenderer(
     @OptIn(KspExperimental::class)
     private val dynamoDbItemAnnotation = classDeclaration.getAnnotationsByType(DynamoDbItem::class).single()
 
+    init {
+        val anno = classDeclaration.getAnnotationsByType(DynamoDbItem::class).single()
+        ctx.logger.warn("It has a converter ${anno.converter}")
+        ctx.logger.warn("It has a Java class ${anno.javaClass}")
+    }
+
     private val itemConverter: Type = dynamoDbItemAnnotation
-        .converterName
-        .takeIf { it.isNotBlank() }
+        .takeIf { it.converter != UnspecifiedItemConverter::class }
         ?.let {
-            val pkg = it.substringBeforeLast(".")
-            val shortName = it.removePrefix("$pkg.")
+            val fullName = checkNotNull(it.converter.qualifiedName) { "DynamoDbItem converter qualified name is unexpectedly null" }
+            val pkg = fullName.substringBeforeLast(".")
+            val shortName = fullName.removePrefix("$pkg.")
             TypeRef(pkg, shortName)
         } ?: TypeRef(ctx.pkg, converterName)
 
@@ -82,7 +89,7 @@ internal class SchemaRenderer(
             renderBuilder()
         }
 
-        if (dynamoDbItemAnnotation.converterName.isBlank()) {
+        if (dynamoDbItemAnnotation.converter == UnspecifiedItemConverter::class) {
             renderItemConverter()
         }
 

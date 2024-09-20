@@ -4,6 +4,11 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper
 
+import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemConverter
+import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
+import aws.sdk.kotlin.runtime.InternalSdkApi
+import kotlin.reflect.KClass
+
 /**
  * Specifies the attribute name for a property in a [DynamoDbItem]-annotated class/interface. If this annotation is not
  * included then the attribute name matches the property name.
@@ -14,12 +19,17 @@ public annotation class DynamoDbAttribute(val name: String)
 /**
  * Specifies that this class/interface describes an item type in a table. All public properties of this type will be mapped to
  * attributes unless they are explicitly ignored.
- * @param converterName The fully qualified name of the item converter to be used for converting this class/interface.
+ * @param converter A class reference of the item converter to be used for converting this annotated class/interface.
  * If not set, one will be automatically generated.
  */
-// FIXME Update to take a KClass<ItemConverter>, which will require splitting codegen modules due to a circular dependency
 @Target(AnnotationTarget.CLASS)
-public annotation class DynamoDbItem(val converterName: String = "")
+public annotation class DynamoDbItem(val converter: KClass<*> = UnspecifiedItemConverter::class)
+
+//@InternalSdkApi
+public object UnspecifiedItemConverter: ItemConverter<Item> {
+    override fun convertTo(from: Item, onlyAttributes: Set<String>?): Item = from
+    override fun convertFrom(to: Item): Item = to
+}
 
 /**
  * Specifies that this property is the primary key for the item. Every top-level [DynamoDbItem] to be used in a table

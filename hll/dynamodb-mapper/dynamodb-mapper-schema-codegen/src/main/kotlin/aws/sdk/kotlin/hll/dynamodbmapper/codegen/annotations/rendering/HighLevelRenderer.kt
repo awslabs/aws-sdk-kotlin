@@ -7,9 +7,12 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.rendering
 import aws.sdk.kotlin.hll.codegen.core.CodeGeneratorFactory
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.util.plus
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.AnnotationsProcessorOptions
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.annotations.DestinationPackage
 import aws.smithy.kotlin.runtime.collections.*
+import com.google.devtools.ksp.KspExperimental
+import com.google.devtools.ksp.getAnnotationsByType
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 
