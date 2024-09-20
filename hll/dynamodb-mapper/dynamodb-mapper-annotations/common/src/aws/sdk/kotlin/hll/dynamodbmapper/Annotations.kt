@@ -14,13 +14,12 @@ public annotation class DynamoDbAttribute(val name: String)
 /**
  * Specifies that this class/interface describes an item type in a table. All public properties of this type will be mapped to
  * attributes unless they are explicitly ignored.
- * @param converter A class reference of the item converter to be used for converting this annotated class/interface.
+ * @param converterName The fully qualified name of the item converter to be used for converting this class/interface.
  * If not set, one will be automatically generated.
  */
+// FIXME Update to take a KClass<ItemConverter>, which will require splitting codegen modules due to a circular dependency
 @Target(AnnotationTarget.CLASS)
-// FIXME Update to take a KClass<out ItemConverter<*>> once KSP bug is fixed
-// https://github.com/google/ksp/issues/1129
-public annotation class DynamoDbItem(val converterName: String)
+public annotation class DynamoDbItem(val converterName: String = "")
 
 /**
  * Specifies that this property is the primary key for the item. Every top-level [DynamoDbItem] to be used in a table

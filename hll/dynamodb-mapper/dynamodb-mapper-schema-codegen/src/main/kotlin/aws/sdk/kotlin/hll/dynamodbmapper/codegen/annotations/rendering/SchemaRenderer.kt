@@ -23,7 +23,6 @@ import com.google.devtools.ksp.symbol.*
  * @param classDeclaration the [KSClassDeclaration] of the class
  * @param ctx the [RenderContext] of the renderer
  */
-@OptIn(KspExperimental::class)
 internal class SchemaRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
