@@ -8,18 +8,19 @@ import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
 
 description = "Tests for smoke tests runners"
+
 plugins {
     alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
     alias(libs.plugins.kotlin.jvm)
 }
 
 val projections = listOf(
-    ProjectionMetadata("successService", "smoke-tests-success.smithy", "smithy.kotlin.traits#SuccessService"),
-    ProjectionMetadata("failureService", "smoke-tests-failure.smithy", "smithy.kotlin.traits#FailureService"),
+    Projection("successService", "smoke-tests-success.smithy", "smithy.kotlin.traits#SuccessService"),
+    Projection("failureService", "smoke-tests-failure.smithy", "smithy.kotlin.traits#FailureService"),
 )
 
 configureProject()
-configureSmithyProjections()
+configureProjections()
 configureTasks()
 
 fun configureProject() {
@@ -37,7 +38,7 @@ fun configureProject() {
     }
 }
 
-fun configureSmithyProjections() {
+fun configureProjections() {
     smithyBuild {
         val pathToSmithyModels = "src/test/resources/"
 
@@ -106,7 +107,7 @@ fun configureTasks() {
 /**
  * Holds metadata about a smithy projection
  */
-data class ProjectionMetadata(
+data class Projection(
     val name: String,
     val modelFile: String,
     val serviceShapeId: String,
