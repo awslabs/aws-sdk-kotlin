@@ -3,7 +3,6 @@ import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SERVICE_FILTER
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SKIP_TAGS
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.net.URI
 import kotlin.test.*
 
 class SmokeTestE2ETest {
@@ -46,7 +45,6 @@ private fun runSmokeTests(envVars: Map<String, String> = emptyMap()): String {
     val outputStream = ByteArrayOutputStream()
     val connector = GradleConnector.newConnector()
         .forProjectDirectory(File(sdkRootDir))
-        .useDistribution(URI("https://services.gradle.org/distributions/gradle-8.5-bin.zip"))
         .connect()
 
     try {
