@@ -1,7 +1,6 @@
-import org.gradle.tooling.GradleConnector
+import org.gradle.testkit.runner.GradleRunner
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SERVICE_FILTER
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SKIP_TAGS
-import java.io.ByteArrayOutputStream
 import java.io.File
 import kotlin.test.*
 
@@ -42,23 +41,11 @@ class SmokeTestE2ETest {
 
 private fun runSmokeTests(envVars: Map<String, String> = emptyMap()): String {
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
-    val outputStream = ByteArrayOutputStream()
-    val connector = GradleConnector.newConnector()
-        .forProjectDirectory(File(sdkRootDir))
-        .connect()
+    val runner = GradleRunner.create()
+        .withProjectDir(File(sdkRootDir))
+        .withArguments("smokeTest")
+        .withEnvironment(envVars)
+        .build()
 
-    try {
-        connector.use {
-            it.newBuild()
-                .forTasks("smokeTest")
-                .setStandardOutput(outputStream)
-                .setStandardError(outputStream)
-                .setEnvironmentVariables(envVars)
-                .run()
-        }
-    } catch (e: Exception) {
-        throw Exception(e.message + "\n\n\n\n\n" + outputStream.toString(), e)
-    }
-
-    return outputStream.toString()
+    return runner.output
 }

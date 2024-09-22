@@ -32,9 +32,9 @@ fun configureProject() {
         codegen(libs.smithy.model)
 
         implementation(libs.smithy.kotlin.codegen)
-        implementation("org.gradle:gradle-tooling-api:+")
 
         testImplementation(libs.kotlin.test)
+        testImplementation(gradleTestKit())
     }
 }
 
