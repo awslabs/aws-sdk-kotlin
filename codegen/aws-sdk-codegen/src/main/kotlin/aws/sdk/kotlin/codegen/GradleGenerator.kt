@@ -102,6 +102,7 @@ class GradleGenerator : KotlinIntegration {
                         write("description = #S", "Creates smoke tests jar")
                         write("group = #S", "application")
                         write("dependsOn(build)")
+                        write("mustRunAfter(build)")
                         withBlock("manifest {", "}") {
                             write("attributes[#S] = #S", "Main-Class", "${ctx.settings.pkg.name}.smoketests.SmokeTestsKt")
                         }
@@ -133,6 +134,7 @@ class GradleGenerator : KotlinIntegration {
             write("description = #S", "Runs smoke tests jar")
             write("group = #S", "verification")
             write("dependsOn(tasks.getByName(#S))", "smokeTestJar")
+            write("mustRunAfter(tasks.getByName(#S))", "smokeTestJar")
             emptyLine()
             write("val sdkVersion: String by project")
             write("val jarFile = file(#S)", "build/libs/$jarName")

@@ -111,6 +111,7 @@ fun configureTasks() {
             showCauses = true
             showStackTraces = true
         }
+        mustRunAfter(tasks.getByName("stageServices"))
     }
 }
 
