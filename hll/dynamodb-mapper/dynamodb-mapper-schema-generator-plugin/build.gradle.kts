@@ -177,7 +177,6 @@ tasks.withType<Test> {
     dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-annotations:publishToMavenLocal")
     dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-codegen:publishToMavenLocal")
     dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-schema-codegen:publishToMavenLocal")
-    dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen:publishToMavenLocal")
     dependsOn(":hll:dynamodb-mapper:dynamodb-mapper-schema-generator-plugin:publishToMavenLocal")
     dependsOn(":hll:dynamodb-mapper:dynamodb-mapper:publishToMavenLocal")
     dependsOn(":hll:hll-codegen:publishToMavenLocal")

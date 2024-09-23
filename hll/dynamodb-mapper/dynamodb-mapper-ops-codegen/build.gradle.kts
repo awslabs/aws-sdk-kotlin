@@ -9,7 +9,6 @@ extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.codegen.ops"
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    `maven-publish`
 }
 
 dependencies {
@@ -46,25 +45,5 @@ tasks.test {
         showStackTraces = true
         showExceptions = true
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-    }
-}
-
-val sdkVersion: String by project
-group = "aws.sdk.kotlin"
-version = sdkVersion
-
-val sourcesJar by tasks.creating(Jar::class) {
-    group = "publishing"
-    description = "Assembles Kotlin sources jar"
-    archiveClassifier.set("sources")
-    from(sourceSets.getByName("main").allSource)
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("dynamodb-mapper-ops-codegen") {
-            from(components["java"])
-            artifact(sourcesJar)
-        }
     }
 }
