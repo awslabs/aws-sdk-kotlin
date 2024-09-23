@@ -22,7 +22,6 @@ private val annotationName = DynamoDbItem::class.qualifiedName!!
 
 public class AnnotationsProcessor(private val environment: SymbolProcessorEnvironment) : HllKspProcessor(environment) {
     private val logger = environment.logger
-    private val codeGenerator = environment.codeGenerator
 
     override fun processImpl(resolver: Resolver): List<KSAnnotated> {
         logger.info("Searching for symbols annotated with $annotationName")
