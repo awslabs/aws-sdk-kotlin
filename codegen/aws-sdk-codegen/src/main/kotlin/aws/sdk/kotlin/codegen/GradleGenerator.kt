@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.codegen
 
+import aws.sdk.kotlin.codegen.smoketests.smokeTestDenyList
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
@@ -11,7 +12,7 @@ import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.FailedResponseTrait
 import software.amazon.smithy.kotlin.codegen.model.traits.SuccessResponseTrait
 import software.amazon.smithy.kotlin.codegen.rendering.GradleWriter
-import software.amazon.smithy.kotlin.codegen.utils.operations
+import software.amazon.smithy.kotlin.codegen.utils.topDownOperations
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
 
@@ -71,9 +72,9 @@ class GradleGenerator : KotlinIntegration {
                             }
                         }
                 }
-                if (ctx.model.operations(ctx.settings.service).any { it.hasTrait<SmokeTestsTrait>() }) {
-                    emptyLine()
-                    generateSmokeTestConfig(writer, ctx.settings.sdkId, ctx)
+                if (ctx.model.topDownOperations(ctx.settings.service).any { it.hasTrait<SmokeTestsTrait>() } && ctx.settings.sdkId !in smokeTestDenyList) {
+                    write("")
+                    generateSmokeTestConfig(writer, ctx)
                 }
             }
 
@@ -81,12 +82,10 @@ class GradleGenerator : KotlinIntegration {
         delegator.fileManifest.writeFile("build.gradle.kts", contents)
     }
 
-    private fun generateSmokeTestConfig(writer: GradleWriter, sdkId: String, ctx: CodegenContext) {
-        if (sdkId !in smokeTestDenyList) {
-            generateSmokeTestJarTask(writer, ctx)
-            writer.emptyLine()
-            generateSmokeTestTask(writer, ctx)
-        }
+    private fun generateSmokeTestConfig(writer: GradleWriter, ctx: CodegenContext) {
+        generateSmokeTestJarTask(writer, ctx)
+        writer.write("")
+        generateSmokeTestTask(writer, ctx)
     }
 
     /**
@@ -135,7 +134,7 @@ class GradleGenerator : KotlinIntegration {
             write("group = #S", "verification")
             write("dependsOn(tasks.getByName(#S))", "smokeTestJar")
             write("mustRunAfter(tasks.getByName(#S))", "smokeTestJar")
-            emptyLine()
+            write("")
             write("val sdkVersion: String by project")
             write("val jarFile = file(#S)", "build/libs/$jarName")
             write("classpath = files(jarFile)")

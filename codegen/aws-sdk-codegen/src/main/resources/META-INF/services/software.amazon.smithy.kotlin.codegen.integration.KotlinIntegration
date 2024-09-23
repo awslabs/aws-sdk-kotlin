@@ -43,4 +43,7 @@ aws.sdk.kotlin.codegen.customization.s3.express.SigV4S3ExpressAuthSchemeIntegrat
 aws.sdk.kotlin.codegen.customization.s3.express.S3ExpressIntegration
 aws.sdk.kotlin.codegen.customization.s3.S3ExpiresIntegration
 aws.sdk.kotlin.codegen.BusinessMetricsIntegration
-aws.sdk.kotlin.codegen.SmokeTestsDenyListIntegration
+aws.sdk.kotlin.codegen.smoketests.SmokeTestsDenyListIntegration
+aws.sdk.kotlin.codegen.smoketests.SmokeTestsCodegenRegionIntegration
+aws.sdk.kotlin.codegen.smoketests.SmokeTestSuccessHttpEngineIntegration
+aws.sdk.kotlin.codegen.smoketests.SmokeTestFailHttpEngineIntegration

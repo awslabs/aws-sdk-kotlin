@@ -1,4 +1,4 @@
-package aws.sdk.kotlin.codegen
+package aws.sdk.kotlin.codegen.smoketests
 
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
@@ -18,10 +18,10 @@ class SmokeTestsDenyListIntegration : KotlinIntegration {
 
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
-            SectionWriterBinding(SmokeTestsRunner, endpointBusinessMetricsSectionWriter),
+            SectionWriterBinding(SmokeTestsRunner, smokeTestDenyListSectionWriter),
         )
 
-    private val endpointBusinessMetricsSectionWriter = SectionWriter { writer, _ ->
+    private val smokeTestDenyListSectionWriter = SectionWriter { writer, _ ->
         writer.write("// Smoke tests for service deny listed until model is fixed")
     }
 }
