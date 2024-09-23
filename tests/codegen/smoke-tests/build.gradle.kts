@@ -95,6 +95,7 @@ fun configureTasks() {
 
     tasks.build {
         dependsOn(tasks.getByName("stageServices"))
+        mustRunAfter(tasks.getByName("stageServices"))
     }
 
     tasks.clean {
@@ -104,6 +105,9 @@ fun configureTasks() {
     }
 
     tasks.withType<Test> {
+        dependsOn(tasks.getByName("stageServices"))
+        mustRunAfter(tasks.getByName("stageServices"))
+
         testLogging {
             events("passed", "skipped", "failed")
             exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
@@ -111,7 +115,6 @@ fun configureTasks() {
             showCauses = true
             showStackTraces = true
         }
-        mustRunAfter(tasks.getByName("stageServices"))
     }
 }
 
