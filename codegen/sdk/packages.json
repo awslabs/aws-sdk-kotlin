@@ -631,6 +631,12 @@
             "brazilName": "AwsSdkKotlinDirectoryService"
         },
         {
+            "sdkId": "Directory Service Data",
+            "namespace": "aws.sdk.kotlin.services.directoryservicedata",
+            "artifactName": "directoryservicedata",
+            "brazilName": "AwsSdkKotlinDirectoryServiceData"
+        },
+        {
             "sdkId": "DocDB",
             "namespace": "aws.sdk.kotlin.services.docdb",
             "artifactName": "docdb",
@@ -1433,6 +1439,12 @@
             "namespace": "aws.sdk.kotlin.services.outposts",
             "artifactName": "outposts",
             "brazilName": "AwsSdkKotlinOutposts"
+        },
+        {
+            "sdkId": "PCS",
+            "namespace": "aws.sdk.kotlin.services.pcs",
+            "artifactName": "pcs",
+            "brazilName": "AwsSdkKotlinPcs"
         },
         {
             "sdkId": "PI",

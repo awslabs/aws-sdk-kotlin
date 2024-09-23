@@ -96,6 +96,29 @@
                 "smithy.api#sensitive": {}
             }
         },
+        "com.amazonaws.bedrockagentruntime#ActionInvocationType": {
+            "type": "enum",
+            "members": {
+                "RESULT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "RESULT"
+                    }
+                },
+                "USER_CONFIRMATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "USER_CONFIRMATION"
+                    }
+                },
+                "USER_CONFIRMATION_AND_RESULT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "USER_CONFIRMATION_AND_RESULT"
+                    }
+                }
+            }
+        },
         "com.amazonaws.bedrockagentruntime#AdditionalModelRequestFields": {
             "type": "map",
             "key": {
@@ -886,6 +909,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The request body to provide for the API request, as the agent elicited from the user.</p>"
                     }
+                },
+                "actionInvocationType": {
+                    "target": "com.amazonaws.bedrockagentruntime#ActionInvocationType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains information about the API operation to invoke.</p>"
+                    }
                 }
             },
             "traits": {
@@ -966,6 +995,12 @@
                         "smithy.api#documentation": "<p>The path to the API operation.</p>"
                     }
                 },
+                "confirmationState": {
+                    "target": "com.amazonaws.bedrockagentruntime#ConfirmationState",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Controls the API operations or functions to invoke based on the user confirmation.</p>"
+                    }
+                },
                 "responseBody": {
                     "target": "com.amazonaws.bedrockagentruntime#ResponseBody",
                     "traits": {
@@ -1026,10 +1061,10 @@
             "type": "string",
             "traits": {
                 "smithy.api#length": {
-                    "min": 20,
-                    "max": 1011
+                    "min": 1,
+                    "max": 2048
                 },
-                "smithy.api#pattern": "^arn:aws(-[^:]+)?:bedrock:[a-z0-9-]{1,20}:(([0-9]{12}:custom-model/[a-z0-9-]{1,63}[.]{1}[a-z0-9-]{1,63}/[a-z0-9]{12})|(:foundation-model/[a-z0-9-]{1,63}[.]{1}[a-z0-9-]{1,63}))$"
+                "smithy.api#pattern": "^(arn:aws(-[^:]+)?:bedrock:[a-z0-9-]{1,20}:(([0-9]{12}:custom-model/[a-z0-9-]{1,63}[.]{1}[a-z0-9-]{1,63}/[a-z0-9]{12})|(:foundation-model/[a-z0-9-]{1,63}[.]{1}[a-z0-9-]{1,63}([.:]?[a-z0-9-]{1,63}))))|(arn:aws(|-us-gov|-cn|-iso|-iso-b):bedrock:(|[0-9a-z-]{1,20}):(|[0-9]{12}):inference-profile/[a-zA-Z0-9-:.]+)|([a-z0-9-]{1,63}[.]{1}[a-z0-9-]{1,63}([.:]?[a-z0-9-]{1,63}))|(([0-9a-zA-Z][_-]?)+)$"
             }
         },
         "com.amazonaws.bedrockagentruntime#ByteContentBlob": {
@@ -1084,7 +1119,7 @@
                 "data": {
                     "target": "com.amazonaws.bedrockagentruntime#ByteContentBlob",
                     "traits": {
-                        "smithy.api#documentation": "<p>The byte value of the file to attach, encoded as Base-64 string. The maximum size of all files that is attached is 10MB. You can attach a maximum of 5 files. </p>",
+                        "smithy.api#documentation": "<p>The raw bytes of the file to attach. The maximum size of all files that is attached is 10MB. You can attach a maximum of 5 files. </p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -1169,6 +1204,23 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>Contains the JSON-formatted string returned by the API invoked by the code interpreter.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagentruntime#ConfirmationState": {
+            "type": "enum",
+            "members": {
+                "CONFIRM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CONFIRM"
+                    }
+                },
+                "DENY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DENY"
+                    }
+                }
             }
         },
         "com.amazonaws.bedrockagentruntime#ConflictException": {
@@ -1900,6 +1952,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The name of the function.</p>"
                     }
+                },
+                "actionInvocationType": {
+                    "target": "com.amazonaws.bedrockagentruntime#ActionInvocationType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains information about the function to invoke,</p>"
+                    }
                 }
             },
             "traits": {
@@ -1946,6 +2004,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The action group that the function belongs to.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "confirmationState": {
+                    "target": "com.amazonaws.bedrockagentruntime#ConfirmationState",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains the user confirmation information about the function that was called.</p>"
                     }
                 },
                 "function": {
@@ -3563,14 +3627,14 @@
                 "knowledgeBaseId": {
                     "target": "com.amazonaws.bedrockagentruntime#KnowledgeBaseId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The unique identifier of the knowledge base that is queried and the foundation model used for generation.</p>",
+                        "smithy.api#documentation": "<p>The unique identifier of the knowledge base that is queried.</p>",
                         "smithy.api#required": {}
                     }
                 },
                 "modelArn": {
                     "target": "com.amazonaws.bedrockagentruntime#BedrockModelArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ARN of the foundation model used to generate a response.</p>",
+                        "smithy.api#documentation": "<p>The ARN of the foundation model or <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html\">inference profile</a> used to generate a response.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -4672,8 +4736,7 @@
             },
             "traits": {
                 "smithy.api#length": {
-                    "min": 2,
-                    "max": 5
+                    "min": 2
                 }
             }
         },
@@ -4961,7 +5024,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Queries a knowledge base and generates responses based on the retrieved results. The response only cites sources that are relevant to the query.</p>",
+                "smithy.api#documentation": "<p>Queries a knowledge base and generates responses based on the retrieved results and using the specified foundation model or <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html\">inference profile</a>. The response only cites sources that are relevant to the query.</p>",
                 "smithy.api#http": {
                     "code": 200,
                     "method": "POST",
