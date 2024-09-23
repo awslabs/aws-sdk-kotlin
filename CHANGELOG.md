@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.38] - 09/23/2024
+
+### Features
+* (**athena**) List/Get/Update/Delete/CreateDataCatalog now integrate with AWS Glue connections. Users can create a Glue connection through Athena or use a Glue connection to define their Athena federated parameters.
+* (**bedrockagent**) Amazon Bedrock Prompt Flows and Prompt Management now supports using inference profiles to increase throughput and improve resilience.
+* (**ec2**) Amazon EC2 G6e instances powered by NVIDIA L40S Tensor Core GPUs are the most cost-efficient GPU instances for deploying generative AI models and the highest performance GPU instances for spatial computing workloads.
+* (**emrserverless**) This release adds support for job concurrency and queuing configuration at Application level.
+* (**glue**) Added AthenaProperties parameter to Glue Connections, allowing Athena to store service specific properties on Glue Connections.
+* (**rds**) Support ComputeRedundancy parameter in ModifyDBShardGroup API. Add DBShardGroupArn in DBShardGroup API response. Remove InvalidMaxAcuFault from CreateDBShardGroup and ModifyDBShardGroup API. Both API will throw InvalidParameterValueException for invalid ACU configuration.
+* (**resourceexplorer2**) AWS Resource Explorer released ListResources feature which allows customers to list all indexed AWS resources within a view.
+
+### Documentation
+* (**apigateway**) Documentation updates for Amazon API Gateway
+
 ## [1.3.37] - 09/20/2024
 
 ### Features
