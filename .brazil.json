@@ -14,7 +14,6 @@
     },
     "ignore": [
       "aws.sdk.kotlin:bom",
-      "aws.sdk.kotlin.crt:aws-crt-kotlin-android",
       "aws.sdk.kotlin:testing",
       "aws.sdk.kotlin:version-catalog"
     ],
