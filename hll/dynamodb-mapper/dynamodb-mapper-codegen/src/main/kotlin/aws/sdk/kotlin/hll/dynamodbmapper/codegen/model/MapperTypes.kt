@@ -4,129 +4,131 @@ import aws.sdk.kotlin.hll.codegen.model.Type
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.TypeVar
 import aws.sdk.kotlin.hll.codegen.model.Types
+import aws.sdk.kotlin.runtime.InternalSdkApi
 
 /**
  * A container object for various DynamoDbMapper [Type] instances
  */
-internal object MapperTypes {
+@InternalSdkApi
+public object MapperTypes {
     // Low-level types
-    val AttributeValue = TypeRef(MapperPkg.Ll.Model, "AttributeValue")
-    val AttributeMap = Types.Kotlin.map(Types.Kotlin.String, AttributeValue)
+    public val AttributeValue: TypeRef = TypeRef(MapperPkg.Ll.Model, "AttributeValue")
+    public val AttributeMap: TypeRef = Types.Kotlin.map(Types.Kotlin.String, AttributeValue)
 
     // High-level types
-    val DynamoDbMapper = TypeRef(MapperPkg.Hl.Base, "DynamoDbMapper")
+    public val DynamoDbMapper: TypeRef = TypeRef(MapperPkg.Hl.Base, "DynamoDbMapper")
 
-    object Annotations {
-        val ManualPagination = TypeRef(MapperPkg.Hl.Annotations, "ManualPagination")
+    public object Annotations {
+        public val ManualPagination: TypeRef = TypeRef(MapperPkg.Hl.Annotations, "ManualPagination")
     }
 
-    object Items {
-        fun itemSchema(typeVar: String) =
+    public object Items {
+        public fun itemSchema(typeVar: String): TypeRef =
             TypeRef(MapperPkg.Hl.Items, "ItemSchema", genericArgs = listOf(TypeVar(typeVar)))
 
-        fun itemSchemaPartitionKey(objectType: TypeRef, pkType: TypeRef) =
+        public fun itemSchemaPartitionKey(objectType: TypeRef, pkType: TypeRef): TypeRef =
             TypeRef(MapperPkg.Hl.Items, "ItemSchema.PartitionKey", genericArgs = listOf(objectType, pkType))
 
-        fun itemSchemaCompositeKey(objectType: TypeRef, pkType: TypeRef, skType: TypeRef) =
+        public fun itemSchemaCompositeKey(objectType: TypeRef, pkType: TypeRef, skType: TypeRef): TypeRef =
             TypeRef(MapperPkg.Hl.Items, "ItemSchema.CompositeKey", genericArgs = listOf(objectType, pkType, skType))
 
-        fun keySpec(keyType: TypeRef) = TypeRef(MapperPkg.Hl.Items, "KeySpec", genericArgs = listOf(keyType))
-        val KeySpecByteArray = TypeRef(MapperPkg.Hl.Items, "KeySpec.ByteArray")
-        val KeySpecNumber = TypeRef(MapperPkg.Hl.Items, "KeySpec.Number")
-        val KeySpecString = TypeRef(MapperPkg.Hl.Items, "KeySpec.String")
-        val AttributeDescriptor = TypeRef(MapperPkg.Hl.Items, "AttributeDescriptor")
+        public fun keySpec(keyType: TypeRef): TypeRef = TypeRef(MapperPkg.Hl.Items, "KeySpec", genericArgs = listOf(keyType))
+        public val KeySpecByteArray: TypeRef = TypeRef(MapperPkg.Hl.Items, "KeySpec.ByteArray")
+        public val KeySpecNumber: TypeRef = TypeRef(MapperPkg.Hl.Items, "KeySpec.Number")
+        public val KeySpecString: TypeRef = TypeRef(MapperPkg.Hl.Items, "KeySpec.String")
+        public val AttributeDescriptor: TypeRef = TypeRef(MapperPkg.Hl.Items, "AttributeDescriptor")
 
-        fun itemConverter(objectType: TypeRef) =
+        public fun itemConverter(objectType: TypeRef): TypeRef =
             TypeRef(MapperPkg.Hl.Items, "ItemConverter", genericArgs = listOf(objectType))
 
-        val SimpleItemConverter = TypeRef(MapperPkg.Hl.Items, "SimpleItemConverter")
+        public val SimpleItemConverter: TypeRef = TypeRef(MapperPkg.Hl.Items, "SimpleItemConverter")
     }
 
-    object Model {
-        fun tablePartitionKey(objectType: TypeRef, pkType: TypeRef) = TypeRef(
+    public object Model {
+        public fun tablePartitionKey(objectType: TypeRef, pkType: TypeRef): TypeRef = TypeRef(
             MapperPkg.Hl.Model,
             "Table.PartitionKey",
             genericArgs = listOf(objectType, pkType),
         )
-        fun tableCompositeKey(objectType: TypeRef, pkType: TypeRef, skType: TypeRef) = TypeRef(
+        public fun tableCompositeKey(objectType: TypeRef, pkType: TypeRef, skType: TypeRef): TypeRef = TypeRef(
             MapperPkg.Hl.Model,
             "Table.CompositeKey",
             genericArgs = listOf(objectType, pkType, skType),
         )
-        val toItem = TypeRef(MapperPkg.Hl.Model, "toItem")
+        public val toItem: TypeRef = TypeRef(MapperPkg.Hl.Model, "toItem")
     }
 
-    object Values {
-        fun valueConverter(value: Type) = TypeRef(MapperPkg.Hl.Values, "ValueConverter", genericArgs = listOf(value))
-        val ItemToValueConverter = TypeRef(MapperPkg.Hl.Values, "ItemToValueConverter")
+    public object Values {
+        public fun valueConverter(value: Type): TypeRef = TypeRef(MapperPkg.Hl.Values, "ValueConverter", genericArgs = listOf(value))
+        public val ItemToValueConverter: TypeRef = TypeRef(MapperPkg.Hl.Values, "ItemToValueConverter")
 
-        object Collections {
-            val ListConverter = TypeRef(MapperPkg.Hl.CollectionValues, "ListConverter")
-            val MapConverter = TypeRef(MapperPkg.Hl.CollectionValues, "MapConverter")
+        public object Collections {
+            public val ListConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "ListConverter")
+            public val MapConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "MapConverter")
 
-            val StringSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "StringSetConverter")
-            val CharSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "CharSetConverter")
-            val CharArraySetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "CharArraySetConverter")
+            public val StringSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "StringSetConverter")
+            public val CharSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "CharSetConverter")
+            public val CharArraySetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "CharArraySetConverter")
 
-            val ByteSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "ByteSetConverter")
-            val DoubleSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "DoubleSetConverter")
-            val FloatSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "FloatSetConverter")
-            val IntSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "IntSetConverter")
-            val LongSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "LongSetConverter")
-            val ShortSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "ShortSetConverter")
+            public val ByteSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "ByteSetConverter")
+            public val DoubleSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "DoubleSetConverter")
+            public val FloatSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "FloatSetConverter")
+            public val IntSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "IntSetConverter")
+            public val LongSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "LongSetConverter")
+            public val ShortSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "ShortSetConverter")
 
-            val UByteSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "UByteSetConverter")
-            val UIntSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "UIntSetConverter")
-            val ULongSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "ULongSetConverter")
-            val UShortSetConverter = TypeRef(MapperPkg.Hl.CollectionValues, "UShortSetConverter")
+            public val UByteSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "UByteSetConverter")
+            public val UIntSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "UIntSetConverter")
+            public val ULongSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "ULongSetConverter")
+            public val UShortSetConverter: TypeRef = TypeRef(MapperPkg.Hl.CollectionValues, "UShortSetConverter")
         }
 
-        object Scalars {
-            fun enumConverter(enumType: Type) = TypeRef(MapperPkg.Hl.ScalarValues, "EnumConverter", genericArgs = listOf(enumType))
+        public object Scalars {
+            public fun enumConverter(enumType: Type): TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "EnumConverter", genericArgs = listOf(enumType))
 
-            val BooleanConverter = TypeRef(MapperPkg.Hl.ScalarValues, "BooleanConverter")
-            val StringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "StringConverter")
-            val CharConverter = TypeRef(MapperPkg.Hl.ScalarValues, "CharConverter")
-            val CharArrayConverter = TypeRef(MapperPkg.Hl.ScalarValues, "CharArrayConverter")
+            public val BooleanConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "BooleanConverter")
+            public val StringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "StringConverter")
+            public val CharConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "CharConverter")
+            public val CharArrayConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "CharArrayConverter")
 
-            val ByteConverter = TypeRef(MapperPkg.Hl.ScalarValues, "ByteConverter")
-            val ByteArrayConverter = TypeRef(MapperPkg.Hl.ScalarValues, "ByteArrayConverter")
-            val DoubleConverter = TypeRef(MapperPkg.Hl.ScalarValues, "DoubleConverter")
-            val FloatConverter = TypeRef(MapperPkg.Hl.ScalarValues, "FloatConverter")
-            val IntConverter = TypeRef(MapperPkg.Hl.ScalarValues, "IntConverter")
-            val LongConverter = TypeRef(MapperPkg.Hl.ScalarValues, "LongConverter")
-            val ShortConverter = TypeRef(MapperPkg.Hl.ScalarValues, "ShortConverter")
-            val UByteConverter = TypeRef(MapperPkg.Hl.ScalarValues, "UByteConverter")
-            val UIntConverter = TypeRef(MapperPkg.Hl.ScalarValues, "UIntConverter")
-            val ULongConverter = TypeRef(MapperPkg.Hl.ScalarValues, "ULongConverter")
-            val UShortConverter = TypeRef(MapperPkg.Hl.ScalarValues, "UShortConverter")
+            public val ByteConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "ByteConverter")
+            public val ByteArrayConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "ByteArrayConverter")
+            public val DoubleConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "DoubleConverter")
+            public val FloatConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "FloatConverter")
+            public val IntConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "IntConverter")
+            public val LongConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "LongConverter")
+            public val ShortConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "ShortConverter")
+            public val UByteConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "UByteConverter")
+            public val UIntConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "UIntConverter")
+            public val ULongConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "ULongConverter")
+            public val UShortConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "UShortConverter")
 
-            val BooleanToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "BooleanToStringConverter")
-            val CharArrayToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "TextConverters.CharArrayToStringConverter")
-            val CharToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "TextConverters.CharToStringConverter")
-            val StringToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "TextConverters.StringToStringConverter")
-            val ByteToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.ByteToStringConverter")
-            val DoubleToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.DoubleToStringConverter")
-            val FloatToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.FloatToStringConverter")
-            val IntToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.IntToStringConverter")
-            val LongToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.LongToStringConverter")
-            val ShortToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.ShortToStringConverter")
-            val UByteToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.UByteToStringConverter")
-            val UIntToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.UIntToStringConverter")
-            val ULongToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.ULongToStringConverter")
-            val UShortToStringConverter = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.UShortToStringConverter")
+            public val BooleanToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "BooleanToStringConverter")
+            public val CharArrayToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "TextConverters.CharArrayToStringConverter")
+            public val CharToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "TextConverters.CharToStringConverter")
+            public val StringToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "TextConverters.StringToStringConverter")
+            public val ByteToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.ByteToStringConverter")
+            public val DoubleToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.DoubleToStringConverter")
+            public val FloatToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.FloatToStringConverter")
+            public val IntToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.IntToStringConverter")
+            public val LongToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.LongToStringConverter")
+            public val ShortToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.ShortToStringConverter")
+            public val UByteToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.UByteToStringConverter")
+            public val UIntToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.UIntToStringConverter")
+            public val ULongToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.ULongToStringConverter")
+            public val UShortToStringConverter: TypeRef = TypeRef(MapperPkg.Hl.ScalarValues, "NumberConverters.UShortToStringConverter")
         }
 
-        object SmithyTypes {
-            val DefaultInstantConverter = TypeRef(MapperPkg.Hl.SmithyTypeValues, "InstantConverter.Default")
-            val UrlConverter = TypeRef(MapperPkg.Hl.SmithyTypeValues, "UrlConverter")
-            val DefaultDocumentConverter = TypeRef(MapperPkg.Hl.SmithyTypeValues, "DocumentConverter.Default")
+        public object SmithyTypes {
+            public val DefaultInstantConverter: TypeRef = TypeRef(MapperPkg.Hl.SmithyTypeValues, "InstantConverter.Default")
+            public val UrlConverter: TypeRef = TypeRef(MapperPkg.Hl.SmithyTypeValues, "UrlConverter")
+            public val DefaultDocumentConverter: TypeRef = TypeRef(MapperPkg.Hl.SmithyTypeValues, "DocumentConverter.Default")
         }
     }
 
-    object PipelineImpl {
-        val HReqContextImpl = TypeRef(MapperPkg.Hl.PipelineImpl, "HReqContextImpl")
-        val MapperContextImpl = TypeRef(MapperPkg.Hl.PipelineImpl, "MapperContextImpl")
-        val Operation = TypeRef(MapperPkg.Hl.PipelineImpl, "Operation")
+    public object PipelineImpl {
+        public val HReqContextImpl: TypeRef = TypeRef(MapperPkg.Hl.PipelineImpl, "HReqContextImpl")
+        public val MapperContextImpl: TypeRef = TypeRef(MapperPkg.Hl.PipelineImpl, "MapperContextImpl")
+        public val Operation: TypeRef = TypeRef(MapperPkg.Hl.PipelineImpl, "Operation")
     }
 }
