@@ -1,5 +1,7 @@
 package aws.sdk.kotlin.codegen.smoketests
 
+import aws.sdk.kotlin.codegen.model.traits.FailedResponseTrait
+import aws.sdk.kotlin.codegen.model.traits.SuccessResponseTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
@@ -7,8 +9,6 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
-import software.amazon.smithy.kotlin.codegen.model.traits.FailedResponseTrait
-import software.amazon.smithy.kotlin.codegen.model.traits.SuccessResponseTrait
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SmokeTestHttpEngineOverride
 import software.amazon.smithy.kotlin.codegen.utils.topDownOperations
 import software.amazon.smithy.model.Model

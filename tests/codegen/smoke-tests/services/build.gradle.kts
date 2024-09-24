@@ -28,8 +28,8 @@ subprojects {
                 kotlin.srcDir("generated-src/main/kotlin")
             }
 
-            jvmTest {
-                kotlin.srcDir("generated-src-jvm/test/java")
+            commonTest {
+                kotlin.srcDir("generated-src/test/kotlin")
             }
         }
     }

@@ -17,8 +17,6 @@ local.properties
 
 # ignore generated files
 services/*/generated-src
-services/*/generated-src-jvm
 services/*/build.gradle.kts
 tests/codegen/smoke-tests/services/*/generated-src
-tests/codegen/smoke-tests/services/*/generated-src-jvm
 tests/codegen/smoke-tests/services/*/build.gradle.kts

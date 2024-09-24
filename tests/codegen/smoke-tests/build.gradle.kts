@@ -47,7 +47,7 @@ fun configureProjections() {
                 imports = listOf(layout.projectDirectory.file(pathToSmithyModels + projection.modelFile).asFile.absolutePath)
                 smithyKotlinPlugin {
                     serviceShapeId = projection.serviceShapeId
-                    packageName = "aws.sdk.kotlin.test.smoketests"
+                    packageName = "aws.sdk.kotlin.test"
                     packageVersion = "1.0"
                     buildSettings {
                         generateFullProject = false
@@ -80,10 +80,6 @@ fun configureTasks() {
                 copy {
                     from("$projectionPath/src")
                     into("$destinationPath/generated-src")
-                }
-                copy {
-                    from("$projectionPath/jvm-src")
-                    into("$destinationPath/generated-src-jvm")
                 }
                 copy {
                     from("$projectionPath/build.gradle.kts")
