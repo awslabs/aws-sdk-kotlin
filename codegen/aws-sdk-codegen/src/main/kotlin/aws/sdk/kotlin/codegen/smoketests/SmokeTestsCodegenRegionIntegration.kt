@@ -5,8 +5,8 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SmokeTestDefaultConfig
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SmokeTestAdditionalEnvVars
+import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SmokeTestDefaultConfig
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SmokeTestRegionDefault
 import software.amazon.smithy.kotlin.codegen.utils.topDownOperations
 import software.amazon.smithy.model.Model
