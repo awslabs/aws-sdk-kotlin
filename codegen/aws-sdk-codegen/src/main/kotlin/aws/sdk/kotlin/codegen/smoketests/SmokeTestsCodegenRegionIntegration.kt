@@ -1,6 +1,7 @@
 package aws.sdk.kotlin.codegen.smoketests
 
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
@@ -27,7 +28,11 @@ class SmokeTestsCodegenRegionIntegration : KotlinIntegration {
         )
 
     private val envVars = SectionWriter { writer, _ ->
-        writer.write("private val regionOverride = System.getenv(#S)", "AWS_SMOKE_TEST_REGION")
+        writer.write(
+            "private val regionOverride = #T(#S)",
+            RuntimeTypes.Core.SmokeTests.getEnv,
+            "AWS_SMOKE_TEST_REGION",
+        )
     }
 
     private val region = SectionWriter { writer, _ ->
