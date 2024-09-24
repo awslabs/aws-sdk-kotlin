@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.39] - 09/24/2024
+
+### Features
+* (**bedrock**) Add support for Cross Region Inference in Bedrock Model Evaluations.
+* (**budgets**) Releasing minor partitional endpoint updates
+* (**kinesis**) This release includes support to add tags when creating a stream
+* (**pinpointsmsvoicev2**) AWS End User Messaging SMS-Voice V2 has added support for resource policies. Use the three new APIs to create, view, edit, and delete resource policies.
+* (**sagemaker**) Adding `HiddenInstanceTypes` and `HiddenSageMakerImageVersionAliases` attribute to SageMaker API
+
 ## [1.3.38] - 09/23/2024
 
 ### Features
