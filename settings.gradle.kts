@@ -59,7 +59,7 @@ file("services").listFiles().forEach {
     }
 }
 
-// generated services by smoke tests - test suite
+// generated services by smoke tests test suite
 file("tests/codegen/smoke-tests/services").listFiles().forEach {
     if (it.isServiceDir) {
         include(":tests:codegen:smoke-tests:services:${it.name}")
