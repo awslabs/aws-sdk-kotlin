@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.40] - 09/25/2024
+
+### Documentation
+* (**cloudtrail**) Doc-only update for CloudTrail network activity events release (in preview)
+* (**ec2**) Updates to documentation for the transit gateway security group referencing feature.
+* (**fsx**) Doc-only update to address Lustre S3 hard-coded names.
+
 ## [1.3.39] - 09/24/2024
 
 ### Features
