@@ -5,6 +5,8 @@
 
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
 import aws.sdk.kotlin.gradle.kmp.*
+import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.text.ensureSuffix
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 description = "High-level libraries for the AWS SDK for Kotlin"
@@ -33,7 +35,10 @@ val optinAnnotations = listOf(
 
 subprojects {
     group = "aws.sdk.kotlin"
-    version = sdkVersion
+
+    @OptIn(InternalApi::class)
+    version = sdkVersion.ensureSuffix("-preview") // i.e 1.3.29-preview
+
     configurePublishing("aws-sdk-kotlin")
 }
 
