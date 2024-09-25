@@ -32,12 +32,15 @@ val optinAnnotations = listOf(
 )
 
 subprojects {
+    group = "aws.sdk.kotlin"
+    version = sdkVersion
+    configurePublishing("aws-sdk-kotlin")
+}
+
+subprojects {
     if (!needsKmpConfigured) {
         return@subprojects
     }
-
-    group = "aws.sdk.kotlin"
-    version = sdkVersion
 
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
@@ -45,7 +48,7 @@ subprojects {
         plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
 
-    configurePublishing("aws-sdk-kotlin")
+//    configurePublishing("aws-sdk-kotlin")
 
     kotlin {
         explicitApi()
