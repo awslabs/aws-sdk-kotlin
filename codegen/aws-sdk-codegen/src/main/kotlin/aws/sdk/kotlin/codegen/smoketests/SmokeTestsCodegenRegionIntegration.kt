@@ -18,7 +18,7 @@ import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
  */
 class SmokeTestsCodegenRegionIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
-        model.topDownOperations(settings.service).any { it.hasTrait<SmokeTestsTrait>() } && settings.sdkId !in smokeTestDenyList
+        model.topDownOperations(settings.service).any { it.hasTrait<SmokeTestsTrait>() }
 
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
@@ -29,8 +29,8 @@ class SmokeTestsCodegenRegionIntegration : KotlinIntegration {
 
     private val envVars = SectionWriter { writer, _ ->
         writer.write(
-            "private val regionOverride = #T(#S)",
-            RuntimeTypes.Core.SmokeTests.getEnv,
+            "private val regionOverride = #T.System.getenv(#S)",
+            RuntimeTypes.Core.Utils.PlatformProvider,
             "AWS_SMOKE_TEST_REGION",
         )
     }

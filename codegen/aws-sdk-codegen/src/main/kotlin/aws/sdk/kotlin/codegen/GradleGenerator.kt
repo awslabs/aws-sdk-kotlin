@@ -4,8 +4,8 @@
  */
 package aws.sdk.kotlin.codegen
 
-import aws.sdk.kotlin.codegen.model.traits.FailedResponseTrait
-import aws.sdk.kotlin.codegen.model.traits.SuccessResponseTrait
+import aws.sdk.kotlin.codegen.model.traits.testing.TestFailedResponseTrait
+import aws.sdk.kotlin.codegen.model.traits.testing.TestSuccessResponseTrait
 import aws.sdk.kotlin.codegen.smoketests.smokeTestDenyList
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
@@ -119,8 +119,8 @@ class GradleGenerator : KotlinIntegration {
      * Generates a gradle task to run smoke tests
      */
     private fun generateSmokeTestTask(writer: GradleWriter, ctx: CodegenContext) {
-        val hasSuccessResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(SuccessResponseTrait.ID)
-        val hasFailedResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(FailedResponseTrait.ID)
+        val hasSuccessResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(TestSuccessResponseTrait.ID)
+        val hasFailedResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(TestFailedResponseTrait.ID)
         val inTestingEnvironment = hasFailedResponseTrait || hasSuccessResponseTrait
 
         /**

@@ -1,7 +1,7 @@
-package aws.sdk.kotlin.codegen.smoketests
+package aws.sdk.kotlin.codegen.smoketests.testing
 
-import aws.sdk.kotlin.codegen.model.traits.FailedResponseTrait
-import aws.sdk.kotlin.codegen.model.traits.SuccessResponseTrait
+import aws.sdk.kotlin.codegen.model.traits.testing.TestFailedResponseTrait
+import aws.sdk.kotlin.codegen.model.traits.testing.TestSuccessResponseTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
@@ -16,14 +16,15 @@ import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
 
 /**
- * Adds [SuccessResponseTrait] support to smoke tests
+ * Adds [TestSuccessResponseTrait] support to smoke tests
+ * IMPORTANT: This integration is intended for use in integration or E2E tests only, not in real-life smoke tests that run
+ * against a service endpoint.
  */
 class SmokeTestSuccessHttpEngineIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
         model.topDownOperations(settings.service).any { it.hasTrait<SmokeTestsTrait>() } &&
-            settings.sdkId !in smokeTestDenyList &&
-            model.expectShape<ServiceShape>(settings.service).hasTrait(SuccessResponseTrait.ID) &&
-            !model.expectShape<ServiceShape>(settings.service).hasTrait(FailedResponseTrait.ID)
+            model.expectShape<ServiceShape>(settings.service).hasTrait(TestSuccessResponseTrait.ID) &&
+            !model.expectShape<ServiceShape>(settings.service).hasTrait(TestFailedResponseTrait.ID)
 
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(

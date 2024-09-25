@@ -45,5 +45,5 @@ aws.sdk.kotlin.codegen.customization.s3.S3ExpiresIntegration
 aws.sdk.kotlin.codegen.BusinessMetricsIntegration
 aws.sdk.kotlin.codegen.smoketests.SmokeTestsDenyListIntegration
 aws.sdk.kotlin.codegen.smoketests.SmokeTestsCodegenRegionIntegration
-aws.sdk.kotlin.codegen.smoketests.SmokeTestSuccessHttpEngineIntegration
-aws.sdk.kotlin.codegen.smoketests.SmokeTestFailHttpEngineIntegration
+aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestSuccessHttpEngineIntegration
+aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestFailHttpEngineIntegration
