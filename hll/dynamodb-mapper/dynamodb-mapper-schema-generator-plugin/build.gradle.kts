@@ -57,6 +57,24 @@ publishing {
     }
 }
 
+/**
+ * The `java-gradle-plugin` plugin creates a javadoc jar by default, conflicting with the empty javadoc jar (emptyJar)
+ * created in aws-kotlin-repo-tools. Configure dependencies and disable the emptyJar task to avoid conflicts.
+ */
+afterEvaluate {
+    tasks.withType<PublishToMavenRepository> {
+        dependsOn(tasks.named("javadocJar"))
+    }
+
+    tasks.named("publishDynamodb-mapper-schema-generatorPluginMarkerMavenPublicationToMavenLocal") {
+        dependsOn(tasks.named("javadocJar"))
+    }
+
+    tasks.named("emptyJar") {
+        enabled = false
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
     testLogging {
