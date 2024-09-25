@@ -48,8 +48,6 @@ subprojects {
         plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
 
-//    configurePublishing("aws-sdk-kotlin")
-
     kotlin {
         explicitApi()
 
