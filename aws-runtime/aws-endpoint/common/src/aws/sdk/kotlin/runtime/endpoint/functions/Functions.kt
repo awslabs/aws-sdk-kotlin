@@ -70,6 +70,7 @@ public data class PartitionConfig(
     public val implicitGlobalRegion: String? = null,
 ) {
     @Deprecated("This constructor does not support implicitGlobalRegion") // but is added for backwards compatibility
+    @JvmOverloads
     public constructor (
         name: String? = null,
         dnsSuffix: String? = null,
