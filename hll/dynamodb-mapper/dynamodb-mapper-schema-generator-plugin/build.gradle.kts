@@ -92,7 +92,9 @@ fun getHllPreviewVersion() = if (sdkVersion.contains("-SNAPSHOT")) { // i.e. 1.3
     sdkVersion
         .removeSuffix("-SNAPSHOT")
         .ensureSuffix("-beta-SNAPSHOT")
-} else sdkVersion.ensureSuffix("-beta") // i.e. 1.3.29-beta
+} else {
+    sdkVersion.ensureSuffix("-beta") // i.e. 1.3.29-beta
+}
 
 /**
  * Create a file containing the sdkVersion to use as a resource
