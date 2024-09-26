@@ -33,12 +33,16 @@ val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
 )
 
+@OptIn(InternalApi::class)
+fun getHllPreviewVersion() = if (sdkVersion.contains("-SNAPSHOT")) { // i.e. 1.3.29-beta-SNAPSHOT
+    sdkVersion
+        .removeSuffix("-SNAPSHOT")
+        .ensureSuffix("-beta-SNAPSHOT")
+} else sdkVersion.ensureSuffix("-beta") // i.e. 1.3.29-beta
+
 subprojects {
     group = "aws.sdk.kotlin"
-
-    @OptIn(InternalApi::class)
-    version = sdkVersion.ensureSuffix("-preview") // i.e 1.3.29-preview
-
+    version = getHllPreviewVersion()
     configurePublishing("aws-sdk-kotlin")
 }
 

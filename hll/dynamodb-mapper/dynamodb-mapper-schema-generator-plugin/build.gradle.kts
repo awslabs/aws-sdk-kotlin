@@ -1,3 +1,5 @@
+import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.text.ensureSuffix
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /*
@@ -45,10 +47,6 @@ gradlePlugin {
     }
 }
 
-val sdkVersion: String by project
-group = "aws.sdk.kotlin"
-version = sdkVersion
-
 publishing {
     publications {
         create<MavenPublication>("dynamodb-mapper-schema-generator-plugin") {
@@ -87,6 +85,15 @@ tasks.test {
 }
 
 // FIXME Commonize the following functions into the aws-kotlin-repo-tools build-support
+val sdkVersion: String by project
+
+@OptIn(InternalApi::class)
+fun getHllPreviewVersion() = if (sdkVersion.contains("-SNAPSHOT")) { // i.e. 1.3.29-beta-SNAPSHOT
+    sdkVersion
+        .removeSuffix("-SNAPSHOT")
+        .ensureSuffix("-beta-SNAPSHOT")
+} else sdkVersion.ensureSuffix("-beta") // i.e. 1.3.29-beta
+
 /**
  * Create a file containing the sdkVersion to use as a resource
  * This saves us from having to manually change version numbers in multiple places
@@ -99,7 +106,7 @@ val generateSdkVersionFile by tasks.registering {
     outputs.file(versionFile)
     sourceSets.main.get().output.dir(resourcesDir)
     doLast {
-        versionFile.writeText(sdkVersion)
+        versionFile.writeText(getHllPreviewVersion())
     }
 }
 

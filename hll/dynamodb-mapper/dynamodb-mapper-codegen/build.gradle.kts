@@ -30,10 +30,6 @@ kotlin {
     }
 }
 
-val sdkVersion: String by project
-group = "aws.sdk.kotlin"
-version = sdkVersion
-
 val sourcesJar by tasks.creating(Jar::class) {
     group = "publishing"
     description = "Assembles Kotlin sources jar"
