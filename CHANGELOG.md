@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.42] - 09/27/2024
+
+### Features
+* (**customerprofiles**) Introduces optional RoleArn parameter for PutIntegration request and includes RoleArn in the response of PutIntegration, GetIntegration and ListIntegrations
+* (**quicksight**) Adding personalization in QuickSight data stories. Admins can enable or disable personalization through QuickSight settings.
+* (**sesv2**) This release adds support for engagement tracking over Https using custom domains.
+
+### Documentation
+* (**securityhub**) Documentation updates for AWS Security Hub
+
+### Miscellaneous
+* Remove WorkLink service
+
 ## [1.3.41] - 09/26/2024
 
 ### Features
