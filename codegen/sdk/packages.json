@@ -2083,12 +2083,6 @@
             "brazilName": "AwsSdkKotlinWorkdocs"
         },
         {
-            "sdkId": "WorkLink",
-            "namespace": "aws.sdk.kotlin.services.worklink",
-            "artifactName": "worklink",
-            "brazilName": "AwsSdkKotlinWorklink"
-        },
-        {
             "sdkId": "WorkMail",
             "namespace": "aws.sdk.kotlin.services.workmail",
             "artifactName": "workmail",
