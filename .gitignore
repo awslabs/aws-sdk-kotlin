@@ -12,11 +12,8 @@ build/
 .idea/
 __pycache__/
 local.properties
-
 # ignore generated files
 services/*/generated-src
 services/*/build.gradle.kts
 .kotest/
 *.klib
-tests/codegen/smoke-tests/services/*/generated-src
-tests/codegen/smoke-tests/services/*/build.gradle.kts
