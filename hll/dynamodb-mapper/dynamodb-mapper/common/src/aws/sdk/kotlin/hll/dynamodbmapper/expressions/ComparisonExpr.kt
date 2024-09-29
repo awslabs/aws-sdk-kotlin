@@ -11,7 +11,9 @@ import aws.sdk.kotlin.hll.dynamodbmapper.expressions.internal.ComparisonExprImpl
  * [DynamoDB's **making comparisons** documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html#Expressions.OperatorsAndFunctions.Comparators).
  * The specific type of comparison is identified by the [comparator] field.
  */
-public interface ComparisonExpr : BooleanExpr {
+public interface ComparisonExpr :
+    BooleanExpr,
+    SortKeyExpr {
     /**
      * The [Comparator] to use in the expression
      */

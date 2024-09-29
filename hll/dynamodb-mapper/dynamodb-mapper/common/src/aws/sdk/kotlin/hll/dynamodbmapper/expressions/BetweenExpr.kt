@@ -11,7 +11,9 @@ import aws.sdk.kotlin.hll.dynamodbmapper.expressions.internal.BetweenExprImpl
  * [DynamoDB's **making comparisons** documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html#Expressions.OperatorsAndFunctions.Comparators).
  * This expression will be true if `value >= min && value <= max`.
  */
-public interface BetweenExpr : BooleanExpr {
+public interface BetweenExpr :
+    BooleanExpr,
+    SortKeyExpr {
     /**
      * The value being compared to the [min] and [max]
      */

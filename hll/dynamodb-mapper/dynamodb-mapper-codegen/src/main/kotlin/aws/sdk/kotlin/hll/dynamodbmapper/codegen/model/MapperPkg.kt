@@ -20,6 +20,12 @@ public object MapperPkg {
         public val CollectionValues: String = "$Values.collections"
         public val ScalarValues: String = "$Values.scalars"
         public val SmithyTypeValues: String = "$Values.smithytypes"
+
+        @InternalSdkApi
+        public object Expressions {
+            public val Base: String = "${Hl.Base}.expressions"
+            public val Internal: String = "$Base.internal"
+        }
     }
 
     @InternalSdkApi

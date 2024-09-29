@@ -10,7 +10,9 @@ import aws.sdk.kotlin.hll.dynamodbmapper.expressions.internal.BooleanFuncExprImp
  * Represents a function expression that yields a boolean result as described in
  * [DynamoDB's **function** documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html#Expressions.OperatorsAndFunctions.Functions)
  */
-public interface BooleanFuncExpr : BooleanExpr {
+public interface BooleanFuncExpr :
+    BooleanExpr,
+    SortKeyExpr {
     /**
      * The specific boolean function to use
      */

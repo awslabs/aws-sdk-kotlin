@@ -29,7 +29,7 @@ public object Types {
         public val OptIn: TypeRef = kotlin("OptIn")
         public val Short: TypeRef = kotlin("Short")
         public val String: TypeRef = kotlin("String")
-        public val StringNullable: TypeRef = String.nullable() as TypeRef
+        public val StringNullable: TypeRef = String.nullable()
         public val UByte: TypeRef = kotlin("UByte")
         public val UInt: TypeRef = kotlin("UInt")
         public val ULong: TypeRef = kotlin("ULong")

@@ -8,6 +8,7 @@ import aws.sdk.kotlin.hll.codegen.util.capitalizeFirstChar
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.emptyAttributes
+import aws.smithy.kotlin.runtime.collections.get
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 
 /**
@@ -47,3 +48,10 @@ public data class Operation(
         }
     }
 }
+
+/**
+ * Gets the low-level [Operation] equivalent for this high-level operation
+ */
+@InternalSdkApi
+public val Operation.lowLevel: Operation
+    get() = attributes[ModelAttributes.LowLevelOperation]

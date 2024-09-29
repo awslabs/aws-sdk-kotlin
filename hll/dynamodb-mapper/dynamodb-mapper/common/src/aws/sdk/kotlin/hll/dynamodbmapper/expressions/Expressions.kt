@@ -27,4 +27,6 @@ public sealed interface Expression {
  * items. This is a [marker interface](https://en.wikipedia.org/wiki/Marker_interface_pattern) which adds no additional
  * declarations.
  */
-public interface BooleanExpr : Expression
+public sealed interface BooleanExpr : Expression
+
+public sealed interface SortKeyExpr : Expression

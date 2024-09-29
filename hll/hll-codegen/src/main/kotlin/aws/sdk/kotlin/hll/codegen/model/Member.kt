@@ -5,15 +5,25 @@
 package aws.sdk.kotlin.hll.codegen.model
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.smithy.kotlin.runtime.collections.Attributes
+import aws.smithy.kotlin.runtime.collections.emptyAttributes
+import aws.smithy.kotlin.runtime.collections.get
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 
 /**
  * Describes a member (i.e., component field, attribute, property, etc.) of a [Structure]
  * @param name The name of the member inside its parent [Structure]
  * @param type The [Type] of the member
+ * @param mutable Whether the member is a mutable (`var`) property or an immutable (`val`) property
+ * @param attributes An [Attributes] collection for associating typed attributes with this member
  */
 @InternalSdkApi
-public data class Member(val name: String, val type: Type, val mutable: Boolean = false) {
+public data class Member(
+    val name: String,
+    val type: Type,
+    val mutable: Boolean = false,
+    val attributes: Attributes = emptyAttributes(),
+) {
     @InternalSdkApi
     public companion object {
         /**
@@ -30,3 +40,10 @@ public data class Member(val name: String, val type: Type, val mutable: Boolean 
         }
     }
 }
+
+/**
+ * Gets the low-level [Structure] equivalent for this high-level structure
+ */
+@InternalSdkApi
+public val Member.lowLevel: Member
+    get() = attributes[ModelAttributes.LowLevelMember]

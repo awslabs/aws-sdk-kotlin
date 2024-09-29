@@ -94,15 +94,32 @@ public data class TypeVar(override val shortName: String, override val nullable:
  * Derives a nullable [Type] equivalent for this type
  */
 @InternalSdkApi
-public fun Type.nullable(): Type = when {
-    nullable -> this
-    this is TypeRef -> copy(nullable = true)
-    this is TypeVar -> copy(nullable = true)
+public fun Type.nullable(value: Boolean = true): Type = when {
+    nullable == value -> this
+    this is TypeRef -> copy(nullable = value)
+    this is TypeVar -> copy(nullable = value)
     else -> error("Unknown Type ${this::class}") // Should be unreachable, only here to make compiler happy
 }
 
 /**
-<<<<<<< HEAD
+ * Derives a nullable [TypeRef] equivalent for this type reference
+ */
+@InternalSdkApi
+public fun TypeRef.nullable(value: Boolean = true): TypeRef = when {
+    nullable == value -> this
+    else -> copy(nullable = value)
+}
+
+/**
+ * Derives a nullable [TypeVar] equivalent for this type variable
+ */
+@InternalSdkApi
+public fun TypeVar.nullable(value: Boolean = true): TypeVar = when {
+    nullable == value -> this
+    else -> copy(nullable = value)
+}
+
+/**
  * Gets a collection of all generic variables referenced by this [Type]
  */
 @InternalSdkApi

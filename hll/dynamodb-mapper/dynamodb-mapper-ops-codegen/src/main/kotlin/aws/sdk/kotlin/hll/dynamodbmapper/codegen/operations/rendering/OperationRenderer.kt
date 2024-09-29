@@ -8,6 +8,7 @@ import aws.sdk.kotlin.hll.codegen.core.*
 import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.Operation
 import aws.sdk.kotlin.hll.codegen.model.Structure
+import aws.sdk.kotlin.hll.codegen.model.lowLevel
 import aws.sdk.kotlin.hll.codegen.rendering.RenderContext
 import aws.sdk.kotlin.hll.codegen.rendering.RendererBase
 import aws.sdk.kotlin.hll.codegen.rendering.info
@@ -24,9 +25,19 @@ internal class OperationRenderer(
     private val ctx: RenderContext,
     private val operation: Operation,
 ) : RendererBase(ctx, operation.name) {
-    private val members = operation.request.lowLevel.members.groupBy { m ->
-        m.codegenBehavior.also { ctx.info("  ${m.name} → $it") }
-    }
+    private val requestMembers = operation
+        .request
+        .also { ctx.info("For type ${it.lowLevelName}:") }
+        .lowLevel
+        .members
+        .groupBy { m -> m.codegenBehavior.also { ctx.info("  ${m.name} → $it") } }
+
+    private val responseMembers = operation
+        .response
+        .also { ctx.info("For type ${it.lowLevelName}:") }
+        .lowLevel
+        .members
+        .groupBy { m -> m.codegenBehavior.also { ctx.info("  ${m.name} → $it") } }
 
     companion object {
         fun factoryFunctionName(operation: Operation) = "${operation.methodName}Operation"
@@ -61,7 +72,7 @@ internal class OperationRenderer(
                 )
 
                 writeInline("serialize = { highLevelReq, schema -> highLevelReq.convert(")
-                members(MemberCodegenBehavior.Hoist) {
+                requestMembers(MemberCodegenBehavior.Hoist) {
                     if (name in itemSourceKind.hoistedFields) {
                         writeInline("spec.#L, ", name)
                     } else {
@@ -84,29 +95,57 @@ internal class OperationRenderer(
         imports += ImportDirective(operation.request.lowLevel.type, operation.request.lowLevelName)
 
         openBlock("private fun <T> #T.convert(", operation.request.type)
-        members(MemberCodegenBehavior.Hoist) { write("#L: #T, ", name, type) }
-        write("schema: #T,", MapperTypes.Items.itemSchema("T"))
+        requestMembers(MemberCodegenBehavior.Hoist) { write("#L: #T, ", name, type) }
+        write("schema: #T", MapperTypes.Items.itemSchema("T"))
         closeAndOpenBlock(") = #L {", operation.request.lowLevelName)
-        members(MemberCodegenBehavior.PassThrough) { write("#1L = this@convert.#1L", name) }
-        members(MemberCodegenBehavior.MapKeys) {
-            write("this@convert.#1L?.let { #1L = schema.converter.convertTo(it, schema.keyAttributeNames) }", name)
+        requestMembers(MemberCodegenBehavior.PassThrough) { write("#L = this@convert.#L", name, highLevel.name) }
+        requestMembers(MemberCodegenBehavior.MapKeys) {
+            write(
+                "this@convert.#L?.let { #L = schema.converter.convertTo(it, schema.keyAttributeNames) }",
+                highLevel.name,
+                name,
+            )
         }
-        members(MemberCodegenBehavior.MapAll) {
-            write("this@convert.#1L?.let { #1L = schema.converter.convertTo(it) }", name)
+        requestMembers(MemberCodegenBehavior.MapAll) {
+            write("this@convert.#L?.let { #L = schema.converter.convertTo(it) }", highLevel.name, name)
         }
-        members(MemberCodegenBehavior.ListMapAll) {
-            write("#1L = this@convert.#1L?.map { schema.converter.toItem(it) }", name)
+        requestMembers(MemberCodegenBehavior.ListMapAll) {
+            write("#L = this@convert.#L?.map { schema.converter.convertTo(it) }", name, highLevel.name)
         }
-        members(MemberCodegenBehavior.Hoist) { write("this.#1L = #1L", name) }
+        requestMembers(MemberCodegenBehavior.Hoist) { write("this.#1L = #1L", name) }
+
+        if (requestMembers.hasExpressions) renderRequestExpressions()
+
         closeBlock("}")
     }
 
-    private fun renderResponse() {
-        ctx.info("For type ${operation.response.lowLevelName}:")
-        val members = operation.response.lowLevel.members.groupBy { m ->
-            m.codegenBehavior.also { ctx.info("  ${m.name} → $it") }
+    private fun renderRequestExpressions() {
+        blankLine()
+        write("val expressionVisitor = #T()", MapperTypes.Expressions.Internal.ParameterizingExpressionVisitor)
+
+        requestMembers(MemberCodegenBehavior.ExpressionLiteral(ExpressionLiteralType.Filter)) {
+            write("#L = this@convert.#L?.accept(expressionVisitor)", name, highLevel.name)
         }
 
+        requestMembers(MemberCodegenBehavior.ExpressionLiteral(ExpressionLiteralType.KeyCondition)) {
+            write(
+                "#L = this@convert.#L?.#T(schema)?.accept(expressionVisitor)",
+                name,
+                highLevel.name,
+                MapperTypes.Expressions.Internal.toExpression,
+            )
+        }
+
+        requestMembers(MemberCodegenBehavior.ExpressionArguments(ExpressionArgumentsType.AttributeNames)) {
+            write("#L = expressionVisitor.expressionAttributeNames()", name)
+        }
+
+        requestMembers(MemberCodegenBehavior.ExpressionArguments(ExpressionArgumentsType.AttributeValues)) {
+            write("#L = expressionVisitor.expressionAttributeValues()", name)
+        }
+    }
+
+    private fun renderResponse() {
         DataTypeGenerator(ctx, this, operation.response).generate()
         blankLine()
 
@@ -119,19 +158,21 @@ internal class OperationRenderer(
             MapperTypes.Items.itemSchema("T"),
             operation.response.type,
         ) {
-            members(MemberCodegenBehavior.PassThrough) { write("#1L = this@convert.#1L", name) }
+            responseMembers(MemberCodegenBehavior.PassThrough) { write("#L = this@convert.#L", highLevel.name, name) }
 
-            members(MemberCodegenBehavior.MapKeys, MemberCodegenBehavior.MapAll) {
+            responseMembers(MemberCodegenBehavior.MapKeys, MemberCodegenBehavior.MapAll) {
                 write(
-                    "#1L = this@convert.#1L?.#2T()?.let(schema.converter::convertFrom)",
+                    "#L = this@convert.#L?.#T()?.let(schema.converter::convertFrom)",
+                    highLevel.name,
                     name,
                     MapperTypes.Model.toItem,
                 )
             }
 
-            members(MemberCodegenBehavior.ListMapAll) {
+            responseMembers(MemberCodegenBehavior.ListMapAll) {
                 write(
-                    "#1L = this@convert.#1L?.map { schema.converter.convertFrom(it.#2T()) }",
+                    "#L = this@convert.#L?.map { schema.converter.convertFrom(it.#T()) }",
+                    highLevel.name,
                     name,
                     MapperTypes.Model.toItem,
                 )
@@ -139,13 +180,32 @@ internal class OperationRenderer(
         }
     }
 
-    private inline operator fun Map<MemberCodegenBehavior, List<Member>>.invoke(
-        vararg behaviors: MemberCodegenBehavior,
-        block: Member.() -> Unit,
-    ) {
-        behaviors.forEach { behavior ->
-            get(behavior)?.forEach(block)
-        }
+    private val Member.highLevel: Member
+        get() =
+            operation.request.members.firstOrNull { it.lowLevel == this }
+                ?: operation.response.members.first { it.lowLevel == this }
+}
+
+private val Map<MemberCodegenBehavior, List<Member>>.hasExpressions: Boolean
+    get() = keys.any {
+        it is MemberCodegenBehavior.ExpressionLiteral || it is MemberCodegenBehavior.ExpressionArguments
+    }
+
+private inline operator fun Map<MemberCodegenBehavior, List<Member>>.invoke(
+    vararg behaviors: MemberCodegenBehavior,
+    block: Member.() -> Unit,
+) {
+    behaviors.forEach { behavior ->
+        get(behavior)?.forEach(block)
+    }
+}
+
+private inline operator fun Map<MemberCodegenBehavior, List<Member>>.invoke(
+    predicate: (MemberCodegenBehavior) -> Boolean,
+    block: Member.() -> Unit,
+) {
+    entries.forEach { (behavior, members) ->
+        if (predicate(behavior)) members.forEach(block)
     }
 }
 

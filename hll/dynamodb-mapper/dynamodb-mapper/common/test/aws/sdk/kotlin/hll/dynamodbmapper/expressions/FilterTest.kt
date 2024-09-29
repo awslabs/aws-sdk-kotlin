@@ -6,6 +6,8 @@ package aws.sdk.kotlin.hll.dynamodbmapper.expressions
 
 import aws.sdk.kotlin.hll.dynamodbmapper.expressions.internal.FilterImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.expressions.internal.ParameterizingExpressionVisitor
+import aws.sdk.kotlin.hll.dynamodbmapper.testutils.UByteRange
+import aws.sdk.kotlin.hll.dynamodbmapper.testutils.UShortRange
 import aws.sdk.kotlin.hll.dynamodbmapper.util.attr
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import kotlin.test.Test
@@ -44,11 +46,11 @@ class FilterTest {
 
     @Test
     fun testByteArrays() {
-        listOf(
-            byteArrayOf(1, 2, 3),
-            byteArrayOf(4, 5, 6),
-            byteArrayOf(7, 8, 9),
-        ).forEach { value ->
+        val b1 = byteArrayOf(1, 2, 3)
+        val b2 = byteArrayOf(4, 5, 6)
+        val b3 = byteArrayOf(7, 8, 9)
+
+        listOf(b1, b2, b3).forEach { value ->
             testFilters(
                 attr(value),
                 "foo = :v0" to { attr("foo") eq value },
@@ -60,6 +62,14 @@ class FilterTest {
                 "contains(foo, :v0)" to { attr("foo") contains value },
             )
         }
+
+        testFilters(
+            mapOf(
+                ":v0" to attr(b1),
+                ":v1" to attr(b2),
+            ),
+            "foo BETWEEN :v0 AND :v1" to { attr("foo").isBetween(b1, b2) },
+        )
 
         (null as ByteArray?).let { value ->
             testFilters(
@@ -792,8 +802,3 @@ class FilterTest {
         assertEquals(expectedANs, actualANs)
     }
 }
-
-// Weirdly, Kotlin stdlib doesn't have range implementations for UByte and UShort (but it _does_ have UInt and ULong).
-// So we're rolling our own here!
-private data class UByteRange(override val start: UByte, override val endInclusive: UByte) : ClosedRange<UByte>
-private data class UShortRange(override val start: UShort, override val endInclusive: UShort) : ClosedRange<UShort>

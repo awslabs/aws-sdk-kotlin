@@ -21,3 +21,12 @@ internal data class AttributePathImpl(
         }
     }
 }
+
+/**
+ * An abstract attribute path that represents the sort key in a given schema. This isn't a concrete path and will be
+ * replaced by the schema's _actual_ sort key in [KeyFilterImpl.toExpression].
+ */
+internal data object SkAttrPathImpl : AttributePath {
+    override val element get() = error("Unsupported")
+    override val parent get() = error("Unsupported")
+}

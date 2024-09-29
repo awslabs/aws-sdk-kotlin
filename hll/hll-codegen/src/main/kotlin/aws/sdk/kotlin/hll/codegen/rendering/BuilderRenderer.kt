@@ -61,8 +61,30 @@ public class BuilderRenderer(
         blankLine()
     }
 
-    private fun renderProperty(member: Member) = generator.apply {
+    private fun renderProperty(member: Member) {
+        val dslInfo = member.dslInfo
+
+        if (dslInfo != null) blankLine()
+
         write("#Lvar #L: #T = null", ctx.attributes.visibility, member.name, member.type.nullable())
-        // TODO add DSL methods for structure members
+
+        ctx.info("For member $builderName.${member.name} dslInfo = $dslInfo")
+        if (dslInfo != null) {
+            blankLine()
+            withBlock(
+                "#Lfun #L(block: #T.() -> #T) {",
+                "}",
+                ctx.attributes.visibility,
+                member.name,
+                dslInfo.interfaceType,
+                member.type,
+            ) {
+                val constructorIfNecessary = if (dslInfo.implSingleton) "" else "()"
+                write("#L = #T#L.run(block)", member.name, dslInfo.implType, constructorIfNecessary)
+            }
+            blankLine()
+        }
+
+        // TODO add DSL methods for low-level structure members
     }
 }

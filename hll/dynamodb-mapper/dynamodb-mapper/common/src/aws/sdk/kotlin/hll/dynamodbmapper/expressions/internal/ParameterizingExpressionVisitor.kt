@@ -26,7 +26,7 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  * }
  * ```
  */
-internal class ParameterizingExpressionVisitor : ExpressionVisitor<String> {
+internal open class ParameterizingExpressionVisitor : ExpressionVisitor<String> {
     private val namePlaceholders = mutableMapOf<String, String>()
     private val valuePlaceholders = mutableMapOf<AttributeValue, String>()
 
