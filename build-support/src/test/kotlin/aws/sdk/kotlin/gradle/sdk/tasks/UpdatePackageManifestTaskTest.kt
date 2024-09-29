@@ -6,7 +6,6 @@ package aws.sdk.kotlin.gradle.sdk.tasks
 
 import aws.sdk.kotlin.gradle.sdk.PackageManifest
 import aws.sdk.kotlin.gradle.sdk.PackageMetadata
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.gradle.kotlin.dsl.create
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import kotlin.test.*
 
-@OptIn(ExperimentalSerializationApi::class)
 class UpdatePackageManifestTaskTest {
     fun modelContents(sdkId: String, serviceName: String = "TestService"): String = """
         ${"$"}version: "2"
