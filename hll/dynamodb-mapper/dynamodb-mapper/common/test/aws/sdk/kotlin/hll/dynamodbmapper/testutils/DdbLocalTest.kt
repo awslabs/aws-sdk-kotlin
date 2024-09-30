@@ -104,7 +104,10 @@ abstract class DdbLocalTest : AnnotationSpec() {
      * Returns a [DynamoDbMapper] instance utilizing the DynamoDB Local instance
      * @param config A function to set the configuration of the mapper before it's built
      */
-    fun mapper(config: DynamoDbMapper.Config.Builder.() -> Unit = { }) = DynamoDbMapper(ddb, config)
+    fun mapper(
+        ddb: DynamoDbClient? = null,
+        config: DynamoDbMapper.Config.Builder.() -> Unit = { },
+    ) = DynamoDbMapper(ddb ?: this.ddb, config)
 
     @AfterAll
     fun cleanUp() {

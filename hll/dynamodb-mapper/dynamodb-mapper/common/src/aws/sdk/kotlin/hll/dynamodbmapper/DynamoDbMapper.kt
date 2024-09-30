@@ -112,4 +112,4 @@ public interface DynamoDbMapper {
 public fun DynamoDbMapper(
     client: DynamoDbClient,
     config: DynamoDbMapper.Config.Builder.() -> Unit = { },
-): DynamoDbMapper = DynamoDbMapperImpl(client, DynamoDbMapper.Config(config))
+): DynamoDbMapper = DynamoDbMapperImpl.wrapping(client, DynamoDbMapper.Config(config))

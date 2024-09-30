@@ -26,6 +26,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(project(":aws-runtime:aws-http"))
                 api(project(":services:dynamodb"))
                 api(project(":hll:hll-mapping-core"))
                 api(libs.kotlinx.coroutines.core)
