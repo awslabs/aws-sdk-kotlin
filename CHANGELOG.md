@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.44] - 10/01/2024
+
+### Features
+* (**bedrockagent**) This release adds support to stop an ongoing ingestion job using the StopIngestionJob API in Agents for Amazon Bedrock.
+* (**codeartifact**) Add support for the dual stack endpoints.
+* (**rds**) This release provides additional support for enabling Aurora Limitless Database DB clusters.
+
 ## [1.3.43] - 09/30/2024
 
 ### Features
