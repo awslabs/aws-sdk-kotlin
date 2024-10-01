@@ -68,6 +68,9 @@ afterEvaluate {
         dependsOn(tasks.named("javadocJar"))
     }
 
+    tasks.findByName("signDynamodb-mapper-schema-generatorPluginMarkerMavenPublication")
+        ?.dependsOn(tasks.named("javadocJar"))
+
     tasks.named("emptyJar") {
         enabled = false
     }
