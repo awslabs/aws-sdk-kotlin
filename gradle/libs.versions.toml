@@ -7,12 +7,12 @@ dokka-version = "1.9.10"
 aws-kotlin-repo-tools-version = "0.4.11"
 
 # libs
-coroutines-version = "1.8.1"
+coroutines-version = "1.9.0"
 atomicfu-version = "0.24.0"
 
 # smithy-kotlin codegen and runtime are versioned separately
-smithy-kotlin-runtime-version = "1.3.8"
-smithy-kotlin-codegen-version = "0.33.8"
+smithy-kotlin-runtime-version = "1.3.14"
+smithy-kotlin-codegen-version = "0.33.14"
 
 # codegen
 smithy-version = "1.50.0"

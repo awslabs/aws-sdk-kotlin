@@ -1,5 +1,162 @@
 # Changelog
 
+## [1.3.42] - 09/27/2024
+
+### Features
+* (**customerprofiles**) Introduces optional RoleArn parameter for PutIntegration request and includes RoleArn in the response of PutIntegration, GetIntegration and ListIntegrations
+* (**quicksight**) Adding personalization in QuickSight data stories. Admins can enable or disable personalization through QuickSight settings.
+* (**sesv2**) This release adds support for engagement tracking over Https using custom domains.
+
+### Documentation
+* (**securityhub**) Documentation updates for AWS Security Hub
+
+### Miscellaneous
+* Remove WorkLink service
+
+## [1.3.41] - 09/26/2024
+
+### Features
+* (**chatbot**) Return State and StateReason fields for Chatbot Channel Configurations.
+* (**lambda**) Reverting Lambda resource-based policy and block public access APIs.
+* (**organizations**) Add support for policy operations on the CHATBOT_POLICY policy type.
+* (**sagemaker**) Adding `TagPropagation` attribute to Sagemaker API
+
+### Documentation
+* (**pcs**) AWS PCS API documentation - Edited the description of the iamInstanceProfileArn parameter of the CreateComputeNodeGroup and UpdateComputeNodeGroup actions; edited the description of the SlurmCustomSetting data type to list the supported parameters for clusters and compute node groups.
+* (**rdsdata**) Documentation update for RDS Data API to reflect support for Aurora MySQL Serverless v2 and Provisioned DB clusters.
+
+## [1.3.40] - 09/25/2024
+
+### Documentation
+* (**cloudtrail**) Doc-only update for CloudTrail network activity events release (in preview)
+* (**ec2**) Updates to documentation for the transit gateway security group referencing feature.
+* (**fsx**) Doc-only update to address Lustre S3 hard-coded names.
+
+## [1.3.39] - 09/24/2024
+
+### Features
+* (**bedrock**) Add support for Cross Region Inference in Bedrock Model Evaluations.
+* (**budgets**) Releasing minor partitional endpoint updates
+* (**kinesis**) This release includes support to add tags when creating a stream
+* (**pinpointsmsvoicev2**) AWS End User Messaging SMS-Voice V2 has added support for resource policies. Use the three new APIs to create, view, edit, and delete resource policies.
+* (**sagemaker**) Adding `HiddenInstanceTypes` and `HiddenSageMakerImageVersionAliases` attribute to SageMaker API
+
+## [1.3.38] - 09/23/2024
+
+### Features
+* (**athena**) List/Get/Update/Delete/CreateDataCatalog now integrate with AWS Glue connections. Users can create a Glue connection through Athena or use a Glue connection to define their Athena federated parameters.
+* (**bedrockagent**) Amazon Bedrock Prompt Flows and Prompt Management now supports using inference profiles to increase throughput and improve resilience.
+* (**ec2**) Amazon EC2 G6e instances powered by NVIDIA L40S Tensor Core GPUs are the most cost-efficient GPU instances for deploying generative AI models and the highest performance GPU instances for spatial computing workloads.
+* (**emrserverless**) This release adds support for job concurrency and queuing configuration at Application level.
+* (**glue**) Added AthenaProperties parameter to Glue Connections, allowing Athena to store service specific properties on Glue Connections.
+* (**rds**) Support ComputeRedundancy parameter in ModifyDBShardGroup API. Add DBShardGroupArn in DBShardGroup API response. Remove InvalidMaxAcuFault from CreateDBShardGroup and ModifyDBShardGroup API. Both API will throw InvalidParameterValueException for invalid ACU configuration.
+* (**resourceexplorer2**) AWS Resource Explorer released ListResources feature which allows customers to list all indexed AWS resources within a view.
+
+### Documentation
+* (**apigateway**) Documentation updates for Amazon API Gateway
+
+## [1.3.37] - 09/20/2024
+
+### Features
+* (**dynamodb**) Generate account endpoint for DynamoDB requests when the account ID is available
+* (**neptune**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+* (**sagemaker**) Amazon SageMaker now supports using manifest files to specify the location of uncompressed model artifacts within Model Packages
+* (**sagemakermetrics**) This release introduces support for the SageMaker Metrics BatchGetMetrics API.
+* (**workspaces**) Releasing new ErrorCodes for SysPrep failures during ImageImport and CreateImage process
+
+## [1.3.36] - 09/19/2024
+
+### Features
+* (**codeconnections**) This release adds the PullRequestComment field to CreateSyncConfiguration API input, UpdateSyncConfiguration API input, GetSyncConfiguration API output and ListSyncConfiguration API output
+* (**glue**) This change is for releasing TestConnection api SDK model
+* (**lambda**) Tagging support for Lambda event source mapping, and code signing configuration resources.
+* (**mediaconvert**) This release provides support for additional DRM configurations per SPEKE Version 2.0.
+* (**medialive**) Adds Bandwidth Reduction Filtering for HD AVC and HEVC encodes, multiplex container settings.
+* (**quicksight**) QuickSight: 1. Add new API - ListFoldersForResource. 2. Commit mode adds visibility configuration of Apply button on multi-select controls for authors.
+* (**sagemaker**) Introduced support for G6e instance types on SageMaker Studio for JupyterLab and CodeEditor applications.
+* (**workspacesweb**) WorkSpaces Secure Browser now enables Administrators to view and manage end-user browsing sessions via Session Management APIs.
+
+### Miscellaneous
+* Upgrade to kotlinx.coroutines 1.9.0
+
+## [1.3.35] - 09/18/2024
+
+### Features
+* (**costexplorer**) This release extends the GetReservationPurchaseRecommendation API to support recommendations for Amazon DynamoDB reservations.
+* (**directoryservice**) Added new APIs for enabling, disabling, and describing access to the AWS Directory Service Data API
+* (**directoryservicedata**) Added new AWS Directory Service Data API, enabling you to manage data stored in AWS Directory Service directories. This includes APIs for creating, reading, updating, and deleting directory users, groups, and group memberships.
+* (**guardduty**) Add `launchType` and `sourceIPs` fields to GuardDuty findings.
+* (**mailmanager**) Introduce a new RuleSet condition evaluation, where customers can set up a StringExpression with a MimeHeader condition. This condition will perform the necessary validation based on the X-header provided by customers.
+* (**s3**) Added SSE-KMS support for directory buckets.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation with information upgrading snapshots with unsupported engine versions for RDS for MySQL and RDS for PostgreSQL.
+
+## [1.3.34] - 09/17/2024
+
+### Features
+* (**codebuild**) GitLab Enhancements - Add support for Self-Hosted GitLab runners in CodeBuild. Add group webhooks
+* (**ecr**) The `DescribeImageScanning` API now includes `fixAvailable`, `exploitAvailable`, and `fixedInVersion` fields to provide more detailed information about the availability of fixes, exploits, and fixed versions for identified image vulnerabilities.
+* (**lambda**) Support for JSON resource-based policies and block public access
+* (**ssm**) Support for additional levels of cross-account, cross-Region organizational units in Automation. Various documentation updates.
+
+### Documentation
+* (**ecs**) This is a documentation only release to address various tickets.
+* (**rds**) Updates Amazon RDS documentation with configuration information about the BYOL model for RDS for Db2.
+
+## [1.3.33] - 09/16/2024
+
+### Features
+* (**bedrock**) This feature adds cross account s3 bucket and VPC support to ModelInvocation jobs. To use a cross account bucket, pass in the accountId of the bucket to s3BucketOwner in the ModelInvocationJobInputDataConfig or ModelInvocationJobOutputDataConfig.
+* (**iot**) This release adds additional enhancements to AWS IoT Device Management Software Package Catalog and Jobs. It also adds SBOM support in Software Package Version.
+* (**medialive**) Removing the ON_PREMISE enum from the input settings field.
+* (**rds**) Launching Global Cluster tagging.
+
+### Documentation
+* (**organizations**) Doc only update for AWS Organizations that fixes several customer-reported issues
+* (**pcaconnectorscep**) This is a general availability (GA) release of Connector for SCEP, a feature of AWS Private CA. Connector for SCEP links your SCEP-enabled and mobile device management systems to AWS Private CA for digital signature installation and certificate management.
+
+## [1.3.32] - 09/13/2024
+
+### Documentation
+* (**amplify**) Doc only update to Amplify to explain platform setting for Next.js 14 SSG only applications
+* (**ivs**) Updates to all tags descriptions.
+* (**ivschat**) Updates to all tags descriptions.
+
+## [1.3.31] - 09/12/2024
+
+### Features
+* (**cognitoidentityprovider**) Added email MFA option to user pools with advanced security features.
+* (**elasticloadbalancingv2**) Correct incorrectly mapped error in ELBv2 waiters
+* (**emr**) Update APIs to allow modification of ODCR options, allocation strategy, and InstanceTypeConfigs on running InstanceFleet clusters.
+* (**glue**) AWS Glue is introducing two new optimizers for Apache Iceberg tables: snapshot retention and orphan file deletion. Customers can enable these optimizers and customize their configurations to perform daily maintenance tasks on their Iceberg tables based on their specific requirements.
+* (**mediaconvert**) This release includes support for dynamic video overlay workflows, including picture-in-picture and squeezeback
+* (**storagegateway**) The S3 File Gateway now supports DSSE-KMS encryption. A new parameter EncryptionType is added to these APIs: CreateSmbFileShare, CreateNfsFileShare, UpdateSmbFileShare, UpdateNfsFileShare, DescribeSmbFileShares, DescribeNfsFileShares. Also, in favor of EncryptionType, KmsEncrypted is deprecated.
+* (**synthetics**) This release introduces two features. The first is tag replication, which allows for the propagation of canary tags onto Synthetics related resources, such as Lambda functions. The second is a limit increase in canary name length, which has now been increased from 21 to 255 characters.
+
+### Documentation
+* (**rds**) This release adds support for the os-upgrade pending maintenance action for Amazon Aurora DB clusters.
+
+## [1.3.30] - 09/11/2024
+
+### Features
+* (**bedrockagent**) Amazon Bedrock Knowledge Bases now supports using inference profiles to increase throughput and improve resilience.
+* (**bedrockagentruntime**) Amazon Bedrock Knowledge Bases now supports using inference profiles to increase throughput and improve resilience.
+* (**ecr**) Added KMS_DSSE to EncryptionType
+* (**guardduty**) Add support for new statistic types in GetFindingsStatistics.
+* (**lexmodelsv2**) Support new Polly voice engines in VoiceSettings: long-form and generative
+* (**medialive**) Adds AV1 Codec support, SRT ouputs, and MediaLive Anywhere support.
+
+## [1.3.29] - 09/10/2024
+
+### Features
+* (**cognitoidentity**) This release adds sensitive trait to some required shapes.
+* (**pipes**) This release adds support for customer managed KMS keys in Amazon EventBridge Pipe
+
+### Documentation
+* (**chimesdkvoice**) Documentation-only update that clarifies the ValidateE911Address action of the Amazon Chime SDK Voice APIs.
+* (**securityhub**) Documentation update for Security Hub
+
 ## [1.3.28] - 09/09/2024
 
 ### Features
