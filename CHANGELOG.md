@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.45] - 10/02/2024
+
+### Features
+* (**appstream**) Added support for Automatic Time Zone Redirection on Amazon AppStream 2.0
+* (**b2bi**) Added and updated APIs to support outbound EDI transformations
+* (**bedrockagentruntime**) Added raw model response and usage metrics to PreProcessing and PostProcessing Trace
+* (**bedrockruntime**) Added new fields to Amazon Bedrock Guardrails trace
+* (**iotdeviceadvisor**) Add clientToken attribute and implement idempotency for CreateSuiteDefinition.
+* (**ivsrealtime**) Adds new Stage Health EventErrorCodes applicable to RTMP(S) broadcasts. Bug Fix: Enforces that EncoderConfiguration Video height and width must be even-number values.
+* (**s3**) This release introduces a header representing the minimum object size limit for Lifecycle transitions.
+* (**sagemaker**) releasing builtinlcc to public
+
+### Documentation
+* (**workspaces**) WSP is being rebranded to become DCV.
+
 ## [1.3.44] - 10/01/2024
 
 ### Features
