@@ -91,12 +91,12 @@ tasks.test {
 val sdkVersion: String by project
 
 @OptIn(InternalApi::class)
-fun getHllPreviewVersion() = if (sdkVersion.contains("-SNAPSHOT")) { // i.e. 1.3.29-beta-SNAPSHOT
+fun getHllPreviewVersion() = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-beta-SNAPSHOT
     sdkVersion
         .removeSuffix("-SNAPSHOT")
         .ensureSuffix("-beta-SNAPSHOT")
 } else {
-    sdkVersion.ensureSuffix("-beta") // i.e. 1.3.29-beta
+    sdkVersion.ensureSuffix("-beta") // e.g. 1.3.29-beta
 }
 
 /**
