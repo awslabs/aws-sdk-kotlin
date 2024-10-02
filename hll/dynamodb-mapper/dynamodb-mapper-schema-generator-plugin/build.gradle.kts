@@ -91,7 +91,7 @@ tasks.test {
 val sdkVersion: String by project
 
 @OptIn(InternalApi::class)
-fun getHllPreviewVersion() = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-beta-SNAPSHOT
+val hllPreviewVersion = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-beta-SNAPSHOT
     sdkVersion
         .removeSuffix("-SNAPSHOT")
         .ensureSuffix("-beta-SNAPSHOT")
@@ -111,7 +111,7 @@ val generateSdkVersionFile by tasks.registering {
     outputs.file(versionFile)
     sourceSets.main.get().output.dir(resourcesDir)
     doLast {
-        versionFile.writeText(getHllPreviewVersion())
+        versionFile.writeText(hllPreviewVersion)
     }
 }
 
