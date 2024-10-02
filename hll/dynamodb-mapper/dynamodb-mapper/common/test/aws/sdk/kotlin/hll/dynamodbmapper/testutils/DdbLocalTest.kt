@@ -8,14 +8,19 @@ import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
+import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.deleteTable
 import aws.sdk.kotlin.services.dynamodb.waiters.waitUntilTableNotExists
+import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
+import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
+import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.net.Scheme
 import aws.smithy.kotlin.runtime.net.url.Url
 import io.kotest.core.spec.style.AnnotationSpec
 import kotlinx.coroutines.runBlocking
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -41,6 +46,9 @@ abstract class DdbLocalTest : AnnotationSpec() {
         }
     }
 
+    private val requests = mutableListOf<HttpRequest>()
+    private val requestInterceptor = RequestCapturingInterceptor(this@DdbLocalTest.requests)
+
     private val ddbHolder = lazy {
         DynamoDbClient {
             endpointUrl = Url {
@@ -55,6 +63,8 @@ abstract class DdbLocalTest : AnnotationSpec() {
                 accessKeyId = "DUMMY"
                 secretAccessKey = "DUMMY"
             }
+
+            interceptors += requestInterceptor
         }
     }
 
@@ -62,8 +72,11 @@ abstract class DdbLocalTest : AnnotationSpec() {
      * An instance of a low-level [DynamoDbClient] utilizing the DynamoDB Local instance which may be used for setting
      * up or verifying various mapper tests. If this is the first time accessing the value, the client will be
      * initialized.
+     *
+     * **Important**: This low-level client should only be accessed via [lowLevelAccess] to ensure that User-Agent
+     * header verification succeeds.
      */
-    val ddb by ddbHolder
+    private val ddb by ddbHolder
 
     private val tempTables = mutableListOf<String>()
 
@@ -95,9 +108,11 @@ abstract class DdbLocalTest : AnnotationSpec() {
         lsis: Map<String, ItemSchema<*>>,
         items: List<Item>,
     ) {
-        ddb.createTable(name, schema, gsis, lsis)
-        tempTables += name
-        ddb.putItems(name, items)
+        lowLevelAccess {
+            createTable(name, schema, gsis, lsis)
+            tempTables += name
+            putItems(name, items)
+        }
     }
 
     /**
@@ -108,6 +123,43 @@ abstract class DdbLocalTest : AnnotationSpec() {
         ddb: DynamoDbClient? = null,
         config: DynamoDbMapper.Config.Builder.() -> Unit = { },
     ) = DynamoDbMapper(ddb ?: this.ddb, config)
+
+    @BeforeEach
+    fun initializeTest() {
+        requestInterceptor.enabled = true
+    }
+
+    /**
+     * Executes requests on a low-level [DynamoDbClient] and _does not_ log any requests executed in [block]. (This
+     * skips verifying that low-level requests contain the [AwsBusinessMetric.DDB_MAPPER] metric.)
+     */
+    protected suspend fun <T> lowLevelAccess(block: suspend DynamoDbClient.() -> T): T {
+        requestInterceptor.enabled = false
+        return block(ddb).also { requestInterceptor.enabled = true }
+    }
+
+    @AfterEach
+    fun postVerify() {
+        requests.forEach { req ->
+            val uaString = requireNotNull(req.headers["User-Agent"]) {
+                "Missing User-Agent header for request $req"
+            }
+
+            val components = uaString.split(" ")
+
+            val metricsComponent = requireNotNull(components.find { it.startsWith("m/") }) {
+                """User-Agent header "$uaString" doesn't contain business metrics for request $req"""
+            }
+
+            val metrics = metricsComponent.removePrefix("m/").split(",")
+
+            assertContains(
+                metrics,
+                AwsBusinessMetric.DDB_MAPPER.identifier,
+                """Mapper business metric not present in User-Agent header "$uaString" for request $req""",
+            )
+        }
+    }
 
     @AfterAll
     fun cleanUp() {
@@ -120,6 +172,16 @@ abstract class DdbLocalTest : AnnotationSpec() {
             }
 
             ddb.close()
+        }
+    }
+}
+
+private class RequestCapturingInterceptor(val requests: MutableList<HttpRequest>) : HttpInterceptor {
+    var enabled = true
+
+    override fun readBeforeTransmit(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
+        if (enabled) {
+            requests += context.protocolRequest
         }
     }
 }

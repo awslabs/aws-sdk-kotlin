@@ -51,11 +51,11 @@ class DynamoDbMapperTest : DdbLocalTest() {
     fun testBusinessMetricEmission() = runTest {
         val interceptor = MetricCapturingInterceptor()
 
-        val ddb = super.ddb.withConfig { interceptors += interceptor }
+        val ddb = lowLevelAccess { withConfig { interceptors += interceptor } }
         interceptor.assertEmpty()
 
         // No metric for low-level client
-        ddb.scan { tableName = TABLE_NAME }
+        lowLevelAccess { scan { tableName = TABLE_NAME } }
         interceptor.assertMetric(AwsBusinessMetric.DDB_MAPPER, exists = false)
         interceptor.reset()
 
@@ -67,12 +67,12 @@ class DynamoDbMapperTest : DdbLocalTest() {
         interceptor.reset()
 
         // Still no metric for low-level client (i.e., LL wasn't modified by HL)
-        ddb.scan { tableName = TABLE_NAME }
+        lowLevelAccess { scan { tableName = TABLE_NAME } }
         interceptor.assertMetric(AwsBusinessMetric.DDB_MAPPER, exists = false)
         interceptor.reset()
 
         // Original client can be closed, mapper is unaffected
-        ddb.close()
+        lowLevelAccess { close() }
         table.scanPaginated { }.collect()
         interceptor.assertMetric(AwsBusinessMetric.DDB_MAPPER)
     }

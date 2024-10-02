@@ -70,7 +70,12 @@ internal class OperationRenderer(
                 }
                 write("schema) },")
 
-                write("lowLevelInvoke = spec.mapper.client::#L,", operation.methodName)
+                withBlock("lowLevelInvoke = { lowLevelReq ->", "},") {
+                    withBlock("spec.mapper.client.#T { client ->", "}", MapperTypes.Internal.withWrappedClient) {
+                        write("client.#L(lowLevelReq)", operation.methodName)
+                    }
+                }
+
                 write("deserialize = #L::convert,", operation.response.lowLevelName)
                 write("interceptors = spec.mapper.config.interceptors,")
             }
