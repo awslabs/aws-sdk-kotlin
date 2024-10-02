@@ -9,7 +9,19 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.util.dynamicAttr
 import aws.sdk.kotlin.hll.dynamodbmapper.util.requireNull
 
-internal data class KeyFilterImpl(override val partitionKey: Any, override val sortKey: SortKeyExpr?) : KeyFilter
+internal data class KeyFilterImpl(override val partitionKey: Any, override val sortKey: SortKeyExpr?) : KeyFilter {
+    init {
+        require(
+            partitionKey is ByteArray ||
+                partitionKey is Number ||
+                partitionKey is String ||
+                partitionKey is UByte ||
+                partitionKey is UInt ||
+                partitionKey is ULong ||
+                partitionKey is UShort,
+        ) { "Partition key values must be either a ByteArray, Number, String, or an unsigned number type" }
+    }
+}
 
 internal fun KeyFilter.toExpression(schema: ItemSchema<*>) = when (schema) {
     is ItemSchema.CompositeKey<*, *, *> -> {

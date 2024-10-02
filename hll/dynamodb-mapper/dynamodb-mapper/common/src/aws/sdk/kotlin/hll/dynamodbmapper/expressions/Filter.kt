@@ -661,7 +661,7 @@ public interface Filter {
     public fun AttributePath.isBetween(min: Expression, max: Expression): BooleanExpr
 
     /**
-     * Creates a range expression for verifying the sort key is between two other expressions
+     * Creates a range expression for verifying this expression is between two other expressions
      * @param min The lower bound value
      * @param max The upper bound value (inclusive)
      */

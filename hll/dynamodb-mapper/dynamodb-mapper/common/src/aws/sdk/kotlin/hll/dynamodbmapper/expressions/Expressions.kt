@@ -29,4 +29,9 @@ public sealed interface Expression {
  */
 public sealed interface BooleanExpr : Expression
 
+/**
+ * A subtype of [Expression] that represents a key condition on a sort key, such as would be used for specifying a Query
+ * key. This is a [marker interface](https://en.wikipedia.org/wiki/Marker_interface_pattern) which adds no additional
+ * declarations.
+ */
 public sealed interface SortKeyExpr : Expression

@@ -96,7 +96,7 @@ internal class OperationRenderer(
 
         openBlock("private fun <T> #T.convert(", operation.request.type)
         requestMembers(MemberCodegenBehavior.Hoist) { write("#L: #T, ", name, type) }
-        write("schema: #T", MapperTypes.Items.itemSchema("T"))
+        write("schema: #T,", MapperTypes.Items.itemSchema("T"))
         closeAndOpenBlock(") = #L {", operation.request.lowLevelName)
         requestMembers(MemberCodegenBehavior.PassThrough) { write("#L = this@convert.#L", name, highLevel.name) }
         requestMembers(MemberCodegenBehavior.MapKeys) {
@@ -197,15 +197,6 @@ private inline operator fun Map<MemberCodegenBehavior, List<Member>>.invoke(
 ) {
     behaviors.forEach { behavior ->
         get(behavior)?.forEach(block)
-    }
-}
-
-private inline operator fun Map<MemberCodegenBehavior, List<Member>>.invoke(
-    predicate: (MemberCodegenBehavior) -> Boolean,
-    block: Member.() -> Unit,
-) {
-    entries.forEach { (behavior, members) ->
-        if (predicate(behavior)) members.forEach(block)
     }
 }
 

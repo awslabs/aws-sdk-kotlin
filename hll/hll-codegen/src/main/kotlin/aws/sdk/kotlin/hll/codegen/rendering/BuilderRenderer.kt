@@ -68,7 +68,6 @@ public class BuilderRenderer(
 
         write("#Lvar #L: #T = null", ctx.attributes.visibility, member.name, member.type.nullable())
 
-        ctx.info("For member $builderName.${member.name} dslInfo = $dslInfo")
         if (dslInfo != null) {
             blankLine()
             withBlock(

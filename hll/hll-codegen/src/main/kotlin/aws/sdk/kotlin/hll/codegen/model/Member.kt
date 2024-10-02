@@ -42,7 +42,7 @@ public data class Member(
 }
 
 /**
- * Gets the low-level [Structure] equivalent for this high-level structure
+ * Gets the low-level [Member] equivalent for this high-level member
  */
 @InternalSdkApi
 public val Member.lowLevel: Member

@@ -20,7 +20,7 @@ public interface SortKey
  * { sortKey eq 42 }
  * ```
  *
- * This example creates an expression which checks whether an attribute named `foo` is equal to the value `42`.
+ * This example creates an expression which checks whether the sort key is equal to the value `42`.
  *
  * ## (Non-)Relationship to schema
  *
@@ -34,12 +34,12 @@ public interface SortKey
  *
  * A very common filter condition is verifying whether the value of the sort key is equal (or unequal) to another a
  * literal value. These comparisons are available by using the following functions:
- * * [eq] — checks if two values are equal (equivalent to Kotlin's `==` operator)
- * * [neq] — checks if two values are _not_ equal (equivalent to Kotlin's `!=` operator)
- * * [lt] — checks if a value is less than another value (equivalent to Kotlin's `<` operator)
- * * [lte] — checks if a value is less than _or equal to_ another value (equivalent to Kotlin's `<=` operator)
- * * [gt] — checks if a value is greater than another value (equivalent to Kotlin's `>` operator)
- * * [gte] — checks if a value is greater than _or equal to_ another value (equivalent to Kotlin's `>=` operator)
+ * * [eq] — checks if the sort key is equal to another value (equivalent to Kotlin's `==` operator)
+ * * [neq] — checks if two the sort key is _not_ equal to another value (equivalent to Kotlin's `!=` operator)
+ * * [lt] — checks if the sort key is less than another value (equivalent to Kotlin's `<` operator)
+ * * [lte] — checks if the sort key is less than _or equal to_ another value (equivalent to Kotlin's `<=` operator)
+ * * [gt] — checks if the sort key is greater than another value (equivalent to Kotlin's `>` operator)
+ * * [gte] — checks if the sort key is greater than _or equal to_ another value (equivalent to Kotlin's `>=` operator)
  *
  * For example:
  *
@@ -56,11 +56,16 @@ public interface SortKey
  * ```kotlin
  * // Checks whether the value of the sort key is between 40 and 60 (inclusive)
  * sortKey isIn 40..60
+ *
+ * // Checks whether the value of the sort key is between two binary values (inclusive)
+ * val minBinary: ByteArray = ...
+ * val maxBinary: ByteArray = ...
+ * sortKey.isBetween(minBinary, maxBinary)
  * ```
  *
  * # Prefixes
  *
- * The [startsWith] function enables expressing a prefix for the value of the sort key. For example:
+ * The [startsWith] function checks for a prefix in the value of the sort key. For example:
  *
  * ```kotlin
  * sortKey startsWith "abc" // Checks whether the value of the sort key starts with `"abc"`
