@@ -1594,11 +1594,6 @@ private const val TEST_SUITE_JSON = """
     "service_envvar_name": "AWS_ENDPOINT_URL_WORKDOCS"
   },
   {
-    "service_id": "WorkLink",
-    "services_section_name": "worklink",
-    "service_envvar_name": "AWS_ENDPOINT_URL_WORKLINK"
-  },
-  {
     "service_id": "WorkMail",
     "services_section_name": "workmail",
     "service_envvar_name": "AWS_ENDPOINT_URL_WORKMAIL"
@@ -1705,7 +1700,6 @@ private const val JAVA_CLIENT_NAMES_JSON = """
   "DAX": "DaxClient",
   "OpsWorksCM": "OpsWorksCmClient",
   "ACM PCA": "AcmPcaClient",
-  "WorkLink": "WorkLinkClient",
   "GuardDuty": "GuardDutyClient",
   "CleanRooms": "CleanRoomsClient",
   "codeartifact": "CodeartifactClient",

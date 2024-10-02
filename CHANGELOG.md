@@ -1,5 +1,67 @@
 # Changelog
 
+## [1.3.44] - 10/01/2024
+
+### Features
+* (**bedrockagent**) This release adds support to stop an ongoing ingestion job using the StopIngestionJob API in Agents for Amazon Bedrock.
+* (**codeartifact**) Add support for the dual stack endpoints.
+* (**rds**) This release provides additional support for enabling Aurora Limitless Database DB clusters.
+
+## [1.3.43] - 09/30/2024
+
+### Features
+* (**bedrock**) Add support for custom models via provisioned throughput for Bedrock Model Evaluation
+* (**connect**) Amazon Connect introduces StartOutboundChatContact API allowing customers to initiate outbound chat contacts
+* (**resourcegroups**) This update includes new APIs to support application groups and to allow users to manage resource tag-sync tasks in applications.
+* (**supplychain**) Release DataLakeDataset, DataIntegrationFlow and ResourceTagging APIs for AWS Supply Chain
+* (**timestreaminfluxdb**) Timestream for InfluxDB now supports port configuration and additional customer-modifiable InfluxDB v2 parameters. This release adds Port to the CreateDbInstance and UpdateDbInstance API, and additional InfluxDB v2 parameters to the CreateDbParameterGroup API.
+
+### Documentation
+* (**clouddirectory**) Add examples for API operations in model.
+* (**pricing**) Add examples for API operations in model.
+* (**verifiedpermissions**) Add examples for API operations in model.
+
+## [1.3.42] - 09/27/2024
+
+### Features
+* (**customerprofiles**) Introduces optional RoleArn parameter for PutIntegration request and includes RoleArn in the response of PutIntegration, GetIntegration and ListIntegrations
+* (**quicksight**) Adding personalization in QuickSight data stories. Admins can enable or disable personalization through QuickSight settings.
+* (**sesv2**) This release adds support for engagement tracking over Https using custom domains.
+
+### Documentation
+* (**securityhub**) Documentation updates for AWS Security Hub
+
+### Miscellaneous
+* Remove WorkLink service
+
+## [1.3.41] - 09/26/2024
+
+### Features
+* (**chatbot**) Return State and StateReason fields for Chatbot Channel Configurations.
+* (**lambda**) Reverting Lambda resource-based policy and block public access APIs.
+* (**organizations**) Add support for policy operations on the CHATBOT_POLICY policy type.
+* (**sagemaker**) Adding `TagPropagation` attribute to Sagemaker API
+
+### Documentation
+* (**pcs**) AWS PCS API documentation - Edited the description of the iamInstanceProfileArn parameter of the CreateComputeNodeGroup and UpdateComputeNodeGroup actions; edited the description of the SlurmCustomSetting data type to list the supported parameters for clusters and compute node groups.
+* (**rdsdata**) Documentation update for RDS Data API to reflect support for Aurora MySQL Serverless v2 and Provisioned DB clusters.
+
+## [1.3.40] - 09/25/2024
+
+### Documentation
+* (**cloudtrail**) Doc-only update for CloudTrail network activity events release (in preview)
+* (**ec2**) Updates to documentation for the transit gateway security group referencing feature.
+* (**fsx**) Doc-only update to address Lustre S3 hard-coded names.
+
+## [1.3.39] - 09/24/2024
+
+### Features
+* (**bedrock**) Add support for Cross Region Inference in Bedrock Model Evaluations.
+* (**budgets**) Releasing minor partitional endpoint updates
+* (**kinesis**) This release includes support to add tags when creating a stream
+* (**pinpointsmsvoicev2**) AWS End User Messaging SMS-Voice V2 has added support for resource policies. Use the three new APIs to create, view, edit, and delete resource policies.
+* (**sagemaker**) Adding `HiddenInstanceTypes` and `HiddenSageMakerImageVersionAliases` attribute to SageMaker API
+
 ## [1.3.38] - 09/23/2024
 
 ### Features
