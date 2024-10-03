@@ -7,6 +7,7 @@ package aws.sdk.kotlin.hll.codegen.model
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.emptyAttributes
+import aws.smithy.kotlin.runtime.collections.get
 import com.google.devtools.ksp.getDeclaredProperties
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSTypeReference
@@ -51,3 +52,10 @@ public fun Structure.genericVars(): List<TypeVar> = buildList {
     addAll(type.genericVars())
     members.flatMap { it.type.genericVars() }.let(::addAll)
 }
+
+/**
+ * Gets the low-level [Structure] equivalent for this high-level structure
+ */
+@InternalSdkApi
+public val Structure.lowLevel: Structure
+    get() = attributes[ModelAttributes.LowLevelStructure]

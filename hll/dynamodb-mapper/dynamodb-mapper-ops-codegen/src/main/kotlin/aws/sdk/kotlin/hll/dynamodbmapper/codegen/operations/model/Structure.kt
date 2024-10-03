@@ -6,13 +6,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
 import aws.sdk.kotlin.hll.codegen.model.*
 import aws.sdk.kotlin.hll.codegen.util.plus
-import aws.smithy.kotlin.runtime.collections.get
-
-/**
- * Gets the low-level [Structure] equivalent for this high-level structure
- */
-internal val Structure.lowLevel: Structure
-    get() = attributes[ModelAttributes.LowLevelStructure]
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
 
 /**
  * Derives a high-level [Structure] equivalent for this low-level structure
@@ -24,20 +18,54 @@ internal fun Structure.toHighLevel(pkg: String): Structure {
     val hlType = TypeRef(pkg, llStructure.type.shortName, listOf(TypeVar("T")))
 
     val hlMembers = llStructure.members.mapNotNull { llMember ->
-        when (llMember.codegenBehavior) {
-            MemberCodegenBehavior.PassThrough -> llMember
+        val nullable = llMember.type.nullable
+
+        val hlMember = when (val behavior = llMember.codegenBehavior) {
+            MemberCodegenBehavior.PassThrough, is MemberCodegenBehavior.ExpressionArguments -> llMember
 
             MemberCodegenBehavior.MapAll, MemberCodegenBehavior.MapKeys ->
-                llMember.copy(type = TypeVar("T", llMember.type.nullable))
+                llMember.copy(type = TypeVar("T", nullable))
 
             MemberCodegenBehavior.ListMapAll -> {
                 val llListType = llMember.type as? TypeRef ?: error("`ListMapAll` member is required to be a TypeRef")
-                val hlListType = llListType.copy(genericArgs = listOf(TypeVar("T")), nullable = llListType.nullable)
+                val hlListType = llListType.copy(genericArgs = listOf(TypeVar("T")))
                 llMember.copy(type = hlListType)
+            }
+
+            is MemberCodegenBehavior.ExpressionLiteral -> {
+                val expressionType = when (behavior.type) {
+                    ExpressionLiteralType.Filter -> MapperTypes.Expressions.BooleanExpr
+                    ExpressionLiteralType.KeyCondition -> MapperTypes.Expressions.KeyFilter
+
+                    // TODO add support for other expression types
+                    else -> return@mapNotNull null
+                }.nullable(nullable)
+
+                val dslInfo = when (behavior.type) {
+                    ExpressionLiteralType.Filter -> DslInfo(
+                        interfaceType = MapperTypes.Expressions.Filter,
+                        implType = MapperTypes.Expressions.Internal.FilterImpl,
+                        implSingleton = true,
+                    )
+
+                    // KeyCondition doesn't use a top-level DSL (SortKeyCondition is nested)
+                    ExpressionLiteralType.KeyCondition -> null
+
+                    // TODO add support for other expression types
+                    else -> return@mapNotNull null
+                }
+
+                llMember.copy(
+                    name = llMember.name.removeSuffix("Expression"),
+                    type = expressionType,
+                    attributes = llMember.attributes + (ModelAttributes.DslInfo to dslInfo),
+                )
             }
 
             else -> null
         }
+
+        hlMember?.copy(attributes = hlMember.attributes + (ModelAttributes.LowLevelMember to llMember))
     }.toSet()
 
     val hlAttributes = llStructure.attributes + (ModelAttributes.LowLevelStructure to llStructure)

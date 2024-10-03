@@ -22,6 +22,19 @@ public object MapperTypes {
         public val ManualPagination: TypeRef = TypeRef(MapperPkg.Hl.Annotations, "ManualPagination")
     }
 
+    public object Expressions {
+        public val BooleanExpr: TypeRef = TypeRef(MapperPkg.Hl.Expressions.Base, "BooleanExpr")
+        public val Filter: TypeRef = TypeRef(MapperPkg.Hl.Expressions.Base, "Filter")
+        public val KeyFilter: TypeRef = TypeRef(MapperPkg.Hl.Expressions.Base, "KeyFilter")
+
+        public object Internal {
+            public val FilterImpl: TypeRef = TypeRef(MapperPkg.Hl.Expressions.Internal, "FilterImpl")
+            public val ParameterizingExpressionVisitor: TypeRef =
+                TypeRef(MapperPkg.Hl.Expressions.Internal, "ParameterizingExpressionVisitor")
+            public val toExpression: TypeRef = TypeRef(MapperPkg.Hl.Expressions.Internal, "toExpression")
+        }
+    }
+
     public object Internal {
         public val withWrappedClient: TypeRef = TypeRef(MapperPkg.Hl.Internal, "withWrappedClient")
     }

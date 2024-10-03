@@ -4,22 +4,18 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.operations
 
+import aws.sdk.kotlin.hll.dynamodbmapper.expressions.KeyFilter
 import aws.sdk.kotlin.hll.dynamodbmapper.items.AttributeDescriptor
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.items.SimpleItemConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.model.itemOf
-import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.Interceptor
-import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.LReqContext
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.DdbLocalTest
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlin.test.assertContentEquals
-import aws.sdk.kotlin.services.dynamodb.model.QueryRequest as LowLevelQueryRequest
-
-// FIXME Much of this test class is temporary because Query/Scan don't yet have conditions
 
 class QueryTest : DdbLocalTest() {
     companion object {
@@ -109,11 +105,11 @@ class QueryTest : DdbLocalTest() {
 
     @Test
     fun testQueryTable() = runTest {
-        val mapper = mapper { interceptors += ExpressionAttributeInterceptor("c" to "foo-corp") }
+        val mapper = mapper()
         val table = mapper.getTable(TABLE_NAME, namedEmpSchema)
 
         val items = table.queryPaginated {
-            keyConditionExpression = """companyId = :c""" // FIXME ugly hack until conditions are implemented
+            keyCondition = KeyFilter("foo-corp")
         }.items().toList()
 
         val expected = listOf(
@@ -144,13 +140,72 @@ class QueryTest : DdbLocalTest() {
     }
 
     @Test
+    fun testQueryTableWithSortKeyCondition() = runTest {
+        val mapper = mapper()
+        val table = mapper.getTable(TABLE_NAME, namedEmpSchema)
+
+        val items = table.queryPaginated {
+            keyCondition = KeyFilter("foo-corp") { sortKey startsWith "AB0" }
+        }.items().toList()
+
+        val expected = listOf(
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "AB0123",
+                name = "Alice Birch",
+                title = "SDE",
+                tenureYears = 5,
+            ),
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "AB0126",
+                name = "Adriana Beech",
+                title = "Manager",
+                tenureYears = 7,
+            ),
+        )
+
+        assertContentEquals(expected, items)
+    }
+
+    @Test
+    fun testQueryTableWithFilter() = runTest {
+        val mapper = mapper()
+        val table = mapper.getTable(TABLE_NAME, namedEmpSchema)
+
+        val items = table.queryPaginated {
+            keyCondition = KeyFilter("foo-corp")
+            filter { attr("title") eq "SDE" }
+        }.items().toList()
+
+        val expected = listOf(
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "AB0123",
+                name = "Alice Birch",
+                title = "SDE",
+                tenureYears = 5,
+            ),
+            NamedEmp(
+                companyId = "foo-corp",
+                empId = "EF0124",
+                name = "Eddie Fraser",
+                title = "SDE",
+                tenureYears = 3,
+            ),
+        )
+
+        assertContentEquals(expected, items)
+    }
+
+    @Test
     fun testQueryGsi() = runTest {
-        val mapper = mapper { interceptors += ExpressionAttributeInterceptor("t" to "Manager") }
+        val mapper = mapper()
         val table = mapper.getTable(TABLE_NAME, namedEmpSchema)
         val index = table.getIndex(TITLE_INDEX_NAME, titleSchema)
 
         val items = index.queryPaginated {
-            keyConditionExpression = """title = :t""" // FIXME ugly hack until conditions are implemented
+            keyCondition = KeyFilter("Manager")
         }.items().toList()
 
         val expected = listOf(
@@ -173,12 +228,12 @@ class QueryTest : DdbLocalTest() {
 
     @Test
     fun testQueryLsi() = runTest {
-        val mapper = mapper { interceptors += ExpressionAttributeInterceptor("c" to "foo-corp") }
+        val mapper = mapper()
         val table = mapper.getTable(TABLE_NAME, namedEmpSchema)
         val index = table.getIndex(NAME_INDEX_NAME, empsByNameSchema)
 
         val items = index.queryPaginated {
-            keyConditionExpression = """companyId = :c""" // FIXME ugly hack until conditions are implemented
+            keyCondition = KeyFilter("foo-corp")
         }.items().toList()
 
         val expected = listOf(
@@ -207,15 +262,4 @@ class QueryTest : DdbLocalTest() {
 
         assertContentEquals(expected, items)
     }
-}
-
-// FIXME ugly hack until conditions are implemented
-private class ExpressionAttributeInterceptor(
-    vararg attributeValues: Pair<String, Any?>,
-) : Interceptor<Any, Any, LowLevelQueryRequest, Any, Any> {
-
-    val attributeValues = itemOf(*attributeValues).mapKeys { (k, _) -> ":$k" }
-
-    override fun modifyBeforeInvocation(ctx: LReqContext<Any, Any, LowLevelQueryRequest>): LowLevelQueryRequest =
-        ctx.lowLevelRequest.copy { expressionAttributeValues = attributeValues }
 }

@@ -660,6 +660,14 @@ public interface Filter {
      */
     public fun AttributePath.isBetween(min: Expression, max: Expression): BooleanExpr
 
+    /**
+     * Creates a range expression for verifying this expression is between two other expressions
+     * @param min The lower bound value
+     * @param max The upper bound value (inclusive)
+     */
+    public fun AttributePath.isBetween(min: ByteArray, max: ByteArray): BooleanExpr =
+        isBetween(LiteralExpr(min), LiteralExpr(max))
+
     // TODO The following overloads support [ClosedRange] but [OpenEndRange] also exists. DynamoDB expressions don't
     //  support it directly but we may be able to cheese it with two inequalities ANDed together.
 
@@ -893,6 +901,12 @@ public interface Filter {
      * @param expr The expression to test for at the beginning of this attribute
      */
     public infix fun AttributePath.startsWith(expr: Expression): BooleanExpr
+
+    /**
+     * Creates an expression for verifying this attribute starts with the given expression
+     * @param value The value to test for at the beginning of this attribute
+     */
+    public infix fun AttributePath.startsWith(value: ByteArray): BooleanExpr = startsWith(LiteralExpr(value))
 
     /**
      * Creates an expression for verifying this attribute starts with the given expression

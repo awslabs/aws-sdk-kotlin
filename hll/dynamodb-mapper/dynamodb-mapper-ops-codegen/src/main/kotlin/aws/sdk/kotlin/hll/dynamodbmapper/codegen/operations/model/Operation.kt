@@ -4,15 +4,9 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
+import aws.sdk.kotlin.hll.codegen.model.ModelAttributes
 import aws.sdk.kotlin.hll.codegen.model.Operation
 import aws.sdk.kotlin.hll.codegen.util.plus
-import aws.smithy.kotlin.runtime.collections.get
-
-/**
- * Gets the low-level [Operation] equivalent for this high-level operation
- */
-internal val Operation.lowLevel: Operation
-    get() = attributes[ModelAttributes.LowLevelOperation]
 
 /**
  * Derives a high-level [Operation] equivalent for this low-level operation

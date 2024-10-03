@@ -39,7 +39,7 @@ internal data class PaginationMembers(
  * property returns `null`.
  */
 internal val Operation.paginationInfo: PaginationMembers?
-    get() = attributes.getOrNull(ModelAttributes.PaginationInfo)
+    get() = attributes.getOrNull(MapperAttributes.PaginationInfo)
 
 /**
  * A codegen plugin that adds DDB-specific pagination info to operations
@@ -47,7 +47,7 @@ internal val Operation.paginationInfo: PaginationMembers?
 internal class DdbPaginationPlugin : ModelParsingPlugin {
     override fun postProcessOperation(operation: Operation): Operation {
         val paginationMembers = PaginationMembers.forOperationOrNull(operation) ?: return operation
-        val newAttributes = operation.attributes + (ModelAttributes.PaginationInfo to paginationMembers)
+        val newAttributes = operation.attributes + (MapperAttributes.PaginationInfo to paginationMembers)
         return operation.copy(attributes = newAttributes)
     }
 }

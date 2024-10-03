@@ -8,6 +8,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.DeserializeInput
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.LResContext
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.MapperContext
+import aws.sdk.kotlin.hll.dynamodbmapper.util.requireNull
 
 internal data class LResContextImpl<T, HReq, LReq, LRes>(
     override val highLevelRequest: HReq,

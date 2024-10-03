@@ -4,15 +4,12 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 
-import aws.sdk.kotlin.hll.codegen.model.Member
-import aws.sdk.kotlin.hll.codegen.model.TypeRef
-import aws.sdk.kotlin.hll.codegen.model.Types
-import aws.sdk.kotlin.hll.codegen.model.nullable
+import aws.sdk.kotlin.hll.codegen.model.*
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperPkg
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
-
-private val attrMapTypes = setOf(MapperTypes.AttributeMap, MapperTypes.AttributeMap.nullable())
-private val attrMapListTypes = Types.Kotlin.list(MapperTypes.AttributeMap).let { setOf(it, it.nullable()) }
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ExpressionArgumentsType.*
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ExpressionLiteralType.*
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.MemberCodegenBehavior.*
 
 /**
  * Describes a behavior to apply for a given [Member] in a low-level structure when generating code for an equivalent
@@ -60,56 +57,105 @@ internal sealed interface MemberCodegenBehavior {
      * structure).
      */
     data object Hoist : MemberCodegenBehavior
+
+    /**
+     * Indicates that a member is a string expression parameter which should be replaced by an expression DSL
+     * @param type The type of expression this member models
+     */
+    data class ExpressionLiteral(val type: ExpressionLiteralType) : MemberCodegenBehavior
+
+    /**
+     * Indicates that a member is a map of expression arguments which should be automatically handled by an expression
+     * DSL
+     * @param type The type of expression arguments this member models
+     */
+    data class ExpressionArguments(val type: ExpressionArgumentsType) : MemberCodegenBehavior
+}
+
+/**
+ * Identifies a type of expression literal supported by DynamoDB APIs
+ */
+internal enum class ExpressionLiteralType {
+    Condition,
+    Filter,
+    KeyCondition,
+    Projection,
+    Update,
+}
+
+/**
+ * Identifies a type of expression arguments supported by DynamoDB APIs
+ */
+internal enum class ExpressionArgumentsType {
+    AttributeNames,
+    AttributeValues,
 }
 
 /**
  * Identifies a [MemberCodegenBehavior] for this [Member] by way of various heuristics
  */
 internal val Member.codegenBehavior: MemberCodegenBehavior
-    get() = when {
-        this in unsupportedMembers -> MemberCodegenBehavior.Drop
-        type in attrMapTypes -> if (name == "key") MemberCodegenBehavior.MapKeys else MemberCodegenBehavior.MapAll
-        type in attrMapListTypes -> MemberCodegenBehavior.ListMapAll
-        isTableName || isIndexName -> MemberCodegenBehavior.Hoist
-        else -> MemberCodegenBehavior.PassThrough
-    }
-
-private val Member.isTableName: Boolean
-    get() = name == "tableName" && type == Types.Kotlin.StringNullable
-
-private val Member.isIndexName: Boolean
-    get() = name == "indexName" && type == Types.Kotlin.StringNullable
+    get() = rules.firstNotNullOfOrNull { it.matchedBehaviorOrNull(this) } ?: PassThrough
 
 private fun llType(name: String) = TypeRef(MapperPkg.Ll.Model, name)
 
-private val unsupportedMembers = listOf(
-    // superseded by ConditionExpression
-    Member("conditionalOperator", llType("ConditionalOperator")),
-    Member("expected", Types.Kotlin.stringMap(llType("ExpectedAttributeValue"))),
+private data class Rule(
+    val namePredicate: (String) -> Boolean,
+    val typePredicate: (TypeRef) -> Boolean,
+    val behavior: MemberCodegenBehavior,
+) {
+    constructor(name: String, type: TypeRef, behavior: MemberCodegenBehavior) :
+        this(name::equals, type::isEquivalentTo, behavior)
 
-    // superseded by FilterExpression
-    Member("queryFilter", Types.Kotlin.stringMap(llType("Condition"))),
-    Member("scanFilter", Types.Kotlin.stringMap(llType("Condition"))),
+    constructor(name: Regex, type: TypeRef, behavior: MemberCodegenBehavior) :
+        this(name::matches, type::isEquivalentTo, behavior)
 
-    // superseded by KeyConditionExpression
-    Member("keyConditions", Types.Kotlin.stringMap(llType("Condition"))),
+    fun matchedBehaviorOrNull(member: Member) = if (matches(member)) behavior else null
+    fun matches(member: Member) = namePredicate(member.name) && typePredicate(member.type as TypeRef)
+}
 
-    // superseded by ProjectionExpression
-    Member("attributesToGet", Types.Kotlin.list(Types.Kotlin.String)),
+private fun Type.isEquivalentTo(other: Type): Boolean = when (this) {
+    is TypeVar -> other is TypeVar && shortName == other.shortName
+    is TypeRef ->
+        other is TypeRef &&
+            fullName == other.fullName &&
+            genericArgs.size == other.genericArgs.size &&
+            genericArgs.zip(other.genericArgs).all { (thisArg, otherArg) -> thisArg.isEquivalentTo(otherArg) }
+}
 
-    // superseded by UpdateExpression
-    Member("attributeUpdates", Types.Kotlin.stringMap(llType("AttributeValueUpdate"))),
+/**
+ * Priority-ordered list of dispositions to apply to members found in structures. The first element from this list that
+ * successfully matches with a member will be chosen.
+ */
+private val rules = listOf(
+    // Deprecated expression members not to be carried forward into HLL
+    Rule("conditionalOperator", llType("ConditionalOperator"), Drop),
+    Rule("expected", Types.Kotlin.stringMap(llType("ExpectedAttributeValue")), Drop),
+    Rule("queryFilter", Types.Kotlin.stringMap(llType("Condition")), Drop),
+    Rule("scanFilter", Types.Kotlin.stringMap(llType("Condition")), Drop),
+    Rule("keyConditions", Types.Kotlin.stringMap(llType("Condition")), Drop),
+    Rule("attributesToGet", Types.Kotlin.list(Types.Kotlin.String), Drop),
+    Rule("attributeUpdates", Types.Kotlin.stringMap(llType("AttributeValueUpdate")), Drop),
 
-    // TODO add support for expressions
-    Member("expressionAttributeNames", Types.Kotlin.stringMap(Types.Kotlin.String)),
-    Member("expressionAttributeValues", MapperTypes.AttributeMap),
-    Member("conditionExpression", Types.Kotlin.String),
-    Member("projectionExpression", Types.Kotlin.String),
-    Member("updateExpression", Types.Kotlin.String),
-).map { member ->
-    if (member.type is TypeRef) {
-        member.copy(type = member.type.nullable())
-    } else {
-        member
-    }
-}.toSet()
+    // Hoisted members
+    Rule("tableName", Types.Kotlin.String, Hoist),
+    Rule("indexName", Types.Kotlin.String, Hoist),
+
+    // Expression literals
+    Rule("keyConditionExpression", Types.Kotlin.String, ExpressionLiteral(KeyCondition)),
+    Rule("filterExpression", Types.Kotlin.String, ExpressionLiteral(Filter)),
+
+    // TODO add support for remaining expression types
+    Rule("conditionExpression", Types.Kotlin.String, Drop),
+    Rule("projectionExpression", Types.Kotlin.String, Drop),
+    Rule("updateExpression", Types.Kotlin.String, Drop),
+
+    // Expression arguments
+    Rule("expressionAttributeNames", Types.Kotlin.stringMap(Types.Kotlin.String), ExpressionArguments(AttributeNames)),
+    Rule("expressionAttributeValues", MapperTypes.AttributeMap, ExpressionArguments(AttributeValues)),
+
+    // Mappable members
+    Rule(".*".toRegex(), Types.Kotlin.list(MapperTypes.AttributeMap), ListMapAll),
+    Rule("key", MapperTypes.AttributeMap, MapKeys),
+    Rule(".*".toRegex(), MapperTypes.AttributeMap, MapAll),
+)
