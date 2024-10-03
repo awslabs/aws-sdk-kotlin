@@ -12,6 +12,7 @@ public object MapperPkg {
     public object Hl {
         public val Base: String = "aws.sdk.kotlin.hll.dynamodbmapper"
         public val Annotations: String = "$Base.annotations"
+        public val Internal: String = "$Base.internal"
         public val Items: String = "$Base.items"
         public val Model: String = "$Base.model"
         public val Ops: String = "$Base.operations"

@@ -8,7 +8,12 @@ import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.model.internal.tableImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.InterceptorAny
+import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
+import aws.sdk.kotlin.services.dynamodb.withConfig
+import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
+import aws.smithy.kotlin.runtime.client.RequestInterceptorContext
+import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 
 internal data class DynamoDbMapperImpl(
     override val client: DynamoDbClient,
@@ -35,3 +40,16 @@ internal class MapperConfigBuilderImpl : DynamoDbMapper.Config.Builder {
 
     override fun build() = MapperConfigImpl(interceptors.toList())
 }
+
+/**
+ * An interceptor that emits the DynamoDB Mapper business metric
+ */
+private object BusinessMetricInterceptor : HttpInterceptor {
+    override suspend fun modifyBeforeSerialization(context: RequestInterceptorContext<Any>): Any {
+        context.executionContext.emitBusinessMetric(AwsBusinessMetric.DDB_MAPPER)
+        return context.request
+    }
+}
+
+internal inline fun <T> DynamoDbClient.withWrappedClient(block: (DynamoDbClient) -> T): T =
+    withConfig { interceptors += BusinessMetricInterceptor }.use(block)

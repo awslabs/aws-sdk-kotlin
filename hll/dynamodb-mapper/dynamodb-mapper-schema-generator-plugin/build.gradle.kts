@@ -1,3 +1,5 @@
+import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.text.ensureSuffix
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /*
@@ -45,15 +47,32 @@ gradlePlugin {
     }
 }
 
-val sdkVersion: String by project
-group = "aws.sdk.kotlin"
-version = sdkVersion
-
 publishing {
     publications {
         create<MavenPublication>("dynamodb-mapper-schema-generator-plugin") {
             from(components["java"])
         }
+    }
+}
+
+/**
+ * The `java-gradle-plugin` plugin creates a javadoc jar by default, conflicting with the empty javadoc jar (emptyJar)
+ * created in aws-kotlin-repo-tools. Configure dependencies and disable the emptyJar task to avoid conflicts.
+ */
+afterEvaluate {
+    tasks.withType<PublishToMavenRepository> {
+        dependsOn(tasks.named("javadocJar"))
+    }
+
+    tasks.named("publishDynamodb-mapper-schema-generatorPluginMarkerMavenPublicationToMavenLocal") {
+        dependsOn(tasks.named("javadocJar"))
+    }
+
+    tasks.findByName("signDynamodb-mapper-schema-generatorPluginMarkerMavenPublication")
+        ?.dependsOn(tasks.named("javadocJar"))
+
+    tasks.named("emptyJar") {
+        enabled = false
     }
 }
 
@@ -69,6 +88,17 @@ tasks.test {
 }
 
 // FIXME Commonize the following functions into the aws-kotlin-repo-tools build-support
+val sdkVersion: String by project
+
+@OptIn(InternalApi::class)
+val hllPreviewVersion = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-beta-SNAPSHOT
+    sdkVersion
+        .removeSuffix("-SNAPSHOT")
+        .ensureSuffix("-beta-SNAPSHOT")
+} else {
+    sdkVersion.ensureSuffix("-beta") // e.g. 1.3.29-beta
+}
+
 /**
  * Create a file containing the sdkVersion to use as a resource
  * This saves us from having to manually change version numbers in multiple places
@@ -81,7 +111,7 @@ val generateSdkVersionFile by tasks.registering {
     outputs.file(versionFile)
     sourceSets.main.get().output.dir(resourcesDir)
     doLast {
-        versionFile.writeText(sdkVersion)
+        versionFile.writeText(hllPreviewVersion)
     }
 }
 

@@ -29,9 +29,14 @@ public object MapperTypes {
 
         public object Internal {
             public val FilterImpl: TypeRef = TypeRef(MapperPkg.Hl.Expressions.Internal, "FilterImpl")
-            public val ParameterizingExpressionVisitor: TypeRef = TypeRef(MapperPkg.Hl.Expressions.Internal, "ParameterizingExpressionVisitor")
+            public val ParameterizingExpressionVisitor: TypeRef =
+                TypeRef(MapperPkg.Hl.Expressions.Internal, "ParameterizingExpressionVisitor")
             public val toExpression: TypeRef = TypeRef(MapperPkg.Hl.Expressions.Internal, "toExpression")
         }
+    }
+
+    public object Internal {
+        public val withWrappedClient: TypeRef = TypeRef(MapperPkg.Hl.Internal, "withWrappedClient")
     }
 
     public object Items {

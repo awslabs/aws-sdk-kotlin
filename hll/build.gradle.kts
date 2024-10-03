@@ -5,6 +5,8 @@
 
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
 import aws.sdk.kotlin.gradle.kmp.*
+import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.text.ensureSuffix
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 description = "High-level libraries for the AWS SDK for Kotlin"
@@ -31,21 +33,31 @@ val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
 )
 
+@OptIn(InternalApi::class)
+val hllPreviewVersion = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-beta-SNAPSHOT
+    sdkVersion
+        .removeSuffix("-SNAPSHOT")
+        .ensureSuffix("-beta-SNAPSHOT")
+} else {
+    sdkVersion.ensureSuffix("-beta") // e.g. 1.3.29-beta
+}
+
+subprojects {
+    group = "aws.sdk.kotlin"
+    version = hllPreviewVersion
+    configurePublishing("aws-sdk-kotlin")
+}
+
 subprojects {
     if (!needsKmpConfigured) {
         return@subprojects
     }
-
-    group = "aws.sdk.kotlin"
-    version = sdkVersion
 
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
         plugin("org.jetbrains.dokka")
         plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
-
-    configurePublishing("aws-sdk-kotlin")
 
     kotlin {
         explicitApi()
@@ -94,7 +106,6 @@ apiValidation {
 
     ignoredProjects += listOf(
         "hll-codegen",
-        "dynamodb-mapper-annotation-processor-test",
         "dynamodb-mapper-codegen",
         "dynamodb-mapper-ops-codegen",
         "dynamodb-mapper-schema-codegen",
