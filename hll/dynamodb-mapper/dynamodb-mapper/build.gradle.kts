@@ -12,6 +12,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
+description = "High level DynamoDbMapper client"
+extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: DynamoDbMapper"
+extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper"
+
 buildscript {
     dependencies {
         classpath(libs.ddb.local)
