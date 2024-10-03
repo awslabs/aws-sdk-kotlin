@@ -22,7 +22,7 @@ public open class SchemaGeneratorPluginExtension {
 
     /**
      * Determines the package where code-generated classes / objects will be placed.
-     * Defaults to [DestinationPackage.Relative] from the package of the class being processed, suffixed with `aws.sdk.kotlin.hll.dynamodbmapper.generatedschemas`.
+     * Defaults to [DestinationPackage.Relative] from the package of the class being processed, suffixed with `dynamodbmapper.generatedschemas`.
      */
     public var destinationPackage: DestinationPackage = DestinationPackage.Relative()
 
