@@ -1261,6 +1261,12 @@
             "brazilName": "AwsSdkKotlinMarketplaceMetering"
         },
         {
+            "sdkId": "Marketplace Reporting",
+            "namespace": "aws.sdk.kotlin.services.marketplacereporting",
+            "artifactName": "marketplacereporting",
+            "brazilName": "AwsSdkKotlinMarketplaceReporting"
+        },
+        {
             "sdkId": "MediaConnect",
             "namespace": "aws.sdk.kotlin.services.mediaconnect",
             "artifactName": "mediaconnect",
