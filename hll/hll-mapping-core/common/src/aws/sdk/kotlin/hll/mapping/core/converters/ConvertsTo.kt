@@ -4,11 +4,14 @@
  */
 package aws.sdk.kotlin.hll.mapping.core.converters
 
+import aws.smithy.kotlin.runtime.ExperimentalApi
+
 /**
  * Models one-way conversion from a type [F] to a type [T]
  * @param F The type being converted from
  * @param T The type being converted to
  */
+@ExperimentalApi
 public fun interface ConvertsTo<F, T> {
     /**
      * Converts a single value from type [F] to type [T]
@@ -27,6 +30,7 @@ public fun interface ConvertsTo<F, T> {
  * @param converter The converter to chain together with this converter. Note that the source type of the given
  * [converter] must be the same as the target type of this converter.
  */
+@ExperimentalApi
 public fun <F, T, T2> ConvertsTo<F, T>.andThenConvertsTo(converter: ConvertsTo<T, T2>): ConvertsTo<F, T2> =
     ConvertsTo { from: F -> converter.convertTo(this.convertTo(from)) }
 
@@ -37,6 +41,7 @@ public fun <F, T, T2> ConvertsTo<F, T>.andThenConvertsTo(converter: ConvertsTo<T
  * @param T The type being converted to
  * @param validate A function which accepts an [F] value and throws an exception if the expected condition is not met
  */
+@ExperimentalApi
 public fun <F, T> ConvertsTo<F, T>.firstValidatingFrom(validate: (F) -> Unit): ConvertsTo<F, T> =
     ConvertsTo { from: F ->
         validate(from)

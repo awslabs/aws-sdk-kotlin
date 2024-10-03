@@ -112,6 +112,7 @@ internal class PaginatorRenderer(
 
     private fun renderItemsPaginator() {
         val jvmName = "${op.methodName}${paginationInfo.items.name.capitalizeFirstChar}"
+        write("@#T", Types.Smithy.ExperimentalApi)
         write("@#T(#S)", Types.Kotlin.Jvm.JvmName, jvmName)
         withBlock("public fun <T> #T.items(): #T =", "", pageFlowType, itemFlowType) {
             withBlock("#T { page ->", "}", Types.Kotlinx.Coroutines.Flow.transform) {
@@ -123,6 +124,7 @@ internal class PaginatorRenderer(
     }
 
     private fun renderPaginatorWithDsl() {
+        write("@#T", Types.Smithy.ExperimentalApi)
         writeInline("public inline fun <T> ")
 
         extensionOf?.let { writeInline("#T.", extensionOf) }
@@ -139,6 +141,7 @@ internal class PaginatorRenderer(
     }
 
     private fun renderPaginatorWithRequest() {
+        write("@#T", Types.Smithy.ExperimentalApi)
         writeInline("public fun <T> ")
 
         extensionOf?.let { writeInline("#T.", extensionOf) }

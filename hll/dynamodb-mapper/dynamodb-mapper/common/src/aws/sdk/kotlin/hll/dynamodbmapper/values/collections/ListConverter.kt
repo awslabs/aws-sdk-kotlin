@@ -8,6 +8,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.values.ValueConverter
 import aws.sdk.kotlin.hll.mapping.core.converters.Converter
 import aws.sdk.kotlin.hll.mapping.core.converters.collections.mapFrom
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import aws.smithy.kotlin.runtime.ExperimentalApi
 
 /**
  * Converts between [List] and
@@ -23,6 +24,7 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  * val intListConv2 = ListConverter.mapFrom(IntConverter) // same as above
  * ```
  */
+@ExperimentalApi
 public val ListConverter: ValueConverter<List<AttributeValue>> = Converter(AttributeValue::L, AttributeValue::asL)
 
 /**
@@ -30,6 +32,7 @@ public val ListConverter: ValueConverter<List<AttributeValue>> = Converter(Attri
  * @param F The type of elements in the list
  * @param elementConverter A converter for transforming between values of [F] and [AttributeValue]
  */
+@ExperimentalApi
 @Suppress("ktlint:standard:function-naming")
 public fun <F> ListConverter(elementConverter: Converter<F, AttributeValue>): ValueConverter<List<F>> =
     ListConverter.mapFrom(elementConverter)
