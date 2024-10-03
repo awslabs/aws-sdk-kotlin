@@ -22,6 +22,10 @@ public object MapperTypes {
         public val ManualPagination: TypeRef = TypeRef(MapperPkg.Hl.Annotations, "ManualPagination")
     }
 
+    public object Internal {
+        public val withWrappedClient: TypeRef = TypeRef(MapperPkg.Hl.Internal, "withWrappedClient")
+    }
+
     public object Items {
         public fun itemSchema(typeVar: String): TypeRef =
             TypeRef(MapperPkg.Hl.Items, "ItemSchema", genericArgs = listOf(TypeVar(typeVar)))

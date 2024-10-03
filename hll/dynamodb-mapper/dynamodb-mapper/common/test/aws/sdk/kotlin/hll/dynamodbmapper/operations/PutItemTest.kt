@@ -43,7 +43,7 @@ class PutItemTest : DdbLocalTest() {
 
         table.putItem { item = Item(id = "foo", value = 42) }
 
-        val resp = ddb.getItem(TABLE_NAME, "id" to "foo")
+        val resp = lowLevelAccess { getItem(TABLE_NAME, "id" to "foo") }
 
         val item = assertNotNull(resp.item)
         assertEquals("foo", item["id"]?.asSOrNull())
