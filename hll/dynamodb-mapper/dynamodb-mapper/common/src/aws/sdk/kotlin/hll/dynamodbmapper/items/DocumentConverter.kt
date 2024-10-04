@@ -8,11 +8,13 @@ import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
 import aws.sdk.kotlin.hll.dynamodbmapper.model.toItem
 import aws.sdk.kotlin.hll.dynamodbmapper.util.NULL_ATTR
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.content.Document
 import aws.smithy.kotlin.runtime.util.toNumber
 
 // FIXME Combine with DocumentValueConverter or refactor to commonize as much code as possible
+@ExperimentalApi
 public object DocumentConverter : ItemConverter<Document> {
     override fun convertFrom(to: Item): Document = to
         .mapValues { (_, attr) -> fromAttributeValue(attr) }

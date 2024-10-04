@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 public object Types {
     @InternalSdkApi
     public object Smithy {
+        public val ExperimentalApi: TypeRef = TypeRef("aws.smithy.kotlin.runtime", "ExperimentalApi")
         public val Instant: TypeRef = TypeRef("aws.smithy.kotlin.runtime.time", "Instant")
         public val Url: TypeRef = TypeRef("aws.smithy.kotlin.runtime.net.url", "Url")
         public val Document: TypeRef = TypeRef("aws.smithy.kotlin.runtime.content", "Document")

@@ -7,6 +7,7 @@ package aws.sdk.kotlin.hll.mapping.core.converters
 import aws.sdk.kotlin.hll.mapping.core.util.Either
 import aws.sdk.kotlin.hll.mapping.core.util.map
 import aws.sdk.kotlin.hll.mapping.core.util.merge
+import aws.smithy.kotlin.runtime.ExperimentalApi
 
 /**
  * Models partial, asymmetrical conversion between a type [F] and a type [T], where some condition internal to the
@@ -26,6 +27,7 @@ import aws.sdk.kotlin.hll.mapping.core.util.merge
  * @param T2 The intermediate type being converted to on the complex branch
  * @param T The overall type being converted to
  */
+@ExperimentalApi
 public interface SplittingConverter<F, F2, T2, T> :
     ConvertsTo<F, Either<T, F2>>,
     ConvertsFrom<Either<F, T2>, T>
@@ -41,6 +43,7 @@ public interface SplittingConverter<F, F2, T2, T> :
  * @param T The overall type being converted to
  * @param converter A [Converter] between types [F2] and [T2]
  */
+@ExperimentalApi
 public fun <F, F2 : F, T, T2 : T> SplittingConverter<F, F2, T2, T>.mergeBy(
     converter: Converter<F2, T2>,
 ): Converter<F, T> =

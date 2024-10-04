@@ -4,11 +4,14 @@
  */
 package aws.sdk.kotlin.hll.mapping.core.converters
 
+import aws.smithy.kotlin.runtime.ExperimentalApi
+
 /**
  * Models two-way conversion between a type [T] and a type [F]
  * @param F The type being converted from
  * @param T The type being converted to
  */
+@ExperimentalApi
 public interface Converter<F, T> :
     ConvertsTo<F, T>,
     ConvertsFrom<F, T>
@@ -20,6 +23,7 @@ public interface Converter<F, T> :
  * @param convertTo A converter instance for converting one-way from [F] to [T]
  * @param convertFrom A converter instance for converting one-way from [T] to [F]
  */
+@ExperimentalApi
 public fun <F, T> Converter(convertTo: ConvertsTo<F, T>, convertFrom: ConvertsFrom<F, T>): Converter<F, T> =
     object : Converter<F, T>, ConvertsTo<F, T> by convertTo, ConvertsFrom<F, T> by convertFrom { }
 
@@ -33,6 +37,7 @@ public fun <F, T> Converter(convertTo: ConvertsTo<F, T>, convertFrom: ConvertsFr
  * @param converter The converter to chain together with this converter. Note that the source type of the given
  * [converter] must be the same as the target type of this converter.
  */
+@ExperimentalApi
 public fun <F, T, T2> Converter<F, T>.andThenTo(converter: Converter<T, T2>): Converter<F, T2> =
     Converter(this.andThenConvertsTo(converter), converter.andThenConvertsFrom(this))
 
@@ -46,6 +51,7 @@ public fun <F, T, T2> Converter<F, T>.andThenTo(converter: Converter<T, T2>): Co
  * @param converter The converter to chain together with this converter. Note that the target type of the given
  * [converter] must be the same as the source type of this converter.
  */
+@ExperimentalApi
 public fun <F, F2, T> Converter<F, T>.andThenFrom(converter: Converter<F2, F>): Converter<F2, T> =
     Converter(converter.andThenConvertsTo(this), this.andThenConvertsFrom(converter))
 
@@ -57,6 +63,7 @@ public fun <F, F2, T> Converter<F, T>.andThenFrom(converter: Converter<F2, F>): 
  * @param validate A function which accepts an [F] value and throws an exception if the expected condition is not
  * met
  */
+@ExperimentalApi
 public fun <F, T> Converter<F, T>.validatingFrom(validate: (F) -> Unit): Converter<F, T> =
     Converter(this.firstValidatingFrom(validate), this)
 
@@ -68,5 +75,6 @@ public fun <F, T> Converter<F, T>.validatingFrom(validate: (F) -> Unit): Convert
  * @param validate A function which accepts a [T] value and throws an exception if the expected condition is not
  * met
  */
+@ExperimentalApi
 public fun <F, T> Converter<F, T>.validatingTo(validate: (T) -> Unit): Converter<F, T> =
     Converter(this, this.firstValidatingTo(validate))

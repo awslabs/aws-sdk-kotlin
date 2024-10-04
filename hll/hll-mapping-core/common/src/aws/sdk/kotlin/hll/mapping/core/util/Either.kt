@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.hll.mapping.core.util
 
+import aws.smithy.kotlin.runtime.ExperimentalApi
+
 /**
  * Represents a value which may be one of two possible types: [L] or [R]. An instance of this type will be either [Left]
  * or [Right].
@@ -15,11 +17,13 @@ package aws.sdk.kotlin.hll.mapping.core.util
  * @param L The type of [Left] values
  * @param R The type of [Right] values
  */
+@ExperimentalApi
 public sealed interface Either<out L, out R> {
     /**
      * The left side of an [Either]
      * @param L The type of values held in this class
      */
+    @ExperimentalApi
     public interface Left<out L> : Either<L, Nothing> {
         /**
          * An [L] value
@@ -31,6 +35,7 @@ public sealed interface Either<out L, out R> {
      * The right side of an [Either]
      * @param R The type of values held in this class
      */
+    @ExperimentalApi
     public interface Right<out R> : Either<Nothing, R> {
         /**
          * An [R] value
@@ -38,6 +43,7 @@ public sealed interface Either<out L, out R> {
         public val value: R
     }
 
+    @ExperimentalApi
     public companion object {
         /**
          * Creates a new [Left] with the given [value]
@@ -66,6 +72,7 @@ private data class RightImpl<out R>(override val value: R) : Either.Right<R>
  * @param R2 The new type of right value
  * @param func A mapping function which turns an [R] into an [R2]
  */
+@ExperimentalApi
 public inline fun <L, R, R2> Either<L, R>.map(func: (right: R) -> R2): Either<L, R2> = when (this) {
     is Either.Left -> this
     is Either.Right -> Either.Right(func(value))
@@ -79,6 +86,7 @@ public inline fun <L, R, R2> Either<L, R>.map(func: (right: R) -> R2): Either<L,
  * @param ifLeft A function for converting [L] values to [T]
  * @param ifRight A function for converting [R] values to [T]
  */
+@ExperimentalApi
 public inline fun <L, R, T> Either<L, R>.fold(ifLeft: (left: L) -> T, ifRight: (right: R) -> T): T = when (this) {
     is Either.Left -> ifLeft(value)
     is Either.Right -> ifRight(value)
@@ -88,4 +96,5 @@ public inline fun <L, R, T> Either<L, R>.fold(ifLeft: (left: L) -> T, ifRight: (
  * Returns the left value or right value
  * @param T The type of values in left/right
  */
+@ExperimentalApi
 public fun <T> Either<T, T>.merge(): T = fold({ it }, { it })

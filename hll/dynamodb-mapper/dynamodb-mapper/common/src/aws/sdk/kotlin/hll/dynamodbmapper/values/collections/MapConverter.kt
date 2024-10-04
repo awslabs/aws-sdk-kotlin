@@ -10,6 +10,7 @@ import aws.sdk.kotlin.hll.mapping.core.converters.collections.mapFrom
 import aws.sdk.kotlin.hll.mapping.core.converters.collections.mapKeysFrom
 import aws.sdk.kotlin.hll.mapping.core.converters.collections.mapValuesFrom
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import aws.smithy.kotlin.runtime.ExperimentalApi
 
 /**
  * Converts between [Map] and
@@ -23,6 +24,7 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
  * val instantMapConv2 = MapConverter.mapValuesFrom(InstantConverter.Default) // same as above
  * ```
  */
+@ExperimentalApi
 public val MapConverter: ValueConverter<Map<String, AttributeValue>> = Converter(AttributeValue::M, AttributeValue::asM)
 
 /**
@@ -32,6 +34,7 @@ public val MapConverter: ValueConverter<Map<String, AttributeValue>> = Converter
  * @param keyConverter A converter for transforming between [K] keys and [String] keys
  * @param valueConverter A converter for transforming between [V] values and [AttributeValue]
  */
+@ExperimentalApi
 @Suppress("ktlint:standard:function-naming")
 public fun <K, V> MapConverter(
     keyConverter: Converter<K, String>,
@@ -43,6 +46,7 @@ public fun <K, V> MapConverter(
  * @param V The type of values in the map
  * @param valueConverter A converter for transforming between [V] values and [AttributeValue]
  */
+@ExperimentalApi
 @Suppress("ktlint:standard:function-naming")
 public fun <V> MapConverter(valueConverter: ValueConverter<V>): ValueConverter<Map<String, V>> =
     MapConverter.mapValuesFrom(valueConverter)
