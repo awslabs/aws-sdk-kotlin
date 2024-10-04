@@ -43,7 +43,8 @@ private fun runSmokeTests(service: String, envVars: Map<String, String> = emptyM
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
     val runner = GradleRunner.create()
         .withProjectDir(File(sdkRootDir))
-        .withArguments(listOf("-Paws.kotlin.native=false", ":tests:codegen:smoke-tests:services:$service:smokeTest"))
+        // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
+        .withArguments("-Paws.kotlin.native=false", ":tests:codegen:smoke-tests:services:$service:smokeTest")
         .withEnvironment(envVars)
         .build()
 
