@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.47] - 10/04/2024
+
+### Features
+* (**ec2**) Documentation updates for Amazon EC2.
+* (**iotdataplane**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
 ## [1.3.46] - 10/03/2024
 
 ### Features
