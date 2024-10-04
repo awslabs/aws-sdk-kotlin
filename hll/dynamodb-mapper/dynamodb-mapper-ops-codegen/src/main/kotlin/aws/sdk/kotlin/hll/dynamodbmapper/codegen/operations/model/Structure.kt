@@ -21,7 +21,7 @@ internal fun Structure.toHighLevel(pkg: String): Structure {
         val nullable = llMember.type.nullable
 
         val hlMember = when (val behavior = llMember.codegenBehavior) {
-            MemberCodegenBehavior.PassThrough, is MemberCodegenBehavior.ExpressionArguments -> llMember
+            MemberCodegenBehavior.PassThrough -> llMember
 
             MemberCodegenBehavior.MapAll, MemberCodegenBehavior.MapKeys ->
                 llMember.copy(type = TypeVar("T", nullable))
