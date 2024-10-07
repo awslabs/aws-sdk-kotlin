@@ -1,0 +1,5 @@
+{
+    "id": "0b5b53ab-70c0-4c1b-a445-8663ae86d6d1",
+    "type": "misc",
+    "description": "Change precedence of profile chain to: Static credentials, Assume role with source profile OR Assume role with naned provider, Web identity token, SSO session, Legacy SSO, Process"
+}
