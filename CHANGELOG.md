@@ -1,5 +1,47 @@
 # Changelog
 
+## [1.3.48] - 10/07/2024
+
+### Features
+* (**deadline**) Add support for using the template from a previous job during job creation and listing parameter definitions for a job.
+* (**qconnect**) This release adds support for the following capabilities: Configuration of the Gen AI system via AIAgent and AIPrompts. Integration support for Bedrock Knowledge Base.
+* (**redshift**) Add validation pattern to S3KeyPrefix on the EnableLogging API
+
+### Documentation
+* (**marketplacereporting**) Documentation-only update for AWS Marketplace Reporting API.
+
+## [1.3.47] - 10/04/2024
+
+### Features
+* (**ec2**) Documentation updates for Amazon EC2.
+* (**iotdataplane**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+## [1.3.46] - 10/03/2024
+
+### Features
+* (**codepipeline**) AWS CodePipeline introduces Commands action that enables you to easily run shell commands as part of your pipeline execution.
+* (**connect**) Public GetMetricDataV2 Grouping increase from 3 to 4
+* (**ec2**) This release includes a new API for modifying instance cpu-options after launch.
+* (**iot**) This release adds support for Custom Authentication with X.509 Client Certificates, support for Custom Client Certificate validation, and support for selecting application protocol and authentication type without requiring TLS ALPN for customer's AWS IoT Domain Configurations.
+* (**marketplacereporting**) The AWS Marketplace Reporting service introduces the GetBuyerDashboard API. This API returns a dashboard that provides visibility into your organization's AWS Marketplace agreements and associated spend across the AWS accounts in your organization.
+* (**mediapackagev2**) Added support for ClipStartTime on the FilterConfiguration object on OriginEndpoint manifest settings objects. Added support for EXT-X-START tags on produced HLS child playlists.
+* (**quicksight**) QuickSight: Add support for exporting and importing folders in AssetBundle APIs
+
+## [1.3.45] - 10/02/2024
+
+### Features
+* (**appstream**) Added support for Automatic Time Zone Redirection on Amazon AppStream 2.0
+* (**b2bi**) Added and updated APIs to support outbound EDI transformations
+* (**bedrockagentruntime**) Added raw model response and usage metrics to PreProcessing and PostProcessing Trace
+* (**bedrockruntime**) Added new fields to Amazon Bedrock Guardrails trace
+* (**iotdeviceadvisor**) Add clientToken attribute and implement idempotency for CreateSuiteDefinition.
+* (**ivsrealtime**) Adds new Stage Health EventErrorCodes applicable to RTMP(S) broadcasts. Bug Fix: Enforces that EncoderConfiguration Video height and width must be even-number values.
+* (**s3**) This release introduces a header representing the minimum object size limit for Lifecycle transitions.
+* (**sagemaker**) releasing builtinlcc to public
+
+### Documentation
+* (**workspaces**) WSP is being rebranded to become DCV.
+
 ## [1.3.44] - 10/01/2024
 
 ### Features
