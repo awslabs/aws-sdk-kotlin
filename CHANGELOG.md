@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.48] - 10/07/2024
+
+### Features
+* (**deadline**) Add support for using the template from a previous job during job creation and listing parameter definitions for a job.
+* (**qconnect**) This release adds support for the following capabilities: Configuration of the Gen AI system via AIAgent and AIPrompts. Integration support for Bedrock Knowledge Base.
+* (**redshift**) Add validation pattern to S3KeyPrefix on the EnableLogging API
+
+### Documentation
+* (**marketplacereporting**) Documentation-only update for AWS Marketplace Reporting API.
+
 ## [1.3.47] - 10/04/2024
 
 ### Features
