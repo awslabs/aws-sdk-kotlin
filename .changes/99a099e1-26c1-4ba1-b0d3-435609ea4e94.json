@@ -1,5 +1,5 @@
 {
     "id": "99a099e1-26c1-4ba1-b0d3-435609ea4e94",
     "type": "misc",
-    "description": "Change order of credentials provider chain to: System properties, Environment variables, Web identity tokens, Profile, ECS, EC2"
+    "description": "The order of credentials resolution in the credentials provider chain has been updated to: system properties, environment variables, web identity tokens, profile, ECS, EC2"
 }
