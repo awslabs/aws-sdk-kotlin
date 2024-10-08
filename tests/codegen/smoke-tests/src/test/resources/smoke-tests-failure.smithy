@@ -41,6 +41,9 @@ service FailureService {
             vendorParamsShape: AwsVendorParams,
             vendorParams: {
                 region: "eu-central-1"
+                uri: "https://failure.amazonaws.com"
+                useFips: false
+                useDualstack: false
             }
         }
     ]
@@ -57,6 +60,12 @@ operation TestOperation {
 @error("client")
 structure InvalidMessageError {}
 
-structure AwsVendorParams {
-    region: String
+@mixin
+structure BaseAwsVendorParams {
+    region: String = "us-west-2"
+    uri: String
+    useFips: Boolean = false
+    useDualstack: Boolean = false
 }
+
+structure AwsVendorParams with [BaseAwsVendorParams] {}
