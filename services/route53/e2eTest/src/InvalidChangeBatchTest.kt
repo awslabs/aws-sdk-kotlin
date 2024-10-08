@@ -9,62 +9,66 @@ import aws.smithy.kotlin.runtime.util.Uuid
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContains
-import kotlin.test.assertNotNull
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
 
 // https://github.com/awslabs/aws-sdk-kotlin/issues/1433
 class InvalidChangeBatchTest {
     @Test
-    fun testMessageIsPopulated() = runTest { Route53Client {}.use { client ->
-        val createHostedZoneResp = client.createHostedZone {
-            this.callerReference = Uuid.random().toString()
-            this.name = "this-is-a-test-hosted-zone-for-aws-sdk-kotlin.com"
-        }
+    fun testMessageIsPopulated() = runTest {
+        Route53Client {
+            region = "us-east-1"
+        }.use { client ->
+            val createHostedZoneResp = client.createHostedZone {
+                this.callerReference = Uuid.random().toString()
+                this.name = "this-is-a-test-hosted-zone-for-aws-sdk-kotlin.com"
+            }
 
-        val hostedZoneId = checkNotNull(createHostedZoneResp.hostedZone?.id) { "Hosted zone is unexpectedly null" }
+            val hostedZoneId = checkNotNull(createHostedZoneResp.hostedZone?.id) { "Hosted zone is unexpectedly null" }
 
-        val exception = assertFailsWith<InvalidChangeBatch> {
-            client.changeResourceRecordSets {
-                this.hostedZoneId = hostedZoneId
-                this.changeBatch = ChangeBatch {
-                    this.changes = listOf(
-                        Change {
-                            this.action = ChangeAction.Delete
-                            this.resourceRecordSet = ResourceRecordSet {
-                                this.name = "test.blerg.com"
-                                this.type = RrType.Cname
-                                this.ttl = 300
-                                this.resourceRecords = listOf(
-                                    ResourceRecord {
-                                        value = "test.blerg.com"
-                                    }
-                                )
-                            }
-                        },
-                        Change {
-                            this.action = ChangeAction.Create
-                            this.resourceRecordSet = ResourceRecordSet {
-                                this.name = "test.blerg.com"
-                                this.type = RrType.Cname
-                                this.ttl = 300
-                                this.resourceRecords = listOf(
-                                    ResourceRecord {
-                                        value = "test.blerg.com"
-                                    }
-                                )
-                            }
-                        },
-                    )
-                    this.comment = "testing..."
+            val exception = assertFailsWith<InvalidChangeBatch> {
+                client.changeResourceRecordSets {
+                    this.hostedZoneId = hostedZoneId
+                    this.changeBatch = ChangeBatch {
+                        this.changes = listOf(
+                            Change {
+                                this.action = ChangeAction.Delete
+                                this.resourceRecordSet = ResourceRecordSet {
+                                    this.name = "test.blerg.com"
+                                    this.type = RrType.Cname
+                                    this.ttl = 300
+                                    this.resourceRecords = listOf(
+                                        ResourceRecord {
+                                            value = "test.blerg.com"
+                                        },
+                                    )
+                                }
+                            },
+                            Change {
+                                this.action = ChangeAction.Create
+                                this.resourceRecordSet = ResourceRecordSet {
+                                    this.name = "test.blerg.com"
+                                    this.type = RrType.Cname
+                                    this.ttl = 300
+                                    this.resourceRecords = listOf(
+                                        ResourceRecord {
+                                            value = "test.blerg.com"
+                                        },
+                                    )
+                                }
+                            },
+                        )
+                        this.comment = "testing..."
+                    }
                 }
             }
-        }
 
-        client.deleteHostedZone {
-            id = hostedZoneId
-        }
+            client.deleteHostedZone {
+                id = hostedZoneId
+            }
 
-        assertNotNull(exception.message)
-        assertContains(exception.message, "[Tried to delete resource record set [name='test.blerg.com.', type='CNAME'] but it was not found, RRSet with DNS name test.blerg.com. is not permitted in zone this-is-a-test-domain-for-aws-sdk-kotlin.com., RRSet of type CNAME with DNS name test.blerg.com. is not permitted as it creates a CNAME loop in the zone.]")
-    } }
+            assertNotNull(exception.message)
+            assertContains(exception.message, "[Tried to delete resource record set [name='test.blerg.com.', type='CNAME'] but it was not found, RRSet with DNS name test.blerg.com. is not permitted in zone this-is-a-test-domain-for-aws-sdk-kotlin.com., RRSet of type CNAME with DNS name test.blerg.com. is not permitted as it creates a CNAME loop in the zone.]")
+        }
+    }
 }
