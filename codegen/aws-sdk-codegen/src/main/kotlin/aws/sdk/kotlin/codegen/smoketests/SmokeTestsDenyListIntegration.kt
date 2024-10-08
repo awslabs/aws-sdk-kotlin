@@ -33,5 +33,4 @@ val smokeTestDenyList = setOf(
     "Application Auto Scaling",
     "SWF",
     "WAFV2",
-    "IoT Data Plane",
 )
