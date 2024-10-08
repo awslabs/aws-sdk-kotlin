@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.49] - 10/08/2024
+
+### Features
+* (**elasticache**) AWS ElastiCache SDK now supports using APIs with newly launched Valkey engine. Please refer to updated AWS ElastiCache public documentation for detailed information on API usage.
+* (**memorydb**) Amazon MemoryDB SDK now supports all APIs for newly launched Valkey engine. Please refer to the updated Amazon MemoryDB public documentation for detailed information on API usage.
+
+### Miscellaneous
+* Upgrade to Smithy 1.51.0
+
 ## [1.3.48] - 10/07/2024
 
 ### Features
