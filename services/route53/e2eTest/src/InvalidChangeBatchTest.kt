@@ -68,7 +68,8 @@ class InvalidChangeBatchTest {
             }
 
             assertNotNull(exception.message)
-            assertContains(exception.message, "[Tried to delete resource record set [name='test.blerg.com.', type='CNAME'] but it was not found, RRSet with DNS name test.blerg.com. is not permitted in zone this-is-a-test-domain-for-aws-sdk-kotlin.com., RRSet of type CNAME with DNS name test.blerg.com. is not permitted as it creates a CNAME loop in the zone.]")
+            println(exception.message)
+            assertContains(exception.message, "[Tried to delete resource record set [name='test.blerg.com.', type='CNAME'] but it was not found, RRSet with DNS name test.blerg.com. is not permitted in zone this-is-a-test-hosted-zone-for-aws-sdk-kotlin.com., RRSet of type CNAME with DNS name test.blerg.com. is not permitted as it creates a CNAME loop in the zone.]")
         }
     }
 }
