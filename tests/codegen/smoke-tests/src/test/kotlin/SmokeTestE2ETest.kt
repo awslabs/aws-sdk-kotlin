@@ -21,6 +21,16 @@ class SmokeTestE2ETest {
     }
 
     @Test
+    fun exceptionService() {
+        val smokeTestRunnerOutput = runSmokeTests("exceptionService", expectingFailure = true)
+
+        assertContains(smokeTestRunnerOutput, "not ok ExceptionService ExceptionTest - no error expected from service")
+        assertContains(smokeTestRunnerOutput, "#aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsFailureException: Smoke test failed with HTTP status code: 400")
+        assertContains(smokeTestRunnerOutput, "#\tat aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsInterceptor.readBeforeDeserialization(SmokeTestsInterceptor.kt:19)")
+        assertContains(smokeTestRunnerOutput, "#\tat aws.smithy.kotlin.runtime.http.interceptors.InterceptorExecutor.readBeforeDeserialization(InterceptorExecutor.kt:252)")
+    }
+
+    @Test
     fun successServiceSkipTags() {
         val envVars = mapOf(SKIP_TAGS to "success")
         val smokeTestRunnerOutput = runSmokeTests("successService", envVars)
@@ -39,14 +49,20 @@ class SmokeTestE2ETest {
     }
 }
 
-private fun runSmokeTests(service: String, envVars: Map<String, String> = emptyMap()): String {
+private fun runSmokeTests(
+    service: String,
+    envVars: Map<String, String> = emptyMap(),
+    expectingFailure: Boolean = false,
+): String {
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
-    val runner = GradleRunner.create()
+
+    val task = GradleRunner.create()
         .withProjectDir(File(sdkRootDir))
         // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
         .withArguments("-Paws.kotlin.native=false", ":tests:codegen:smoke-tests:services:$service:smokeTest")
         .withEnvironment(envVars)
-        .build()
 
-    return runner.output
+    val buildResult = if (expectingFailure) task.buildAndFail() else task.build()
+
+    return buildResult.output
 }

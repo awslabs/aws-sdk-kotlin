@@ -17,6 +17,7 @@ plugins {
 val projections = listOf(
     Projection("successService", "smoke-tests-success.smithy", "smithy.kotlin.traits#SuccessService"),
     Projection("failureService", "smoke-tests-failure.smithy", "smithy.kotlin.traits#FailureService"),
+    Projection("exceptionService", "smoke-tests-exception.smithy", "smithy.kotlin.traits#ExceptionService"),
 )
 
 configureProject()
