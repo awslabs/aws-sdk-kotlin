@@ -5,10 +5,12 @@
 package aws.sdk.kotlin.hll.mapping.core.converters.collections
 
 import aws.sdk.kotlin.hll.mapping.core.converters.*
+import aws.smithy.kotlin.runtime.ExperimentalApi
 
 /**
  * Namespace for containing various conversion utilities dealing with [Set] mapping
  */
+@ExperimentalApi
 public object SetMappingConverters {
     /**
      * Creates a one-way converter for transforming [Set] with elements of type [T] to [Set] with elements of type [F]
@@ -77,6 +79,7 @@ public object SetMappingConverters {
  * @param elementConverter The element converter to chain together with this set converter. Note that the target type
  * of the given [elementConverter] must be the same as the source element type of this converter.
  */
+@ExperimentalApi
 public fun <F, F2, T> Converter<Set<F>, T>.mapFrom(elementConverter: Converter<F2, F>): Converter<Set<F2>, T> =
     this.andThenFrom(SetMappingConverters.of(elementConverter))
 
@@ -90,5 +93,6 @@ public fun <F, F2, T> Converter<Set<F>, T>.mapFrom(elementConverter: Converter<F
  * @param elementConverter The element converter to chain together with this set converter. Note that the source type
  * of the given [elementConverter] must be the same as the target element type of this converter.
  */
+@ExperimentalApi
 public fun <F, T, T2> Converter<F, Set<T>>.mapTo(elementConverter: Converter<T, T2>): Converter<F, Set<T2>> =
     this.andThenTo(SetMappingConverters.of(elementConverter))

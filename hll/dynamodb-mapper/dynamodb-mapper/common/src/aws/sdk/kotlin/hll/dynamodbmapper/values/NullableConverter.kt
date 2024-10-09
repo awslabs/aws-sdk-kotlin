@@ -10,6 +10,7 @@ import aws.sdk.kotlin.hll.mapping.core.converters.SplittingConverter
 import aws.sdk.kotlin.hll.mapping.core.converters.mergeBy
 import aws.sdk.kotlin.hll.mapping.core.util.Either
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import aws.smithy.kotlin.runtime.ExperimentalApi
 import kotlin.reflect.KClass
 
 /**
@@ -19,6 +20,7 @@ import kotlin.reflect.KClass
  * Thus, it is typically used in conjunction with the [NullableConverter] factory function or via [mergeBy].
  * @param V The non-nullable type
  */
+@ExperimentalApi
 public class NullableConverter<V : Any>(klass: KClass<V>) : SplittingConverter<V?, V, AttributeValue, AttributeValue> {
     override fun convertTo(from: V?): Either<AttributeValue, V> = when (from) {
         null -> Either.Left(NULL_ATTR)
@@ -34,8 +36,10 @@ public class NullableConverter<V : Any>(klass: KClass<V>) : SplittingConverter<V
 /**
  * Initializes a new [NullableConverter] for the given reified type [V]
  */
+@ExperimentalApi
 public inline fun <reified V : Any> NullableConverter(): NullableConverter<V> = NullableConverter(V::class)
 
+@ExperimentalApi
 @Suppress("ktlint:standard:function-naming")
 public inline fun <reified F : Any> NullableConverter(
     delegate: Converter<F, AttributeValue>,

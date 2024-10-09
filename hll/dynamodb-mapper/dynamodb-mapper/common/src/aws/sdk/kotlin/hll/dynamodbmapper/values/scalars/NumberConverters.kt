@@ -9,10 +9,12 @@ import aws.sdk.kotlin.hll.mapping.core.converters.Converter
 import aws.sdk.kotlin.hll.mapping.core.converters.andThenTo
 import aws.sdk.kotlin.hll.mapping.core.converters.validatingFrom
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
+import aws.smithy.kotlin.runtime.ExperimentalApi
 
 /**
  * Namespace for containing various conversion utilities dealing with number conversion
  */
+@ExperimentalApi
 public object NumberConverters {
     /**
      * Converts between [String] instances which contains numbers and
@@ -115,6 +117,7 @@ public object NumberConverters {
  * * [Int] — If the number is in the range of [Int.MIN_VALUE] and [Int.MAX_VALUE] (inclusive)
  * * [Long] — Anything else
  */
+@ExperimentalApi
 public val AutoNumberConverter: ValueConverter<Number> =
     NumberConverters.of(NumberConverters.AutoNumberToStringConverter)
 
@@ -122,58 +125,68 @@ public val AutoNumberConverter: ValueConverter<Number> =
  * Converts between [Byte] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val ByteConverter: ValueConverter<Byte> = NumberConverters.of(NumberConverters.ByteToStringConverter)
 
 /**
  * Converts between [Double] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val DoubleConverter: ValueConverter<Double> = NumberConverters.of(NumberConverters.DoubleToStringConverter)
 
 /**
  * Converts between [Float] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val FloatConverter: ValueConverter<Float> = NumberConverters.of(NumberConverters.FloatToStringConverter)
 
 /**
  * Converts between [Int] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val IntConverter: ValueConverter<Int> = NumberConverters.of(NumberConverters.IntToStringConverter)
 
 /**
  * Converts between [Long] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val LongConverter: ValueConverter<Long> = NumberConverters.of(NumberConverters.LongToStringConverter)
 
 /**
  * Converts between [Short] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val ShortConverter: ValueConverter<Short> = NumberConverters.of(NumberConverters.ShortToStringConverter)
 
 /**
  * Converts between [UByte] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val UByteConverter: ValueConverter<UByte> = NumberConverters.of(NumberConverters.UByteToStringConverter)
 
 /**
  * Converts between [UInt] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val UIntConverter: ValueConverter<UInt> = NumberConverters.of(NumberConverters.UIntToStringConverter)
 
 /**
  * Converts between [ULong] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val ULongConverter: ValueConverter<ULong> = NumberConverters.of(NumberConverters.ULongToStringConverter)
 
 /**
  * Converts between [UShort] and
  * [DynamoDB `N` values](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.NamingRulesDataTypes.html#HowItWorks.DataTypes.Number)
  */
+@ExperimentalApi
 public val UShortConverter: ValueConverter<UShort> = NumberConverters.of(NumberConverters.UShortToStringConverter)

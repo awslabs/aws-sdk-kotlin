@@ -5,12 +5,14 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.model
 
 import aws.sdk.kotlin.hll.dynamodbmapper.operations.IndexOperations
+import aws.smithy.kotlin.runtime.ExperimentalApi
 
 /**
  * Represents a secondary index on a table in DynamoDB and an associated item schema. Operations on this index will
  * invoke low-level operations and map items to objects.
  * @param T The type of objects which will be read from this index
  */
+@ExperimentalApi
 public interface Index<T> :
     IndexSpec<T>,
     IndexOperations<T>,
@@ -21,6 +23,7 @@ public interface Index<T> :
      * @param T The type of objects which will be read from this index
      * @param PK The type of the partition key property, either [String], [Number], or [ByteArray]
      */
+    @ExperimentalApi
     public interface PartitionKey<T, PK> :
         Index<T>,
         PersistenceSpec.PartitionKey<T, PK>
@@ -31,6 +34,7 @@ public interface Index<T> :
      * @param PK The type of the partition key property, either [String], [Number], or [ByteArray]
      * @param SK The type of the sort key property, either [String], [Number], or [ByteArray]
      */
+    @ExperimentalApi
     public interface CompositeKey<T, PK, SK> :
         Index<T>,
         PersistenceSpec.CompositeKey<T, PK, SK>

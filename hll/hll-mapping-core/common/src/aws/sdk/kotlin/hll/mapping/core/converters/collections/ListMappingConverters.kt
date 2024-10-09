@@ -5,10 +5,12 @@
 package aws.sdk.kotlin.hll.mapping.core.converters.collections
 
 import aws.sdk.kotlin.hll.mapping.core.converters.*
+import aws.smithy.kotlin.runtime.ExperimentalApi
 
 /**
  * Namespace for containing various conversion utilities dealing with [List] mapping
  */
+@ExperimentalApi
 public object ListMappingConverters {
     /**
      * Creates a one-way converter for transforming [List] with elements of type [T] to [List] with elements of type [F]
@@ -77,6 +79,7 @@ public object ListMappingConverters {
  * @param elementConverter The element converter to chain together with this list converter. Note that the target type
  * of the given [elementConverter] must be the same as the source element type of this converter.
  */
+@ExperimentalApi
 public fun <F, F2, T> Converter<List<F>, T>.mapFrom(elementConverter: Converter<F2, F>): Converter<List<F2>, T> =
     this.andThenFrom(ListMappingConverters.of(elementConverter))
 
@@ -90,5 +93,6 @@ public fun <F, F2, T> Converter<List<F>, T>.mapFrom(elementConverter: Converter<
  * @param elementConverter The element converter to chain together with this list converter. Note that the source type
  * of the given [elementConverter] must be the same as the target element type of this converter.
  */
+@ExperimentalApi
 public fun <F, T, T2> Converter<F, List<T>>.mapTo(elementConverter: Converter<T, T2>): Converter<F, List<T2>> =
     this.andThenTo(ListMappingConverters.of(elementConverter))

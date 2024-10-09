@@ -5,10 +5,12 @@
 package aws.sdk.kotlin.hll.mapping.core.converters.collections
 
 import aws.sdk.kotlin.hll.mapping.core.converters.*
+import aws.smithy.kotlin.runtime.ExperimentalApi
 
 /**
  * Namespace for containing various conversion utilities dealing with [Map] mapping
  */
+@ExperimentalApi
 public object MapMappingConverters {
     /**
      * Creates a one-way converter for transforming [Map] with keys of type [TK] to [Map] with keys of type [FK]. The
@@ -246,6 +248,7 @@ public object MapMappingConverters {
  * @param keyConverter The key converter to chain together with this map converter. Note that the target key type of the
  * given [keyConverter] must be the same as the source key type of this converter.
  */
+@ExperimentalApi
 public fun <FK, FK2, V, T> Converter<Map<FK, V>, T>.mapKeysFrom(
     keyConverter: Converter<FK2, FK>,
 ): Converter<Map<FK2, V>, T> = this.andThenFrom(MapMappingConverters.ofKeys(keyConverter))
@@ -261,6 +264,7 @@ public fun <FK, FK2, V, T> Converter<Map<FK, V>, T>.mapKeysFrom(
  * @param keyConverter The key converter to chain together with this map converter. Note that the source key type of the
  * given [keyConverter] must be the same as the target key type of this converter.
  */
+@ExperimentalApi
 public fun <F, TK, TK2, V> Converter<F, Map<TK, V>>.mapKeysTo(
     keyConverter: Converter<TK, TK2>,
 ): Converter<F, Map<TK2, V>> = this.andThenTo(MapMappingConverters.ofKeys(keyConverter))
@@ -276,6 +280,7 @@ public fun <F, TK, TK2, V> Converter<F, Map<TK, V>>.mapKeysTo(
  * @param valueConverter The value converter to chain together with this map converter. Note that the target value type
  * of the given [valueConverter] must be the same as the source value type of this converter.
  */
+@ExperimentalApi
 public fun <K, FV, FV2, T> Converter<Map<K, FV>, T>.mapValuesFrom(
     valueConverter: Converter<FV2, FV>,
 ): Converter<Map<K, FV2>, T> = this.andThenFrom(MapMappingConverters.ofValues(valueConverter))
@@ -291,6 +296,7 @@ public fun <K, FV, FV2, T> Converter<Map<K, FV>, T>.mapValuesFrom(
  * @param valueConverter The value converter to chain together with this map converter. Note that the source value type
  * of the given [valueConverter] must be the same as the target value type of this converter.
  */
+@ExperimentalApi
 public fun <F, K, TV, TV2> Converter<F, Map<K, TV>>.mapValuesTo(
     valueConverter: Converter<TV, TV2>,
 ): Converter<F, Map<K, TV2>> = this.andThenTo(MapMappingConverters.ofValues(valueConverter))
@@ -321,6 +327,7 @@ private fun <F1, T1, F2, T2> Converter<F1, T1>.zip(other: Converter<F2, T2>) = C
  * @param entryConverter The entry converter to chain together with this map converter. Note that the target types of
  * the given [entryConverter] must be the same as the source types of this converter.
  */
+@ExperimentalApi
 public fun <FK, FV, FK2, FV2, T> Converter<Map<FK, FV>, T>.mapFrom(
     entryConverter: Converter<Pair<FK2, FV2>, Pair<FK, FV>>,
 ): Converter<Map<FK2, FV2>, T> = this.andThenFrom(MapMappingConverters.of(entryConverter))
@@ -339,6 +346,7 @@ public fun <FK, FV, FK2, FV2, T> Converter<Map<FK, FV>, T>.mapFrom(
  * @param valueConverter The value converter to chain together with this map converter. Note that the target value type
  * of the given [valueConverter] must be the same as the source value type of this converter.
  */
+@ExperimentalApi
 public fun <FK, FV, FK2, FV2, T> Converter<Map<FK, FV>, T>.mapFrom(
     keyConverter: Converter<FK2, FK>,
     valueConverter: Converter<FV2, FV>,
@@ -356,6 +364,7 @@ public fun <FK, FV, FK2, FV2, T> Converter<Map<FK, FV>, T>.mapFrom(
  * @param entryConverter The entry converter to chain together with this map converter. Note that the source types of
  * the given [entryConverter] must be the same as the target types of this converter.
  */
+@ExperimentalApi
 public fun <F, TK, TV, TK2, TV2> Converter<F, Map<TK, TV>>.mapTo(
     entryConverter: Converter<Pair<TK, TV>, Pair<TK2, TV2>>,
 ): Converter<F, Map<TK2, TV2>> = this.andThenTo(MapMappingConverters.of(entryConverter))
@@ -374,6 +383,7 @@ public fun <F, TK, TV, TK2, TV2> Converter<F, Map<TK, TV>>.mapTo(
  * @param valueConverter The value converter to chain together with this map converter. Note that the source value type
  * of the given [valueConverter] must be the same as the target value type of this converter.
  */
+@ExperimentalApi
 public fun <F, TK, TV, TK2, TV2> Converter<F, Map<TK, TV>>.mapTo(
     keyConverter: Converter<TK, TK2>,
     valueConverter: Converter<TV, TV2>,
