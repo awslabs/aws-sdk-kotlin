@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.50] - 10/09/2024
+
+### Features
+* (**codepipeline**) AWS CodePipeline introduces a Compute category
+
 ## [1.3.49] - 10/08/2024
 
 ### Features
