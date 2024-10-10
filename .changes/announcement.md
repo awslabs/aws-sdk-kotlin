@@ -56,7 +56,6 @@ the credentials provider to a credentials provider chain with the current order,
 
 ```kotlin
 S3Client{
-    region = "..."
     credentialsProvider = CredentialsProviderChain(
         SystemPropertyCredentialsProvider(),
         EnvironmentCredentialsProvider(),
