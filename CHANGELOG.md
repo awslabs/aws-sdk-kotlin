@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.51] - 10/10/2024
+
+### Features
+* (**databasemigrationservice**) Introduces DescribeDataMigrations, CreateDataMigration, ModifyDataMigration, DeleteDataMigration, StartDataMigration, StopDataMigration operations to SDK. Provides FailedDependencyFault error message.
+* (**ec2**) This release adds support for assigning the billing of shared Amazon EC2 On-Demand Capacity Reservations.
+* (**iotfleetwise**) Refine campaign related API validations
+* (**neptunegraph**) Support for 16 m-NCU graphs available through account allowlisting
+* (**outposts**) Adding new "DELIVERED" enum value for Outposts Order status
+* (**route53resolver**) Route 53 Resolver Forwarding Rules can now include a server name indication (SNI) in the target address for rules that use the DNS-over-HTTPS (DoH) protocol. When a DoH-enabled Outbound Resolver Endpoint forwards a request to a DoH server, it will provide the SNI in the TLS handshake.
+* (**socialmessaging**) This release for AWS End User Messaging includes a public SDK, providing a suite of APIs that enable sending WhatsApp messages to end users.
+* (**timestreaminfluxdb**) This release updates our regex based validation rules in regards to valid DbInstance and DbParameterGroup name.
+
+### Documentation
+* (**acmpca**) Documentation updates for AWS Private CA.
+* (**ecs**) This is a documentation only release that updates to documentation to let customers know that Amazon Elastic Inference is no longer available.
+* (**elasticinference**) Elastic Inference - Documentation update to add service shutdown notice.
+
 ## [1.3.50] - 10/09/2024
 
 ### Features

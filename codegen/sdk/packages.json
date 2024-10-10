@@ -1945,6 +1945,12 @@
             "brazilName": "AwsSdkKotlinSnowball"
         },
         {
+            "sdkId": "SocialMessaging",
+            "namespace": "aws.sdk.kotlin.services.socialmessaging",
+            "artifactName": "socialmessaging",
+            "brazilName": "AwsSdkKotlinSocialmessaging"
+        },
+        {
             "sdkId": "Ssm Sap",
             "namespace": "aws.sdk.kotlin.services.ssmsap",
             "artifactName": "ssmsap",
