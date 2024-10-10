@@ -1,5 +1,99 @@
 # Changelog
 
+## [1.3.51] - 10/10/2024
+
+### Features
+* (**databasemigrationservice**) Introduces DescribeDataMigrations, CreateDataMigration, ModifyDataMigration, DeleteDataMigration, StartDataMigration, StopDataMigration operations to SDK. Provides FailedDependencyFault error message.
+* (**ec2**) This release adds support for assigning the billing of shared Amazon EC2 On-Demand Capacity Reservations.
+* (**iotfleetwise**) Refine campaign related API validations
+* (**neptunegraph**) Support for 16 m-NCU graphs available through account allowlisting
+* (**outposts**) Adding new "DELIVERED" enum value for Outposts Order status
+* (**route53resolver**) Route 53 Resolver Forwarding Rules can now include a server name indication (SNI) in the target address for rules that use the DNS-over-HTTPS (DoH) protocol. When a DoH-enabled Outbound Resolver Endpoint forwards a request to a DoH server, it will provide the SNI in the TLS handshake.
+* (**socialmessaging**) This release for AWS End User Messaging includes a public SDK, providing a suite of APIs that enable sending WhatsApp messages to end users.
+* (**timestreaminfluxdb**) This release updates our regex based validation rules in regards to valid DbInstance and DbParameterGroup name.
+
+### Documentation
+* (**acmpca**) Documentation updates for AWS Private CA.
+* (**ecs**) This is a documentation only release that updates to documentation to let customers know that Amazon Elastic Inference is no longer available.
+* (**elasticinference**) Elastic Inference - Documentation update to add service shutdown notice.
+
+## [1.3.50] - 10/09/2024
+
+### Features
+* (**codepipeline**) AWS CodePipeline introduces a Compute category
+
+## [1.3.49] - 10/08/2024
+
+### Features
+* (**elasticache**) AWS ElastiCache SDK now supports using APIs with newly launched Valkey engine. Please refer to updated AWS ElastiCache public documentation for detailed information on API usage.
+* (**memorydb**) Amazon MemoryDB SDK now supports all APIs for newly launched Valkey engine. Please refer to the updated Amazon MemoryDB public documentation for detailed information on API usage.
+
+### Miscellaneous
+* Upgrade to Smithy 1.51.0
+
+## [1.3.48] - 10/07/2024
+
+### Features
+* (**deadline**) Add support for using the template from a previous job during job creation and listing parameter definitions for a job.
+* (**qconnect**) This release adds support for the following capabilities: Configuration of the Gen AI system via AIAgent and AIPrompts. Integration support for Bedrock Knowledge Base.
+* (**redshift**) Add validation pattern to S3KeyPrefix on the EnableLogging API
+
+### Documentation
+* (**marketplacereporting**) Documentation-only update for AWS Marketplace Reporting API.
+
+## [1.3.47] - 10/04/2024
+
+### Features
+* (**ec2**) Documentation updates for Amazon EC2.
+* (**iotdataplane**) Add v2 smoke tests and smithy smokeTests trait for SDK testing.
+
+## [1.3.46] - 10/03/2024
+
+### Features
+* (**codepipeline**) AWS CodePipeline introduces Commands action that enables you to easily run shell commands as part of your pipeline execution.
+* (**connect**) Public GetMetricDataV2 Grouping increase from 3 to 4
+* (**ec2**) This release includes a new API for modifying instance cpu-options after launch.
+* (**iot**) This release adds support for Custom Authentication with X.509 Client Certificates, support for Custom Client Certificate validation, and support for selecting application protocol and authentication type without requiring TLS ALPN for customer's AWS IoT Domain Configurations.
+* (**marketplacereporting**) The AWS Marketplace Reporting service introduces the GetBuyerDashboard API. This API returns a dashboard that provides visibility into your organization's AWS Marketplace agreements and associated spend across the AWS accounts in your organization.
+* (**mediapackagev2**) Added support for ClipStartTime on the FilterConfiguration object on OriginEndpoint manifest settings objects. Added support for EXT-X-START tags on produced HLS child playlists.
+* (**quicksight**) QuickSight: Add support for exporting and importing folders in AssetBundle APIs
+
+## [1.3.45] - 10/02/2024
+
+### Features
+* (**appstream**) Added support for Automatic Time Zone Redirection on Amazon AppStream 2.0
+* (**b2bi**) Added and updated APIs to support outbound EDI transformations
+* (**bedrockagentruntime**) Added raw model response and usage metrics to PreProcessing and PostProcessing Trace
+* (**bedrockruntime**) Added new fields to Amazon Bedrock Guardrails trace
+* (**iotdeviceadvisor**) Add clientToken attribute and implement idempotency for CreateSuiteDefinition.
+* (**ivsrealtime**) Adds new Stage Health EventErrorCodes applicable to RTMP(S) broadcasts. Bug Fix: Enforces that EncoderConfiguration Video height and width must be even-number values.
+* (**s3**) This release introduces a header representing the minimum object size limit for Lifecycle transitions.
+* (**sagemaker**) releasing builtinlcc to public
+
+### Documentation
+* (**workspaces**) WSP is being rebranded to become DCV.
+
+## [1.3.44] - 10/01/2024
+
+### Features
+* (**bedrockagent**) This release adds support to stop an ongoing ingestion job using the StopIngestionJob API in Agents for Amazon Bedrock.
+* (**codeartifact**) Add support for the dual stack endpoints.
+* (**rds**) This release provides additional support for enabling Aurora Limitless Database DB clusters.
+
+## [1.3.43] - 09/30/2024
+
+### Features
+* (**bedrock**) Add support for custom models via provisioned throughput for Bedrock Model Evaluation
+* (**connect**) Amazon Connect introduces StartOutboundChatContact API allowing customers to initiate outbound chat contacts
+* (**resourcegroups**) This update includes new APIs to support application groups and to allow users to manage resource tag-sync tasks in applications.
+* (**supplychain**) Release DataLakeDataset, DataIntegrationFlow and ResourceTagging APIs for AWS Supply Chain
+* (**timestreaminfluxdb**) Timestream for InfluxDB now supports port configuration and additional customer-modifiable InfluxDB v2 parameters. This release adds Port to the CreateDbInstance and UpdateDbInstance API, and additional InfluxDB v2 parameters to the CreateDbParameterGroup API.
+
+### Documentation
+* (**clouddirectory**) Add examples for API operations in model.
+* (**pricing**) Add examples for API operations in model.
+* (**verifiedpermissions**) Add examples for API operations in model.
+
 ## [1.3.42] - 09/27/2024
 
 ### Features
