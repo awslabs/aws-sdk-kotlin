@@ -62,7 +62,7 @@ public data class Partition(
  * the result of a partition call.
  */
 @InternalSdkApi
-public data class PartitionConfig @JvmOverloads constructor(
+public data class PartitionConfig(
     public val name: String? = null,
     public val dnsSuffix: String? = null,
     public val dualStackDnsSuffix: String? = null,
@@ -70,6 +70,23 @@ public data class PartitionConfig @JvmOverloads constructor(
     public val supportsDualStack: Boolean? = null,
     public val implicitGlobalRegion: String? = null,
 ) {
+    @Deprecated("This constructor does not support implicitGlobalRegion") // but is added for backwards compatibility
+    @JvmOverloads
+    public constructor (
+        name: String? = null,
+        dnsSuffix: String? = null,
+        dualStackDnsSuffix: String? = null,
+        supportsFIPS: Boolean? = null,
+        supportsDualStack: Boolean? = null,
+    ) : this(
+        name,
+        dnsSuffix,
+        dualStackDnsSuffix,
+        supportsFIPS,
+        supportsDualStack,
+        null,
+    )
+
     public fun mergeWith(other: PartitionConfig): PartitionConfig =
         PartitionConfig(
             other.name ?: name,
