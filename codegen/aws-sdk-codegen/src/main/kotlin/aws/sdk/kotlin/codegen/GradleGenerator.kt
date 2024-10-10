@@ -4,9 +4,17 @@
  */
 package aws.sdk.kotlin.codegen
 
+import aws.sdk.kotlin.codegen.model.traits.testing.TestFailedResponseTrait
+import aws.sdk.kotlin.codegen.model.traits.testing.TestSuccessResponseTrait
+import aws.sdk.kotlin.codegen.smoketests.smokeTestDenyList
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.model.expectShape
+import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.GradleWriter
+import software.amazon.smithy.kotlin.codegen.utils.topDownOperations
+import software.amazon.smithy.model.shapes.ServiceShape
+import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
 
 // TODO - would be nice to allow integrations to define custom settings in the plugin
 // e.g. we could then more consistently apply this integration if we could define a property like: `build.isAwsSdk: true`
@@ -64,9 +72,72 @@ class GradleGenerator : KotlinIntegration {
                             }
                         }
                 }
+                if (ctx.model.topDownOperations(ctx.settings.service).any { it.hasTrait<SmokeTestsTrait>() } && ctx.settings.sdkId !in smokeTestDenyList) {
+                    write("")
+                    generateSmokeTestConfig(writer, ctx)
+                }
             }
 
         val contents = writer.toString()
         delegator.fileManifest.writeFile("build.gradle.kts", contents)
+    }
+
+    private fun generateSmokeTestConfig(writer: GradleWriter, ctx: CodegenContext) {
+        generateSmokeTestJarTask(writer, ctx)
+        writer.write("")
+        generateSmokeTestTask(writer, ctx)
+    }
+
+    /**
+     * Generates a gradle task to create smoke test runner JARs
+     */
+    private fun generateSmokeTestJarTask(writer: GradleWriter, ctx: CodegenContext) {
+        writer.withBlock("jvm {", "}") {
+            withBlock("compilations {", "}") {
+                write("val mainPath = getByName(#S).output.classesDirs", "main")
+                write("val testPath = getByName(#S).output.classesDirs", "test")
+                withBlock("tasks {", "}") {
+                    withBlock("register<Jar>(#S) {", "}", "smokeTestJar") {
+                        write("description = #S", "Creates smoke tests jar")
+                        write("group = #S", "application")
+                        write("dependsOn(build)")
+                        write("mustRunAfter(build)")
+                        withBlock("manifest {", "}") {
+                            write("attributes[#S] = #S", "Main-Class", "${ctx.settings.pkg.name}.smoketests.SmokeTestsKt")
+                        }
+                        write("val runtimePath = configurations.getByName(#S).map { if (it.isDirectory) it else zipTree(it) }", "jvmRuntimeClasspath")
+                        write("duplicatesStrategy = DuplicatesStrategy.EXCLUDE")
+                        write("from(runtimePath, mainPath, testPath)")
+                        write("archiveBaseName.set(#S)", "\${project.name}-smoketests")
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Generates a gradle task to run smoke tests
+     */
+    private fun generateSmokeTestTask(writer: GradleWriter, ctx: CodegenContext) {
+        val hasSuccessResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(TestSuccessResponseTrait.ID)
+        val hasFailedResponseTrait = ctx.model.expectShape<ServiceShape>(ctx.settings.service).hasTrait(TestFailedResponseTrait.ID)
+        val inTestingEnvironment = hasFailedResponseTrait || hasSuccessResponseTrait
+
+        /**
+         * E2E tests don't have sdkVersion in jar names. They're added later for publishing.
+         * @see SmokeTestE2ETest
+         */
+        val jarName = if (inTestingEnvironment) "\${project.name}-smoketests.jar" else "\${project.name}-smoketests-\$sdkVersion.jar"
+
+        writer.withBlock("tasks.register<JavaExec>(#S) {", "}", "smokeTest") {
+            write("description = #S", "Runs smoke tests jar")
+            write("group = #S", "verification")
+            write("dependsOn(tasks.getByName(#S))", "smokeTestJar")
+            write("mustRunAfter(tasks.getByName(#S))", "smokeTestJar")
+            write("")
+            write("val sdkVersion: String by project")
+            write("val jarFile = file(#S)", "build/libs/$jarName")
+            write("classpath = files(jarFile)")
+        }
     }
 }
