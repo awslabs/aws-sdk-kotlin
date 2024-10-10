@@ -46,11 +46,11 @@ object S3TestUtils {
         accountId: String? = null,
     ): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX, region, accountId)
 
-    private suspend fun getBucketWithPrefix(
+    suspend fun getBucketWithPrefix(
         client: S3Client,
         prefix: String,
-        region: String?,
-        accountId: String?,
+        region: String? = null,
+        accountId: String? = null,
     ): String = withTimeout(60.seconds) {
         val buckets = client.listBuckets()
             .buckets
@@ -88,7 +88,7 @@ object S3TestUtils {
                 rules = listOf(
                     LifecycleRule {
                         expiration { days = 1 }
-                        filter = LifecycleRuleFilter.Prefix("")
+                        filter { this.prefix = "" }
                         status = ExpirationStatus.Enabled
                         id = "delete-old"
                     },
