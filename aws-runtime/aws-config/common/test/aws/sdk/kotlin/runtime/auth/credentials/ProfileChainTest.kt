@@ -8,11 +8,13 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProvider
 import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
+import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.profile.AwsConfigurationSource
 import aws.sdk.kotlin.runtime.config.profile.FileType
 import aws.sdk.kotlin.runtime.config.profile.parse
 import aws.sdk.kotlin.runtime.config.profile.toSharedConfig
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.collections.attributesOf
 import aws.smithy.kotlin.runtime.telemetry.logging.Logger
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -35,7 +37,7 @@ class ProfileChainTest {
     private fun chain(leaf: LeafProvider, vararg roles: RoleArn): TestOutput =
         TestOutput.Chain(ProfileChain(leaf, roles.toList()))
 
-    private val tests = listOf(
+    private val kitchenSinkTests = listOf(
         TestCase(
             "basic role arn backed by static credentials",
             """
@@ -53,7 +55,7 @@ class ProfileChainTest {
             ),
         ),
         TestCase(
-            "ignore explicit credentials when source profile is specified",
+            "ignore source profile when explicit credentials are specified",
             """
             [profile A]
             aws_access_key_id = abc123
@@ -66,8 +68,7 @@ class ProfileChainTest {
             aws_secret_access_key = jkl123
             """,
             chain(
-                LeafProvider.AccessKey(Credentials("ghi890", "jkl123")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+                LeafProvider.AccessKey(Credentials("abc123", "def456")),
             ),
         ),
         TestCase(
@@ -105,7 +106,7 @@ class ProfileChainTest {
             ),
         ),
         TestCase(
-            "self referential profile (first load base creds, then use for the role)",
+            "self referential profile (load base credentials, ignore role)",
             """
             [profile A]
             aws_access_key_id = abc123
@@ -115,7 +116,6 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("abc123", "def456")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA"),
             ),
         ),
         TestCase(
@@ -153,7 +153,7 @@ class ProfileChainTest {
             TestOutput.Error("profile (A) contained both `source_profile` and `credential_source`. Only one or the other can be defined."),
         ),
         TestCase(
-            "partial credentials error (missing secret)",
+            "partial static credentials (missing secret) in source profile leads to credentials not being found",
             """
             [profile A]
             role_arn = arn:foo
@@ -162,10 +162,10 @@ class ProfileChainTest {
             [profile B]
             aws_access_key_id = abc123
             """,
-            TestOutput.Error("profile (B) missing `aws_secret_access_key`"),
+            TestOutput.Error("profile (B) did not contain credential information"),
         ),
         TestCase(
-            "partial credentials error (missing access key)",
+            "partial static credentials (missing access key) in source profile leads to credentials not being found",
             """
             [profile A]
             role_arn = arn:foo
@@ -174,7 +174,7 @@ class ProfileChainTest {
             [profile B]
             aws_secret_access_key = abc123
             """,
-            TestOutput.Error("profile (B) missing `aws_access_key_id`"),
+            TestOutput.Error("profile (B) did not contain credential information"),
         ),
         TestCase(
             "missing credentials error (empty source profile)",
@@ -230,8 +230,7 @@ class ProfileChainTest {
             """
             [profile A]
             role_arn = arn:aws:iam::123456789:role/RoleA
-            aws_access_key_id = bug_if_returned
-            aws_secret_access_key = bug_if_returned
+            web_identity_token_file = bug/if/returned
             source_profile = B
 
             [profile B]
@@ -263,12 +262,11 @@ class ProfileChainTest {
             TestOutput.Error("profile formed an infinite loop: A -> B -> A"),
         ),
         TestCase(
-            "infinite loop with static credentials",
+            "infinite loop with web identity token",
             """
             [profile A]
             role_arn = arn:aws:iam::123456789:role/RoleA
-            aws_access_key_id = bug_if_returned
-            aws_secret_access_key = bug_if_returned
+            web_identity_token_file=bug/if/returned
             source_profile = B
 
             [profile B]
@@ -497,9 +495,183 @@ class ProfileChainTest {
         ),
     )
 
-    @Test
-    fun testProfileChainResolution() {
-        tests.forEachIndexed { idx, test ->
+    private val precedenceTests = listOf(
+        TestCase(
+            "static credentials precedence test",
+            """
+            [profile A]
+            aws_access_key_id = 1
+            aws_secret_access_key = 2
+            aws_session_token = 3
+            aws_account_id = 4
+            source_profile = B
+            role_arn = some-arn
+            web_identity_token_file = /some/path
+            sso_session = dev\nsso_account_id = 12345678901
+            sso_role_name = role
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            credential_process = some/process
+            
+            [profile B]
+            aws_access_key_id = 0
+            aws_secret_access_key = 0
+            aws_session_token = 0
+            aws_account_id = 0
+            
+            [sso-session dev]
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            """,
+            chain(
+                LeafProvider.AccessKey(
+                    Credentials(
+                        "1",
+                        "2",
+                        "3",
+                        attributes = attributesOf {
+                            AwsClientOption.AccountId to "4"
+                        },
+                    ),
+                ),
+            ),
+        ),
+        TestCase(
+            "assume role with source profile precedence test",
+            """
+            [profile A]
+            source_profile = B
+            role_arn = some-arn
+            web_identity_token_file = /some/path
+            sso_session = dev
+            sso_account_id = 12345678901
+            sso_role_name = role
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            credential_process = some/process
+            
+            [profile B]
+            aws_access_key_id = 1
+            aws_secret_access_key = 2
+            aws_session_token = 3
+            aws_account_id = 4
+            
+            [sso-session dev]
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            """,
+            chain(
+                LeafProvider.AccessKey(
+                    Credentials(
+                        "1",
+                        "2",
+                        "3",
+                        attributes = attributesOf {
+                            AwsClientOption.AccountId to "4"
+                        },
+                    ),
+                ),
+                RoleArn("some-arn"),
+            ),
+        ),
+        TestCase(
+            "assume role with named provider / credential source precedence test",
+            """
+            [profile A]
+            role_arn = some-arn
+            credential_source = Ec2InstanceMetadata
+            web_identity_token_file = /some/path
+            sso_session = dev
+            sso_account_id = 12345678901
+            sso_role_name = role
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            credential_process = some/process
+            
+            [sso-session dev]
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            """,
+            chain(
+                LeafProvider.NamedSource("Ec2InstanceMetadata"),
+                RoleArn("some-arn"),
+            ),
+        ),
+        TestCase(
+            "web identity token / STS precedence test",
+            """
+            [profile A]
+            role_arn = some-arn
+            web_identity_token_file = /some/path
+            sso_session = dev
+            sso_account_id = 12345678901
+            sso_role_name = role
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            credential_process = some/process
+            
+            [sso-session dev]
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            """,
+            chain(
+                LeafProvider.WebIdentityTokenRole("some-arn", "/some/path"),
+            ),
+        ),
+        TestCase(
+            "SSO role precedence test",
+            """
+            [profile A]
+            sso_session = dev
+            sso_account_id = 12345678901
+            sso_role_name = role
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            credential_process = some/process
+            
+            [sso-session dev]
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            """,
+            chain(
+                LeafProvider.SsoSession("dev", "https://some.url", "us-west-2", "12345678901", "role"),
+            ),
+        ),
+        TestCase(
+            "legacy SSO precedence test",
+            """
+            [profile A]
+            sso_account_id = 12345678901
+            sso_role_name = role
+            sso_region = us-west-2
+            sso_start_url = https://some.url
+            credential_process = some/process
+            """,
+            chain(
+                LeafProvider.LegacySso("https://some.url", "us-west-2", "12345678901", "role"),
+            ),
+        ),
+        TestCase(
+            "process precedence test",
+            """
+            [profile A]
+            credential_process = some/process
+            """,
+            chain(
+                LeafProvider.Process("some/process"),
+            ),
+        ),
+        TestCase(
+            "empty profile",
+            """
+            [profile A]
+            """,
+            TestOutput.Error("profile (A) did not contain credential information"),
+        ),
+    )
+
+    private fun List<TestCase>.run() =
+        this.forEachIndexed { idx, test ->
             val profiles = parse(Logger.None, FileType.CONFIGURATION, test.profile.trimIndent())
             val source = AwsConfigurationSource(test.activeProfile, "not-needed", "not-needed")
             val config = profiles.toSharedConfig(source)
@@ -519,5 +691,10 @@ class ProfileChainTest {
                 }
             }
         }
+
+    @Test
+    fun testProfileChainResolution() {
+        kitchenSinkTests.run()
+        precedenceTests.run()
     }
 }

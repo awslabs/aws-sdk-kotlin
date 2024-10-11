@@ -18,6 +18,7 @@ import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.auth.awscredentials.simpleClassName
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
@@ -202,4 +203,6 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
         is LeafProvider.LegacySso -> "single sign-on (legacy)"
         is LeafProvider.Process -> "process"
     }
+
+    override fun toString(): String = this.simpleClassName
 }

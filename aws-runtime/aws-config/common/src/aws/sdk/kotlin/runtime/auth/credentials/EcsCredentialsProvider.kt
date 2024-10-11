@@ -8,10 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.ErrorMetadata
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
+import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.config.resolve
@@ -197,6 +194,8 @@ public class EcsCredentialsProvider(
             httpClient.closeIfCloseable()
         }
     }
+
+    override fun toString(): String = this.simpleClassName
 }
 
 private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {

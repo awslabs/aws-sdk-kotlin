@@ -1,0 +1,6 @@
+{
+    "id": "0b5b53ab-70c0-4c1b-a445-8663ae86d6d1",
+    "type": "misc",
+    "description": "The order of credentials resolution in config files has been updated to: static credentials, assume role with source profile OR assume role with named provider, web identity token, SSO session, legacy SSO, process",
+    "requiresMinorVersionBump": true
+}

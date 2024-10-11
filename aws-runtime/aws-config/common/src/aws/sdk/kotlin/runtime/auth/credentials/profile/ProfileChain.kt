@@ -33,6 +33,16 @@ internal data class ProfileChain(
     val roles: List<RoleArn>,
 ) {
     companion object {
+        /**
+         * Resolves profile chain with the following precedence:
+         *
+         * 1. Static credentials
+         * 2. Assume role with source profile OR assume role with named provider (mutually exclusive)
+         * 3. Web ID token file & role arn
+         * 4. SSO session
+         * 5. Legacy SSO
+         * 6. Process
+         */
         internal fun resolve(config: AwsSharedConfig): ProfileChain {
             val visited = mutableSetOf<String>()
             val chain = mutableListOf<RoleArn>()
@@ -53,11 +63,9 @@ internal data class ProfileChain(
                     throw ProviderConfigurationException("profile formed an infinite loop: ${visited.joinToString(separator = " -> ")} -> $sourceProfileName")
                 }
 
-                // when chaining assume role profiles, SDKs MUST terminate the chain as soon as they hit a profile with static credentials
-                if (visited.size > 1) {
-                    leaf = profile.staticCredsOrNull()
-                    if (leaf != null) break@loop
-                }
+                // static credentials have the highest precedence
+                leaf = profile.staticCredsOrNull()
+                if (leaf != null) break@loop
 
                 // the existence of `role_arn` is the only signal that multiple profiles will be chained
                 val roleArn = profile.roleArnOrNull()
@@ -132,8 +140,11 @@ internal const val SSO_SESSION = "sso_session"
 internal const val CREDENTIAL_PROCESS = "credential_process"
 
 private fun AwsProfile.roleArnOrNull(): RoleArn? {
+    val validSource = contains(CREDENTIAL_SOURCE) || contains(SOURCE_PROFILE)
+
+    // chained roles have higher precedence than web id token file
     // web identity tokens are leaf providers, not chained roles
-    if (contains(WEB_IDENTITY_TOKEN_FILE)) return null
+    if (!validSource && contains(WEB_IDENTITY_TOKEN_FILE)) return null
 
     val roleArn = getOrNull(ROLE_ARN) ?: return null
 
@@ -237,11 +248,12 @@ private fun AwsProfile.ssoSessionCreds(config: AwsSharedConfig): LeafProviderRes
 }
 
 /**
- * Attempt to load [LeafProvider.Process] from the current profile or `null` if the current profile does not contain
+ * Attempt to load [LeafProvider.Process] from the current profile or exception if the current profile does not contain
  * a credentials process command to execute
  */
-private fun AwsProfile.processCreds(): LeafProviderResult? {
-    if (!contains(CREDENTIAL_PROCESS)) return null
+private fun AwsProfile.processCreds(): LeafProviderResult {
+    // Process is last in precedence - credentials not found means no credentials in profile
+    if (!contains(CREDENTIAL_PROCESS)) return LeafProviderResult.Err("profile ($name) did not contain credential information")
 
     val credentialProcess = getOrNull(CREDENTIAL_PROCESS) ?: return LeafProviderResult.Err("profile ($name) missing `$CREDENTIAL_PROCESS`")
 
@@ -257,7 +269,7 @@ private fun AwsProfile.staticCreds(): LeafProviderResult {
     val secretKey = getOrNull(AWS_SECRET_ACCESS_KEY)
     val accountId = getOrNull(AWS_ACCOUNT_ID)
     return when {
-        accessKeyId == null && secretKey == null -> LeafProviderResult.Err("profile ($name) did not contain credential information")
+        accessKeyId == null && secretKey == null -> LeafProviderResult.Err("profile ($name) missing `aws_access_key_id` & `aws_secret_access_key`")
         accessKeyId == null -> LeafProviderResult.Err("profile ($name) missing `aws_access_key_id`")
         secretKey == null -> LeafProviderResult.Err("profile ($name) missing `aws_secret_access_key`")
         else -> {
@@ -315,7 +327,6 @@ private fun AwsProfile.leafProvider(config: AwsSharedConfig): LeafProvider {
     return webIdentityTokenCreds()
         .orElse { ssoSessionCreds(config) }
         .orElse(::legacySsoCreds)
-        .orElse(::processCreds)
-        .unwrapOrElse(::staticCreds)
+        .unwrapOrElse(::processCreds)
         .unwrap()
 }
