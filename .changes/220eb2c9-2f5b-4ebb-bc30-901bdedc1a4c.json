@@ -1,0 +1,5 @@
+{
+    "id": "220eb2c9-2f5b-4ebb-bc30-901bdedc1a4c",
+    "type": "bugfix",
+    "description": "⚠️ **IMPORTANT**: Update to the latest S3 model, which correctly models `ReplicationRuleFilter` and `LifecycleRuleFilter` as structures (not unions). This may cause compilation failures in existing code which references these two shapes."
+}
