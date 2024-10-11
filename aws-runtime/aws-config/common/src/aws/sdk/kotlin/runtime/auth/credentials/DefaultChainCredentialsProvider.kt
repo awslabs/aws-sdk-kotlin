@@ -7,10 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
-import aws.smithy.kotlin.runtime.auth.awscredentials.CachedCredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderChain
+import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
@@ -55,8 +52,14 @@ public class DefaultChainCredentialsProvider constructor(
     private val chain = CredentialsProviderChain(
         SystemPropertyCredentialsProvider(platformProvider::getProperty),
         EnvironmentCredentialsProvider(platformProvider::getenv),
-        // STS web identity provider can be constructed from either the profile OR 100% from the environment
-        StsWebIdentityProvider(platformProvider = platformProvider, httpClient = engine, region = region),
+        LazilyInitializedCredentialsProvider("EnvironmentStsWebIdentityCredentialsProvider") {
+            // STS web identity provider can be constructed from either the profile OR 100% from the environment
+            StsWebIdentityCredentialsProvider.fromEnvironment(
+                platformProvider = platformProvider,
+                httpClient = httpClient,
+                region = region,
+            )
+        },
         ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClient = engine, region = region),
         EcsCredentialsProvider(platformProvider, engine),
         ImdsCredentialsProvider(
@@ -80,21 +83,4 @@ public class DefaultChainCredentialsProvider constructor(
             engine.closeIfCloseable()
         }
     }
-}
-
-/**
- * Wrapper around [StsWebIdentityCredentialsProvider] that delays any exceptions until [resolve] is invoked.
- * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
- */
-public class StsWebIdentityProvider(
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
-    private val httpClient: HttpClientEngine? = null,
-    private val region: String? = null,
-) : CloseableCredentialsProvider {
-    override suspend fun resolve(attributes: Attributes): Credentials {
-        val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClient = httpClient, region = region)
-        return wrapped.resolve(attributes)
-    }
-
-    override fun close() { }
 }

@@ -39,6 +39,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/DefaultChainBearerTok
 	public final fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
 	public final fun getProfileName ()Ljava/lang/String;
+	public fun getProviderName ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -49,6 +50,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/DefaultChainCredentia
 	public fun close ()V
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
 	public final fun getProfileName ()Ljava/lang/String;
+	public fun getProviderName ()Ljava/lang/String;
 	public final fun getRegion ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
@@ -61,6 +63,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/EcsCredentialsProvide
 	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Laws/smithy/kotlin/runtime/net/HostResolver;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
+	public fun getProviderName ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -69,6 +72,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/EnvironmentCredential
 	public fun <init> (Lkotlin/jvm/functions/Function1;)V
 	public synthetic fun <init> (Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getGetEnv ()Lkotlin/jvm/functions/Function1;
+	public fun getProviderName ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -80,6 +84,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/ImdsCredentialsProvid
 	public final fun getClient ()Lkotlin/Lazy;
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;
 	public final fun getProfileOverride ()Ljava/lang/String;
+	public fun getProviderName ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -93,9 +98,17 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/InvalidSsoTokenExcept
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
+public final class aws/sdk/kotlin/runtime/auth/credentials/LazilyInitializedCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
+	public fun <init> (Ljava/lang/String;Lkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getProviderName ()Ljava/lang/String;
+	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public final class aws/sdk/kotlin/runtime/auth/credentials/ProcessCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
 	public fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;JJ)V
 	public synthetic fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/util/PlatformProvider;JJILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun getProviderName ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -110,6 +123,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/ProfileCredentialsPro
 	public final fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
 	public final fun getProfileName ()Ljava/lang/String;
+	public fun getProviderName ()Ljava/lang/String;
 	public final fun getRegion ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
@@ -125,6 +139,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/SsoCredentialsProvide
 	public final fun getAccountId ()Ljava/lang/String;
 	public final fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
+	public fun getProviderName ()Ljava/lang/String;
 	public final fun getRoleName ()Ljava/lang/String;
 	public final fun getSsoRegion ()Ljava/lang/String;
 	public final fun getSsoSessionName ()Ljava/lang/String;
@@ -137,6 +152,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/SsoTokenProvider : aw
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLaws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/time/Clock;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
+	public fun getProviderName ()Ljava/lang/String;
 	public final fun getRefreshBufferWindow-UwyO8pc ()J
 	public final fun getSsoRegion ()Ljava/lang/String;
 	public final fun getSsoSessionName ()Ljava/lang/String;
@@ -149,6 +165,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProv
 	public synthetic fun <init> (Laws/sdk/kotlin/runtime/auth/credentials/StaticCredentialsProvider$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun <init> (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;)V
 	public final fun getCredentials ()Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
+	public fun getProviderName ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
@@ -177,6 +194,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StsAssumeRoleCredenti
 	public final fun getAssumeRoleParameters ()Laws/sdk/kotlin/runtime/auth/credentials/AssumeRoleParameters;
 	public final fun getBootstrapCredentialsProvider ()Laws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider;
 	public final fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
+	public fun getProviderName ()Ljava/lang/String;
 	public final fun getRegion ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
@@ -189,6 +207,7 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredent
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLaws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getHttpClient ()Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;
 	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformProvider;
+	public fun getProviderName ()Ljava/lang/String;
 	public final fun getRegion ()Ljava/lang/String;
 	public final fun getWebIdentityParameters ()Laws/sdk/kotlin/runtime/auth/credentials/AssumeRoleWithWebIdentityParameters;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -199,19 +218,12 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredent
 	public static synthetic fun fromEnvironment-TUY-ock$default (Laws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider$Companion;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLaws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;ILjava/lang/Object;)Laws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityCredentialsProvider;
 }
 
-public final class aws/sdk/kotlin/runtime/auth/credentials/StsWebIdentityProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
-	public fun <init> ()V
-	public fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Ljava/lang/String;)V
-	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/http/engine/HttpClientEngine;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun close ()V
-	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
 public final class aws/sdk/kotlin/runtime/auth/credentials/SystemPropertyCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
 	public fun <init> ()V
 	public fun <init> (Lkotlin/jvm/functions/Function1;)V
 	public synthetic fun <init> (Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getGetProperty ()Lkotlin/jvm/functions/Function1;
+	public fun getProviderName ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

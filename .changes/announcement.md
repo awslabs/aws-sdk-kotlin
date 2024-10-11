@@ -59,7 +59,9 @@ S3Client{
     credentialsProvider = CredentialsProviderChain(
         SystemPropertyCredentialsProvider(),
         EnvironmentCredentialsProvider(),
-        StsWebIdentityProvider(),
+        LazilyInitializedCredentialsProvider("EnvironmentStsWebIdentityCredentialsProvider") {
+            StsWebIdentityCredentialsProvider.fromEnvironment()
+        },
         ProfileCredentialsProvider(),
         EcsCredentialsProvider(),
         ImdsCredentialsProvider(),
