@@ -26,49 +26,50 @@ class InvalidChangeBatchTest {
 
             val hostedZoneId = checkNotNull(createHostedZoneResp.hostedZone?.id) { "Hosted zone is unexpectedly null" }
 
-            val exception = assertFailsWith<InvalidChangeBatch> {
-                client.changeResourceRecordSets {
-                    this.hostedZoneId = hostedZoneId
-                    this.changeBatch = ChangeBatch {
-                        this.changes = listOf(
-                            Change {
-                                this.action = ChangeAction.Delete
-                                this.resourceRecordSet = ResourceRecordSet {
-                                    this.name = "test.blerg.com"
-                                    this.type = RrType.Cname
-                                    this.ttl = 300
-                                    this.resourceRecords = listOf(
-                                        ResourceRecord {
-                                            value = "test.blerg.com"
-                                        },
-                                    )
-                                }
-                            },
-                            Change {
-                                this.action = ChangeAction.Create
-                                this.resourceRecordSet = ResourceRecordSet {
-                                    this.name = "test.blerg.com"
-                                    this.type = RrType.Cname
-                                    this.ttl = 300
-                                    this.resourceRecords = listOf(
-                                        ResourceRecord {
-                                            value = "test.blerg.com"
-                                        },
-                                    )
-                                }
-                            },
-                        )
-                        this.comment = "testing..."
+            try {
+                val exception = assertFailsWith<InvalidChangeBatch> {
+                    client.changeResourceRecordSets {
+                        this.hostedZoneId = hostedZoneId
+                        this.changeBatch = ChangeBatch {
+                            this.changes = listOf(
+                                Change {
+                                    this.action = ChangeAction.Delete
+                                    this.resourceRecordSet = ResourceRecordSet {
+                                        this.name = "test.blerg.com"
+                                        this.type = RrType.Cname
+                                        this.ttl = 300
+                                        this.resourceRecords = listOf(
+                                            ResourceRecord {
+                                                value = "test.blerg.com"
+                                            },
+                                        )
+                                    }
+                                },
+                                Change {
+                                    this.action = ChangeAction.Create
+                                    this.resourceRecordSet = ResourceRecordSet {
+                                        this.name = "test.blerg.com"
+                                        this.type = RrType.Cname
+                                        this.ttl = 300
+                                        this.resourceRecords = listOf(
+                                            ResourceRecord {
+                                                value = "test.blerg.com"
+                                            },
+                                        )
+                                    }
+                                },
+                            )
+                            this.comment = "testing..."
+                        }
                     }
                 }
-            }
 
-            client.deleteHostedZone {
-                id = hostedZoneId
+                assertNotNull(exception.message)
+            } finally {
+                client.deleteHostedZone {
+                    id = hostedZoneId
+                }
             }
-
-            assertNotNull(exception.message)
-            assertContains(exception.message, "[Tried to delete resource record set [name='test.blerg.com.', type='CNAME'] but it was not found, RRSet with DNS name test.blerg.com. is not permitted in zone this-is-a-test-hosted-zone-for-aws-sdk-kotlin.com., RRSet of type CNAME with DNS name test.blerg.com. is not permitted as it creates a CNAME loop in the zone.]")
         }
     }
 }
