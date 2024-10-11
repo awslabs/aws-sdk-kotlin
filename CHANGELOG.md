@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.52] - 10/11/2024
+
+### Features
+* (**elasticloadbalancingv2**) Add zonal_shift.config.enabled attribute. Add new AdministrativeOverride construct in the describe-target-health API response to include information about the override status applied to a target.
+* (**emr**) This release provides new parameter "Context" in instance fleet clusters.
+* (**guardduty**) Added a new field for network connection details.
+
+### Fixes
+* [#1433](https://github.com/awslabs/aws-sdk-kotlin/issues/1433) Remove Route53 InvalidChangeBatch error response customization
+
+### Documentation
+* (**appflow**) Doc only updates for clarification around OAuth2GrantType for Salesforce.
+* (**robomaker**) Documentation update: added support notices to each API action.
+
 ## [1.3.51] - 10/10/2024
 
 ### Features
