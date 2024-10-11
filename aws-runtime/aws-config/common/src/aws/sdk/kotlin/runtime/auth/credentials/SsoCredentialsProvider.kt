@@ -11,6 +11,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
+import aws.smithy.kotlin.runtime.auth.awscredentials.simpleClassName
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
@@ -138,4 +139,6 @@ public class SsoCredentialsProvider public constructor(
 
         return token
     }
+
+    override fun toString(): String = this.simpleClassName
 }

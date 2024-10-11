@@ -9,11 +9,7 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.EC2MetadataError
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
-import aws.smithy.kotlin.runtime.auth.awscredentials.DEFAULT_CREDENTIALS_REFRESH_SECONDS
+import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -151,4 +147,6 @@ public class ImdsCredentialsProvider(
         }
         else -> null
     }
+
+    override fun toString(): String = this.simpleClassName
 }

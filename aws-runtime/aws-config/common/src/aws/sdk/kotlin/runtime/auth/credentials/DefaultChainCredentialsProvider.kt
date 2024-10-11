@@ -83,4 +83,6 @@ public class DefaultChainCredentialsProvider constructor(
             engine.closeIfCloseable()
         }
     }
+
+    override fun toString(): String = this.simpleClassName + ": " + this.chain
 }
