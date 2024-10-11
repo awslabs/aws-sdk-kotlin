@@ -8,7 +8,6 @@ import aws.sdk.kotlin.services.route53.model.*
 import aws.smithy.kotlin.runtime.util.Uuid
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertContains
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 
