@@ -10,7 +10,6 @@ import aws.sdk.kotlin.e2etest.S3TestUtils.deleteMultiRegionAccessPoint
 import aws.sdk.kotlin.e2etest.S3TestUtils.getAccountId
 import aws.sdk.kotlin.e2etest.S3TestUtils.getBucketWithPrefix
 import aws.sdk.kotlin.e2etest.S3TestUtils.getMultiRegionAccessPointArn
-import aws.sdk.kotlin.e2etest.S3TestUtils.getTestBucket
 import aws.sdk.kotlin.e2etest.S3TestUtils.multiRegionAccessPointWasCreated
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.deleteObject
