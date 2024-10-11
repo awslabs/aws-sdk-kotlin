@@ -9,14 +9,16 @@ import aws.smithy.kotlin.runtime.collections.Attributes
  * the first call to [resolve]. This is useful when the initialization of the credentials provider is expensive
  * or should be deferred until credentials are actually needed.
  *
- * @param providerName The name of the credentials provider that is being wrapped.
+ * @param providerName The name of the credentials provider that is being wrapped. Will default to "LazilyInitializedCredentialsProvider".
  * @param initializer A lambda function that provides the actual [CredentialsProvider] to be initialized lazily.
  */
 public class LazilyInitializedCredentialsProvider(
-    override val providerName: String? = null,
+    private val providerName: String = "LazilyInitializedCredentialsProvider",
     initializer: () -> CredentialsProvider,
 ) : CredentialsProvider {
     private val provider = lazy(initializer)
 
     override suspend fun resolve(attributes: Attributes): Credentials = provider.value.resolve(attributes)
+
+    override fun toString(): String = providerName
 }
