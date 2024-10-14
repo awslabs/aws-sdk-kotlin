@@ -8,10 +8,12 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.SsoClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
+import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.auth.awscredentials.simpleClassName
+import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
@@ -92,9 +94,11 @@ public class SsoCredentialsProvider public constructor(
 
         val token = if (ssoTokenProvider != null) {
             logger.trace { "Attempting to load token using token provider for sso-session: `$ssoSessionName`" }
+            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO)
             ssoTokenProvider.resolve(attributes)
         } else {
             logger.trace { "Attempting to load token from file using legacy format" }
+            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
             legacyLoadTokenFile()
         }
 

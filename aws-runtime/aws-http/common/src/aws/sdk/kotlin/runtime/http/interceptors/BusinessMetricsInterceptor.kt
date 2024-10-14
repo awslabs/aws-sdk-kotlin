@@ -64,4 +64,26 @@ private fun formatMetrics(metrics: MutableSet<String>): String {
 @InternalApi
 public enum class AwsBusinessMetric(public override val identifier: String) : BusinessMetric {
     S3_EXPRESS_BUCKET("J"),
+    ;
+
+    public enum class Credentials(public override val identifier: String) : BusinessMetric {
+        CREDENTIALS_CODE("e"),
+        CREDENTIALS_JVM_SYSTEM_PROPERTIES("f"),
+        CREDENTIALS_ENV_VARS("g"),
+        CREDENTIALS_ENV_VARS_STS_WEB_ID_TOKEN("h"),
+        CREDENTIALS_STS_ASSUME_ROLE("i"),
+        CREDENTIALS_STS_ASSUME_ROLE_WEB_ID("k"),
+        CREDENTIALS_PROFILE("n"),
+        CREDENTIALS_PROFILE_SOURCE_PROFILE("o"),
+        CREDENTIALS_PROFILE_NAMED_PROVIDER("p"),
+        CREDENTIALS_PROFILE_STS_WEB_ID_TOKEN("q"),
+        CREDENTIALS_PROFILE_SSO("r"),
+        CREDENTIALS_SSO("s"),
+        CREDENTIALS_PROFILE_SSO_LEGACY("t"),
+        CREDENTIALS_SSO_LEGACY("u"),
+        CREDENTIALS_PROFILE_PROCESS("v"),
+        CREDENTIALS_PROCESS("w"),
+        CREDENTIALS_HTTP("z"),
+        CREDENTIALS_IMDS("0"),
+    }
 }

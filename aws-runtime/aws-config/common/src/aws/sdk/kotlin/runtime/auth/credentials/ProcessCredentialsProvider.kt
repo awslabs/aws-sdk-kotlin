@@ -5,10 +5,12 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
+import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.auth.awscredentials.simpleClassName
+import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
@@ -52,6 +54,8 @@ public class ProcessCredentialsProvider(
 ) : CredentialsProvider {
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<ProcessCredentialsProvider>()
+
+        attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
 
         val (exitCode, output) = try {
             executeCommand(credentialProcess, platformProvider, maxOutputLengthBytes, timeoutMillis)
