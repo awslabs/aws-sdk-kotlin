@@ -12,6 +12,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.MutableAttributes
+import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.collections.merge
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
@@ -81,7 +82,7 @@ public class DefaultChainCredentialsProvider constructor(
     private val provider = CachedCredentialsProvider(chain)
 
     override suspend fun resolve(attributes: Attributes): Credentials {
-        if (attributes is MutableAttributes) (this as MutableAttributes).merge(executionContext)
+        if (attributes is MutableAttributes) attributes.merge(executionContext)
         return provider.resolve(attributes)
     }
 

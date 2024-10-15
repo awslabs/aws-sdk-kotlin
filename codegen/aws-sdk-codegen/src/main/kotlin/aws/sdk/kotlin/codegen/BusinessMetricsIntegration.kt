@@ -74,7 +74,13 @@ class BusinessMetricsIntegration : KotlinIntegration {
                 "if (config.credentialsProvider.#T != #S ) {",
                 "}",
                 RuntimeTypes.Auth.Credentials.AwsCredentials.simpleClassName,
-                "DefaultChainCredentialsProvider",
+                /**
+                 * If a [CredentialsProvider] is not wrapped by [aws.sdk.kotlin.runtime.auth.credentials.internal.ManagedCredentialsProvider]
+                 * it means that it was not created by the SDK, suggesting that the user has supplied their own [CredentialsProvider].
+                 *
+                 * See:[AwsServiceConfigIntegration.CredentialsProviderProp]
+                 */
+                "ManagedCredentialsProvider",
             ) {
                 write(
                     "op.context.#T(#T.Credentials.CREDENTIALS_CODE)",
