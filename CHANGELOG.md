@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.54] - 10/15/2024
+
+### Features
+* (**amplify**) Added sourceUrlType field to StartDeployment request
+* (**codebuild**) Enable proxy for reserved capacity fleet.
+* (**ivs**) On a channel that you own, you can now replace an ongoing stream with a new stream by streaming up with the priority parameter appended to the stream key.
+* (**qbusiness**) Amazon Q Business now supports embedding the Amazon Q Business web experience on third-party websites.
+* (**redshift**) This release launches the CreateIntegration, DeleteIntegration, DescribeIntegrations and ModifyIntegration APIs to create and manage Amazon Redshift Zero-ETL Integrations.
+* (**resiliencehub**) AWS Resilience Hub now integrates with the myApplications platform, enabling customers to easily assess the resilience of applications defined in myApplications. The new Resiliency widget provides visibility into application resilience and actionable recommendations for improvement.
+* (**sesv2**) This release adds support for email maximum delivery seconds that allows senders to control the time within which their emails are attempted for delivery.
+* (**transcribestreaming**) We are expanding support for 40 new locales in AWS Transcribe Streaming.
+
+### Documentation
+* (**cloudformation**) Documentation update for AWS CloudFormation API Reference.
+
 ## [1.3.53] - 10/14/2024
 
 ### Features
