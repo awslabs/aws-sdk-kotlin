@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProvider
 import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
+import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArnSource
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
@@ -133,7 +134,9 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
 
         chain.roles.forEach { roleArn ->
             logger.debug { "Assuming role `${roleArn.roleArn}`" }
-            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SOURCE_PROFILE)
+            if (roleArn.roleArnSource == RoleArnSource.SOURCE_PROFILE) {
+                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SOURCE_PROFILE)
+            }
 
             val assumeProvider = roleArn.toCredentialsProvider(creds, region)
             creds = assumeProvider.resolve(attributes)

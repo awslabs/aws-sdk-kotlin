@@ -7,15 +7,23 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.client.AwsClientOption
+import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
+import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics
 import aws.smithy.kotlin.runtime.collections.attributesOf
+import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.net.Host
+import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
+import io.mockk.coEvery
+import io.mockk.mockkStatic
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class ProfileCredentialsProviderTest {
     @Test
@@ -316,6 +324,288 @@ class ProfileCredentialsProviderTest {
         )
         val actual = provider.resolve()
         val expected = credentials("AKID-Default", "Default-Secret", accountId = "12345")
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun staticCredentialsBusinessMetrics() = runTest {
+        val testProvider = TestPlatformProvider(
+            env = mapOf("AWS_CONFIG_FILE" to "config"),
+            fs = mapOf(
+                "config" to """
+                [default]
+                aws_access_key_id = AKID-Default
+                aws_secret_access_key = Default-Secret
+                """.trimIndent(),
+            ),
+        )
+        val testEngine = TestConnection()
+
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+        val attributes = ExecutionContext()
+        provider.resolve(attributes)
+
+        assertTrue(attributes.contains(BusinessMetrics))
+
+        val actual = attributes[BusinessMetrics]
+        val expected = setOf(
+            AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE.identifier,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun assumeRoleWithSourceProfileBusinessMetrics() = runTest {
+        val testArn = "arn:aws:iam::1234567:role/test-role"
+        val testProvider = TestPlatformProvider(
+            env = mapOf(
+                "AWS_CONFIG_FILE" to "config",
+                "AWS_REGION" to "us-west-2",
+            ),
+            fs = mapOf(
+                "config" to """
+                [default]
+                role_arn = $testArn
+                source_profile = B
+                
+                [profile B]
+                region = us-east-1
+                aws_access_key_id = AKID-Profile
+                aws_secret_access_key = Profile-Secret
+                """.trimIndent(),
+            ),
+        )
+        val testEngine = buildTestConnection {
+            expect(StsTestUtils.stsResponse(testArn))
+        }
+
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+        val attributes = ExecutionContext()
+        provider.resolve(attributes)
+
+        assertTrue(attributes.contains(BusinessMetrics))
+
+        val actual = attributes[BusinessMetrics]
+        val expected = setOf(
+            AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SOURCE_PROFILE.identifier,
+            AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE.identifier,
+            AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE.identifier,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun assumeRoleWithNamedProviderBusinessMetrics() = runTest {
+        val testArn = "arn:aws:iam::1234567:role/test-role"
+        val testProvider = TestPlatformProvider(
+            env = mapOf(
+                "AWS_CONFIG_FILE" to "config",
+                "AWS_REGION" to "us-west-2",
+                "AWS_ACCESS_KEY_ID" to "1",
+                "AWS_SECRET_ACCESS_KEY" to "2",
+            ),
+            fs = mapOf(
+                "config" to """
+                [default]
+                role_arn = $testArn
+                credential_source = Environment
+                """.trimIndent(),
+            ),
+        )
+        val testEngine = buildTestConnection {
+            expect(StsTestUtils.stsResponse(testArn))
+        }
+
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+        val attributes = ExecutionContext()
+        provider.resolve(attributes)
+
+        assertTrue(attributes.contains(BusinessMetrics))
+
+        val actual = attributes[BusinessMetrics]
+        val expected = setOf(
+            AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_NAMED_PROVIDER.identifier,
+            AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS.identifier,
+            AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE.identifier,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun assumeRoleWithWebIdentityTokenBusinessMetrics() = runTest {
+        val testArn = "arn:aws:iam::1234567:role/test-role"
+        val testProvider = TestPlatformProvider(
+            env = mapOf(
+                "AWS_CONFIG_FILE" to "config",
+                "AWS_REGION" to "us-west-2",
+            ),
+            fs = mapOf(
+                "config" to """
+                [default]
+                role_arn = $testArn
+                web_identity_token_file = /some/path/to/test-token
+                """.trimIndent(),
+                "/some/path/to/test-token" to "token",
+            ),
+        )
+        val testEngine = buildTestConnection {
+            expect(StsTestUtils.stsRequest(emptyMap()), StsTestUtils.stsResponse(testArn))
+        }
+
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+        val attributes = ExecutionContext()
+        try {
+            provider.resolve(attributes)
+        } catch (e: CredentialsProviderException) {
+            if (e.message != "STS failed to assume role from web identity") throw e
+        }
+
+        assertTrue(attributes.contains(BusinessMetrics))
+
+        val actual = attributes[BusinessMetrics]
+        val expected = setOf(
+            AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_STS_WEB_ID_TOKEN.identifier,
+            AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE_WEB_ID.identifier,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun ssoBusinessMetrics() = runTest {
+        val testProvider = TestPlatformProvider(
+            env = mapOf(
+                "AWS_CONFIG_FILE" to "config",
+            ),
+            fs = mapOf(
+                "config" to """
+                [default]
+                sso_session = B
+                sso_account_id = 012345678901
+                sso_role_name = SampleRole
+                
+                [sso-session B]
+                sso_region = us-east-1
+                sso_start_url = https://d-abc123.awsapps.com/start
+                """.trimIndent(),
+            ),
+        )
+        val testEngine = TestConnection()
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+        val attributes = ExecutionContext()
+        try {
+            provider.resolve(attributes)
+        } catch (e: ProviderConfigurationException) {
+            if (e.message != "Invalid or missing SSO session cache. Run `aws sso login` to initiate a new SSO session") throw e
+        }
+
+        assertTrue(attributes.contains(BusinessMetrics))
+
+        val actual = attributes[BusinessMetrics]
+        val expected = setOf(
+            AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO.identifier,
+            AwsBusinessMetric.Credentials.CREDENTIALS_SSO.identifier,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun legacySsoBusinessMetrics() = runTest {
+        val testProvider = TestPlatformProvider(
+            env = mapOf(
+                "AWS_CONFIG_FILE" to "config",
+            ),
+            fs = mapOf(
+                "config" to """
+                [default]
+                sso_account_id = 012345678901
+                sso_region = us-east-1
+                sso_role_name = SampleRole
+                sso_start_url = https://d-abc123.awsapps.com/start-beta
+                """.trimIndent(),
+            ),
+        )
+        val testEngine = TestConnection()
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+        val attributes = ExecutionContext()
+        try {
+            provider.resolve(attributes)
+        } catch (e: ProviderConfigurationException) {
+            if (e.message != "Invalid or missing SSO session cache. Run `aws sso login` to initiate a new SSO session") throw e
+        }
+
+        assertTrue(attributes.contains(BusinessMetrics))
+
+        val actual = attributes[BusinessMetrics]
+        val expected = setOf(
+            AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO_LEGACY.identifier,
+            AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY.identifier,
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun processBusinessMetrics() = runTest {
+        val testProvider = TestPlatformProvider(
+            env = mapOf(
+                "AWS_CONFIG_FILE" to "config",
+            ),
+            fs = mapOf(
+                "config" to """
+                [default]
+                credential_process = awscreds-custom
+                """.trimIndent(),
+                "awscreds-custom" to "some-process",
+            ),
+        )
+        val testEngine = TestConnection()
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+
+        mockkStatic(::executeCommand)
+        coEvery { executeCommand(any(), any(), any(), any(), any()) }.returns(
+            Pair(
+                0,
+                """
+            {
+                "Version": 1,
+                "AccessKeyId": "AccessKeyId",
+                "SecretAccessKey": "SecretAccessKey",
+                "SessionToken": "SessionToken"
+            }
+                """.trimIndent(),
+            ),
+        )
+
+        val attributes = ExecutionContext()
+        provider.resolve(attributes)
+
+        assertTrue(attributes.contains(BusinessMetrics))
+
+        val actual = attributes[BusinessMetrics]
+        val expected = setOf(
+            AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_PROCESS.identifier,
+            AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS.identifier,
+        )
         assertEquals(expected, actual)
     }
 }
