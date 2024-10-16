@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.55] - 10/16/2024
+
+### Features
+* (**s3**) Add support for the new optional bucket-region and prefix query parameters in the ListBuckets API. For ListBuckets requests that express pagination, Amazon S3 will now return both the bucket names and associated AWS regions in the response.
+
 ## [1.3.54] - 10/15/2024
 
 ### Features
