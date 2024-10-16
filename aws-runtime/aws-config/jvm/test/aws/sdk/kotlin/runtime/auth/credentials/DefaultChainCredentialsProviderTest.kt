@@ -184,7 +184,7 @@ class DefaultChainCredentialsProviderTest {
                 assertEquals(expected.creds, creds)
 
                 if (expected.businessMetrics.isNotEmpty()) {
-                    assertEquals(expected.businessMetrics, attributes[BusinessMetrics]) // TODO: FILL OUT TESTS
+                    assertEquals(expected.businessMetrics, attributes[BusinessMetrics])
                 }
 
                 // assert http traffic to the extent we can. These tests do not have specific timestamps they
