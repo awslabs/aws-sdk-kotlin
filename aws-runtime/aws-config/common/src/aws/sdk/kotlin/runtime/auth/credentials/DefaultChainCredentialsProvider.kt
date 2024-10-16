@@ -7,18 +7,13 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
-import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
-import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.Attributes
-import aws.smithy.kotlin.runtime.collections.MutableAttributes
 import aws.smithy.kotlin.runtime.collections.get
-import aws.smithy.kotlin.runtime.collections.merge
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
-import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
@@ -51,7 +46,6 @@ public class DefaultChainCredentialsProvider constructor(
     httpClient: HttpClientEngine? = null,
     public val region: String? = null,
 ) : CloseableCredentialsProvider {
-    private val executionContext = ExecutionContext()
     private val manageEngine = httpClient == null
     private val engine = httpClient ?: DefaultHttpEngine()
 
@@ -59,7 +53,6 @@ public class DefaultChainCredentialsProvider constructor(
         SystemPropertyCredentialsProvider(platformProvider::getProperty),
         EnvironmentCredentialsProvider(platformProvider::getenv),
         LazilyInitializedCredentialsProvider("EnvironmentStsWebIdentityCredentialsProvider") {
-            executionContext.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS_STS_WEB_ID_TOKEN)
             StsWebIdentityCredentialsProvider.fromEnvironment(
                 platformProvider = platformProvider,
                 httpClient = httpClient,
@@ -81,10 +74,7 @@ public class DefaultChainCredentialsProvider constructor(
 
     private val provider = CachedCredentialsProvider(chain)
 
-    override suspend fun resolve(attributes: Attributes): Credentials {
-        if (attributes is MutableAttributes) attributes.merge(executionContext)
-        return provider.resolve(attributes)
-    }
+    override suspend fun resolve(attributes: Attributes): Credentials = provider.resolve(attributes)
 
     override fun close() {
         provider.close()

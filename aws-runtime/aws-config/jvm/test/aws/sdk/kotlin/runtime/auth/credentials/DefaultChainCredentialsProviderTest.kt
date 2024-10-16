@@ -8,7 +8,10 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.copy
+import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics
+import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.httptest.TestConnection
+import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.Filesystem
 import aws.smithy.kotlin.runtime.util.OperatingSystem
@@ -17,10 +20,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.longOrNull
+import kotlinx.serialization.json.*
 import java.io.File
 import java.nio.file.Paths
 import kotlin.test.Test
@@ -79,6 +79,7 @@ class DefaultChainCredentialsProviderTest {
             override val name: String,
             override val docs: String,
             val creds: Credentials,
+            val businessMetrics: MutableSet<String>,
         ) : TestResult()
 
         data class ErrorContains(
@@ -103,7 +104,8 @@ class DefaultChainCredentialsProviderTest {
                             o["expiry"]?.jsonPrimitive?.longOrNull?.let { Instant.fromEpochSeconds(it) },
                             accountId = o["accountId"]?.jsonPrimitive?.content,
                         )
-                        Ok(name, docs, creds)
+                        val businessMetrics = o["business_metrics"]?.jsonArray?.map { it.jsonPrimitive.content }?.toMutableSet() ?: mutableSetOf()
+                        Ok(name, docs, creds, businessMetrics)
                     }
                     "ErrorContains" in result -> ErrorContains(name, docs, checkNotNull(result["ErrorContains"]).jsonPrimitive.content)
                     else -> error("unrecognized result object: $result")
@@ -166,7 +168,8 @@ class DefaultChainCredentialsProviderTest {
     fun executeTest(name: String) = runTest {
         val test = makeTest(name)
         val provider = DefaultChainCredentialsProvider(platformProvider = test.testPlatform, httpClient = test.testEngine)
-        val actual = runCatching { provider.resolve() }
+        val attributes = ExecutionContext()
+        val actual = runCatching { provider.resolve(attributes) }
         val expected = test.expected
         when {
             expected is TestResult.Ok && actual.isFailure -> error("expected success, got error: $actual")
@@ -179,6 +182,10 @@ class DefaultChainCredentialsProviderTest {
                 val sanitizedExpiration = if (expected.creds.expiration == null) null else actualCreds.expiration
                 val creds = actualCreds.copy(providerName = null, expiration = sanitizedExpiration)
                 assertEquals(expected.creds, creds)
+
+                if (expected.businessMetrics.isNotEmpty()) {
+                    assertEquals(expected.businessMetrics, attributes[BusinessMetrics]) // TODO: FILL OUT TESTS
+                }
 
                 // assert http traffic to the extent we can. These tests do not have specific timestamps they
                 // were signed with and some lack enough context to even assert a body (e.g. incorrect content-type).
