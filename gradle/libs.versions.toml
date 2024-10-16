@@ -2,7 +2,7 @@
 kotlin-version = "2.0.21"
 dokka-version = "1.9.10"
 
-aws-kotlin-repo-tools-version = "0.4.12"
+aws-kotlin-repo-tools-version = "0.4.13"
 
 # libs
 coroutines-version = "1.9.0"
