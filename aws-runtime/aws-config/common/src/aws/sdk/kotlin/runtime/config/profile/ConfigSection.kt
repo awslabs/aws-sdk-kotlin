@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.config.profile
 import aws.sdk.kotlin.runtime.InternalSdkApi
 
 @InternalSdkApi
-@ConsistentCopyVisibility // Opt-in to future internal copy() generation https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-consistent-copy-visibility/
+@ExposedCopyVisibility // FIXME Change to @ConsistentCopyVisibility in 1.4.x minor version bump
 public data class ConfigSection internal constructor(
     public val name: String,
     internal val properties: Map<String, AwsConfigValue>,
