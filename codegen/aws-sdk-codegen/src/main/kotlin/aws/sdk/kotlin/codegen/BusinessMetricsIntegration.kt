@@ -71,16 +71,9 @@ class BusinessMetricsIntegration : KotlinIntegration {
         override val name: String = "credentialsOverrideBusinessMetricsMiddleware"
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             writer.withBlock(
-                "if (config.credentialsProvider.#T != #S ) {",
+                "if (config.credentialsProvider is #T) {",
                 "}",
-                RuntimeTypes.Auth.Credentials.AwsCredentials.simpleClassName,
-                /**
-                 * If a [CredentialsProvider] is not wrapped by [aws.sdk.kotlin.runtime.auth.credentials.internal.ManagedCredentialsProvider]
-                 * it means that it was not created by the SDK, suggesting that the user has supplied their own [CredentialsProvider].
-                 *
-                 * See:[AwsServiceConfigIntegration.CredentialsProviderProp]
-                 */
-                "ManagedCredentialsProvider",
+                AwsRuntimeTypes.Config.Credentials.StaticCredentialsProvider,
             ) {
                 write(
                     "op.context.#T(#T.Credentials.CREDENTIALS_CODE)",
