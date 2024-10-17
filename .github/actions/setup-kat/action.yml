@@ -23,8 +23,8 @@ runs:
         
         aws s3 cp s3://kotlin-sdk-build-tools/kat-releases/$kat_version/kat-$kat_version.zip ./kat.zip
         
+        echo "Unzipping kat tool"
         unzip ./kat.zip -d kat
-        cd kat/kat-$kat_version/bin
         
         kat_binary_path="$PWD/kat/kat-$kat_version/bin"
         export PATH="$kat_binary_path:$PATH"
