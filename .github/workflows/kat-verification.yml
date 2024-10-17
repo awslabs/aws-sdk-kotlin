@@ -56,4 +56,11 @@ jobs:
           pwd
           ls -lsa
           kat brazil transform -i ./build/m2 -o ./transformed -t .brazil.json -v live -m ./codegen/sdk/packages.json
+          
+          # Check for manifest file
+          if [ ! -f "./transformed/brazil-import-manifest.json" ]; then
+            echo "Error: manifest.json not found in the transformed artifact"
+            exit 1
+          fi
+          
           echo "Transformation succeeded!"
