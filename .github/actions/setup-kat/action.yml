@@ -24,14 +24,10 @@ runs:
         aws s3 cp s3://kotlin-sdk-build-tools/kat-releases/$kat_version/kat-$kat_version.zip ./kat.zip
         
         echo "Unzipping kat tool"
-        unzip ./kat.zip -d kat
+        unzip -qq ./kat.zip -d kat
         
         kat_binary_path="$PWD/kat/kat-$kat_version/bin"
         export PATH="$kat_binary_path:$PATH"
         echo "$kat_binary_path" >> $GITHUB_PATH
-
-        # Debug        
-        echo "Current PATH: $PATH"
-        ls -l "$kat_binary_path"
 
         echo "Installed kat version $(kat version)" || (echo "Failed to execute kat command" && exit 1)
