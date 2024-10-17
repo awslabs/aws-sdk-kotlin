@@ -1,4 +1,4 @@
-name: Kat Verification
+name: Kat Transform
 
 on:
   pull_request:
