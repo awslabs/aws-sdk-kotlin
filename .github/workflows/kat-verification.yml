@@ -26,6 +26,8 @@ jobs:
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
       - name: Setup kat
         uses: ./aws-sdk-kotlin/.github/actions/setup-kat
+        env:
+          CI_AWS_ROLE_ARN: ${{ secrets.CI_AWS_ROLE_ARN }}
       - name: Verify
         working-directory: ./aws-sdk-kotlin
         shell: bash

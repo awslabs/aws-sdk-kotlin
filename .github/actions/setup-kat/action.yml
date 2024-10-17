@@ -8,7 +8,7 @@ runs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
+        role-to-assume: $CI_AWS_ROLE_ARN
         aws-region: us-west-2
     - name: Install AWS CLI
       shell: bash
@@ -28,7 +28,7 @@ runs:
         
         aws s3 cp s3://kotlin-sdk-build-tools/kat-releases/$kat_version/kat-$kat_version.zip ./kat.zip
         
-        unzip ./kat.zip kat
+        unzip ./kat.zip -d kat
         cd kat/kat-$kat_version/bin
         
         kat_binary_path=kat/kat-$kat_version/bin
