@@ -13,6 +13,8 @@ runs:
     - name: Set up kat
       shell: bash
       run: |
+        aws sts get-caller-identity 
+        
         kat_version=$(aws s3 ls s3://kotlin-sdk-build-tools/kat-releases/ | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1)
         
         if [ -z "$kat_version" ]; then
