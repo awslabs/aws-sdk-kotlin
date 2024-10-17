@@ -28,5 +28,6 @@ runs:
         
         kat_binary_path="$PWD/kat/kat-$kat_version/bin"
         export PATH="$kat_binary_path:$PATH"
+        echo "$kat_binary_path" >> $GITHUB_PATH
 
         echo "Installed kat version $(kat version)" || (echo "Failed to execute kat command" && exit 1)
