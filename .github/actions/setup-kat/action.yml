@@ -12,9 +12,7 @@ runs:
         sudo apt-get install -y awscli
     - name: Set up kat
       shell: bash
-      run: |
-        aws sts get-caller-identity 
-        
+      run: |        
         kat_version=$(aws s3 ls s3://kotlin-sdk-build-tools/kat-releases/ | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1)
         
         if [ -z "$kat_version" ]; then
@@ -28,8 +26,13 @@ runs:
         unzip ./kat.zip -d kat
         cd kat/kat-$kat_version/bin
         
-        kat_binary_path=kat/kat-$kat_version/bin
+        kat_binary_path="$PWD/kat/kat-$kat_version/bin"
         export PATH="$kat_binary_path:$PATH"
-        echo $kat_binary_path >> $GITHUB_PATH
-        
+        echo "$kat_binary_path" >> $GITHUB_PATH
+
+        # Debug        
+        echo "Current PATH: $PATH"
+        ls -l "$kat_binary_path"
+
+
         echo "Installed kat version $(kat version)"
