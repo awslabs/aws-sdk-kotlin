@@ -27,6 +27,6 @@ runs:
         unzip -qq ./kat.zip -d kat
         
         kat_binary_path="$PWD/kat/kat-$kat_version/bin"
-        echo "$kat_binary_path" >> $GITHUB_PATH
+        export PATH="$kat_binary_path:$PATH"
 
         echo "Installed kat version $(kat version)" || (echo "Failed to execute kat command" && exit 1)
