@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.56] - 10/17/2024
+
+### Features
+* (**bedrockagent**) Removing support for topK property in PromptModelInferenceConfiguration object, Making PromptTemplateConfiguration property as required, Limiting the maximum PromptVariant to 1
+* (**dataexchange**) This release adds Data Grant support, through which customers can programmatically create data grants to share with other AWS accounts and accept data grants from other AWS accounts.
+* (**pinpointsmsvoicev2**) Added the registrations status of REQUIRES_AUTHENTICATION
+* (**pipes**) This release adds validation to require specifying a SecurityGroup and Subnets in the Vpc object under PipesSourceSelfManagedKafkaParameters. It also adds support for iso-e, iso-f, and other non-commercial partitions in ARN parameters.
+* (**quicksight**) Add StartDashboardSnapshotJobSchedule API. RestoreAnalysis now supports restoring analysis to folders.
+* (**workspaces**) Updated the DomainName pattern for Active Directory
+
+### Documentation
+* (**ecs**) This is an Amazon ECS documentation only update to address tickets.
+* (**rds**) Updates Amazon RDS documentation for TAZ IAM support
+
+### Miscellaneous
+* Upgrade to Kotlin 2.0.21
+
 ## [1.3.55] - 10/16/2024
 
 ### Features
