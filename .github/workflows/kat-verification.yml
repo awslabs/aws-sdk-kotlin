@@ -39,7 +39,7 @@ jobs:
       - name: Setup kat
         uses: ./aws-sdk-kotlin/.github/actions/setup-kat
 
-      - name: Verify
+      - name: Build
         working-directory: ./aws-sdk-kotlin
         shell: bash
         run: |
@@ -47,4 +47,12 @@ jobs:
           ls -lsa
           ./gradlew build
           ./gradlew publishAllPublicationsToTestLocalRepository
+
+      - name: Transform
+        working-directory: ./aws-sdk-kotlin
+        shell: bash
+        run: |
+          pwd
+          ls -lsa
           kat brazil transform -i ./build/m2 -o ./transformed -t .brazil.json -v live -m ./codegen/sdk/packages.json
+          echo "Transformation succeeded!"

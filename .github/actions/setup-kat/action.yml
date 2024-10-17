@@ -34,5 +34,4 @@ runs:
         echo "Current PATH: $PATH"
         ls -l "$kat_binary_path"
 
-
         echo "Installed kat version $(kat version)"
