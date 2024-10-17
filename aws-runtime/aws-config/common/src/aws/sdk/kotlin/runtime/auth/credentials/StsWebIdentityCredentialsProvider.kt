@@ -44,10 +44,6 @@ public class StsWebIdentityCredentialsProvider(
     public val platformProvider: PlatformProvider = PlatformProvider.System,
     public val httpClient: HttpClientEngine? = null,
 ) : CredentialsProvider {
-    /**
-     * Indicates if the class was created using [fromEnvironment]
-     */
-    private var createdFromEnvironment: Boolean = false
 
     /**
      * A [CredentialsProvider] that exchanges a Web Identity Token for credentials from the AWS Security Token Service
@@ -85,46 +81,6 @@ public class StsWebIdentityCredentialsProvider(
         httpClient,
     )
 
-    /**
-     * A [CredentialsProvider] that exchanges a Web Identity Token for credentials from the AWS Security Token Service
-     * (STS).
-     *
-     * @param roleArn The ARN of the target role to assume, e.g. `arn:aws:iam:123456789:role/example`
-     * @param webIdentityTokenFilePath The path to the file containing a JWT token
-     * @param region The AWS region to assume the role in
-     * @param roleSessionName The name to associate with the session. Use the role session name to uniquely identify a
-     * session when the same role is assumed by different principals or for different reasons. In cross-account
-     * scenarios, the role session name is visible to, and can be logged by the account that owns the role. The role
-     * session name is also in the ARN of the assumed role principal.
-     * @param duration The expiry duration of the credentials. Defaults to 15 minutes if not set.
-     * @param platformProvider The platform API provider
-     * @param httpClient the [HttpClientEngine] instance to use to make requests. NOTE: This engine's resources and
-     * lifetime are NOT managed by the provider. Caller is responsible for closing.
-     * @param createdFromEnvironment If the [StsWebIdentityCredentialsProvider] was created using [fromEnvironment].
-     */
-    private constructor(
-        roleArn: String,
-        webIdentityTokenFilePath: String,
-        region: String?,
-        roleSessionName: String? = null,
-        duration: Duration = DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds,
-        platformProvider: PlatformProvider = PlatformProvider.System,
-        httpClient: HttpClientEngine? = null,
-        createdFromEnvironment: Boolean,
-    ) : this(
-        AssumeRoleWithWebIdentityParameters(
-            roleArn = roleArn,
-            webIdentityTokenFilePath = webIdentityTokenFilePath,
-            roleSessionName = roleSessionName,
-            duration = duration,
-        ),
-        region,
-        platformProvider,
-        httpClient,
-    ) {
-        this.createdFromEnvironment = createdFromEnvironment
-    }
-
     public companion object {
         /**
          * Create an [StsWebIdentityCredentialsProvider] from the current execution environment. This will attempt
@@ -143,16 +99,7 @@ public class StsWebIdentityCredentialsProvider(
             val resolvedRoleArn = platformProvider.resolve(roleArn, AwsSdkSetting.AwsRoleArn, "roleArn")
             val resolvedTokenFilePath = platformProvider.resolve(webIdentityTokenFilePath, AwsSdkSetting.AwsWebIdentityTokenFile, "webIdentityTokenFilePath")
             val resolvedRegion = region ?: AwsSdkSetting.AwsRegion.resolve(platformProvider)
-            return StsWebIdentityCredentialsProvider(
-                resolvedRoleArn,
-                resolvedTokenFilePath,
-                resolvedRegion,
-                roleSessionName,
-                duration,
-                platformProvider,
-                httpClient,
-                createdFromEnvironment = true,
-            )
+            return StsWebIdentityCredentialsProvider(resolvedRoleArn, resolvedTokenFilePath, resolvedRegion, roleSessionName, duration, platformProvider, httpClient)
         }
     }
 
@@ -160,9 +107,6 @@ public class StsWebIdentityCredentialsProvider(
         val logger = coroutineContext.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials via web identity" }
 
-        if (createdFromEnvironment) {
-            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS_STS_WEB_ID_TOKEN)
-        }
         attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE_WEB_ID)
 
         val provider = this

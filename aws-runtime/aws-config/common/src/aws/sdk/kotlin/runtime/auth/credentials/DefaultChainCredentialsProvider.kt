@@ -7,13 +7,15 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
+import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
+import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics
 import aws.smithy.kotlin.runtime.collections.Attributes
-import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
+import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 
 /**
@@ -53,7 +55,12 @@ public class DefaultChainCredentialsProvider constructor(
     private val chain = CredentialsProviderChain(
         SystemPropertyCredentialsProvider(platformProvider::getProperty),
         EnvironmentCredentialsProvider(platformProvider::getenv),
-        LazilyInitializedCredentialsProvider("EnvironmentStsWebIdentityCredentialsProvider") {
+        LazilyInitializedCredentialsProvider(
+            "EnvironmentStsWebIdentityCredentialsProvider",
+            ExecutionContext.build {
+                attributes[BusinessMetrics] = mutableSetOf(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS_STS_WEB_ID_TOKEN.identifier)
+            },
+        ) {
             // STS web identity provider can be constructed from either the profile OR 100% from the environment
             StsWebIdentityCredentialsProvider.fromEnvironment(
                 platformProvider = platformProvider,
