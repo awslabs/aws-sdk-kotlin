@@ -45,6 +45,7 @@ jobs:
         run: |
           pwd
           ls -lsa
+          kat bump-version  # Bump from `vNext-SNAPSHOT` to `vNext`. kat transform only works on non-SNAPSHOT versions 
           ./gradlew build
           ./gradlew publishAllPublicationsToTestLocalRepository
 
