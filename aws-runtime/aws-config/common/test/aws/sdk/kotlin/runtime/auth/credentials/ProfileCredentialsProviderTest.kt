@@ -328,7 +328,7 @@ class ProfileCredentialsProviderTest {
     }
 
     @Test
-    fun staticCredentialsBusinessMetrics() = runTest {
+    fun profileCredentialsBusinessMetrics() = runTest {
         val testProvider = TestPlatformProvider(
             env = mapOf("AWS_CONFIG_FILE" to "config"),
             fs = mapOf(

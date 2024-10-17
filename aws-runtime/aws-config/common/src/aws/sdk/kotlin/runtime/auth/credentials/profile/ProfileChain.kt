@@ -112,7 +112,7 @@ internal data class RoleArn(
     /**
      * The source used to create the [RoleArn]
      */
-    val roleArnSource: RoleArnSource? = null,
+    val source: RoleArnSource? = null,
 
     /**
      * Session name to pass to the assume role provider

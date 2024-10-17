@@ -134,7 +134,7 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
 
         chain.roles.forEach { roleArn ->
             logger.debug { "Assuming role `${roleArn.roleArn}`" }
-            if (roleArn.roleArnSource == RoleArnSource.SOURCE_PROFILE) {
+            if (roleArn.source == RoleArnSource.SOURCE_PROFILE) {
                 attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SOURCE_PROFILE)
             }
 

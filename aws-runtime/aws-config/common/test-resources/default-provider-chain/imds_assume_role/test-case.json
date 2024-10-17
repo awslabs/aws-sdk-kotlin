@@ -1,6 +1,6 @@
 {
   "name": "imds-token-fail",
-  "docs": "acquires credentials via IMDS and uses them to assume a role",
+  "docs": "acquires credentials from a profile with IMDS as a named provider and uses them to assume a role",
   "result": {
     "Ok": {
       "access_key_id": "ASIARCORRECT",
