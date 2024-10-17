@@ -7,7 +7,8 @@
       "secret_access_key": "secretkeycorrect",
       "session_token": "tokencorrect",
       "expiry": 1632249686,
-      "accountId": "130633740322"
+      "accountId": "130633740322",
+      "business_metrics": ["p","z", "i"]
     }
   }
 }

@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProvider
 import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
+import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArnSource
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.profile.AwsConfigurationSource
 import aws.sdk.kotlin.runtime.config.profile.FileType
@@ -51,7 +52,7 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("abc123", "def456")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+                RoleArn("arn:aws:iam::123456789:role/RoleA", RoleArnSource.SOURCE_PROFILE),
             ),
         ),
         TestCase(
@@ -85,7 +86,7 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("abc123", "def456")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA", "my_session_name"),
+                RoleArn("arn:aws:iam::123456789:role/RoleA", RoleArnSource.SOURCE_PROFILE, "my_session_name"),
             ),
         ),
         TestCase(
@@ -102,7 +103,7 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("abc123", "def456")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA", externalId = "my_external_id"),
+                RoleArn("arn:aws:iam::123456789:role/RoleA", RoleArnSource.SOURCE_PROFILE, externalId = "my_external_id"),
             ),
         ),
         TestCase(
@@ -127,7 +128,7 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.NamedSource("Ec2InstanceMetadata"),
-                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+                RoleArn("arn:aws:iam::123456789:role/RoleA", RoleArnSource.CREDENTIALS_SOURCE),
             ),
         ),
         TestCase(
@@ -221,8 +222,8 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("mno456", "pqr789")),
-                RoleArn("arn:aws:iam::123456789:role/RoleB"),
-                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+                RoleArn("arn:aws:iam::123456789:role/RoleB", RoleArnSource.SOURCE_PROFILE),
+                RoleArn("arn:aws:iam::123456789:role/RoleA", RoleArnSource.SOURCE_PROFILE),
             ),
         ),
         TestCase(
@@ -245,7 +246,7 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.AccessKey(Credentials("profile_b_key", "profile_b_secret")),
-                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+                RoleArn("arn:aws:iam::123456789:role/RoleA", RoleArnSource.SOURCE_PROFILE),
             ),
         ),
         TestCase(
@@ -320,7 +321,7 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.WebIdentityTokenRole("arn:aws:iam::123456789:role/RoleB", "/var/token.jwt", "some_session_name"),
-                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+                RoleArn("arn:aws:iam::123456789:role/RoleA", RoleArnSource.SOURCE_PROFILE),
             ),
         ),
         TestCase(
@@ -352,7 +353,7 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.LegacySso("https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA"),
-                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+                RoleArn("arn:aws:iam::123456789:role/RoleA", RoleArnSource.SOURCE_PROFILE),
             ),
         ),
         TestCase(
@@ -434,7 +435,7 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.SsoSession("my-session", "https://d-92671207e4.awsapps.com/start", "us-east-2", "1234567", "RoleA"),
-                RoleArn("arn:aws:iam::123456789:role/RoleA"),
+                RoleArn("arn:aws:iam::123456789:role/RoleA", RoleArnSource.SOURCE_PROFILE),
             ),
         ),
         TestCase(
@@ -571,7 +572,7 @@ class ProfileChainTest {
                         },
                     ),
                 ),
-                RoleArn("some-arn"),
+                RoleArn("some-arn", RoleArnSource.SOURCE_PROFILE),
             ),
         ),
         TestCase(
@@ -594,7 +595,7 @@ class ProfileChainTest {
             """,
             chain(
                 LeafProvider.NamedSource("Ec2InstanceMetadata"),
-                RoleArn("some-arn"),
+                RoleArn("some-arn", RoleArnSource.CREDENTIALS_SOURCE),
             ),
         ),
         TestCase(

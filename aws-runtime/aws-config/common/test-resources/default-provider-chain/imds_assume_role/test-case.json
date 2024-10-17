@@ -1,13 +1,14 @@
 {
   "name": "imds-token-fail",
-  "docs": "acquires credentials via IMDS and uses them to assume a role",
+  "docs": "acquires credentials from a profile with IMDS as a named provider and uses them to assume a role",
   "result": {
     "Ok": {
       "access_key_id": "ASIARCORRECT",
       "secret_access_key": "secretkeycorrect",
       "session_token": "tokencorrect",
       "expiry": 1632249686,
-      "accountId": "130633740322"
+      "accountId": "130633740322",
+      "business_metrics": ["p","0", "i"]
     }
   }
 }

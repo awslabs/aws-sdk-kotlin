@@ -6,7 +6,8 @@
       "access_key_id": "ASIARTEST",
       "secret_access_key": "testsecret",
       "session_token": "testtoken",
-      "expiry": 1632270906
+      "expiry": 1632270906,
+      "business_metrics": ["0"]
     }
   }
 }

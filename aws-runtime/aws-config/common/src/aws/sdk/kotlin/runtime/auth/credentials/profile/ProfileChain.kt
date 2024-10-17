@@ -108,6 +108,12 @@ internal data class RoleArn(
      * ARN of role to assume
      */
     val roleArn: String,
+
+    /**
+     * The source used to create the [RoleArn]
+     */
+    val source: RoleArnSource? = null,
+
     /**
      * Session name to pass to the assume role provider
      */
@@ -118,6 +124,14 @@ internal data class RoleArn(
      */
     val externalId: String? = null,
 )
+
+/**
+ * Represents the possible sources for creating a [RoleArn].
+ */
+internal enum class RoleArnSource {
+    SOURCE_PROFILE,
+    CREDENTIALS_SOURCE,
+}
 
 internal const val ROLE_ARN = "role_arn"
 internal const val EXTERNAL_ID = "external_id"
@@ -148,8 +162,15 @@ private fun AwsProfile.roleArnOrNull(): RoleArn? {
 
     val roleArn = getOrNull(ROLE_ARN) ?: return null
 
+    val roleArnSource = when {
+        contains(SOURCE_PROFILE) && !contains(CREDENTIAL_SOURCE) -> RoleArnSource.SOURCE_PROFILE
+        contains(CREDENTIAL_SOURCE) && !contains(SOURCE_PROFILE) -> RoleArnSource.CREDENTIALS_SOURCE
+        else -> null
+    }
+
     return RoleArn(
         roleArn,
+        roleArnSource,
         sessionName = getOrNull(ROLE_SESSION_NAME),
         externalId = getOrNull(EXTERNAL_ID),
     )
