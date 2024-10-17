@@ -1,0 +1,38 @@
+name: Setup Kat
+description: >
+  Prepare kat tool for use in CI
+
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
+        aws-region: us-west-2
+    - name: Install AWS CLI
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y awscli
+    - name: Set up kat
+      shell: bash
+      run: |
+        kat_version=$(aws s3 ls s3://kotlin-sdk-build-tools/kat-releases/ | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1)
+        
+        if [ -z "$kat_version" ]; then
+          echo "No versions of kat were found"
+          exit 1
+        fi
+        echo "Downloading kat version $kat_version"
+        
+        aws s3 cp s3://kotlin-sdk-build-tools/kat-releases/$kat_version/kat-$kat_version.zip ./kat.zip
+        
+        unzip ./kat.zip kat
+        cd kat/kat-$kat_version/bin
+        
+        kat_binary_path=kat/kat-$kat_version/bin
+        export PATH="$kat_binary_path:$PATH"
+        echo $kat_binary_path >> $GITHUB_PATH
+        
+        echo "Installed kat version $(kat version)"
