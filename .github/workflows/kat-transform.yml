@@ -59,7 +59,7 @@ jobs:
           
           # Check for manifest file
           if [ ! -f "./transformed/brazil-import-manifest.json" ]; then
-            echo "Error: manifest.json not found in the transformed artifact"
+            echo "Error: brazil-import-manifest.json not found in the transformed artifact"
             exit 1
           fi
           
