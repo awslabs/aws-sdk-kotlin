@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.57] - 10/18/2024
+
+### Features
+* (**athena**) Removing FEDERATED from Create/List/Delete/GetDataCatalog API
+* (**bedrock**) Adding converse support to CMI API's
+* (**bedrockruntime**) Added converse support for custom imported models
+* (**datazone**) Adding the following project member designations: PROJECT_CATALOG_VIEWER, PROJECT_CATALOG_CONSUMER and PROJECT_CATALOG_STEWARD in the CreateProjectMembership API and PROJECT_CATALOG_STEWARD designation in the AddPolicyGrant API.
+* (**ec2**) RequestSpotInstances and RequestSpotFleet feature release.
+
 ## [1.3.56] - 10/17/2024
 
 ### Features
