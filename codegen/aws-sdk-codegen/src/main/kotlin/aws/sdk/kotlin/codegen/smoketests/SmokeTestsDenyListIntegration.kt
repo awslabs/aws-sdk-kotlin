@@ -22,7 +22,7 @@ class SmokeTestsDenyListIntegration : KotlinIntegration {
         )
 
     private val smokeTestDenyListSectionWriter = SectionWriter { writer, _ ->
-        writer.write("// Smoke tests for service deny listed until model is fixed")
+        writer.write("// Smoke tests for service deny listed")
     }
 }
 
@@ -33,5 +33,4 @@ val smokeTestDenyList = setOf(
     "Application Auto Scaling",
     "SWF",
     "WAFV2",
-    "IoT Data Plane",
 )
