@@ -37,7 +37,7 @@ jobs:
           aws-region: us-west-2
 
       - name: Setup kat
-        uses: ./aws-sdk-kotlin/.github/actions/setup-kat
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/setup-kat@kat-ci
 
       - name: Build
         working-directory: ./aws-sdk-kotlin
