@@ -1,0 +1,66 @@
+name: Kat Transform
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened, labeled, unlabeled ]
+    branches: [ main ]
+
+# Allow one instance of this workflow per pull request, and cancel older runs when new changes are pushed
+concurrency:
+  group: kat-pr-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  RUN: ${{ github.run_id }}-${{ github.run_number }}
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+
+jobs:
+  verify-transform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          path: 'aws-sdk-kotlin'
+
+      - name: Setup Build
+        uses: ./aws-sdk-kotlin/.github/actions/setup-build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
+          aws-region: us-west-2
+
+      - name: Setup kat
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/setup-kat@main
+
+      - name: Build
+        working-directory: ./aws-sdk-kotlin
+        shell: bash
+        run: |
+          pwd
+          ls -lsa
+          kat bump-version  # Bump from `vNext-SNAPSHOT` to `vNext`. kat transform only works on non-SNAPSHOT versions 
+          ./gradlew build
+          ./gradlew publishAllPublicationsToTestLocalRepository
+
+      - name: Transform
+        working-directory: ./aws-sdk-kotlin
+        shell: bash
+        run: |
+          pwd
+          ls -lsa
+          kat brazil transform -i ./build/m2 -o ./transformed -t .brazil.json -v live -m ./codegen/sdk/packages.json
+          
+          # Check for manifest file
+          if [ ! -f "./transformed/brazil-import-manifest.json" ]; then
+            echo "Error: brazil-import-manifest.json not found in the transformed artifact"
+            exit 1
+          fi
+          
+          echo "Transformation succeeded!"
