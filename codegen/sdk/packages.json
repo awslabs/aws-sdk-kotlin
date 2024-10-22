@@ -1261,6 +1261,12 @@
             "brazilName": "AwsSdkKotlinMarketplaceMetering"
         },
         {
+            "sdkId": "Marketplace Reporting",
+            "namespace": "aws.sdk.kotlin.services.marketplacereporting",
+            "artifactName": "marketplacereporting",
+            "brazilName": "AwsSdkKotlinMarketplaceReporting"
+        },
+        {
             "sdkId": "MediaConnect",
             "namespace": "aws.sdk.kotlin.services.mediaconnect",
             "artifactName": "mediaconnect",
@@ -1939,6 +1945,12 @@
             "brazilName": "AwsSdkKotlinSnowball"
         },
         {
+            "sdkId": "SocialMessaging",
+            "namespace": "aws.sdk.kotlin.services.socialmessaging",
+            "artifactName": "socialmessaging",
+            "brazilName": "AwsSdkKotlinSocialmessaging"
+        },
+        {
             "sdkId": "Ssm Sap",
             "namespace": "aws.sdk.kotlin.services.ssmsap",
             "artifactName": "ssmsap",
@@ -2081,12 +2093,6 @@
             "namespace": "aws.sdk.kotlin.services.workdocs",
             "artifactName": "workdocs",
             "brazilName": "AwsSdkKotlinWorkdocs"
-        },
-        {
-            "sdkId": "WorkLink",
-            "namespace": "aws.sdk.kotlin.services.worklink",
-            "artifactName": "worklink",
-            "brazilName": "AwsSdkKotlinWorklink"
         },
         {
             "sdkId": "WorkMail",

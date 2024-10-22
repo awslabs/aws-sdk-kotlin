@@ -14,7 +14,7 @@ plugins {
 description = "Support for AWS configuration"
 extra["moduleName"] = "aws.sdk.kotlin.runtime.config"
 
-apply(plugin = "kotlinx-atomicfu")
+apply(plugin = "org.jetbrains.kotlinx.atomicfu")
 
 kotlin {
     sourceSets {
