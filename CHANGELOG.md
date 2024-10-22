@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.59] - 10/22/2024
+
+### Features
+* (**bedrockruntime**) Updating invoke regex to support imported models for converse API
+* (**imagebuilder**) Add macOS platform and instance placement options
+* (**m2**) Add AuthSecretsManagerArn optional parameter to batch job APIs, expand batch parameter limits, and introduce clientToken constraints.
+* (**rds**) Global clusters now expose the Endpoint attribute as one of its fields. It is a Read/Write endpoint for the global cluster which resolves to the Global Cluster writer instance.
+* (**repostspace**) Adds the BatchAddRole and BatchRemoveRole APIs.
+* (**timestreamquery**) This release adds support for Query Insights, a feature that provides details of query execution, enabling users to identify areas for improvement to optimize their queries, resulting in improved query performance and lower query costs.
+
 ## [1.3.58] - 10/21/2024
 
 ### Features
