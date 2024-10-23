@@ -1,5 +1,0 @@
-{
-    "id": "b95f4632-90cf-4d72-8947-46fd13b902c4",
-    "type": "bugfix",
-    "description": "Fix backwards incompatibility with versions < 1.2.28"
-}

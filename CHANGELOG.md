@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.60] - 10/23/2024
+
+### Features
+* (**connect**) Amazon Connect Service Feature: Add support to start screen sharing for a web calling contact.
+* (**ec2**) Amazon EC2 X8g, C8g and M8g instances are powered by AWS Graviton4 processors. X8g provide the lowest cost per GiB of memory among Graviton4 instances. C8g provide the best price performance for compute-intensive workloads. M8g provide the best price performance in for general purpose workloads.
+* (**mwaa**) Introducing InvokeRestApi which allows users to invoke the Apache Airflow REST API on the webserver with the specified inputs.
+* (**paymentcryptography**) Add support for ECC P-256 and P-384 Keys.
+* (**paymentcryptographydata**) Add ECDH support on PIN operations.
+
+### Fixes
+* Fix backwards incompatibility with versions < 1.2.28
+
+### Documentation
+* (**bedrock**) Doc updates for supporting converse
+
 ## [1.3.59] - 10/22/2024
 
 ### Features
