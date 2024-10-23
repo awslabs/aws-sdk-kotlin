@@ -1,5 +1,100 @@
 # Changelog
 
+## [1.3.59] - 10/22/2024
+
+### Features
+* (**bedrockruntime**) Updating invoke regex to support imported models for converse API
+* (**imagebuilder**) Add macOS platform and instance placement options
+* (**m2**) Add AuthSecretsManagerArn optional parameter to batch job APIs, expand batch parameter limits, and introduce clientToken constraints.
+* (**rds**) Global clusters now expose the Endpoint attribute as one of its fields. It is a Read/Write endpoint for the global cluster which resolves to the Global Cluster writer instance.
+* (**repostspace**) Adds the BatchAddRole and BatchRemoveRole APIs.
+* (**timestreamquery**) This release adds support for Query Insights, a feature that provides details of query execution, enabling users to identify areas for improvement to optimize their queries, resulting in improved query performance and lower query costs.
+
+## [1.3.58] - 10/21/2024
+
+### Features
+* (**applicationinsights**) This feature enables customers to specify SNS Topic ARN. CloudWatch Application Insights (CWAI) will utilize this ARN to send problem notifications.
+* (**autoscaling**) Adds support for removing the PlacementGroup setting on an Auto Scaling Group through the UpdateAutoScalingGroup API.
+* (**bedrockagentruntime**) Knowledge Bases for Amazon Bedrock now supports custom prompts and model parameters in the orchestrationConfiguration of the RetrieveAndGenerate API. The modelArn field accepts Custom Models and Imported Models ARNs.
+* (**databasemigrationservice**) Added support for tagging in StartReplicationTaskAssessmentRun API and introduced IsLatestTaskAssessmentRun and ResultStatistic fields for enhanced tracking and assessment result statistics.
+* (**ec2**) Amazon EC2 now allows you to create network interfaces with just the EFA driver and no ENA driver by specifying the network interface type as efa-only.
+* (**eks**) This release adds support for Amazon Application Recovery Controller (ARC) zonal shift and zonal autoshift with EKS that enhances the resiliency of multi-AZ cluster environments
+* (**fms**) Update AWS WAF policy - add the option to retrofit existing web ACLs instead of creating all new web ACLs.
+* (**paymentcryptographydata**) Adding new API to generate authenticated scripts for EMV pin change use cases.
+* (**wafv2**) Add a property to WebACL to indicate whether it's been retrofitted by Firewall Manager.
+
+## [1.3.57] - 10/18/2024
+
+### Features
+* (**athena**) Removing FEDERATED from Create/List/Delete/GetDataCatalog API
+* (**bedrock**) Adding converse support to CMI API's
+* (**bedrockruntime**) Added converse support for custom imported models
+* (**datazone**) Adding the following project member designations: PROJECT_CATALOG_VIEWER, PROJECT_CATALOG_CONSUMER and PROJECT_CATALOG_STEWARD in the CreateProjectMembership API and PROJECT_CATALOG_STEWARD designation in the AddPolicyGrant API.
+* (**ec2**) RequestSpotInstances and RequestSpotFleet feature release.
+
+## [1.3.56] - 10/17/2024
+
+### Features
+* (**bedrockagent**) Removing support for topK property in PromptModelInferenceConfiguration object, Making PromptTemplateConfiguration property as required, Limiting the maximum PromptVariant to 1
+* (**dataexchange**) This release adds Data Grant support, through which customers can programmatically create data grants to share with other AWS accounts and accept data grants from other AWS accounts.
+* (**pinpointsmsvoicev2**) Added the registrations status of REQUIRES_AUTHENTICATION
+* (**pipes**) This release adds validation to require specifying a SecurityGroup and Subnets in the Vpc object under PipesSourceSelfManagedKafkaParameters. It also adds support for iso-e, iso-f, and other non-commercial partitions in ARN parameters.
+* (**quicksight**) Add StartDashboardSnapshotJobSchedule API. RestoreAnalysis now supports restoring analysis to folders.
+* (**workspaces**) Updated the DomainName pattern for Active Directory
+
+### Documentation
+* (**ecs**) This is an Amazon ECS documentation only update to address tickets.
+* (**rds**) Updates Amazon RDS documentation for TAZ IAM support
+
+### Miscellaneous
+* Upgrade to Kotlin 2.0.21
+
+## [1.3.55] - 10/16/2024
+
+### Features
+* (**s3**) Add support for the new optional bucket-region and prefix query parameters in the ListBuckets API. For ListBuckets requests that express pagination, Amazon S3 will now return both the bucket names and associated AWS regions in the response.
+
+## [1.3.54] - 10/15/2024
+
+### Features
+* (**amplify**) Added sourceUrlType field to StartDeployment request
+* (**codebuild**) Enable proxy for reserved capacity fleet.
+* (**ivs**) On a channel that you own, you can now replace an ongoing stream with a new stream by streaming up with the priority parameter appended to the stream key.
+* (**qbusiness**) Amazon Q Business now supports embedding the Amazon Q Business web experience on third-party websites.
+* (**redshift**) This release launches the CreateIntegration, DeleteIntegration, DescribeIntegrations and ModifyIntegration APIs to create and manage Amazon Redshift Zero-ETL Integrations.
+* (**resiliencehub**) AWS Resilience Hub now integrates with the myApplications platform, enabling customers to easily assess the resilience of applications defined in myApplications. The new Resiliency widget provides visibility into application resilience and actionable recommendations for improvement.
+* (**sesv2**) This release adds support for email maximum delivery seconds that allows senders to control the time within which their emails are attempted for delivery.
+* (**transcribestreaming**) We are expanding support for 40 new locales in AWS Transcribe Streaming.
+
+### Documentation
+* (**cloudformation**) Documentation update for AWS CloudFormation API Reference.
+
+## [1.3.53] - 10/14/2024
+
+### Features
+* (**codepipeline**) AWS CodePipeline V2 type pipelines now support automatically retrying failed stages and skipping stage for failed entry conditions.
+* (**mailmanager**) Mail Manager support for viewing and exporting metadata of archived messages.
+* (**securitylake**) This release updates request validation regex for resource ARNs.
+* (**supplychain**) This release adds AWS Supply Chain instance management functionality. Specifically adding CreateInstance, DeleteInstance, GetInstance, ListInstances, and UpdateInstance APIs.
+* (**transfer**) This release enables customers using SFTP connectors to query the transfer status of their files to meet their monitoring needs as well as orchestrate post transfer actions.
+
+### Fixes
+* ⚠️ **IMPORTANT**: Update to the latest S3 model, which correctly models `ReplicationRuleFilter` and `LifecycleRuleFilter` as structures (not unions). This may cause compilation failures in existing code which references these two shapes.
+
+## [1.3.52] - 10/11/2024
+
+### Features
+* (**elasticloadbalancingv2**) Add zonal_shift.config.enabled attribute. Add new AdministrativeOverride construct in the describe-target-health API response to include information about the override status applied to a target.
+* (**emr**) This release provides new parameter "Context" in instance fleet clusters.
+* (**guardduty**) Added a new field for network connection details.
+
+### Fixes
+* [#1433](https://github.com/awslabs/aws-sdk-kotlin/issues/1433) Remove Route53 InvalidChangeBatch error response customization
+
+### Documentation
+* (**appflow**) Doc only updates for clarification around OAuth2GrantType for Salesforce.
+* (**robomaker**) Documentation update: added support notices to each API action.
+
 ## [1.3.51] - 10/10/2024
 
 ### Features

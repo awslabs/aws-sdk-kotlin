@@ -10,7 +10,6 @@ import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.ExpirationStatus
 import aws.sdk.kotlin.services.s3.model.LifecycleRule
-import aws.sdk.kotlin.services.s3.model.LifecycleRuleFilter
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketNotExists
@@ -46,11 +45,11 @@ object S3TestUtils {
         accountId: String? = null,
     ): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX, region, accountId)
 
-    private suspend fun getBucketWithPrefix(
+    suspend fun getBucketWithPrefix(
         client: S3Client,
         prefix: String,
-        region: String?,
-        accountId: String?,
+        region: String? = null,
+        accountId: String? = null,
     ): String = withTimeout(60.seconds) {
         val buckets = client.listBuckets()
             .buckets
@@ -88,7 +87,7 @@ object S3TestUtils {
                 rules = listOf(
                     LifecycleRule {
                         expiration { days = 1 }
-                        filter = LifecycleRuleFilter.Prefix("")
+                        filter { this.prefix = "" }
                         status = ExpirationStatus.Enabled
                         id = "delete-old"
                     },
