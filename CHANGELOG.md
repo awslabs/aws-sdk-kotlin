@@ -26,7 +26,7 @@
 ## [1.3.57] - 10/18/2024
 
 ### Features
-* (**athena**) Removing FEDERATED from Create/List/Delete/GetDataCatalog API
+* (**athena**) Remove `DataCatalog` from `Create`/`DeleteDataCatalog`. Remove `Status`, `ConnectionType`, and `Error` from `DataCatalog` and `DataCatalogSummary`. These were released inadvertently with no functionality. They were not populated or populated with a default value. Code related to these changes can be safely removed.
 * (**bedrock**) Adding converse support to CMI API's
 * (**bedrockruntime**) Added converse support for custom imported models
 * (**datazone**) Adding the following project member designations: PROJECT_CATALOG_VIEWER, PROJECT_CATALOG_CONSUMER and PROJECT_CATALOG_STEWARD in the CreateProjectMembership API and PROJECT_CATALOG_STEWARD designation in the AddPolicyGrant API.
