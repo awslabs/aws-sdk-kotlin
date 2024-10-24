@@ -69,7 +69,6 @@ internal class SchemaRenderer(
         ?.getAnnotationsByType(DynamoDbAttribute::class)
         ?.singleOrNull()?.name ?: sortKeyProp?.name
 
-
     /**
      * Skip rendering a class builder if:
      *   - the user has configured GenerateBuilders to WHEN_REQUIRED (default value) AND
