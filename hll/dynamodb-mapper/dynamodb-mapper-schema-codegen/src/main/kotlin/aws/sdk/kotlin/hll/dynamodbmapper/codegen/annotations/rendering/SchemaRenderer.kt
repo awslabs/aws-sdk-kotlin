@@ -195,6 +195,12 @@ internal class SchemaRenderer(
 
             type.isGenericFor(Types.Kotlin.Collections.Set) -> writeInline("#T", ksType.singleArgument().setValueConverter)
 
+            type.nullable -> {
+                writeInline("#T(", MapperTypes.Values.NullableConverter)
+                renderValueConverter(ksType.makeNotNullable())
+                writeInline(")")
+            }
+
             else -> writeInline(
                 "#T",
                 when (type) {
@@ -218,7 +224,7 @@ internal class SchemaRenderer(
                     Types.Kotlin.UShort -> MapperTypes.Values.Scalars.UShortConverter
                     Types.Kotlin.ULong -> MapperTypes.Values.Scalars.ULongConverter
 
-                    else -> error("Unsupported attribute type $this")
+                    else -> error("Unsupported attribute type $type")
                 },
             )
         }
