@@ -23,6 +23,7 @@ import com.google.devtools.ksp.symbol.*
  * @param classDeclaration the [KSClassDeclaration] of the class
  * @param ctx the [RenderContext] of the renderer
  */
+@OptIn(KspExperimental::class)
 internal class SchemaRenderer(
     private val classDeclaration: KSClassDeclaration,
     private val ctx: RenderContext,
@@ -34,7 +35,6 @@ internal class SchemaRenderer(
     private val converterName = "${className}Converter"
     private val schemaName = "${className}Schema"
 
-    @OptIn(KspExperimental::class)
     private val dynamoDbItemAnnotation = classDeclaration.getAnnotationsByType(DynamoDbItem::class).single()
 
     private val itemConverter: Type = dynamoDbItemAnnotation
@@ -46,7 +46,6 @@ internal class SchemaRenderer(
             TypeRef(pkg, shortName)
         } ?: TypeRef(ctx.pkg, converterName)
 
-    @OptIn(KspExperimental::class)
     private val properties = classDeclaration
         .getAllProperties()
         .filterNot { it.modifiers.contains(Modifier.PRIVATE) || it.isAnnotationPresent(DynamoDbIgnore::class) }
@@ -61,7 +60,15 @@ internal class SchemaRenderer(
     }
 
     private val partitionKeyProp = properties.single { it.isPk }
+    private val partitionKeyName: String = partitionKeyProp
+        .getAnnotationsByType(DynamoDbAttribute::class)
+        .singleOrNull()?.name ?: partitionKeyProp.name
+
     private val sortKeyProp = properties.singleOrNull { it.isSk }
+    private val sortKeyName: String? = sortKeyProp
+        ?.getAnnotationsByType(DynamoDbAttribute::class)
+        ?.singleOrNull()?.name ?: sortKeyProp?.name
+
 
     /**
      * Skip rendering a class builder if:
@@ -286,9 +293,9 @@ internal class SchemaRenderer(
         write("@#T", Types.Smithy.ExperimentalApi)
         withBlock("#Lobject #L : #T {", "}", ctx.attributes.visibility, schemaName, schemaType) {
             write("override val converter : #1T = #1T", itemConverter)
-            write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyProp.name)
+            write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyName)
             if (sortKeyProp != null) {
-                write("override val sortKey: #T = #T(#S)", MapperTypes.Items.keySpec(sortKeyProp.keySpec), sortKeyProp.keySpecType, sortKeyProp.name)
+                write("override val sortKey: #T = #T(#S)", MapperTypes.Items.keySpec(sortKeyProp.keySpec), sortKeyProp.keySpecType, sortKeyName!!)
             }
         }
         blankLine()
