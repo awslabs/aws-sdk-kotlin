@@ -107,8 +107,6 @@ public class StsWebIdentityCredentialsProvider(
         val logger = coroutineContext.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials via web identity" }
 
-        attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE_WEB_ID)
-
         val provider = this
         val params = provider.webIdentityParameters
 
@@ -154,7 +152,9 @@ public class StsWebIdentityCredentialsProvider(
             expiration = roleCredentials.expiration,
             providerName = PROVIDER_NAME,
             accountId = accountId,
-        )
+        ).also {
+            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE_WEB_ID)
+        }
     }
 
     override fun toString(): String = this.simpleClassName

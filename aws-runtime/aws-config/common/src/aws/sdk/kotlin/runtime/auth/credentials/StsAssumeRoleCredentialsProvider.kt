@@ -97,8 +97,6 @@ public class StsAssumeRoleCredentialsProvider(
         val logger = coroutineContext.logger<StsAssumeRoleCredentialsProvider>()
         logger.debug { "retrieving assumed credentials" }
 
-        attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE)
-
         // NOTE: multi region access points require regional STS endpoints
         val provider = this
         val telemetry = coroutineContext.telemetryProvider
@@ -150,7 +148,9 @@ public class StsAssumeRoleCredentialsProvider(
             expiration = roleCredentials.expiration,
             providerName = PROVIDER_NAME,
             accountId = accountId,
-        )
+        ).also {
+            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE)
+        }
     }
 
     override fun toString(): String = this.simpleClassName

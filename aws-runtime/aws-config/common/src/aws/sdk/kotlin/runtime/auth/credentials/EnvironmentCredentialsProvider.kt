@@ -39,15 +39,15 @@ public class EnvironmentCredentialsProvider(
             "Attempting to load credentials from env vars $ACCESS_KEY_ID/$SECRET_ACCESS_KEY/$SESSION_TOKEN"
         }
 
-        attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS)
-
         return credentials(
             accessKeyId = requireEnv(ACCESS_KEY_ID),
             secretAccessKey = requireEnv(SECRET_ACCESS_KEY),
             sessionToken = getEnv(SESSION_TOKEN),
             providerName = PROVIDER_NAME,
             accountId = getEnv(ACCOUNT_ID),
-        )
+        ).also {
+            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS)
+        }
     }
 
     override fun toString(): String = this.simpleClassName

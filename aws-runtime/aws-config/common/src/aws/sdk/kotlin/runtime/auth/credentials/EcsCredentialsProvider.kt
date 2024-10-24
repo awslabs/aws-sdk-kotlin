@@ -79,8 +79,6 @@ public class EcsCredentialsProvider(
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<EcsCredentialsProvider>()
 
-        attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_HTTP)
-
         val authToken = loadAuthToken()
         val relativeUri = AwsSdkSetting.AwsContainerCredentialsRelativeUri.resolve(platformProvider)
         val fullUri = AwsSdkSetting.AwsContainerCredentialsFullUri.resolve(platformProvider)
@@ -115,7 +113,9 @@ public class EcsCredentialsProvider(
 
         logger.debug { "obtained credentials from container metadata service; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
 
-        return creds
+        return creds.also {
+            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_HTTP)
+        }
     }
 
     private suspend fun loadAuthToken(): String? {

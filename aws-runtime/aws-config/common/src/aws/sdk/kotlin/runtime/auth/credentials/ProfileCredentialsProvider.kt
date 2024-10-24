@@ -89,6 +89,7 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
     public val httpClient: HttpClientEngine? = null,
     public val configurationSource: AwsConfigurationSource? = null,
 ) : CloseableCredentialsProvider {
+    private val credentialsBusinessMetrics: MutableSet<AwsBusinessMetric.Credentials> = mutableSetOf()
 
     public constructor(
         profileName: String? = null,
@@ -135,7 +136,7 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
         chain.roles.forEach { roleArn ->
             logger.debug { "Assuming role `${roleArn.roleArn}`" }
             if (roleArn.source == RoleArnSource.SOURCE_PROFILE) {
-                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SOURCE_PROFILE)
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SOURCE_PROFILE)
             }
 
             val assumeProvider = roleArn.toCredentialsProvider(creds, region)
@@ -143,7 +144,11 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
         }
 
         logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
-        return creds
+        return creds.also {
+            credentialsBusinessMetrics.forEach { metric ->
+                attributes.emitBusinessMetric(metric)
+            }
+        }
     }
 
     override fun close() {
@@ -155,18 +160,18 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
     private suspend fun LeafProvider.toCredentialsProvider(region: LazyAsyncValue<String?>, attributes: Attributes): CredentialsProvider =
         when (this) {
             is LeafProvider.NamedSource -> {
-                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_NAMED_PROVIDER)
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_NAMED_PROVIDER)
                 namedProviders[name]
                     ?: throw ProviderConfigurationException("unknown credentials source: $name")
             }
 
             is LeafProvider.AccessKey -> {
-                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
                 StaticCredentialsProvider(credentials)
             }
 
             is LeafProvider.WebIdentityTokenRole -> {
-                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_STS_WEB_ID_TOKEN)
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_STS_WEB_ID_TOKEN)
                 StsWebIdentityCredentialsProvider(
                     roleArn,
                     webIdentityTokenFile,
@@ -178,7 +183,7 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
             }
 
             is LeafProvider.SsoSession -> {
-                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO)
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO)
                 SsoCredentialsProvider(
                     accountId = ssoAccountId,
                     roleName = ssoRoleName,
@@ -191,7 +196,7 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
             }
 
             is LeafProvider.LegacySso -> {
-                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO_LEGACY)
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO_LEGACY)
                 SsoCredentialsProvider(
                     accountId = ssoAccountId,
                     roleName = ssoRoleName,
@@ -203,7 +208,7 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
             }
 
             is LeafProvider.Process -> {
-                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_PROCESS)
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_PROCESS)
                 ProcessCredentialsProvider(command)
             }
         }

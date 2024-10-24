@@ -98,8 +98,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/InvalidSsoTokenExcept
 }
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/LazilyInitializedCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CredentialsProvider {
-	public fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/operation/ExecutionContext;Lkotlin/jvm/functions/Function0;)V
-	public synthetic fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/operation/ExecutionContext;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/businessmetrics/BusinessMetric;Lkotlin/jvm/functions/Function0;)V
+	public synthetic fun <init> (Ljava/lang/String;Laws/smithy/kotlin/runtime/businessmetrics/BusinessMetric;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 }

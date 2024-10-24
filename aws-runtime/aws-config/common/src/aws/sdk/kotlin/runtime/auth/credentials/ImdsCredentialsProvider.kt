@@ -62,8 +62,6 @@ public class ImdsCredentialsProvider(
     private val mu = Mutex()
 
     override suspend fun resolve(attributes: Attributes): Credentials {
-        attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
-
         if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
             throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
         }
@@ -114,6 +112,7 @@ public class ImdsCredentialsProvider(
 
                 creds.also {
                     mu.withLock { previousCredentials = it }
+                    attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
                 }
             }
             is JsonCredentialsResponse.Error -> {

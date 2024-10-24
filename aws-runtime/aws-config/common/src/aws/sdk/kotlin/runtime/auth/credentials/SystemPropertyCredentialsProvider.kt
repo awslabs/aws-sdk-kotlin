@@ -39,15 +39,15 @@ public class SystemPropertyCredentialsProvider(
             "Attempting to load credentials from system properties $ACCESS_KEY_ID/$SECRET_ACCESS_KEY/$SESSION_TOKEN"
         }
 
-        attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_JVM_SYSTEM_PROPERTIES)
-
         return credentials(
             accessKeyId = requireProperty(ACCESS_KEY_ID),
             secretAccessKey = requireProperty(SECRET_ACCESS_KEY),
             sessionToken = getProperty(SESSION_TOKEN),
             providerName = PROVIDER_NAME,
             accountId = getProperty(ACCOUNT_ID),
-        )
+        ).also {
+            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_JVM_SYSTEM_PROPERTIES)
+        }
     }
 
     override fun toString(): String = this.simpleClassName

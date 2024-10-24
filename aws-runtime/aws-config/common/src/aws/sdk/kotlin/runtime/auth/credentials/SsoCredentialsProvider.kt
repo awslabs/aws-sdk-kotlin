@@ -94,11 +94,9 @@ public class SsoCredentialsProvider public constructor(
 
         val token = if (ssoTokenProvider != null) {
             logger.trace { "Attempting to load token using token provider for sso-session: `$ssoSessionName`" }
-            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO)
             ssoTokenProvider.resolve(attributes)
         } else {
             logger.trace { "Attempting to load token from file using legacy format" }
-            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
             legacyLoadTokenFile()
         }
 
@@ -132,7 +130,13 @@ public class SsoCredentialsProvider public constructor(
             expiration = Instant.fromEpochMilliseconds(roleCredentials.expiration),
             PROVIDER_NAME,
             accountId = accountId,
-        )
+        ).also {
+            if (ssoTokenProvider != null) {
+                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO)
+            } else {
+                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
+            }
+        }
     }
 
     // non sso-session legacy token flow

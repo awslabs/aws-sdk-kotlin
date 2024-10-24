@@ -55,8 +55,6 @@ public class ProcessCredentialsProvider(
     override suspend fun resolve(attributes: Attributes): Credentials {
         val logger = coroutineContext.logger<ProcessCredentialsProvider>()
 
-        attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
-
         val (exitCode, output) = try {
             executeCommand(credentialProcess, platformProvider, maxOutputLengthBytes, timeoutMillis)
         } catch (ex: Exception) {
@@ -72,14 +70,18 @@ public class ProcessCredentialsProvider(
         val deserializer = JsonDeserializer(payload)
 
         return when (val resp = deserializeJsonProcessCredentials(deserializer)) {
-            is JsonCredentialsResponse.SessionCredentials -> credentials(
-                resp.accessKeyId,
-                resp.secretAccessKey,
-                resp.sessionToken,
-                resp.expiration ?: Instant.MAX_VALUE,
-                PROVIDER_NAME,
-                resp.accountId,
-            )
+            is JsonCredentialsResponse.SessionCredentials -> {
+                credentials(
+                    resp.accessKeyId,
+                    resp.secretAccessKey,
+                    resp.sessionToken,
+                    resp.expiration ?: Instant.MAX_VALUE,
+                    PROVIDER_NAME,
+                    resp.accountId,
+                ).also {
+                    attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
+                }
+            }
             else -> throw CredentialsProviderException("Credentials response was not of expected format")
         }
     }
