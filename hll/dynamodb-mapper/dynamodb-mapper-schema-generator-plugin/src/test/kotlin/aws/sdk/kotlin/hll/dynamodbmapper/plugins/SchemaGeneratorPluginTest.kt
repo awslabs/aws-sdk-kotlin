@@ -449,6 +449,33 @@ class SchemaGeneratorPluginTest {
     }
 
     @Test
+    fun testNullableTypes() {
+        buildFile.appendText(
+            """
+            dependencies {
+                implementation("aws.smithy.kotlin:runtime-core:$smithyKotlinVersion")
+                testImplementation(kotlin("test")) 
+            }
+            """.trimIndent(),
+        )
+
+        createClassFile("standard-item-converters/src/NullableItem")
+
+        val buildResult = runner.build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), buildResult.task(":build")?.outcome)
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/NullableItemSchema.kt")
+        assertTrue(schemaFile.exists())
+
+        val testFile = File(testProjectDir, "src/test/kotlin/org/example/standard-item-converters/test/NullableItemTest.kt")
+        testFile.ensureParentDirsCreated()
+        testFile.createNewFile()
+        testFile.writeText(getResource("/standard-item-converters/test/NullableItemTest.kt"))
+
+        val testResult = runner.withArguments("test").build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), testResult.task(":test")?.outcome)
+    }
+
+    @Test
     fun testLists() {
         buildFile.appendText(
             """
@@ -524,5 +551,29 @@ class SchemaGeneratorPluginTest {
 
         val testResult = runner.withArguments("test").build()
         assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), testResult.task(":test")?.outcome)
+    }
+
+    @Test
+    fun testRenamedPartitionKey() {
+        createClassFile("RenamedPartitionKey")
+
+        val result = runner.build()
+        assertContains(setOf(TaskOutcome.SUCCESS, TaskOutcome.UP_TO_DATE), result.task(":build")?.outcome)
+
+        val schemaFile = File(testProjectDir, "build/generated/ksp/main/kotlin/org/example/dynamodbmapper/generatedschemas/RenamedPartitionKeySchema.kt")
+        assertTrue(schemaFile.exists())
+
+        val schemaContents = schemaFile.readText()
+
+        // Schema should use the renamed partition key
+        assertContains(
+            schemaContents,
+            """
+        object RenamedPartitionKeySchema : ItemSchema.PartitionKey<RenamedPartitionKey, Int> {
+            override val converter : RenamedPartitionKeyConverter = RenamedPartitionKeyConverter
+            override val partitionKey: KeySpec<Number> = aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec.Number("user_id")
+        }
+            """.trimIndent(),
+        )
     }
 }
