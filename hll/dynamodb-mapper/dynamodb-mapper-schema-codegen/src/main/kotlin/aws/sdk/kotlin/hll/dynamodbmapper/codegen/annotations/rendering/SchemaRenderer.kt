@@ -60,12 +60,12 @@ internal class SchemaRenderer(
     }
 
     private val partitionKeyProp = properties.single { it.isPk }
-    private val partitionKeyName: String = partitionKeyProp
+    private val partitionKeyName = partitionKeyProp
         .getAnnotationsByType(DynamoDbAttribute::class)
         .singleOrNull()?.name ?: partitionKeyProp.name
 
     private val sortKeyProp = properties.singleOrNull { it.isSk }
-    private val sortKeyName: String? = sortKeyProp
+    private val sortKeyName = sortKeyProp
         ?.getAnnotationsByType(DynamoDbAttribute::class)
         ?.singleOrNull()?.name ?: sortKeyProp?.name
 
