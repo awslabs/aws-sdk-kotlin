@@ -74,13 +74,13 @@ if (project.NATIVE_ENABLED) {
     }
 
     tasks.withType<KotlinCompilationTask<*>>().all {
-        if(name != "kspCommonMainKotlinMetadata") {
+        if (name != "kspCommonMainKotlinMetadata") {
             dependsOn("kspCommonMainKotlinMetadata")
         }
     }
 
     tasks.withType<KspAATask>().configureEach {
-        if(name != "kspCommonMainKotlinMetadata") {
+        if (name != "kspCommonMainKotlinMetadata") {
             dependsOn("kspCommonMainKotlinMetadata")
         }
     }
