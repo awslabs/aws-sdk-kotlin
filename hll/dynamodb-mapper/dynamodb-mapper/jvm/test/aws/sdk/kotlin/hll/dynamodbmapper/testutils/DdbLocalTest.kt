@@ -1,7 +1,7 @@
 /*
- * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0
- */
+* Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+* SPDX-License-Identifier: Apache-2.0
+*/
 package aws.sdk.kotlin.hll.dynamodbmapper.testutils
 
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
@@ -23,8 +23,6 @@ import kotlinx.coroutines.runBlocking
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-
-private const val DDB_LOCAL_PORT = 44212 // Keep in sync with build.gradle.kts
 
 /**
  * The base class for test classes which need DynamoDB Local running. This class provides a few convenience declarations
@@ -185,3 +183,4 @@ private class RequestCapturingInterceptor(val requests: MutableList<HttpRequest>
         }
     }
 }
+private const val DDB_LOCAL_PORT = 44212 // Keep in sync with build.gradle.kts
