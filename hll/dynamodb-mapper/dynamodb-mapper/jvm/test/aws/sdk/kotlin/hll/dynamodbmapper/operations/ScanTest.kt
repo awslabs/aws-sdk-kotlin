@@ -14,6 +14,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.smithytypes.InstantConverter
 import aws.smithy.kotlin.runtime.time.Instant
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toSet
