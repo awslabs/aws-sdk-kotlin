@@ -79,22 +79,10 @@ if (project.NATIVE_ENABLED) {
         }
     }
 
-    tasks.withType<KspAATask>().configureEach {
-        if (name != "kspCommonMainKotlinMetadata") {
+    listOf("sourcesJar", "linuxX64SourcesJar", "jvmSourcesJar").forEach {
+        tasks.named(it) {
             dependsOn("kspCommonMainKotlinMetadata")
         }
-    }
-
-    tasks.named("sourcesJar") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
-
-    tasks.named("linuxX64SourcesJar") {
-        dependsOn("kspCommonMainKotlinMetadata")
-    }
-
-    tasks.named("jvmSourcesJar") {
-        dependsOn("kspCommonMainKotlinMetadata")
     }
 
     kotlin.sourceSets.commonMain {
