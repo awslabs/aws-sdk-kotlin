@@ -6,8 +6,8 @@
 import aws.sdk.kotlin.gradle.kmp.NATIVE_ENABLED
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer
+import com.google.devtools.ksp.gradle.KspAATask
 import com.google.devtools.ksp.gradle.KspTaskJvm
-import com.google.devtools.ksp.gradle.KspTaskMetadata
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -67,15 +67,38 @@ ksp {
 }
 
 if (project.NATIVE_ENABLED) {
-    // Configure KSP for commonMain source generation; https://github.com/google/ksp/issues/963#issuecomment-1894144639
+    // Configure KSP for multiplatform: https://kotlinlang.org/docs/ksp-multiplatform.html
+    // https://github.com/google/ksp/issues/963#issuecomment-1894144639
+    dependencies {
+        add("kspCommonMainMetadata", project(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen"))
+    }
 
-    dependencies.kspCommonMainMetadata(project(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen"))
+    tasks.withType<KotlinCompilationTask<*>>().all {
+        if(name != "kspCommonMainKotlinMetadata") {
+            dependsOn("kspCommonMainKotlinMetadata")
+        }
+    }
+
+    tasks.withType<KspAATask>().configureEach {
+        if(name != "kspCommonMainKotlinMetadata") {
+            dependsOn("kspCommonMainKotlinMetadata")
+        }
+    }
+
+    tasks.named("sourcesJar") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+
+    tasks.named("linuxX64SourcesJar") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+
+    tasks.named("jvmSourcesJar") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
 
     kotlin.sourceSets.commonMain {
-        tasks.withType<KspTaskMetadata> {
-            // Wire up the generated source to the commonMain source set
-            kotlin.srcDir(destinationDirectory)
-        }
+        kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
     }
 } else {
     // FIXME This is a dirty hack for JVM-only builds which KSP doesn't consider to be "multiplatform". Explanation of

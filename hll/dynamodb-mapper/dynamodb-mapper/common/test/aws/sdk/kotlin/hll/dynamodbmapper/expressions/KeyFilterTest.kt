@@ -10,9 +10,9 @@ import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
-import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class KeyFilterTest {
     private val singleKeySchema = ItemSchema(DummyConverter, KeySpec.String("primary"))
@@ -31,7 +31,7 @@ class KeyFilterTest {
     fun testSingleKeySchemaWithErroneousSortKey() {
         val kf = KeyFilter("foo") { sortKey eq 2 }
 
-        assertThrows<IllegalArgumentException> {
+        assertFailsWith<IllegalArgumentException> {
             kf.toExpression(singleKeySchema)
         }
     }

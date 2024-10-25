@@ -18,7 +18,7 @@ public object TextConverters {
     /**
      * Converts between [CharArray] and [String]
      */
-    public val CharArrayToStringConverter: Converter<CharArray, String> = Converter(::String, String::toCharArray)
+    public val CharArrayToStringConverter: Converter<CharArray, String> = Converter(CharArray::concatToString, String::toCharArray)
 
     /**
      * Converts between [Char] and [String]
