@@ -1,7 +1,7 @@
 /*
-* Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-* SPDX-License-Identifier: Apache-2.0
-*/
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.hll.dynamodbmapper.operations
 
 import aws.sdk.kotlin.hll.dynamodbmapper.items.AttributeDescriptor
@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toSet
 import kotlinx.coroutines.test.runTest
-import kotlin.test.assertEquals
 
 class ScanTest : DdbLocalTest() {
     companion object {
