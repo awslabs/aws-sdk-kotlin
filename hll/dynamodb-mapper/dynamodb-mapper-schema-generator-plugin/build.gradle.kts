@@ -21,7 +21,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(kotlin("gradle-plugin"))
+    implementation(kotlin("gradle-plugin", version = kotlin.coreLibrariesVersion))
     implementation(libs.ksp.gradle.plugin)
 
     implementation(project(":hll:hll-codegen")) // for RenderOptions
