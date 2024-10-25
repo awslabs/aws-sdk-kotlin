@@ -22,7 +22,6 @@ import kotlin.test.assertNotNull
 class Sigv4aTest {
     @Test
     @Ignore // TODO enable once SESv2 model adds endpointId and Sigv4a
-
     fun testSigv4a() = runBlocking {
         val interceptor = RequestCapturingInterceptor()
 
@@ -45,7 +44,7 @@ class Sigv4aTest {
         assertEquals(1, interceptor.requests.size)
         val request = interceptor.requests.single()
 
-        assertContains("bdm3x3zl.n5x.endpoints.email.amazonaws.com", request.url.host.toString()) // Correct endpoint?
+        assertContains("bdm3x3zl.n5x.endpoints.email.amazonaws.com", request.url.host.toString()) // Verify endpoint
 
         val authHeader = assertNotNull(
             request.headers["Authorization"],
