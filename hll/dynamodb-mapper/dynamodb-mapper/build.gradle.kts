@@ -40,14 +40,14 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(libs.kotlinx.coroutines.test)
-                implementation(libs.kotest.assertions.core)
-                implementation(libs.kotest.runner.junit5)
             }
         }
 
         jvmTest {
             dependencies {
                 implementation(libs.mockk)
+                implementation(libs.kotest.assertions.core)
+                implementation(libs.kotest.runner.junit5)
             }
         }
     }
