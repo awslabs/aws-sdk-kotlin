@@ -2269,12 +2269,6 @@
             "brazilName": "AwsSdkKotlinNeptunedata"
         },
         {
-            "sdkId": "nimble",
-            "namespace": "aws.sdk.kotlin.services.nimble",
-            "artifactName": "nimble",
-            "brazilName": "AwsSdkKotlinNimble"
-        },
-        {
             "sdkId": "rbin",
             "namespace": "aws.sdk.kotlin.services.rbin",
             "artifactName": "rbin",
