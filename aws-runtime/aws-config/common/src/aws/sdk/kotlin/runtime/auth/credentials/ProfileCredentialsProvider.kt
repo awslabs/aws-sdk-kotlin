@@ -129,7 +129,7 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
         val profileOverride = profileName?.let { sharedConfig.profiles[it] }
         val region = asyncLazy { region ?: profileOverride?.getOrNull("region") ?: attributes.getOrNull(AwsClientOption.Region) ?: resolveRegion(platformProvider) }
 
-        val leaf = chain.leaf.toCredentialsProvider(region, attributes)
+        val leaf = chain.leaf.toCredentialsProvider(region)
         logger.debug { "Resolving credentials from ${chain.leaf.description()}" }
         var creds = leaf.resolve(attributes)
 
@@ -157,59 +157,52 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
         }
     }
 
-    private suspend fun LeafProvider.toCredentialsProvider(region: LazyAsyncValue<String?>, attributes: Attributes): CredentialsProvider =
+    private suspend fun LeafProvider.toCredentialsProvider(region: LazyAsyncValue<String?>): CredentialsProvider =
         when (this) {
-            is LeafProvider.NamedSource -> {
+            is LeafProvider.NamedSource -> namedProviders[name].also {
                 credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_NAMED_PROVIDER)
-                namedProviders[name]
-                    ?: throw ProviderConfigurationException("unknown credentials source: $name")
-            }
+            } ?: throw ProviderConfigurationException("unknown credentials source: $name")
 
-            is LeafProvider.AccessKey -> {
+            is LeafProvider.AccessKey -> StaticCredentialsProvider(credentials).also {
                 credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
-                StaticCredentialsProvider(credentials)
             }
 
-            is LeafProvider.WebIdentityTokenRole -> {
+            is LeafProvider.WebIdentityTokenRole -> StsWebIdentityCredentialsProvider(
+                roleArn,
+                webIdentityTokenFile,
+                region = region.get(),
+                roleSessionName = sessionName,
+                platformProvider = platformProvider,
+                httpClient = httpClient,
+            ).also {
                 credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_STS_WEB_ID_TOKEN)
-                StsWebIdentityCredentialsProvider(
-                    roleArn,
-                    webIdentityTokenFile,
-                    region = region.get(),
-                    roleSessionName = sessionName,
-                    platformProvider = platformProvider,
-                    httpClient = httpClient,
-                )
             }
 
-            is LeafProvider.SsoSession -> {
+            is LeafProvider.SsoSession -> SsoCredentialsProvider(
+                accountId = ssoAccountId,
+                roleName = ssoRoleName,
+                startUrl = ssoStartUrl,
+                ssoRegion = ssoRegion,
+                ssoSessionName = ssoSessionName,
+                httpClient = httpClient,
+                platformProvider = platformProvider,
+            ).also {
                 credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO)
-                SsoCredentialsProvider(
-                    accountId = ssoAccountId,
-                    roleName = ssoRoleName,
-                    startUrl = ssoStartUrl,
-                    ssoRegion = ssoRegion,
-                    ssoSessionName = ssoSessionName,
-                    httpClient = httpClient,
-                    platformProvider = platformProvider,
-                )
             }
 
-            is LeafProvider.LegacySso -> {
+            is LeafProvider.LegacySso -> SsoCredentialsProvider(
+                accountId = ssoAccountId,
+                roleName = ssoRoleName,
+                startUrl = ssoStartUrl,
+                ssoRegion = ssoRegion,
+                httpClient = httpClient,
+                platformProvider = platformProvider,
+            ).also {
                 credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO_LEGACY)
-                SsoCredentialsProvider(
-                    accountId = ssoAccountId,
-                    roleName = ssoRoleName,
-                    startUrl = ssoStartUrl,
-                    ssoRegion = ssoRegion,
-                    httpClient = httpClient,
-                    platformProvider = platformProvider,
-                )
             }
 
-            is LeafProvider.Process -> {
+            is LeafProvider.Process -> ProcessCredentialsProvider(command).also {
                 credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_PROCESS)
-                ProcessCredentialsProvider(command)
             }
         }
 
