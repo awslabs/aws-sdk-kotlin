@@ -40,14 +40,14 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(libs.kotlinx.coroutines.test)
-                implementation(libs.kotest.assertions.core)
-                implementation(libs.kotest.runner.junit5)
             }
         }
 
         jvmTest {
             dependencies {
                 implementation(libs.mockk)
+                implementation(libs.kotest.assertions.core)
+                implementation(libs.kotest.runner.junit5)
             }
         }
     }
@@ -67,8 +67,9 @@ ksp {
 }
 
 if (project.NATIVE_ENABLED) {
-    // Configure KSP for commonMain source generation; https://github.com/google/ksp/issues/963#issuecomment-1894144639
-
+    // Configure KSP for multiplatform: https://kotlinlang.org/docs/ksp-multiplatform.html
+    // https://github.com/google/ksp/issues/963#issuecomment-1894144639
+    // https://github.com/google/ksp/issues/965
     dependencies.kspCommonMainMetadata(project(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen"))
 
     kotlin.sourceSets.commonMain {

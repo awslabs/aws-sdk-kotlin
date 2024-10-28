@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.expressions
 
 import aws.smithy.kotlin.runtime.ExperimentalApi
+import kotlin.jvm.JvmName
 
 /**
  * Represents a sort key independent of schema

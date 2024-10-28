@@ -18,7 +18,7 @@ class ScalarConvertersTest : ValueConvertersTest() {
     @Test
     fun testByteArrayConverter() = given(ByteArrayConverter) {
         byteArrayOf() inDdbIs theSame
-        "Foo".toByteArray() inDdbIs theSame
+        "Foo".encodeToByteArray() inDdbIs theSame
         ByteArray(1024) { it.toByte() } inDdbIs theSame
     }
 

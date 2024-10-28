@@ -6,6 +6,7 @@ package aws.sdk.kotlin.hll.dynamodbmapper.expressions
 
 import aws.sdk.kotlin.hll.dynamodbmapper.util.dynamicAttr
 import aws.smithy.kotlin.runtime.ExperimentalApi
+import kotlin.jvm.JvmName
 
 /**
  * A DSL interface providing support for "low-level" filter expressions. Implementations of this interface provide
