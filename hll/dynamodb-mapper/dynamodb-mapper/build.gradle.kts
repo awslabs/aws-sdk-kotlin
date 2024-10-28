@@ -7,6 +7,7 @@ import aws.sdk.kotlin.gradle.kmp.NATIVE_ENABLED
 import com.amazonaws.services.dynamodbv2.local.main.ServerRunner
 import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer
 import com.google.devtools.ksp.gradle.KspTaskJvm
+import com.google.devtools.ksp.gradle.KspTaskMetadata
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -71,21 +72,11 @@ if (project.NATIVE_ENABLED) {
     // https://github.com/google/ksp/issues/965
     dependencies.kspCommonMainMetadata(project(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen"))
 
-    // Set up task dependencies since KSP doesn't handle this well:
-    tasks.withType<KotlinCompilationTask<*>>().all {
-        if (name != "kspCommonMainKotlinMetadata") {
-            dependsOn("kspCommonMainKotlinMetadata")
-        }
-    }
-
-    listOf("sourcesJar", "linuxX64SourcesJar", "jvmSourcesJar").forEach {
-        tasks.named(it) {
-            dependsOn("kspCommonMainKotlinMetadata")
-        }
-    }
-
     kotlin.sourceSets.commonMain {
-        kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+        tasks.withType<KspTaskMetadata> {
+            // Wire up the generated source to the commonMain source set
+            kotlin.srcDir(destinationDirectory)
+        }
     }
 } else {
     // FIXME This is a dirty hack for JVM-only builds which KSP doesn't consider to be "multiplatform". Explanation of
