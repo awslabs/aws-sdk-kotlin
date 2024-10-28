@@ -22,9 +22,10 @@ public class LazilyInitializedCredentialsProvider(
 ) : CredentialsProvider {
     private val provider = lazy(initializer)
 
-    override suspend fun resolve(attributes: Attributes): Credentials = provider.value.resolve(attributes).also {
-        attributes.emitBusinessMetric(businessMetric)
-    }
+    override suspend fun resolve(attributes: Attributes): Credentials =
+        provider.value.resolve(attributes).also {
+            attributes.emitBusinessMetric(businessMetric)
+        }
 
     override fun toString(): String = providerName
 }
