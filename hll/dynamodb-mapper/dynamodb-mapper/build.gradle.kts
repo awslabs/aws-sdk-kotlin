@@ -68,8 +68,10 @@ ksp {
 if (project.NATIVE_ENABLED) {
     // Configure KSP for multiplatform: https://kotlinlang.org/docs/ksp-multiplatform.html
     // https://github.com/google/ksp/issues/963#issuecomment-1894144639
+    // https://github.com/google/ksp/issues/965
     dependencies.kspCommonMainMetadata(project(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen"))
 
+    // Set up task dependencies since KSP doesn't handle this well:
     tasks.withType<KotlinCompilationTask<*>>().all {
         if (name != "kspCommonMainKotlinMetadata") {
             dependsOn("kspCommonMainKotlinMetadata")
