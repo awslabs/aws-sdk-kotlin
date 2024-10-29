@@ -1,0 +1,28 @@
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlugin$apply$1$1$inlined$sam$i$org_gradle_api_Action$0 : org/gradle/api/Action {
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public final synthetic fun execute (Ljava/lang/Object;)V
+}
+
+public final class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPlugin$inlined$sam$i$org_gradle_api_Action$0 : org/gradle/api/Action {
+	public fun <init> (Lkotlin/jvm/functions/Function1;)V
+	public final synthetic fun execute (Ljava/lang/Object;)V
+}
+
+public class aws/sdk/kotlin/hll/dynamodbmapper/plugins/SchemaGeneratorPluginExtension {
+	public fun <init> ()V
+	public final fun getDestinationPackage ()Laws/sdk/kotlin/hll/dynamodbmapper/codegen/annotations/DestinationPackage;
+	public final fun getGenerateBuilderClasses ()Laws/sdk/kotlin/hll/dynamodbmapper/codegen/annotations/GenerateBuilderClasses;
+	public final fun getGenerateGetTableExtension ()Z
+	public final fun getVisibility ()Laws/sdk/kotlin/hll/codegen/rendering/Visibility;
+	public final fun setDestinationPackage (Laws/sdk/kotlin/hll/dynamodbmapper/codegen/annotations/DestinationPackage;)V
+	public final fun setGenerateBuilderClasses (Laws/sdk/kotlin/hll/dynamodbmapper/codegen/annotations/GenerateBuilderClasses;)V
+	public final fun setGenerateGetTableExtension (Z)V
+	public final fun setVisibility (Laws/sdk/kotlin/hll/codegen/rendering/Visibility;)V
+}
+
