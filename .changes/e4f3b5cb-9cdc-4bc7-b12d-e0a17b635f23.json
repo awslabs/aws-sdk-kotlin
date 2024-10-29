@@ -1,9 +1,0 @@
-{
-    "id": "e4f3b5cb-9cdc-4bc7-b12d-e0a17b635f23",
-    "type": "feature",
-    "description": "Initial release of Developer Preview of **DynamoDB Mapper** for Kotlin",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#472"
-    ],
-    "module": "dynamodb-mapper"
-}

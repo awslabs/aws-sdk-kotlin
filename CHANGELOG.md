@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.64] - 10/29/2024
+
+### Features
+* (**bedrock**) Update Application Inference Profile
+* (**bedrockruntime**) Update Application Inference Profile
+* (**cleanrooms**) This release adds the option for customers to configure analytics engine when creating a collaboration, and introduces the new SPARK analytics engine type in addition to maintaining the legacy CLEAN_ROOMS_SQL engine type.
+* (**cloudwatchlogs**) Added support for new optional baseline parameter in the UpdateAnomaly API. For UpdateAnomaly requests with baseline set to True, The anomaly behavior is then treated as baseline behavior. However, more severe occurrences of this behavior will still be reported as anomalies.
+* [#472](https://github.com/awslabs/aws-sdk-kotlin/issues/472) (**dynamodb-mapper**) Initial release of Developer Preview of **DynamoDB Mapper** for Kotlin
+* (**iotfleetwise**) Updated BatchCreateVehicle and BatchUpdateVehicle APIs: LimitExceededException has been added and the maximum number of vehicles in a batch has been set to 10 explicitly
+* (**redshiftdata**) Adding a new API GetStatementResultV2 that supports CSV formatted results from ExecuteStatement and BatchExecuteStatement calls.
+* (**sagemaker**) Adding `notebook-al2-v3` as allowed value to SageMaker NotebookInstance PlatformIdentifier attribute
+
+### Miscellaneous
+* Remove Nimble Service
+
 ## [1.3.63] - 10/28/2024
 
 ### Features
