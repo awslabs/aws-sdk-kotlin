@@ -114,7 +114,6 @@ class AwsQueryModeCustomizationTest {
         ctx.generationCtx.delegator.flushWriters()
 
         val actual = ctx.manifest.expectFileString("/src/main/kotlin/com/test/DefaultTestClient.kt")
-        println(actual)
 
         val getFooMethod = actual.lines("    override suspend fun getFoo(input: GetFooRequest): GetFooResponse {", "    }")
 
