@@ -9,12 +9,19 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.*
+import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.ParamName
+import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.ParamShape
+import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.Parameter
+import software.amazon.smithy.kotlin.codegen.rendering.util.format
+import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.kotlin.codegen.utils.topDownOperations
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.node.*
+import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
 
 /**
- * Adds support for AWS specific client config during smoke tests code generation.
+ * Adds support for AWS specific client config and custom code generation to smoke tests.
  */
 class SmokeTestAwsVendorParamsIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
@@ -29,8 +36,79 @@ class SmokeTestAwsVendorParamsIntegration : KotlinIntegration {
                 regionSectionWriters +
                 useAccelerateSectionWriters +
                 useMultiRegionAccessPointsSectionWriters +
-                useGlobalEndpointSectionWriters
+                useGlobalEndpointSectionWriters +
+                listOf(parameterGenerator) // TODO: Convert this so that all can be placed here in this list
 }
+
+/**
+ * TODO: Write
+ */
+private val parameterGenerator =
+    SectionWriterBinding(Param) { writer, _ ->
+        val paramName = writer.getContextValue(ParamName)
+        val parameter = writer.getContextValue(Parameter)
+        val shape = writer.getContextValue(ParamShape)
+
+        writer.write("#L", coerceParameterToModeledShape(parameter, shape, paramName))
+    }
+
+fun coerceParameterToModeledShape(param: Node, customShape: Shape?, name: String): String {
+    if (customShape == null) return param.format()
+
+    // TODO: Fill this out
+
+    // TODO: Which ones need customization and which ones can I delegate down to `format` ?
+    when (customShape) {
+        is BigDecimalShape -> {
+            if (param !is NumberNode)
+        }
+        is BigIntegerShape -> {}
+        is BlobShape -> {}
+        is BooleanShape -> {}
+        is ByteShape -> {}
+        is ListShape -> {}
+        is CollectionShape -> {}
+        is DocumentShape -> {}
+        is DoubleShape -> {}
+        is EntityShape -> {} // ??
+        is EnumShape -> {}
+        is FloatShape -> {}
+        is IntEnumShape -> {}
+        is IntegerShape -> {}
+        is LongShape -> {}
+        is MapShape -> {}
+        is MemberShape -> {}
+        is NumberShape -> {}
+        is SetShape -> {}
+        is ShortShape -> {}
+        is StringShape -> {}
+        is TimestampShape -> {}
+        is UnionShape -> {}
+        else -> throw Exception("Code generation unsupported for smoke test operation parameter '$name' of type '$customShape'.")
+    }
+
+    // TODO: Remove. This is here for reference only.
+    when (param) {
+        is NullNode -> "null"
+        is StringNode -> value.dq()
+        is BooleanNode -> value.toString()
+        is NumberNode -> value.toString()
+        is ArrayNode -> elements.joinToString(",", "listOf(", ")") { element ->
+            element.format()
+        }
+        is ObjectNode -> stringMap.entries.joinToString(", ", "mapOf(", ")") { (key, value) ->
+            "${key.dq()} to ${value.format()}"
+        }
+        else -> throw Exception("Unexpected node type: $this")
+    }
+
+    return ""
+}
+
+
+
+
+
 
 /**
  * Uses the AWS Kotlin SDK specific name for the dual stack config option i.e. `useDualstack` -> `useDualStack`
