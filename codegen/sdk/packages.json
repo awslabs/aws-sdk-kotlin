@@ -829,6 +829,24 @@
             "brazilName": "AwsSdkKotlinGamelift"
         },
         {
+            "sdkId": "Geo Maps",
+            "namespace": "aws.sdk.kotlin.services.geomaps",
+            "artifactName": "geomaps",
+            "brazilName": "AwsSdkKotlinGeoMaps"
+        },
+        {
+            "sdkId": "Geo Places",
+            "namespace": "aws.sdk.kotlin.services.geoplaces",
+            "artifactName": "geoplaces",
+            "brazilName": "AwsSdkKotlinGeoPlaces"
+        },
+        {
+            "sdkId": "Geo Routes",
+            "namespace": "aws.sdk.kotlin.services.georoutes",
+            "artifactName": "georoutes",
+            "brazilName": "AwsSdkKotlinGeoRoutes"
+        },
+        {
             "sdkId": "Glacier",
             "namespace": "aws.sdk.kotlin.services.glacier",
             "artifactName": "glacier",
