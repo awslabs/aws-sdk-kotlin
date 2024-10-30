@@ -5,9 +5,8 @@
 package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.testutil.lines
-import kotlin.test.Test
-import kotlinx.coroutines.test.runTest
 import software.amazon.smithy.kotlin.codegen.test.*
+import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class AwsQueryModeCustomizationTest {
