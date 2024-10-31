@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.66] - 10/31/2024
+
+### Features
+* (**amp**) Added support for UpdateScraper API, to enable updating collector configuration in-place
+* (**autoscaling**) Adds bake time for Auto Scaling group Instance Refresh
+* (**batch**) Add `podNamespace` to `EksAttemptDetail` and `containerID` to `EksAttemptContainerDetail`.
+* (**elasticloadbalancingv2**) Add UDP support for AWS PrivateLink and dual-stack Network Load Balancers
+* (**glue**) Add schedule support for AWS Glue column statistics
+* (**sagemaker**) SageMaker HyperPod adds scale-down at instance level via BatchDeleteClusterNodes API and group level via UpdateCluster API. SageMaker Training exposes secondary job status in TrainingJobSummary from ListTrainingJobs API. SageMaker now supports G6, G6e, P5e instances for HyperPod and Training.
+* (**sesv2**) This release enables customers to provide the email template content in the SESv2 SendEmail and SendBulkEmail APIs instead of the name or the ARN of a stored email template.
+
+### Miscellaneous
+* Send x-amzn-query-mode=true for services with query-compatible trait
+* Bump to smithy-kotlin 1.3.18
+
 ## [1.3.65] - 10/30/2024
 
 ### Features

@@ -1,5 +1,0 @@
-{
-    "id": "20e287a5-cee0-4a5f-9d08-4022dcdee843",
-    "type": "misc",
-    "description": "Send x-amzn-query-mode=true for services with query-compatible trait"
-}
