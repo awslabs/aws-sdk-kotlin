@@ -8,6 +8,7 @@ import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.MutableAttributes
 import aws.smithy.kotlin.runtime.collections.toMutableAttributes
+import kotlin.jvm.JvmName
 
 /**
  * Makes sure the metrics do not exceed the maximum size and truncates them if so.
