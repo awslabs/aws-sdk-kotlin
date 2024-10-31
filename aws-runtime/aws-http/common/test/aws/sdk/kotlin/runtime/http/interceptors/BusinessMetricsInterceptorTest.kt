@@ -5,6 +5,8 @@
 package aws.sdk.kotlin.runtime.http.interceptors
 
 import aws.sdk.kotlin.runtime.http.BUSINESS_METRICS_MAX_LENGTH
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.BusinessMetricsInterceptor
 import aws.sdk.kotlin.runtime.http.middleware.USER_AGENT
 import aws.smithy.kotlin.runtime.businessmetrics.SmithyBusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric

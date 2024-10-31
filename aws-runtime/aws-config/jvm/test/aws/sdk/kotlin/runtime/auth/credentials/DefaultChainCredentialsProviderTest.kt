@@ -6,10 +6,9 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetrics
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.copy
-import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics
-import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Instant
@@ -79,7 +78,6 @@ class DefaultChainCredentialsProviderTest {
             override val name: String,
             override val docs: String,
             val creds: Credentials,
-            val businessMetrics: MutableSet<String>,
         ) : TestResult()
 
         data class ErrorContains(
@@ -97,15 +95,15 @@ class DefaultChainCredentialsProviderTest {
                 return when {
                     "Ok" in result -> {
                         val o = checkNotNull(result["Ok"]).jsonObject
-                        val creds = credentials(
+                        val expectedBusinessMetrics = o["business_metrics"]?.jsonArray?.map { it.jsonPrimitive.content }?.toMutableSet() ?: mutableSetOf()
+                        val expectedCreds = credentials(
                             checkNotNull(o["access_key_id"]).jsonPrimitive.content,
                             checkNotNull(o["secret_access_key"]).jsonPrimitive.content,
                             o["session_token"]?.jsonPrimitive?.content,
                             o["expiry"]?.jsonPrimitive?.longOrNull?.let { Instant.fromEpochSeconds(it) },
                             accountId = o["accountId"]?.jsonPrimitive?.content,
-                        )
-                        val businessMetrics = o["business_metrics"]?.jsonArray?.map { it.jsonPrimitive.content }?.toMutableSet() ?: mutableSetOf()
-                        Ok(name, docs, creds, businessMetrics)
+                        ).emitBusinessMetrics(expectedBusinessMetrics)
+                        Ok(name, docs, expectedCreds)
                     }
                     "ErrorContains" in result -> ErrorContains(name, docs, checkNotNull(result["ErrorContains"]).jsonPrimitive.content)
                     else -> error("unrecognized result object: $result")
@@ -182,10 +180,6 @@ class DefaultChainCredentialsProviderTest {
                 val sanitizedExpiration = if (expected.creds.expiration == null) null else actualCreds.expiration
                 val creds = actualCreds.copy(providerName = null, expiration = sanitizedExpiration)
                 assertEquals(expected.creds, creds)
-
-                if (expected.businessMetrics.isNotEmpty()) {
-                    assertEquals(expected.businessMetrics, attributes[BusinessMetrics])
-                }
 
                 // assert http traffic to the extent we can. These tests do not have specific timestamps they
                 // were signed with and some lack enough context to even assert a body (e.g. incorrect content-type).

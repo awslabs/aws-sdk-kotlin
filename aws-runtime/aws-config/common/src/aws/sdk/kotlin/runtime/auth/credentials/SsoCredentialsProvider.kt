@@ -8,16 +8,12 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.SsoClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
-import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
-import aws.smithy.kotlin.runtime.auth.awscredentials.simpleClassName
-import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetric
+import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
 import aws.smithy.kotlin.runtime.time.Clock
@@ -123,19 +119,19 @@ public class SsoCredentialsProvider public constructor(
 
         val roleCredentials = resp.roleCredentials ?: throw CredentialsProviderException("Expected SSO roleCredentials to not be null")
 
-        return credentials(
+        val creds = credentials(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in SSO roleCredentials response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
             sessionToken = roleCredentials.sessionToken,
             expiration = Instant.fromEpochMilliseconds(roleCredentials.expiration),
             PROVIDER_NAME,
             accountId = accountId,
-        ).also {
-            if (ssoTokenProvider != null) {
-                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO)
-            } else {
-                attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
-            }
+        )
+
+        return if (ssoTokenProvider != null) {
+            creds.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO)
+        } else {
+            creds.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
         }
     }
 

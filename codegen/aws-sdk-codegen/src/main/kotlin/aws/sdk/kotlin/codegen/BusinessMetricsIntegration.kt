@@ -17,7 +17,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddlewa
 import software.amazon.smithy.model.shapes.OperationShape
 
 /**
- * Renders the addition of the [BusinessMetricsInterceptor] and endpoint business metrics emitters
+ * Renders the addition of the [BusinessMetricsInterceptor], endpoint business metrics emitters, and a static credentials business metric.
  */
 class BusinessMetricsIntegration : KotlinIntegration {
     override val order: Byte
@@ -47,7 +47,7 @@ class BusinessMetricsIntegration : KotlinIntegration {
             AwsSigningAttributes,
             AwsSigningAttributes,
             RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
-            AwsRuntimeTypes.Http.Interceptors.AwsBusinessMetric,
+            AwsRuntimeTypes.Http.Interceptors.BusinessMetrics.AwsBusinessMetric,
         )
         writer.write("")
     }
@@ -62,7 +62,7 @@ class BusinessMetricsIntegration : KotlinIntegration {
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             writer.write(
                 "op.interceptors.add(#T())",
-                AwsRuntimeTypes.Http.Interceptors.BusinessMetricsInterceptor,
+                AwsRuntimeTypes.Http.Interceptors.BusinessMetrics.BusinessMetricsInterceptor,
             )
         }
     }
@@ -78,7 +78,7 @@ class BusinessMetricsIntegration : KotlinIntegration {
                 write(
                     "op.context.#T(#T.Credentials.CREDENTIALS_CODE)",
                     RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
-                    AwsRuntimeTypes.Http.Interceptors.AwsBusinessMetric,
+                    AwsRuntimeTypes.Http.Interceptors.BusinessMetrics.AwsBusinessMetric,
                 )
             }
         }

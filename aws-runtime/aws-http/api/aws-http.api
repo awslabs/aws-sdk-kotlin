@@ -140,39 +140,6 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/AddUserAgentMetadata
 	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
 }
 
-public final class aws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric : java/lang/Enum, aws/smithy/kotlin/runtime/businessmetrics/BusinessMetric {
-	public static final field S3_EXPRESS_BUCKET Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getIdentifier ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
-	public static fun values ()[Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
-}
-
-public final class aws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials : java/lang/Enum, aws/smithy/kotlin/runtime/businessmetrics/BusinessMetric {
-	public static final field CREDENTIALS_CODE Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_ENV_VARS Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_ENV_VARS_STS_WEB_ID_TOKEN Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_HTTP Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_IMDS Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_JVM_SYSTEM_PROPERTIES Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_PROCESS Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_PROFILE Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_PROFILE_NAMED_PROVIDER Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_PROFILE_PROCESS Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_PROFILE_SOURCE_PROFILE Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_PROFILE_SSO Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_PROFILE_SSO_LEGACY Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_PROFILE_STS_WEB_ID_TOKEN Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_SSO Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_SSO_LEGACY Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_STS_ASSUME_ROLE Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static final field CREDENTIALS_STS_ASSUME_ROLE_WEB_ID Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getIdentifier ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-	public static fun values ()[Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric$Credentials;
-}
-
 public final class aws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
 	public static final field INSTANCE Laws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor;
 	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -196,7 +163,7 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor :
 	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
 }
 
-public final class aws/sdk/kotlin/runtime/http/interceptors/BusinessMetricsInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
+public final class aws/sdk/kotlin/runtime/http/interceptors/UnsupportedSigningAlgorithmInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
 	public fun <init> ()V
 	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun modifyBeforeCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -219,7 +186,47 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/BusinessMetricsInter
 	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
 }
 
-public final class aws/sdk/kotlin/runtime/http/interceptors/UnsupportedSigningAlgorithmInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
+public final class aws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric : java/lang/Enum, aws/smithy/kotlin/runtime/businessmetrics/BusinessMetric {
+	public static final field S3_EXPRESS_BUCKET Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getIdentifier ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric;
+	public static fun values ()[Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric;
+}
+
+public final class aws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials : java/lang/Enum, aws/smithy/kotlin/runtime/businessmetrics/BusinessMetric {
+	public static final field CREDENTIALS_CODE Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_ENV_VARS Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_ENV_VARS_STS_WEB_ID_TOKEN Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_HTTP Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_IMDS Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_JVM_SYSTEM_PROPERTIES Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_PROCESS Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_PROFILE Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_PROFILE_NAMED_PROVIDER Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_PROFILE_PROCESS Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_PROFILE_SOURCE_PROFILE Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_PROFILE_SSO Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_PROFILE_SSO_LEGACY Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_PROFILE_STS_WEB_ID_TOKEN Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_SSO Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_SSO_LEGACY Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_STS_ASSUME_ROLE Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static final field CREDENTIALS_STS_ASSUME_ROLE_WEB_ID Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getIdentifier ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+	public static fun values ()[Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric$Credentials;
+}
+
+public final class aws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetricsUtilsKt {
+	public static final fun emitBusinessMetric (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;Laws/smithy/kotlin/runtime/businessmetrics/BusinessMetric;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
+	public static final fun emitBusinessMetric (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;Ljava/lang/String;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
+	public static final fun emitBusinessMetricsWithSetOfBusinessMetrics (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;Ljava/util/Set;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
+	public static final fun emitBusinessMetricsWithSetOfString (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;Ljava/util/Set;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
+}
+
+public final class aws/sdk/kotlin/runtime/http/interceptors/businessmetrics/BusinessMetricsInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
 	public fun <init> ()V
 	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun modifyBeforeCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

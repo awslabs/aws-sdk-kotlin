@@ -7,6 +7,8 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.*
 import aws.sdk.kotlin.runtime.config.imds.DEFAULT_TOKEN_TTL_SECONDS
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.util.withBusinessMetrics
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.http.*
@@ -126,7 +128,7 @@ class ImdsCredentialsProviderTest {
             "IQote///test0",
             expiration0,
             "IMDSv2",
-        )
+        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
         assertEquals(expected0, actual0)
 
         testClock.advance(1.seconds)
@@ -138,7 +140,7 @@ class ImdsCredentialsProviderTest {
             "IQote///test1",
             expiration1,
             "IMDSv2",
-        )
+        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
         assertEquals(expected1, actual1)
 
         connection.assertRequests()
@@ -195,7 +197,7 @@ class ImdsCredentialsProviderTest {
             "IQote///test",
             expiration,
             "IMDSv2",
-        )
+        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
         assertEquals(expected, actual)
 
         connection.assertRequests()
@@ -334,7 +336,7 @@ class ImdsCredentialsProviderTest {
             sessionToken = "IQote///test",
             expiration = Instant.fromEpochSeconds(1631935916),
             providerName = "IMDSv2",
-        )
+        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
 
         assertEquals(expected, actual)
 
@@ -402,7 +404,7 @@ class ImdsCredentialsProviderTest {
             sessionToken = "IQote///test",
             expiration = Instant.fromEpochSeconds(1631935916),
             providerName = "IMDSv2",
-        )
+        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
 
         val provider = ImdsCredentialsProvider(
             profileOverride = "imds-test-role",
@@ -519,7 +521,7 @@ class ImdsCredentialsProviderTest {
             sessionToken = "IQote///test",
             expiration = Instant.fromEpochSeconds(1631935916),
             providerName = "IMDSv2",
-        )
+        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
 
         val provider = ImdsCredentialsProvider(
             profileOverride = "imds-test-role",

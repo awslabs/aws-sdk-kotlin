@@ -1,9 +1,9 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
-import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.Attributes
 
 /**
@@ -17,15 +17,16 @@ import aws.smithy.kotlin.runtime.collections.Attributes
  */
 public class LazilyInitializedCredentialsProvider(
     private val providerName: String = "LazilyInitializedCredentialsProvider",
-    private val businessMetric: BusinessMetric,
+    private val businessMetric: BusinessMetric? = null,
     initializer: () -> CredentialsProvider,
 ) : CredentialsProvider {
     private val provider = lazy(initializer)
 
-    override suspend fun resolve(attributes: Attributes): Credentials =
-        provider.value.resolve(attributes).also {
-            attributes.emitBusinessMetric(businessMetric)
-        }
+    override suspend fun resolve(attributes: Attributes): Credentials {
+        val credentials = provider.value.resolve(attributes)
+        if (businessMetric == null) return credentials
+        return credentials.emitBusinessMetric(businessMetric)
+    }
 
     override fun toString(): String = providerName
 }

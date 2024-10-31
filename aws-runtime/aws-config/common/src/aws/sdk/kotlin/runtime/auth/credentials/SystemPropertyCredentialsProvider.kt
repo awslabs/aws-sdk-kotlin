@@ -7,11 +7,11 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.simpleClassName
-import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.telemetry.logging.trace
 import aws.smithy.kotlin.runtime.util.PlatformProvider
@@ -45,9 +45,7 @@ public class SystemPropertyCredentialsProvider(
             sessionToken = getProperty(SESSION_TOKEN),
             providerName = PROVIDER_NAME,
             accountId = getProperty(ACCOUNT_ID),
-        ).also {
-            attributes.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_JVM_SYSTEM_PROPERTIES)
-        }
+        ).emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_JVM_SYSTEM_PROPERTIES)
     }
 
     override fun toString(): String = this.simpleClassName
