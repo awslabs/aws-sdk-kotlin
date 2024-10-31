@@ -3,7 +3,7 @@ package aws.sdk.kotlin.runtime.util
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetrics
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
-import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetrics
+import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.collections.mutableAttributes
 import aws.smithy.kotlin.runtime.collections.toMutableAttributes
@@ -13,7 +13,9 @@ import aws.smithy.kotlin.runtime.collections.toMutableAttributes
  */
 internal fun testAttributes(attributes: Attributes? = null, vararg metrics: BusinessMetric): Attributes {
     val testAttributes = attributes?.toMutableAttributes() ?: mutableAttributes()
-    testAttributes.emitBusinessMetrics(metrics.toSet())
+    metrics.forEach { metric ->
+        testAttributes.emitBusinessMetric(metric.identifier)
+    }
     return testAttributes
 }
 
@@ -22,7 +24,9 @@ internal fun testAttributes(attributes: Attributes? = null, vararg metrics: Busi
  */
 internal fun testAttributes(vararg metrics: BusinessMetric): Attributes {
     val testAttributes = mutableAttributes()
-    testAttributes.emitBusinessMetrics(metrics.toSet())
+    metrics.forEach { metric ->
+        testAttributes.emitBusinessMetric(metric.identifier)
+    }
     return testAttributes
 }
 
