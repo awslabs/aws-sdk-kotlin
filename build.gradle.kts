@@ -145,6 +145,8 @@ configureNexus()
 val lintPaths = listOf(
     "**/*.{kt,kts}",
     "!**/generated-src/**",
+    "!**/generated/ksp/**",
+    "!**/kspCaches/**",
     "!**/smithyprojections/**",
 )
 

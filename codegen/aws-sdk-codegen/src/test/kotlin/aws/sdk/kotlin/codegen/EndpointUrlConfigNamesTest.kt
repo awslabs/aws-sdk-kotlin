@@ -1114,11 +1114,6 @@ private const val TEST_SUITE_JSON = """
     "service_envvar_name": "AWS_ENDPOINT_URL_NETWORKMANAGER"
   },
   {
-    "service_id": "nimble",
-    "services_section_name": "nimble",
-    "service_envvar_name": "AWS_ENDPOINT_URL_NIMBLE"
-  },
-  {
     "service_id": "OpenSearch",
     "services_section_name": "opensearch",
     "service_envvar_name": "AWS_ENDPOINT_URL_OPENSEARCH"
@@ -1685,7 +1680,6 @@ private const val JAVA_CLIENT_NAMES_JSON = """
   "AppConfigData": "AppConfigDataClient",
   "IoT Jobs Data Plane": "IotJobsDataPlaneClient",
   "Timestream Query": "TimestreamQueryClient",
-  "nimble": "NimbleClient",
   "Lex Model Building Service": "LexModelBuildingClient",
   "Medical Imaging": "MedicalImagingClient",
   "Auto Scaling": "AutoScalingClient",

@@ -1,17 +1,18 @@
 package aws.sdk.kotlin.codegen.smoketests
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.getContextValue
-import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.*
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.ParamName
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.ParamShape
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.Parameter
+import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.rendering.util.format
 import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.kotlin.codegen.utils.topDownOperations
@@ -21,9 +22,9 @@ import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
 
 /**
- * Adds support for AWS specific client config and custom code generation to smoke tests.
+ * Code generates AWS specific code for smoke test runners
  */
-class SmokeTestAwsVendorParamsIntegration : KotlinIntegration {
+class AwsSmokeTestsRunnerGeneratorIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
         model.topDownOperations(settings.service).any { it.hasTrait<SmokeTestsTrait>() }
 
@@ -49,61 +50,62 @@ private val parameterGenerator =
         val parameter = writer.getContextValue(Parameter)
         val shape = writer.getContextValue(ParamShape)
 
-        writer.write("#L", coerceParameterToModeledShape(parameter, shape, paramName))
+        val symbolProvider = writer.getContextValue(SymbolProvider)
+
+        coerceParameterToModeledShape(
+            parameter,
+            shape,
+            paramName,
+            writer,
+            symbolProvider,
+        )
     }
 
-fun coerceParameterToModeledShape(param: Node, customShape: Shape?, name: String): String {
-    if (customShape == null) return param.format()
+fun coerceParameterToModeledShape(
+    param: Node,
+    customShape: Shape?,
+    name: String,
+    writer: KotlinWriter,
+    symbolProvider: SymbolProvider
+) {
+    if (customShape == null || customShape.isCompatibleWithNodeTypes) {
+        writer.write("#L", param.format())
+    }
 
-    // TODO: Fill this out
-
-    // TODO: Which ones need customization and which ones can I delegate down to `format` ?
     when (customShape) {
-        is BigDecimalShape -> {
-            if (param !is NumberNode)
+        is DocumentShape -> {} // TODO: Unknown !
+        is BlobShape -> {} // TODO: Unknown !
+        is EnumShape -> {
+            val enumSymbol = symbolProvider.toSymbol(customShape)
+            val enumValue = param.asStringNode().get().value
+
+            writer.write("#T.#L", enumSymbol, enumValue)
         }
-        is BigIntegerShape -> {}
-        is BlobShape -> {}
-        is BooleanShape -> {}
-        is ByteShape -> {}
-        is ListShape -> {}
-        is CollectionShape -> {}
-        is DocumentShape -> {}
-        is DoubleShape -> {}
-        is EntityShape -> {} // ??
-        is EnumShape -> {}
-        is FloatShape -> {}
-        is IntEnumShape -> {}
-        is IntegerShape -> {}
-        is LongShape -> {}
-        is MapShape -> {}
-        is MemberShape -> {}
-        is NumberShape -> {}
-        is SetShape -> {}
-        is ShortShape -> {}
-        is StringShape -> {}
-        is TimestampShape -> {}
-        is UnionShape -> {}
+        is MemberShape -> {} // TODO: Important !
+        is TimestampShape -> {} // TODO: Unknown !
+        is UnionShape -> {} // TODO: Important !
         else -> throw Exception("Code generation unsupported for smoke test operation parameter '$name' of type '$customShape'.")
     }
+}
 
-    // TODO: Remove. This is here for reference only.
-    when (param) {
-        is NullNode -> "null"
-        is StringNode -> value.dq()
-        is BooleanNode -> value.toString()
-        is NumberNode -> value.toString()
-        is ArrayNode -> elements.joinToString(",", "listOf(", ")") { element ->
-            element.format()
-        }
-        is ObjectNode -> stringMap.entries.joinToString(", ", "mapOf(", ")") { (key, value) ->
-            "${key.dq()} to ${value.format()}"
-        }
-        else -> throw Exception("Unexpected node type: $this")
+private val Shape.isCompatibleWithNodeTypes: Boolean
+    get() = when (this) {
+        is NumberShape, // TODO: Maybe not all numbers are okay?
+        is MapShape,
+        is StringShape,
+        is BooleanShape, // TODO: One of these can actually be an enum.....
+        is CollectionShape -> true
+
+        else -> false
     }
 
-    return ""
-}
+
+
+
+
+
+
+
 
 
 

@@ -96,6 +96,12 @@ subprojects {
                             }
                         }
 
+                        if (project.name == "sesv2") {
+                            dependencies {
+                                implementation(libs.smithy.kotlin.aws.signing.crt) // needed for E2E test of SigV4a
+                            }
+                        }
+
                         // Run the tests with the classpath containing the compile dependencies (including 'main'),
                         // runtime dependencies, and the outputs of this compilation:
                         classpath = compileDependencyFiles + runtimeDependencyFiles + output.allOutputs
