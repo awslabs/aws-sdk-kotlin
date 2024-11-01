@@ -19,6 +19,7 @@ import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -91,6 +92,24 @@ class BusinessMetricsInterceptorTest {
 
         assertTrue(truncatedMetrics.encodeToByteArray().size <= BUSINESS_METRICS_MAX_LENGTH)
         assertFalse(truncatedMetrics.endsWith(","))
+    }
+
+    @Test
+    fun malformedBusinessMetrics() = runTest {
+        val executionContext = ExecutionContext()
+        val reallyLongMetric = "All work and no play makes Jack a dull boy".repeat(1000)
+
+        executionContext.attributes.emitBusinessMetric(
+            object : BusinessMetric {
+                override val identifier: String = reallyLongMetric
+            },
+        )
+
+        val interceptor = BusinessMetricsInterceptor()
+
+        assertFailsWith<IllegalStateException>("Business metrics are incorrectly formatted:") {
+            interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
+        }
     }
 }
 

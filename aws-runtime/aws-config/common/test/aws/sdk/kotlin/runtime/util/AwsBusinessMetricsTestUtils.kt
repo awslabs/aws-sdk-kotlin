@@ -37,5 +37,5 @@ internal fun testAttributes(vararg metrics: BusinessMetric): Attributes {
 internal fun Credentials.withBusinessMetrics(vararg metrics: BusinessMetric): Credentials =
     emitBusinessMetrics(metrics.toSet())
 
-internal fun String.toAwsBusinessMetric(): BusinessMetric =
+internal fun String.toAwsCredentialsBusinessMetric(): BusinessMetric =
     AwsBusinessMetric.Credentials.entries.find { it.identifier == this } ?: throw Exception("String '$this' is not an AWS business metric")

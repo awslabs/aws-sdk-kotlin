@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetrics
-import aws.sdk.kotlin.runtime.util.toAwsBusinessMetric
+import aws.sdk.kotlin.runtime.util.toAwsCredentialsBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.copy
 import aws.smithy.kotlin.runtime.httptest.TestConnection
@@ -103,7 +103,9 @@ class DefaultChainCredentialsProviderTest {
                             o["session_token"]?.jsonPrimitive?.content,
                             o["expiry"]?.jsonPrimitive?.longOrNull?.let { Instant.fromEpochSeconds(it) },
                             accountId = o["accountId"]?.jsonPrimitive?.content,
-                        ).emitBusinessMetrics(expectedBusinessMetrics.map { it.toAwsBusinessMetric() }.toSet())
+                        ).emitBusinessMetrics(
+                            expectedBusinessMetrics.map { it.toAwsCredentialsBusinessMetric() }.toSet(),
+                        )
                         Ok(name, docs, expectedCreds)
                     }
                     "ErrorContains" in result -> ErrorContains(name, docs, checkNotNull(result["ErrorContains"]).jsonPrimitive.content)
