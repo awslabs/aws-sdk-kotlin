@@ -11,7 +11,6 @@ import aws.sdk.kotlin.runtime.util.toAwsCredentialsBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.copy
 import aws.smithy.kotlin.runtime.httptest.TestConnection
-import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.Filesystem
 import aws.smithy.kotlin.runtime.util.OperatingSystem
@@ -169,8 +168,7 @@ class DefaultChainCredentialsProviderTest {
     fun executeTest(name: String) = runTest {
         val test = makeTest(name)
         val provider = DefaultChainCredentialsProvider(platformProvider = test.testPlatform, httpClient = test.testEngine)
-        val attributes = ExecutionContext()
-        val actual = runCatching { provider.resolve(attributes) }
+        val actual = runCatching { provider.resolve() }
         val expected = test.expected
         when {
             expected is TestResult.Ok && actual.isFailure -> error("expected success, got error: $actual")
