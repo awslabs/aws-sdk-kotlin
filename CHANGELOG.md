@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.67] - 11/01/2024
+
+### Features
+* (**bedrockagent**) Amazon Bedrock Knowledge Bases now supports using application inference profiles to increase throughput and improve resilience.
+* (**cloudwatchlogs**) This release introduces an improvement in PutLogEvents
+* (**docdbelastic**) Amazon DocumentDB Elastic Clusters adds support for pending maintenance actions feature with APIs GetPendingMaintenanceAction, ListPendingMaintenanceActions and ApplyPendingMaintenanceAction
+* (**taxsettings**) Add support for supplemental tax registrations via these new APIs: PutSupplementalTaxRegistration, ListSupplementalTaxRegistrations, and DeleteSupplementalTaxRegistration.
+
 ## [1.3.66] - 10/31/2024
 
 ### Features
