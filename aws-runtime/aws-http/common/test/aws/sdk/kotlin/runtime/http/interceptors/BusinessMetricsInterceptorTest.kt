@@ -8,6 +8,7 @@ import aws.sdk.kotlin.runtime.http.BUSINESS_METRICS_MAX_LENGTH
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.BusinessMetricsInterceptor
 import aws.sdk.kotlin.runtime.http.middleware.USER_AGENT
+import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.SmithyBusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
@@ -18,7 +19,6 @@ import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -69,10 +69,13 @@ class BusinessMetricsInterceptorTest {
     @Test
     fun truncateBusinessMetrics() = runTest {
         val executionContext = ExecutionContext()
-        executionContext.attributes[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics] = mutableSetOf()
 
         for (i in 0..1024) {
-            executionContext.attributes[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics].add(i.toString())
+            executionContext.emitBusinessMetric(
+                object : BusinessMetric {
+                    override val identifier: String = i.toString()
+                },
+            )
         }
 
         val rawMetrics = executionContext[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics]
@@ -88,21 +91,6 @@ class BusinessMetricsInterceptorTest {
 
         assertTrue(truncatedMetrics.encodeToByteArray().size <= BUSINESS_METRICS_MAX_LENGTH)
         assertFalse(truncatedMetrics.endsWith(","))
-    }
-
-    @Test
-    fun malformedBusinessMetrics() = runTest {
-        val executionContext = ExecutionContext()
-
-        executionContext.attributes[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics] = mutableSetOf(
-            "A".repeat(BUSINESS_METRICS_MAX_LENGTH),
-        )
-
-        val interceptor = BusinessMetricsInterceptor()
-
-        assertFailsWith<IllegalStateException>("Business metrics are incorrectly formatted:") {
-            interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
-        }
     }
 }
 

@@ -8,14 +8,13 @@ import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.MutableAttributes
 import aws.smithy.kotlin.runtime.collections.toMutableAttributes
-import kotlin.jvm.JvmName
 
 /**
  * Makes sure the metrics do not exceed the maximum size and truncates them if so.
  */
-internal fun formatMetrics(metrics: MutableSet<String>): String {
+internal fun formatMetrics(metrics: MutableSet<BusinessMetric>): String {
     if (metrics.isEmpty()) return ""
-    val metricsString = metrics.joinToString(",", "m/")
+    val metricsString = metrics.joinToString(",", "m/") { it.identifier }
     val metricsByteArray = metricsString.encodeToByteArray()
 
     if (metricsByteArray.size <= BUSINESS_METRICS_MAX_LENGTH) return metricsString
@@ -69,50 +68,31 @@ public enum class AwsBusinessMetric(public override val identifier: String) : Bu
 
 /**
  * Emits a business metric into [Credentials.attributes]
- * @param identifier The identifier of the [BusinessMetric] to be emitted.
+ * @param metric The [BusinessMetric] to be emitted.
  */
 @InternalApi
-public fun Credentials.emitBusinessMetric(identifier: String): Credentials =
+public fun Credentials.emitBusinessMetric(metric: BusinessMetric): Credentials =
     when (val credentialsAttributes = this.attributes) {
         is MutableAttributes -> {
-            credentialsAttributes.emitBusinessMetric(identifier)
+            credentialsAttributes.emitBusinessMetric(metric)
             this
         }
         else -> {
             val newCredentialsAttributes = credentialsAttributes.toMutableAttributes()
-            newCredentialsAttributes.emitBusinessMetric(identifier)
+            newCredentialsAttributes.emitBusinessMetric(metric)
             this.copy(attributes = newCredentialsAttributes)
         }
     }
-
-/**
- * Emits a business metric into [Credentials.attributes]
- * @param metric The [BusinessMetric] to be emitted.
- */
-@InternalApi
-public fun Credentials.emitBusinessMetric(metric: BusinessMetric): Credentials = this.emitBusinessMetric(metric.identifier)
-
-/**
- * Emits business metrics into [Credentials.attributes]
- * @param identifiers The identifiers of the [BusinessMetric]s to be emitted.
- */
-@InternalApi
-@JvmName("emitBusinessMetricsWithSetOfString")
-public fun Credentials.emitBusinessMetrics(identifiers: Set<String>): Credentials {
-    var credentials = this
-    identifiers.forEach { identifier ->
-        credentials = this.emitBusinessMetric(identifier)
-    }
-    return credentials
-}
 
 /**
  * Emits business metrics into [Credentials.attributes]
  * @param metrics The [BusinessMetric]s to be emitted.
  */
 @InternalApi
-@JvmName("emitBusinessMetricsWithSetOfBusinessMetrics")
-public fun Credentials.emitBusinessMetrics(metrics: Set<BusinessMetric>): Credentials =
-    this.emitBusinessMetrics(
-        metrics.map { it.identifier }.toSet(),
-    )
+public fun Credentials.emitBusinessMetrics(metrics: Set<BusinessMetric>): Credentials {
+    var credentials = this
+    metrics.forEach { identifier ->
+        credentials = this.emitBusinessMetric(identifier)
+    }
+    return credentials
+}
