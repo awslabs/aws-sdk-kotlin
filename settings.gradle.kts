@@ -75,6 +75,7 @@ file("tests/codegen/smoke-tests/services").listFiles().forEach {
     if (it.isServiceDir) {
         include(":tests:codegen:smoke-tests:services:${it.name}")
     }
+}
 
 if ("dynamodb".isBootstrappedService) {
     include(":hll:dynamodb-mapper")

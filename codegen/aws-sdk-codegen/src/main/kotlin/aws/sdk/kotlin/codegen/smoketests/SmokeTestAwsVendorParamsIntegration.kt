@@ -69,8 +69,10 @@ fun coerceParameterToModeledShape(
     symbolProvider: SymbolProvider
 ) {
     if (customShape == null || customShape.isCompatibleWithNodeTypes) {
-        writer.write("#L", param.format())
+        writer.writeInline("#L", param.format())
     }
+
+    if (customShape != null) writer.write("// ${customShape::class.simpleName}")
 
     when (customShape) {
         is DocumentShape -> {} // TODO: Unknown !
@@ -84,7 +86,7 @@ fun coerceParameterToModeledShape(
         is MemberShape -> {} // TODO: Important !
         is TimestampShape -> {} // TODO: Unknown !
         is UnionShape -> {} // TODO: Important !
-        else -> throw Exception("Code generation unsupported for smoke test operation parameter '$name' of type '$customShape'.")
+//        else -> throw Exception("Code generation unsupported for smoke test operation parameter '$name' of type '$customShape'.")
     }
 }
 
