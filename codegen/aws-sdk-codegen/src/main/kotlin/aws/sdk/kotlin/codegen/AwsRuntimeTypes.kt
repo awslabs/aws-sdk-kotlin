@@ -60,8 +60,11 @@ object AwsRuntimeTypes {
         object Interceptors : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP, "interceptors") {
             val AddUserAgentMetadataInterceptor = symbol("AddUserAgentMetadataInterceptor")
             val UnsupportedSigningAlgorithmInterceptor = symbol("UnsupportedSigningAlgorithmInterceptor")
-            val BusinessMetricsInterceptor = symbol("BusinessMetricsInterceptor")
-            val AwsBusinessMetric = symbol("AwsBusinessMetric")
+
+            object BusinessMetrics : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP, "interceptors.businessmetrics") {
+                val BusinessMetricsInterceptor = symbol("BusinessMetricsInterceptor")
+                val AwsBusinessMetric = symbol("AwsBusinessMetric")
+            }
         }
 
         object Retries {
