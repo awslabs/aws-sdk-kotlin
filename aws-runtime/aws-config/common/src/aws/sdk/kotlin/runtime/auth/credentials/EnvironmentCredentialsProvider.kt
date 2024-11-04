@@ -7,6 +7,8 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.simpleClassName
@@ -36,13 +38,14 @@ public class EnvironmentCredentialsProvider(
         coroutineContext.trace<EnvironmentCredentialsProvider> {
             "Attempting to load credentials from env vars $ACCESS_KEY_ID/$SECRET_ACCESS_KEY/$SESSION_TOKEN"
         }
+
         return credentials(
             accessKeyId = requireEnv(ACCESS_KEY_ID),
             secretAccessKey = requireEnv(SECRET_ACCESS_KEY),
             sessionToken = getEnv(SESSION_TOKEN),
             providerName = PROVIDER_NAME,
             accountId = getEnv(ACCOUNT_ID),
-        )
+        ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS)
     }
 
     override fun toString(): String = this.simpleClassName

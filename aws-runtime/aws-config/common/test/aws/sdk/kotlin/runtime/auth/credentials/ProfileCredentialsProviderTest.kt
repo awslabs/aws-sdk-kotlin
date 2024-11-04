@@ -7,12 +7,20 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.client.AwsClientOption
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetrics
+import aws.sdk.kotlin.runtime.util.testAttributes
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awscredentials.copy
 import aws.smithy.kotlin.runtime.collections.attributesOf
 import aws.smithy.kotlin.runtime.httptest.TestConnection
 import aws.smithy.kotlin.runtime.httptest.buildTestConnection
 import aws.smithy.kotlin.runtime.net.Host
+import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
+import io.mockk.coEvery
+import io.mockk.mockkStatic
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -38,6 +46,7 @@ class ProfileCredentialsProviderTest {
         )
         val actual = provider.resolve()
         val expected = Credentials("AKID-Default", "Default-Secret")
+            .withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
         assertEquals(expected, actual)
     }
 
@@ -66,6 +75,7 @@ class ProfileCredentialsProviderTest {
         )
         val actual = provider.resolve()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
+            .withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
         assertEquals(expected, actual)
     }
 
@@ -96,6 +106,7 @@ class ProfileCredentialsProviderTest {
         )
         val actual = provider.resolve()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
+            .withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
         assertEquals(expected, actual)
     }
 
@@ -131,7 +142,15 @@ class ProfileCredentialsProviderTest {
             httpClient = testEngine,
         )
         val actual = provider.resolve()
-        assertEquals(StsTestUtils.CREDENTIALS, actual)
+        val expected = StsTestUtils.CREDENTIALS.copy(
+            attributes = testAttributes(
+                StsTestUtils.CREDENTIALS.attributes,
+                AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SOURCE_PROFILE,
+                AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE,
+                AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE,
+            ),
+        )
+        assertEquals(expected, actual)
 
         testEngine.assertRequests()
         val req = testEngine.requests().first()
@@ -316,6 +335,99 @@ class ProfileCredentialsProviderTest {
         )
         val actual = provider.resolve()
         val expected = credentials("AKID-Default", "Default-Secret", accountId = "12345")
+            .withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun assumeRoleWithNamedProviderBusinessMetrics() = runTest {
+        val testArn = "arn:aws:iam::1234567:role/test-role"
+        val testProvider = TestPlatformProvider(
+            env = mapOf(
+                "AWS_CONFIG_FILE" to "config",
+                "AWS_REGION" to "us-west-2",
+                "AWS_ACCESS_KEY_ID" to "1",
+                "AWS_SECRET_ACCESS_KEY" to "2",
+            ),
+            fs = mapOf(
+                "config" to """
+                [default]
+                role_arn = $testArn
+                credential_source = Environment
+                """.trimIndent(),
+            ),
+        )
+        val testEngine = buildTestConnection {
+            expect(StsTestUtils.stsResponse(testArn))
+        }
+
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+
+        val actual = provider.resolve()
+        val expected = StsTestUtils.CREDENTIALS.copy(
+            attributes = testAttributes(
+                StsTestUtils.CREDENTIALS.attributes,
+                AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_NAMED_PROVIDER,
+                AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS,
+                AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE,
+            ),
+        )
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun processBusinessMetrics() = runTest {
+        val testProvider = TestPlatformProvider(
+            env = mapOf(
+                "AWS_CONFIG_FILE" to "config",
+            ),
+            fs = mapOf(
+                "config" to """
+                [default]
+                credential_process = awscreds-custom
+                """.trimIndent(),
+                "awscreds-custom" to "some-process",
+            ),
+        )
+        val testEngine = TestConnection()
+        val provider = ProfileCredentialsProvider(
+            platformProvider = testProvider,
+            httpClient = testEngine,
+        )
+
+        mockkStatic(::executeCommand)
+        coEvery { executeCommand(any(), any(), any(), any(), any()) }.returns(
+            Pair(
+                0,
+                """
+            {
+                "Version": 1,
+                "AccessKeyId": "AKID-Default",
+                "SecretAccessKey": "Default-Secret",
+                "SessionToken": "SessionToken",
+                "Expiration" : "2019-05-29T00:21:43Z"
+            }
+                """.trimIndent(),
+            ),
+        )
+
+        val actual = provider.resolve()
+        val expected = credentials(
+            "AKID-Default",
+            "Default-Secret",
+            "SessionToken",
+            Instant.fromIso8601("2019-05-29T00:21:43Z"),
+            "Process",
+        ).withBusinessMetrics(
+            setOf(
+                AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_PROCESS,
+                AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS,
+            ),
+        )
+
         assertEquals(expected, actual)
     }
 }

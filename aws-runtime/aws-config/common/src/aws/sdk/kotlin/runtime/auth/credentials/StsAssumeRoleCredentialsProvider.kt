@@ -13,6 +13,8 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.PolicyDescript
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.Tag
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
@@ -146,7 +148,7 @@ public class StsAssumeRoleCredentialsProvider(
             expiration = roleCredentials.expiration,
             providerName = PROVIDER_NAME,
             accountId = accountId,
-        )
+        ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE)
     }
 
     override fun toString(): String = this.simpleClassName

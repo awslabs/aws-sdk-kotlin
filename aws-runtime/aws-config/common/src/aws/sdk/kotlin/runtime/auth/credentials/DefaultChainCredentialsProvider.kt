@@ -7,6 +7,8 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
@@ -52,14 +54,8 @@ public class DefaultChainCredentialsProvider constructor(
     private val chain = CredentialsProviderChain(
         SystemPropertyCredentialsProvider(platformProvider::getProperty),
         EnvironmentCredentialsProvider(platformProvider::getenv),
-        LazilyInitializedCredentialsProvider("EnvironmentStsWebIdentityCredentialsProvider") {
-            // STS web identity provider can be constructed from either the profile OR 100% from the environment
-            StsWebIdentityCredentialsProvider.fromEnvironment(
-                platformProvider = platformProvider,
-                httpClient = httpClient,
-                region = region,
-            )
-        },
+        // STS web identity provider can be constructed from either the profile OR 100% from the environment
+        StsWebIdentityProvider(platformProvider = platformProvider, httpClient = engine, region = region),
         ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClient = engine, region = region),
         EcsCredentialsProvider(platformProvider, engine),
         ImdsCredentialsProvider(
@@ -85,4 +81,21 @@ public class DefaultChainCredentialsProvider constructor(
     }
 
     override fun toString(): String = this.simpleClassName + ": " + this.chain
+}
+
+/**
+ * Wrapper around [StsWebIdentityCredentialsProvider] that delays any exceptions until [resolve] is invoked.
+ * This allows it to be part of the default chain and any failures result in the chain to move onto the next provider.
+ */
+public class StsWebIdentityProvider(
+    public val platformProvider: PlatformProvider = PlatformProvider.System,
+    public val httpClient: HttpClientEngine? = null,
+    public val region: String? = null,
+) : CloseableCredentialsProvider {
+    override suspend fun resolve(attributes: Attributes): Credentials {
+        val wrapped = StsWebIdentityCredentialsProvider.fromEnvironment(platformProvider = platformProvider, httpClient = httpClient, region = region)
+        return wrapped.resolve(attributes).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS_STS_WEB_ID_TOKEN)
+    }
+
+    override fun close() { }
 }

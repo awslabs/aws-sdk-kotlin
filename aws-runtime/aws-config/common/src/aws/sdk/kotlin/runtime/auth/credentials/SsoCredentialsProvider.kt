@@ -8,14 +8,12 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.SsoClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
-import aws.smithy.kotlin.runtime.auth.awscredentials.simpleClassName
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
+import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
-import aws.smithy.kotlin.runtime.serde.json.*
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.telemetry.telemetryProvider
 import aws.smithy.kotlin.runtime.time.Clock
@@ -121,7 +119,7 @@ public class SsoCredentialsProvider public constructor(
 
         val roleCredentials = resp.roleCredentials ?: throw CredentialsProviderException("Expected SSO roleCredentials to not be null")
 
-        return credentials(
+        val creds = credentials(
             accessKeyId = checkNotNull(roleCredentials.accessKeyId) { "Expected accessKeyId in SSO roleCredentials response" },
             secretAccessKey = checkNotNull(roleCredentials.secretAccessKey) { "Expected secretAccessKey in SSO roleCredentials response" },
             sessionToken = roleCredentials.sessionToken,
@@ -129,6 +127,12 @@ public class SsoCredentialsProvider public constructor(
             PROVIDER_NAME,
             accountId = accountId,
         )
+
+        return if (ssoTokenProvider != null) {
+            creds.withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO)
+        } else {
+            creds.withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
+        }
     }
 
     // non sso-session legacy token flow

@@ -9,6 +9,8 @@ import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.EC2MetadataError
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.config.resolve
@@ -106,7 +108,7 @@ public class ImdsCredentialsProvider(
                     resp.sessionToken,
                     resp.expiration,
                     PROVIDER_NAME,
-                )
+                ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
 
                 creds.also {
                     mu.withLock { previousCredentials = it }

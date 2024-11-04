@@ -1,0 +1,37 @@
+package aws.sdk.kotlin.codegen.businessmetrics
+
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.model.shapes.OperationShape
+
+/**
+ * Renders the addition of some of the credentials related business metrics.
+ */
+class CredentialsBusinessMetricsIntegration : KotlinIntegration {
+    override fun customizeMiddleware(
+        ctx: ProtocolGenerator.GenerationContext,
+        resolved: List<ProtocolMiddleware>,
+    ): List<ProtocolMiddleware> = resolved + credentialsBusinessMetricsMiddleware
+
+    private val credentialsBusinessMetricsMiddleware = object : ProtocolMiddleware {
+        override val name: String = "credentialsOverrideBusinessMetricsMiddleware"
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            writer.withBlock(
+                "if (config.credentialsProvider is #T) {",
+                "}",
+                AwsRuntimeTypes.Config.Credentials.StaticCredentialsProvider,
+            ) {
+                write(
+                    "op.context.#T(#T.Credentials.CREDENTIALS_CODE)",
+                    RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
+                    AwsRuntimeTypes.Http.Interceptors.BusinessMetrics.AwsBusinessMetric,
+                )
+            }
+        }
+    }
+}
