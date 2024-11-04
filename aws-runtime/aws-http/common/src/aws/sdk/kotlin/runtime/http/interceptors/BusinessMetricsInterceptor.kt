@@ -35,9 +35,9 @@ public class BusinessMetricsInterceptor : HttpInterceptor {
 /**
  * Makes sure the metrics do not exceed the maximum size and truncates them if so.
  */
-private fun formatMetrics(metrics: MutableSet<String>): String {
+private fun formatMetrics(metrics: MutableSet<BusinessMetric>): String {
     if (metrics.isEmpty()) return ""
-    val metricsString = metrics.joinToString(",", "m/")
+    val metricsString = metrics.joinToString(",", "m/") { it.identifier }
     val metricsByteArray = metricsString.encodeToByteArray()
 
     if (metricsByteArray.size <= BUSINESS_METRICS_MAX_LENGTH) return metricsString
