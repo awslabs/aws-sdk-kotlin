@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
-import aws.sdk.kotlin.runtime.util.withBusinessMetrics
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.collections.attributesOf
 import io.kotest.matchers.string.shouldContain
@@ -34,7 +34,7 @@ class EnvironmentCredentialsProviderTest {
                 "def",
                 "ghi",
                 providerName = "Environment",
-            ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS),
+            ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS),
         )
     }
 
@@ -51,7 +51,7 @@ class EnvironmentCredentialsProviderTest {
                 "def",
                 null,
                 providerName = "Environment",
-            ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS),
+            ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS),
         )
     }
 
@@ -103,7 +103,7 @@ class EnvironmentCredentialsProviderTest {
             "def",
             providerName = "Environment",
             attributes = attributesOf { AwsClientOption.AccountId to "12345" },
-        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS)
+        ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_ENV_VARS)
         assertEquals(expected, actual)
     }
 }

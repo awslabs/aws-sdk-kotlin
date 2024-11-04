@@ -71,7 +71,7 @@ public enum class AwsBusinessMetric(public override val identifier: String) : Bu
  * @param metric The [BusinessMetric] to be emitted.
  */
 @InternalApi
-public fun Credentials.emitBusinessMetric(metric: BusinessMetric): Credentials =
+public fun Credentials.withBusinessMetric(metric: BusinessMetric): Credentials =
     when (val credentialsAttributes = this.attributes) {
         is MutableAttributes -> {
             credentialsAttributes.emitBusinessMetric(metric)
@@ -89,10 +89,10 @@ public fun Credentials.emitBusinessMetric(metric: BusinessMetric): Credentials =
  * @param metrics The [BusinessMetric]s to be emitted.
  */
 @InternalApi
-public fun Credentials.emitBusinessMetrics(metrics: Set<BusinessMetric>): Credentials {
+public fun Credentials.withBusinessMetrics(metrics: Set<BusinessMetric>): Credentials {
     var credentials = this
-    metrics.forEach { identifier ->
-        credentials = this.emitBusinessMetric(identifier)
+    metrics.forEach { metric ->
+        credentials = this.withBusinessMetric(metric)
     }
     return credentials
 }

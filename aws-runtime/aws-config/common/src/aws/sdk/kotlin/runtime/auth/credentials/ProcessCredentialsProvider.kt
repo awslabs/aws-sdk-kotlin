@@ -6,7 +6,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
-import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
@@ -75,7 +75,7 @@ public class ProcessCredentialsProvider(
                     resp.expiration ?: Instant.MAX_VALUE,
                     PROVIDER_NAME,
                     resp.accountId,
-                ).emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
+                ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
             }
             else -> throw CredentialsProviderException("Credentials response was not of expected format")
         }

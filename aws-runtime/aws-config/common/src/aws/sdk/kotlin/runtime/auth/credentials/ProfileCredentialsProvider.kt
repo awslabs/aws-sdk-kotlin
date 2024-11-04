@@ -16,7 +16,7 @@ import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.profile.AwsConfigurationSource
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
-import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetrics
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetrics
 import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
@@ -148,7 +148,7 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
         }
 
         logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
-        return creds.emitBusinessMetrics(credentialsBusinessMetrics)
+        return creds.withBusinessMetrics(credentialsBusinessMetrics)
     }
 
     override fun close() {

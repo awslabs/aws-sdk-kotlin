@@ -12,7 +12,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.assumeRoleWithWebIde
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.PolicyDescriptorType
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
-import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
@@ -152,7 +152,7 @@ public class StsWebIdentityCredentialsProvider(
             expiration = roleCredentials.expiration,
             providerName = PROVIDER_NAME,
             accountId = accountId,
-        ).emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE_WEB_ID)
+        ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE_WEB_ID)
     }
 
     override fun toString(): String = this.simpleClassName

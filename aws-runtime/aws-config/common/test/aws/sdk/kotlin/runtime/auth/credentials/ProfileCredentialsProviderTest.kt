@@ -8,8 +8,9 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetrics
 import aws.sdk.kotlin.runtime.util.testAttributes
-import aws.sdk.kotlin.runtime.util.withBusinessMetrics
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.copy
 import aws.smithy.kotlin.runtime.collections.attributesOf
@@ -45,7 +46,7 @@ class ProfileCredentialsProviderTest {
         )
         val actual = provider.resolve()
         val expected = Credentials("AKID-Default", "Default-Secret")
-            .withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
+            .withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
         assertEquals(expected, actual)
     }
 
@@ -74,7 +75,7 @@ class ProfileCredentialsProviderTest {
         )
         val actual = provider.resolve()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
-            .withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
+            .withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
         assertEquals(expected, actual)
     }
 
@@ -105,7 +106,7 @@ class ProfileCredentialsProviderTest {
         )
         val actual = provider.resolve()
         val expected = Credentials("AKID-Profile", "Profile-Secret")
-            .withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
+            .withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
         assertEquals(expected, actual)
     }
 
@@ -334,7 +335,7 @@ class ProfileCredentialsProviderTest {
         )
         val actual = provider.resolve()
         val expected = credentials("AKID-Default", "Default-Secret", accountId = "12345")
-            .withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
+            .withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
         assertEquals(expected, actual)
     }
 
@@ -421,8 +422,10 @@ class ProfileCredentialsProviderTest {
             Instant.fromIso8601("2019-05-29T00:21:43Z"),
             "Process",
         ).withBusinessMetrics(
-            AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_PROCESS,
-            AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS,
+            setOf(
+                AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_PROCESS,
+                AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS,
+            ),
         )
 
         assertEquals(expected, actual)

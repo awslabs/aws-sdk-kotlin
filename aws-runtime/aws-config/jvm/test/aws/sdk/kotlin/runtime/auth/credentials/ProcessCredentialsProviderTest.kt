@@ -6,7 +6,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
-import aws.sdk.kotlin.runtime.util.withBusinessMetrics
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.time.Instant
@@ -43,7 +43,7 @@ class ProcessCredentialsProviderTest {
             sessionToken = "SessionToken",
             expiration = Instant.fromEpochSeconds(1665705600),
             providerName = "Process",
-        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
+        ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
         val actualCredentials = processCredentialsProvider.resolve()
@@ -73,7 +73,7 @@ class ProcessCredentialsProviderTest {
             sessionToken = "SessionToken",
             expiration = Instant.MAX_VALUE,
             providerName = "Process",
-        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
+        ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
         val actualCredentials = processCredentialsProvider.resolve()
@@ -166,7 +166,7 @@ class ProcessCredentialsProviderTest {
             expiration = Instant.fromEpochSeconds(1665705600),
             providerName = "Process",
             accountId = "12345",
-        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
+        ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_PROCESS)
 
         val processCredentialsProvider = ProcessCredentialsProvider("anyString")
         val actualCredentials = processCredentialsProvider.resolve()

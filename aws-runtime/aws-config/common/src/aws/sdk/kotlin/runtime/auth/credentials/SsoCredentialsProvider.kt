@@ -9,7 +9,7 @@ import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.SsoClient
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sso.getRoleCredentials
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
-import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.collections.Attributes
@@ -129,9 +129,9 @@ public class SsoCredentialsProvider public constructor(
         )
 
         return if (ssoTokenProvider != null) {
-            creds.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO)
+            creds.withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO)
         } else {
-            creds.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
+            creds.withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
         }
     }
 

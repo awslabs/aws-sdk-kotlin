@@ -220,8 +220,8 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsB
 }
 
 public final class aws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetricsUtilsKt {
-	public static final fun emitBusinessMetric (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;Laws/smithy/kotlin/runtime/businessmetrics/BusinessMetric;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
-	public static final fun emitBusinessMetrics (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;Ljava/util/Set;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
+	public static final fun withBusinessMetric (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;Laws/smithy/kotlin/runtime/businessmetrics/BusinessMetric;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
+	public static final fun withBusinessMetrics (Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;Ljava/util/Set;)Laws/smithy/kotlin/runtime/auth/awscredentials/Credentials;
 }
 
 public final class aws/sdk/kotlin/runtime/http/interceptors/businessmetrics/BusinessMetricsInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {

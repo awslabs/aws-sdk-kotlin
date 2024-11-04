@@ -6,7 +6,7 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
-import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetrics
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetrics
 import aws.sdk.kotlin.runtime.util.toAwsCredentialsBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.copy
@@ -102,7 +102,7 @@ class DefaultChainCredentialsProviderTest {
                             o["session_token"]?.jsonPrimitive?.content,
                             o["expiry"]?.jsonPrimitive?.longOrNull?.let { Instant.fromEpochSeconds(it) },
                             accountId = o["accountId"]?.jsonPrimitive?.content,
-                        ).emitBusinessMetrics(
+                        ).withBusinessMetrics(
                             expectedBusinessMetrics.map { it.toAwsCredentialsBusinessMetric() }.toSet(),
                         )
                         Ok(name, docs, expectedCreds)

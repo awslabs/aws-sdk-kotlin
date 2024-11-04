@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
-import aws.sdk.kotlin.runtime.util.withBusinessMetrics
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -210,7 +210,7 @@ class SsoCredentialsProviderTest {
             expectedExpiration,
             "SSO",
             "123456789",
-        ).withBusinessMetrics(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
+        ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_SSO_LEGACY)
         assertEquals(expected, actual)
     }
 }

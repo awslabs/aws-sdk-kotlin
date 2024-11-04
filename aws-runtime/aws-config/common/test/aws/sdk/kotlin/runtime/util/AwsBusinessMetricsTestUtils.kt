@@ -1,8 +1,6 @@
 package aws.sdk.kotlin.runtime.util
 
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
-import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetrics
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.Attributes
@@ -30,12 +28,6 @@ internal fun testAttributes(vararg metrics: BusinessMetric): Attributes {
     }
     return testAttributes
 }
-
-/**
- * Type alias for [emitBusinessMetrics], used for testing.
- */
-internal fun Credentials.withBusinessMetrics(vararg metrics: BusinessMetric): Credentials =
-    emitBusinessMetrics(metrics.toSet())
 
 /**
  * Converts a [String] into an [AwsBusinessMetric.Credentials] if the identifier matches

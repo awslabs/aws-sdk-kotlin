@@ -8,7 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
-import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.emitBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.ErrorMetadata
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
@@ -113,7 +113,7 @@ public class EcsCredentialsProvider(
 
         logger.debug { "obtained credentials from container metadata service; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
 
-        return creds.emitBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_HTTP)
+        return creds.withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_HTTP)
     }
 
     private suspend fun loadAuthToken(): String? {
