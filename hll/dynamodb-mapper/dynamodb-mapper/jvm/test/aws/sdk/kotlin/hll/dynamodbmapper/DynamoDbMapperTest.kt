@@ -79,7 +79,7 @@ class DynamoDbMapperTest : DdbLocalTest() {
 }
 
 private class MetricCapturingInterceptor : HttpInterceptor {
-    private val capturedMetrics = mutableSetOf<String>()
+    private val capturedMetrics = mutableSetOf<BusinessMetric>()
 
     override fun readBeforeTransmit(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
         capturedMetrics += context.executionContext[BusinessMetrics]
@@ -88,12 +88,12 @@ private class MetricCapturingInterceptor : HttpInterceptor {
     fun assertMetric(metric: BusinessMetric, exists: Boolean = true) {
         if (exists) {
             assertTrue(
-                metric.identifier in capturedMetrics,
+                metric in capturedMetrics,
                 "Expected metrics to contain $metric. Actual values: $capturedMetrics",
             )
         } else {
             assertFalse(
-                metric.identifier in capturedMetrics,
+                metric in capturedMetrics,
                 "Expected metrics *not* to contain $metric. Actual values: $capturedMetrics",
             )
         }

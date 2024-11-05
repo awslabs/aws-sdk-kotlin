@@ -6,6 +6,7 @@ package aws.sdk.kotlin.runtime.http.interceptors
 
 import aws.sdk.kotlin.runtime.http.BUSINESS_METRICS_MAX_LENGTH
 import aws.sdk.kotlin.runtime.http.middleware.USER_AGENT
+import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.SmithyBusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
@@ -70,7 +71,11 @@ class BusinessMetricsInterceptorTest {
         executionContext.attributes[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics] = mutableSetOf()
 
         for (i in 0..1024) {
-            executionContext.attributes[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics].add(i.toString())
+            executionContext.emitBusinessMetric(
+                object : BusinessMetric {
+                    override val identifier: String = i.toString()
+                },
+            )
         }
 
         val rawMetrics = executionContext[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics]
@@ -91,9 +96,12 @@ class BusinessMetricsInterceptorTest {
     @Test
     fun malformedBusinessMetrics() = runTest {
         val executionContext = ExecutionContext()
+        val reallyLongMetric = "All work and no play makes Jack a dull boy".repeat(1000)
 
-        executionContext.attributes[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics] = mutableSetOf(
-            "A".repeat(BUSINESS_METRICS_MAX_LENGTH),
+        executionContext.attributes.emitBusinessMetric(
+            object : BusinessMetric {
+                override val identifier: String = reallyLongMetric
+            },
         )
 
         val interceptor = BusinessMetricsInterceptor()
