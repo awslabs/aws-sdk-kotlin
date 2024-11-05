@@ -1,6 +1,6 @@
+import aws.sdk.kotlin.codegen.smoketests.AWS_SERVICE_FILTER
+import aws.sdk.kotlin.codegen.smoketests.AWS_SKIP_TAGS
 import org.gradle.testkit.runner.GradleRunner
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SERVICE_FILTER
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SKIP_TAGS
 import java.io.File
 import kotlin.test.*
 
@@ -32,7 +32,7 @@ class SmokeTestE2ETest {
 
     @Test
     fun successServiceSkipTags() {
-        val envVars = mapOf(SKIP_TAGS to "success")
+        val envVars = mapOf(AWS_SKIP_TAGS to "success")
         val smokeTestRunnerOutput = runSmokeTests("successService", envVars)
 
         assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTest - no error expected from service")
@@ -41,7 +41,7 @@ class SmokeTestE2ETest {
 
     @Test
     fun successServiceServiceFilter() {
-        val envVars = mapOf(SERVICE_FILTER to "Failure") // Only run tests for services with this SDK ID
+        val envVars = mapOf(AWS_SERVICE_FILTER to "Failure") // Only run tests for services with this SDK ID
         val smokeTestRunnerOutput = runSmokeTests("successService", envVars)
 
         assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTest - no error expected from service # skip")

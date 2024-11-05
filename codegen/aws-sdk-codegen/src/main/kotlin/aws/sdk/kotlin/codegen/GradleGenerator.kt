@@ -6,7 +6,6 @@ package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.testing.TestFailedResponseTrait
 import aws.sdk.kotlin.codegen.model.traits.testing.TestSuccessResponseTrait
-import aws.sdk.kotlin.codegen.smoketests.smokeTestDenyList
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
@@ -72,7 +71,7 @@ class GradleGenerator : KotlinIntegration {
                             }
                         }
                 }
-                if (ctx.model.topDownOperations(ctx.settings.service).any { it.hasTrait<SmokeTestsTrait>() } && ctx.settings.sdkId !in smokeTestDenyList) {
+                if (ctx.model.topDownOperations(ctx.settings.service).any { it.hasTrait<SmokeTestsTrait>() }) {
                     write("")
                     generateSmokeTestConfig(writer, ctx)
                 }

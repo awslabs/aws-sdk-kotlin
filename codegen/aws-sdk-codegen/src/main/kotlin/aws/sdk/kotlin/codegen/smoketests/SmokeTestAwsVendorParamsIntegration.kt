@@ -1,232 +1,160 @@
 package aws.sdk.kotlin.codegen.smoketests
 
 import aws.sdk.kotlin.codegen.AwsRuntimeTypes
-import software.amazon.smithy.codegen.core.SymbolProvider
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.*
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
+import software.amazon.smithy.kotlin.codegen.core.getContextValue
+import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
 import software.amazon.smithy.kotlin.codegen.rendering.smoketests.*
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.ParamName
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.ParamShape
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.Parameter
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.Param.SymbolProvider
-import software.amazon.smithy.kotlin.codegen.rendering.util.format
-import software.amazon.smithy.kotlin.codegen.utils.dq
 import software.amazon.smithy.kotlin.codegen.utils.topDownOperations
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.node.*
-import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.smoketests.traits.SmokeTestsTrait
 
 /**
- * Code generates AWS specific code for smoke test runners
+ * Generates AWS specific code for smoke test runners
  */
 class AwsSmokeTestsRunnerGeneratorIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
         model.topDownOperations(settings.service).any { it.hasTrait<SmokeTestsTrait>() }
 
     override val sectionWriters: List<SectionWriterBinding>
-        get() =
-            dualStackSectionWriters +
-                sigv4aRegionSetSectionWriters +
-                uriSectionWriters +
-                accountIdEndpointSectionWriters +
-                regionSectionWriters +
-                useAccelerateSectionWriters +
-                useMultiRegionAccessPointsSectionWriters +
-                useGlobalEndpointSectionWriters +
-                listOf(parameterGenerator) // TODO: Convert this so that all can be placed here in this list
+        get() = listOf(
+            AwsSmokeTestsRunnerGenerator.regionEnvironmentVariable,
+            AwsSmokeTestsRunnerGenerator.clientConfig,
+            AwsSmokeTestsRunnerGenerator.defaultClientConfig,
+            AwsSmokeTestsRunnerGenerator.skipTagsEnvironmentVariable,
+            AwsSmokeTestsRunnerGenerator.serviceFilterEnvironmentVariable,
+        )
 }
 
 /**
- * TODO: Write
+ * The section writer bindings used by [AwsSmokeTestsRunnerGeneratorIntegration]
  */
-private val parameterGenerator =
-    SectionWriterBinding(Param) { writer, _ ->
-        val paramName = writer.getContextValue(ParamName)
-        val parameter = writer.getContextValue(Parameter)
-        val shape = writer.getContextValue(ParamShape)
-
-        val symbolProvider = writer.getContextValue(SymbolProvider)
-
-        coerceParameterToModeledShape(
-            parameter,
-            shape,
-            paramName,
-            writer,
-            symbolProvider,
-        )
-    }
-
-fun coerceParameterToModeledShape(
-    param: Node,
-    customShape: Shape?,
-    name: String,
-    writer: KotlinWriter,
-    symbolProvider: SymbolProvider
-) {
-    if (customShape == null || customShape.isCompatibleWithNodeTypes) {
-        writer.writeInline("#L", param.format())
-    }
-
-    if (customShape != null) writer.write("// ${customShape::class.simpleName}")
-
-    when (customShape) {
-        is DocumentShape -> {} // TODO: Unknown !
-        is BlobShape -> {} // TODO: Unknown !
-        is EnumShape -> {
-            val enumSymbol = symbolProvider.toSymbol(customShape)
-            val enumValue = param.asStringNode().get().value
-
-            writer.write("#T.#L", enumSymbol, enumValue)
-        }
-        is MemberShape -> {} // TODO: Important !
-        is TimestampShape -> {} // TODO: Unknown !
-        is UnionShape -> {} // TODO: Important !
-//        else -> throw Exception("Code generation unsupported for smoke test operation parameter '$name' of type '$customShape'.")
-    }
-}
-
-private val Shape.isCompatibleWithNodeTypes: Boolean
-    get() = when (this) {
-        is NumberShape, // TODO: Maybe not all numbers are okay?
-        is MapShape,
-        is StringShape,
-        is BooleanShape, // TODO: One of these can actually be an enum.....
-        is CollectionShape -> true
-
-        else -> false
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Uses the AWS Kotlin SDK specific name for the dual stack config option i.e. `useDualstack` -> `useDualStack`
- */
-private val dualStackSectionWriters = listOf(
-    SectionWriterBinding(SmokeTestUseDualStackKey) { writer, _ -> writer.writeInline("useDualStack") },
-)
-
-/**
- * Uses the AWS Kotlin SDK specific name for the sigV4a signing region set option i.e.
- * `sigv4aRegionSet` -> `sigV4aSigningRegionSet`.
- *
- * Converts the modeled sigV4a signing region set from a list to a set.
- *
- * Adds additional config needed for the SDK to make sigV4a calls
- */
-private val sigv4aRegionSetSectionWriters = listOf(
-    SectionWriterBinding(SmokeTestSigv4aRegionSetKey) { writer, _ -> writer.writeInline("sigV4aSigningRegionSet") },
-    SectionWriterBinding(SmokeTestSigv4aRegionSetValue) { writer, value ->
-        writer.write("#L.toSet()", value)
-        // TODO: Remove once sigV4a is supported for default signer.
-        writer.write(
-            "authSchemes = listOf(#T(#T))",
-            RuntimeTypes.Auth.HttpAuthAws.SigV4AsymmetricAuthScheme,
-            RuntimeTypes.Auth.AwsSigningCrt.CrtAwsSigner,
-        )
-    },
-)
-
-/**
- * Ensures we use the provided URI
- */
-private val uriSectionWriters = listOf(
-    SectionWriterBinding(SmokeTestUriKey) { writer, _ -> writer.writeInline("endpointProvider") },
-    SectionWriterBinding(SmokeTestUriValue) { writer, value ->
-        val endpointProvider = writer.getContextValue(SmokeTestUriValue.EndpointProvider)
-        val endpointParameters = writer.getContextValue(SmokeTestUriValue.EndpointParameters)
-        writer.withBlock("object : #T {", "}", endpointProvider) {
-            write(
-                "override suspend fun resolveEndpoint(params: #T): #T = #T(#L)",
-                endpointParameters,
-                RuntimeTypes.SmithyClient.Endpoints.Endpoint,
-                RuntimeTypes.SmithyClient.Endpoints.Endpoint,
-                value,
+private object AwsSmokeTestsRunnerGenerator {
+    /**
+     * Adds region environment variable support to AWS smoke test runners.
+     * Preserves other environment variables added via section writer binding, if any.
+     */
+    val regionEnvironmentVariable =
+        SectionWriterBinding(SmokeTestsRunnerGenerator.AdditionalEnvironmentVariables) { writer, previous ->
+            writer.write("#L", previous)
+            writer.write(
+                "private val regionOverride = #T.System.getenv(#S)",
+                RuntimeTypes.Core.Utils.PlatformProvider,
+                AWS_REGION,
             )
         }
-    },
-)
 
-/**
- * Uses the AWS Kotlin SDK specific way of configuring `accountIdEndpointMode`
- */
-private val accountIdEndpointSectionWriters = listOf(
-    SectionWriterBinding(SmokeTestAccountIdBasedRoutingKey) { writer, _ -> writer.writeInline("accountIdEndpointMode") },
-    SectionWriterBinding(SmokeTestAccountIdBasedRoutingValue) { writer, value ->
-        when (value) {
-            "true" -> writer.write("#T.REQUIRED", AwsRuntimeTypes.Config.Endpoints.AccountIdEndpointMode)
-            "false" -> writer.write("#T.DISABLED", AwsRuntimeTypes.Config.Endpoints.AccountIdEndpointMode)
+    /**
+     * Add AWS specific client config support to AWS smoke test runners
+     */
+    val clientConfig =
+        SectionWriterBinding(SmokeTestsRunnerGenerator.ClientConfig) { writer, _ ->
+            val name = writer.getContextValue(SmokeTestsRunnerGenerator.ClientConfig.Name)
+            val value = writer.getContextValue(SmokeTestsRunnerGenerator.ClientConfig.Value)
+
+            // Normalize client config names
+            val newName = when (name) {
+                "uri" -> "endpointProvider"
+                "useDualstack" -> "useDualStack"
+                "sigv4aRegionSet" -> "sigV4aSigningRegionSet"
+                "useAccountIdRouting" -> "accountIdEndpointMode"
+                "useAccelerate" -> "enableAccelerate"
+                "useMultiRegionAccessPoints" -> "disableMrap"
+                "useGlobalEndpoint" -> {
+                    writer.write("throw Exception(#S)", "'useGlobalEndpoint' is not supported by the SDK")
+                    return@SectionWriterBinding
+                }
+                else -> name
+            }
+            writer.writeInline("#L = ", newName)
+
+            // Normalize client values
+            when (newName) {
+                "endpointProvider" -> {
+                    val endpointProvider = writer.getContextValue(SmokeTestsRunnerGenerator.ClientConfig.EndpointProvider)
+                    val endpointParameters = writer.getContextValue(SmokeTestsRunnerGenerator.ClientConfig.EndpointParams)
+
+                    writer.withBlock("object : #T {", "}", endpointProvider) {
+                        write(
+                            "override suspend fun resolveEndpoint(params: #1T): #2T = #2T(#3L)",
+                            endpointParameters,
+                            RuntimeTypes.SmithyClient.Endpoints.Endpoint,
+                            value,
+                        )
+                    }
+                }
+                "sigV4aSigningRegionSet" -> {
+                    // Render new value
+                    writer.write("#L.toSet()", value)
+                    // Also configure sigV4a - TODO: Remove once sigV4a is supported for default signer.
+                    writer.write(
+                        "authSchemes = listOf(#T(#T))",
+                        RuntimeTypes.Auth.HttpAuthAws.SigV4AsymmetricAuthScheme,
+                        RuntimeTypes.Auth.AwsSigningCrt.CrtAwsSigner,
+                    )
+                }
+                "accountIdEndpointMode" -> {
+                    when (value) {
+                        "true" -> writer.write("#T.REQUIRED", AwsRuntimeTypes.Config.Endpoints.AccountIdEndpointMode)
+                        "false" -> writer.write("#T.DISABLED", AwsRuntimeTypes.Config.Endpoints.AccountIdEndpointMode)
+                    }
+                }
+                "disableMrap" -> {
+                    when (value) {
+                        "true" -> writer.write("false")
+                        "false" -> writer.write("true")
+                    }
+                }
+                "region" -> {
+                    writer.write("regionOverride ?: #L", value)
+                }
+                else -> writer.write("#L", value)
+            }
         }
-    },
-)
 
-/**
- * Gets region override environment variable.
- *
- * Sets region override as default.
- *
- * Sets region override as default client config if no other client config is modelled.
- */
-private val regionSectionWriters = listOf(
-    SectionWriterBinding(SmokeTestAdditionalEnvVars) { writer, _ ->
-        writer.write(
-            "private val regionOverride = #T.System.getenv(#S)",
-            RuntimeTypes.Core.Utils.PlatformProvider,
-            "AWS_SMOKE_TEST_REGION",
-        )
-    },
-    SectionWriterBinding(SmokeTestRegionDefault) { writer, _ ->
-        writer.writeInline("regionOverride ?: ")
-    },
-    SectionWriterBinding(SmokeTestDefaultConfig) { writer, _ -> writer.write("region = regionOverride") },
-)
-
-/**
- * Uses the AWS Kotlin SDK specific name for the S3 accelerate config option i.e. `useAccelerate` -> `enableAccelerate`
- */
-private val useAccelerateSectionWriters = listOf(
-    SectionWriterBinding(SmokeTestUseAccelerateKey) { writer, _ -> writer.writeInline("enableAccelerate") },
-)
-
-/**
- * Uses the AWS Kotlin SDK specific name for the S3 multi region access points (MRAP) config option i.e.
- * `useMultiRegionAccessPoints` -> `disableMrap`.
- *
- * Our config option is opt out while the modeled config is opt in so we invert the boolean values.
- */
-private val useMultiRegionAccessPointsSectionWriters = listOf(
-    SectionWriterBinding(SmokeTestUseMultiRegionAccessPointsKey) { writer, _ -> writer.writeInline("disableMrap") },
-    SectionWriterBinding(SmokeTestUseMultiRegionAccessPointsValue) { writer, value ->
-        when (value) {
-            "true" -> writer.write("false")
-            "false" -> writer.write("true")
+    /**
+     * Add default client config to AWS smoke test runners.
+     * Preserves previous default config if any.
+     */
+    val defaultClientConfig =
+        SectionWriterBinding(SmokeTestsRunnerGenerator.DefaultClientConfig) { writer, previous ->
+            writer.write("#L", previous)
+            writer.write("region = regionOverride")
         }
-    },
-)
+
+    /**
+     * Replaces environment variable with one specific to AWS smoke test runners
+     */
+    val skipTagsEnvironmentVariable =
+        SectionWriterBinding(SmokeTestsRunnerGenerator.SkipTags) { writer, _ -> writer.writeInline("#S", AWS_SKIP_TAGS) }
+
+    /**
+     * Replaces environment variable with one specific to AWS smoke test runners
+     */
+    val serviceFilterEnvironmentVariable =
+        SectionWriterBinding(SmokeTestsRunnerGenerator.ServiceFilter) { writer, _ -> writer.writeInline("#S", AWS_SERVICE_FILTER) }
+}
 
 /**
- * Leaves a comment in the client config whenever the use of the `useGlobalEndpoint` S3 config option is modeled.
- *
- * The SDK does not support this config option.
- * See `BindAwsEndpointBuiltins` & `S3_USE_GLOBAL_ENDPOINT`
+ * Env var for AWS smoke test runners.
+ * Should be a string that corresponds to an AWS region.
+ * The region to use when executing smoke tests. This value MUST override any value supplied in the smoke tests themselves.
  */
-private val useGlobalEndpointSectionWriters = listOf(
-    SectionWriterBinding(SmokeTestUseGlobalEndpoint) { writer, _ ->
-        writer.write("// Smoke tests modeled the use of `useGlobalEndpoint` config, but it's not supported by the SDK")
-    },
-)
+private const val AWS_REGION = "AWS_SMOKE_TEST_REGION"
+
+/**
+ * Env var for AWS smoke test runners.
+ * Should be a comma-delimited list of strings that correspond to tags on the test cases.
+ * If a test case is tagged with one of the tags indicated by AWS_SMOKE_TEST_SKIP_TAGS, it MUST be skipped by the smoke test runner.
+ */
+const val AWS_SKIP_TAGS = "AWS_SMOKE_TEST_SKIP_TAGS"
+
+/**
+ * Env var for AWS smoke test runners.
+ * Should be a comma-separated list of service identifiers to test.
+ */
+const val AWS_SERVICE_FILTER = "AWS_SMOKE_TEST_SERVICE_IDS"

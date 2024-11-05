@@ -32,6 +32,7 @@ fun configureProject() {
         codegen(libs.smithy.cli)
         codegen(libs.smithy.model)
 
+        implementation(project(":codegen:aws-sdk-codegen"))
         implementation(libs.smithy.kotlin.codegen)
 
         testImplementation(libs.kotlin.test)
