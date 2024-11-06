@@ -39,7 +39,7 @@ private object AwsSmokeTestsRunnerGenerator {
      * Preserves other environment variables added via section writer binding, if any.
      */
     val regionEnvironmentVariable =
-        SectionWriterBinding(AdditionalEnvironmentVariables) { writer, previous ->
+        SectionWriterBinding(SmokeTestSectionIds.AdditionalEnvironmentVariables) { writer, previous ->
             writer.write("#L", previous)
             writer.write(
                 "private val regionOverride = #T.System.getenv(#S)",
@@ -52,9 +52,9 @@ private object AwsSmokeTestsRunnerGenerator {
      * Add AWS specific client config support to AWS smoke test runners
      */
     val clientConfig =
-        SectionWriterBinding(ClientConfig) { writer, _ ->
-            val name = writer.getContextValue(ClientConfig.Name)
-            val value = writer.getContextValue(ClientConfig.Value)
+        SectionWriterBinding(SmokeTestSectionIds.ClientConfig) { writer, _ ->
+            val name = writer.getContextValue(SmokeTestSectionIds.ClientConfig.Name)
+            val value = writer.getContextValue(SmokeTestSectionIds.ClientConfig.Value)
 
             // Normalize client config names
             val newName = when (name) {
@@ -65,7 +65,7 @@ private object AwsSmokeTestsRunnerGenerator {
                 "useAccelerate" -> "enableAccelerate"
                 "useMultiRegionAccessPoints" -> "disableMrap"
                 "useGlobalEndpoint" -> {
-                    writer.write("throw Exception(#S)", "'useGlobalEndpoint' is not supported by the SDK")
+                    writer.write("throw #T(#S)", RuntimeTypes.Core.SmokeTests.SmokeTestsException, "'useGlobalEndpoint' is not supported by the SDK")
                     return@SectionWriterBinding
                 }
                 else -> name
@@ -75,8 +75,8 @@ private object AwsSmokeTestsRunnerGenerator {
             // Normalize client values
             when (newName) {
                 "endpointProvider" -> {
-                    val endpointProvider = writer.getContextValue(ClientConfig.EndpointProvider)
-                    val endpointParameters = writer.getContextValue(ClientConfig.EndpointParams)
+                    val endpointProvider = writer.getContextValue(SmokeTestSectionIds.ClientConfig.EndpointProvider)
+                    val endpointParameters = writer.getContextValue(SmokeTestSectionIds.ClientConfig.EndpointParams)
 
                     writer.withBlock("object : #T {", "}", endpointProvider) {
                         write(
@@ -121,7 +121,7 @@ private object AwsSmokeTestsRunnerGenerator {
      * Preserves previous default config if any.
      */
     val defaultClientConfig =
-        SectionWriterBinding(DefaultClientConfig) { writer, previous ->
+        SectionWriterBinding(SmokeTestSectionIds.DefaultClientConfig) { writer, previous ->
             writer.write("#L", previous)
             writer.write("region = regionOverride")
         }
@@ -130,13 +130,13 @@ private object AwsSmokeTestsRunnerGenerator {
      * Replaces environment variable with one specific to AWS smoke test runners
      */
     val skipTagsEnvironmentVariable =
-        SectionWriterBinding(SkipTags) { writer, _ -> writer.writeInline("#S", AWS_SKIP_TAGS) }
+        SectionWriterBinding(SmokeTestSectionIds.SkipTags) { writer, _ -> writer.writeInline("#S", AWS_SKIP_TAGS) }
 
     /**
      * Replaces environment variable with one specific to AWS smoke test runners
      */
     val serviceFilterEnvironmentVariable =
-        SectionWriterBinding(ServiceFilter) { writer, _ -> writer.writeInline("#S", AWS_SERVICE_FILTER) }
+        SectionWriterBinding(SmokeTestSectionIds.ServiceFilter) { writer, _ -> writer.writeInline("#S", AWS_SERVICE_FILTER) }
 }
 
 /**

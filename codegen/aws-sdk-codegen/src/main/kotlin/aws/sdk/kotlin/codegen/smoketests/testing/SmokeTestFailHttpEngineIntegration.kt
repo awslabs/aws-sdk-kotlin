@@ -10,7 +10,7 @@ import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.hasTrait
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.HttpEngineOverride
+import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SmokeTestSectionIds
 import software.amazon.smithy.kotlin.codegen.utils.topDownOperations
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -29,7 +29,7 @@ class SmokeTestFailHttpEngineIntegration : KotlinIntegration {
 
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
-            SectionWriterBinding(HttpEngineOverride, httpClientOverride),
+            SectionWriterBinding(SmokeTestSectionIds.HttpEngineOverride, httpClientOverride),
         )
 
     private val httpClientOverride = SectionWriter { writer, _ ->
