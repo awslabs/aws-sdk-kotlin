@@ -20,7 +20,6 @@ import aws.smithy.kotlin.runtime.http.request.toBuilder
 public class BusinessMetricsInterceptor : HttpInterceptor {
     override suspend fun modifyBeforeTransmit(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
         context.executionContext.getOrNull(BusinessMetrics)?.let { metrics ->
-            throw Exception("Metrics: $metrics")
             val metricsString = formatMetrics(metrics)
             val currentUserAgentHeader = context.protocolRequest.headers[USER_AGENT]
             val modifiedRequest = context.protocolRequest.toBuilder()
