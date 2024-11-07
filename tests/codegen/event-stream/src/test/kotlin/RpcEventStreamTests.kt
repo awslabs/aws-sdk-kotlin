@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.test.eventstream.awsjson11.model.MessageWithString
-import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStream
-import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStreamOperationWithInitialRequestResponseRequest
-import aws.sdk.kotlin.test.eventstream.awsjson11.model.TestStreamOperationWithInitialRequestResponseResponse
-import aws.sdk.kotlin.test.eventstream.awsjson11.serde.deserializeTestStreamOperationWithInitialRequestResponseOperationBody
-import aws.sdk.kotlin.test.eventstream.awsjson11.serde.serializeTestStreamOperationWithInitialRequestResponseOperationBody
+import aws.sdk.kotlin.test.awsjson11.model.MessageWithString
+import aws.sdk.kotlin.test.awsjson11.model.TestStream
+import aws.sdk.kotlin.test.awsjson11.model.TestStreamOperationWithInitialRequestResponseRequest
+import aws.sdk.kotlin.test.awsjson11.model.TestStreamOperationWithInitialRequestResponseResponse
+import aws.sdk.kotlin.test.awsjson11.serde.deserializeTestStreamOperationWithInitialRequestResponseOperationBody
+import aws.sdk.kotlin.test.awsjson11.serde.serializeTestStreamOperationWithInitialRequestResponseOperationBody
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes

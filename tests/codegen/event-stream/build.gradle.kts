@@ -14,7 +14,7 @@ plugins {
 
 description = "Event stream codegen integration test suite"
 
-data class EventStreamTest(
+data class Test(
     val projectionName: String,
     val protocolName: String,
     val modelTemplate: File,
@@ -24,8 +24,8 @@ data class EventStreamTest(
 }
 
 val tests = listOf(
-    EventStreamTest("restJson1", "restJson1", file("event-stream-model-template.smithy")),
-    EventStreamTest("awsJson11", "awsJson1_1", file("event-stream-initial-request-response.smithy")),
+    Test("restJson1", "restJson1", file("event-stream-model-template.smithy")),
+    Test("awsJson11", "awsJson1_1", file("event-stream-initial-request-response.smithy")),
 )
 
 fun fillInModel(output: File, protocolName: String, template: File) {
@@ -42,7 +42,7 @@ fun fillInModel(output: File, protocolName: String, template: File) {
     output.writeText(replaced)
 }
 
-val testServiceShapeId = "aws.sdk.kotlin.test.eventstream#TestService"
+val testServiceShapeId = "aws.sdk.kotlin.test#TestService"
 smithyBuild {
     tests.forEach { test ->
 
@@ -61,7 +61,7 @@ smithyBuild {
 
             smithyKotlinPlugin {
                 serviceShapeId = testServiceShapeId
-                packageName = "aws.sdk.kotlin.test.eventstream.${test.projectionName.lowercase()}"
+                packageName = "aws.sdk.kotlin.test.${test.projectionName.lowercase()}"
                 packageVersion = "1.0"
                 buildSettings {
                     generateFullProject = false

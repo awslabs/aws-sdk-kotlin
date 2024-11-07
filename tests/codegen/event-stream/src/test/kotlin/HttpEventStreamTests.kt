@@ -4,9 +4,9 @@
  */
 
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.test.eventstream.restjson1.model.*
-import aws.sdk.kotlin.test.eventstream.restjson1.serde.deserializeTestStreamOpOperationBody
-import aws.sdk.kotlin.test.eventstream.restjson1.serde.serializeTestStreamOpOperationBody
+import aws.sdk.kotlin.test.restjson1.model.*
+import aws.sdk.kotlin.test.restjson1.serde.deserializeTestStreamOpOperationBody
+import aws.sdk.kotlin.test.restjson1.serde.serializeTestStreamOpOperationBody
 import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigningAttributes
