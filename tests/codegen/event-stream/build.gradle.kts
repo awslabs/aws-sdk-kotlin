@@ -3,10 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
-
 
 description = "Event stream codegen integration test suite"
 
@@ -78,56 +76,12 @@ tasks.generateSmithyBuild {
     }
 }
 
-val optinAnnotations = listOf(
-    "kotlin.RequiresOptIn",
-    "aws.smithy.kotlin.runtime.InternalApi",
-    "aws.sdk.kotlin.runtime.InternalSdkApi",
-)
-kotlin.sourceSets.all {
-    optinAnnotations.forEach { languageSettings.optIn(it) }
-}
-
-kotlin.sourceSets.getByName("test") {
-    smithyBuild.projections.forEach {
-        kotlin.srcDir(smithyBuild.smithyKotlinProjectionSrcDir(it.name))
+kotlin {
+    sourceSets {
+        commonTest {
+            smithyBuild.projections.forEach {
+                kotlin.srcDir(smithyBuild.smithyKotlinProjectionSrcDir(it.name))
+            }
+        }
     }
 }
-
-tasks.test {
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-        showStandardStreams = true
-        showStackTraces = true
-        showExceptions = true
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-    }
-}
-
-//dependencies {
-//
-//    implementation(libs.kotlinx.coroutines.core)
-//
-//    testImplementation(libs.kotlin.test)
-//    testImplementation(libs.kotlin.test.junit5)
-//    testImplementation(libs.kotlinx.coroutines.test)
-//
-//    testImplementation(libs.smithy.kotlin.smithy.test)
-//    testImplementation(libs.smithy.kotlin.aws.signing.default)
-//    testImplementation(libs.smithy.kotlin.telemetry.api)
-//
-//    // have to manually add all the dependencies of the generated client(s)
-//    // doing it this way (as opposed to doing what we do for protocol-tests) allows
-//    // the tests to work without a publish to maven-local step at the cost of maintaining
-//    // this set of dependencies manually
-//    // <-- BEGIN GENERATED DEPENDENCY LIST -->
-//    implementation(libs.bundles.smithy.kotlin.service.client)
-//    implementation(libs.smithy.kotlin.aws.event.stream)
-//    implementation(project(":aws-runtime:aws-http"))
-//    implementation(libs.smithy.kotlin.aws.json.protocols)
-//    implementation(libs.smithy.kotlin.serde.json)
-//    api(project(":aws-runtime:aws-config"))
-//    api(project(":aws-runtime:aws-core"))
-//    api(project(":aws-runtime:aws-endpoint"))
-//    // <-- END GENERATED DEPENDENCY LIST -->
-//}

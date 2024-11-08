@@ -9,9 +9,14 @@ import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
 
 description = "Tests for smoke tests runners"
 
-plugins {
-    alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
-    alias(libs.plugins.kotlin.jvm)
+kotlin {
+    sourceSets {
+        jvmTest {
+            dependencies {
+                implementation("dev.gradleplugins:gradle-test-kit:7.3.3") // TODO: Use lib.versions.toml
+            }
+        }
+    }
 }
 
 val projections = listOf(
@@ -20,29 +25,12 @@ val projections = listOf(
     Projection("exceptionService", "smoke-tests-exception.smithy", "smithy.kotlin.traits#ExceptionService"),
 )
 
-configureProject()
 configureProjections()
 configureTasks()
 
-fun configureProject() {
-    val codegen by configurations.getting
-
-    dependencies {
-        codegen(project(":codegen:aws-sdk-codegen"))
-        codegen(libs.smithy.cli)
-        codegen(libs.smithy.model)
-
-        implementation(project(":codegen:aws-sdk-codegen"))
-        implementation(libs.smithy.kotlin.codegen)
-
-        testImplementation(libs.kotlin.test)
-        testImplementation(gradleTestKit())
-    }
-}
-
 fun configureProjections() {
     smithyBuild {
-        val pathToSmithyModels = "src/test/resources/"
+        val pathToSmithyModels = "src/jvmTest/resources/"
 
         this@Build_gradle.projections.forEach { projection ->
             projections.register(projection.name) {
@@ -105,14 +93,6 @@ fun configureTasks() {
     tasks.withType<Test> {
         dependsOn(tasks.getByName("stageServices"))
         mustRunAfter(tasks.getByName("stageServices"))
-
-        testLogging {
-            events("passed", "skipped", "failed")
-            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-            showExceptions = true
-            showCauses = true
-            showStackTraces = true
-        }
     }
 }
 
