@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.3.69] - 11/07/2024
+
+### Features
+* (**autoscaling**) Auto Scaling groups now support the ability to strictly balance instances across Availability Zones by configuring the AvailabilityZoneDistribution parameter. If balanced-only is configured for a group, launches will always be attempted in the under scaled Availability Zone even if it is unhealthy.
+* (**bedrockagent**) Add prompt support for chat template configuration and agent generative AI resource. Add support for configuring an optional guardrail in Prompt and Knowledge Base nodes in Prompt Flows. Add API to validate flow definition
+* (**bedrockruntime**) Add Prompt management support to Bedrock runtime APIs: Converse, ConverseStream, InvokeModel, InvokeModelWithStreamingResponse
+* (**cleanrooms**) This release introduces support for Custom Models in AWS Clean Rooms ML.
+* (**cleanroomsml**) This release introduces support for Custom Models in AWS Clean Rooms ML.
+* (**quicksight**) Add Client Credentials based OAuth support for Snowflake and Starburst
+* (**resourceexplorer2**) Add GetManagedView, ListManagedViews APIs.
+* (**synthetics**) Add support to toggle if a canary will automatically delete provisioned canary resources such as Lambda functions and layers when a canary is deleted.  This behavior can be controlled via the new ProvisionedResourceCleanup property exposed in the CreateCanary and UpdateCanary APIs.
+
+## [1.3.68] - 11/06/2024
+
+### Features
+* (**codebuild**) AWS CodeBuild now adds additional compute types for reserved capacity fleet.
+* (**guardduty**) GuardDuty RDS Protection expands support for Amazon Aurora PostgreSQL Limitless Databases.
+* (**lakeformation**) API changes for new named tag expressions feature.
+* (**qapps**) Introduces category apis in AmazonQApps. Web experience users use Categories to tag and filter library items.
+* (**s3control**) Fix ListStorageLensConfigurations and ListStorageLensGroups deserialization for Smithy SDKs.
+* (**verifiedpermissions**) Adding BatchGetPolicy API which supports the retrieval of multiple policies across multiple policy stores within a single request.
+
 ## [1.3.67] - 11/01/2024
 
 ### Features
