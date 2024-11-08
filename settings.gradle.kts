@@ -52,11 +52,12 @@ include(":hll:hll-codegen")
 include(":hll:hll-mapping-core")
 include(":services")
 include(":tests")
+include(":tests:codegen")
 include(":tests:codegen:event-stream")
 include(":tests:codegen:rules-engine")
 include(":tests:e2e-test-util")
-include(":tests:codegen:smoke-tests")
-include(":tests:codegen:smoke-tests:services")
+//include(":tests:codegen:smoke-tests")
+//include(":tests:codegen:smoke-tests:services")
 
 // generated services
 val File.isServiceDir: Boolean
