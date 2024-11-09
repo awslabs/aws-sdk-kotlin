@@ -58,7 +58,7 @@ smithyBuild {
 
 kotlin {
     sourceSets {
-        commonTest { // TODO: CHANGE TO JUST TEST WHEN NON-KMPing the project
+        commonTest {
             smithyBuild.projections.forEach {
                 kotlin.srcDir(smithyBuild.smithyKotlinProjectionSrcDir(it.name))
             }
