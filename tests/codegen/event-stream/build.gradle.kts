@@ -5,25 +5,10 @@
 
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
+import shared.CodegenTest
+import shared.Model
 
-description = "AWS SDK for Kotlin codegen event stream integration test suite"
-
-apply(from = rootProject.file("buildSrc/shared.gradle.kts"))
-
-data class CodegenTest(
-    val name: String,
-    val model: Model,
-    val serviceShapeId: String,
-    val protocolName: String? = null,
-)
-
-data class Model(
-    val fileName: String,
-    val path: String = "src/commonTest/resources/",
-) {
-    val file: File
-        get() = layout.projectDirectory.file(path + fileName).asFile
-}
+description = "AWS SDK for Kotlin's event stream codegen test suite"
 
 val tests = listOf(
     CodegenTest(
@@ -43,7 +28,7 @@ val tests = listOf(
 smithyBuild {
     tests.forEach { test ->
         projections.register(test.name) {
-            imports = listOf(test.model.file.absolutePath)
+            imports = listOf(layout.projectDirectory.file(test.model.path + test.model.fileName).asFile.absolutePath)
             transforms = listOf(
                 """
                 {
@@ -88,7 +73,7 @@ tasks.generateSmithyBuild {
 }
 
 fun fillInModel(test: CodegenTest) {
-    val modelFile = test.model.file
+    val modelFile = layout.projectDirectory.file(test.model.path + test.model.fileName).asFile
     val model = modelFile.readText()
 
     val opTraits =

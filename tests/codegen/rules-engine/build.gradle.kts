@@ -4,23 +4,10 @@
  */
 
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
+import shared.CodegenTest
+import shared.Model
 
-description = "AWS SDK for Kotlin codegen rules engine integration test suite"
-
-data class CodegenTest(
-    val name: String,
-    val model: Model,
-    val serviceShapeId: String,
-    val protocolName: String? = null,
-)
-
-data class Model(
-    val fileName: String,
-    val path: String = "src/commonTest/resources/",
-) {
-    val file: File
-        get() = layout.projectDirectory.file(path + fileName).asFile
-}
+description = "AWS SDK for Kotlin's rules engine codegen test suite"
 
 val tests = listOf(
     CodegenTest("operationContextParams", Model("operation-context-params.smithy"), "aws.sdk.kotlin.test#TestService")
@@ -29,7 +16,7 @@ val tests = listOf(
 smithyBuild {
     tests.forEach { test ->
         projections.register(test.name) {
-            imports = listOf(test.model.file.absolutePath)
+            imports = listOf(layout.projectDirectory.file(test.model.path + test.model.fileName).asFile.absolutePath)
             smithyKotlinPlugin {
                 serviceShapeId = test.serviceShapeId
                 packageName = "aws.sdk.kotlin.test.${test.name.lowercase()}"

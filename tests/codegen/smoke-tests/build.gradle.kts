@@ -6,8 +6,10 @@
 import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
+import shared.CodegenTest
+import shared.Model
 
-description = "AWS SDK for Kotlin codegen smoke tests integration test suite"
+description = "AWS SDK for Kotlin's smoke test codegen test suite"
 
 kotlin {
     sourceSets {
@@ -17,21 +19,6 @@ kotlin {
             }
         }
     }
-}
-
-data class CodegenTest(
-    val name: String,
-    val model: Model,
-    val serviceShapeId: String,
-    val protocolName: String? = null,
-)
-
-data class Model(
-    val fileName: String,
-    val path: String = "src/jvmTest/resources/",
-) {
-    val file: File
-        get() = layout.projectDirectory.file(path + fileName).asFile
 }
 
 val tests = listOf(
@@ -47,7 +34,7 @@ fun configureProjections() {
     smithyBuild {
         this@Build_gradle.tests.forEach { test ->
             projections.register(test.name) {
-                imports = listOf(test.model.file.absolutePath)
+                imports = listOf(layout.projectDirectory.file(test.model.path + test.model.fileName).asFile.absolutePath)
                 smithyKotlinPlugin {
                     serviceShapeId = test.serviceShapeId
                     packageName = "aws.sdk.kotlin.test.${test.name.lowercase()}"
