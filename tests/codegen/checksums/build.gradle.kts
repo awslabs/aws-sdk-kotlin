@@ -7,7 +7,8 @@ import shared.Model
 description = "AWS SDK for Kotlin's checksums codegen test suite"
 
 val tests = listOf(
-    CodegenTest("checksums", Model("checksums.smithy"), "aws.sdk.kotlin.test#TestService"),
+    CodegenTest("checksums", Model("kitchen-sink.smithy"), "aws.sdk.kotlin.test#TestService"),
+    CodegenTest("clientConfig", Model("client-config.smithy"), "aws.sdk.kotlin.test#ClientConfigTestService"),
 )
 
 smithyBuild {
