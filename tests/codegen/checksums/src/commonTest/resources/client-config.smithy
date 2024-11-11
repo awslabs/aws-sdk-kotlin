@@ -27,7 +27,7 @@ service ClientConfigTestService {
     requestChecksumRequired: false,
     requestAlgorithmMember: "checksumAlgorithm",
 )
-@http(method: "POST", uri: "/test-eventstream", code: 200)
+@http(method: "POST", uri: "/test-checksums", code: 200)
 operation ChecksumsNotRequiredOperation {
     input: SomeInput,
     output: SomeOutput
