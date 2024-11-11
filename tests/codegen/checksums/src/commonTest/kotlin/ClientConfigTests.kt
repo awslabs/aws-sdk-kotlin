@@ -106,6 +106,11 @@ class ClientConfigTests {
             assertTrue(testInterceptor.containsChecksum)
         }
     }
+
+    @Nested
+    inner class ResponseChecksumValidation {
+        // TODO
+    }
 }
 
 private class TestInterceptor : HttpInterceptor {
