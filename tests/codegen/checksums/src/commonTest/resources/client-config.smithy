@@ -20,7 +20,7 @@ use smithy.rules#endpointRuleSet
 })
 service ClientConfigTestService {
     version: "2023-01-01",
-    operations: [ChecksumsNotRequiredOperation]
+    operations: [ChecksumsNotRequiredOperation, ChecksumsRequiredOperation]
 }
 
 @httpChecksum(
@@ -31,6 +31,16 @@ service ClientConfigTestService {
 operation ChecksumsNotRequiredOperation {
     input: SomeInput,
     output: SomeOutput
+}
+
+@httpChecksum(
+    requestChecksumRequired: true,
+    requestAlgorithmMember: "checksumAlgorithm",
+)
+@http(method: "POST", uri: "/test-checksums-2", code: 200)
+operation ChecksumsRequiredOperation {
+    input: AnotherInput,
+    output: AnotherOutput
 }
 
 @input
@@ -45,6 +55,19 @@ structure SomeInput {
 
 @output
 structure SomeOutput {}
+
+@input
+structure AnotherInput {
+    @httpHeader("x-amz-request-algorithm")
+    checksumAlgorithm: ChecksumAlgorithm
+
+    @httpPayload
+    @required
+    body: String
+}
+
+@output
+structure AnotherOutput {}
 
 enum ChecksumAlgorithm {
     CRC32
