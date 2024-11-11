@@ -1,5 +1,6 @@
 
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
+import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
 import shared.CodegenTest
 import shared.Model
 
@@ -25,6 +26,17 @@ smithyBuild {
                         "aws.sdk.kotlin.runtime.InternalSdkApi",
                     )
                 }
+            }
+        }
+    }
+}
+
+// TODO: Commonize this to other codegen tests
+kotlin {
+    sourceSets {
+        commonTest {
+            smithyBuild.projections.forEach {
+                kotlin.srcDir(smithyBuild.smithyKotlinProjectionSrcDir(it.name))
             }
         }
     }
