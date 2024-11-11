@@ -243,6 +243,7 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 	public final fun getAwsMaxAttempts ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsProfile ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsRegion ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
+	public final fun getAwsRequestChecksumCalculation ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsRequestMinCompressionSizeBytes ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsRetryMode ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsRoleArn ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
@@ -258,6 +259,11 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
 	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/AwsSdkSetting;Laws/smithy/kotlin/runtime/util/PlatformProvider;Ljava/lang/String;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/url/Url;
+}
+
+public final class aws/sdk/kotlin/runtime/config/checksums/ResolveRequestChecksumCalculationKt {
+	public static final fun resolveRequestChecksumCalculation (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveRequestChecksumCalculation$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/config/compression/RequestCompressionResolversKt {
@@ -467,6 +473,7 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 	public static synthetic fun getLongOrNull$default (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/Long;
 	public static final fun getMaxAttempts (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/Integer;
 	public static final fun getRegion (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
+	public static final fun getRequestChecksumCalculation (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getRequestMinCompressionSizeBytes (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/Long;
 	public static final fun getRetryMode (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Laws/smithy/kotlin/runtime/client/config/RetryMode;
 	public static final fun getRoleArn (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
