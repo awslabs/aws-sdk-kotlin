@@ -15,13 +15,13 @@ val tests = listOf(
         "restJson1",
         Model("event-stream-model-template.smithy"),
         "aws.sdk.kotlin.test#TestService",
-        "restJson1"
+        "restJson1",
     ),
     CodegenTest(
         "awsJson11",
         Model("event-stream-initial-request-response.smithy"),
         "aws.sdk.kotlin.test#TestService",
-        "awsJson1_1"
+        "awsJson1_1",
     ),
 )
 

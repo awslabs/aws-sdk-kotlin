@@ -214,6 +214,12 @@ public object AwsSdkSetting {
      */
     public val AwsRequestChecksumCalculation: EnvironmentSetting<String> =
         strEnvSetting("aws.requestChecksumCalculation", "AWS_REQUEST_CHECKSUM_CALCULATION")
+
+    /**
+     * todo
+     */
+    public val AwsResponseChecksumValidation: EnvironmentSetting<String> =
+        strEnvSetting("aws.responseChecksumValidation", "AWS_RESPONSE_CHECKSUM_VALIDATION")
 }
 
 /**

@@ -7,6 +7,7 @@ package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.config.checksums.resolveRequestChecksumCalculation
+import aws.sdk.kotlin.runtime.config.checksums.resolveResponseChecksumValidation
 import aws.sdk.kotlin.runtime.config.compression.resolveDisableRequestCompression
 import aws.sdk.kotlin.runtime.config.compression.resolveRequestMinCompressionSizeBytes
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
@@ -99,6 +100,9 @@ public abstract class AbstractAwsSdkClientFactory<
             if (config is HttpChecksumClientConfig.Builder) {
                 config.requestChecksumCalculation =
                     config.requestChecksumCalculation ?: resolveRequestChecksumCalculation(platform, profile)
+
+                config.responseChecksumValidation =
+                    config.responseChecksumValidation ?: resolveResponseChecksumValidation(platform, profile)
             }
 
             finalizeConfig(builder)

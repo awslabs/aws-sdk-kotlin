@@ -175,6 +175,13 @@ public val AwsProfile.requestChecksumCalculation: String?
     get() = getOrNull("request_checksum_calculation")
 
 /**
+ * todo
+ */
+@InternalSdkApi
+public val AwsProfile.responseChecksumValidation: String?
+    get() = getOrNull("response_checksum_validation")
+
+/**
  * Parse a config value as a boolean, ignoring case.
  */
 @InternalSdkApi

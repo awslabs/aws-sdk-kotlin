@@ -2,16 +2,16 @@ import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.test.clientconfig.*
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
-import aws.smithy.kotlin.runtime.client.config.RequestChecksumCalculation
+import aws.smithy.kotlin.runtime.client.config.ChecksumConfigOption
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.httptest.TestEngine
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Nested
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import aws.smithy.kotlin.runtime.httptest.TestEngine
-import org.junit.jupiter.api.Nested
-import kotlin.test.Ignore
 
 class ClientConfigTests {
     @Nested
@@ -22,7 +22,7 @@ class ClientConfigTests {
             val testInterceptor = TestInterceptor()
 
             ClientConfigTestClient {
-                requestChecksumCalculation = RequestChecksumCalculation.WHEN_SUPPORTED
+                requestChecksumCalculation = ChecksumConfigOption.WHEN_SUPPORTED
                 interceptors = mutableListOf(testInterceptor)
                 httpClient = TestEngine()
                 credentialsProvider = StaticCredentialsProvider(
@@ -43,7 +43,7 @@ class ClientConfigTests {
             val testInterceptor = TestInterceptor()
 
             ClientConfigTestClient {
-                requestChecksumCalculation = RequestChecksumCalculation.WHEN_REQUIRED
+                requestChecksumCalculation = ChecksumConfigOption.WHEN_REQUIRED
                 interceptors = mutableListOf(testInterceptor)
                 httpClient = TestEngine()
                 credentialsProvider = StaticCredentialsProvider(
@@ -68,7 +68,7 @@ class ClientConfigTests {
             val testInterceptor = TestInterceptor()
 
             ClientConfigTestClient {
-                requestChecksumCalculation = RequestChecksumCalculation.WHEN_SUPPORTED
+                requestChecksumCalculation = ChecksumConfigOption.WHEN_SUPPORTED
                 interceptors = mutableListOf(testInterceptor)
                 httpClient = TestEngine()
                 credentialsProvider = StaticCredentialsProvider(
@@ -90,7 +90,7 @@ class ClientConfigTests {
             val testInterceptor = TestInterceptor()
 
             ClientConfigTestClient {
-                requestChecksumCalculation = RequestChecksumCalculation.WHEN_REQUIRED
+                requestChecksumCalculation = ChecksumConfigOption.WHEN_REQUIRED
                 interceptors = mutableListOf(testInterceptor)
                 httpClient = TestEngine()
                 credentialsProvider = StaticCredentialsProvider(
