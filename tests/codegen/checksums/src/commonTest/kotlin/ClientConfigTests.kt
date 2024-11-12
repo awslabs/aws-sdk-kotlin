@@ -189,7 +189,7 @@ class ClientConfigTests {
 
         @Test
         @Ignore // todo - unignore
-        fun responseChecksumValidationResponseChecksumValidationWhenRequiredWithRequestValidationModeMember(): Unit = runBlocking {
+        fun responseChecksumValidationResponseChecksumValidationWhenRequiredWithRequestValidationModeEnabled(): Unit = runBlocking {
             var responseChecksumValidated = false
 
             ClientConfigTestClient {
@@ -215,6 +215,7 @@ class ClientConfigTests {
                 try {
                     client.checksumsRequiredOperation {
                         body = "Hello"
+                        validationMode = ValidationMode.Enabled
                     }
                 } catch (_: ChecksumMismatchException) { // "bogus" is not a matching checksum
                     responseChecksumValidated = true
