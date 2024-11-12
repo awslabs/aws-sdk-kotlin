@@ -128,7 +128,7 @@ class ClientConfigTests {
                             Headers {
                                 append("x-amz-checksum-crc32", "bogus")
                             },
-                            "Goodbye!".toHttpBody(),
+                            "World!".toHttpBody(),
                         )
                         val now = Instant.now()
                         HttpCall(request, resp, now, now)
@@ -141,7 +141,7 @@ class ClientConfigTests {
             }.use { client ->
                 try {
                     client.checksumsRequiredOperation {
-                        body = "Hello World!"
+                        body = "Hello"
                     }
                 } catch (_: ChecksumMismatchException) { // "bogus" is not a matching checksum
                     responseChecksumValidated = true
@@ -164,7 +164,7 @@ class ClientConfigTests {
                             Headers {
                                 append("x-amz-checksum-crc32", "bogus")
                             },
-                            "Goodbye!".toHttpBody(),
+                            "World!".toHttpBody(),
                         )
                         val now = Instant.now()
                         HttpCall(request, resp, now, now)
@@ -177,7 +177,7 @@ class ClientConfigTests {
             }.use { client ->
                 try {
                     client.checksumsRequiredOperation {
-                        body = "Hello World!"
+                        body = "Hello"
                     }
                 } catch (_: ChecksumMismatchException) { // "bogus" is not a matching checksum
                     responseChecksumValidated = true
@@ -201,7 +201,7 @@ class ClientConfigTests {
                             Headers {
                                 append("x-amz-checksum-crc32", "bogus")
                             },
-                            "Goodbye!".toHttpBody(),
+                            "World!".toHttpBody(),
                         )
                         val now = Instant.now()
                         HttpCall(request, resp, now, now)
@@ -214,7 +214,7 @@ class ClientConfigTests {
             }.use { client ->
                 try {
                     client.checksumsRequiredOperation {
-                        body = "Hello World!"
+                        body = "Hello"
                     }
                 } catch (_: ChecksumMismatchException) { // "bogus" is not a matching checksum
                     responseChecksumValidated = true
