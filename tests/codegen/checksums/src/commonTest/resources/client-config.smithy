@@ -33,16 +33,6 @@ operation ChecksumsNotRequiredOperation {
     output: SomeOutput
 }
 
-@httpChecksum(
-    requestChecksumRequired: true,
-    requestAlgorithmMember: "checksumAlgorithm",
-)
-@http(method: "POST", uri: "/test-checksums-2", code: 200)
-operation ChecksumsRequiredOperation {
-    input: AnotherInput,
-    output: AnotherOutput
-}
-
 @input
 structure SomeInput {
     @httpHeader("x-amz-request-algorithm")
@@ -56,10 +46,25 @@ structure SomeInput {
 @output
 structure SomeOutput {}
 
+@httpChecksum(
+    requestChecksumRequired: true,
+    requestAlgorithmMember: "checksumAlgorithm",
+    requestValidationModeMember: "validationMode",
+    responseAlgorithms: ["CRC32"]
+)
+@http(method: "POST", uri: "/test-checksums-2", code: 200)
+operation ChecksumsRequiredOperation {
+    input: AnotherInput,
+    output: AnotherOutput
+}
+
 @input
 structure AnotherInput {
     @httpHeader("x-amz-request-algorithm")
     checksumAlgorithm: ChecksumAlgorithm
+
+    @httpHeader("x-amz-response-validation-mode")
+    validationMode: ValidationMode
 
     @httpPayload
     @required
@@ -75,4 +80,8 @@ enum ChecksumAlgorithm {
     CRC64NVME
     SHA1
     SHA256
+}
+
+enum ValidationMode {
+    ENABLED
 }
