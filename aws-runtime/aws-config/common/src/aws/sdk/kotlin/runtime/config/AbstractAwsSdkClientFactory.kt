@@ -98,9 +98,11 @@ public abstract class AbstractAwsSdkClientFactory<
             }
 
             if (config is HttpChecksumClientConfig.Builder) {
+                // TODO - business metric
                 config.requestChecksumCalculation =
                     config.requestChecksumCalculation ?: resolveRequestChecksumCalculation(platform, profile)
 
+                // TODO - business metric
                 config.responseChecksumValidation =
                     config.responseChecksumValidation ?: resolveResponseChecksumValidation(platform, profile)
             }
