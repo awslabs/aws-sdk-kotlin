@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.72] - 11/12/2024
+
+### Features
+* (**codebuild**) AWS CodeBuild now supports non-containerized Linux and Windows builds on Reserved Capacity.
+* (**controltower**) Added ResetEnabledControl API.
+* (**fis**) This release adds support for generating experiment reports with the experiment report configuration
+* (**gamelift**) Amazon GameLift releases container fleets support for general availability. Deploy Linux-based containerized game server software for hosting on Amazon GameLift.
+* (**paymentcryptography**) Updated ListAliases API with KeyArn filter.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation for Amazon RDS Extended Support for Amazon Aurora MySQL.
+
 ## [1.3.71] - 11/11/2024
 
 ### Features
