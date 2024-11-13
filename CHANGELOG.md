@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.73] - 11/13/2024
+
+### Features
+* (**accessanalyzer**) This release adds support for policy validation and external access findings for resource control policies (RCP). IAM Access Analyzer helps you author functional and secure RCPs and awareness that a RCP may restrict external access. Updated service API, documentation, and paginators.
+* (**applicationsignals**) Amazon CloudWatch Application Signals now supports creating Service Level Objectives with burn rates. Users can now create or update SLOs with burn rate configurations to meet their specific business requirements.
+* (**b2bi**) This release adds a GenerateMapping API to allow generation of JSONata or XSLT transformer code based on input and output samples.
+* (**billing**) Today, AWS announces the general availability of ListBillingViews API in the AWS SDKs, to enable AWS Billing Conductor (ABC) users to create proforma Cost and Usage Reports (CUR) programmatically.
+* (**cloudtrail**) This release adds a new API GenerateQuery that generates a query from a natural language prompt about the event data in your event data store. This operation uses generative artificial intelligence (generative AI) to produce a ready-to-use SQL query from the prompt.
+* (**dynamodb**) This release includes supports the new WarmThroughput feature for DynamoDB. You can now provide an optional WarmThroughput attribute for CreateTable or UpdateTable APIs to pre-warm your table or global secondary index. You can also use DescribeTable to see the latest WarmThroughput value.
+* (**ec2**) This release adds the source AMI details in DescribeImages API
+* (**internetmonitor**) Add new query type Routing_Suggestions regarding querying interface
+* (**mediaconvert**) This release adds support for ARN inputs in the Kantar credentials secrets name field and the MSPR field to the manifests for PlayReady DRM protected outputs.
+* (**organizations**) Add support for policy operations on the Resource Control Polices.
+
 ## [1.3.72] - 11/12/2024
 
 ### Features

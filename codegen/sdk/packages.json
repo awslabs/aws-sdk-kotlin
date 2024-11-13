@@ -235,6 +235,12 @@
             "brazilName": "AwsSdkKotlinBedrockRuntime"
         },
         {
+            "sdkId": "Billing",
+            "namespace": "aws.sdk.kotlin.services.billing",
+            "artifactName": "billing",
+            "brazilName": "AwsSdkKotlinBilling"
+        },
+        {
             "sdkId": "Braket",
             "namespace": "aws.sdk.kotlin.services.braket",
             "artifactName": "braket",
