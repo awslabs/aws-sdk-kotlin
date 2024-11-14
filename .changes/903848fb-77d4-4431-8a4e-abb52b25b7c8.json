@@ -1,0 +1,5 @@
+{
+    "id": "903848fb-77d4-4431-8a4e-abb52b25b7c8",
+    "type": "bugfix",
+    "description": "Fix concurrency issues with S3 Express credential caching"
+}
