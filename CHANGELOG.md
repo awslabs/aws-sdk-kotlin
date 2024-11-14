@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.74] - 11/14/2024
+
+### Features
+* (**accessanalyzer**) Expand analyzer configuration capabilities for unused access analyzers. Unused access analyzer configurations now support the ability to exclude accounts and resource tags from analysis providing more granular control over the scope of analysis.
+* (**cloudcontrol**) Added support for CloudFormation Hooks with Cloud Control API. The GetResourceRequestStatus API response now includes an optional HooksProgressEvent and HooksRequestToken parameter for Hooks Invocation Progress as part of resource operation with Cloud Control.
+* (**deadline**) Adds support for select GPU accelerated instance types when creating new service-managed fleets.
+* (**iam**) This release includes support for five new APIs and changes to existing APIs that give AWS Organizations customers the ability to use temporary root credentials, targeted to member accounts in the organization.
+* (**iotwireless**) New FuotaTask resource type to enable logging for your FUOTA tasks. A ParticipatingGatewaysforMulticast parameter to choose the list of gateways to receive the multicast downlink message and the transmission interval between them. Descriptor field which will be sent to devices during FUOTA transfer.
+* (**ivs**) IVS now offers customers the ability to stream multitrack video to Channels.
+* (**licensemanagerusersubscriptions**) New and updated API operations to support License Included User-based Subscription of Microsoft Remote Desktop Services (RDS).
+* (**partnercentralselling**) Announcing AWS Partner Central API for Selling: This service launch Introduces new APIs for co-selling opportunity management and related functions. Key features include notifications, a dynamic sandbox for testing, and streamlined validations.
+* (**quicksight**) This release adds APIs for Custom Permissions management in QuickSight, and APIs to support QuickSight Branding.
+* (**redshift**) Adds support for Amazon Redshift S3AccessGrants
+* (**s3**) This release updates the ListBuckets API Reference documentation in support of the new 10,000 general purpose bucket default quota on all AWS accounts. To increase your bucket quota from 10,000 to up to 1 million buckets, simply request a quota increase via Service Quotas.
+* (**sagemaker**) Add support for Neuron instance types [ trn1/trn1n/inf2 ] on SageMaker Notebook Instances Platform.
+* (**sts**) This release introduces the new API 'AssumeRoot', which returns short-term credentials that you can use to perform privileged tasks.
+
 ## [1.3.73] - 11/13/2024
 
 ### Features
