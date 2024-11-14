@@ -1489,6 +1489,12 @@
             "brazilName": "AwsSdkKotlinPanorama"
         },
         {
+            "sdkId": "PartnerCentral Selling",
+            "namespace": "aws.sdk.kotlin.services.partnercentralselling",
+            "artifactName": "partnercentralselling",
+            "brazilName": "AwsSdkKotlinPartnercentralSelling"
+        },
+        {
             "sdkId": "Payment Cryptography",
             "namespace": "aws.sdk.kotlin.services.paymentcryptography",
             "artifactName": "paymentcryptography",
