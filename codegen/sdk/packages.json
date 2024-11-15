@@ -511,6 +511,12 @@
             "brazilName": "AwsSdkKotlinConnectcampaigns"
         },
         {
+            "sdkId": "ConnectCampaignsV2",
+            "namespace": "aws.sdk.kotlin.services.connectcampaignsv2",
+            "artifactName": "connectcampaignsv2",
+            "brazilName": "AwsSdkKotlinConnectcampaignsv2"
+        },
+        {
             "sdkId": "ConnectCases",
             "namespace": "aws.sdk.kotlin.services.connectcases",
             "artifactName": "connectcases",
