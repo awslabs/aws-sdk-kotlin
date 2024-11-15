@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.75] - 11/15/2024
+
+### Features
+* (**partnercentralselling**) Announcing AWS Partner Central API for Selling: This service launch Introduces new APIs for co-selling opportunity management and related functions. Key features include notifications, a dynamic sandbox for testing, and streamlined validations.
+
+### Fixes
+* Fix concurrency issues with S3 Express credential caching
+
 ## [1.3.74] - 11/14/2024
 
 ### Features
