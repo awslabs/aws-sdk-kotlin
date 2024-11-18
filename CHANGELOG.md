@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.77] - 11/18/2024
+
+### Features
+* (**appconfig**) AWS AppConfig has added a new extension action point, AT_DEPLOYMENT_TICK, to support third-party monitors to trigger an automatic rollback during a deployment.
+* (**autoscaling**) Amazon EC2 Auto Scaling now supports Amazon Application Recovery Controller (ARC) zonal shift and zonal autoshift to help you quickly recover an impaired application from failures in an Availability Zone (AZ).
+* (**cloudformation**) This release adds a new API, ListHookResults, that allows retrieving CloudFormation Hooks invocation results for hooks invoked during a create change set operation or Cloud Control API operation
+* (**connect**) Adds CreateContactFlowVersion and ListContactFlowVersions APIs to create and view the versions of a contact flow.
+* (**customerprofiles**) This release introduces Segmentation APIs and new Calculated Attribute Event Filters as part of Amazon Connect Customer Profiles service.
+* (**ec2**) Adding request and response elements for managed resources.
+* (**ecs**) This release adds support for adding VPC Lattice configurations in ECS CreateService/UpdateService APIs. The configuration allows for associating VPC Lattice target groups with ECS Services.
+* (**iotsitewise**) The release introduces a generative AI Assistant in AWS IoT SiteWise. It includes: 1) InvokeAssistant API - Invoke the Assistant to get alarm summaries and ask questions. 2) Dataset APIs - Manage knowledge base configuration for the Assistant. 3) Portal APIs enhancement - Manage AI-aware dashboards.
+* (**qconnect**) This release introduces MessageTemplate as a resource in Amazon Q in Connect, along with APIs to create, read, search, update, and delete MessageTemplate resources.
+* (**rds**) Add support for the automatic pause/resume feature of Aurora Serverless v2.
+* (**rdsdata**) Add support for the automatic pause/resume feature of Aurora Serverless v2.
+
 ## [1.3.76] - 11/15/2024
 
 ### Features
