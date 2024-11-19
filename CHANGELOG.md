@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.78] - 11/19/2024
+
+### Features
+* (**b2bi**) Add new X12 transactions sets and versions
+* (**ec2**) This release adds VPC Block Public Access (VPC BPA), a new declarative control which blocks resources in VPCs and subnets that you own in a Region from reaching or being reached from the internet through internet gateways and egress-only internet gateways.
+* (**ecs**) This release introduces support for configuring the version consistency feature for individual containers defined within a task definition. The configuration allows to specify whether ECS should resolve the container image tag specified in the container definition to an image digest.
+* (**efs**) Add support for the new parameters in EFS replication APIs
+* (**glue**) AWS Glue Data Catalog now enhances managed table optimizations of Apache Iceberg tables that can be accessed only from a specific Amazon Virtual Private Cloud (VPC) environment.
+* (**keyspaces**) Amazon Keyspaces Multi-Region Replication: Adds support to add new regions to multi and single-region keyspaces.
+* (**mwaa**) Amazon MWAA now supports a new environment class, mw1.micro, ideal for workloads requiring fewer resources than mw1.small. This class supports a single instance of each Airflow component: Scheduler, Worker, and Webserver.
+* (**taxsettings**) Release Tax Inheritance APIs,  Tax Exemption APIs, and functionality update for some existing Tax Registration APIs
+* (**workspaces**) Releasing new ErrorCodes for Image Validation failure during CreateWorkspaceImage process
+
 ## [1.3.77] - 11/18/2024
 
 ### Features
