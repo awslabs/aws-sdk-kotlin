@@ -1,8 +1,0 @@
-{
-    "id": "83a46ab2-f991-41a9-8ec2-ae7098bc7dbc",
-    "type": "feature",
-    "description": "Include Maven Bill of Materials (BOM) in version catalog",
-    "issues": [
-        "https://github.com/awslabs/aws-sdk-kotlin/issues/1440"
-    ]
-}
