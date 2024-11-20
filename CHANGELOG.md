@@ -1871,8 +1871,8 @@
 * (**managedblockchainquery**) Introduces a new API for Amazon Managed Blockchain Query: ListFilteredTransactionEvents.
 
 ### Fixes
-* [#1045](https://github.com/awslabs/smithy-kotlin/issues/1045) ⚠️ **IMPORTANT**: Fix codegen for map shapes which use string enums as map keys. See the [**Map key changes** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1258) for more details
-* [#1041](https://github.com/awslabs/smithy-kotlin/issues/1041) ⚠️ **IMPORTANT**: Disable [OkHttp's transparent response decompression](https://square.github.io/okhttp/features/calls/#rewriting-requests) by manually specifying `Accept-Encoding: identity` in requests. See the [**Disabling automatic response decompression** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1259) for more details.
+* [#1045](https://github.com/smithy-lang/smithy-kotlin/issues/1045) ⚠️ **IMPORTANT**: Fix codegen for map shapes which use string enums as map keys. See the [**Map key changes** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1258) for more details
+* [#1041](https://github.com/smithy-lang/smithy-kotlin/issues/1041) ⚠️ **IMPORTANT**: Disable [OkHttp's transparent response decompression](https://square.github.io/okhttp/features/calls/#rewriting-requests) by manually specifying `Accept-Encoding: identity` in requests. See the [**Disabling automatic response decompression** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1259) for more details.
 
 ### Documentation
 * (**cloudformation**) Documentation update, March 2024. Corrects some formatting.
@@ -2179,7 +2179,7 @@
 * (**workspaces**) This release introduces User-Decoupling feature. This feature allows Workspaces Core customers to provision workspaces without providing users. CreateWorkspaces and DescribeWorkspaces APIs will now take a new optional parameter "WorkspaceName".
 
 ### Fixes
-* [#1031](https://github.com/awslabs/smithy-kotlin/issues/1031) Bump **smithy-kotlin** version to consume upstream fixes for URL parsing
+* [#1031](https://github.com/smithy-lang/smithy-kotlin/issues/1031) Bump **smithy-kotlin** version to consume upstream fixes for URL parsing
 
 ## [1.0.52] - 02/07/2024
 
@@ -2574,7 +2574,7 @@
 * (**location**) This release 1)  adds sub-municipality field in Places API for searching and getting places information, and 2) allows optimizing route calculation based on expected arrival time.
 
 ### Fixes
-* [#1008](https://github.com/awslabs/smithy-kotlin/issues/1008) Upgrade to [**smithy-kotlin** 1.0.3](https://github.com/awslabs/smithy-kotlin/releases/tag/v1.0.3) to consume fixes for URL signing special characters
+* [#1008](https://github.com/smithy-lang/smithy-kotlin/issues/1008) Upgrade to [**smithy-kotlin** 1.0.3](https://github.com/smithy-lang/smithy-kotlin/releases/tag/v1.0.3) to consume fixes for URL signing special characters
 
 ## [1.0.14] - 12/11/2023
 
@@ -2752,7 +2752,7 @@
 ## [1.0.0] - 11/26/2023
 
 ### Features
-* [#659](https://github.com/awslabs/smithy-kotlin/issues/659) BREAKING: Overhaul URL APIs to clarify content encoding, when data is in which state, and to reduce the number of times data is encoded/decoded
+* [#659](https://github.com/smithy-lang/smithy-kotlin/issues/659) BREAKING: Overhaul URL APIs to clarify content encoding, when data is in which state, and to reduce the number of times data is encoded/decoded
 
 ### Fixes
 * **Breaking**: Make some properties of IoT types optional. Previously they defaulted to false, which isn't what the service expects.
@@ -3046,7 +3046,7 @@
 * [#1000](https://github.com/awslabs/aws-sdk-kotlin/issues/1000) Add more parameters for fetching STS credentials
 
 ### Fixes
-* [#935](https://github.com/awslabs/smithy-kotlin/issues/935) Fix closing an event stream causing an IllegalStateException
+* [#935](https://github.com/smithy-lang/smithy-kotlin/issues/935) Fix closing an event stream causing an IllegalStateException
 
 ### Miscellaneous
 * Sync AWS models and bump smithy-kotlin
@@ -3101,7 +3101,7 @@
 ## [0.29.0-beta] - 07/20/2023
 
 ### Features
-* [#146](https://github.com/awslabs/smithy-kotlin/issues/146), [#800](https://github.com/awslabs/aws-sdk-kotlin/issues/800) Enable **Timestream Query** and **Timestream Write** service clients
+* [#146](https://github.com/smithy-lang/smithy-kotlin/issues/146), [#800](https://github.com/awslabs/aws-sdk-kotlin/issues/800) Enable **Timestream Query** and **Timestream Write** service clients
 * [#969](https://github.com/awslabs/aws-sdk-kotlin/issues/969) Make `region` an optional client config parameter to support multi-region use cases
 
 ### Miscellaneous
@@ -3161,7 +3161,7 @@
 ## [0.26.0-beta] - 05/25/2023
 
 ### Features
-* [#755](https://github.com/awslabs/smithy-kotlin/issues/755) **Breaking**: Refresh presigning APIs to simplify usage and add new capabilities. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/925) for more information.
+* [#755](https://github.com/smithy-lang/smithy-kotlin/issues/755) **Breaking**: Refresh presigning APIs to simplify usage and add new capabilities. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/925) for more information.
 
 ### Miscellaneous
 * Sync the latest versions of AWS service models and **smithy-kotlin**
@@ -3285,7 +3285,7 @@
 
 ### Features
 * Sync to latest AWS service models
-* [#446](https://github.com/awslabs/smithy-kotlin/issues/446) Implement flexible checksums customization
+* [#446](https://github.com/smithy-lang/smithy-kotlin/issues/446) Implement flexible checksums customization
 
 ### Miscellaneous
 * Update to latest **smithy-kotlin** version
@@ -3319,7 +3319,7 @@
 **NOTE**: Do not use. Prefer 0.19.4-beta or later.
 
 ### Features
-* [#122](https://github.com/awslabs/smithy-kotlin/issues/122) Add capability to intercept SDK operations
+* [#122](https://github.com/smithy-lang/smithy-kotlin/issues/122) Add capability to intercept SDK operations
 
 ### Miscellaneous
 * Sync AWS service models
@@ -3350,7 +3350,7 @@
 * [#399](https://github.com/awslabs/aws-sdk-kotlin/issues/399) Add support for [S3 Virtual Host Addressing](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html) (enabled by default).
 * [#231](https://github.com/awslabs/aws-sdk-kotlin/issues/231) Add support for [S3 Access Points](https://aws.amazon.com/s3/features/access-points/).
 * Add support for [S3 Object Lambda](https://aws.amazon.com/s3/features/object-lambda/).
-* [#677](https://github.com/awslabs/smithy-kotlin/issues/677) Add a new tracing framework for centralized handling of log messages and metric events and providing easy integration points for connecting to downstream tracing systems (e.g., kotlin-logging)
+* [#677](https://github.com/smithy-lang/smithy-kotlin/issues/677) Add a new tracing framework for centralized handling of log messages and metric events and providing easy integration points for connecting to downstream tracing systems (e.g., kotlin-logging)
 * **BREAKING** Add smithy-modeled endpoint resolvers for AWS services. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/761) for more information.
 * Add support for [S3 PrivateLink](https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html).
 * Add support for [FIPS](https://aws.amazon.com/compliance/fips/) endpoints in client config.
@@ -3458,7 +3458,7 @@
 
 ### Miscellaneous
 * Sync AWS service models.
-* [#216](https://github.com/awslabs/smithy-kotlin/issues/216) Enable [Explicit API mode](https://github.com/Kotlin/KEEP/blob/master/proposals/explicit-api-mode.md)
+* [#216](https://github.com/smithy-lang/smithy-kotlin/issues/216) Enable [Explicit API mode](https://github.com/Kotlin/KEEP/blob/master/proposals/explicit-api-mode.md)
 
 ## [0.17.1-beta] - 07/21/2022
 
@@ -3480,12 +3480,12 @@
 ## [0.16.6-beta] - 07/08/2022
 
 ### Features
-* [#123](https://github.com/awslabs/smithy-kotlin/issues/123) Add support for smithy Document type.
+* [#123](https://github.com/smithy-lang/smithy-kotlin/issues/123) Add support for smithy Document type.
 
 ### Miscellaneous
 * Update AWS models to latest versions
 * Upgrade smithy-kotlin version to 0.11.2
-* [#599](https://github.com/awslabs/smithy-kotlin/issues/599) Upgrade Smithy version to 1.22
+* [#599](https://github.com/smithy-lang/smithy-kotlin/issues/599) Upgrade Smithy version to 1.22
 
 ## [0.16.5-beta] - 07/01/2022
 
@@ -3495,10 +3495,10 @@
 ## [0.16.4-beta] - 06/23/2022
 
 ### Fixes
-* [#139](https://github.com/awslabs/smithy-kotlin/issues/139) Validate that members bound to URI paths are non-null at object construction
+* [#139](https://github.com/smithy-lang/smithy-kotlin/issues/139) Validate that members bound to URI paths are non-null at object construction
 
 ### Miscellaneous
-* Upgrade smithy kotlin to [0.11.0](https://github.com/awslabs/smithy-kotlin/releases/tag/v0.11.0)
+* Upgrade smithy kotlin to [0.11.0](https://github.com/smithy-lang/smithy-kotlin/releases/tag/v0.11.0)
 
 ## [0.16.3-beta] - 06/16/2022
 
@@ -3514,7 +3514,7 @@
 ## [0.16.2-beta] - 06/10/2022
 
 ### Fixes
-* [#619](https://github.com/awslabs/aws-sdk-kotlin/issues/619), [#657](https://github.com/awslabs/smithy-kotlin/issues/657) Upgrade smithy-kotlin to pull in fixes for signing bugs.
+* [#619](https://github.com/awslabs/aws-sdk-kotlin/issues/619), [#657](https://github.com/smithy-lang/smithy-kotlin/issues/657) Upgrade smithy-kotlin to pull in fixes for signing bugs.
 
 ### Documentation
 * [#620](https://github.com/awslabs/aws-sdk-kotlin/issues/620) Update outdated howto docs to correctly describe client instantiation and client engine configuration
@@ -3525,7 +3525,7 @@
 ## [0.16.1-beta] - 06/02/2022
 
 ### Features
-* [#617](https://github.com/awslabs/smithy-kotlin/issues/617) Add a new non-CRT SigV4 signer and use it as the default. This removes the CRT as a hard dependency for using the SDK (although the CRT signer can still be used via explicit configuration on client creation).
+* [#617](https://github.com/smithy-lang/smithy-kotlin/issues/617) Add a new non-CRT SigV4 signer and use it as the default. This removes the CRT as a hard dependency for using the SDK (although the CRT signer can still be used via explicit configuration on client creation).
 
 ### Miscellaneous
 * Sync AWS models to latest
@@ -3539,7 +3539,7 @@
 * [#480](https://github.com/awslabs/aws-sdk-kotlin/issues/480) Upgrade smithy-kotlin to 0.10.0 which upgrades to ktor-2.x. This is considered a **breaking change** as it may reverse the issue described in #480 and break ktor-1.x users.
 
 ### Miscellaneous
-* Upgrade smithy-kotlin to 0.9.2 which includes codegen updates to generate operations with all optional inputs to include a default parameter. See [smithy-kotlin#129](https://github.com/awslabs/smithy-kotlin/issues/129)
+* Upgrade smithy-kotlin to 0.9.2 which includes codegen updates to generate operations with all optional inputs to include a default parameter. See [smithy-kotlin#129](https://github.com/smithy-lang/smithy-kotlin/issues/129)
 * upgrade kotlin to 1.6.21 and other deps to latest
 
 ## [0.15.2-beta] - 05/13/2022
@@ -3675,7 +3675,7 @@
 
 ### New features
 * update AWS models to latest versions [#499](https://github.com/awslabs/aws-sdk-kotlin/pull/499)
-* Paginators! [smithy-kotlin#557](https://github.com/awslabs/smithy-kotlin/pull/557)
+* Paginators! [smithy-kotlin#557](https://github.com/smithy-lang/smithy-kotlin/pull/557)
 
 ### Fixes
 * enforce only once shutdown logic for crt engine connections [#497](https://github.com/awslabs/aws-sdk-kotlin/pull/497)
@@ -3818,7 +3818,7 @@
 
 * implement basic retry support in runtime [#328](https://github.com/awslabs/aws-sdk-kotlin/pull/328)
 * event stream framing support [#320](https://github.com/awslabs/aws-sdk-kotlin/pull/320)
-* replace GSON based JSON serde with KMP compatible impl [#477](https://github.com/awslabs/smithy-kotlin/pull/477)
+* replace GSON based JSON serde with KMP compatible impl [#477](https://github.com/smithy-lang/smithy-kotlin/pull/477)
 * Add IMDSv2 client in runtime [#330](https://github.com/awslabs/aws-sdk-kotlin/pull/330)
 
 
@@ -3860,11 +3860,11 @@
 
 ### New features
 
-* Support for presigning requests [#435](https://github.com/awslabs/smithy-kotlin/issues/435)
+* Support for presigning requests [#435](https://github.com/smithy-lang/smithy-kotlin/issues/435)
 * Detect aws region from system properties [#202](https://github.com/awslabs/aws-sdk-kotlin/issues/202)
 * EC2 Query Protocol [#230](https://github.com/awslabs/aws-sdk-kotlin/issues/230)
-* Provide opt-in wire logging [#425](https://github.com/awslabs/smithy-kotlin/issues/425)
-* Support profile credentials provider [#302](https://github.com/awslabs/smithy-kotlin/issues/302)
+* Provide opt-in wire logging [#425](https://github.com/smithy-lang/smithy-kotlin/issues/425)
+* Support profile credentials provider [#302](https://github.com/smithy-lang/smithy-kotlin/issues/302)
 
 ### Fixes
 
@@ -3876,9 +3876,9 @@
 * Create S3 object with Unicode name fails with signature mismatch [#200](https://github.com/awslabs/aws-sdk-kotlin/issues/200)
 * Codegen errors in marketplacecommerceanalytics [#214](https://github.com/awslabs/aws-sdk-kotlin/issues/214)
 * Escape model-extra files for Windows [#191](https://github.com/awslabs/aws-sdk-kotlin/issues/191)
-* Support Glacier APIVersion Header [#165](https://github.com/awslabs/smithy-kotlin/issues/165)
-* Support APIGateway Accept Header [#157](https://github.com/awslabs/smithy-kotlin/issues/157)
-* Add support for awsQueryError trait [#375](https://github.com/awslabs/smithy-kotlin/issues/375)
+* Support Glacier APIVersion Header [#165](https://github.com/smithy-lang/smithy-kotlin/issues/165)
+* Support APIGateway Accept Header [#157](https://github.com/smithy-lang/smithy-kotlin/issues/157)
+* Add support for awsQueryError trait [#375](https://github.com/smithy-lang/smithy-kotlin/issues/375)
 * S3 HeadObject errors require customization [#152](https://github.com/awslabs/aws-sdk-kotlin/issues/152)
 * S3 custom treatment of GetBucketLocation response [#194](https://github.com/awslabs/aws-sdk-kotlin/issues/194)
 
@@ -3917,28 +3917,28 @@
 
 ### New Features
 
-* `awsQuery` protocol support (https://github.com/awslabs/smithy-kotlin/issues/127)
-* detect region from environment variables (https://github.com/awslabs/smithy-kotlin/issues/356)
-* custom S3 error metadata support (https://github.com/awslabs/smithy-kotlin/issues/323)
-* environment credentials provider (https://github.com/awslabs/smithy-kotlin/issues/301)
-* bind default HTTP client engine to CRT (https://github.com/awslabs/smithy-kotlin/issues/199)
-* operation DSL overloads (https://github.com/awslabs/smithy-kotlin/issues/184)
-* Kinesis read timeouts (https://github.com/awslabs/smithy-kotlin/issues/162)
-* XML EOL encoding support (https://github.com/awslabs/smithy-kotlin/issues/142)
+* `awsQuery` protocol support (https://github.com/smithy-lang/smithy-kotlin/issues/127)
+* detect region from environment variables (https://github.com/smithy-lang/smithy-kotlin/issues/356)
+* custom S3 error metadata support (https://github.com/smithy-lang/smithy-kotlin/issues/323)
+* environment credentials provider (https://github.com/smithy-lang/smithy-kotlin/issues/301)
+* bind default HTTP client engine to CRT (https://github.com/smithy-lang/smithy-kotlin/issues/199)
+* operation DSL overloads (https://github.com/smithy-lang/smithy-kotlin/issues/184)
+* Kinesis read timeouts (https://github.com/smithy-lang/smithy-kotlin/issues/162)
+* XML EOL encoding support (https://github.com/smithy-lang/smithy-kotlin/issues/142)
 
 ### Fixes
 
-* path literal not escaped correctly (https://github.com/awslabs/smithy-kotlin/issues/395)
-* idempotency tokens are not detected on resources (https://github.com/awslabs/smithy-kotlin/issues/376)
-* httpPayload bound members need dedicated serde (https://github.com/awslabs/smithy-kotlin/issues/353)
+* path literal not escaped correctly (https://github.com/smithy-lang/smithy-kotlin/issues/395)
+* idempotency tokens are not detected on resources (https://github.com/smithy-lang/smithy-kotlin/issues/376)
+* httpPayload bound members need dedicated serde (https://github.com/smithy-lang/smithy-kotlin/issues/353)
 * Route53 error messages (and maybe other restXml messages) are not deserialized and present in stacktrace
-  (https://github.com/awslabs/smithy-kotlin/issues/352)
-* fix url-encoding behavior of httpLabel and httpQuery members (https://github.com/awslabs/smithy-kotlin/issues/328)
-* runtime error when using Kotlin 1.5.0 (https://github.com/awslabs/smithy-kotlin/issues/319)
+  (https://github.com/smithy-lang/smithy-kotlin/issues/352)
+* fix url-encoding behavior of httpLabel and httpQuery members (https://github.com/smithy-lang/smithy-kotlin/issues/328)
+* runtime error when using Kotlin 1.5.0 (https://github.com/smithy-lang/smithy-kotlin/issues/319)
 * SES fails to build due to invalid docs (https://github.com/awslabs/aws-sdk-kotlin/issues/153)
 * exception is thrown for SQS delete message (https://github.com/awslabs/aws-sdk-kotlin/issues/147)
 * SNS getTopicAttributes throws an exception (https://github.com/awslabs/aws-sdk-kotlin/issues/142)
-* elasticbeanstalk model generates invalid enum (https://github.com/awslabs/smithy-kotlin/issues/403)
+* elasticbeanstalk model generates invalid enum (https://github.com/smithy-lang/smithy-kotlin/issues/403)
 
 ### Other
 
@@ -4171,20 +4171,20 @@
 ### New Features
 
 * `restXml` protocol support
-* add conversions to/from `java.time.Instant` and SDK `Instant` (https://github.com/awslabs/smithy-kotlin/issues/271)
-* implement missing IO runtime primitives (https://github.com/awslabs/smithy-kotlin/issues/264)
+* add conversions to/from `java.time.Instant` and SDK `Instant` (https://github.com/smithy-lang/smithy-kotlin/issues/271)
+* implement missing IO runtime primitives (https://github.com/smithy-lang/smithy-kotlin/issues/264)
 * API documentation (https://github.com/awslabs/aws-sdk-kotlin/issues/119)
 
 ### Fixes
 
-* generate per/service base exception types (https://github.com/awslabs/smithy-kotlin/issues/233)
-* use sdkId if available for service client generation (https://github.com/awslabs/smithy-kotlin/issues/276)
+* generate per/service base exception types (https://github.com/smithy-lang/smithy-kotlin/issues/233)
+* use sdkId if available for service client generation (https://github.com/smithy-lang/smithy-kotlin/issues/276)
 * explicitly set jvm target compatibility (https://github.com/awslabs/aws-sdk-kotlin/issues/103)
 * http error registration (https://github.com/awslabs/aws-sdk-kotlin/issues/118)
 
 ### Other
 
-* generate per/service base exception types (https://github.com/awslabs/smithy-kotlin/issues/270)
+* generate per/service base exception types (https://github.com/smithy-lang/smithy-kotlin/issues/270)
 
 ## [0.1.0-M0] - 03/19/2021
 
@@ -4203,7 +4203,7 @@ See the [Getting Started Guide](docs/GettingStarted.md) for how to work with bet
 * Translate
 * Cognito Identity Provider
 * Secrets Manager
-  * NOTE: Default idempotency token provider will not currently work, you'll need to override the config to create or update secrets until [#180](https://github.com/awslabs/smithy-kotlin/issues/180) is implemented
+  * NOTE: Default idempotency token provider will not currently work, you'll need to override the config to create or update secrets until [#180](https://github.com/smithy-lang/smithy-kotlin/issues/180) is implemented
 * KMS
 * Lambda
 
