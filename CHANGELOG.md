@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.3.79] - 11/20/2024
+
+### Features
+* (**applicationdiscoveryservice**) Add support to import data from commercially available discovery tools without file manipulation.
+* (**autoscaling**) With this release, customers can prioritize launching instances into ODCRs using targets from ASGs or Launch Templates. Customers can express their baseline instances' CPU-performance in attribute-based Instance Requirements configuration by referencing an instance family that meets their needs.
+* (**bedrockagentruntime**) Releasing new Prompt Optimization to enhance your prompts for improved performance
+* (**cloudfront**) Add support for gRPC, VPC origins, and Anycast IP Lists. Allow LoggingConfig IncludeCookies to be set regardless of whether the LoggingConfig is enabled.
+* (**computeoptimizer**) This release enables AWS Compute Optimizer to analyze and generate optimization recommendations for Amazon Aurora database instances. It also enables Compute Optimizer to identify idle Amazon EC2 instances, Amazon EBS volumes, Amazon ECS services running on Fargate, and Amazon RDS databases.
+* (**controltower**) Adds support for child enabled baselines which allow you to see the enabled baseline status for individual accounts.
+* (**costoptimizationhub**) This release adds action type "Delete" to the GetRecommendation, ListRecommendations and ListRecommendationSummaries APIs to support new EBS and ECS recommendations with action type "Delete".
+* (**datazone**) This release supports Metadata Enforcement Rule feature for Create Subscription Request action.
+* (**ec2**) With this release, customers can express their desire to launch instances only in an ODCR or ODCR group rather than OnDemand capacity. Customers can express their baseline instances' CPU-performance in attribute-based Instance Requirements configuration by referencing an instance family.
+* (**ecs**) This release adds support for the Availability Zone rebalancing feature on Amazon ECS.
+* (**elasticloadbalancingv2**) This release adds support for configuring Load balancer Capacity Unit reservations
+* (**lambda**) Add Node 22.x (node22.x) support to AWS Lambda
+* (**mediaconvert**) This release adds the ability to reconfigure concurrent job settings for existing queues and create queues with custom concurrent job settings.
+* (**mediapackagev2**) MediaPackage v2 now supports the Media Quality Confidence Score (MQCS) published from MediaLive. Customers can control input switching based on the MQCS and publishing HTTP Headers for the MQCS via the API.
+* (**omics**) Enabling call caching feature that allows customers to reuse previously computed results from a set of completed tasks in a new workflow run.
+* (**rbin**) This release adds support for exclusion tags for Recycle Bin, which allows you to identify resources that are to be excluded, or ignored, by a Region-level retention rule.
+* (**rds**) This release adds support for scale storage on the DB instance using a Blue/Green Deployment.
+* (**timestreamquery**) This release adds support for Provisioning Timestream Compute Units (TCUs), a new feature that allows provisioning dedicated compute resources for your queries, providing predictable and cost-effective query performance.
+* (**workspaces**) Added support for Rocky Linux 8 on Amazon WorkSpaces Personal.
+* (**workspacesweb**) Added data protection settings with support for inline data redaction.
+* [#1440](https://github.com/awslabs/aws-sdk-kotlin/issues/1440) Include Maven Bill of Materials (BOM) in version catalog
+
 ## [1.3.78] - 11/19/2024
 
 ### Features
