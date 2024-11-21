@@ -1423,6 +1423,18 @@
             "brazilName": "AwsSdkKotlinNetworkmonitor"
         },
         {
+            "sdkId": "Notifications",
+            "namespace": "aws.sdk.kotlin.services.notifications",
+            "artifactName": "notifications",
+            "brazilName": "AwsSdkKotlinNotifications"
+        },
+        {
+            "sdkId": "NotificationsContacts",
+            "namespace": "aws.sdk.kotlin.services.notificationscontacts",
+            "artifactName": "notificationscontacts",
+            "brazilName": "AwsSdkKotlinNotificationscontacts"
+        },
+        {
             "sdkId": "OAM",
             "namespace": "aws.sdk.kotlin.services.oam",
             "artifactName": "oam",
