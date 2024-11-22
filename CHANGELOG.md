@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.3.81] - 11/22/2024
+
+### Features
+* (**autoscaling**) Now, Amazon EC2 Auto Scaling customers can enable target tracking policies to take quicker scaling decisions, enhancing their application performance and EC2 utilization. To get started, specify target tracking to monitor a metric that is available on Amazon CloudWatch at seconds-level interval.
+* (**bcmpricingcalculator**) Initial release of the AWS Billing and Cost Management Pricing Calculator API.
+* (**bedrockagentruntime**) InvokeInlineAgent API release to help invoke runtime agents without any dependency on preconfigured agents.
+* (**chatbot**) Adds support for programmatic management of custom actions and aliases which can be associated with channel configurations.
+* (**codepipeline**) AWS CodePipeline V2 type pipelines now support ECRBuildAndPublish and InspectorScan actions.
+* (**cognitoidentityprovider**) Add support for users to sign up and sign in without passwords, using email and SMS OTPs and Passkeys. Add support for Passkeys based on WebAuthn. Add support for enhanced branding customization for hosted authentication pages with Amazon Cognito Managed Login. Add feature tiers with new pricing.
+* (**connect**) Amazon Connect Service Feature: Add APIs for Amazon Connect Email Channel
+* (**costexplorer**) This release adds the Impact field(contains Contribution field) to the GetAnomalies API response under RootCause
+* (**elasticloadbalancingv2**) This release adds support for advertising trusted CA certificate names in associated trust stores.
+* (**emr**) Advanced Scaling in Amazon EMR Managed Scaling
+* (**inspector2**) Extend inspector2 service model to include ServiceQuotaExceededException.
+* (**lambda**) Add ProvisionedPollerConfig to Lambda event-source-mapping API.
+* (**mailmanager**) Added new "DeliverToQBusiness" rule action to MailManager RulesSet for ingesting email data into Amazon Q Business customer applications
+* (**neptunegraph**) Add 4 new APIs to support new Export features, allowing Parquet and CSV formats. Add new arguments in Import APIs to support Parquet import. Add a new query "neptune.read" to run algorithms without loading data into database
+* (**omics**) This release adds support for resource policy based cross account S3 access to sequence store read sets.
+* (**quicksight**) This release includes: Update APIs to support Image, Layer Map, font customization, and Plugin Visual. Add Identity center related information in ListNamsespace API. Update API for restrictedFolder support in topics and add API for SearchTopics, Describe/Update DashboardsQA Configration.
+* (**sagemaker**) This release adds APIs for new features for SageMaker endpoint to scale down to zero instances, native support for multi-adapter inference, and endpoint scaling improvements.
+* (**ses**) This release adds support for starting email contacts in your Amazon Connect instance as an email receiving action.
+* (**sfn**) Add support for variables and JSONata in TestState, GetExecutionHistory, DescribeStateMachine, and DescribeStateMachineForExecution
+
+### Documentation
+* (**sns**) ArchivePolicy attribute added to Archive and Replay feature
+* (**workspaces**) While integrating WSP-DCV rebrand, a few mentions were erroneously renamed from WSP to DCV. This release reverts those mentions back to WSP.
+
 ## [1.3.80] - 11/21/2024
 
 ### Features

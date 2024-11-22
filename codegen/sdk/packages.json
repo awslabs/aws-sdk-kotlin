@@ -193,6 +193,12 @@
             "brazilName": "AwsSdkKotlinBcmDataExports"
         },
         {
+            "sdkId": "BCM Pricing Calculator",
+            "namespace": "aws.sdk.kotlin.services.bcmpricingcalculator",
+            "artifactName": "bcmpricingcalculator",
+            "brazilName": "AwsSdkKotlinBcmPricingCalculator"
+        },
+        {
             "sdkId": "Backup",
             "namespace": "aws.sdk.kotlin.services.backup",
             "artifactName": "backup",
