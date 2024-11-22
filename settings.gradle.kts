@@ -54,8 +54,8 @@ include(":services")
 include(":tests")
 include(":tests:codegen:event-stream")
 include(":tests:e2e-test-util")
-// include(":tests:codegen:smoke-tests")
-// include(":tests:codegen:smoke-tests:services")
+include(":tests:codegen:smoke-tests")
+include(":tests:codegen:smoke-tests:services")
 
 // generated services
 val File.isServiceDir: Boolean
@@ -71,13 +71,11 @@ file("services").listFiles().forEach {
 }
 
 // generated services by smoke tests test suite
-/*
 file("tests/codegen/smoke-tests/services").listFiles().forEach {
     if (it.isServiceDir) {
         include(":tests:codegen:smoke-tests:services:${it.name}")
     }
 }
-*/
 
 if ("dynamodb".isBootstrappedService) {
     include(":hll:dynamodb-mapper")
