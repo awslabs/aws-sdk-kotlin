@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.82] - 11/25/2024
+
+### Features
+* (**directconnect**) Update DescribeDirectConnectGatewayAssociations API to return associated core network information if a Direct Connect gateway is attached to a Cloud WAN core network.
+* (**networkmanager**) This release adds native Direct Connect integration on Cloud WAN enabling customers to directly attach their Direct Connect gateways to Cloud WAN without the need for an intermediate Transit Gateway.
+* (**s3**) Amazon Simple Storage Service / Features: Add support for ETag based conditional writes in PutObject and CompleteMultiPartUpload APIs to prevent unintended object modifications.
+
 ## [1.3.81] - 11/22/2024
 
 ### Features
