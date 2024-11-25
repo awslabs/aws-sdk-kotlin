@@ -34,7 +34,7 @@ class S3PresignerTest {
 
     @BeforeAll
     fun createResources(): Unit = runBlocking {
-        testBucket = S3TestUtils.getTestBucket(client)
+        testBucket = S3TestUtils.getTestBucketWithPrefix(client)
     }
 
     @AfterAll

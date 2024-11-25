@@ -15,15 +15,15 @@ import java.util.*
  * todo
  */
 @InternalSdkApi
-public suspend fun resolveResponseChecksumValidation(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): ChecksumConfigOption? {
-    AwsSdkSetting.AwsResponseChecksumValidation.resolve(platform) ?: profile.get().responseChecksumValidation?.let {
-        try {
-            return ChecksumConfigOption.valueOf(it.uppercase(Locale.getDefault()))
-        } catch (_: IllegalArgumentException) {
-            throw ConfigurationException(
-                "'$it' is not a valid value for response checksum validation. Valid values are: ${ChecksumConfigOption.entries.toTypedArray()}",
+public suspend fun resolveResponseChecksumValidation(platform: PlatformProvider = PlatformProvider.System, profile: LazyAsyncValue<AwsProfile>): ChecksumConfigOption {
+    val unparsedString = AwsSdkSetting.AwsResponseChecksumValidation.resolve(platform) ?: profile.get().responseChecksumValidation
+    return unparsedString?.let {
+        when (unparsedString.uppercase()) {
+            "WHEN_SUPPORTED" -> ChecksumConfigOption.WHEN_SUPPORTED
+            "WHEN_REQUIRED" -> ChecksumConfigOption.WHEN_REQUIRED
+            else -> throw ConfigurationException(
+                "'$it' is not a valid value for request checksum calculation. Valid values are: ${ChecksumConfigOption.entries.toTypedArray()}",
             )
         }
-    }
-    return null
+    } ?: ChecksumConfigOption.WHEN_SUPPORTED
 }

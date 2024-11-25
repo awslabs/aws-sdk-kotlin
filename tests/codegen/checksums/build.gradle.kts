@@ -7,6 +7,7 @@ import shared.Model
 description = "AWS SDK for Kotlin's checksums codegen test suite"
 
 kotlin {
+    // TODO: This should be part of the shared gradle file !
     sourceSets {
         commonTest {
             dependencies {
@@ -17,8 +18,8 @@ kotlin {
 }
 
 val tests = listOf(
-    CodegenTest("checksums", Model("kitchen-sink.smithy"), "aws.sdk.kotlin.test#TestService"),
-    CodegenTest("clientConfig", Model("client-config.smithy"), "aws.sdk.kotlin.test#ClientConfigTestService"),
+    CodegenTest("checksums", Model("request-response-test.smithy"), "aws.sdk.kotlin.test#TestService"),
+    CodegenTest("clientConfig", Model("config-test.smithy"), "aws.sdk.kotlin.test#ClientConfigTestService"),
 )
 
 smithyBuild {

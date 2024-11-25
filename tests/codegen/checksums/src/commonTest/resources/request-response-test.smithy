@@ -71,7 +71,7 @@ structure SomeInput {
 structure SomeOutput {}
 
 @http(uri: "/HttpChecksumStreamingOperation", method: "POST")
-@optionalAuth
+@auth([sigv4])
 @httpChecksum(
     requestChecksumRequired: true,
     requestAlgorithmMember: "checksumAlgorithm",

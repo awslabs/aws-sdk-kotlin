@@ -39,13 +39,72 @@ object S3TestUtils {
     private const val S3_MAX_BUCKET_NAME_LENGTH = 63 // https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
     private const val S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX = "--x-s3"
 
-    suspend fun getTestBucket(
+    suspend fun getTestBucketWithPrefix(
         client: S3Client,
         region: String? = null,
         accountId: String? = null,
     ): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX, region, accountId)
 
     suspend fun getBucketWithPrefix(
+        client: S3Client,
+        prefix: String,
+        region: String? = null,
+        accountId: String? = null,
+    ): String = withTimeout(60.seconds) {
+        val buckets = client.listBuckets()
+            .buckets
+            ?.mapNotNull { it.name }
+
+        var testBucket = buckets?.firstOrNull { bucketName ->
+            bucketName.startsWith(prefix) &&
+                region?.let {
+                    client.getBucketLocation {
+                        bucket = bucketName
+                        expectedBucketOwner = accountId
+                    }.locationConstraint?.value == region
+                } ?: true
+        }
+
+        if (testBucket == null) {
+            testBucket = prefix + UUID.randomUUID()
+            println("Creating S3 bucket: $testBucket")
+
+            client.createBucket {
+                bucket = testBucket
+                createBucketConfiguration {
+                    locationConstraint = BucketLocationConstraint.fromValue(region ?: client.config.region!!)
+                }
+            }
+
+            client.waitUntilBucketExists { bucket = testBucket }
+        } else {
+            println("Using existing S3 bucket: $testBucket")
+        }
+
+        client.putBucketLifecycleConfiguration {
+            bucket = testBucket
+            lifecycleConfiguration {
+                rules = listOf(
+                    LifecycleRule {
+                        expiration { days = 1 }
+                        filter { this.prefix = "" }
+                        status = ExpirationStatus.Enabled
+                        id = "delete-old"
+                    },
+                )
+            }
+        }
+
+        testBucket
+    }
+
+    suspend fun getTestBucket(
+        client: S3Client,
+        region: String? = null,
+        accountId: String? = null,
+    ): String = getBucket(client, TEST_BUCKET_PREFIX, region, accountId)
+
+    suspend fun getBucket(
         client: S3Client,
         prefix: String,
         region: String? = null,

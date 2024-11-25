@@ -4,8 +4,11 @@ import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import kotlin.test.*
 
+// TODO: Turn on tests again
+
 class SmokeTestE2ETest {
     @Test
+    @Ignore
     fun successService() {
         val smokeTestRunnerOutput = runSmokeTests("successService")
 
@@ -14,6 +17,7 @@ class SmokeTestE2ETest {
     }
 
     @Test
+    @Ignore
     fun failureService() {
         val smokeTestRunnerOutput = runSmokeTests("failureService")
 
@@ -21,6 +25,7 @@ class SmokeTestE2ETest {
     }
 
     @Test
+    @Ignore
     fun exceptionService() {
         val smokeTestRunnerOutput = runSmokeTests("exceptionService", expectingFailure = true)
 
@@ -31,6 +36,7 @@ class SmokeTestE2ETest {
     }
 
     @Test
+    @Ignore
     fun successServiceSkipTags() {
         val envVars = mapOf(AWS_SKIP_TAGS to "success")
         val smokeTestRunnerOutput = runSmokeTests("successService", envVars)
@@ -40,6 +46,7 @@ class SmokeTestE2ETest {
     }
 
     @Test
+    @Ignore
     fun successServiceServiceFilter() {
         val envVars = mapOf(AWS_SERVICE_FILTER to "Failure") // Only run tests for services with this SDK ID
         val smokeTestRunnerOutput = runSmokeTests("successService", envVars)

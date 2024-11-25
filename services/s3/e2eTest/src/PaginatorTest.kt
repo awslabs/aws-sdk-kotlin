@@ -11,7 +11,6 @@ import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.sdk.kotlin.services.s3.paginators.listPartsPaginated
 import aws.sdk.kotlin.services.s3.uploadPart
 import aws.smithy.kotlin.runtime.content.ByteStream
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.runBlocking
@@ -33,7 +32,7 @@ class PaginatorTest {
 
     @BeforeAll
     fun createResources(): Unit = runBlocking {
-        testBucket = S3TestUtils.getTestBucket(client)
+        testBucket = S3TestUtils.getTestBucketWithPrefix(client)
     }
 
     @AfterAll

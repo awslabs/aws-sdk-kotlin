@@ -6,6 +6,7 @@ package aws.sdk.kotlin.codegen.customization.flexiblechecksums
 
 import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
+import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.withBlock
@@ -13,10 +14,15 @@ import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
+import software.amazon.smithy.model.traits.HttpPayloadTrait
+import software.amazon.smithy.model.traits.StreamingTrait
 
 /**
  * Adds a middleware that enables sending flexible checksums during an HTTP request
@@ -26,8 +32,61 @@ class FlexibleChecksumsRequest : KotlinIntegration {
         .shapes<OperationShape>()
         .any { it.hasTrait<HttpChecksumTrait>() }
 
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
+        listOf(
+            ConfigProperty {
+                name = "requestChecksumCalculation"
+                symbol = RuntimeTypes.SmithyClient.Config.ChecksumConfigOption
+                baseClass = RuntimeTypes.SmithyClient.Config.HttpChecksumClientConfig
+                useNestedBuilderBaseClass()
+                documentation = "" // todo
+                propertyType = ConfigPropertyType.RequiredWithDefault("ChecksumConfigOption.WHEN_SUPPORTED")
+            },
+        )
+
+    private val operationsWithStreamingPayloads = mutableListOf<ShapeId>()
+
+    override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
+        model.operationShapes.forEach { operationShape ->
+
+            val operationInput = model.expectShape<StructureShape>(operationShape.inputShape)
+
+            operationInput.members().find { it.hasTrait<HttpPayloadTrait>() }?.let { httpPayload ->
+                if (model.getShape(httpPayload.target).get().hasTrait<StreamingTrait>()) {
+                    operationsWithStreamingPayloads.add(operationShape.id)
+                }
+            }
+        }
+
+        return model
+    }
+
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
-        resolved + flexibleChecksumsRequestMiddleware
+        resolved + flexibleChecksumsRequestMiddleware + configBusinessMetrics
+
+    private val configBusinessMetrics = object : ProtocolMiddleware {
+        override val name: String = "requestChecksumCalculationBusinessMetric"
+
+        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
+            op.hasTrait<HttpChecksumTrait>()
+
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            writer.withBlock("when(config.requestChecksumCalculation) {", "}") {
+                writer.write(
+                    "#T.WHEN_SUPPORTED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_REQ_WHEN_SUPPORTED)",
+                    RuntimeTypes.SmithyClient.Config.ChecksumConfigOption,
+                    RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
+                    RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
+                )
+                writer.write(
+                    "#T.WHEN_REQUIRED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_REQ_WHEN_REQUIRED)",
+                    RuntimeTypes.SmithyClient.Config.ChecksumConfigOption,
+                    RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
+                    RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
+                )
+            }
+        }
+    }
 
     private val flexibleChecksumsRequestMiddleware = object : ProtocolMiddleware {
         override val name: String = "FlexibleChecksumsRequest"
@@ -42,22 +101,25 @@ class FlexibleChecksumsRequest : KotlinIntegration {
         }
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsRequestInterceptor
-            val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
-
             val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
 
             val requestAlgorithmMember = ctx.model.expectShape<StructureShape>(op.input.get())
                 .members()
                 .first { it.memberName == httpChecksumTrait.requestAlgorithmMember.get() }
 
-            val requestAlgorithmMemberName = ctx.symbolProvider.toMemberName(requestAlgorithmMember)
+            val userSelectedChecksumAlgorithm = ctx.symbolProvider.toMemberName(requestAlgorithmMember)
+            val requestChecksumRequired = httpChecksumTrait.isRequestChecksumRequired
+            val streamingPayload = operationsWithStreamingPayloads.contains(op.id)
 
-            writer.withBlock("op.interceptors.add(#T<#T>() {", "})", interceptorSymbol, inputSymbol) {
-                writer.write("input.#L?.value", requestAlgorithmMemberName)
-            }
-            writer.withBlock("input.#L?.let {", "}", requestAlgorithmMemberName) {
-                writer.write("op.context[#T.ChecksumAlgorithm] = it.value", RuntimeTypes.HttpClient.Operation.HttpOperationContext)
+            writer.withBlock(
+                "op.interceptors.add(#T(",
+                "))",
+                RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsRequestInterceptor,
+            ) {
+                writer.write("requestChecksumRequired = #L,", requestChecksumRequired)
+                writer.write("requestChecksumCalculation = config.requestChecksumCalculation,")
+                writer.write("userSelectedChecksumAlgorithm = input.#L?.value,", userSelectedChecksumAlgorithm)
+                writer.write("streamingPayload = #L,", streamingPayload)
             }
         }
     }

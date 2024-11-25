@@ -14,6 +14,7 @@ description = "AWS SDK for Kotlin's smoke test codegen test suite"
 kotlin {
     sourceSets {
         jvmTest {
+            // todo: apply jvm plugin just here ?
             dependencies {
                 implementation("dev.gradleplugins:gradle-test-kit:7.3.3") // TODO: Use lib.versions.toml
             }
