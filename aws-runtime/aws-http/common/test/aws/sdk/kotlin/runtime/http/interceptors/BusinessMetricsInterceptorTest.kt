@@ -16,10 +16,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class BusinessMetricsInterceptorTest {
     @Test
@@ -109,6 +106,14 @@ class BusinessMetricsInterceptorTest {
         assertFailsWith<IllegalStateException>("Business metrics are incorrectly formatted:") {
             interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
         }
+    }
+
+    @Test
+    fun businessMetricToString() {
+        val businessMetricToString = AwsBusinessMetric.S3_EXPRESS_BUCKET.toString()
+        val businessMetricIdentifier = AwsBusinessMetric.S3_EXPRESS_BUCKET.identifier
+
+        assertEquals(businessMetricIdentifier, businessMetricToString)
     }
 }
 
