@@ -356,6 +356,7 @@ class ResponseChecksumValidation {
 
     @Test
     fun compositeChecksumsAreNotValidated(): Unit = runBlocking {
+        // TODO: Move elsewhere
         ClientConfigTestClient {
             responseChecksumValidation = ChecksumConfigOption.WHEN_REQUIRED
             httpClient = TestEngine(
@@ -365,7 +366,7 @@ class ResponseChecksumValidation {
                         Headers {
                             append(
                                 "x-amz-checksum-crc32",
-                                "I'm a composite checksum and will trigger `ChecksumMismatchException` if read!-1"
+                                "I'm a composite checksum and will trigger `ChecksumMismatchException` if read!-1",
                             )
                         },
                         "World!".toHttpBody(),

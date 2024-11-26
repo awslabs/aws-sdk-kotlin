@@ -29,12 +29,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import java.io.File
 import java.util.UUID
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertFailsWith
-import kotlin.test.assertIs
+import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -193,6 +188,10 @@ class S3BucketOpsIntegrationTest {
         }
     }
 
+    // FIXME: Enable test when motorcade is ready
+    // Seeing: S3Exception: Checksum Type mismatch occurred, expected checksum Type: null, actual checksum Type: crc32
+    // Cause: "Post-motorcade SDK is expected not to work against Pre-Motorcade S3"
+    @Ignore
     @Test
     fun testMultipartUpload(): Unit = runBlocking {
         s3WithAllEngines { s3 ->

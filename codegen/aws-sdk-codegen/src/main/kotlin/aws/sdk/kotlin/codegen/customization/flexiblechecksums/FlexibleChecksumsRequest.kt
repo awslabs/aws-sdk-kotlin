@@ -19,10 +19,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
-import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.traits.HttpPayloadTrait
-import software.amazon.smithy.model.traits.StreamingTrait
 
 /**
  * Adds a middleware that enables sending flexible checksums during an HTTP request
@@ -43,23 +40,6 @@ class FlexibleChecksumsRequest : KotlinIntegration {
                 propertyType = ConfigPropertyType.RequiredWithDefault("ChecksumConfigOption.WHEN_SUPPORTED")
             },
         )
-
-    private val operationsWithStreamingPayloads = mutableListOf<ShapeId>()
-
-    override fun preprocessModel(model: Model, settings: KotlinSettings): Model {
-        model.operationShapes.forEach { operationShape ->
-
-            val operationInput = model.expectShape<StructureShape>(operationShape.inputShape)
-
-            operationInput.members().find { it.hasTrait<HttpPayloadTrait>() }?.let { httpPayload ->
-                if (model.getShape(httpPayload.target).get().hasTrait<StreamingTrait>()) {
-                    operationsWithStreamingPayloads.add(operationShape.id)
-                }
-            }
-        }
-
-        return model
-    }
 
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
         resolved + flexibleChecksumsRequestMiddleware + configBusinessMetrics
@@ -109,7 +89,6 @@ class FlexibleChecksumsRequest : KotlinIntegration {
 
             val userSelectedChecksumAlgorithm = ctx.symbolProvider.toMemberName(requestAlgorithmMember)
             val requestChecksumRequired = httpChecksumTrait.isRequestChecksumRequired
-            val streamingPayload = operationsWithStreamingPayloads.contains(op.id)
 
             writer.withBlock(
                 "op.interceptors.add(#T(",
@@ -119,7 +98,6 @@ class FlexibleChecksumsRequest : KotlinIntegration {
                 writer.write("requestChecksumRequired = #L,", requestChecksumRequired)
                 writer.write("requestChecksumCalculation = config.requestChecksumCalculation,")
                 writer.write("userSelectedChecksumAlgorithm = input.#L?.value,", userSelectedChecksumAlgorithm)
-                writer.write("streamingPayload = #L,", streamingPayload)
             }
         }
     }

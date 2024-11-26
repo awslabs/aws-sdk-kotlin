@@ -33,8 +33,10 @@ object S3TestUtils {
 
     const val DEFAULT_REGION = "us-west-2"
 
-    // The E2E test account only has permission to operate on buckets with the prefix
-    private const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
+    // The E2E test account only has permission to operate on buckets with the prefix (s3-test-bucket-)
+    // Motorcade allow-listed bucket: "s3-test-bucket-ci-motorcade". E2E tests will use it and delete it!
+    // FIXME: Change back to "s3-test-bucket-" after motorcade is released.
+    private const val TEST_BUCKET_PREFIX = "s3-test-bucket-temp-"
 
     private const val S3_MAX_BUCKET_NAME_LENGTH = 63 // https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
     private const val S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX = "--x-s3"
@@ -98,15 +100,9 @@ object S3TestUtils {
         testBucket
     }
 
-    suspend fun getTestBucket(
+    suspend fun getTestBucketByName(
         client: S3Client,
-        region: String? = null,
-        accountId: String? = null,
-    ): String = getBucket(client, TEST_BUCKET_PREFIX, region, accountId)
-
-    suspend fun getBucket(
-        client: S3Client,
-        prefix: String,
+        bucket: String,
         region: String? = null,
         accountId: String? = null,
     ): String = withTimeout(60.seconds) {
@@ -115,33 +111,33 @@ object S3TestUtils {
             ?.mapNotNull { it.name }
 
         var testBucket = buckets?.firstOrNull { bucketName ->
-            bucketName.startsWith(prefix) &&
+            bucketName == bucket &&
                 region?.let {
                     client.getBucketLocation {
-                        bucket = bucketName
+                        this.bucket = bucketName
                         expectedBucketOwner = accountId
                     }.locationConstraint?.value == region
                 } ?: true
         }
 
         if (testBucket == null) {
-            testBucket = prefix + UUID.randomUUID()
+            testBucket = bucket
             println("Creating S3 bucket: $testBucket")
 
             client.createBucket {
-                bucket = testBucket
+                this.bucket = testBucket
                 createBucketConfiguration {
                     locationConstraint = BucketLocationConstraint.fromValue(region ?: client.config.region!!)
                 }
             }
 
-            client.waitUntilBucketExists { bucket = testBucket }
+            client.waitUntilBucketExists { this.bucket = testBucket }
         } else {
             println("Using existing S3 bucket: $testBucket")
         }
 
         client.putBucketLifecycleConfiguration {
-            bucket = testBucket
+            this.bucket = testBucket
             lifecycleConfiguration {
                 rules = listOf(
                     LifecycleRule {
@@ -192,12 +188,26 @@ object S3TestUtils {
         testBucket
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun deleteBucketAndAllContents(client: S3Client, bucketName: String): Unit = coroutineScope {
+        deleteBucketContents(client, bucketName)
+
+        try {
+            client.deleteBucket { bucket = bucketName }
+
+            client.waitUntilBucketNotExists {
+                bucket = bucketName
+            }
+        } catch (ex: Exception) {
+            println("Failed to delete bucket: $bucketName")
+            throw ex
+        }
+    }
+
+    suspend fun deleteBucketContents(client: S3Client, bucketName: String): Unit = coroutineScope {
         val scope = this
 
         try {
-            println("Deleting S3 bucket: $bucketName")
+            println("Deleting S3 buckets contents: $bucketName")
             val dispatcher = Dispatchers.Default.limitedParallelism(64)
             val jobs = mutableListOf<Job>()
 
@@ -216,14 +226,8 @@ object S3TestUtils {
                 }
 
             jobs.joinAll()
-
-            client.deleteBucket { bucket = bucketName }
-
-            client.waitUntilBucketNotExists {
-                bucket = bucketName
-            }
         } catch (ex: Exception) {
-            println("Failed to delete bucket: $bucketName")
+            println("Failed to delete buckets contents: $bucketName")
             throw ex
         }
     }
@@ -372,5 +376,17 @@ object S3TestUtils {
         return s3Control.listMultiRegionAccessPoints {
             accountId = testAccountId
         }.accessPoints?.any { it.name == multiRegionAccessPointName } ?: false
+    }
+
+    internal suspend fun deleteMultiPartUploads(client: S3Client, bucketName: String) {
+        client.listMultipartUploads {
+            bucket = bucketName
+        }.uploads?.forEach { upload ->
+            client.abortMultipartUpload {
+                bucket = bucketName
+                key = upload.key
+                uploadId = upload.uploadId
+            }
+        }
     }
 }
