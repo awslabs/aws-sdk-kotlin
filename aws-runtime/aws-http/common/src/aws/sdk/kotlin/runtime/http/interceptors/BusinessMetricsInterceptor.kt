@@ -65,4 +65,7 @@ private fun formatMetrics(metrics: MutableSet<BusinessMetric>): String {
 public enum class AwsBusinessMetric(public override val identifier: String) : BusinessMetric {
     S3_EXPRESS_BUCKET("J"),
     DDB_MAPPER("d"),
+    ;
+
+    override fun toString(): String = identifier
 }
