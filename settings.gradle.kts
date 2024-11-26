@@ -16,6 +16,14 @@ pluginManagement {
             }
         }
     }
+    resolutionStrategy {
+        val sdkVersion: String by settings
+        eachPlugin {
+            if (requested.id.id == "aws.sdk.kotlin.hll.dynamodbmapper.schema.generator") {
+                useModule("aws.sdk.kotlin:dynamodb-mapper-schema-generator-plugin:$sdkVersion")
+            }
+        }
+    }
 }
 
 dependencyResolutionManagement {
@@ -39,10 +47,15 @@ include(":aws-runtime:aws-core")
 include(":aws-runtime:aws-config")
 include(":aws-runtime:aws-endpoint")
 include(":aws-runtime:aws-http")
+include(":hll")
+include(":hll:hll-codegen")
+include(":hll:hll-mapping-core")
 include(":services")
 include(":tests")
 include(":tests:codegen:event-stream")
 include(":tests:e2e-test-util")
+include(":tests:codegen:smoke-tests")
+include(":tests:codegen:smoke-tests:services")
 
 // generated services
 val File.isServiceDir: Boolean
@@ -55,6 +68,26 @@ file("services").listFiles().forEach {
     if (it.isServiceDir) {
         include(":services:${it.name}")
     }
+}
+
+// generated services by smoke tests test suite
+file("tests/codegen/smoke-tests/services").listFiles().forEach {
+    if (it.isServiceDir) {
+        include(":tests:codegen:smoke-tests:services:${it.name}")
+    }
+}
+
+if ("dynamodb".isBootstrappedService) {
+    include(":hll:dynamodb-mapper")
+    include(":hll:dynamodb-mapper:dynamodb-mapper")
+    include(":hll:dynamodb-mapper:dynamodb-mapper-codegen")
+    include(":hll:dynamodb-mapper:dynamodb-mapper-ops-codegen")
+    include(":hll:dynamodb-mapper:dynamodb-mapper-schema-codegen")
+    include(":hll:dynamodb-mapper:dynamodb-mapper-annotations")
+    include(":hll:dynamodb-mapper:dynamodb-mapper-schema-generator-plugin")
+    include(":hll:dynamodb-mapper:tests:dynamodb-mapper-schema-generator-plugin-test")
+} else {
+    logger.warn(":services:dynamodb is not bootstrapped, skipping :hll:dynamodb-mapper and subprojects")
 }
 
 // Service benchmarks project

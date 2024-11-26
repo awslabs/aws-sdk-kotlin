@@ -8,8 +8,8 @@ import aws.sdk.kotlin.e2etest.S3TestUtils.createMultiRegionAccessPoint
 import aws.sdk.kotlin.e2etest.S3TestUtils.deleteBucketAndAllContents
 import aws.sdk.kotlin.e2etest.S3TestUtils.deleteMultiRegionAccessPoint
 import aws.sdk.kotlin.e2etest.S3TestUtils.getAccountId
+import aws.sdk.kotlin.e2etest.S3TestUtils.getBucketWithPrefix
 import aws.sdk.kotlin.e2etest.S3TestUtils.getMultiRegionAccessPointArn
-import aws.sdk.kotlin.e2etest.S3TestUtils.getTestBucket
 import aws.sdk.kotlin.e2etest.S3TestUtils.multiRegionAccessPointWasCreated
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.deleteObject
@@ -26,6 +26,8 @@ import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+
+private const val MRAP_BUCKET_PREFIX = "s3-mrap-test-bucket-"
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MutliRegionAccessPointTest {
@@ -45,8 +47,8 @@ class MutliRegionAccessPointTest {
     @BeforeAll
     private fun setUp(): Unit = runBlocking {
         accountId = getAccountId()
-        usWestBucket = getTestBucket(s3West, "us-west-2", accountId)
-        usEastBucket = getTestBucket(s3East, "us-east-2", accountId)
+        usWestBucket = getBucketWithPrefix(s3West, MRAP_BUCKET_PREFIX, "us-west-2", accountId)
+        usEastBucket = getBucketWithPrefix(s3East, MRAP_BUCKET_PREFIX, "us-east-2", accountId)
 
         createMultiRegionAccessPoint(
             s3Control,

@@ -58,7 +58,18 @@ internal class DefaultS3ExpressCredentialsProvider(
                     client.logger.trace { "Credentials for ${key.bucket} are expiring in ${it.expiringCredentials.expiresAt} and are within their refresh window, performing asynchronous refresh..." }
                     launch(coroutineContext) {
                         try {
-                            it.sfg.singleFlight { createSessionCredentials(key, client) }
+                            it.sfg.singleFlight {
+                                // This coroutine/SFG may have started _after_ prior instances(s) finished, replacing
+                                // the cached value already. To prevent re-refreshing it, we need to re-acquire the
+                                // current cached value and verify whether it's expiring soon.
+                                val currentCreds = credentialsCache.get(key)
+
+                                if (currentCreds?.expiringCredentials?.isExpiringWithin(refreshBuffer) == true) {
+                                    createSessionCredentials(key, client)
+                                } else {
+                                    it.expiringCredentials
+                                }
+                            }
                         } catch (e: Exception) {
                             client.logger.warn(e) { "Asynchronous refresh for ${key.bucket} failed." }
                         }

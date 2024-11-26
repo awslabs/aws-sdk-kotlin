@@ -193,6 +193,12 @@
             "brazilName": "AwsSdkKotlinBcmDataExports"
         },
         {
+            "sdkId": "BCM Pricing Calculator",
+            "namespace": "aws.sdk.kotlin.services.bcmpricingcalculator",
+            "artifactName": "bcmpricingcalculator",
+            "brazilName": "AwsSdkKotlinBcmPricingCalculator"
+        },
+        {
             "sdkId": "Backup",
             "namespace": "aws.sdk.kotlin.services.backup",
             "artifactName": "backup",
@@ -233,6 +239,12 @@
             "namespace": "aws.sdk.kotlin.services.bedrockruntime",
             "artifactName": "bedrockruntime",
             "brazilName": "AwsSdkKotlinBedrockRuntime"
+        },
+        {
+            "sdkId": "Billing",
+            "namespace": "aws.sdk.kotlin.services.billing",
+            "artifactName": "billing",
+            "brazilName": "AwsSdkKotlinBilling"
         },
         {
             "sdkId": "Braket",
@@ -503,6 +515,12 @@
             "namespace": "aws.sdk.kotlin.services.connectcampaigns",
             "artifactName": "connectcampaigns",
             "brazilName": "AwsSdkKotlinConnectcampaigns"
+        },
+        {
+            "sdkId": "ConnectCampaignsV2",
+            "namespace": "aws.sdk.kotlin.services.connectcampaignsv2",
+            "artifactName": "connectcampaignsv2",
+            "brazilName": "AwsSdkKotlinConnectcampaignsv2"
         },
         {
             "sdkId": "ConnectCases",
@@ -827,6 +845,24 @@
             "namespace": "aws.sdk.kotlin.services.gamelift",
             "artifactName": "gamelift",
             "brazilName": "AwsSdkKotlinGamelift"
+        },
+        {
+            "sdkId": "Geo Maps",
+            "namespace": "aws.sdk.kotlin.services.geomaps",
+            "artifactName": "geomaps",
+            "brazilName": "AwsSdkKotlinGeoMaps"
+        },
+        {
+            "sdkId": "Geo Places",
+            "namespace": "aws.sdk.kotlin.services.geoplaces",
+            "artifactName": "geoplaces",
+            "brazilName": "AwsSdkKotlinGeoPlaces"
+        },
+        {
+            "sdkId": "Geo Routes",
+            "namespace": "aws.sdk.kotlin.services.georoutes",
+            "artifactName": "georoutes",
+            "brazilName": "AwsSdkKotlinGeoRoutes"
         },
         {
             "sdkId": "Glacier",
@@ -1393,6 +1429,18 @@
             "brazilName": "AwsSdkKotlinNetworkmonitor"
         },
         {
+            "sdkId": "Notifications",
+            "namespace": "aws.sdk.kotlin.services.notifications",
+            "artifactName": "notifications",
+            "brazilName": "AwsSdkKotlinNotifications"
+        },
+        {
+            "sdkId": "NotificationsContacts",
+            "namespace": "aws.sdk.kotlin.services.notificationscontacts",
+            "artifactName": "notificationscontacts",
+            "brazilName": "AwsSdkKotlinNotificationscontacts"
+        },
+        {
             "sdkId": "OAM",
             "namespace": "aws.sdk.kotlin.services.oam",
             "artifactName": "oam",
@@ -1463,6 +1511,12 @@
             "namespace": "aws.sdk.kotlin.services.panorama",
             "artifactName": "panorama",
             "brazilName": "AwsSdkKotlinPanorama"
+        },
+        {
+            "sdkId": "PartnerCentral Selling",
+            "namespace": "aws.sdk.kotlin.services.partnercentralselling",
+            "artifactName": "partnercentralselling",
+            "brazilName": "AwsSdkKotlinPartnercentralSelling"
         },
         {
             "sdkId": "Payment Cryptography",
@@ -1945,6 +1999,12 @@
             "brazilName": "AwsSdkKotlinSnowball"
         },
         {
+            "sdkId": "SocialMessaging",
+            "namespace": "aws.sdk.kotlin.services.socialmessaging",
+            "artifactName": "socialmessaging",
+            "brazilName": "AwsSdkKotlinSocialmessaging"
+        },
+        {
             "sdkId": "Ssm Sap",
             "namespace": "aws.sdk.kotlin.services.ssmsap",
             "artifactName": "ssmsap",
@@ -2261,12 +2321,6 @@
             "namespace": "aws.sdk.kotlin.services.neptunedata",
             "artifactName": "neptunedata",
             "brazilName": "AwsSdkKotlinNeptunedata"
-        },
-        {
-            "sdkId": "nimble",
-            "namespace": "aws.sdk.kotlin.services.nimble",
-            "artifactName": "nimble",
-            "brazilName": "AwsSdkKotlinNimble"
         },
         {
             "sdkId": "rbin",

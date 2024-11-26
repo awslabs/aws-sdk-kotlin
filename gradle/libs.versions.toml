@@ -1,33 +1,36 @@
 [versions]
-kotlin-version = "2.0.10"
+kotlin-version = "2.0.21"
+ksp-version = "2.0.21-1.0.25" # Keep in sync with kotlin-version
+
 dokka-version = "1.9.10"
 
-aws-kotlin-repo-tools-version = "0.4.10"
+aws-kotlin-repo-tools-version = "0.4.14"
 
 # libs
 coroutines-version = "1.9.0"
-atomicfu-version = "0.24.0"
+atomicfu-version = "0.25.0"
 
 # smithy-kotlin codegen and runtime are versioned separately
-smithy-kotlin-runtime-version = "1.3.17-SNAPSHOT"
-smithy-kotlin-codegen-version = "0.33.17-SNAPSHOT"
+smithy-kotlin-runtime-version = "1.3.26"
+smithy-kotlin-codegen-version = "0.33.26"
 
 # codegen
-smithy-version = "1.50.0"
+smithy-version = "1.51.0"
 
 # testing
-junit-version = "5.10.1"
-kotest-version = "5.8.0"
-kotlinx-benchmark-version = "0.4.9"
-kotlinx-serialization-version = "1.6.2"
-mockk-version = "1.13.7"
-slf4j-version = "2.0.9"
+ddb-local-version = "2.5.2"
+junit-version = "5.10.5"
+kotest-version = "5.9.1"
+kotlinx-benchmark-version = "0.4.12"
+kotlinx-serialization-version = "1.7.3"
+mockk-version = "1.13.13"
+slf4j-version = "2.0.16"
 
 [libraries]
 aws-kotlin-repo-tools-build-support = { module="aws.sdk.kotlin.gradle:build-support", version.ref = "aws-kotlin-repo-tools-version" }
 
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin-version"}
-kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin-version"}
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin-version" }
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin-version" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin-version" }
 kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin-version" }
 dokka-core = { module = "org.jetbrains.dokka:dokka-core", version.ref = "dokka-version" }
@@ -41,6 +44,9 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines-version" }
 kotlinx-coroutines-jdk8 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8", version.ref = "coroutines-version" }
 kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j", version.ref = "coroutines-version" }
+
+ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp-version" }
+ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp-version" }
 
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j-version" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-version" }
@@ -107,6 +113,8 @@ kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-version" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk-version" }
 
+ddb-local = { module = "com.amazonaws:DynamoDBLocal", version.ref = "ddb-local-version" }
+
 [bundles]
 # bundle of smithy-kotlin dependencies all AWS service clients have
 smithy-kotlin-service-client = [
@@ -134,6 +142,8 @@ kotlin-multiplatform = {id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinx-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlinx-benchmark-version" }
 kotlinx-binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.2" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version"}
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-version" }
 aws-kotlin-repo-tools-kmp = { id = "aws.sdk.kotlin.gradle.kmp", version.ref = "aws-kotlin-repo-tools-version" }
 aws-kotlin-repo-tools-smithybuild = { id = "aws.sdk.kotlin.gradle.smithybuild", version.ref = "aws-kotlin-repo-tools-version" }
 aws-kotlin-repo-tools-artifactsizemetrics = { id = "aws.sdk.kotlin.gradle.artifactsizemetrics", version.ref = "aws-kotlin-repo-tools-version" }
+gradle-plugin-publish = { id = "com.gradle.plugin-publish", version = "1.2.1"}
