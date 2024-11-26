@@ -12,7 +12,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddlewa
 import software.amazon.smithy.model.shapes.OperationShape
 
 /**
- * Renders the addition of the [aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.BusinessMetricsInterceptor]
+ * Renders the addition of the [BusinessMetricsInterceptor]
  */
 class BusinessMetricsInterceptorIntegration : KotlinIntegration {
     override fun customizeMiddleware(
