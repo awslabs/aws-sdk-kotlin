@@ -1453,6 +1453,12 @@
             "brazilName": "AwsSdkKotlinOsis"
         },
         {
+            "sdkId": "ObservabilityAdmin",
+            "namespace": "aws.sdk.kotlin.services.observabilityadmin",
+            "artifactName": "observabilityadmin",
+            "brazilName": "AwsSdkKotlinObservabilityadmin"
+        },
+        {
             "sdkId": "Omics",
             "namespace": "aws.sdk.kotlin.services.omics",
             "artifactName": "omics",
