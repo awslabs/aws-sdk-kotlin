@@ -33,21 +33,22 @@ object S3TestUtils {
 
     const val DEFAULT_REGION = "us-west-2"
 
-    // The E2E test account only has permission to operate on buckets with the prefix (s3-test-bucket-)
-    // Motorcade allow-listed bucket: "s3-test-bucket-ci-motorcade". E2E tests will use it and delete it!
-    // FIXME: Change back to "s3-test-bucket-" after motorcade is released.
+    // The E2E test account only has permission to operate on buckets with the prefix "s3-test-bucket-"
+    // Motorcade allow-listed bucket: "s3-test-bucket-ci-motorcade".
+    // Non-checksum E2E tests will use it and delete it if TEST_BUCKET_PREFIX="s3-test-bucket-" via `deleteBucketAndAllContents`
+    // TODO: Change back to "s3-test-bucket-" after motorcade is released.
     private const val TEST_BUCKET_PREFIX = "s3-test-bucket-temp-"
 
     private const val S3_MAX_BUCKET_NAME_LENGTH = 63 // https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
     private const val S3_EXPRESS_DIRECTORY_BUCKET_SUFFIX = "--x-s3"
 
-    suspend fun getTestBucketWithPrefix(
+    suspend fun getTestBucket(
         client: S3Client,
         region: String? = null,
         accountId: String? = null,
-    ): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX, region, accountId)
+    ): String = getBucket(client, TEST_BUCKET_PREFIX, region, accountId)
 
-    suspend fun getBucketWithPrefix(
+    suspend fun getBucket(
         client: S3Client,
         prefix: String,
         region: String? = null,
@@ -100,7 +101,7 @@ object S3TestUtils {
         testBucket
     }
 
-    suspend fun getTestBucketByName(
+    suspend fun getBucketByName(
         client: S3Client,
         bucket: String,
         region: String? = null,
@@ -134,20 +135,6 @@ object S3TestUtils {
             client.waitUntilBucketExists { this.bucket = testBucket }
         } else {
             println("Using existing S3 bucket: $testBucket")
-        }
-
-        client.putBucketLifecycleConfiguration {
-            this.bucket = testBucket
-            lifecycleConfiguration {
-                rules = listOf(
-                    LifecycleRule {
-                        expiration { days = 1 }
-                        filter { this.prefix = "" }
-                        status = ExpirationStatus.Enabled
-                        id = "delete-old"
-                    },
-                )
-            }
         }
 
         testBucket

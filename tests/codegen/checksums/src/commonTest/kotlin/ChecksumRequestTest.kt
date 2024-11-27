@@ -8,9 +8,6 @@ import utils.HeaderReader
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-// TODO - Simplify
-// TODO - Test empty payload
-
 class ChecksumRequestTest {
     @Test
     fun crc32(): Unit = runBlocking {
@@ -27,7 +24,7 @@ class ChecksumRequestTest {
             credentialsProvider = StaticCredentialsProvider(
                 Credentials("accessKeyID", "secretAccessKey"),
             )
-            region = "us-east-1" // TODO - region is unnecessary .....
+            region = "us-east-1"
         }.use { client ->
             client.httpChecksumOperation {
                 body = "Hello world".encodeToByteArray()

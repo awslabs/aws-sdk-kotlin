@@ -45,7 +45,7 @@ class S3BucketOpsIntegrationTest {
 
     @BeforeAll
     fun createResources(): Unit = runBlocking {
-        testBucket = S3TestUtils.getTestBucketWithPrefix(client)
+        testBucket = S3TestUtils.getTestBucket(client)
     }
 
     @AfterAll

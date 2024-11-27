@@ -30,11 +30,11 @@ class FlexibleChecksumsResponse : KotlinIntegration {
         listOf(
             ConfigProperty {
                 name = "responseChecksumValidation"
-                symbol = RuntimeTypes.SmithyClient.Config.ChecksumConfigOption
+                symbol = RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption
                 baseClass = RuntimeTypes.SmithyClient.Config.HttpChecksumClientConfig
                 useNestedBuilderBaseClass()
-                documentation = "" // todo
-                propertyType = ConfigPropertyType.RequiredWithDefault("ChecksumConfigOption.WHEN_SUPPORTED")
+                documentation = "Configures response checksum validation"
+                propertyType = ConfigPropertyType.RequiredWithDefault("HttpChecksumConfigOption.WHEN_SUPPORTED")
             },
         )
 
@@ -48,13 +48,13 @@ class FlexibleChecksumsResponse : KotlinIntegration {
             writer.withBlock("when(config.responseChecksumValidation) {", "}") {
                 writer.write(
                     "#T.WHEN_SUPPORTED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_SUPPORTED)",
-                    RuntimeTypes.SmithyClient.Config.ChecksumConfigOption,
+                    RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
                     RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
                     RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
                 )
                 writer.write(
                     "#T.WHEN_REQUIRED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_REQUIRED)",
-                    RuntimeTypes.SmithyClient.Config.ChecksumConfigOption,
+                    RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
                     RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
                     RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
                 )
@@ -86,7 +86,7 @@ class FlexibleChecksumsResponse : KotlinIntegration {
                 "))",
                 RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsResponseInterceptor,
             ) {
-                writer.write("responseValidation = input.#L?.value == \"ENABLED\",", requestValidationModeMemberName)
+                writer.write("responseValidationRequired = input.#L?.value == \"ENABLED\",", requestValidationModeMemberName)
                 writer.write("responseChecksumValidation = config.responseChecksumValidation,")
             }
         }

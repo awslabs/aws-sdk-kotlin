@@ -2,7 +2,7 @@ import aws.sdk.kotlin.test.checksums.TestClient
 import aws.sdk.kotlin.test.checksums.httpChecksumOperation
 import aws.sdk.kotlin.test.checksums.model.ChecksumAlgorithm
 import aws.smithy.kotlin.runtime.businessmetrics.SmithyBusinessMetric
-import aws.smithy.kotlin.runtime.client.config.ChecksumConfigOption
+import aws.smithy.kotlin.runtime.client.config.HttpChecksumConfigOption
 import aws.smithy.kotlin.runtime.httptest.TestEngine
 import kotlinx.coroutines.runBlocking
 import utils.BusinessMetricsReader
@@ -43,8 +43,8 @@ class ChecksumBusinessMetricsTest {
         TestClient {
             httpClient = TestEngine()
             interceptors = mutableListOf(businessMetricsReader)
-            requestChecksumCalculation = ChecksumConfigOption.WHEN_SUPPORTED
-            responseChecksumValidation = ChecksumConfigOption.WHEN_SUPPORTED
+            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_SUPPORTED
+            responseChecksumValidation = HttpChecksumConfigOption.WHEN_SUPPORTED
         }.use { client ->
             client.httpChecksumOperation {
                 body = "Hello world".encodeToByteArray()
@@ -66,8 +66,8 @@ class ChecksumBusinessMetricsTest {
         TestClient {
             httpClient = TestEngine()
             interceptors = mutableListOf(businessMetricsReader)
-            requestChecksumCalculation = ChecksumConfigOption.WHEN_REQUIRED
-            responseChecksumValidation = ChecksumConfigOption.WHEN_REQUIRED
+            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_REQUIRED
+            responseChecksumValidation = HttpChecksumConfigOption.WHEN_REQUIRED
         }.use { client ->
             client.httpChecksumOperation {
                 body = "Hello world".encodeToByteArray()

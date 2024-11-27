@@ -7,7 +7,6 @@ import shared.Model
 description = "AWS SDK for Kotlin's checksums codegen test suite"
 
 kotlin {
-    // TODO: This should be part of the shared gradle file !
     sourceSets {
         commonTest {
             dependencies {
@@ -43,7 +42,6 @@ smithyBuild {
     }
 }
 
-// TODO: Commonize this to other codegen tests
 kotlin {
     sourceSets {
         commonTest {

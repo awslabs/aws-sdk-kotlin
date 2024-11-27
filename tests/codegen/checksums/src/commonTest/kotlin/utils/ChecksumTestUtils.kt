@@ -7,7 +7,6 @@ import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.request.toBuilder
-import kotlinx.coroutines.runBlocking
 
 /**
  * Checks if the specified headers are set in an HTTP request.
@@ -42,31 +41,6 @@ internal class HeaderReader(
 }
 
 /**
- * Checks if the specified trailer headers are set in an HTTP request.
- */
-internal class TrailerReader(
-    private val expectedTrailers: Map<String, String?>,
-) : HttpInterceptor {
-    var containsExpectedTrailers = true
-
-    override fun readBeforeTransmit(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
-        expectedTrailers.forEach { trailer ->
-            val containsTrailer = context.protocolRequest.trailingHeaders.contains(trailer.key)
-            val trailerValueMatches = trailer.value?.let { trailerValue ->
-                runBlocking {
-                    context.protocolRequest.trailingHeaders[trailer.key]?.await() == trailerValue
-                }
-            } ?: true
-
-            if (!containsTrailer || !trailerValueMatches) {
-                containsExpectedTrailers = false
-                return
-            }
-        }
-    }
-}
-
-/**
  * Sets the specified checksum header and value in an HTTP request.
  */
 internal class HeaderSetter(
@@ -81,6 +55,9 @@ internal class HeaderSetter(
     }
 }
 
+/**
+ * Checks if the specified business metrics are set in an HTTP request.
+ */
 internal class BusinessMetricsReader(
     private val expectedBusinessMetrics: Set<BusinessMetric>,
 ) : HttpInterceptor {

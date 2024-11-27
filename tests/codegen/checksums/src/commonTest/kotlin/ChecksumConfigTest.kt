@@ -3,7 +3,7 @@ import aws.sdk.kotlin.test.clientconfig.*
 import aws.sdk.kotlin.test.clientconfig.model.ChecksumAlgorithm
 import aws.sdk.kotlin.test.clientconfig.model.ValidationMode
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.client.config.ChecksumConfigOption
+import aws.smithy.kotlin.runtime.client.config.HttpChecksumConfigOption
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -19,8 +19,6 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-// TODO - Simplify this
-
 /**
  * Tests the `aws.protocols#httpChecksum` trait's `requestChecksumRequired` when set to **true**.
  */
@@ -32,7 +30,7 @@ class RequestChecksumRequired {
         )
 
         ClientConfigTestClient {
-            requestChecksumCalculation = ChecksumConfigOption.WHEN_SUPPORTED
+            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_SUPPORTED
             interceptors = mutableListOf(headerReader)
             httpClient = TestEngine()
             credentialsProvider = StaticCredentialsProvider(
@@ -57,7 +55,7 @@ class RequestChecksumRequired {
         )
 
         ClientConfigTestClient {
-            requestChecksumCalculation = ChecksumConfigOption.WHEN_REQUIRED
+            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_REQUIRED
             interceptors = mutableListOf(headerReader)
             httpClient = TestEngine()
             credentialsProvider = StaticCredentialsProvider(
@@ -87,7 +85,7 @@ class RequestChecksumNotRequired {
         )
 
         ClientConfigTestClient {
-            requestChecksumCalculation = ChecksumConfigOption.WHEN_SUPPORTED
+            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_SUPPORTED
             interceptors = mutableListOf(headerReader)
             httpClient = TestEngine()
             credentialsProvider = StaticCredentialsProvider(
@@ -112,7 +110,7 @@ class RequestChecksumNotRequired {
         )
 
         ClientConfigTestClient {
-            requestChecksumCalculation = ChecksumConfigOption.WHEN_REQUIRED
+            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_REQUIRED
             interceptors = mutableListOf(headerReader)
             httpClient = TestEngine()
             credentialsProvider = StaticCredentialsProvider(
@@ -269,7 +267,7 @@ class ResponseChecksumValidation {
     fun responseChecksumValidationWhenSupported(): Unit = runBlocking {
         assertFailsWith<ChecksumMismatchException> {
             ClientConfigTestClient {
-                responseChecksumValidation = ChecksumConfigOption.WHEN_SUPPORTED
+                responseChecksumValidation = HttpChecksumConfigOption.WHEN_SUPPORTED
                 httpClient = TestEngine(
                     roundTripImpl = { _, request ->
                         val resp = HttpResponse(
@@ -298,7 +296,7 @@ class ResponseChecksumValidation {
     @Test
     fun responseChecksumValidationWhenRequired(): Unit = runBlocking {
         ClientConfigTestClient {
-            responseChecksumValidation = ChecksumConfigOption.WHEN_REQUIRED
+            responseChecksumValidation = HttpChecksumConfigOption.WHEN_REQUIRED
             httpClient = TestEngine(
                 roundTripImpl = { _, request ->
                     val resp = HttpResponse(
@@ -327,7 +325,7 @@ class ResponseChecksumValidation {
     fun responseChecksumValidationWhenRequiredWithRequestValidationModeEnabled(): Unit = runBlocking {
         assertFailsWith<ChecksumMismatchException> {
             ClientConfigTestClient {
-                responseChecksumValidation = ChecksumConfigOption.WHEN_REQUIRED
+                responseChecksumValidation = HttpChecksumConfigOption.WHEN_REQUIRED
                 httpClient = TestEngine(
                     roundTripImpl = { _, request ->
                         val resp = HttpResponse(
@@ -356,9 +354,8 @@ class ResponseChecksumValidation {
 
     @Test
     fun compositeChecksumsAreNotValidated(): Unit = runBlocking {
-        // TODO: Move elsewhere
         ClientConfigTestClient {
-            responseChecksumValidation = ChecksumConfigOption.WHEN_REQUIRED
+            responseChecksumValidation = HttpChecksumConfigOption.WHEN_REQUIRED
             httpClient = TestEngine(
                 roundTripImpl = { _, request ->
                     val resp = HttpResponse(

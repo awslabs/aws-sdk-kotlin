@@ -33,11 +33,11 @@ class FlexibleChecksumsRequest : KotlinIntegration {
         listOf(
             ConfigProperty {
                 name = "requestChecksumCalculation"
-                symbol = RuntimeTypes.SmithyClient.Config.ChecksumConfigOption
+                symbol = RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption
                 baseClass = RuntimeTypes.SmithyClient.Config.HttpChecksumClientConfig
                 useNestedBuilderBaseClass()
-                documentation = "" // todo
-                propertyType = ConfigPropertyType.RequiredWithDefault("ChecksumConfigOption.WHEN_SUPPORTED")
+                documentation = "Configures request checksum calculation"
+                propertyType = ConfigPropertyType.RequiredWithDefault("HttpChecksumConfigOption.WHEN_SUPPORTED")
             },
         )
 
@@ -54,13 +54,13 @@ class FlexibleChecksumsRequest : KotlinIntegration {
             writer.withBlock("when(config.requestChecksumCalculation) {", "}") {
                 writer.write(
                     "#T.WHEN_SUPPORTED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_REQ_WHEN_SUPPORTED)",
-                    RuntimeTypes.SmithyClient.Config.ChecksumConfigOption,
+                    RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
                     RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
                     RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
                 )
                 writer.write(
                     "#T.WHEN_REQUIRED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_REQ_WHEN_REQUIRED)",
-                    RuntimeTypes.SmithyClient.Config.ChecksumConfigOption,
+                    RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
                     RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
                     RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
                 )
@@ -87,7 +87,7 @@ class FlexibleChecksumsRequest : KotlinIntegration {
                 .members()
                 .first { it.memberName == httpChecksumTrait.requestAlgorithmMember.get() }
 
-            val userSelectedChecksumAlgorithm = ctx.symbolProvider.toMemberName(requestAlgorithmMember)
+            val requestAlgorithmMemberName = ctx.symbolProvider.toMemberName(requestAlgorithmMember)
             val requestChecksumRequired = httpChecksumTrait.isRequestChecksumRequired
 
             writer.withBlock(
@@ -97,7 +97,7 @@ class FlexibleChecksumsRequest : KotlinIntegration {
             ) {
                 writer.write("requestChecksumRequired = #L,", requestChecksumRequired)
                 writer.write("requestChecksumCalculation = config.requestChecksumCalculation,")
-                writer.write("userSelectedChecksumAlgorithm = input.#L?.value,", userSelectedChecksumAlgorithm)
+                writer.write("userSelectedChecksumAlgorithm = input.#L?.value,", requestAlgorithmMemberName)
             }
         }
     }
