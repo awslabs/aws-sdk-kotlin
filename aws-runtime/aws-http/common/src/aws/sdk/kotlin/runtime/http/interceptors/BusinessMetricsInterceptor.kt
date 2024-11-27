@@ -44,7 +44,10 @@ public class BusinessMetricsInterceptor : HttpInterceptor {
 private fun formatMetrics(metrics: MutableSet<BusinessMetric>, logger: Logger): String {
     val allowedMetrics = metrics.filter {
         if (it.identifier.length > 2) {
-            logger.warn { "Business metric '${it.identifier}' will be skipped due to length being > 2" }
+            logger.warn {
+                "Business metric '${it.identifier}' will be skipped due to length being > 2. " +
+                    "This is likely a bug. Please raise an issue at https://github.com/awslabs/aws-sdk-kotlin/issues/new/choose"
+            }
             false
         } else {
             true
