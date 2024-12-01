@@ -11,14 +11,8 @@ import shared.Model
 
 description = "AWS SDK for Kotlin's smoke test codegen test suite"
 
-kotlin {
-    sourceSets {
-        jvmTest {
-            dependencies {
-                implementation("dev.gradleplugins:gradle-test-kit:7.3.3")
-            }
-        }
-    }
+dependencies {
+    jvmTestImplementation(gradleTestKit())
 }
 
 val tests = listOf(
