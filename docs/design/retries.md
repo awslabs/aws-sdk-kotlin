@@ -6,13 +6,13 @@
 # Abstract
 
 The AWS SDK for Kotlin uses a specialization of the generalized
-[**smithy-kotlin** Retry Design](https://github.com/awslabs/smithy-kotlin/blob/main/docs/design/retries.md). This
+[**smithy-kotlin** Retry Design](https://github.com/smithy-lang/smithy-kotlin/blob/main/docs/design/retries.md). This
 document covers those specializations (but does not re-hash the generalized design).
 
 # SDK implementation
 
 The SDK uses the following customizations/specializations over the generalized
-[**smithy-kotlin** Retry Design](https://github.com/awslabs/smithy-kotlin/blob/main/docs/design/retries.md):
+[**smithy-kotlin** Retry Design](https://github.com/smithy-lang/smithy-kotlin/blob/main/docs/design/retries.md):
 
 ## Retry policy
 

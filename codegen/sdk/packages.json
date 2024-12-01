@@ -193,6 +193,12 @@
             "brazilName": "AwsSdkKotlinBcmDataExports"
         },
         {
+            "sdkId": "BCM Pricing Calculator",
+            "namespace": "aws.sdk.kotlin.services.bcmpricingcalculator",
+            "artifactName": "bcmpricingcalculator",
+            "brazilName": "AwsSdkKotlinBcmPricingCalculator"
+        },
+        {
             "sdkId": "Backup",
             "namespace": "aws.sdk.kotlin.services.backup",
             "artifactName": "backup",
@@ -233,6 +239,12 @@
             "namespace": "aws.sdk.kotlin.services.bedrockruntime",
             "artifactName": "bedrockruntime",
             "brazilName": "AwsSdkKotlinBedrockRuntime"
+        },
+        {
+            "sdkId": "Billing",
+            "namespace": "aws.sdk.kotlin.services.billing",
+            "artifactName": "billing",
+            "brazilName": "AwsSdkKotlinBilling"
         },
         {
             "sdkId": "Braket",
@@ -503,6 +515,12 @@
             "namespace": "aws.sdk.kotlin.services.connectcampaigns",
             "artifactName": "connectcampaigns",
             "brazilName": "AwsSdkKotlinConnectcampaigns"
+        },
+        {
+            "sdkId": "ConnectCampaignsV2",
+            "namespace": "aws.sdk.kotlin.services.connectcampaignsv2",
+            "artifactName": "connectcampaignsv2",
+            "brazilName": "AwsSdkKotlinConnectcampaignsv2"
         },
         {
             "sdkId": "ConnectCases",
@@ -1411,6 +1429,18 @@
             "brazilName": "AwsSdkKotlinNetworkmonitor"
         },
         {
+            "sdkId": "Notifications",
+            "namespace": "aws.sdk.kotlin.services.notifications",
+            "artifactName": "notifications",
+            "brazilName": "AwsSdkKotlinNotifications"
+        },
+        {
+            "sdkId": "NotificationsContacts",
+            "namespace": "aws.sdk.kotlin.services.notificationscontacts",
+            "artifactName": "notificationscontacts",
+            "brazilName": "AwsSdkKotlinNotificationscontacts"
+        },
+        {
             "sdkId": "OAM",
             "namespace": "aws.sdk.kotlin.services.oam",
             "artifactName": "oam",
@@ -1421,6 +1451,12 @@
             "namespace": "aws.sdk.kotlin.services.osis",
             "artifactName": "osis",
             "brazilName": "AwsSdkKotlinOsis"
+        },
+        {
+            "sdkId": "ObservabilityAdmin",
+            "namespace": "aws.sdk.kotlin.services.observabilityadmin",
+            "artifactName": "observabilityadmin",
+            "brazilName": "AwsSdkKotlinObservabilityadmin"
         },
         {
             "sdkId": "Omics",
@@ -1481,6 +1517,12 @@
             "namespace": "aws.sdk.kotlin.services.panorama",
             "artifactName": "panorama",
             "brazilName": "AwsSdkKotlinPanorama"
+        },
+        {
+            "sdkId": "PartnerCentral Selling",
+            "namespace": "aws.sdk.kotlin.services.partnercentralselling",
+            "artifactName": "partnercentralselling",
+            "brazilName": "AwsSdkKotlinPartnercentralSelling"
         },
         {
             "sdkId": "Payment Cryptography",

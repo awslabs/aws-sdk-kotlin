@@ -1,5 +1,212 @@
 # Changelog
 
+## [1.3.84] - 11/27/2024
+
+### Features
+* (**bedrockagent**) Add support for specifying embeddingDataType, either FLOAT32 or BINARY
+* (**configservice**) AWS Config adds support for service-linked recorders, a new type of Config recorder managed by AWS services to record specific subsets of resource configuration data and functioning independently from customer managed AWS Config recorders.
+* (**fsx**) This release adds EFA support to increase FSx for Lustre file systems' throughput performance to a single client instance. This can be done by specifying EfaEnabled=true at the time of creation of Persistent_2 file systems.
+* (**observabilityadmin**) Amazon CloudWatch Observability Admin adds the ability to audit telemetry configuration for AWS resources in customers AWS Accounts and Organizations. The release introduces new APIs to turn on/off the new experience, which supports discovering supported AWS resources and their state of telemetry.
+
+## [1.3.83] - 11/26/2024
+
+### Features
+* (**bedrockagent**) Custom Orchestration API release for AWSBedrockAgents.
+* (**bedrockagentruntime**) Custom Orchestration and Streaming configurations API release for AWSBedrockAgents.
+* (**connect**) Enables access to ValueMap and ValueInteger types for SegmentAttributes and fixes deserialization bug for DescribeContactFlow in AmazonConnect Public API
+* (**ec2**) Adds support for Time-based Copy for EBS Snapshots and Cross Region PrivateLink. Time-based Copy ensures that EBS Snapshots are copied within and across AWS Regions in a specified timeframe. Cross Region PrivateLink enables customers to connect to VPC endpoint services hosted in other AWS Regions.
+* (**qapps**) Private sharing, file upload and data collection feature support for Q Apps
+
+## [1.3.82] - 11/25/2024
+
+### Features
+* (**directconnect**) Update DescribeDirectConnectGatewayAssociations API to return associated core network information if a Direct Connect gateway is attached to a Cloud WAN core network.
+* (**networkmanager**) This release adds native Direct Connect integration on Cloud WAN enabling customers to directly attach their Direct Connect gateways to Cloud WAN without the need for an intermediate Transit Gateway.
+* (**s3**) Amazon Simple Storage Service / Features: Add support for ETag based conditional writes in PutObject and CompleteMultiPartUpload APIs to prevent unintended object modifications.
+
+## [1.3.81] - 11/22/2024
+
+### Features
+* (**autoscaling**) Now, Amazon EC2 Auto Scaling customers can enable target tracking policies to take quicker scaling decisions, enhancing their application performance and EC2 utilization. To get started, specify target tracking to monitor a metric that is available on Amazon CloudWatch at seconds-level interval.
+* (**bcmpricingcalculator**) Initial release of the AWS Billing and Cost Management Pricing Calculator API.
+* (**bedrockagentruntime**) InvokeInlineAgent API release to help invoke runtime agents without any dependency on preconfigured agents.
+* (**chatbot**) Adds support for programmatic management of custom actions and aliases which can be associated with channel configurations.
+* (**codepipeline**) AWS CodePipeline V2 type pipelines now support ECRBuildAndPublish and InspectorScan actions.
+* (**cognitoidentityprovider**) Add support for users to sign up and sign in without passwords, using email and SMS OTPs and Passkeys. Add support for Passkeys based on WebAuthn. Add support for enhanced branding customization for hosted authentication pages with Amazon Cognito Managed Login. Add feature tiers with new pricing.
+* (**connect**) Amazon Connect Service Feature: Add APIs for Amazon Connect Email Channel
+* (**costexplorer**) This release adds the Impact field(contains Contribution field) to the GetAnomalies API response under RootCause
+* (**elasticloadbalancingv2**) This release adds support for advertising trusted CA certificate names in associated trust stores.
+* (**emr**) Advanced Scaling in Amazon EMR Managed Scaling
+* (**inspector2**) Extend inspector2 service model to include ServiceQuotaExceededException.
+* (**lambda**) Add ProvisionedPollerConfig to Lambda event-source-mapping API.
+* (**mailmanager**) Added new "DeliverToQBusiness" rule action to MailManager RulesSet for ingesting email data into Amazon Q Business customer applications
+* (**neptunegraph**) Add 4 new APIs to support new Export features, allowing Parquet and CSV formats. Add new arguments in Import APIs to support Parquet import. Add a new query "neptune.read" to run algorithms without loading data into database
+* (**omics**) This release adds support for resource policy based cross account S3 access to sequence store read sets.
+* (**quicksight**) This release includes: Update APIs to support Image, Layer Map, font customization, and Plugin Visual. Add Identity center related information in ListNamsespace API. Update API for restrictedFolder support in topics and add API for SearchTopics, Describe/Update DashboardsQA Configration.
+* (**sagemaker**) This release adds APIs for new features for SageMaker endpoint to scale down to zero instances, native support for multi-adapter inference, and endpoint scaling improvements.
+* (**ses**) This release adds support for starting email contacts in your Amazon Connect instance as an email receiving action.
+* (**sfn**) Add support for variables and JSONata in TestState, GetExecutionHistory, DescribeStateMachine, and DescribeStateMachineForExecution
+
+### Documentation
+* (**sns**) ArchivePolicy attribute added to Archive and Replay feature
+* (**workspaces**) While integrating WSP-DCV rebrand, a few mentions were erroneously renamed from WSP to DCV. This release reverts those mentions back to WSP.
+
+## [1.3.80] - 11/21/2024
+
+### Features
+* (**apigateway**) Added support for custom domain names for private APIs.
+* (**applicationautoscaling**) Application Auto Scaling now supports Predictive Scaling to proactively increase the desired capacity ahead of predicted demand, ensuring improved availability and responsiveness for customers' applications. This feature is currently only made available for Amazon ECS Service scalable targets.
+* (**appsync**) Add support for the Amazon Bedrock Runtime.
+* (**cloudfront**) Adds support for Origin Selection between EMPv2 origins based on media quality score.
+* (**cloudtrail**) This release introduces new APIs for creating and managing CloudTrail Lake dashboards. It also adds support for resource-based policies on CloudTrail EventDataStore and Dashboard resource.
+* (**cloudwatchlogs**) Adds "Create field indexes to improve query performance and reduce scan volume" and "Transform logs during ingestion". Updates documentation for "PutLogEvents with Entity".
+* (**costexplorer**) This release introduces three new APIs that enable you to estimate the cost, coverage, and utilization impact of Savings Plans you plan to purchase. The three APIs are StartCommitmentPurchaseAnalysis, GetCommitmentPurchaseAnalysis, and ListCommitmentPurchaseAnalyses.
+* (**ec2**) Adds support for requesting future-dated Capacity Reservations with a minimum commitment duration, enabling IPAM for organizational units within AWS Organizations, reserving EC2 Capacity Blocks that start in 30 minutes, and extending the end date of existing Capacity Blocks.
+* (**elasticache**) Added support to modify the engine type for existing ElastiCache Users and User Groups. Customers can now modify the engine type from redis to valkey.
+* (**health**) Adds metadata property to an AffectedEntity.
+* (**iot**) General Availability (GA) release of AWS IoT Device Management - Commands, to trigger light-weight remote actions on targeted devices
+* (**iotfleetwise**) AWS IoT FleetWise now includes campaign parameters to store and forward data, configure MQTT topic as a data destination, and collect diagnostic trouble code data. It includes APIs for network agnostic data collection using custom decoding interfaces, and monitoring the last known state of vehicles.
+* (**iotjobsdataplane**) General Availability (GA) release of AWS IoT Device Management - Commands, to trigger light-weight remote actions on targeted devices
+* (**lambda**) Adds support for metrics for event source mappings for AWS Lambda
+* (**notifications**) This release adds support for AWS User Notifications. You can now configure and view notifications from AWS services in a central location using the AWS SDK.
+* (**notificationscontacts**) This release adds support for AWS User Notifications Contacts. You can now configure and view email contacts for AWS User Notifications using the AWS SDK.
+* (**resiliencehub**) AWS Resilience Hub's new summary view visually represents applications' resilience through charts, enabling efficient resilience management. It provides a consolidated view of the app portfolio's resilience state and allows data export for custom stakeholder reporting.
+* (**s3**) Add support for conditional deletes for the S3 DeleteObject and DeleteObjects APIs. Add support for write offset bytes option used to append to objects with the S3 PutObject API.
+* (**ssm**) Added support for providing high-level overviews of managed nodes and previewing the potential impact of a runbook execution.
+* (**ssmquicksetup**) Add methods that retrieve details about deployed configurations: ListConfigurations, GetConfiguration
+* (**xray**) AWS X-Ray introduces Transaction Search APIs, enabling span ingestion into CloudWatch Logs for high-scale trace data indexing. These APIs support span-level queries, trace graph generation, and metric correlation for deeper application insights.
+
+### Documentation
+* (**elasticloadbalancingv2**) This feature adds support for enabling zonal shift on cross-zone enabled Application Load Balancer, as well as modifying HTTP request and response headers.
+
+## [1.3.79] - 11/20/2024
+
+### Features
+* (**applicationdiscoveryservice**) Add support to import data from commercially available discovery tools without file manipulation.
+* (**autoscaling**) With this release, customers can prioritize launching instances into ODCRs using targets from ASGs or Launch Templates. Customers can express their baseline instances' CPU-performance in attribute-based Instance Requirements configuration by referencing an instance family that meets their needs.
+* (**bedrockagentruntime**) Releasing new Prompt Optimization to enhance your prompts for improved performance
+* (**cloudfront**) Add support for gRPC, VPC origins, and Anycast IP Lists. Allow LoggingConfig IncludeCookies to be set regardless of whether the LoggingConfig is enabled.
+* (**computeoptimizer**) This release enables AWS Compute Optimizer to analyze and generate optimization recommendations for Amazon Aurora database instances. It also enables Compute Optimizer to identify idle Amazon EC2 instances, Amazon EBS volumes, Amazon ECS services running on Fargate, and Amazon RDS databases.
+* (**controltower**) Adds support for child enabled baselines which allow you to see the enabled baseline status for individual accounts.
+* (**costoptimizationhub**) This release adds action type "Delete" to the GetRecommendation, ListRecommendations and ListRecommendationSummaries APIs to support new EBS and ECS recommendations with action type "Delete".
+* (**datazone**) This release supports Metadata Enforcement Rule feature for Create Subscription Request action.
+* (**ec2**) With this release, customers can express their desire to launch instances only in an ODCR or ODCR group rather than OnDemand capacity. Customers can express their baseline instances' CPU-performance in attribute-based Instance Requirements configuration by referencing an instance family.
+* (**ecs**) This release adds support for the Availability Zone rebalancing feature on Amazon ECS.
+* (**elasticloadbalancingv2**) This release adds support for configuring Load balancer Capacity Unit reservations
+* (**lambda**) Add Node 22.x (node22.x) support to AWS Lambda
+* (**mediaconvert**) This release adds the ability to reconfigure concurrent job settings for existing queues and create queues with custom concurrent job settings.
+* (**mediapackagev2**) MediaPackage v2 now supports the Media Quality Confidence Score (MQCS) published from MediaLive. Customers can control input switching based on the MQCS and publishing HTTP Headers for the MQCS via the API.
+* (**omics**) Enabling call caching feature that allows customers to reuse previously computed results from a set of completed tasks in a new workflow run.
+* (**rbin**) This release adds support for exclusion tags for Recycle Bin, which allows you to identify resources that are to be excluded, or ignored, by a Region-level retention rule.
+* (**rds**) This release adds support for scale storage on the DB instance using a Blue/Green Deployment.
+* (**timestreamquery**) This release adds support for Provisioning Timestream Compute Units (TCUs), a new feature that allows provisioning dedicated compute resources for your queries, providing predictable and cost-effective query performance.
+* (**workspaces**) Added support for Rocky Linux 8 on Amazon WorkSpaces Personal.
+* (**workspacesweb**) Added data protection settings with support for inline data redaction.
+* [#1440](https://github.com/awslabs/aws-sdk-kotlin/issues/1440) Include Maven Bill of Materials (BOM) in version catalog
+
+## [1.3.78] - 11/19/2024
+
+### Features
+* (**b2bi**) Add new X12 transactions sets and versions
+* (**ec2**) This release adds VPC Block Public Access (VPC BPA), a new declarative control which blocks resources in VPCs and subnets that you own in a Region from reaching or being reached from the internet through internet gateways and egress-only internet gateways.
+* (**ecs**) This release introduces support for configuring the version consistency feature for individual containers defined within a task definition. The configuration allows to specify whether ECS should resolve the container image tag specified in the container definition to an image digest.
+* (**efs**) Add support for the new parameters in EFS replication APIs
+* (**glue**) AWS Glue Data Catalog now enhances managed table optimizations of Apache Iceberg tables that can be accessed only from a specific Amazon Virtual Private Cloud (VPC) environment.
+* (**keyspaces**) Amazon Keyspaces Multi-Region Replication: Adds support to add new regions to multi and single-region keyspaces.
+* (**mwaa**) Amazon MWAA now supports a new environment class, mw1.micro, ideal for workloads requiring fewer resources than mw1.small. This class supports a single instance of each Airflow component: Scheduler, Worker, and Webserver.
+* (**taxsettings**) Release Tax Inheritance APIs,  Tax Exemption APIs, and functionality update for some existing Tax Registration APIs
+* (**workspaces**) Releasing new ErrorCodes for Image Validation failure during CreateWorkspaceImage process
+
+## [1.3.77] - 11/18/2024
+
+### Features
+* (**appconfig**) AWS AppConfig has added a new extension action point, AT_DEPLOYMENT_TICK, to support third-party monitors to trigger an automatic rollback during a deployment.
+* (**autoscaling**) Amazon EC2 Auto Scaling now supports Amazon Application Recovery Controller (ARC) zonal shift and zonal autoshift to help you quickly recover an impaired application from failures in an Availability Zone (AZ).
+* (**cloudformation**) This release adds a new API, ListHookResults, that allows retrieving CloudFormation Hooks invocation results for hooks invoked during a create change set operation or Cloud Control API operation
+* (**connect**) Adds CreateContactFlowVersion and ListContactFlowVersions APIs to create and view the versions of a contact flow.
+* (**customerprofiles**) This release introduces Segmentation APIs and new Calculated Attribute Event Filters as part of Amazon Connect Customer Profiles service.
+* (**ec2**) Adding request and response elements for managed resources.
+* (**ecs**) This release adds support for adding VPC Lattice configurations in ECS CreateService/UpdateService APIs. The configuration allows for associating VPC Lattice target groups with ECS Services.
+* (**iotsitewise**) The release introduces a generative AI Assistant in AWS IoT SiteWise. It includes: 1) InvokeAssistant API - Invoke the Assistant to get alarm summaries and ask questions. 2) Dataset APIs - Manage knowledge base configuration for the Assistant. 3) Portal APIs enhancement - Manage AI-aware dashboards.
+* (**qconnect**) This release introduces MessageTemplate as a resource in Amazon Q in Connect, along with APIs to create, read, search, update, and delete MessageTemplate resources.
+* (**rds**) Add support for the automatic pause/resume feature of Aurora Serverless v2.
+* (**rdsdata**) Add support for the automatic pause/resume feature of Aurora Serverless v2.
+
+## [1.3.76] - 11/15/2024
+
+### Features
+* (**cloudwatch**) Adds support for adding related Entity information to metrics ingested through PutMetricData.
+* (**connectcampaignsv2**) Added Amazon Connect Outbound Campaigns V2 SDK.
+* (**ec2**) Remove non-functional enum variants for FleetCapacityReservationUsageStrategy
+* (**iot**) This release allows AWS IoT Core users to enrich MQTT messages with propagating attributes, to associate a thing to a connection, and to enable Online Certificate Status Protocol (OCSP) stapling for TLS X.509 server certificates through private endpoints.
+* (**outposts**) You can now purchase AWS Outposts rack or server capacity for a 5-year term with one of  the following payment options: All Upfront, Partial Upfront, and No Upfront.
+* (**pinpointsmsvoicev2**) Use rule overrides to always allow or always block messages to specific phone numbers. Use message feedback to monitor if a customer interacts with your message.
+* (**route53resolver**) Route 53 Resolver DNS Firewall Advanced Rules allows you to monitor and block suspicious DNS traffic based on anomalies detected in the queries, such as DNS tunneling and Domain Generation Algorithms (DGAs).
+
+### Documentation
+* (**datasync**) Doc-only updates and enhancements related to creating DataSync tasks and describing task executions.
+* (**polly**) Fixes PutLexicon usage example.
+
+## [1.3.75] - 11/15/2024
+
+### Features
+* (**partnercentralselling**) Announcing AWS Partner Central API for Selling: This service launch Introduces new APIs for co-selling opportunity management and related functions. Key features include notifications, a dynamic sandbox for testing, and streamlined validations.
+
+### Fixes
+* Fix concurrency issues with S3 Express credential caching
+
+## [1.3.74] - 11/14/2024
+
+### Features
+* (**accessanalyzer**) Expand analyzer configuration capabilities for unused access analyzers. Unused access analyzer configurations now support the ability to exclude accounts and resource tags from analysis providing more granular control over the scope of analysis.
+* (**cloudcontrol**) Added support for CloudFormation Hooks with Cloud Control API. The GetResourceRequestStatus API response now includes an optional HooksProgressEvent and HooksRequestToken parameter for Hooks Invocation Progress as part of resource operation with Cloud Control.
+* (**deadline**) Adds support for select GPU accelerated instance types when creating new service-managed fleets.
+* (**iam**) This release includes support for five new APIs and changes to existing APIs that give AWS Organizations customers the ability to use temporary root credentials, targeted to member accounts in the organization.
+* (**iotwireless**) New FuotaTask resource type to enable logging for your FUOTA tasks. A ParticipatingGatewaysforMulticast parameter to choose the list of gateways to receive the multicast downlink message and the transmission interval between them. Descriptor field which will be sent to devices during FUOTA transfer.
+* (**ivs**) IVS now offers customers the ability to stream multitrack video to Channels.
+* (**licensemanagerusersubscriptions**) New and updated API operations to support License Included User-based Subscription of Microsoft Remote Desktop Services (RDS).
+* (**partnercentralselling**) Announcing AWS Partner Central API for Selling: This service launch Introduces new APIs for co-selling opportunity management and related functions. Key features include notifications, a dynamic sandbox for testing, and streamlined validations.
+* (**quicksight**) This release adds APIs for Custom Permissions management in QuickSight, and APIs to support QuickSight Branding.
+* (**redshift**) Adds support for Amazon Redshift S3AccessGrants
+* (**s3**) This release updates the ListBuckets API Reference documentation in support of the new 10,000 general purpose bucket default quota on all AWS accounts. To increase your bucket quota from 10,000 to up to 1 million buckets, simply request a quota increase via Service Quotas.
+* (**sagemaker**) Add support for Neuron instance types [ trn1/trn1n/inf2 ] on SageMaker Notebook Instances Platform.
+* (**sts**) This release introduces the new API 'AssumeRoot', which returns short-term credentials that you can use to perform privileged tasks.
+
+## [1.3.73] - 11/13/2024
+
+### Features
+* (**accessanalyzer**) This release adds support for policy validation and external access findings for resource control policies (RCP). IAM Access Analyzer helps you author functional and secure RCPs and awareness that a RCP may restrict external access. Updated service API, documentation, and paginators.
+* (**applicationsignals**) Amazon CloudWatch Application Signals now supports creating Service Level Objectives with burn rates. Users can now create or update SLOs with burn rate configurations to meet their specific business requirements.
+* (**b2bi**) This release adds a GenerateMapping API to allow generation of JSONata or XSLT transformer code based on input and output samples.
+* (**billing**) Today, AWS announces the general availability of ListBillingViews API in the AWS SDKs, to enable AWS Billing Conductor (ABC) users to create proforma Cost and Usage Reports (CUR) programmatically.
+* (**cloudtrail**) This release adds a new API GenerateQuery that generates a query from a natural language prompt about the event data in your event data store. This operation uses generative artificial intelligence (generative AI) to produce a ready-to-use SQL query from the prompt.
+* (**dynamodb**) This release includes supports the new WarmThroughput feature for DynamoDB. You can now provide an optional WarmThroughput attribute for CreateTable or UpdateTable APIs to pre-warm your table or global secondary index. You can also use DescribeTable to see the latest WarmThroughput value.
+* (**ec2**) This release adds the source AMI details in DescribeImages API
+* (**internetmonitor**) Add new query type Routing_Suggestions regarding querying interface
+* (**mediaconvert**) This release adds support for ARN inputs in the Kantar credentials secrets name field and the MSPR field to the manifests for PlayReady DRM protected outputs.
+* (**organizations**) Add support for policy operations on the Resource Control Polices.
+
+## [1.3.72] - 11/12/2024
+
+### Features
+* (**codebuild**) AWS CodeBuild now supports non-containerized Linux and Windows builds on Reserved Capacity.
+* (**controltower**) Added ResetEnabledControl API.
+* (**fis**) This release adds support for generating experiment reports with the experiment report configuration
+* (**gamelift**) Amazon GameLift releases container fleets support for general availability. Deploy Linux-based containerized game server software for hosting on Amazon GameLift.
+* (**paymentcryptography**) Updated ListAliases API with KeyArn filter.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation for Amazon RDS Extended Support for Amazon Aurora MySQL.
+
+## [1.3.71] - 11/11/2024
+
+### Features
+* (**cloudfront**) No API changes from previous release. This release migrated the model to Smithy keeping all features unchanged.
+* (**inspector2**) Adds support for filePath filter.
+* (**lambda**) Add Python 3.13 (python3.13) support to AWS Lambda
+* (**opensearch**) Adds Support for new AssociatePackages and DissociatePackages API in Amazon OpenSearch Service that allows association and dissociation operations to be carried out on multiple packages at the same time.
+* (**outposts**) This release updates StartCapacityTask to allow an active Outpost to be modified. It also adds a new API to list all running EC2 instances on the Outpost.
+
 ## [1.3.70] - 11/08/2024
 
 ### Features
@@ -1768,8 +1975,8 @@
 * (**managedblockchainquery**) Introduces a new API for Amazon Managed Blockchain Query: ListFilteredTransactionEvents.
 
 ### Fixes
-* [#1045](https://github.com/awslabs/smithy-kotlin/issues/1045) ⚠️ **IMPORTANT**: Fix codegen for map shapes which use string enums as map keys. See the [**Map key changes** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1258) for more details
-* [#1041](https://github.com/awslabs/smithy-kotlin/issues/1041) ⚠️ **IMPORTANT**: Disable [OkHttp's transparent response decompression](https://square.github.io/okhttp/features/calls/#rewriting-requests) by manually specifying `Accept-Encoding: identity` in requests. See the [**Disabling automatic response decompression** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1259) for more details.
+* [#1045](https://github.com/smithy-lang/smithy-kotlin/issues/1045) ⚠️ **IMPORTANT**: Fix codegen for map shapes which use string enums as map keys. See the [**Map key changes** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1258) for more details
+* [#1041](https://github.com/smithy-lang/smithy-kotlin/issues/1041) ⚠️ **IMPORTANT**: Disable [OkHttp's transparent response decompression](https://square.github.io/okhttp/features/calls/#rewriting-requests) by manually specifying `Accept-Encoding: identity` in requests. See the [**Disabling automatic response decompression** breaking change announcement](https://github.com/awslabs/aws-sdk-kotlin/discussions/1259) for more details.
 
 ### Documentation
 * (**cloudformation**) Documentation update, March 2024. Corrects some formatting.
@@ -2076,7 +2283,7 @@
 * (**workspaces**) This release introduces User-Decoupling feature. This feature allows Workspaces Core customers to provision workspaces without providing users. CreateWorkspaces and DescribeWorkspaces APIs will now take a new optional parameter "WorkspaceName".
 
 ### Fixes
-* [#1031](https://github.com/awslabs/smithy-kotlin/issues/1031) Bump **smithy-kotlin** version to consume upstream fixes for URL parsing
+* [#1031](https://github.com/smithy-lang/smithy-kotlin/issues/1031) Bump **smithy-kotlin** version to consume upstream fixes for URL parsing
 
 ## [1.0.52] - 02/07/2024
 
@@ -2471,7 +2678,7 @@
 * (**location**) This release 1)  adds sub-municipality field in Places API for searching and getting places information, and 2) allows optimizing route calculation based on expected arrival time.
 
 ### Fixes
-* [#1008](https://github.com/awslabs/smithy-kotlin/issues/1008) Upgrade to [**smithy-kotlin** 1.0.3](https://github.com/awslabs/smithy-kotlin/releases/tag/v1.0.3) to consume fixes for URL signing special characters
+* [#1008](https://github.com/smithy-lang/smithy-kotlin/issues/1008) Upgrade to [**smithy-kotlin** 1.0.3](https://github.com/smithy-lang/smithy-kotlin/releases/tag/v1.0.3) to consume fixes for URL signing special characters
 
 ## [1.0.14] - 12/11/2023
 
@@ -2649,7 +2856,7 @@
 ## [1.0.0] - 11/26/2023
 
 ### Features
-* [#659](https://github.com/awslabs/smithy-kotlin/issues/659) BREAKING: Overhaul URL APIs to clarify content encoding, when data is in which state, and to reduce the number of times data is encoded/decoded
+* [#659](https://github.com/smithy-lang/smithy-kotlin/issues/659) BREAKING: Overhaul URL APIs to clarify content encoding, when data is in which state, and to reduce the number of times data is encoded/decoded
 
 ### Fixes
 * **Breaking**: Make some properties of IoT types optional. Previously they defaulted to false, which isn't what the service expects.
@@ -2943,7 +3150,7 @@
 * [#1000](https://github.com/awslabs/aws-sdk-kotlin/issues/1000) Add more parameters for fetching STS credentials
 
 ### Fixes
-* [#935](https://github.com/awslabs/smithy-kotlin/issues/935) Fix closing an event stream causing an IllegalStateException
+* [#935](https://github.com/smithy-lang/smithy-kotlin/issues/935) Fix closing an event stream causing an IllegalStateException
 
 ### Miscellaneous
 * Sync AWS models and bump smithy-kotlin
@@ -2998,7 +3205,7 @@
 ## [0.29.0-beta] - 07/20/2023
 
 ### Features
-* [#146](https://github.com/awslabs/smithy-kotlin/issues/146), [#800](https://github.com/awslabs/aws-sdk-kotlin/issues/800) Enable **Timestream Query** and **Timestream Write** service clients
+* [#146](https://github.com/smithy-lang/smithy-kotlin/issues/146), [#800](https://github.com/awslabs/aws-sdk-kotlin/issues/800) Enable **Timestream Query** and **Timestream Write** service clients
 * [#969](https://github.com/awslabs/aws-sdk-kotlin/issues/969) Make `region` an optional client config parameter to support multi-region use cases
 
 ### Miscellaneous
@@ -3058,7 +3265,7 @@
 ## [0.26.0-beta] - 05/25/2023
 
 ### Features
-* [#755](https://github.com/awslabs/smithy-kotlin/issues/755) **Breaking**: Refresh presigning APIs to simplify usage and add new capabilities. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/925) for more information.
+* [#755](https://github.com/smithy-lang/smithy-kotlin/issues/755) **Breaking**: Refresh presigning APIs to simplify usage and add new capabilities. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/925) for more information.
 
 ### Miscellaneous
 * Sync the latest versions of AWS service models and **smithy-kotlin**
@@ -3182,7 +3389,7 @@
 
 ### Features
 * Sync to latest AWS service models
-* [#446](https://github.com/awslabs/smithy-kotlin/issues/446) Implement flexible checksums customization
+* [#446](https://github.com/smithy-lang/smithy-kotlin/issues/446) Implement flexible checksums customization
 
 ### Miscellaneous
 * Update to latest **smithy-kotlin** version
@@ -3216,7 +3423,7 @@
 **NOTE**: Do not use. Prefer 0.19.4-beta or later.
 
 ### Features
-* [#122](https://github.com/awslabs/smithy-kotlin/issues/122) Add capability to intercept SDK operations
+* [#122](https://github.com/smithy-lang/smithy-kotlin/issues/122) Add capability to intercept SDK operations
 
 ### Miscellaneous
 * Sync AWS service models
@@ -3247,7 +3454,7 @@
 * [#399](https://github.com/awslabs/aws-sdk-kotlin/issues/399) Add support for [S3 Virtual Host Addressing](https://docs.aws.amazon.com/AmazonS3/latest/userguide/VirtualHosting.html) (enabled by default).
 * [#231](https://github.com/awslabs/aws-sdk-kotlin/issues/231) Add support for [S3 Access Points](https://aws.amazon.com/s3/features/access-points/).
 * Add support for [S3 Object Lambda](https://aws.amazon.com/s3/features/object-lambda/).
-* [#677](https://github.com/awslabs/smithy-kotlin/issues/677) Add a new tracing framework for centralized handling of log messages and metric events and providing easy integration points for connecting to downstream tracing systems (e.g., kotlin-logging)
+* [#677](https://github.com/smithy-lang/smithy-kotlin/issues/677) Add a new tracing framework for centralized handling of log messages and metric events and providing easy integration points for connecting to downstream tracing systems (e.g., kotlin-logging)
 * **BREAKING** Add smithy-modeled endpoint resolvers for AWS services. See [this discussion post](https://github.com/awslabs/aws-sdk-kotlin/discussions/761) for more information.
 * Add support for [S3 PrivateLink](https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html).
 * Add support for [FIPS](https://aws.amazon.com/compliance/fips/) endpoints in client config.
@@ -3355,7 +3562,7 @@
 
 ### Miscellaneous
 * Sync AWS service models.
-* [#216](https://github.com/awslabs/smithy-kotlin/issues/216) Enable [Explicit API mode](https://github.com/Kotlin/KEEP/blob/master/proposals/explicit-api-mode.md)
+* [#216](https://github.com/smithy-lang/smithy-kotlin/issues/216) Enable [Explicit API mode](https://github.com/Kotlin/KEEP/blob/master/proposals/explicit-api-mode.md)
 
 ## [0.17.1-beta] - 07/21/2022
 
@@ -3377,12 +3584,12 @@
 ## [0.16.6-beta] - 07/08/2022
 
 ### Features
-* [#123](https://github.com/awslabs/smithy-kotlin/issues/123) Add support for smithy Document type.
+* [#123](https://github.com/smithy-lang/smithy-kotlin/issues/123) Add support for smithy Document type.
 
 ### Miscellaneous
 * Update AWS models to latest versions
 * Upgrade smithy-kotlin version to 0.11.2
-* [#599](https://github.com/awslabs/smithy-kotlin/issues/599) Upgrade Smithy version to 1.22
+* [#599](https://github.com/smithy-lang/smithy-kotlin/issues/599) Upgrade Smithy version to 1.22
 
 ## [0.16.5-beta] - 07/01/2022
 
@@ -3392,10 +3599,10 @@
 ## [0.16.4-beta] - 06/23/2022
 
 ### Fixes
-* [#139](https://github.com/awslabs/smithy-kotlin/issues/139) Validate that members bound to URI paths are non-null at object construction
+* [#139](https://github.com/smithy-lang/smithy-kotlin/issues/139) Validate that members bound to URI paths are non-null at object construction
 
 ### Miscellaneous
-* Upgrade smithy kotlin to [0.11.0](https://github.com/awslabs/smithy-kotlin/releases/tag/v0.11.0)
+* Upgrade smithy kotlin to [0.11.0](https://github.com/smithy-lang/smithy-kotlin/releases/tag/v0.11.0)
 
 ## [0.16.3-beta] - 06/16/2022
 
@@ -3411,7 +3618,7 @@
 ## [0.16.2-beta] - 06/10/2022
 
 ### Fixes
-* [#619](https://github.com/awslabs/aws-sdk-kotlin/issues/619), [#657](https://github.com/awslabs/smithy-kotlin/issues/657) Upgrade smithy-kotlin to pull in fixes for signing bugs.
+* [#619](https://github.com/awslabs/aws-sdk-kotlin/issues/619), [#657](https://github.com/smithy-lang/smithy-kotlin/issues/657) Upgrade smithy-kotlin to pull in fixes for signing bugs.
 
 ### Documentation
 * [#620](https://github.com/awslabs/aws-sdk-kotlin/issues/620) Update outdated howto docs to correctly describe client instantiation and client engine configuration
@@ -3422,7 +3629,7 @@
 ## [0.16.1-beta] - 06/02/2022
 
 ### Features
-* [#617](https://github.com/awslabs/smithy-kotlin/issues/617) Add a new non-CRT SigV4 signer and use it as the default. This removes the CRT as a hard dependency for using the SDK (although the CRT signer can still be used via explicit configuration on client creation).
+* [#617](https://github.com/smithy-lang/smithy-kotlin/issues/617) Add a new non-CRT SigV4 signer and use it as the default. This removes the CRT as a hard dependency for using the SDK (although the CRT signer can still be used via explicit configuration on client creation).
 
 ### Miscellaneous
 * Sync AWS models to latest
@@ -3436,7 +3643,7 @@
 * [#480](https://github.com/awslabs/aws-sdk-kotlin/issues/480) Upgrade smithy-kotlin to 0.10.0 which upgrades to ktor-2.x. This is considered a **breaking change** as it may reverse the issue described in #480 and break ktor-1.x users.
 
 ### Miscellaneous
-* Upgrade smithy-kotlin to 0.9.2 which includes codegen updates to generate operations with all optional inputs to include a default parameter. See [smithy-kotlin#129](https://github.com/awslabs/smithy-kotlin/issues/129)
+* Upgrade smithy-kotlin to 0.9.2 which includes codegen updates to generate operations with all optional inputs to include a default parameter. See [smithy-kotlin#129](https://github.com/smithy-lang/smithy-kotlin/issues/129)
 * upgrade kotlin to 1.6.21 and other deps to latest
 
 ## [0.15.2-beta] - 05/13/2022
@@ -3572,7 +3779,7 @@
 
 ### New features
 * update AWS models to latest versions [#499](https://github.com/awslabs/aws-sdk-kotlin/pull/499)
-* Paginators! [smithy-kotlin#557](https://github.com/awslabs/smithy-kotlin/pull/557)
+* Paginators! [smithy-kotlin#557](https://github.com/smithy-lang/smithy-kotlin/pull/557)
 
 ### Fixes
 * enforce only once shutdown logic for crt engine connections [#497](https://github.com/awslabs/aws-sdk-kotlin/pull/497)
@@ -3715,7 +3922,7 @@
 
 * implement basic retry support in runtime [#328](https://github.com/awslabs/aws-sdk-kotlin/pull/328)
 * event stream framing support [#320](https://github.com/awslabs/aws-sdk-kotlin/pull/320)
-* replace GSON based JSON serde with KMP compatible impl [#477](https://github.com/awslabs/smithy-kotlin/pull/477)
+* replace GSON based JSON serde with KMP compatible impl [#477](https://github.com/smithy-lang/smithy-kotlin/pull/477)
 * Add IMDSv2 client in runtime [#330](https://github.com/awslabs/aws-sdk-kotlin/pull/330)
 
 
@@ -3757,11 +3964,11 @@
 
 ### New features
 
-* Support for presigning requests [#435](https://github.com/awslabs/smithy-kotlin/issues/435)
+* Support for presigning requests [#435](https://github.com/smithy-lang/smithy-kotlin/issues/435)
 * Detect aws region from system properties [#202](https://github.com/awslabs/aws-sdk-kotlin/issues/202)
 * EC2 Query Protocol [#230](https://github.com/awslabs/aws-sdk-kotlin/issues/230)
-* Provide opt-in wire logging [#425](https://github.com/awslabs/smithy-kotlin/issues/425)
-* Support profile credentials provider [#302](https://github.com/awslabs/smithy-kotlin/issues/302)
+* Provide opt-in wire logging [#425](https://github.com/smithy-lang/smithy-kotlin/issues/425)
+* Support profile credentials provider [#302](https://github.com/smithy-lang/smithy-kotlin/issues/302)
 
 ### Fixes
 
@@ -3773,9 +3980,9 @@
 * Create S3 object with Unicode name fails with signature mismatch [#200](https://github.com/awslabs/aws-sdk-kotlin/issues/200)
 * Codegen errors in marketplacecommerceanalytics [#214](https://github.com/awslabs/aws-sdk-kotlin/issues/214)
 * Escape model-extra files for Windows [#191](https://github.com/awslabs/aws-sdk-kotlin/issues/191)
-* Support Glacier APIVersion Header [#165](https://github.com/awslabs/smithy-kotlin/issues/165)
-* Support APIGateway Accept Header [#157](https://github.com/awslabs/smithy-kotlin/issues/157)
-* Add support for awsQueryError trait [#375](https://github.com/awslabs/smithy-kotlin/issues/375)
+* Support Glacier APIVersion Header [#165](https://github.com/smithy-lang/smithy-kotlin/issues/165)
+* Support APIGateway Accept Header [#157](https://github.com/smithy-lang/smithy-kotlin/issues/157)
+* Add support for awsQueryError trait [#375](https://github.com/smithy-lang/smithy-kotlin/issues/375)
 * S3 HeadObject errors require customization [#152](https://github.com/awslabs/aws-sdk-kotlin/issues/152)
 * S3 custom treatment of GetBucketLocation response [#194](https://github.com/awslabs/aws-sdk-kotlin/issues/194)
 
@@ -3814,28 +4021,28 @@
 
 ### New Features
 
-* `awsQuery` protocol support (https://github.com/awslabs/smithy-kotlin/issues/127)
-* detect region from environment variables (https://github.com/awslabs/smithy-kotlin/issues/356)
-* custom S3 error metadata support (https://github.com/awslabs/smithy-kotlin/issues/323)
-* environment credentials provider (https://github.com/awslabs/smithy-kotlin/issues/301)
-* bind default HTTP client engine to CRT (https://github.com/awslabs/smithy-kotlin/issues/199)
-* operation DSL overloads (https://github.com/awslabs/smithy-kotlin/issues/184)
-* Kinesis read timeouts (https://github.com/awslabs/smithy-kotlin/issues/162)
-* XML EOL encoding support (https://github.com/awslabs/smithy-kotlin/issues/142)
+* `awsQuery` protocol support (https://github.com/smithy-lang/smithy-kotlin/issues/127)
+* detect region from environment variables (https://github.com/smithy-lang/smithy-kotlin/issues/356)
+* custom S3 error metadata support (https://github.com/smithy-lang/smithy-kotlin/issues/323)
+* environment credentials provider (https://github.com/smithy-lang/smithy-kotlin/issues/301)
+* bind default HTTP client engine to CRT (https://github.com/smithy-lang/smithy-kotlin/issues/199)
+* operation DSL overloads (https://github.com/smithy-lang/smithy-kotlin/issues/184)
+* Kinesis read timeouts (https://github.com/smithy-lang/smithy-kotlin/issues/162)
+* XML EOL encoding support (https://github.com/smithy-lang/smithy-kotlin/issues/142)
 
 ### Fixes
 
-* path literal not escaped correctly (https://github.com/awslabs/smithy-kotlin/issues/395)
-* idempotency tokens are not detected on resources (https://github.com/awslabs/smithy-kotlin/issues/376)
-* httpPayload bound members need dedicated serde (https://github.com/awslabs/smithy-kotlin/issues/353)
+* path literal not escaped correctly (https://github.com/smithy-lang/smithy-kotlin/issues/395)
+* idempotency tokens are not detected on resources (https://github.com/smithy-lang/smithy-kotlin/issues/376)
+* httpPayload bound members need dedicated serde (https://github.com/smithy-lang/smithy-kotlin/issues/353)
 * Route53 error messages (and maybe other restXml messages) are not deserialized and present in stacktrace
-  (https://github.com/awslabs/smithy-kotlin/issues/352)
-* fix url-encoding behavior of httpLabel and httpQuery members (https://github.com/awslabs/smithy-kotlin/issues/328)
-* runtime error when using Kotlin 1.5.0 (https://github.com/awslabs/smithy-kotlin/issues/319)
+  (https://github.com/smithy-lang/smithy-kotlin/issues/352)
+* fix url-encoding behavior of httpLabel and httpQuery members (https://github.com/smithy-lang/smithy-kotlin/issues/328)
+* runtime error when using Kotlin 1.5.0 (https://github.com/smithy-lang/smithy-kotlin/issues/319)
 * SES fails to build due to invalid docs (https://github.com/awslabs/aws-sdk-kotlin/issues/153)
 * exception is thrown for SQS delete message (https://github.com/awslabs/aws-sdk-kotlin/issues/147)
 * SNS getTopicAttributes throws an exception (https://github.com/awslabs/aws-sdk-kotlin/issues/142)
-* elasticbeanstalk model generates invalid enum (https://github.com/awslabs/smithy-kotlin/issues/403)
+* elasticbeanstalk model generates invalid enum (https://github.com/smithy-lang/smithy-kotlin/issues/403)
 
 ### Other
 
@@ -4068,20 +4275,20 @@
 ### New Features
 
 * `restXml` protocol support
-* add conversions to/from `java.time.Instant` and SDK `Instant` (https://github.com/awslabs/smithy-kotlin/issues/271)
-* implement missing IO runtime primitives (https://github.com/awslabs/smithy-kotlin/issues/264)
+* add conversions to/from `java.time.Instant` and SDK `Instant` (https://github.com/smithy-lang/smithy-kotlin/issues/271)
+* implement missing IO runtime primitives (https://github.com/smithy-lang/smithy-kotlin/issues/264)
 * API documentation (https://github.com/awslabs/aws-sdk-kotlin/issues/119)
 
 ### Fixes
 
-* generate per/service base exception types (https://github.com/awslabs/smithy-kotlin/issues/233)
-* use sdkId if available for service client generation (https://github.com/awslabs/smithy-kotlin/issues/276)
+* generate per/service base exception types (https://github.com/smithy-lang/smithy-kotlin/issues/233)
+* use sdkId if available for service client generation (https://github.com/smithy-lang/smithy-kotlin/issues/276)
 * explicitly set jvm target compatibility (https://github.com/awslabs/aws-sdk-kotlin/issues/103)
 * http error registration (https://github.com/awslabs/aws-sdk-kotlin/issues/118)
 
 ### Other
 
-* generate per/service base exception types (https://github.com/awslabs/smithy-kotlin/issues/270)
+* generate per/service base exception types (https://github.com/smithy-lang/smithy-kotlin/issues/270)
 
 ## [0.1.0-M0] - 03/19/2021
 
@@ -4100,7 +4307,7 @@ See the [Getting Started Guide](docs/GettingStarted.md) for how to work with bet
 * Translate
 * Cognito Identity Provider
 * Secrets Manager
-  * NOTE: Default idempotency token provider will not currently work, you'll need to override the config to create or update secrets until [#180](https://github.com/awslabs/smithy-kotlin/issues/180) is implemented
+  * NOTE: Default idempotency token provider will not currently work, you'll need to override the config to create or update secrets until [#180](https://github.com/smithy-lang/smithy-kotlin/issues/180) is implemented
 * KMS
 * Lambda
 
