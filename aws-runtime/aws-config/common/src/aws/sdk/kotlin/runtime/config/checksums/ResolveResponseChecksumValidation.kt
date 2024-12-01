@@ -22,7 +22,7 @@ public suspend fun resolveResponseChecksumValidation(platform: PlatformProvider 
             "WHEN_SUPPORTED" -> HttpChecksumConfigOption.WHEN_SUPPORTED
             "WHEN_REQUIRED" -> HttpChecksumConfigOption.WHEN_REQUIRED
             else -> throw ConfigurationException(
-                "'$it' is not a valid value for request checksum calculation. Valid values are: ${HttpChecksumConfigOption.entries.toTypedArray()}",
+                "'$it' is not a valid value for request checksum calculation. Valid values are: ${HttpChecksumConfigOption.entries}",
             )
         }
     } ?: HttpChecksumConfigOption.WHEN_SUPPORTED
