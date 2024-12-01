@@ -83,8 +83,14 @@ fun fillInModel(test: CodegenTest) {
         }
 
     val replaced = model
-        .replace("{protocol-name}", test.protocolName!!)
-        .replace("{op-traits}", opTraits)
+        .replace(
+            "{protocol-name}",
+            test.protocolName ?: throw IllegalStateException("Please specify a protocol name for the codegen test"),
+        )
+        .replace(
+            "{op-traits}",
+            opTraits,
+        )
 
     modelFile.parentFile.mkdirs()
     modelFile.writeText(replaced)
