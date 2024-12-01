@@ -61,7 +61,6 @@ private fun runSmokeTests(
         // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
         .withArguments("-Paws.kotlin.native=false", ":tests:codegen:smoke-tests:services:$service:smokeTest")
         .withEnvironment(envVars)
-        .withGradleVersion("8.5")
 
     val buildResult = if (expectingFailure) task.buildAndFail() else task.build()
 
