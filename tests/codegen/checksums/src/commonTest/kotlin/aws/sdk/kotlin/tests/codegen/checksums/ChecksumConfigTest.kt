@@ -3,10 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+package aws.sdk.kotlin.tests.codegen.checksums
+
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.test.clientconfig.*
 import aws.sdk.kotlin.test.clientconfig.model.ChecksumAlgorithm
 import aws.sdk.kotlin.test.clientconfig.model.ValidationMode
+import aws.sdk.kotlin.tests.codegen.checksums.utils.HeaderReader
+import aws.sdk.kotlin.tests.codegen.checksums.utils.HeaderSetter
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.client.config.HttpChecksumConfigOption
 import aws.smithy.kotlin.runtime.http.*
@@ -17,8 +21,6 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestEngine
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.runBlocking
-import utils.HeaderReader
-import utils.HeaderSetter
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse

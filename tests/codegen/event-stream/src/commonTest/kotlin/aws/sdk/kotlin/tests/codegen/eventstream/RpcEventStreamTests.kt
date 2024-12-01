@@ -2,6 +2,9 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+
+package aws.sdk.kotlin.tests.codegen.eventstream
+
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.test.awsjson11.model.MessageWithString
 import aws.sdk.kotlin.test.awsjson11.model.TestStream

@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+package aws.sdk.kotlin.tests.codegen.eventstream
+
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.test.restjson1.model.*
 import aws.sdk.kotlin.test.restjson1.serde.deserializeTestStreamOpOperationBody

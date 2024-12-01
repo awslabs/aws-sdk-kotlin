@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+package aws.sdk.kotlin.tests.codegen.checksums
+
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.test.checksums.*
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials

@@ -1,4 +1,9 @@
-package utils
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package aws.sdk.kotlin.tests.codegen.checksums.utils
 
 import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics
