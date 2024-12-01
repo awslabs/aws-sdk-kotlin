@@ -1,8 +1,8 @@
 
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
-import shared.CodegenTest
-import shared.Model
+import aws.sdk.kotlin.shared.CodegenTest
+import aws.sdk.kotlin.shared.Model
 
 description = "AWS SDK for Kotlin's checksums codegen test suite"
 

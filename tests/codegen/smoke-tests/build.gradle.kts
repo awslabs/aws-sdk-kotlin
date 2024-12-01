@@ -6,8 +6,8 @@
 import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
-import shared.CodegenTest
-import shared.Model
+import aws.sdk.kotlin.shared.CodegenTest
+import aws.sdk.kotlin.shared.Model
 
 description = "AWS SDK for Kotlin's smoke test codegen test suite"
 
