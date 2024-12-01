@@ -17,7 +17,6 @@ import java.io.FileInputStream
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class S3ChecksumTest {
     private val client = S3Client { region = "us-west-2" }
     private val testBucket = "s3-test-bucket-ci-motorcade"
@@ -37,7 +36,6 @@ class S3ChecksumTest {
     }
 
     @Test
-    @Order(1)
     fun testPutObject(): Unit = runBlocking {
         client.putObject {
             bucket = testBucket
@@ -47,7 +45,6 @@ class S3ChecksumTest {
     }
 
     @Test
-    @Order(2)
     fun testPutObjectWithEmptyBody(): Unit = runBlocking {
         client.putObject {
             bucket = testBucket
@@ -56,7 +53,6 @@ class S3ChecksumTest {
     }
 
     @Test
-    @Order(3)
     fun testPutObjectAwsChunkedEncoded(): Unit = runBlocking {
         val testString = "Hello World"
         val tempFile = File.createTempFile("test", ".txt").also {
@@ -73,7 +69,6 @@ class S3ChecksumTest {
     }
 
     @Test
-    @Order(4)
     fun testMultiPartUpload(): Unit = runBlocking {
         // Parts need to be at least 5 MB
         val partOne = "Hello".repeat(1_048_576)
