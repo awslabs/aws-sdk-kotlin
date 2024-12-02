@@ -955,6 +955,12 @@
             "brazilName": "AwsSdkKotlinInternetmonitor"
         },
         {
+            "sdkId": "Invoicing",
+            "namespace": "aws.sdk.kotlin.services.invoicing",
+            "artifactName": "invoicing",
+            "brazilName": "AwsSdkKotlinInvoicing"
+        },
+        {
             "sdkId": "IoT",
             "namespace": "aws.sdk.kotlin.services.iot",
             "artifactName": "iot",
@@ -1415,6 +1421,12 @@
             "namespace": "aws.sdk.kotlin.services.networkfirewall",
             "artifactName": "networkfirewall",
             "brazilName": "AwsSdkKotlinNetworkFirewall"
+        },
+        {
+            "sdkId": "NetworkFlowMonitor",
+            "namespace": "aws.sdk.kotlin.services.networkflowmonitor",
+            "artifactName": "networkflowmonitor",
+            "brazilName": "AwsSdkKotlinNetworkflowmonitor"
         },
         {
             "sdkId": "NetworkManager",
@@ -1937,6 +1949,12 @@
             "namespace": "aws.sdk.kotlin.services.secretsmanager",
             "artifactName": "secretsmanager",
             "brazilName": "AwsSdkKotlinSecretsManager"
+        },
+        {
+            "sdkId": "Security IR",
+            "namespace": "aws.sdk.kotlin.services.securityir",
+            "artifactName": "securityir",
+            "brazilName": "AwsSdkKotlinSecurityIr"
         },
         {
             "sdkId": "SecurityHub",
