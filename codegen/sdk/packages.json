@@ -583,6 +583,12 @@
             "brazilName": "AwsSdkKotlinDlm"
         },
         {
+            "sdkId": "DSQL",
+            "namespace": "aws.sdk.kotlin.services.dsql",
+            "artifactName": "dsql",
+            "brazilName": "AwsSdkKotlinDsql"
+        },
+        {
             "sdkId": "Data Pipeline",
             "namespace": "aws.sdk.kotlin.services.datapipeline",
             "artifactName": "datapipeline",
@@ -1805,6 +1811,12 @@
             "namespace": "aws.sdk.kotlin.services.s3outposts",
             "artifactName": "s3outposts",
             "brazilName": "AwsSdkKotlinS3outposts"
+        },
+        {
+            "sdkId": "S3Tables",
+            "namespace": "aws.sdk.kotlin.services.s3tables",
+            "artifactName": "s3tables",
+            "brazilName": "AwsSdkKotlinS3tables"
         },
         {
             "sdkId": "SES",
