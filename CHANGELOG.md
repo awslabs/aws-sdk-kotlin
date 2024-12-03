@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.86] - 12/03/2024
+
+### Features
+* (**bedrockruntime**) Add an API parameter that allows customers to set performance configuration for invoking a model.
+* (**s3control**) It allows customers to pass CRC64NVME as a header in S3 Batch Operations copy requests
+* (**socialmessaging**) Added support for passing role arn corresponding to the supported event destination
+
 ## [1.3.85] - 12/02/2024
 
 ### Features
