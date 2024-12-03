@@ -19,6 +19,13 @@ import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.StructureShape
 
 /**
+ * AWS services that can return composite checksums in their responses
+ */
+private val compositeChecksumServices = setOf(
+    "s3",
+)
+
+/**
  * Adds a middleware which validates checksums returned in responses if the user has opted-in.
  */
 class FlexibleChecksumsResponse : KotlinIntegration {
@@ -75,6 +82,8 @@ class FlexibleChecksumsResponse : KotlinIntegration {
         }
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
+
             val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
             val requestValidationModeMember = ctx.model.expectShape<StructureShape>(op.input.get())
                 .members()
@@ -82,12 +91,14 @@ class FlexibleChecksumsResponse : KotlinIntegration {
             val requestValidationModeMemberName = ctx.symbolProvider.toMemberName(requestValidationModeMember)
 
             writer.withBlock(
-                "op.interceptors.add(#T(",
+                "op.interceptors.add(#T<#T>(",
                 "))",
                 RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsResponseInterceptor,
+                inputSymbol,
             ) {
-                writer.write("responseValidationRequired = input.#L?.value == \"ENABLED\",", requestValidationModeMemberName)
-                writer.write("responseChecksumValidation = config.responseChecksumValidation,")
+                writer.write("input.#L?.value == \"ENABLED\",", requestValidationModeMemberName)
+                writer.write("config.responseChecksumValidation,")
+                writer.write("#L", compositeChecksumServices.contains(ctx.settings.sdkId))
             }
         }
     }
