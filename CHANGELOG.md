@@ -1,5 +1,56 @@
 # Changelog
 
+## [1.3.86] - 12/03/2024
+
+### Features
+* (**bedrockruntime**) Add an API parameter that allows customers to set performance configuration for invoking a model.
+* (**s3control**) It allows customers to pass CRC64NVME as a header in S3 Batch Operations copy requests
+* (**socialmessaging**) Added support for passing role arn corresponding to the supported event destination
+
+## [1.3.85] - 12/02/2024
+
+### Features
+* (**bedrock**) Add support for Knowledge Base Evaluations & LLM as a judge
+* (**bedrockagent**) This release introduces APIs to upload documents directly into a Knowledge Base
+* (**bedrockagentruntime**) This release introduces a new Rerank API to leverage reranking models (with integration into Knowledge Bases); APIs to upload documents directly into Knowledge Base; RetrieveAndGenerateStream API for streaming response; Guardrails on Retrieve API; and ability to automatically generate filters
+* (**chimesdkvoice**) This release adds supports for enterprises to integrate Amazon Connect with other voice systems. It supports directly transferring voice calls and metadata without using the public telephone network. It also supports real-time and post-call analytics.
+* (**cleanrooms**) This release allows customers and their partners to easily collaborate with data stored in Snowflake and Amazon Athena, without having to move or share their underlying data among collaborators.
+* (**cloudwatchlogs**) Adds PutIntegration, GetIntegration, ListIntegrations and DeleteIntegration APIs. Adds QueryLanguage support to StartQuery, GetQueryResults, DescribeQueries, DescribeQueryDefinitions, and PutQueryDefinition APIs.
+* (**connect**) Adds support for WhatsApp Business messaging, IVR call recording, enabling Contact Lens for existing on-premise contact centers and telephony platforms, and enabling telephony and IVR migration to Amazon Connect independent of their contact center agents.
+* (**connectcampaignsv2**) Amazon Connect Outbound Campaigns V2 / Features : Adds support for Event-Triggered Campaigns.
+* (**customerprofiles**) This release introduces Event Trigger APIs as part of Amazon Connect Customer Profiles service.
+* (**ec2**) Adds support for declarative policies that allow you to enforce desired configuration across an AWS organization through configuring account attributes. Adds support for Allowed AMIs that allows you to limit the use of AMIs in AWS accounts. Adds support for connectivity over non-HTTP protocols.
+* (**eks**) Added support for Auto Mode Clusters, Hybrid Nodes, and specifying computeTypes in the DescribeAddonVersions API.
+* (**eventbridge**) Call private APIs by configuring Connections with VPC connectivity through PrivateLink and VPC Lattice
+* (**fsx**) FSx API changes to support the public launch of the Amazon FSx Intelligent Tiering for OpenZFS storage class.
+* (**guardduty**) Add new Multi Domain Correlation findings.
+* (**imagebuilder**) Added support for EC2 Image Builder's integration with AWS Marketplace for Marketplace components.
+* (**invoicing**) AWS Invoice Configuration allows you to receive separate AWS invoices based on your organizational needs. You can use the AWS SDKs to manage Invoice Units and programmatically fetch the information of the invoice receiver.
+* (**memorydb**) Amazon MemoryDB SDK now supports all APIs for Multi-Region. Please refer to the updated Amazon MemoryDB public documentation for detailed information on API usage.
+* (**networkflowmonitor**) This release adds documentation for a new feature in Amazon CloudWatch called Network Flow Monitor. You can use Network Flow Monitor to get near real-time metrics, including retransmissions and data transferred, for your actual workloads.
+* (**opensearch**) This feature introduces support for CRUDL APIs, enabling the creation and management of Connected data sources.
+* (**organizations**) Add support for policy operations on the DECLARATIVE_POLICY_EC2 policy type.
+* (**qbusiness**) Amazon Q Business now supports capabilities to extract insights and answer questions from visual elements embedded within documents, a browser extension for Google Chrome, Mozilla Firefox, and Microsoft Edge, and attachments across conversations.
+* (**qconnect**) This release adds following capabilities: Configuring safeguards via AIGuardrails for Q in Connect inferencing, and APIs to support Q&A self-service use cases
+* (**rds**) Amazon RDS supports CloudWatch Database Insights. You can use the SDK to create, modify, and describe the DatabaseInsightsMode for your DB instances and clusters.
+* (**s3**) Amazon S3 introduces support for AWS Dedicated Local Zones
+* (**s3control**) Amazon S3 introduces support for AWS Dedicated Local Zones
+* (**securityhub**) Add new Multi Domain Correlation findings.
+* (**securityir**) AWS Security Incident Response is a purpose-built security incident solution designed to help customers prepare for, respond to, and recover from security incidents.
+* (**transfer**) AWS Transfer Family now offers Web apps that enables simple and secure access to data stored in Amazon S3.
+* (**vpclattice**) Lattice APIs that allow sharing and access of VPC resources across accounts.
+
+### Documentation
+* (**ecs**) This release adds support for Container Insights with Enhanced Observability for Amazon ECS.
+
+## [1.3.84] - 11/27/2024
+
+### Features
+* (**bedrockagent**) Add support for specifying embeddingDataType, either FLOAT32 or BINARY
+* (**configservice**) AWS Config adds support for service-linked recorders, a new type of Config recorder managed by AWS services to record specific subsets of resource configuration data and functioning independently from customer managed AWS Config recorders.
+* (**fsx**) This release adds EFA support to increase FSx for Lustre file systems' throughput performance to a single client instance. This can be done by specifying EfaEnabled=true at the time of creation of Persistent_2 file systems.
+* (**observabilityadmin**) Amazon CloudWatch Observability Admin adds the ability to audit telemetry configuration for AWS resources in customers AWS Accounts and Organizations. The release introduces new APIs to turn on/off the new experience, which supports discovering supported AWS resources and their state of telemetry.
+
 ## [1.3.83] - 11/26/2024
 
 ### Features
