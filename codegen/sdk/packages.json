@@ -955,6 +955,12 @@
             "brazilName": "AwsSdkKotlinInternetmonitor"
         },
         {
+            "sdkId": "Invoicing",
+            "namespace": "aws.sdk.kotlin.services.invoicing",
+            "artifactName": "invoicing",
+            "brazilName": "AwsSdkKotlinInvoicing"
+        },
+        {
             "sdkId": "IoT",
             "namespace": "aws.sdk.kotlin.services.iot",
             "artifactName": "iot",
@@ -1417,6 +1423,12 @@
             "brazilName": "AwsSdkKotlinNetworkFirewall"
         },
         {
+            "sdkId": "NetworkFlowMonitor",
+            "namespace": "aws.sdk.kotlin.services.networkflowmonitor",
+            "artifactName": "networkflowmonitor",
+            "brazilName": "AwsSdkKotlinNetworkflowmonitor"
+        },
+        {
             "sdkId": "NetworkManager",
             "namespace": "aws.sdk.kotlin.services.networkmanager",
             "artifactName": "networkmanager",
@@ -1451,6 +1463,12 @@
             "namespace": "aws.sdk.kotlin.services.osis",
             "artifactName": "osis",
             "brazilName": "AwsSdkKotlinOsis"
+        },
+        {
+            "sdkId": "ObservabilityAdmin",
+            "namespace": "aws.sdk.kotlin.services.observabilityadmin",
+            "artifactName": "observabilityadmin",
+            "brazilName": "AwsSdkKotlinObservabilityadmin"
         },
         {
             "sdkId": "Omics",
@@ -1931,6 +1949,12 @@
             "namespace": "aws.sdk.kotlin.services.secretsmanager",
             "artifactName": "secretsmanager",
             "brazilName": "AwsSdkKotlinSecretsManager"
+        },
+        {
+            "sdkId": "Security IR",
+            "namespace": "aws.sdk.kotlin.services.securityir",
+            "artifactName": "securityir",
+            "brazilName": "AwsSdkKotlinSecurityIr"
         },
         {
             "sdkId": "SecurityHub",

@@ -145,6 +145,7 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric : 
 	public static final field S3_EXPRESS_BUCKET Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public fun getIdentifier ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
 	public static fun values ()[Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
 }

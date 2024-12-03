@@ -10,21 +10,34 @@ import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.SmithyBusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
-import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class BusinessMetricsInterceptorTest {
     @Test
     fun noBusinessMetrics() = runTest {
         val executionContext = ExecutionContext()
+        val interceptor = BusinessMetricsInterceptor()
+        val request = interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
+        val userAgentHeader = request.headers[USER_AGENT]!!
+
+        assertFalse(userAgentHeader.endsWith("m/"))
+    }
+
+    @Test
+    fun noValidBusinessMetrics() = runTest {
+        val executionContext = ExecutionContext()
+
+        val invalidBusinessMetric = object : BusinessMetric {
+            override val identifier: String = "All work and no play makes Jack a dull boy".repeat(1000)
+        }
+
+        executionContext.emitBusinessMetric(invalidBusinessMetric)
+
         val interceptor = BusinessMetricsInterceptor()
         val request = interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
         val userAgentHeader = request.headers[USER_AGENT]!!
@@ -66,11 +79,11 @@ class BusinessMetricsInterceptorTest {
     }
 
     @Test
-    fun truncateBusinessMetrics() = runTest {
+    fun businessMetricsMaxLength() = runTest {
         val executionContext = ExecutionContext()
         executionContext.attributes[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics] = mutableSetOf()
 
-        for (i in 0..1024) {
+        for (i in 0..BUSINESS_METRICS_MAX_LENGTH) {
             executionContext.emitBusinessMetric(
                 object : BusinessMetric {
                     override val identifier: String = i.toString()
@@ -78,37 +91,45 @@ class BusinessMetricsInterceptorTest {
             )
         }
 
-        val rawMetrics = executionContext[aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics]
-        val rawMetricsString = rawMetrics.joinToString(",", "m/")
-        val rawMetricsByteArray = rawMetricsString.encodeToByteArray()
+        val interceptor = BusinessMetricsInterceptor()
+        val request = interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
+        val userAgentHeader = request.headers[USER_AGENT]!!
+        val metrics = "m/" + userAgentHeader.substringAfter("m/")
 
-        assertTrue(rawMetricsByteArray.size >= BUSINESS_METRICS_MAX_LENGTH)
+        assertTrue(metrics.encodeToByteArray().size <= BUSINESS_METRICS_MAX_LENGTH)
+        assertFalse(metrics.endsWith(","))
+    }
+
+    @Test
+    fun invalidBusinessMetric() = runTest {
+        val executionContext = ExecutionContext()
+
+        val validMetric = AwsBusinessMetric.S3_EXPRESS_BUCKET
+        val invalidMetric = object : BusinessMetric {
+            override val identifier: String = "All work and no play makes Jack a dull boy".repeat(1000)
+        }
+
+        executionContext.attributes.emitBusinessMetric(validMetric)
+        executionContext.attributes.emitBusinessMetric(invalidMetric)
 
         val interceptor = BusinessMetricsInterceptor()
         val request = interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
         val userAgentHeader = request.headers[USER_AGENT]!!
-        val truncatedMetrics = "m/" + userAgentHeader.substringAfter("m/")
 
-        assertTrue(truncatedMetrics.encodeToByteArray().size <= BUSINESS_METRICS_MAX_LENGTH)
-        assertFalse(truncatedMetrics.endsWith(","))
+        assertTrue(
+            userAgentHeader.contains(validMetric.identifier),
+        )
+        assertFalse(
+            userAgentHeader.contains(invalidMetric.identifier),
+        )
     }
 
     @Test
-    fun malformedBusinessMetrics() = runTest {
-        val executionContext = ExecutionContext()
-        val reallyLongMetric = "All work and no play makes Jack a dull boy".repeat(1000)
+    fun businessMetricToString() {
+        val businessMetricToString = AwsBusinessMetric.S3_EXPRESS_BUCKET.toString()
+        val businessMetricIdentifier = AwsBusinessMetric.S3_EXPRESS_BUCKET.identifier
 
-        executionContext.attributes.emitBusinessMetric(
-            object : BusinessMetric {
-                override val identifier: String = reallyLongMetric
-            },
-        )
-
-        val interceptor = BusinessMetricsInterceptor()
-
-        assertFailsWith<IllegalStateException>("Business metrics are incorrectly formatted:") {
-            interceptor.modifyBeforeTransmit(interceptorContext(executionContext))
-        }
+        assertEquals(businessMetricIdentifier, businessMetricToString)
     }
 }
 
