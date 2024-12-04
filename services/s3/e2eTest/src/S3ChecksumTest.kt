@@ -25,6 +25,7 @@ class S3ChecksumTest {
     @BeforeAll
     private fun setUp(): Unit = runBlocking {
         val accountId = getAccountId()
+        // FIXME: Use randomly generated bucket instead of hardcoded one when motorcade is ready
         getBucketByName(client, testBucket, "us-west-2", accountId)
     }
 
