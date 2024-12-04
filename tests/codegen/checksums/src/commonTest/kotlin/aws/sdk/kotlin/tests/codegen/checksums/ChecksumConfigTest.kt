@@ -19,6 +19,8 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.interceptors.ChecksumMismatchException
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.httptest.TestEngine
+import aws.smithy.kotlin.runtime.io.SdkSource
+import aws.smithy.kotlin.runtime.io.source
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
@@ -270,6 +272,8 @@ class UserProvidedChecksumHeader {
  * Tests the `aws.protocols#httpChecksum` trait's `requestValidationModeMember`.
  */
 class ResponseChecksumValidation {
+    private val responseBody = "Hello world"
+
     @Test
     fun responseChecksumValidationWhenSupported(): Unit = runBlocking {
         assertFailsWith<ChecksumMismatchException> {
@@ -282,7 +286,11 @@ class ResponseChecksumValidation {
                             Headers {
                                 append("x-amz-checksum-crc32", "I will trigger `ChecksumMismatchException` if read!")
                             },
-                            "World!".toHttpBody(),
+                            object : HttpBody.SourceContent() {
+                                override val isOneShot: Boolean = false
+                                override val contentLength: Long? = responseBody.length.toLong()
+                                override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                            },
                         )
                         val now = Instant.now()
                         HttpCall(request, resp, now, now)
@@ -340,7 +348,11 @@ class ResponseChecksumValidation {
                             Headers {
                                 append("x-amz-checksum-crc32", "I will trigger `ChecksumMismatchException` if read!")
                             },
-                            "World!".toHttpBody(),
+                            object : HttpBody.SourceContent() {
+                                override val isOneShot: Boolean = false
+                                override val contentLength: Long? = responseBody.length.toLong()
+                                override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                            },
                         )
                         val now = Instant.now()
                         HttpCall(request, resp, now, now)

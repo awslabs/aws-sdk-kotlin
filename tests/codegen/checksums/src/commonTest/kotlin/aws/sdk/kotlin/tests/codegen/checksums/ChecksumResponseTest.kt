@@ -8,17 +8,18 @@ package aws.sdk.kotlin.tests.codegen.checksums
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.sdk.kotlin.test.checksums.*
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.http.Headers
-import aws.smithy.kotlin.runtime.http.HttpCall
-import aws.smithy.kotlin.runtime.http.HttpStatusCode
+import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.interceptors.ChecksumMismatchException
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.http.toHttpBody
 import aws.smithy.kotlin.runtime.httptest.TestEngine
+import aws.smithy.kotlin.runtime.io.SdkSource
+import aws.smithy.kotlin.runtime.io.source
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
+
+private val responseBody = "Hello world"
 
 class SuccessfulChecksumResponseTest {
     @Test
@@ -31,7 +32,11 @@ class SuccessfulChecksumResponseTest {
                         Headers {
                             append("x-amz-checksum-crc32", "i9aeUg==")
                         },
-                        "Hello world".toHttpBody(),
+                        object : HttpBody.SourceContent() {
+                            override val isOneShot: Boolean = false
+                            override val contentLength: Long? = responseBody.length.toLong()
+                            override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                        },
                     )
                     val now = Instant.now()
                     HttpCall(request, resp, now, now)
@@ -58,7 +63,11 @@ class SuccessfulChecksumResponseTest {
                         Headers {
                             append("x-amz-checksum-crc32c", "crUfeA==")
                         },
-                        "Hello world".toHttpBody(),
+                        object : HttpBody.SourceContent() {
+                            override val isOneShot: Boolean = false
+                            override val contentLength: Long? = responseBody.length.toLong()
+                            override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                        },
                     )
                     val now = Instant.now()
                     HttpCall(request, resp, now, now)
@@ -85,7 +94,11 @@ class SuccessfulChecksumResponseTest {
                         Headers {
                             append("x-amz-checksum-sha1", "e1AsOh9IyGCa4hLN+2Od7jlnP14=")
                         },
-                        "Hello world".toHttpBody(),
+                        object : HttpBody.SourceContent() {
+                            override val isOneShot: Boolean = false
+                            override val contentLength: Long? = responseBody.length.toLong()
+                            override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                        },
                     )
                     val now = Instant.now()
                     HttpCall(request, resp, now, now)
@@ -112,7 +125,11 @@ class SuccessfulChecksumResponseTest {
                         Headers {
                             append("x-amz-checksum-sha256", "ZOyIygCyaOW6GjVnihtTFtIS9PNmskdyMlNKiuyjfzw=")
                         },
-                        "Hello world".toHttpBody(),
+                        object : HttpBody.SourceContent() {
+                            override val isOneShot: Boolean = false
+                            override val contentLength: Long? = responseBody.length.toLong()
+                            override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                        },
                     )
                     val now = Instant.now()
                     HttpCall(request, resp, now, now)
@@ -142,7 +159,11 @@ class FailedChecksumResponseTest {
                             Headers {
                                 append("x-amz-checksum-crc32", "bm90LWEtY2hlY2tzdW0=")
                             },
-                            "Hello world".toHttpBody(),
+                            object : HttpBody.SourceContent() {
+                                override val isOneShot: Boolean = false
+                                override val contentLength: Long? = responseBody.length.toLong()
+                                override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                            },
                         )
                         val now = Instant.now()
                         HttpCall(request, resp, now, now)
@@ -171,7 +192,11 @@ class FailedChecksumResponseTest {
                             Headers {
                                 append("x-amz-checksum-crc32c", "bm90LWEtY2hlY2tzdW0=")
                             },
-                            "Hello world".toHttpBody(),
+                            object : HttpBody.SourceContent() {
+                                override val isOneShot: Boolean = false
+                                override val contentLength: Long? = responseBody.length.toLong()
+                                override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                            },
                         )
                         val now = Instant.now()
                         HttpCall(request, resp, now, now)
@@ -200,7 +225,11 @@ class FailedChecksumResponseTest {
                             Headers {
                                 append("x-amz-checksum-sha1", "bm90LWEtY2hlY2tzdW0=")
                             },
-                            "Hello world".toHttpBody(),
+                            object : HttpBody.SourceContent() {
+                                override val isOneShot: Boolean = false
+                                override val contentLength: Long? = responseBody.length.toLong()
+                                override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                            },
                         )
                         val now = Instant.now()
                         HttpCall(request, resp, now, now)
@@ -229,7 +258,11 @@ class FailedChecksumResponseTest {
                             Headers {
                                 append("x-amz-checksum-sha256", "bm90LWEtY2hlY2tzdW0=")
                             },
-                            "Hello world".toHttpBody(),
+                            object : HttpBody.SourceContent() {
+                                override val isOneShot: Boolean = false
+                                override val contentLength: Long? = responseBody.length.toLong()
+                                override fun readFrom(): SdkSource = responseBody.toByteArray().source()
+                            },
                         )
                         val now = Instant.now()
                         HttpCall(request, resp, now, now)
