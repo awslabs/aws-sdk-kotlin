@@ -235,6 +235,18 @@
             "brazilName": "AwsSdkKotlinBedrockAgentRuntime"
         },
         {
+            "sdkId": "Bedrock Data Automation",
+            "namespace": "aws.sdk.kotlin.services.bedrockdataautomation",
+            "artifactName": "bedrockdataautomation",
+            "brazilName": "AwsSdkKotlinBedrockDataAutomation"
+        },
+        {
+            "sdkId": "Bedrock Data Automation Runtime",
+            "namespace": "aws.sdk.kotlin.services.bedrockdataautomationruntime",
+            "artifactName": "bedrockdataautomationruntime",
+            "brazilName": "AwsSdkKotlinBedrockDataAutomationRuntime"
+        },
+        {
             "sdkId": "Bedrock Runtime",
             "namespace": "aws.sdk.kotlin.services.bedrockruntime",
             "artifactName": "bedrockruntime",
