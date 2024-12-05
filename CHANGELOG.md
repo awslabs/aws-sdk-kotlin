@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.89] - 12/05/2024
+
+### Features
+* (**partnercentralselling**) Introducing the preview of new partner central selling APIs designed to transform how AWS partners collaborate and co-sell with multiple partners. This enables multiple partners to seamlessly engage and jointly pursue customer opportunities, fostering a new era of collaborative selling.
+* (**qbusiness**) This release removes the deprecated UserId and UserGroups fields from SearchRelevantContent api's request parameters.
+
 ## [1.3.88] - 12/04/2024
 
 ### Features
