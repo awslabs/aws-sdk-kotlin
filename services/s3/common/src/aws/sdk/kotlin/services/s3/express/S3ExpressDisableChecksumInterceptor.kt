@@ -6,14 +6,18 @@ package aws.sdk.kotlin.services.s3.express
 
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
 import aws.smithy.kotlin.runtime.collections.AttributeKey
+import aws.smithy.kotlin.runtime.http.DeferredHeadersBuilder
+import aws.smithy.kotlin.runtime.http.HeadersBuilder
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
-import aws.smithy.kotlin.runtime.http.operation.HttpOperationContext
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
+import aws.smithy.kotlin.runtime.http.request.toBuilder
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import kotlin.coroutines.coroutineContext
 
+private const val CHECKSUM_HEADER_PREFIX = "x-amz-checksum-"
+
 /**
- * Disable checksums entirely for s3:UploadPart requests.
+ * Disables checksums for s3:UploadPart requests that use S3 express.
  */
 internal class S3ExpressDisableChecksumInterceptor : HttpInterceptor {
     override suspend fun modifyBeforeSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
@@ -22,14 +26,45 @@ internal class S3ExpressDisableChecksumInterceptor : HttpInterceptor {
         }
 
         val logger = coroutineContext.logger<S3ExpressDisableChecksumInterceptor>()
+        logger.warn { "Checksums must not be sent with S3 express upload part operation, removing checksum(s)" }
 
-        val configuredChecksumAlgorithm = context.executionContext.getOrNull(HttpOperationContext.ChecksumAlgorithm)
+        val request = context.protocolRequest.toBuilder()
 
-        configuredChecksumAlgorithm?.let {
-            logger.warn { "Disabling configured checksum $it for S3 Express UploadPart" }
-            context.executionContext.remove(HttpOperationContext.ChecksumAlgorithm)
+        request.headers.removeChecksumHeaders()
+        request.trailingHeaders.removeChecksumTrailingHeaders()
+        request.headers.removeChecksumTrailingHeadersFromXAmzTrailer()
+
+        return request.build()
+    }
+}
+
+/**
+ * Removes any checksums sent in the request's headers
+ */
+internal fun HeadersBuilder.removeChecksumHeaders(): Unit =
+    names().forEach { name ->
+        if (name.startsWith(CHECKSUM_HEADER_PREFIX)) {
+            remove(name)
         }
+    }
 
-        return context.protocolRequest
+/**
+ * Removes any checksums sent in the request's trailing headers
+ */
+internal fun DeferredHeadersBuilder.removeChecksumTrailingHeaders(): Unit =
+    names().forEach { name ->
+        if (name.startsWith(CHECKSUM_HEADER_PREFIX)) {
+            remove(name)
+        }
+    }
+
+/**
+ * Removes any checksums sent in the request's trailing headers from `x-amz-trailer`
+ */
+internal fun HeadersBuilder.removeChecksumTrailingHeadersFromXAmzTrailer() {
+    this.getAll("x-amz-trailer")?.forEach { trailingHeader ->
+        if (trailingHeader.startsWith(CHECKSUM_HEADER_PREFIX)) {
+            this.remove("x-amz-trailer", trailingHeader)
+        }
     }
 }

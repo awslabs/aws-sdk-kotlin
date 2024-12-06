@@ -6,18 +6,24 @@ package aws.sdk.kotlin.codegen.customization.flexiblechecksums
 
 import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.defaultName
-import software.amazon.smithy.kotlin.codegen.core.withBlock
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.StructureShape
+
+/**
+ * AWS services that can return composite checksums in their responses
+ */
+private val compositeChecksumServices = setOf(
+    "s3",
+)
 
 /**
  * Adds a middleware which validates checksums returned in responses if the user has opted-in.
@@ -27,8 +33,41 @@ class FlexibleChecksumsResponse : KotlinIntegration {
         .shapes<OperationShape>()
         .any { it.hasTrait<HttpChecksumTrait>() }
 
+    override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
+        listOf(
+            ConfigProperty {
+                name = "responseChecksumValidation"
+                symbol = RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption
+                baseClass = RuntimeTypes.SmithyClient.Config.HttpChecksumClientConfig
+                useNestedBuilderBaseClass()
+                documentation = "Configures response checksum validation"
+                propertyType = ConfigPropertyType.RequiredWithDefault("HttpChecksumConfigOption.WHEN_SUPPORTED")
+            },
+        )
+
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
-        resolved + flexibleChecksumsResponseMiddleware
+        resolved + flexibleChecksumsResponseMiddleware + configBusinessMetrics
+
+    private val configBusinessMetrics = object : ProtocolMiddleware {
+        override val name: String = "responseChecksumValidationBusinessMetric"
+
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            writer.withBlock("when(config.responseChecksumValidation) {", "}") {
+                writer.write(
+                    "#T.WHEN_SUPPORTED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_SUPPORTED)",
+                    RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
+                    RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
+                    RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
+                )
+                writer.write(
+                    "#T.WHEN_REQUIRED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_REQUIRED)",
+                    RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
+                    RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
+                    RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
+                )
+            }
+        }
+    }
 
     private val flexibleChecksumsResponseMiddleware = object : ProtocolMiddleware {
         override val name: String = "FlexibleChecksumsResponse"
@@ -44,20 +83,22 @@ class FlexibleChecksumsResponse : KotlinIntegration {
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
-            val interceptorSymbol = RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsResponseInterceptor
 
             val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
             val requestValidationModeMember = ctx.model.expectShape<StructureShape>(op.input.get())
                 .members()
                 .first { it.memberName == httpChecksumTrait.requestValidationModeMember.get() }
+            val requestValidationModeMemberName = ctx.symbolProvider.toMemberName(requestValidationModeMember)
 
             writer.withBlock(
-                "op.interceptors.add(#T<#T> {",
-                "})",
-                interceptorSymbol,
+                "op.interceptors.add(#T<#T>(",
+                "))",
+                RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsResponseInterceptor,
                 inputSymbol,
             ) {
-                writer.write("it.#L?.value == \"ENABLED\"", requestValidationModeMember.defaultName())
+                writer.write("input.#L?.value == \"ENABLED\",", requestValidationModeMemberName)
+                writer.write("config.responseChecksumValidation,")
+                writer.write("#L", compositeChecksumServices.contains(ctx.settings.sdkId))
             }
         }
     }
