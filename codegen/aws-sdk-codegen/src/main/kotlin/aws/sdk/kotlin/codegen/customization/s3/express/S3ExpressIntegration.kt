@@ -16,8 +16,6 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerato
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
-import software.amazon.smithy.kotlin.codegen.utils.dq
-import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
@@ -99,7 +97,6 @@ class S3ExpressIntegration : KotlinIntegration {
         resolved + listOf(
             addClientToExecutionContext,
             addBucketToExecutionContext,
-            useCrc32Checksum,
             uploadPartDisableChecksum,
         )
 
@@ -133,43 +130,13 @@ class S3ExpressIntegration : KotlinIntegration {
     }
 
     /**
-     * For any operations that require a checksum, set CRC32 if the user has not already configured a checksum.
-     */
-    private val useCrc32Checksum = object : ProtocolMiddleware {
-        override val name: String = "UseCrc32Checksum"
-
-        override val order: Byte = -1 // Render before flexible checksums
-
-        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean = !op.isS3UploadPart &&
-            (op.hasTrait<HttpChecksumRequiredTrait>() || (op.hasTrait<HttpChecksumTrait>() && op.expectTrait<HttpChecksumTrait>().isRequestChecksumRequired))
-
-        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            val interceptorSymbol = buildSymbol {
-                namespace = "aws.sdk.kotlin.services.s3.express"
-                name = "S3ExpressCrc32ChecksumInterceptor"
-            }
-
-            val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()
-
-            val checksumAlgorithmMember = ctx.model.expectShape<StructureShape>(op.input.get())
-                .members()
-                .firstOrNull { it.memberName == httpChecksumTrait?.requestAlgorithmMember?.getOrNull() }
-
-            // S3 models a header name x-amz-sdk-checksum-algorithm representing the name of the checksum algorithm used
-            val checksumHeaderName = checksumAlgorithmMember?.getTrait<HttpHeaderTrait>()?.value
-
-            writer.write("op.interceptors.add(#T(${checksumHeaderName?.dq() ?: ""}))", interceptorSymbol)
-        }
-    }
-
-    /**
      * Disable all checksums for s3:UploadPart
      */
     private val uploadPartDisableChecksum = object : ProtocolMiddleware {
         override val name: String = "UploadPartDisableChecksum"
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
-            op.isS3UploadPart
+            op.isS3UploadPart && op.hasTrait<HttpChecksumTrait>()
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
             val interceptorSymbol = buildSymbol {

@@ -8,7 +8,7 @@ import aws.sdk.kotlin.e2etest.S3TestUtils.createMultiRegionAccessPoint
 import aws.sdk.kotlin.e2etest.S3TestUtils.deleteBucketAndAllContents
 import aws.sdk.kotlin.e2etest.S3TestUtils.deleteMultiRegionAccessPoint
 import aws.sdk.kotlin.e2etest.S3TestUtils.getAccountId
-import aws.sdk.kotlin.e2etest.S3TestUtils.getBucketWithPrefix
+import aws.sdk.kotlin.e2etest.S3TestUtils.getBucket
 import aws.sdk.kotlin.e2etest.S3TestUtils.getMultiRegionAccessPointArn
 import aws.sdk.kotlin.e2etest.S3TestUtils.multiRegionAccessPointWasCreated
 import aws.sdk.kotlin.services.s3.S3Client
@@ -47,8 +47,8 @@ class MutliRegionAccessPointTest {
     @BeforeAll
     private fun setUp(): Unit = runBlocking {
         accountId = getAccountId()
-        usWestBucket = getBucketWithPrefix(s3West, MRAP_BUCKET_PREFIX, "us-west-2", accountId)
-        usEastBucket = getBucketWithPrefix(s3East, MRAP_BUCKET_PREFIX, "us-east-2", accountId)
+        usWestBucket = getBucket(s3West, MRAP_BUCKET_PREFIX, "us-west-2", accountId)
+        usEastBucket = getBucket(s3East, MRAP_BUCKET_PREFIX, "us-east-2", accountId)
 
         createMultiRegionAccessPoint(
             s3Control,

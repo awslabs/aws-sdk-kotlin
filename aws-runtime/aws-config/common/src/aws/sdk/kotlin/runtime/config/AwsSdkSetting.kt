@@ -208,6 +208,18 @@ public object AwsSdkSetting {
      */
     public val AwsSigV4aSigningRegionSet: EnvironmentSetting<String> =
         strEnvSetting("aws.sigV4aSigningRegionSet", "AWS_SIGV4A_SIGNING_REGION_SET")
+
+    /**
+     * Configures request checksum calculation
+     */
+    public val AwsRequestChecksumCalculation: EnvironmentSetting<String> =
+        strEnvSetting("aws.requestChecksumCalculation", "AWS_REQUEST_CHECKSUM_CALCULATION")
+
+    /**
+     * Configures response checksum validation
+     */
+    public val AwsResponseChecksumValidation: EnvironmentSetting<String> =
+        strEnvSetting("aws.responseChecksumValidation", "AWS_RESPONSE_CHECKSUM_VALIDATION")
 }
 
 /**
