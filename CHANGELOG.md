@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.90] - 12/09/2024
+
+### Features
+* (**cognitoidentityprovider**) Change `CustomDomainConfig` from a required to an optional parameter for the `UpdateUserPoolDomain` operation.
+* (**ec2**) This release includes a new API for modifying instance network-performance-options after launch.
+* (**medialive**) H265 outputs now support disabling the deblocking filter.
+
+### Documentation
+* (**appsync**) Provides description of new Amazon Bedrock runtime datasource.
+* (**ecs**) This is a documentation only update to address various tickets for Amazon ECS.
+* (**keyspaces**) Amazon Keyspaces: adding the list of IAM actions required by the UpdateKeyspace API.
+* (**workspaces**) Added text to clarify case-sensitivity
+
 ## [1.3.89] - 12/05/2024
 
 ### Features
