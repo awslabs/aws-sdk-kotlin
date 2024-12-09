@@ -15,7 +15,6 @@ val smokeTestDenyList = setOf(
 
 /**
  * Will wipe the smoke test runner file for services that are deny listed.
- *
  * Some services model smoke tests incorrectly and the code generated file will not compile.
  */
 class SmokeTestsDenyListIntegration : KotlinIntegration {
@@ -27,7 +26,7 @@ class SmokeTestsDenyListIntegration : KotlinIntegration {
             SectionWriterBinding(
                 SmokeTestsFile,
             ) { writer, _ ->
-                writer.write("// Smoke tests for service deny listed")
+                writer.write("// Smoke tests for service are deny listed")
             },
         )
 }
