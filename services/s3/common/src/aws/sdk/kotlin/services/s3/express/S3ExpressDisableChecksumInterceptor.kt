@@ -15,6 +15,8 @@ import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import kotlin.coroutines.coroutineContext
 
 private const val CHECKSUM_HEADER_PREFIX = "x-amz-checksum-"
+private const val S3_EXPRESS_ENDPOINT_PROPERTY_KEY = "backend"
+private const val S3_EXPRESS_ENDPOINT_PROPERTY_VALUE = "S3Express"
 
 /**
  * Disables checksums for s3:UploadPart requests that use S3 express.

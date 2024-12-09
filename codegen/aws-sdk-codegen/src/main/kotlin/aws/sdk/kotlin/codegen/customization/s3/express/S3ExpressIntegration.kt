@@ -25,8 +25,7 @@ import software.amazon.smithy.model.transform.ModelTransformer
  * An integration which handles codegen for S3 Express, such as:
  * 1. Configure auth scheme by applying a synthetic shape and trait
  * 2. Add ExpressClient and Bucket to execution context
- * 3. Override checksums to use CRC32 instead of MD5
- * 4. Disable all checksums for s3:UploadPart
+ * 3. Disable all checksums for s3:UploadPart
  */
 class S3ExpressIntegration : KotlinIntegration {
     companion object {

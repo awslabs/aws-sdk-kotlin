@@ -46,9 +46,9 @@ object S3TestUtils {
         client: S3Client,
         region: String? = null,
         accountId: String? = null,
-    ): String = getBucket(client, TEST_BUCKET_PREFIX, region, accountId)
+    ): String = getBucketWithPrefix(client, TEST_BUCKET_PREFIX, region, accountId)
 
-    suspend fun getBucket(
+    suspend fun getBucketWithPrefix(
         client: S3Client,
         prefix: String,
         region: String? = null,
