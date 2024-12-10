@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.91] - 12/10/2024
+
+### Features
+* (**bcmpricingcalculator**) Updated condition key inference from Workload Estimate, Bill Scenario, and Bill Estimate resources. Updated documentation links.
+* (**connect**) Add support for Push Notifications for Amazon Connect chat. With Push Notifications enabled an alert could be sent to customers about new messages even when they aren't actively using the mobile application.
+* (**finspace**) Update KxCommandLineArgument value parameter regex to allow for spaces and semicolons
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to customize thumbnails recording mode and interval for both Individual Participant Recording (IPR) and Server-Side Compositions (SSC).
+* (**sesv2**) Introduces support for creating DEED (Deterministic Easy-DKIM) identities.
+
+### Documentation
+* (**applicationautoscaling**) Doc only update for AAS Predictive Scaling policy configuration API.
+* (**dsql**) Doc only update to examples for DeleteMultiRegionClusters & CreateMultiRegionClusters
+
 ## [1.3.90] - 12/09/2024
 
 ### Features
