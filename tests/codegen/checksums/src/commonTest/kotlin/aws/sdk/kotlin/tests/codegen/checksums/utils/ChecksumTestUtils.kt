@@ -20,8 +20,8 @@ internal class HeaderReader(
     private val expectedHeaders: Map<String, String?>,
     private val forbiddenHeaders: Map<String, String?> = emptyMap(),
 ) : HttpInterceptor {
-    var containsExpectedHeaders = true
-    var containsForbiddenHeaders = false
+    var containsExpectedHeaders = false
+    var containsForbiddenHeaders = true
 
     override fun readBeforeTransmit(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
         expectedHeaders.forEach { header ->
@@ -31,17 +31,18 @@ internal class HeaderReader(
             } ?: true
 
             if (!containsHeader || !headerValueMatches) {
-                containsExpectedHeaders = false
                 return
             }
         }
 
         forbiddenHeaders.forEach { header ->
             if (context.protocolRequest.headers.contains(header.key)) {
-                containsForbiddenHeaders = true
                 return
             }
         }
+
+        containsExpectedHeaders = true
+        containsForbiddenHeaders = false
     }
 }
 
@@ -66,7 +67,7 @@ internal class HeaderSetter(
 internal class BusinessMetricsReader(
     private val expectedBusinessMetrics: Set<BusinessMetric>,
 ) : HttpInterceptor {
-    var containsExpectedBusinessMetrics = true
+    var containsExpectedBusinessMetrics = false
 
     override fun readBeforeTransmit(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
         containsExpectedBusinessMetrics = context.executionContext[BusinessMetrics].containsAll(expectedBusinessMetrics)

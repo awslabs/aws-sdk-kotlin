@@ -16,6 +16,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerato
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
+import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.*
@@ -138,12 +139,25 @@ class S3ExpressIntegration : KotlinIntegration {
             op.isS3UploadPart && op.hasTrait<HttpChecksumTrait>()
 
         override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+            val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
+
+            val requestAlgorithmMemberName = httpChecksumTrait.requestAlgorithmMember?.getOrNull()?.let {
+                val requestAlgorithmMemberShape = ctx.model.expectShape<StructureShape>(op.input.get())
+                    .members()
+                    .first { it.memberName == httpChecksumTrait.requestAlgorithmMember.get() }
+                ctx.symbolProvider.toMemberName(requestAlgorithmMemberShape)
+            }
+
             val interceptorSymbol = buildSymbol {
                 namespace = "aws.sdk.kotlin.services.s3.express"
                 name = "S3ExpressDisableChecksumInterceptor"
             }
             writer.addImport(interceptorSymbol)
-            writer.write("op.interceptors.add(#T())", interceptorSymbol)
+            writer.write(
+                "op.interceptors.add(#T(input.#L?.value != null))",
+                interceptorSymbol,
+                requestAlgorithmMemberName,
+            )
         }
     }
 

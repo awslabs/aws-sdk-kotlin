@@ -19,13 +19,6 @@ import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.StructureShape
 
 /**
- * AWS services that can return composite checksums in their responses
- */
-private val compositeChecksumServices = setOf(
-    "s3",
-)
-
-/**
  * Adds a middleware which validates checksums returned in responses if the user has opted-in.
  */
 class FlexibleChecksumsResponse : KotlinIntegration {
@@ -98,7 +91,6 @@ class FlexibleChecksumsResponse : KotlinIntegration {
             ) {
                 writer.write("input.#L?.value == \"ENABLED\",", requestValidationModeMemberName)
                 writer.write("config.responseChecksumValidation,")
-                writer.write("#L", compositeChecksumServices.contains(ctx.settings.sdkId))
             }
         }
     }

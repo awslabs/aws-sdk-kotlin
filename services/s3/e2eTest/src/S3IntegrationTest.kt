@@ -390,7 +390,7 @@ class S3BucketOpsIntegrationTest {
 }
 
 // generate sequence of "chunks" where each range defines the inclusive start and end bytes
-private fun File.chunk(partSize: Int): Sequence<LongRange> =
+internal fun File.chunk(partSize: Int): Sequence<LongRange> =
     (0 until length() step partSize.toLong()).asSequence().map {
         it until minOf(it + partSize, length())
     }

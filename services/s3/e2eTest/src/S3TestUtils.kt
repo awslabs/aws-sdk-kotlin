@@ -10,6 +10,7 @@ import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.ExpirationStatus
 import aws.sdk.kotlin.services.s3.model.LifecycleRule
+import aws.sdk.kotlin.services.s3.paginators.listBucketsPaginated
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketNotExists
@@ -103,26 +104,42 @@ object S3TestUtils {
 
     suspend fun getBucketByName(
         client: S3Client,
-        bucket: String,
+        targetBucket: String,
         region: String? = null,
         accountId: String? = null,
     ): String = withTimeout(60.seconds) {
-        val buckets = client.listBuckets()
-            .buckets
-            ?.mapNotNull { it.name }
+        val bucketNames = mutableListOf<String>()
 
-        var testBucket = buckets?.firstOrNull { bucketName ->
-            bucketName == bucket &&
-                region?.let {
+        client.listBucketsPaginated()
+            .collect { response ->
+                response.buckets?.forEach { bucket ->
+                    bucket.name?.let { bucketNames.add(it) }
+                }
+            }
+
+        var testBucket = bucketNames.firstOrNull { bucketName ->
+            if (bucketName == targetBucket) {
+                val isInCorrectLocation = region?.let {
                     client.getBucketLocation {
-                        this.bucket = bucketName
+                        bucket = bucketName
                         expectedBucketOwner = accountId
                     }.locationConstraint?.value == region
                 } ?: true
+
+                if (isInCorrectLocation) {
+                    true
+                } else {
+                    throw RuntimeException(
+                        "The requested bucket ($targetBucket) already exists in another region than the one requested ($region)",
+                    )
+                }
+            } else {
+                false
+            }
         }
 
         if (testBucket == null) {
-            testBucket = bucket
+            testBucket = targetBucket
             println("Creating S3 bucket: $testBucket")
 
             client.createBucket {

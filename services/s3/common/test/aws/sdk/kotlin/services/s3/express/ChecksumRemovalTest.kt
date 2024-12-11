@@ -7,27 +7,31 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ChecksumRemovalTest {
+    // Header capitalization shouldn't matter
+    private val crc32Header = "x-aMz-cHeCkSum-cRC32"
+    private val sha256Header = "X-Amz-ChEcKsum-sHa256"
+
     @Test
     fun removeChecksumHeaders() {
         val headers = HeadersBuilder()
 
-        headers.append("x-amz-checksum-crc32", "foo")
-        headers.append("x-amz-checksum-sha256", "bar")
+        headers.append(crc32Header, "foo")
+        headers.append(sha256Header, "bar")
 
         assertTrue(
-            headers.contains("x-amz-checksum-crc32"),
+            headers.contains(crc32Header),
         )
         assertTrue(
-            headers.contains("x-amz-checksum-sha256"),
+            headers.contains(sha256Header),
         )
 
         headers.removeChecksumHeaders()
 
         assertFalse(
-            headers.contains("x-amz-checksum-crc32"),
+            headers.contains(crc32Header),
         )
         assertFalse(
-            headers.contains("x-amz-checksum-sha256"),
+            headers.contains(sha256Header),
         )
     }
 
@@ -35,23 +39,23 @@ class ChecksumRemovalTest {
     fun removeChecksumTrailingHeaders() {
         val trailingHeaders = DeferredHeadersBuilder()
 
-        trailingHeaders.add("x-amz-checksum-crc32", "foo")
-        trailingHeaders.add("x-amz-checksum-sha256", "bar")
+        trailingHeaders.add(crc32Header, "foo")
+        trailingHeaders.add(sha256Header, "bar")
 
         assertTrue(
-            trailingHeaders.contains("x-amz-checksum-crc32"),
+            trailingHeaders.contains(crc32Header),
         )
         assertTrue(
-            trailingHeaders.contains("x-amz-checksum-sha256"),
+            trailingHeaders.contains(sha256Header),
         )
 
         trailingHeaders.removeChecksumTrailingHeaders()
 
         assertFalse(
-            trailingHeaders.contains("x-amz-checksum-crc32"),
+            trailingHeaders.contains(crc32Header),
         )
         assertFalse(
-            trailingHeaders.contains("x-amz-checksum-sha256"),
+            trailingHeaders.contains(sha256Header),
         )
     }
 
@@ -59,13 +63,13 @@ class ChecksumRemovalTest {
     fun removeChecksumTrailingHeadersFromXAmzTrailer() {
         val headers = HeadersBuilder()
 
-        headers.append("x-amz-trailer", "x-amz-checksum-crc32")
+        headers.append("x-amz-trailer", crc32Header)
         headers.append("x-amz-trailer", "x-amz-trailing-header")
 
         val xAmzTrailer = headers.getAll("x-amz-trailer")
 
         assertTrue(
-            xAmzTrailer?.contains("x-amz-checksum-crc32") ?: false,
+            xAmzTrailer?.contains(crc32Header) ?: false,
         )
         assertTrue(
             xAmzTrailer?.contains("x-amz-trailing-header") ?: false,
@@ -74,7 +78,7 @@ class ChecksumRemovalTest {
         headers.removeChecksumTrailingHeadersFromXAmzTrailer()
 
         assertFalse(
-            xAmzTrailer?.contains("x-amz-checksum-crc32") ?: false,
+            xAmzTrailer?.contains(crc32Header) ?: false,
         )
         assertTrue(
             xAmzTrailer?.contains("x-amz-trailing-header") ?: false,

@@ -16,7 +16,6 @@ subprojects {
     apply(plugin = libraries.plugins.kotlin.multiplatform.get().pluginId)
 
     val optinAnnotations = listOf(
-        "kotlin.RequiresOptIn",
         "aws.smithy.kotlin.runtime.InternalApi",
         "aws.sdk.kotlin.runtime.InternalSdkApi",
     )

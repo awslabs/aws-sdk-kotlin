@@ -8,19 +8,21 @@ import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.model.CompletedMultipartUpload
 import aws.sdk.kotlin.services.s3.model.CompletedPart
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
-import aws.smithy.kotlin.runtime.content.ByteStream
-import aws.smithy.kotlin.runtime.content.fromInputStream
+import aws.smithy.kotlin.runtime.content.*
+import aws.smithy.kotlin.runtime.hashing.crc32
+import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.*
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
+import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3ChecksumTest {
     private val client = S3Client { region = "us-west-2" }
     private val testBucket = "s3-test-bucket-ci-motorcade"
-    private val testObject = "test-object"
+    private fun testKey(): String = "test-object" + UUID.randomUUID()
 
     @BeforeAll
     private fun setUp(): Unit = runBlocking {
@@ -38,87 +40,123 @@ class S3ChecksumTest {
 
     @Test
     fun testPutObject(): Unit = runBlocking {
+        val testBody = "Hello World"
+        val testKey = testKey()
+
         client.putObject {
             bucket = testBucket
-            key = testObject
-            body = ByteStream.fromString("Hello World")
+            key = testKey
+            body = ByteStream.fromString(testBody)
+        }
+
+        client.getObject(
+            GetObjectRequest {
+                bucket = testBucket
+                key = testKey
+            },
+        ) { actual ->
+            assertEquals(testBody, actual.body?.decodeToString() ?: "")
         }
     }
 
     @Test
     fun testPutObjectWithEmptyBody(): Unit = runBlocking {
+        val testKey = testKey()
+        val testBody = ""
+
         client.putObject {
             bucket = testBucket
-            key = testObject + UUID.randomUUID()
+            key = testKey
+        }
+
+        client.getObject(
+            GetObjectRequest {
+                bucket = testBucket
+                key = testKey
+            },
+        ) { actual ->
+            assertEquals(testBody, actual.body?.decodeToString() ?: "")
         }
     }
 
     @Test
     fun testPutObjectAwsChunkedEncoded(): Unit = runBlocking {
-        val testString = "Hello World"
+        val testKey = testKey()
+        val testBody = "Hello World"
+
         val tempFile = File.createTempFile("test", ".txt").also {
-            it.writeText(testString)
+            it.writeText(testBody)
             it.deleteOnExit()
         }
         val inputStream = FileInputStream(tempFile)
 
         client.putObject {
             bucket = testBucket
-            key = testObject + UUID.randomUUID()
-            body = ByteStream.fromInputStream(inputStream, testString.length.toLong())
+            key = testKey
+            body = ByteStream.fromInputStream(inputStream, testBody.length.toLong())
+        }
+
+        client.getObject(
+            GetObjectRequest {
+                bucket = testBucket
+                key = testKey
+            },
+        ) { actual ->
+            assertEquals(testBody, actual.body?.decodeToString() ?: "")
         }
     }
 
     @Test
     fun testMultiPartUpload(): Unit = runBlocking {
-        // Parts need to be at least 5 MB
-        val partOne = "Hello".repeat(1_048_576)
-        val partTwo = "World".repeat(1_048_576)
+        val testKey = testKey()
+
+        val partSize = 5 * 1024 * 1024 // 5 MB - min part size
+        val contentSize: Long = 8 * 1024 * 1024 // 2 parts
+        val file = RandomTempFile(sizeInBytes = contentSize)
+
+        val expectedChecksum = file.readBytes().crc32()
 
         val testUploadId = client.createMultipartUpload {
             bucket = testBucket
-            key = testObject
+            key = testKey
         }.uploadId
 
-        val eTagPartOne = client.uploadPart {
-            bucket = testBucket
-            key = testObject
-            partNumber = 1
-            uploadId = testUploadId
-            body = ByteStream.fromString(partOne)
-        }.eTag
+        val uploadedParts = file.chunk(partSize).mapIndexed { index, chunk ->
+            val adjustedIndex = index + 1 // index starts from 0 but partNumber needs to start from 1
 
-        val eTagPartTwo = client.uploadPart {
-            bucket = testBucket
-            key = testObject
-            partNumber = 2
-            uploadId = testUploadId
-            body = ByteStream.fromString(partTwo)
-        }.eTag
+            runBlocking {
+                client.uploadPart {
+                    bucket = testBucket
+                    key = testKey
+                    partNumber = adjustedIndex
+                    uploadId = testUploadId
+                    body = file.asByteStream(chunk)
+                }.let {
+                    CompletedPart {
+                        partNumber = adjustedIndex
+                        eTag = it.eTag
+                    }
+                }
+            }
+        }.toList()
 
         client.completeMultipartUpload {
             bucket = testBucket
-            key = testObject
+            key = testKey
             uploadId = testUploadId
             multipartUpload = CompletedMultipartUpload {
-                parts = listOf(
-                    CompletedPart {
-                        partNumber = 1
-                        eTag = eTagPartOne
-                    },
-                    CompletedPart {
-                        partNumber = 2
-                        eTag = eTagPartTwo
-                    },
-                )
+                parts = uploadedParts
             }
         }
 
         client.getObject(
             GetObjectRequest {
                 bucket = testBucket
-                key = testObject
+                key = testKey
             },
-        ) {}
+        ) { actual ->
+            val actualChecksum = actual.body!!.toByteArray().crc32()
+            assertEquals(actualChecksum, expectedChecksum)
+        }
     }
 }

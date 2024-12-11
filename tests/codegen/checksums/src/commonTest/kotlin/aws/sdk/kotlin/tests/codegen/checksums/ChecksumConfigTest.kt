@@ -265,6 +265,10 @@ class UserProvidedChecksumHeader {
         assertTrue(
             headerReader.containsExpectedHeaders,
         )
+
+        assertFalse(
+            headerReader.containsForbiddenHeaders,
+        )
     }
 }
 
@@ -367,37 +371,6 @@ class ResponseChecksumValidation {
                     body = "Hello"
                     validationMode = ValidationMode.Enabled
                 }
-            }
-        }
-    }
-
-    @Test
-    fun compositeChecksumsAreNotValidated(): Unit = runBlocking {
-        ClientConfigTestClient {
-            responseChecksumValidation = HttpChecksumConfigOption.WHEN_REQUIRED
-            httpClient = TestEngine(
-                roundTripImpl = { _, request ->
-                    val resp = HttpResponse(
-                        HttpStatusCode.OK,
-                        Headers {
-                            append(
-                                "x-amz-checksum-crc32",
-                                "I'm a composite checksum and will trigger `ChecksumMismatchException` if read!-1",
-                            )
-                        },
-                        "World!".toHttpBody(),
-                    )
-                    val now = Instant.now()
-                    HttpCall(request, resp, now, now)
-                },
-            )
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsRequiredOperation {
-                body = "Hello"
             }
         }
     }
