@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.92] - 12/11/2024
+
+### Features
+* (**artifact**) Add support for listing active customer agreements for the calling AWS Account.
+* (**emrserverless**) This release adds support for accessing system profile logs in Lake Formation-enabled jobs.
+* (**migrationhub**) API and documentation updates for AWS MigrationHub related to adding support for listing migration task updates and associating, disassociating and listing source resources
+* (**sesv2**) Introduces support for multi-region endpoint.
+* (**timestreaminfluxdb**) Adds networkType parameter to CreateDbInstance API which allows IPv6 support to the InfluxDB endpoint
+
+### Documentation
+* (**cloudtrail**) Doc-only updates for CloudTrail.
+* (**cognitoidentityprovider**) Updated descriptions for some API operations and parameters, corrected some errors in Cognito user pools
+* (**controlcatalog**) Minor documentation updates to the content of ImplementationDetails object part of the Control Catalog GetControl API
+
 ## [1.3.91] - 12/10/2024
 
 ### Features
