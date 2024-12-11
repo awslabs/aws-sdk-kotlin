@@ -62,6 +62,7 @@ object AwsRuntimeTypes {
             val UnsupportedSigningAlgorithmInterceptor = symbol("UnsupportedSigningAlgorithmInterceptor")
             val BusinessMetricsInterceptor = symbol("BusinessMetricsInterceptor")
             val AwsBusinessMetric = symbol("AwsBusinessMetric")
+            val S3CompositeChecksumsInterceptor = symbol("S3CompositeChecksumsInterceptor")
         }
 
         object Retries {

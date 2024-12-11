@@ -168,6 +168,20 @@ public val AwsProfile.sigV4aSigningRegionSet: String?
     get() = getOrNull("sigv4a_signing_region_set")
 
 /**
+ * Configures request checksum calculation
+ */
+@InternalSdkApi
+public val AwsProfile.requestChecksumCalculation: String?
+    get() = getOrNull("request_checksum_calculation")
+
+/**
+ * Configures response checksum validation
+ */
+@InternalSdkApi
+public val AwsProfile.responseChecksumValidation: String?
+    get() = getOrNull("response_checksum_validation")
+
+/**
  * Parse a config value as a boolean, ignoring case.
  */
 @InternalSdkApi
