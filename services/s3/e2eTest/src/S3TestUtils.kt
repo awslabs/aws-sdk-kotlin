@@ -10,7 +10,6 @@ import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.model.BucketLocationConstraint
 import aws.sdk.kotlin.services.s3.model.ExpirationStatus
 import aws.sdk.kotlin.services.s3.model.LifecycleRule
-import aws.sdk.kotlin.services.s3.paginators.listBucketsPaginated
 import aws.sdk.kotlin.services.s3.paginators.listObjectsV2Paginated
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketExists
 import aws.sdk.kotlin.services.s3.waiters.waitUntilBucketNotExists
@@ -107,54 +106,31 @@ object S3TestUtils {
         targetBucket: String,
         region: String? = null,
         accountId: String? = null,
-    ): String = withTimeout(60.seconds) {
-        val bucketNames = mutableListOf<String>()
+    ): Unit = withTimeout(60.seconds) {
+        try {
+            val targetBucketRegion = client
+                .headBucket {
+                    this.bucket = targetBucket
+                    expectedBucketOwner = accountId
+                }.bucketRegion
 
-        client.listBucketsPaginated()
-            .collect { response ->
-                response.buckets?.forEach { bucket ->
-                    bucket.name?.let { bucketNames.add(it) }
-                }
+            if (targetBucketRegion != region) {
+                throw RuntimeException(
+                    "The requested bucket ($targetBucket) already exists in another region than the one requested ($region)",
+                )
             }
-
-        var testBucket = bucketNames.firstOrNull { bucketName ->
-            if (bucketName == targetBucket) {
-                val isInCorrectLocation = region?.let {
-                    client.getBucketLocation {
-                        bucket = bucketName
-                        expectedBucketOwner = accountId
-                    }.locationConstraint?.value == region
-                } ?: true
-
-                if (isInCorrectLocation) {
-                    true
-                } else {
-                    throw RuntimeException(
-                        "The requested bucket ($targetBucket) already exists in another region than the one requested ($region)",
-                    )
-                }
-            } else {
-                false
-            }
-        }
-
-        if (testBucket == null) {
-            testBucket = targetBucket
-            println("Creating S3 bucket: $testBucket")
+        } catch (e: Throwable) {
+            println("Creating S3 bucket: $targetBucket")
 
             client.createBucket {
-                this.bucket = testBucket
+                bucket = targetBucket
                 createBucketConfiguration {
                     locationConstraint = BucketLocationConstraint.fromValue(region ?: client.config.region!!)
                 }
             }
 
-            client.waitUntilBucketExists { this.bucket = testBucket }
-        } else {
-            println("Using existing S3 bucket: $testBucket")
+            client.waitUntilBucketExists { bucket = targetBucket }
         }
-
-        testBucket
     }
 
     suspend fun getTestDirectoryBucket(client: S3Client, suffix: String) = withTimeout(60.seconds) {
