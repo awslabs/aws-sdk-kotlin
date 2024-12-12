@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * SPDX-License-Identifier: Apache-2.0
  */
 plugins {
-    alias(libs.plugins.kotlin.jvm)
+    id(libs.plugins.kotlin.jvm.get().pluginId)
 }
 
 description = "Custom Dokka plugin for AWS Kotlin SDK API docs"

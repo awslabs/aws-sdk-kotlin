@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 
 plugins {
     `maven-publish`
-    alias(libs.plugins.dokka)
+    `dokka-convention`
     alias(libs.plugins.aws.kotlin.repo.tools.kmp) apply false
 }
 
@@ -31,7 +31,6 @@ subprojects {
 
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
-        plugin("org.jetbrains.dokka")
         plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
 
@@ -128,10 +127,6 @@ subprojects {
         }
     }
 
-    dependencies {
-        dokkaPlugin(project(":dokka-aws"))
-    }
-
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
             allWarningsAsErrors.set(false) // FIXME Tons of errors occur in generated code
@@ -148,5 +143,13 @@ subprojects {
                 pom.properties.put("aws.sdk.id", sdkId)
             }
         }
+    }
+}
+
+// Configure Dokka for subprojects
+dependencies {
+    subprojects.forEach {
+        it.plugins.apply("dokka-convention") // Apply the Dokka conventions plugin to the subproject
+        dokka(project(it.path)) // Aggregate the subproject's generated documentation
     }
 }

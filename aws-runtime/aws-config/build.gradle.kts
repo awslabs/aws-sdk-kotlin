@@ -5,7 +5,6 @@
 import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
     alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
@@ -83,7 +82,6 @@ smithyBuild {
     val basePackage = "aws.sdk.kotlin.runtime.auth.credentials.internal"
 
     projections {
-
         // generate an sts client
         create("sts-credentials-provider") {
             imports = listOf(
@@ -241,9 +239,12 @@ smithyBuild.projections.all {
     }
 }
 
-// suppress internal generated clients
-tasks.named<DokkaTaskPartial>("dokkaHtmlPartial") {
-    dependsOn(tasks.generateSmithyProjections)
+// Suppress internally-generated clients
+dokka {
+    tasks.dokkaGenerateModuleHtml {
+        dependsOn(tasks.generateSmithyProjections)
+    }
+
     dokkaSourceSets.configureEach {
         perPackageOption {
             matchingRegex.set(""".*\.internal.*""")

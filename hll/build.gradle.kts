@@ -5,8 +5,6 @@
 
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
 import aws.sdk.kotlin.gradle.kmp.*
-import aws.smithy.kotlin.runtime.InternalApi
-import aws.smithy.kotlin.runtime.text.ensureSuffix
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 description = "High-level libraries for the AWS SDK for Kotlin"
@@ -16,7 +14,7 @@ extra["moduleName"] = "aws.sdk.kotlin.hll"
 // FIXME 🔽🔽🔽 This is all copied from :aws-runtime and should be commonized 🔽🔽🔽
 
 plugins {
-    alias(libs.plugins.dokka)
+    `dokka-convention`
     alias(libs.plugins.kotlinx.binary.compatibility.validator)
     alias(libs.plugins.aws.kotlin.repo.tools.kmp) apply false
     jacoco
@@ -34,7 +32,8 @@ val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
 )
 
-@OptIn(InternalApi::class)
+private fun String.ensureSuffix(suffix: String): String = if (endsWith(suffix)) this else plus(suffix)
+
 val hllPreviewVersion = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-beta-SNAPSHOT
     sdkVersion
         .removeSuffix("-SNAPSHOT")
@@ -56,7 +55,6 @@ subprojects {
 
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
-        plugin("org.jetbrains.dokka")
         plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
 
@@ -85,10 +83,6 @@ subprojects {
         }
     }
 
-    dependencies {
-        dokkaPlugin(project(":dokka-aws"))
-    }
-
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_1_8)
@@ -112,4 +106,12 @@ apiValidation {
         "dynamodb-mapper-schema-codegen",
         "dynamodb-mapper-schema-generator-plugin-test",
     ).filter { it in availableSubprojects } // Some projects may not be in the build depending on bootstrapping
+}
+
+// Configure Dokka for subprojects
+dependencies {
+    subprojects.forEach {
+        it.plugins.apply("dokka-convention") // Apply the Dokka conventions plugin to the subproject
+        dokka(project(it.path)) // Aggregate the subproject's generated documentation
+    }
 }

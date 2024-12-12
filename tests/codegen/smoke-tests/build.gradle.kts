@@ -11,7 +11,7 @@ description = "Tests for smoke tests runners"
 
 plugins {
     alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
-    alias(libs.plugins.kotlin.jvm)
+    id(libs.plugins.kotlin.jvm.get().pluginId)
 }
 
 val projections = listOf(
