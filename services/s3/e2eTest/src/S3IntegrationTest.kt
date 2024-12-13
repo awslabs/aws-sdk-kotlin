@@ -188,9 +188,8 @@ class S3BucketOpsIntegrationTest {
         }
     }
 
-    // FIXME: Enable test when motorcade is ready
+    // FIXME: Enable test
     // Seeing: S3Exception: Checksum Type mismatch occurred, expected checksum Type: null, actual checksum Type: crc32
-    // Cause: "Post-motorcade SDK is expected not to work against Pre-Motorcade S3"
     @Ignore
     @Test
     fun testMultipartUpload(): Unit = runBlocking {

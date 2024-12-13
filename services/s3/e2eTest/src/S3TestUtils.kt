@@ -34,9 +34,8 @@ object S3TestUtils {
     const val DEFAULT_REGION = "us-west-2"
 
     // The E2E test account only has permission to operate on buckets with the prefix "s3-test-bucket-"
-    // Motorcade allow-listed bucket: "s3-test-bucket-ci-motorcade".
-    // Non-checksum E2E tests will use it and delete it if TEST_BUCKET_PREFIX="s3-test-bucket-" via `deleteBucketAndAllContents`
-    // TODO: Change back to "s3-test-bucket-" after motorcade is released.
+    // Non-checksum E2E tests will use and delete hardcoded bucket required for checksum tests if TEST_BUCKET_PREFIX="s3-test-bucket-" via `deleteBucketAndAllContents`
+    // TODO: Change back to "s3-test-bucket-"
     private const val TEST_BUCKET_PREFIX = "s3-test-bucket-temp-"
 
     private const val S3_MAX_BUCKET_NAME_LENGTH = 63 // https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html

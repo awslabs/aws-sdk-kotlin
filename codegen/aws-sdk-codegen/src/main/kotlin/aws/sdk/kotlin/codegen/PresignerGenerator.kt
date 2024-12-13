@@ -12,9 +12,7 @@ import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Hashing.isSupportedForFlexibleChecksums
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Hashing.toHashFunctionOrThrow
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.IllegalStateException
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Text.Encoding.encodeBase64String
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Text.lowercase
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Utils.runBlocking
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Http.HttpBody
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Http.readAll
@@ -278,10 +276,10 @@ class PresignerGenerator : KotlinIntegration {
             }
 
             checksumAlgorithmMember(op, ctx)?.let { checksumAlgorithmMember ->
-                withBlock("input.#L?.value?.let { checksumAlgorithmString ->", "}", checksumAlgorithmMember) {
+                withBlock("input.#L?.value?.let { checksumAlgorithmName ->", "}", checksumAlgorithmMember) {
                     withBlock("when (unsignedRequest.body) {", "}") {
                         withBlock("is #1T.Bytes, is #1T.Empty -> {", "}", HttpBody) {
-                            write("val checksumAlgorithm = checksumAlgorithmString.#T()", toHashFunctionOrThrow)
+                            write("val checksumAlgorithm = checksumAlgorithmName.#T()", toHashFunctionOrThrow)
                             withInlineBlock(
                                 "if (checksumAlgorithm.#T) {",
                                 "}",
@@ -293,9 +291,8 @@ class PresignerGenerator : KotlinIntegration {
                                     }
                                 }
                                 write(
-                                    "checksum = #S.#T() to checksumAlgorithm.digest().#T()",
-                                    "x-amz-checksum-\${checksumAlgorithmString}",
-                                    lowercase,
+                                    "checksum = #S.lowercase() to checksumAlgorithm.digest().#T()",
+                                    "x-amz-checksum-\${checksumAlgorithmName}",
                                     encodeBase64String,
                                 )
                             }
@@ -306,12 +303,13 @@ class PresignerGenerator : KotlinIntegration {
                                         "#T.#T<Presigner> { #S }",
                                         coroutineContext,
                                         warn,
-                                        "The requested checksum algorithm is not supported for pre-signed URL checksums, sending request without checksum.",
+                                        "The requested checksum algorithm (\${checksumAlgorithmName}) is not supported for pre-signed URL checksums, sending request without checksum. " +
+                                            "Supported checksums for pre-signed URLs include the following: ",
                                     )
                                 }
                             }
                         }
-                        write("else -> throw #T(#S)", IllegalStateException, "HTTP body type unsupported for pre-signed URL checksums.")
+                        write("else -> throw IllegalStateException(#S)", "HTTP body type unsupported for pre-signed URL checksums.")
                     }
                 }
             }
@@ -340,7 +338,7 @@ class PresignerGenerator : KotlinIntegration {
     private fun normalizeUriPath(service: ServiceShape) = service.sdkId != "S3"
 
     /**
-     * Gets the checksum algorithm member if a user can configure request checksums otherwise null
+     * Gets the checksum algorithm member if configured on a request, otherwise null
      */
     private fun checksumAlgorithmMember(
         operationShape: OperationShape,

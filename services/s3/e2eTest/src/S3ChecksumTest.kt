@@ -31,7 +31,7 @@ class S3ChecksumTest {
     @BeforeAll
     private fun setUp(): Unit = runBlocking {
         val accountId = getAccountId()
-        // FIXME: Use randomly generated bucket instead of hardcoded one when motorcade is ready
+        // FIXME: Use randomly generated bucket instead of hardcoded one
         getBucketByName(client, testBucket, "us-west-2", accountId)
     }
 
@@ -169,6 +169,7 @@ class S3ChecksumTest {
         val unsignedPutRequest = PutObjectRequest {
             bucket = testBucket
             key = testKey()
+            checksumCrc32 = "`"
         }
         val presignedPutRequest = client.presignPutObject(unsignedPutRequest, 60.seconds)
         val contents = "presign-test"

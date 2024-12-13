@@ -69,7 +69,7 @@ class FlexibleChecksumsRequest : KotlinIntegration {
     }
 
     private val flexibleChecksumsRequestMiddleware = object : ProtocolMiddleware {
-        override val name: String = "FlexibleChecksumsRequest"
+        override val name: String = "flexibleChecksumsRequestMiddleware"
 
         override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean {
             val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()

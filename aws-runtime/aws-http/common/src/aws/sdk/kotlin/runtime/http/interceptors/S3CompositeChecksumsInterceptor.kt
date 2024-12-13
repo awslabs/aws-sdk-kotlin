@@ -32,7 +32,7 @@ public class S3CompositeChecksumsInterceptor : HttpInterceptor {
 internal fun HeadersBuilder.removeCompositeChecksums(logger: Logger): Unit =
     names().forEach { header ->
         if (header.startsWith(CHECKSUM_HEADER_PREFIX, ignoreCase = true) && get(header)!!.isCompositeChecksum()) {
-            logger.warn { "S3 returned a composite checksum, composite checksums are not supported, removing checksum" }
+            logger.warn { "S3 returned a composite checksum ($header), composite checksums are not supported, removing checksum" }
             remove(header)
         }
     }

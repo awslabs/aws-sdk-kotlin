@@ -19,7 +19,7 @@ private const val S3_EXPRESS_ENDPOINT_PROPERTY_KEY = "backend"
 private const val S3_EXPRESS_ENDPOINT_PROPERTY_VALUE = "S3Express"
 
 /**
- * Disables checksums for s3:UploadPart requests that use S3 express.
+ * Disables checksums for s3:UploadPart requests that use S3 Express.
  */
 internal class S3ExpressDisableChecksumInterceptor(
     private val userConfiguredChecksum: Boolean,

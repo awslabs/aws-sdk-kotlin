@@ -41,9 +41,8 @@ class PaginatorTest {
         S3TestUtils.deleteBucketAndAllContents(client, testBucket)
     }
 
-    // FIXME: Enable test when motorcade is ready
+    // FIXME: Enable test
     // Seeing: S3Exception: Checksum Type mismatch occurred, expected checksum Type: null, actual checksum Type: crc32
-    // Cause: "Post-motorcade SDK is expected not to work against Pre-Motorcade S3"
     // ListParts has a strange pagination termination condition via [IsTerminated]. Verify it actually works correctly.
     @Ignore
     @Test
