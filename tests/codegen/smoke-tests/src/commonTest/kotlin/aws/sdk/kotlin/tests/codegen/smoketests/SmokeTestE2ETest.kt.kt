@@ -11,9 +11,7 @@ import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import kotlin.test.*
 
-// FIXME: Enable smoke test E2E tests
 class SmokeTestE2ETest {
-    @Ignore
     @Test
     fun successService() {
         val smokeTestRunnerOutput = runSmokeTests("successService")
@@ -22,7 +20,6 @@ class SmokeTestE2ETest {
         assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTestWithTags - no error expected from service")
     }
 
-    @Ignore
     @Test
     fun failureService() {
         val smokeTestRunnerOutput = runSmokeTests("failureService")
@@ -30,7 +27,6 @@ class SmokeTestE2ETest {
         assertContains(smokeTestRunnerOutput, "ok FailureService FailuresTest - error expected from service")
     }
 
-    @Ignore
     @Test
     fun exceptionService() {
         val smokeTestRunnerOutput = runSmokeTests("exceptionService", expectingFailure = true)
@@ -41,7 +37,6 @@ class SmokeTestE2ETest {
         assertContains(smokeTestRunnerOutput, "#\tat aws.smithy.kotlin.runtime.http.interceptors.InterceptorExecutor.readBeforeDeserialization(InterceptorExecutor.kt:252)")
     }
 
-    @Ignore
     @Test
     fun successServiceSkipTags() {
         val envVars = mapOf(AWS_SKIP_TAGS to "success")
@@ -51,7 +46,6 @@ class SmokeTestE2ETest {
         assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTestWithTags - no error expected from service # skip")
     }
 
-    @Ignore
     @Test
     fun successServiceServiceFilter() {
         val envVars = mapOf(AWS_SERVICE_FILTER to "Failure") // Only run tests for services with this SDK ID

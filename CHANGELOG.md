@@ -1,5 +1,74 @@
 # Changelog
 
+## [1.3.93] - 12/12/2024
+
+### Features
+* (**connect**) Configure holidays and other overrides to hours of operation in advance. During contact handling, Amazon Connect automatically checks for overrides and provides customers with an appropriate flow path. After an override period passes call center automatically reverts to standard hours of operation.
+* (**databasemigrationservice**) Add parameters to support for kerberos authentication. Add parameter for disabling the Unicode source filter with PostgreSQL settings. Add parameter to use large integer value with Kinesis/Kafka settings.
+* (**glue**) To support customer-managed encryption in Data Quality to allow customers encrypt data with their own KMS key, we will add a DataQualityEncryption field to the SecurityConfiguration API where customers can provide their KMS keys.
+* (**route53domains**) This release includes the following API updates: added the enumeration type RESTORE_DOMAIN to the OperationType; constrained the Price attribute to non-negative values; updated the LangCode to allow 2 or 3 alphabetical characters.
+
+### Documentation
+* (**guardduty**) Improved descriptions for certain APIs.
+
+## [1.3.92] - 12/11/2024
+
+### Features
+* (**artifact**) Add support for listing active customer agreements for the calling AWS Account.
+* (**emrserverless**) This release adds support for accessing system profile logs in Lake Formation-enabled jobs.
+* (**migrationhub**) API and documentation updates for AWS MigrationHub related to adding support for listing migration task updates and associating, disassociating and listing source resources
+* (**sesv2**) Introduces support for multi-region endpoint.
+* (**timestreaminfluxdb**) Adds networkType parameter to CreateDbInstance API which allows IPv6 support to the InfluxDB endpoint
+
+### Documentation
+* (**cloudtrail**) Doc-only updates for CloudTrail.
+* (**cognitoidentityprovider**) Updated descriptions for some API operations and parameters, corrected some errors in Cognito user pools
+* (**controlcatalog**) Minor documentation updates to the content of ImplementationDetails object part of the Control Catalog GetControl API
+
+## [1.3.91] - 12/10/2024
+
+### Features
+* (**bcmpricingcalculator**) Updated condition key inference from Workload Estimate, Bill Scenario, and Bill Estimate resources. Updated documentation links.
+* (**connect**) Add support for Push Notifications for Amazon Connect chat. With Push Notifications enabled an alert could be sent to customers about new messages even when they aren't actively using the mobile application.
+* (**finspace**) Update KxCommandLineArgument value parameter regex to allow for spaces and semicolons
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to customize thumbnails recording mode and interval for both Individual Participant Recording (IPR) and Server-Side Compositions (SSC).
+* (**sesv2**) Introduces support for creating DEED (Deterministic Easy-DKIM) identities.
+
+### Documentation
+* (**applicationautoscaling**) Doc only update for AAS Predictive Scaling policy configuration API.
+* (**dsql**) Doc only update to examples for DeleteMultiRegionClusters & CreateMultiRegionClusters
+
+## [1.3.90] - 12/09/2024
+
+### Features
+* (**cognitoidentityprovider**) Change `CustomDomainConfig` from a required to an optional parameter for the `UpdateUserPoolDomain` operation.
+* (**ec2**) This release includes a new API for modifying instance network-performance-options after launch.
+* (**medialive**) H265 outputs now support disabling the deblocking filter.
+
+### Documentation
+* (**appsync**) Provides description of new Amazon Bedrock runtime datasource.
+* (**ecs**) This is a documentation only update to address various tickets for Amazon ECS.
+* (**keyspaces**) Amazon Keyspaces: adding the list of IAM actions required by the UpdateKeyspace API.
+* (**workspaces**) Added text to clarify case-sensitivity
+
+## [1.3.89] - 12/05/2024
+
+### Features
+* (**partnercentralselling**) Introducing the preview of new partner central selling APIs designed to transform how AWS partners collaborate and co-sell with multiple partners. This enables multiple partners to seamlessly engage and jointly pursue customer opportunities, fostering a new era of collaborative selling.
+* (**qbusiness**) This release removes the deprecated UserId and UserGroups fields from SearchRelevantContent api's request parameters.
+
+## [1.3.88] - 12/04/2024
+
+### Features
+* (**bedrock**) Introduced two APIs ListPromptRouters and GetPromptRouter for Intelligent Prompt Router feature. Add support for Bedrock Guardrails image content filter. New Bedrock Marketplace feature enabling a wider range of bedrock compatible models with self-hosted capability.
+* (**bedrockagent**) This release introduces the ability to generate SQL using natural language, through a new GenerateQuery API (with native integration into Knowledge Bases); ability to ingest and retrieve images through Bedrock Data Automation; and ability to create a Knowledge Base backed by Kendra GenAI Index.
+* (**bedrockagentruntime**) This release introduces the ability to generate SQL using natural language, through a new GenerateQuery API (with native integration into Knowledge Bases); ability to ingest and retrieve images through Bedrock Data Automation; and ability to create a Knowledge Base backed by Kendra GenAI Index.
+* (**bedrockdataautomation**) Release Bedrock Data Automation SDK
+* (**bedrockdataautomationruntime**) Release Bedrock Data Automation Runtime SDK
+* (**bedrockruntime**) Added support for Intelligent Prompt Router in Invoke, InvokeStream, Converse and ConverseStream. Add support for Bedrock Guardrails image content filter. New Bedrock Marketplace feature enabling a wider range of bedrock compatible models with self-hosted capability.
+* (**kendra**) This release adds GenAI Index in Amazon Kendra for Retrieval Augmented Generation (RAG) and intelligent search. With the Kendra GenAI Index, customers get high retrieval accuracy powered by the latest information retrieval technologies and semantic models.
+* (**sagemaker**) Amazon SageMaker HyperPod launched task governance to help customers maximize accelerator utilization for model development and flexible training plans to meet training timelines and budget while reducing weeks of training time. AI apps from AWS partner is now available in SageMaker.
+
 ## [1.3.87] - 12/03/2024
 
 ### Features
