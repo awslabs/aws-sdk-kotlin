@@ -4,10 +4,10 @@ import aws.sdk.kotlin.e2etest.S3TestUtils.deleteBucketContents
 import aws.sdk.kotlin.e2etest.S3TestUtils.deleteMultiPartUploads
 import aws.sdk.kotlin.e2etest.S3TestUtils.getAccountId
 import aws.sdk.kotlin.e2etest.S3TestUtils.getBucketByName
+import aws.sdk.kotlin.e2etest.S3TestUtils.responseCodeFromPut
 import aws.sdk.kotlin.services.s3.*
-import aws.sdk.kotlin.services.s3.model.CompletedMultipartUpload
-import aws.sdk.kotlin.services.s3.model.CompletedPart
-import aws.sdk.kotlin.services.s3.model.GetObjectRequest
+import aws.sdk.kotlin.services.s3.model.*
+import aws.sdk.kotlin.services.s3.presigners.presignPutObject
 import aws.smithy.kotlin.runtime.content.*
 import aws.smithy.kotlin.runtime.hashing.crc32
 import aws.smithy.kotlin.runtime.testing.RandomTempFile
@@ -16,7 +16,11 @@ import org.junit.jupiter.api.*
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
+import kotlin.test.Ignore
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3ChecksumTest {
@@ -158,5 +162,34 @@ class S3ChecksumTest {
             val actualChecksum = actual.body!!.toByteArray().crc32()
             assertEquals(actualChecksum, expectedChecksum)
         }
+    }
+
+    @Test
+    fun testPresignedUrlNoDefault() = runBlocking {
+        val unsignedPutRequest = PutObjectRequest {
+            bucket = testBucket
+            key = testKey()
+        }
+        val presignedPutRequest = client.presignPutObject(unsignedPutRequest, 60.seconds)
+        val contents = "presign-test"
+
+        assertFalse(presignedPutRequest.url.toString().contains("x-amz-checksum-crc32"))
+        assertTrue(responseCodeFromPut(presignedPutRequest, contents) in 200..299)
+    }
+
+    @Test
+    @Ignore
+    // FIXME: Sending checksum via query params should work
+    fun testPresignedUrlContainsChecksum() = runBlocking {
+        val unsignedPutRequest = PutObjectRequest {
+            bucket = testBucket
+            key = testKey()
+            checksumAlgorithm = ChecksumAlgorithm.Crc32
+        }
+        val presignedPutRequest = client.presignPutObject(unsignedPutRequest, 60.seconds)
+        val contents = "presign-test"
+
+        assertTrue(presignedPutRequest.url.toString().contains("x-amz-checksum-crc32"))
+        assertTrue(responseCodeFromPut(presignedPutRequest, contents) in 200..299)
     }
 }

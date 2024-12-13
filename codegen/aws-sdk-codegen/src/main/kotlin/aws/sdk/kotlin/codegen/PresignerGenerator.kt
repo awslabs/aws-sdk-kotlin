@@ -5,22 +5,32 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
+import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
 import software.amazon.smithy.codegen.core.Symbol
 import software.amazon.smithy.kotlin.codegen.core.*
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Hashing.isSupportedForFlexibleChecksums
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Hashing.toHashFunctionOrThrow
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.IllegalStateException
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Text.Encoding.encodeBase64String
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Text.lowercase
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Utils.runBlocking
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Http.HttpBody
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Http.readAll
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.KotlinCoroutines.coroutineContext
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Observability.TelemetryApi.warn
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionId
 import software.amazon.smithy.kotlin.codegen.integration.SectionKey
 import software.amazon.smithy.kotlin.codegen.lang.KotlinTypes
-import software.amazon.smithy.kotlin.codegen.model.buildSymbol
-import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.model.getTrait
+import software.amazon.smithy.kotlin.codegen.model.*
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointResolverAdapterGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.HttpBindingResolver
 import software.amazon.smithy.kotlin.codegen.rendering.serde.serializerName
+import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.knowledge.TopDownIndex
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -149,6 +159,7 @@ class PresignerGenerator : KotlinIntegration {
                 requestSymbol,
                 serializerSymbol,
                 contextMap,
+                op,
             )
         }
     }
@@ -193,6 +204,7 @@ class PresignerGenerator : KotlinIntegration {
         requestSymbol: Symbol,
         serializerSymbol: Symbol,
         contextMap: Map<SectionKey<*>, Any>,
+        op: OperationShape,
     ) = writer.apply {
         dokka {
             write("Presign a [#T] using the configuration of this [#T].", requestSymbol, serviceSymbol)
@@ -265,6 +277,45 @@ class PresignerGenerator : KotlinIntegration {
                 )
             }
 
+            checksumAlgorithmMember(op, ctx)?.let { checksumAlgorithmMember ->
+                withBlock("input.#L?.value?.let { checksumAlgorithmString ->", "}", checksumAlgorithmMember) {
+                    withBlock("when (unsignedRequest.body) {", "}") {
+                        withBlock("is #1T.Bytes, is #1T.Empty -> {", "}", HttpBody) {
+                            write("val checksumAlgorithm = checksumAlgorithmString.#T()", toHashFunctionOrThrow)
+                            withInlineBlock(
+                                "if (checksumAlgorithm.#T) {",
+                                "}",
+                                isSupportedForFlexibleChecksums,
+                            ) {
+                                withBlock("#T {", "}", runBlocking) {
+                                    withBlock("checksumAlgorithm.update(", ")") {
+                                        write("unsignedRequest.body.#T() ?: byteArrayOf()", readAll)
+                                    }
+                                }
+                                write(
+                                    "checksum = #S.#T() to checksumAlgorithm.digest().#T()",
+                                    "x-amz-checksum-\${checksumAlgorithmString}",
+                                    lowercase,
+                                    encodeBase64String,
+                                )
+                            }
+                            withBlock(" else {", "}") {
+                                withBlock("#T {", "}", runBlocking) {
+                                    write("class Presigner")
+                                    write(
+                                        "#T.#T<Presigner> { #S }",
+                                        coroutineContext,
+                                        warn,
+                                        "The requested checksum algorithm is not supported for pre-signed URL checksums, sending request without checksum.",
+                                    )
+                                }
+                            }
+                        }
+                        write("else -> throw #T(#S)", IllegalStateException, "HTTP body type unsupported for pre-signed URL checksums.")
+                    }
+                }
+            }
+
             declareSection(SigningConfigCustomizationSection)
 
             write("configBlock()")
@@ -287,4 +338,24 @@ class PresignerGenerator : KotlinIntegration {
      * > "my-object/example/photo.user". This is an incorrect path for that object.
      */
     private fun normalizeUriPath(service: ServiceShape) = service.sdkId != "S3"
+
+    /**
+     * Gets the checksum algorithm member if a user can configure request checksums otherwise null
+     */
+    private fun checksumAlgorithmMember(
+        operationShape: OperationShape,
+        ctx: CodegenContext,
+    ): String? {
+        operationShape.getTrait<HttpChecksumTrait>()?.let { httpChecksumTrait ->
+            httpChecksumTrait.requestAlgorithmMember.getOrNull()?.let { requestAlgorithmMember ->
+                val memberShape = ctx.model
+                    .expectShape<StructureShape>(operationShape.input.get())
+                    .members()
+                    .first { it.memberName == requestAlgorithmMember }
+
+                return ctx.symbolProvider.toMemberName(memberShape)
+            }
+        }
+        return null
+    }
 }
