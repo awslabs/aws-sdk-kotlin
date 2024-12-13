@@ -177,9 +177,9 @@ class S3ChecksumTest {
         assertTrue(responseCodeFromPut(presignedPutRequest, contents) in 200..299)
     }
 
+    // FIXME: Sending checksum via query params should work
     @Test
     @Ignore
-    // FIXME: Sending checksum via query params should work
     fun testPresignedUrlContainsChecksum() = runBlocking {
         val unsignedPutRequest = PutObjectRequest {
             bucket = testBucket
