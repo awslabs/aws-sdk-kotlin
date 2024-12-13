@@ -54,6 +54,11 @@ fun createBomConstraintsAndVersionCatalog() {
         }
     }
 
+    // Add the BOM itself to the version catalog
+    catalogExt.versionCatalog {
+        library("bom", "aws.sdk.kotlin:bom:$version")
+    }
+
     val ignoredSmithyKotlin = setOf(
         "smithy.kotlin.codegen",
         "smithy.kotlin.http.test",

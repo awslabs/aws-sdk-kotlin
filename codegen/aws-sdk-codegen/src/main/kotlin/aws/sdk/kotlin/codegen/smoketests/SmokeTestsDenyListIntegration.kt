@@ -2,14 +2,19 @@ package aws.sdk.kotlin.codegen.smoketests
 
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
-import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SmokeTestsRunner
+import software.amazon.smithy.kotlin.codegen.rendering.smoketests.SmokeTestSectionIds.SmokeTestsFile
 import software.amazon.smithy.model.Model
 
 /**
+ * SDK ID's of services that are deny listed from smoke test code generation.
+ */
+val smokeTestDenyList = setOf(
+    "S3Tables",
+)
+
+/**
  * Will wipe the smoke test runner file for services that are deny listed.
- *
  * Some services model smoke tests incorrectly and the code generated file will not compile.
  */
 class SmokeTestsDenyListIntegration : KotlinIntegration {
@@ -18,20 +23,10 @@ class SmokeTestsDenyListIntegration : KotlinIntegration {
 
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
-            SectionWriterBinding(SmokeTestsRunner, smokeTestDenyListSectionWriter),
+            SectionWriterBinding(
+                SmokeTestsFile,
+            ) { writer, _ ->
+                writer.write("// Smoke tests for service are deny listed")
+            },
         )
-
-    private val smokeTestDenyListSectionWriter = SectionWriter { writer, _ ->
-        writer.write("// Smoke tests for service deny listed until model is fixed")
-    }
 }
-
-/**
- * SDK ID's of services that model smoke tests incorrectly
- */
-val smokeTestDenyList = setOf(
-    "Application Auto Scaling",
-    "SWF",
-    "WAFV2",
-    "IoT Data Plane",
-)

@@ -1973,6 +1973,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The maximum number of read and write units for the global secondary index being created. If you use this parameter, you must specify <code>MaxReadRequestUnits</code>, <code>MaxWriteRequestUnits</code>, or both.</p>"
                     }
+                },
+                "WarmThroughput": {
+                    "target": "com.amazonaws.dynamodb#WarmThroughput",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the warm throughput value (in read units per second and write units per second) when creating a secondary index.</p>"
+                    }
                 }
             },
             "traits": {
@@ -2214,6 +2220,12 @@
                         "smithy.api#documentation": "<p>Indicates whether deletion protection is to be enabled (true) or disabled (false) on\n            the table.</p>"
                     }
                 },
+                "WarmThroughput": {
+                    "target": "com.amazonaws.dynamodb#WarmThroughput",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the warm throughput (in read units per second and write units per second) for creating a table.</p>"
+                    }
+                },
                 "ResourcePolicy": {
                     "target": "com.amazonaws.dynamodb#ResourcePolicy",
                     "traits": {
@@ -2447,6 +2459,9 @@
                 },
                 {
                     "target": "com.amazonaws.dynamodb#ProvisionedThroughputExceededException"
+                },
+                {
+                    "target": "com.amazonaws.dynamodb#ReplicatedWriteConflictException"
                 },
                 {
                     "target": "com.amazonaws.dynamodb#RequestLimitExceeded"
@@ -4028,9 +4043,9 @@
                                                         "properties": {
                                                             "authSchemes": [
                                                                 {
-                                                                    "name": "sigv4",
+                                                                    "signingRegion": "us-east-1",
                                                                     "signingName": "dynamodb",
-                                                                    "signingRegion": "us-east-1"
+                                                                    "name": "sigv4"
                                                                 }
                                                             ]
                                                         },
@@ -7203,6 +7218,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The maximum number of read and write units for the specified global secondary index. If you use this parameter, you must specify <code>MaxReadRequestUnits</code>, <code>MaxWriteRequestUnits</code>, or both.</p>"
                     }
+                },
+                "WarmThroughput": {
+                    "target": "com.amazonaws.dynamodb#WarmThroughput",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the warm throughput value (in read units per second and write units per second) for the specified secondary index. If you use this parameter, you must specify <code>ReadUnitsPerSecond</code>, <code>WriteUnitsPerSecond</code>, or both.</p>"
+                    }
                 }
             },
             "traits": {
@@ -7299,6 +7320,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The maximum number of read and write units for the specified global secondary index. If you use this parameter, you must specify <code>MaxReadRequestUnits</code>, <code>MaxWriteRequestUnits</code>, or both.</p>"
                     }
+                },
+                "WarmThroughput": {
+                    "target": "com.amazonaws.dynamodb#GlobalSecondaryIndexWarmThroughputDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the warm throughput value (in read units per second and write units per second) for the specified secondary index.</p>"
+                    }
                 }
             },
             "traits": {
@@ -7382,6 +7409,32 @@
             "type": "list",
             "member": {
                 "target": "com.amazonaws.dynamodb#GlobalSecondaryIndexUpdate"
+            }
+        },
+        "com.amazonaws.dynamodb#GlobalSecondaryIndexWarmThroughputDescription": {
+            "type": "structure",
+            "members": {
+                "ReadUnitsPerSecond": {
+                    "target": "com.amazonaws.dynamodb#PositiveLongObject",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents warm throughput read units per second value for a global secondary index.</p>"
+                    }
+                },
+                "WriteUnitsPerSecond": {
+                    "target": "com.amazonaws.dynamodb#PositiveLongObject",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents warm throughput write units per second value for a global secondary index.</p>"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.dynamodb#IndexStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the warm throughput status being created or updated on a global secondary index. The status can only be <code>UPDATING</code> or <code>ACTIVE</code>.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The description of the warm throughput value on a global secondary index.</p>"
             }
         },
         "com.amazonaws.dynamodb#GlobalSecondaryIndexes": {
@@ -9191,6 +9244,23 @@
                 "target": "com.amazonaws.dynamodb#AttributeValue"
             }
         },
+        "com.amazonaws.dynamodb#MultiRegionConsistency": {
+            "type": "enum",
+            "members": {
+                "EVENTUAL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EVENTUAL"
+                    }
+                },
+                "STRONG": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "STRONG"
+                    }
+                }
+            }
+        },
         "com.amazonaws.dynamodb#NextTokenString": {
             "type": "string"
         },
@@ -9675,6 +9745,9 @@
                 },
                 {
                     "target": "com.amazonaws.dynamodb#ProvisionedThroughputExceededException"
+                },
+                {
+                    "target": "com.amazonaws.dynamodb#ReplicatedWriteConflictException"
                 },
                 {
                     "target": "com.amazonaws.dynamodb#RequestLimitExceeded"
@@ -10296,6 +10369,12 @@
                         "smithy.api#documentation": "<p>Overrides the maximum on-demand throughput settings for the specified replica table.</p>"
                     }
                 },
+                "WarmThroughput": {
+                    "target": "com.amazonaws.dynamodb#TableWarmThroughputDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the warm throughput value for this replica.</p>"
+                    }
+                },
                 "GlobalSecondaryIndexes": {
                     "target": "com.amazonaws.dynamodb#ReplicaGlobalSecondaryIndexDescriptionList",
                     "traits": {
@@ -10423,6 +10502,12 @@
                     "target": "com.amazonaws.dynamodb#OnDemandThroughputOverride",
                     "traits": {
                         "smithy.api#documentation": "<p>Overrides the maximum on-demand throughput for the specified global secondary index in the specified replica table.</p>"
+                    }
+                },
+                "WarmThroughput": {
+                    "target": "com.amazonaws.dynamodb#GlobalSecondaryIndexWarmThroughputDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the warm throughput of the global secondary index for this replica.</p>"
                     }
                 }
             },
@@ -10749,6 +10834,18 @@
             "type": "list",
             "member": {
                 "target": "com.amazonaws.dynamodb#ReplicaUpdate"
+            }
+        },
+        "com.amazonaws.dynamodb#ReplicatedWriteConflictException": {
+            "type": "structure",
+            "members": {
+                "message": {
+                    "target": "com.amazonaws.dynamodb#ErrorMessage"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The request was rejected because one or more items in the request are being modified by a request in another Region. </p>",
+                "smithy.api#error": "client"
             }
         },
         "com.amazonaws.dynamodb#ReplicationGroupUpdate": {
@@ -12171,6 +12268,18 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The maximum number of read and write units for the specified on-demand table. If you use this parameter, you must specify <code>MaxReadRequestUnits</code>, <code>MaxWriteRequestUnits</code>, or both.</p>"
                     }
+                },
+                "WarmThroughput": {
+                    "target": "com.amazonaws.dynamodb#TableWarmThroughputDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes the warm throughput value of the base table.</p>"
+                    }
+                },
+                "MultiRegionConsistency": {
+                    "target": "com.amazonaws.dynamodb#MultiRegionConsistency",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates one of the following consistency modes for a global table:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>EVENTUAL</code>: Indicates that the global table is configured for multi-Region eventual consistency.</p>\n            </li>\n            <li>\n               <p>\n                  <code>STRONG</code>: Indicates that the global table is configured for multi-Region strong consistency (preview).</p>\n               <note>\n                  <p>Multi-Region strong consistency (MRSC) is a new DynamoDB global tables capability currently available in preview mode. For more information, see <a href=\"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/PreviewFeatures.html#multi-region-strong-consistency-gt\">Global tables multi-Region strong consistency</a>.</p>\n               </note>\n            </li>\n         </ul>\n         <p>If you don't specify this field, the global table consistency mode defaults to <code>EVENTUAL</code>.</p>"
+                    }
                 }
             },
             "traits": {
@@ -12268,6 +12377,32 @@
                         "smithy.api#enumValue": "ARCHIVED"
                     }
                 }
+            }
+        },
+        "com.amazonaws.dynamodb#TableWarmThroughputDescription": {
+            "type": "structure",
+            "members": {
+                "ReadUnitsPerSecond": {
+                    "target": "com.amazonaws.dynamodb#PositiveLongObject",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the base table's warm throughput value in read units per second.</p>"
+                    }
+                },
+                "WriteUnitsPerSecond": {
+                    "target": "com.amazonaws.dynamodb#PositiveLongObject",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the base table's warm throughput value in write units per second.</p>"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.dynamodb#TableStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents warm throughput value of the base table..</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Represents the warm throughput value (in read units per second and write units per second) of the base table.</p>"
             }
         },
         "com.amazonaws.dynamodb#Tag": {
@@ -13016,6 +13151,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Updates the maximum number of read and write units for the specified global secondary index. If you use this parameter, you must specify <code>MaxReadRequestUnits</code>, <code>MaxWriteRequestUnits</code>, or both.</p>"
                     }
+                },
+                "WarmThroughput": {
+                    "target": "com.amazonaws.dynamodb#WarmThroughput",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the warm throughput value of the new provisioned throughput settings to be applied to a global secondary index.</p>"
+                    }
                 }
             },
             "traits": {
@@ -13219,6 +13360,9 @@
                 },
                 {
                     "target": "com.amazonaws.dynamodb#ProvisionedThroughputExceededException"
+                },
+                {
+                    "target": "com.amazonaws.dynamodb#ReplicatedWriteConflictException"
                 },
                 {
                     "target": "com.amazonaws.dynamodb#RequestLimitExceeded"
@@ -13644,10 +13788,22 @@
                         "smithy.api#documentation": "<p>Indicates whether deletion protection is to be enabled (true) or disabled (false) on\n            the table.</p>"
                     }
                 },
+                "MultiRegionConsistency": {
+                    "target": "com.amazonaws.dynamodb#MultiRegionConsistency",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the consistency mode for a new global table. This parameter is only valid when you create a global table by specifying one or more <a href=\"https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ReplicationGroupUpdate.html#DDB-Type-ReplicationGroupUpdate-Create\">Create</a> actions in the <a href=\"https://docs.aws.amazon.com/https:/docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateTable.html#DDB-UpdateTable-request-ReplicaUpdates\">ReplicaUpdates</a> action list.</p>\n         <p>You can specify one of the following consistency modes:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>EVENTUAL</code>: Configures a new global table for multi-Region eventual consistency. This is the default consistency mode for global tables.</p>\n            </li>\n            <li>\n               <p>\n                  <code>STRONG</code>: Configures a new global table for multi-Region strong consistency (preview).</p>\n               <note>\n                  <p>Multi-Region strong consistency (MRSC) is a new DynamoDB global tables capability currently available in preview mode. For more information, see <a href=\"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/PreviewFeatures.html#multi-region-strong-consistency-gt\">Global tables multi-Region strong consistency</a>.</p>\n               </note>\n            </li>\n         </ul>\n         <p>If you don't specify this parameter, the global table consistency mode defaults to <code>EVENTUAL</code>.</p>"
+                    }
+                },
                 "OnDemandThroughput": {
                     "target": "com.amazonaws.dynamodb#OnDemandThroughput",
                     "traits": {
                         "smithy.api#documentation": "<p>Updates the maximum number of read and write units for the specified table in\n            on-demand capacity mode. If you use this parameter, you must specify\n                <code>MaxReadRequestUnits</code>, <code>MaxWriteRequestUnits</code>, or both.</p>"
+                    }
+                },
+                "WarmThroughput": {
+                    "target": "com.amazonaws.dynamodb#WarmThroughput",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the warm throughput (in read units per second and write units per second) for updating a table.</p>"
                     }
                 }
             },
@@ -13808,6 +13964,26 @@
             },
             "traits": {
                 "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.dynamodb#WarmThroughput": {
+            "type": "structure",
+            "members": {
+                "ReadUnitsPerSecond": {
+                    "target": "com.amazonaws.dynamodb#LongObject",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the number of read operations your base table can instantaneously support.</p>"
+                    }
+                },
+                "WriteUnitsPerSecond": {
+                    "target": "com.amazonaws.dynamodb#LongObject",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Represents the number of write operations your base table can instantaneously support.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Provides visibility into the number of read and write operations your table or secondary index can instantaneously support. The settings can be modified using the <code>UpdateTable</code> operation to meet the throughput requirements of an upcoming peak event.</p>"
             }
         },
         "com.amazonaws.dynamodb#WriteRequest": {
