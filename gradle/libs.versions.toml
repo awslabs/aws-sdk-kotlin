@@ -8,7 +8,7 @@ aws-kotlin-repo-tools-version = "0.4.14"
 
 # libs
 coroutines-version = "1.9.0"
-atomicfu-version = "0.26.1"
+atomicfu-version = "0.23.1"
 binary-compatibility-validator-version = "0.16.3"
 
 # smithy-kotlin codegen and runtime are versioned separately
