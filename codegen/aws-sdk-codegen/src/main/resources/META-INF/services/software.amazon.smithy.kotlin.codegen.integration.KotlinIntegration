@@ -45,6 +45,7 @@ aws.sdk.kotlin.codegen.businessmetrics.BusinessMetricsInterceptorIntegration
 aws.sdk.kotlin.codegen.businessmetrics.CredentialsBusinessMetricsIntegration
 aws.sdk.kotlin.codegen.businessmetrics.EndpointBusinessMetricsIntegration
 aws.sdk.kotlin.codegen.smoketests.AwsSmokeTestsRunnerGeneratorIntegration
+aws.sdk.kotlin.codegen.smoketests.SmokeTestsDenyListIntegration
 aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestSuccessHttpEngineIntegration
 aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestFailHttpEngineIntegration
 aws.sdk.kotlin.codegen.customization.AwsQueryModeCustomization

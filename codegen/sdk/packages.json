@@ -235,6 +235,18 @@
             "brazilName": "AwsSdkKotlinBedrockAgentRuntime"
         },
         {
+            "sdkId": "Bedrock Data Automation",
+            "namespace": "aws.sdk.kotlin.services.bedrockdataautomation",
+            "artifactName": "bedrockdataautomation",
+            "brazilName": "AwsSdkKotlinBedrockDataAutomation"
+        },
+        {
+            "sdkId": "Bedrock Data Automation Runtime",
+            "namespace": "aws.sdk.kotlin.services.bedrockdataautomationruntime",
+            "artifactName": "bedrockdataautomationruntime",
+            "brazilName": "AwsSdkKotlinBedrockDataAutomationRuntime"
+        },
+        {
             "sdkId": "Bedrock Runtime",
             "namespace": "aws.sdk.kotlin.services.bedrockruntime",
             "artifactName": "bedrockruntime",
@@ -581,6 +593,12 @@
             "namespace": "aws.sdk.kotlin.services.dlm",
             "artifactName": "dlm",
             "brazilName": "AwsSdkKotlinDlm"
+        },
+        {
+            "sdkId": "DSQL",
+            "namespace": "aws.sdk.kotlin.services.dsql",
+            "artifactName": "dsql",
+            "brazilName": "AwsSdkKotlinDsql"
         },
         {
             "sdkId": "Data Pipeline",
@@ -953,6 +971,12 @@
             "namespace": "aws.sdk.kotlin.services.internetmonitor",
             "artifactName": "internetmonitor",
             "brazilName": "AwsSdkKotlinInternetmonitor"
+        },
+        {
+            "sdkId": "Invoicing",
+            "namespace": "aws.sdk.kotlin.services.invoicing",
+            "artifactName": "invoicing",
+            "brazilName": "AwsSdkKotlinInvoicing"
         },
         {
             "sdkId": "IoT",
@@ -1417,6 +1441,12 @@
             "brazilName": "AwsSdkKotlinNetworkFirewall"
         },
         {
+            "sdkId": "NetworkFlowMonitor",
+            "namespace": "aws.sdk.kotlin.services.networkflowmonitor",
+            "artifactName": "networkflowmonitor",
+            "brazilName": "AwsSdkKotlinNetworkflowmonitor"
+        },
+        {
             "sdkId": "NetworkManager",
             "namespace": "aws.sdk.kotlin.services.networkmanager",
             "artifactName": "networkmanager",
@@ -1451,6 +1481,12 @@
             "namespace": "aws.sdk.kotlin.services.osis",
             "artifactName": "osis",
             "brazilName": "AwsSdkKotlinOsis"
+        },
+        {
+            "sdkId": "ObservabilityAdmin",
+            "namespace": "aws.sdk.kotlin.services.observabilityadmin",
+            "artifactName": "observabilityadmin",
+            "brazilName": "AwsSdkKotlinObservabilityadmin"
         },
         {
             "sdkId": "Omics",
@@ -1789,6 +1825,12 @@
             "brazilName": "AwsSdkKotlinS3outposts"
         },
         {
+            "sdkId": "S3Tables",
+            "namespace": "aws.sdk.kotlin.services.s3tables",
+            "artifactName": "s3tables",
+            "brazilName": "AwsSdkKotlinS3tables"
+        },
+        {
             "sdkId": "SES",
             "namespace": "aws.sdk.kotlin.services.ses",
             "artifactName": "ses",
@@ -1931,6 +1973,12 @@
             "namespace": "aws.sdk.kotlin.services.secretsmanager",
             "artifactName": "secretsmanager",
             "brazilName": "AwsSdkKotlinSecretsManager"
+        },
+        {
+            "sdkId": "Security IR",
+            "namespace": "aws.sdk.kotlin.services.securityir",
+            "artifactName": "securityir",
+            "brazilName": "AwsSdkKotlinSecurityIr"
         },
         {
             "sdkId": "SecurityHub",

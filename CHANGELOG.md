@@ -1,5 +1,171 @@
 # Changelog
 
+## [1.3.94] - 12/13/2024
+
+### Features
+* (**cloudhsmv2**) Add support for Dual-Stack hsm2m.medium clusters. The customers will now be able to create hsm2m.medium clusters having both IPv4 and IPv6 connection capabilities by specifying a new param called NetworkType=DUALSTACK during cluster creation.
+* (**cloudwatchlogs**) Limit PutIntegration IntegrationName and ListIntegrations IntegrationNamePrefix parameters to 50 characters
+* (**ec2**) This release adds GroupId to the response for DeleteSecurityGroup.
+* (**eks**) Add NodeRepairConfig in CreateNodegroupRequest and UpdateNodegroupConfigRequest
+* (**mediaconnect**) AWS Elemental MediaConnect Gateway now supports Source Specific Multicast (SSM) for ingress bridges. This enables you to specify a source IP address in addition to a multicast IP when creating or updating an ingress bridge source.
+* (**servicediscovery**) AWS Cloud Map now supports service-level attributes, allowing you to associate custom metadata directly with services. These attributes can be retrieved, updated, and deleted using the new GetServiceAttributes, UpdateServiceAttributes, and DeleteServiceAttributes API calls.
+
+### Documentation
+* (**networkmanager**) There was a sentence fragment in UpdateDirectConnectGatewayAttachment that was causing customer confusion as to whether it's an incomplete sentence or if it was a typo. Removed the fragment.
+
+## [1.3.93] - 12/12/2024
+
+### Features
+* (**connect**) Configure holidays and other overrides to hours of operation in advance. During contact handling, Amazon Connect automatically checks for overrides and provides customers with an appropriate flow path. After an override period passes call center automatically reverts to standard hours of operation.
+* (**databasemigrationservice**) Add parameters to support for kerberos authentication. Add parameter for disabling the Unicode source filter with PostgreSQL settings. Add parameter to use large integer value with Kinesis/Kafka settings.
+* (**glue**) To support customer-managed encryption in Data Quality to allow customers encrypt data with their own KMS key, we will add a DataQualityEncryption field to the SecurityConfiguration API where customers can provide their KMS keys.
+* (**route53domains**) This release includes the following API updates: added the enumeration type RESTORE_DOMAIN to the OperationType; constrained the Price attribute to non-negative values; updated the LangCode to allow 2 or 3 alphabetical characters.
+
+### Documentation
+* (**guardduty**) Improved descriptions for certain APIs.
+
+## [1.3.92] - 12/11/2024
+
+### Features
+* (**artifact**) Add support for listing active customer agreements for the calling AWS Account.
+* (**emrserverless**) This release adds support for accessing system profile logs in Lake Formation-enabled jobs.
+* (**migrationhub**) API and documentation updates for AWS MigrationHub related to adding support for listing migration task updates and associating, disassociating and listing source resources
+* (**sesv2**) Introduces support for multi-region endpoint.
+* (**timestreaminfluxdb**) Adds networkType parameter to CreateDbInstance API which allows IPv6 support to the InfluxDB endpoint
+
+### Documentation
+* (**cloudtrail**) Doc-only updates for CloudTrail.
+* (**cognitoidentityprovider**) Updated descriptions for some API operations and parameters, corrected some errors in Cognito user pools
+* (**controlcatalog**) Minor documentation updates to the content of ImplementationDetails object part of the Control Catalog GetControl API
+
+## [1.3.91] - 12/10/2024
+
+### Features
+* (**bcmpricingcalculator**) Updated condition key inference from Workload Estimate, Bill Scenario, and Bill Estimate resources. Updated documentation links.
+* (**connect**) Add support for Push Notifications for Amazon Connect chat. With Push Notifications enabled an alert could be sent to customers about new messages even when they aren't actively using the mobile application.
+* (**finspace**) Update KxCommandLineArgument value parameter regex to allow for spaces and semicolons
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to customize thumbnails recording mode and interval for both Individual Participant Recording (IPR) and Server-Side Compositions (SSC).
+* (**sesv2**) Introduces support for creating DEED (Deterministic Easy-DKIM) identities.
+
+### Documentation
+* (**applicationautoscaling**) Doc only update for AAS Predictive Scaling policy configuration API.
+* (**dsql**) Doc only update to examples for DeleteMultiRegionClusters & CreateMultiRegionClusters
+
+## [1.3.90] - 12/09/2024
+
+### Features
+* (**cognitoidentityprovider**) Change `CustomDomainConfig` from a required to an optional parameter for the `UpdateUserPoolDomain` operation.
+* (**ec2**) This release includes a new API for modifying instance network-performance-options after launch.
+* (**medialive**) H265 outputs now support disabling the deblocking filter.
+
+### Documentation
+* (**appsync**) Provides description of new Amazon Bedrock runtime datasource.
+* (**ecs**) This is a documentation only update to address various tickets for Amazon ECS.
+* (**keyspaces**) Amazon Keyspaces: adding the list of IAM actions required by the UpdateKeyspace API.
+* (**workspaces**) Added text to clarify case-sensitivity
+
+## [1.3.89] - 12/05/2024
+
+### Features
+* (**partnercentralselling**) Introducing the preview of new partner central selling APIs designed to transform how AWS partners collaborate and co-sell with multiple partners. This enables multiple partners to seamlessly engage and jointly pursue customer opportunities, fostering a new era of collaborative selling.
+* (**qbusiness**) This release removes the deprecated UserId and UserGroups fields from SearchRelevantContent api's request parameters.
+
+## [1.3.88] - 12/04/2024
+
+### Features
+* (**bedrock**) Introduced two APIs ListPromptRouters and GetPromptRouter for Intelligent Prompt Router feature. Add support for Bedrock Guardrails image content filter. New Bedrock Marketplace feature enabling a wider range of bedrock compatible models with self-hosted capability.
+* (**bedrockagent**) This release introduces the ability to generate SQL using natural language, through a new GenerateQuery API (with native integration into Knowledge Bases); ability to ingest and retrieve images through Bedrock Data Automation; and ability to create a Knowledge Base backed by Kendra GenAI Index.
+* (**bedrockagentruntime**) This release introduces the ability to generate SQL using natural language, through a new GenerateQuery API (with native integration into Knowledge Bases); ability to ingest and retrieve images through Bedrock Data Automation; and ability to create a Knowledge Base backed by Kendra GenAI Index.
+* (**bedrockdataautomation**) Release Bedrock Data Automation SDK
+* (**bedrockdataautomationruntime**) Release Bedrock Data Automation Runtime SDK
+* (**bedrockruntime**) Added support for Intelligent Prompt Router in Invoke, InvokeStream, Converse and ConverseStream. Add support for Bedrock Guardrails image content filter. New Bedrock Marketplace feature enabling a wider range of bedrock compatible models with self-hosted capability.
+* (**kendra**) This release adds GenAI Index in Amazon Kendra for Retrieval Augmented Generation (RAG) and intelligent search. With the Kendra GenAI Index, customers get high retrieval accuracy powered by the latest information retrieval technologies and semantic models.
+* (**sagemaker**) Amazon SageMaker HyperPod launched task governance to help customers maximize accelerator utilization for model development and flexible training plans to meet training timelines and budget while reducing weeks of training time. AI apps from AWS partner is now available in SageMaker.
+
+## [1.3.87] - 12/03/2024
+
+### Features
+* (**athena**) Add FEDERATED type to CreateDataCatalog. This creates Athena Data Catalog, AWS Lambda connector, and AWS Glue connection. Create/DeleteDataCatalog returns DataCatalog. Add Status, ConnectionType, and Error to DataCatalog and DataCatalogSummary. Add DeleteCatalogOnly to delete Athena Catalog only.
+* (**bedrock**) Tagging support for Async Invoke resources. Added support for Distillation in CreateModelCustomizationJob API. Support for videoDataDeliveryEnabled flag in invocation logging.
+* (**bedrockagent**) Releasing SDK for Multi-Agent Collaboration.
+* (**bedrockagentruntime**) Releasing SDK for multi agent collaboration
+* (**bedrockruntime**) Added support for Async Invoke Operations Start, List and Get. Support for invocation logs with `requestMetadata` field in Converse, ConverseStream, Invoke and InvokeStream. Video content blocks in Converse/ConverseStream accept raw bytes or S3 URI.
+* (**datazone**) Adds support for Connections, ProjectProfiles, and JobRuns APIs. Supports the new Lineage feature at GA. Adjusts optionality of a parameter for DataSource and SubscriptionTarget APIs which may adjust types in some clients.
+* (**dsql**) Add new API operations for Amazon Aurora DSQL. Amazon Aurora DSQL is a serverless, distributed SQL database with virtually unlimited scale, highest availability, and zero infrastructure management.
+* (**dynamodb**) This change adds support for global tables with multi-Region strong consistency (in preview). The UpdateTable API now supports a new attribute MultiRegionConsistency to set consistency when creating global tables. The DescribeTable output now optionally includes the MultiRegionConsistency attribute.
+* (**glue**) This release includes(1)Zero-ETL integration to ingest data from 3P SaaS and DynamoDB to Redshift/Redlake (2)new properties on Connections to enable reuse; new connection APIs for retrieve/preview metadata (3)support of CRUD operations for Multi-catalog (4)support of automatic statistics collections
+* (**lakeformation**) This release added two new LakeFormation Permissions (CREATE_CATALOG, SUPER_USER) and added Id field for CatalogResource. It also added new conditon and expression field.
+* (**qapps**) Add support for 11 new plugins as action cards to help automate repetitive tasks and improve productivity.
+* (**qbusiness**) Amazon Q Business now supports customization options for your web experience, 11 new Plugins, and QuickSight support. Amazon Q index allows software providers to enrich their native generative AI experiences with their customer's enterprise knowledge and user context spanning multiple applications.
+* (**quicksight**) This release includes API needed to support for Unstructured Data in Q in QuickSight Q&A (IDC).
+* (**redshift**) Adds support for Amazon Redshift RegisterNamespace and DeregisterNamespace APIs to share data to AWS Glue Data Catalog.
+* (**redshiftserverless**) Adds support for the ListManagedWorkgroups API to get an overview of existing managed workgroups.
+* (**s3**) Amazon S3 Metadata stores object metadata in read-only, fully managed Apache Iceberg metadata tables that you can query. You can create metadata table configurations for S3 general purpose buckets.
+* (**s3tables**) Amazon S3 Tables deliver the first cloud object store with built-in open table format support, and the easiest way to store tabular data at scale.
+
+### Documentation
+* (**cloudwatch**) Support for configuring AiOps investigation as alarm action
+
+## [1.3.86] - 12/03/2024
+
+### Features
+* (**bedrockruntime**) Add an API parameter that allows customers to set performance configuration for invoking a model.
+* (**s3control**) It allows customers to pass CRC64NVME as a header in S3 Batch Operations copy requests
+* (**socialmessaging**) Added support for passing role arn corresponding to the supported event destination
+
+## [1.3.85] - 12/02/2024
+
+### Features
+* (**bedrock**) Add support for Knowledge Base Evaluations & LLM as a judge
+* (**bedrockagent**) This release introduces APIs to upload documents directly into a Knowledge Base
+* (**bedrockagentruntime**) This release introduces a new Rerank API to leverage reranking models (with integration into Knowledge Bases); APIs to upload documents directly into Knowledge Base; RetrieveAndGenerateStream API for streaming response; Guardrails on Retrieve API; and ability to automatically generate filters
+* (**chimesdkvoice**) This release adds supports for enterprises to integrate Amazon Connect with other voice systems. It supports directly transferring voice calls and metadata without using the public telephone network. It also supports real-time and post-call analytics.
+* (**cleanrooms**) This release allows customers and their partners to easily collaborate with data stored in Snowflake and Amazon Athena, without having to move or share their underlying data among collaborators.
+* (**cloudwatchlogs**) Adds PutIntegration, GetIntegration, ListIntegrations and DeleteIntegration APIs. Adds QueryLanguage support to StartQuery, GetQueryResults, DescribeQueries, DescribeQueryDefinitions, and PutQueryDefinition APIs.
+* (**connect**) Adds support for WhatsApp Business messaging, IVR call recording, enabling Contact Lens for existing on-premise contact centers and telephony platforms, and enabling telephony and IVR migration to Amazon Connect independent of their contact center agents.
+* (**connectcampaignsv2**) Amazon Connect Outbound Campaigns V2 / Features : Adds support for Event-Triggered Campaigns.
+* (**customerprofiles**) This release introduces Event Trigger APIs as part of Amazon Connect Customer Profiles service.
+* (**ec2**) Adds support for declarative policies that allow you to enforce desired configuration across an AWS organization through configuring account attributes. Adds support for Allowed AMIs that allows you to limit the use of AMIs in AWS accounts. Adds support for connectivity over non-HTTP protocols.
+* (**eks**) Added support for Auto Mode Clusters, Hybrid Nodes, and specifying computeTypes in the DescribeAddonVersions API.
+* (**eventbridge**) Call private APIs by configuring Connections with VPC connectivity through PrivateLink and VPC Lattice
+* (**fsx**) FSx API changes to support the public launch of the Amazon FSx Intelligent Tiering for OpenZFS storage class.
+* (**guardduty**) Add new Multi Domain Correlation findings.
+* (**imagebuilder**) Added support for EC2 Image Builder's integration with AWS Marketplace for Marketplace components.
+* (**invoicing**) AWS Invoice Configuration allows you to receive separate AWS invoices based on your organizational needs. You can use the AWS SDKs to manage Invoice Units and programmatically fetch the information of the invoice receiver.
+* (**memorydb**) Amazon MemoryDB SDK now supports all APIs for Multi-Region. Please refer to the updated Amazon MemoryDB public documentation for detailed information on API usage.
+* (**networkflowmonitor**) This release adds documentation for a new feature in Amazon CloudWatch called Network Flow Monitor. You can use Network Flow Monitor to get near real-time metrics, including retransmissions and data transferred, for your actual workloads.
+* (**opensearch**) This feature introduces support for CRUDL APIs, enabling the creation and management of Connected data sources.
+* (**organizations**) Add support for policy operations on the DECLARATIVE_POLICY_EC2 policy type.
+* (**qbusiness**) Amazon Q Business now supports capabilities to extract insights and answer questions from visual elements embedded within documents, a browser extension for Google Chrome, Mozilla Firefox, and Microsoft Edge, and attachments across conversations.
+* (**qconnect**) This release adds following capabilities: Configuring safeguards via AIGuardrails for Q in Connect inferencing, and APIs to support Q&A self-service use cases
+* (**rds**) Amazon RDS supports CloudWatch Database Insights. You can use the SDK to create, modify, and describe the DatabaseInsightsMode for your DB instances and clusters.
+* (**s3**) Amazon S3 introduces support for AWS Dedicated Local Zones
+* (**s3control**) Amazon S3 introduces support for AWS Dedicated Local Zones
+* (**securityhub**) Add new Multi Domain Correlation findings.
+* (**securityir**) AWS Security Incident Response is a purpose-built security incident solution designed to help customers prepare for, respond to, and recover from security incidents.
+* (**transfer**) AWS Transfer Family now offers Web apps that enables simple and secure access to data stored in Amazon S3.
+* (**vpclattice**) Lattice APIs that allow sharing and access of VPC resources across accounts.
+
+### Documentation
+* (**ecs**) This release adds support for Container Insights with Enhanced Observability for Amazon ECS.
+
+## [1.3.84] - 11/27/2024
+
+### Features
+* (**bedrockagent**) Add support for specifying embeddingDataType, either FLOAT32 or BINARY
+* (**configservice**) AWS Config adds support for service-linked recorders, a new type of Config recorder managed by AWS services to record specific subsets of resource configuration data and functioning independently from customer managed AWS Config recorders.
+* (**fsx**) This release adds EFA support to increase FSx for Lustre file systems' throughput performance to a single client instance. This can be done by specifying EfaEnabled=true at the time of creation of Persistent_2 file systems.
+* (**observabilityadmin**) Amazon CloudWatch Observability Admin adds the ability to audit telemetry configuration for AWS resources in customers AWS Accounts and Organizations. The release introduces new APIs to turn on/off the new experience, which supports discovering supported AWS resources and their state of telemetry.
+
+## [1.3.83] - 11/26/2024
+
+### Features
+* (**bedrockagent**) Custom Orchestration API release for AWSBedrockAgents.
+* (**bedrockagentruntime**) Custom Orchestration and Streaming configurations API release for AWSBedrockAgents.
+* (**connect**) Enables access to ValueMap and ValueInteger types for SegmentAttributes and fixes deserialization bug for DescribeContactFlow in AmazonConnect Public API
+* (**ec2**) Adds support for Time-based Copy for EBS Snapshots and Cross Region PrivateLink. Time-based Copy ensures that EBS Snapshots are copied within and across AWS Regions in a specified timeframe. Cross Region PrivateLink enables customers to connect to VPC endpoint services hosted in other AWS Regions.
+* (**qapps**) Private sharing, file upload and data collection feature support for Q Apps
+
 ## [1.3.82] - 11/25/2024
 
 ### Features
