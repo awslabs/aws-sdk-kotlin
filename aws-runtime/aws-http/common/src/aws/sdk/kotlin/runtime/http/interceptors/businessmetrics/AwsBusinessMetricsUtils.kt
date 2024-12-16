@@ -8,13 +8,26 @@ import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.emitBusinessMetric
 import aws.smithy.kotlin.runtime.collections.MutableAttributes
 import aws.smithy.kotlin.runtime.collections.toMutableAttributes
+import aws.smithy.kotlin.runtime.telemetry.logging.Logger
 
 /**
  * Makes sure the metrics do not exceed the maximum size and truncates them if so.
+ * Makes sure that metric identifiers are not > 2 chars in length. Skips them if so.
  */
-internal fun formatMetrics(metrics: MutableSet<BusinessMetric>): String {
-    if (metrics.isEmpty()) return ""
-    val metricsString = metrics.joinToString(",", "m/") { it.identifier }
+internal fun formatMetrics(metrics: MutableSet<BusinessMetric>, logger: Logger): String {
+    val allowedMetrics = metrics.filter {
+        if (it.identifier.length > 2) {
+            logger.warn {
+                "Business metric '${it.identifier}' will be skipped due to length being > 2. " +
+                        "This is likely a bug. Please raise an issue at https://github.com/awslabs/aws-sdk-kotlin/issues/new/choose"
+            }
+            false
+        } else {
+            true
+        }
+    }
+    if (allowedMetrics.isEmpty()) return ""
+    val metricsString = allowedMetrics.joinToString(",", "m/") { it.identifier }
     val metricsByteArray = metricsString.encodeToByteArray()
 
     if (metricsByteArray.size <= BUSINESS_METRICS_MAX_LENGTH) return metricsString
@@ -41,6 +54,7 @@ internal fun formatMetrics(metrics: MutableSet<BusinessMetric>): String {
 @InternalApi
 public enum class AwsBusinessMetric(public override val identifier: String) : BusinessMetric {
     S3_EXPRESS_BUCKET("J"),
+    DDB_MAPPER("d"),
     ;
 
     @InternalApi
@@ -64,6 +78,8 @@ public enum class AwsBusinessMetric(public override val identifier: String) : Bu
         CREDENTIALS_HTTP("z"),
         CREDENTIALS_IMDS("0"),
     }
+
+    override fun toString(): String = identifier
 }
 
 /**

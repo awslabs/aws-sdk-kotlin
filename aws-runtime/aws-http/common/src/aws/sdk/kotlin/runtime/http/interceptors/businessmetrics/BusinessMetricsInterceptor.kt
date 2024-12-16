@@ -10,14 +10,18 @@ import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.request.toBuilder
+import aws.smithy.kotlin.runtime.telemetry.logging.logger
+import kotlin.coroutines.coroutineContext
 
 /**
  * Appends business metrics to the `User-Agent` header.
  */
 public class BusinessMetricsInterceptor : HttpInterceptor {
     override suspend fun modifyBeforeTransmit(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
+        val logger = coroutineContext.logger<BusinessMetricsInterceptor>()
+
         context.executionContext.getOrNull(BusinessMetrics)?.let { metrics ->
-            val metricsString = formatMetrics(metrics)
+            val metricsString = formatMetrics(metrics, logger)
             val currentUserAgentHeader = context.protocolRequest.headers[USER_AGENT]
             val modifiedRequest = context.protocolRequest.toBuilder()
 
