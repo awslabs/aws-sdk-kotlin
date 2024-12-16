@@ -6,6 +6,8 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
@@ -34,7 +36,7 @@ private val CREDENTIALS = credentials(
     StsTestUtils.EPOCH + 15.minutes,
     "WebIdentityToken",
     "1234567",
-)
+).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE_WEB_ID)
 
 class StsWebIdentityCredentialsProviderTest {
     // see https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html#API_AssumeRoleWithWebIdentity_ResponseElements
