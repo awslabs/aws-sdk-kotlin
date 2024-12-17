@@ -140,16 +140,6 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/AddUserAgentMetadata
 	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
 }
 
-public final class aws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric : java/lang/Enum, aws/smithy/kotlin/runtime/businessmetrics/BusinessMetric {
-	public static final field DDB_MAPPER Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
-	public static final field S3_EXPRESS_BUCKET Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public fun getIdentifier ()Ljava/lang/String;
-	public fun toString ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
-	public static fun values ()[Laws/sdk/kotlin/runtime/http/interceptors/AwsBusinessMetric;
-}
-
 public final class aws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
 	public static final field INSTANCE Laws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor;
 	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -197,9 +187,11 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/UnsupportedSigningAl
 }
 
 public final class aws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric : java/lang/Enum, aws/smithy/kotlin/runtime/businessmetrics/BusinessMetric {
+	public static final field DDB_MAPPER Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric;
 	public static final field S3_EXPRESS_BUCKET Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public fun getIdentifier ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric;
 	public static fun values ()[Laws/sdk/kotlin/runtime/http/interceptors/businessmetrics/AwsBusinessMetric;
 }
