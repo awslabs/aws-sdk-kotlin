@@ -19,15 +19,15 @@ import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.StructureShape
 
 /**
- * Adds a middleware which validates checksums returned in responses if the user has opted-in.
+ * Handles flexible checksum responses
  */
 class FlexibleChecksumsResponse : KotlinIntegration {
-    override fun enabledForService(model: Model, settings: KotlinSettings) = model
-        .shapes<OperationShape>()
-        .any { it.hasTrait<HttpChecksumTrait>() }
+    override fun enabledForService(model: Model, settings: KotlinSettings) =
+        model.isTraitApplied(HttpChecksumTrait::class.java)
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
         listOf(
+            // Allows flexible checksum response configuration
             ConfigProperty {
                 name = "responseChecksumValidation"
                 symbol = RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption
@@ -39,59 +39,66 @@ class FlexibleChecksumsResponse : KotlinIntegration {
         )
 
     override fun customizeMiddleware(ctx: ProtocolGenerator.GenerationContext, resolved: List<ProtocolMiddleware>) =
-        resolved + flexibleChecksumsResponseMiddleware + configBusinessMetrics
+        resolved + flexibleChecksumsResponseMiddleware + responseChecksumValidationBusinessMetric
+}
 
-    private val configBusinessMetrics = object : ProtocolMiddleware {
-        override val name: String = "responseChecksumValidationBusinessMetric"
+/**
+ * Emits business metric based on `responseChecksumValidation` client config
+ */
+private val responseChecksumValidationBusinessMetric = object : ProtocolMiddleware {
+    override val name: String = "responseChecksumValidationBusinessMetric"
 
-        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            writer.withBlock("when(config.responseChecksumValidation) {", "}") {
-                writer.write(
-                    "#T.WHEN_SUPPORTED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_SUPPORTED)",
-                    RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
-                    RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
-                    RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
-                )
-                writer.write(
-                    "#T.WHEN_REQUIRED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_REQUIRED)",
-                    RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
-                    RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
-                    RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
-                )
-            }
+    override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+        writer.withBlock("when(config.responseChecksumValidation) {", "}") {
+            // Supported
+            writer.write(
+                "#T.WHEN_SUPPORTED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_SUPPORTED)",
+                RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
+                RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
+                RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
+            )
+            // Required
+            writer.write(
+                "#T.WHEN_REQUIRED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_REQUIRED)",
+                RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
+                RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
+                RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
+            )
         }
     }
+}
 
-    private val flexibleChecksumsResponseMiddleware = object : ProtocolMiddleware {
-        override val name: String = "FlexibleChecksumsResponse"
+/**
+ * Adds interceptor to handle flexible checksum response validation
+ */
+private val flexibleChecksumsResponseMiddleware = object : ProtocolMiddleware {
+    override val name: String = "flexibleChecksumsResponseMiddleware"
 
-        override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean {
-            val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()
-            val input = op.input.getOrNull()?.let { ctx.model.expectShape<StructureShape>(it) }
+    override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean {
+        val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()
+        val inputShape = op.input.getOrNull()?.let { ctx.model.expectShape<StructureShape>(it) }
 
-            return (httpChecksumTrait != null) &&
-                (httpChecksumTrait.requestValidationModeMember?.getOrNull() != null) &&
-                (input?.memberNames?.any { it == httpChecksumTrait.requestValidationModeMember.get() } == true)
-        }
+        return (httpChecksumTrait != null) &&
+            (httpChecksumTrait.requestValidationModeMember?.getOrNull() != null) &&
+            (inputShape?.memberNames?.any { it == httpChecksumTrait.requestValidationModeMember.get() } == true)
+    }
 
-        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
+    override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+        val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
+        val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
+        val requestValidationModeMember = ctx.model.expectShape<StructureShape>(op.input.get())
+            .members()
+            .first { it.memberName == httpChecksumTrait.requestValidationModeMember.get() }
+        val requestValidationModeMemberName = ctx.symbolProvider.toMemberName(requestValidationModeMember)
 
-            val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
-            val requestValidationModeMember = ctx.model.expectShape<StructureShape>(op.input.get())
-                .members()
-                .first { it.memberName == httpChecksumTrait.requestValidationModeMember.get() }
-            val requestValidationModeMemberName = ctx.symbolProvider.toMemberName(requestValidationModeMember)
-
-            writer.withBlock(
-                "op.interceptors.add(#T<#T>(",
-                "))",
-                RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsResponseInterceptor,
-                inputSymbol,
-            ) {
-                writer.write("input.#L?.value == \"ENABLED\",", requestValidationModeMemberName)
-                writer.write("config.responseChecksumValidation,")
-            }
+        writer.withBlock( // TODO: ADD DIFFERENT INTERCEPTORS DEPENDING ON IF THE SERVICE HAS COMPOSITE CHECKSUMS !
+            "op.interceptors.add(#T<#T>(",
+            "))",
+            RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsResponseInterceptor,
+            inputSymbol,
+        ) {
+            writer.write("input.#L?.value == \"ENABLED\",", requestValidationModeMemberName)
+            writer.write("config.responseChecksumValidation,")
         }
     }
 }
