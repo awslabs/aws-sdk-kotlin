@@ -1,15 +1,15 @@
 namespace aws.sdk.kotlin.test
 
-use aws.protocols#restJson1
+use aws.protocols#{protocol-name}
 use aws.api#service
 use aws.auth#sigv4
 
-@restJson1
+@{protocol-name}
 @sigv4(name: "event-stream-test")
 @service(sdkId: "EventStreamTest")
 service TestService { version: "123", operations: [TestStreamOp] }
 
-@http(method: "POST", uri: "/test-eventstream", code: 200)
+{op-traits}
 operation TestStreamOp {
     input: TestStreamInputOutput,
     output: TestStreamInputOutput,
