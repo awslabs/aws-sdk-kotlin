@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
+import aws.smithy.kotlin.runtime.hashing.algorithmsSupportedForFlexibleChecksums
 import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
@@ -304,7 +305,7 @@ class PresignerGenerator : KotlinIntegration {
                                         coroutineContext,
                                         warn,
                                         "The requested checksum algorithm (\${checksumAlgorithmName}) is not supported for pre-signed URL checksums, sending request without checksum. " +
-                                            "Supported checksums for pre-signed URLs include the following: ",
+                                            "Supported checksums for pre-signed URLs: $algorithmsSupportedForFlexibleChecksums",
                                     )
                                 }
                             }

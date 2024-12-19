@@ -4,6 +4,8 @@
  */
 package aws.sdk.kotlin.codegen.customization.flexiblechecksums
 
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
+import aws.sdk.kotlin.codegen.customization.s3.isS3
 import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -16,6 +18,7 @@ import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.kotlin.codegen.utils.getOrNull
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.shapes.StructureShape
 
 /**
@@ -84,18 +87,22 @@ private val flexibleChecksumsResponseMiddleware = object : ProtocolMiddleware {
     }
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-        val inputSymbol = ctx.symbolProvider.toSymbol(ctx.model.expectShape(op.inputShape))
         val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
         val requestValidationModeMember = ctx.model.expectShape<StructureShape>(op.input.get())
             .members()
             .first { it.memberName == httpChecksumTrait.requestValidationModeMember.get() }
         val requestValidationModeMemberName = ctx.symbolProvider.toMemberName(requestValidationModeMember)
 
-        writer.withBlock( // TODO: ADD DIFFERENT INTERCEPTORS DEPENDING ON IF THE SERVICE HAS COMPOSITE CHECKSUMS !
-            "op.interceptors.add(#T<#T>(",
+        val interceptor = if (ctx.model.expectShape<ServiceShape>(ctx.settings.service).isS3) {
+            AwsRuntimeTypes.Http.Interceptors.S3FlexibleChecksumResponseInterceptor
+        } else {
+            RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsResponseInterceptor
+        }
+
+        writer.withBlock(
+            "op.interceptors.add(#T(",
             "))",
-            RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsResponseInterceptor,
-            inputSymbol,
+            interceptor,
         ) {
             writer.write("input.#L?.value == \"ENABLED\",", requestValidationModeMemberName)
             writer.write("config.responseChecksumValidation,")

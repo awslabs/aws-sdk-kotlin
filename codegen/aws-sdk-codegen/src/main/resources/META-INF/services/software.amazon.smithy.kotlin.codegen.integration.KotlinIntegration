@@ -12,7 +12,6 @@ aws.sdk.kotlin.codegen.endpoints.AddAwsEndpointFunctions
 aws.sdk.kotlin.codegen.PresignerGenerator
 aws.sdk.kotlin.codegen.customization.flexiblechecksums.FlexibleChecksumsRequest
 aws.sdk.kotlin.codegen.customization.flexiblechecksums.FlexibleChecksumsResponse
-aws.sdk.kotlin.codegen.customization.flexiblechecksums.s3.S3CompositeChecksumsIntegration
 aws.sdk.kotlin.codegen.customization.AddAwsSpanAttributes
 aws.sdk.kotlin.codegen.customization.s3.S3OperationErrorHandler
 aws.sdk.kotlin.codegen.customization.s3.S3SigningConfig
