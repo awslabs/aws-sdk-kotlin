@@ -1,5 +1,60 @@
 # Changelog
 
+## [1.3.97] - 12/18/2024
+
+### Features
+* (**amplify**) Added WAF Configuration to Amplify Apps
+* (**budgets**) Releasing minor partition endpoint updates
+* (**connect**) This release adds support for the UpdateParticipantAuthentication API used for customer authentication within Amazon Connect chats.
+* (**connectparticipant**) This release adds support for the GetAuthenticationUrl and CancelParticipantAuthentication APIs used for customer authentication within Amazon Connect chats. There are also minor updates to the GetAttachment API.
+* (**datasync**) AWS DataSync introduces the ability to update attributes for in-cloud locations.
+* (**iot**) Release connectivity status query API which is a dedicated high throughput(TPS) API to query a specific device's most recent connectivity state and metadata.
+* (**quicksight**) Add support for PerformanceConfiguration attribute to Dataset entity. Allow PerformanceConfiguration specification in CreateDataset and UpdateDataset APIs.
+* (**resiliencehub**) AWS Resilience Hub now automatically detects already configured CloudWatch alarms and FIS experiments as part of the assessment process and returns the discovered resources in the corresponding list API responses. It also allows you to include or exclude test recommendations for an AppComponent.
+* (**transfer**) Added AS2 agreement configurations to control filename preservation and message signing enforcement. Added AS2 connector configuration to preserve content type from S3 objects.
+
+### Documentation
+* (**mwaa**) Added support for Apache Airflow version 2.10.3 to MWAA.
+
+## [1.3.96] - 12/18/2024
+
+### Features
+* (**account**) Update endpoint configuration.
+* (**backup**) Add Support for Backup Indexing
+* (**backupsearch**) Add support for searching backups
+* (**batch**) This feature allows AWS Batch on Amazon EKS to support configuration of Pod Annotations, overriding Namespace on which the Batch job's Pod runs on, and allows Subpath and Persistent Volume claim to be set for AWS Batch on Amazon EKS jobs.
+* (**cleanroomsml**) Add support for SQL compute configuration for StartAudienceGenerationJob API.
+* (**cloudfront**) Adds support for OriginReadTimeout and OriginKeepaliveTimeout to create CloudFront Distributions with VPC Origins.
+* (**codepipeline**) AWS CodePipeline V2 type pipelines now support Managed Compute Rule.
+* (**ecs**) Added support for enableFaultInjection task definition parameter which can be used to enable Fault Injection feature on ECS tasks.
+* (**m2**) This release adds support for AWS Mainframe Modernization(M2) Service to allow specifying network type(ipv4, dual) for the environment instances. For dual network type, m2 environment applications will serve both IPv4 and IPv6 requests, whereas for ipv4 it will serve only IPv4 requests.
+* (**synthetics**) Add support to toggle outbound IPv6 traffic on canaries connected to dualstack subnets.  This behavior can be controlled via the new Ipv6AllowedForDualStack parameter of the VpcConfig input object in CreateCanary and UpdateCanary APIs.
+
+## [1.3.95] - 12/16/2024
+
+### Features
+* (**dlm**) This release adds support for Local Zones in Amazon Data Lifecycle Manager EBS snapshot lifecycle policies.
+* (**ec2**) This release adds support for EBS local snapshots in AWS Dedicated Local Zones, which allows you to store snapshots of EBS volumes locally in Dedicated Local Zones.
+* (**greengrassv2**) Add support for runtime in GetCoreDevice and ListCoreDevices APIs.
+* (**medialive**) AWS Elemental MediaLive adds three new features: MediaPackage v2 endpoint support for live stream delivery, KLV metadata passthrough in CMAF Ingest output groups, and Metadata Name Modifier in CMAF Ingest output groups for customizing metadata track names in output streams.
+* (**rds**) This release adds support for the "MYSQL_CACHING_SHA2_PASSWORD" enum value for RDS Proxy ClientPasswordAuthType.
+
+### Documentation
+* (**cloud9**) Added information about Ubuntu 18.04 will be removed from the available imageIds for Cloud9 because Ubuntu 18.04 has ended standard support on May 31, 2023.
+
+## [1.3.94] - 12/13/2024
+
+### Features
+* (**cloudhsmv2**) Add support for Dual-Stack hsm2m.medium clusters. The customers will now be able to create hsm2m.medium clusters having both IPv4 and IPv6 connection capabilities by specifying a new param called NetworkType=DUALSTACK during cluster creation.
+* (**cloudwatchlogs**) Limit PutIntegration IntegrationName and ListIntegrations IntegrationNamePrefix parameters to 50 characters
+* (**ec2**) This release adds GroupId to the response for DeleteSecurityGroup.
+* (**eks**) Add NodeRepairConfig in CreateNodegroupRequest and UpdateNodegroupConfigRequest
+* (**mediaconnect**) AWS Elemental MediaConnect Gateway now supports Source Specific Multicast (SSM) for ingress bridges. This enables you to specify a source IP address in addition to a multicast IP when creating or updating an ingress bridge source.
+* (**servicediscovery**) AWS Cloud Map now supports service-level attributes, allowing you to associate custom metadata directly with services. These attributes can be retrieved, updated, and deleted using the new GetServiceAttributes, UpdateServiceAttributes, and DeleteServiceAttributes API calls.
+
+### Documentation
+* (**networkmanager**) There was a sentence fragment in UpdateDirectConnectGatewayAttachment that was causing customer confusion as to whether it's an incomplete sentence or if it was a typo. Removed the fragment.
+
 ## [1.3.93] - 12/12/2024
 
 ### Features

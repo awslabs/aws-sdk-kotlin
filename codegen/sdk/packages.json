@@ -211,6 +211,12 @@
             "brazilName": "AwsSdkKotlinBackupGateway"
         },
         {
+            "sdkId": "BackupSearch",
+            "namespace": "aws.sdk.kotlin.services.backupsearch",
+            "artifactName": "backupsearch",
+            "brazilName": "AwsSdkKotlinBackupsearch"
+        },
+        {
             "sdkId": "Batch",
             "namespace": "aws.sdk.kotlin.services.batch",
             "artifactName": "batch",
