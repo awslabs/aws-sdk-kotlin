@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.98] - 12/19/2024
+
+### Features
+* (**appstream**) Added support for Rocky Linux 8 on Amazon AppStream 2.0
+* (**mediaconvert**) This release adds support for inserting timecode tracks into MP4 container outputs.
+* (**medialive**) MediaLive is releasing ListVersions api
+* (**qconnect**) Amazon Q in Connect enables agents to ask Q for assistance in multiple languages and Q will provide answers and recommended step-by-step guides in those languages. Qs default language is English (United States) and you can switch this by setting the locale configuration on the AI Agent.
+* (**ssmsap**) AWS Systems Manager for SAP added support for registration and discovery of distributed ABAP applications
+* (**workspaces**) Added AWS Global Accelerator (AGA) support for WorkSpaces Personal.
+
 ## [1.3.97] - 12/18/2024
 
 ### Features
