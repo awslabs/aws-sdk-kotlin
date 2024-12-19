@@ -131,7 +131,7 @@ private fun requestChecksumsConfigured(ctx: ProtocolGenerator.GenerationContext,
 
     return (
         (httpChecksumTrait != null) &&
-        (httpChecksumTrait.requestAlgorithmMember?.getOrNull() != null) &&
-        (inputShape?.memberNames?.any { it == httpChecksumTrait.requestAlgorithmMember.get() } == true)
-    )
+            (httpChecksumTrait.requestAlgorithmMember?.getOrNull() != null) &&
+            (inputShape?.memberNames?.any { it == httpChecksumTrait.requestAlgorithmMember.get() } == true)
+        )
 }

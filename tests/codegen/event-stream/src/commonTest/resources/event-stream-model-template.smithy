@@ -4,12 +4,12 @@ use aws.protocols#restJson1
 use aws.api#service
 use aws.auth#sigv4
 
-@{protocol-name}
+@restJson1
 @sigv4(name: "event-stream-test")
 @service(sdkId: "EventStreamTest")
 service TestService { version: "123", operations: [TestStreamOp] }
 
-{op-traits}
+@http(method: "POST", uri: "/test-eventstream", code: 200)
 operation TestStreamOp {
     input: TestStreamInputOutput,
     output: TestStreamInputOutput,

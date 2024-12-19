@@ -145,7 +145,7 @@ class S3ExpressIntegration : KotlinIntegration {
                     namespace = "aws.sdk.kotlin.services.s3.express"
                     name = "S3ExpressDefaultChecksumAlgorithm"
                 },
-                op.isS3UploadPart
+                op.isS3UploadPart,
             )
         }
     }

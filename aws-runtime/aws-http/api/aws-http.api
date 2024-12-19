@@ -196,27 +196,9 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/BusinessMetricsInter
 	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
 }
 
-public final class aws/sdk/kotlin/runtime/http/interceptors/S3CompositeChecksumsInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
-	public fun <init> ()V
-	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun modifyBeforeCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun modifyBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun modifyBeforeRetryLoop (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun modifyBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun modifyBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun modifyBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun readAfterAttempt (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
-	public fun readAfterDeserialization (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
-	public fun readAfterExecution (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;)V
-	public fun readAfterSerialization (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
-	public fun readAfterSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
-	public fun readAfterTransmit (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
-	public fun readBeforeAttempt (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
-	public fun readBeforeDeserialization (Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)V
-	public fun readBeforeExecution (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
-	public fun readBeforeSerialization (Laws/smithy/kotlin/runtime/client/RequestInterceptorContext;)V
-	public fun readBeforeSigning (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
-	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
+public final class aws/sdk/kotlin/runtime/http/interceptors/S3FlexibleChecksumResponseInterceptor : aws/smithy/kotlin/runtime/http/interceptors/FlexibleChecksumsResponseInterceptor {
+	public fun <init> (ZLaws/smithy/kotlin/runtime/client/config/HttpChecksumConfigOption;)V
+	public fun ignoreChecksum (Ljava/lang/String;)Z
 }
 
 public final class aws/sdk/kotlin/runtime/http/interceptors/UnsupportedSigningAlgorithmInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
