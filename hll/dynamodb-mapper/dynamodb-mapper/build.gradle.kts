@@ -151,7 +151,7 @@ open class DynamoDbLocalInstance : DefaultTask() {
         portFile
             .asFile
             .get()
-            .also { println("Writing port info file to ${it.absolutePath} ") }
+            .also { println("Writing port info file to ${it.absolutePath}") }
             .writeText(port.toString())
     }
 
