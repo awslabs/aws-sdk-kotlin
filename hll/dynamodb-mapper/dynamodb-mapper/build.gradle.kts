@@ -148,11 +148,21 @@ open class DynamoDbLocalInstance : DefaultTask() {
             .createServerFromCommandLineArgs(arrayOf("-inMemory", "-port", port.toString(), "-disableTelemetry"))
             .also { it.start() }
 
-        portFile.asFile.get().writeText(port.toString())
+        portFile
+            .asFile
+            .get()
+            .also { println("Writing port info file to ${it.absolutePath}") }
+            .writeText(port.toString())
     }
 
     fun stop() {
-        runCatching { portFile.asFile.get().delete() }.onFailure { t -> println("Failed to delete $portFile: $t") }
+        runCatching {
+            portFile
+                .asFile
+                .get()
+                .also { println("Deleting port info file at ${it.absolutePath}") }
+                .delete()
+        }.onFailure { t -> println("Failed to delete $portFile: $t") }
 
         runner?.let {
             println("Stopping DynamoDB local instance on port $port")
