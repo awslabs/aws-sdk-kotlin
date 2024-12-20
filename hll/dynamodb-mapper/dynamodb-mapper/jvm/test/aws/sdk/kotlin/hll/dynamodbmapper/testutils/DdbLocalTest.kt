@@ -50,7 +50,9 @@ abstract class DdbLocalTest : AnnotationSpec() {
 
     private val ddbHolder = lazy {
         val portFile = File("build/ddblocal/port.info").absoluteFile // Keep in sync with build.gradle.kts
+        println("Reading DDB Local port info from ${portFile.absolutePath}")
         val port = portFile.readText().toInt()
+        println("Connecting to DDB Local on port $port")
 
         DynamoDbClient {
             endpointUrl = Url {
