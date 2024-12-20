@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.3.99] - 12/20/2024
+
+### Features
+* (**bedrockagent**) Support for custom user agent and max web pages crawled for web connector. Support app only credentials for SharePoint connector. Increase agents memory duration limit to 365 days. Support to specify max number of session summaries to include in agent invocation context.
+* (**bedrockagentruntime**) bedrock agents now supports long term memory and performance configs. Invokeflow supports performance configs. RetrieveAndGenerate performance configs
+* (**billing**) Added new API's for defining and fetching Billing Views.
+* (**connect**) This release supports adding NotAttributeCondition and Range to the RoutingCriteria object.
+* (**costexplorer**) Support for retrieving cost, usage, and forecast for billing view.
+* (**docdb**) Support AWS Secret Manager managed password for AWS DocumentDB instance-based cluster.
+* (**eks**) This release expands the catalog of upgrade insight checks
+* (**macie2**) This release adds support for identifying S3 general purpose buckets that exceed the Amazon Macie quota for preventative control monitoring.
+* (**outposts**) Add CS8365C as a supported power connector for Outpost sites.
+* (**sagemaker**) This release adds support for c6i, m6i and r6i instance on SageMaker Hyperpod and trn1 instances in batch
+
+### Documentation
+* (**bedrockdataautomation**) Documentation update for Amazon Bedrock Data Automation
+* (**bedrockdataautomationruntime**) Documentation update for Amazon Bedrock Data Automation Runtime
+
 ## [1.3.98] - 12/19/2024
 
 ### Features
