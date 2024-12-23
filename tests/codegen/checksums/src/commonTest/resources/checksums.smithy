@@ -20,7 +20,7 @@ use smithy.rules#endpointRuleSet
 })
 service TestService {
     version: "2023-01-01",
-    operations: [HttpChecksumOperation, HttpChecksumStreamingOperation]
+    operations: [HttpChecksumOperation, HttpChecksumRequestChecksumsNotRequiredOperation]
 }
 
 @http(uri: "/HttpChecksumOperation", method: "POST")
@@ -34,6 +34,19 @@ service TestService {
 operation HttpChecksumOperation {
     input: SomeInput,
     output: SomeOutput
+}
+
+@http(uri: "/HttpChecksumRequestChecksumsNotRequiredOperation", method: "POST")
+@optionalAuth
+@httpChecksum(
+    requestChecksumRequired: false,
+    requestAlgorithmMember: "checksumAlgorithm",
+    requestValidationModeMember: "validationMode",
+    responseAlgorithms: ["CRC32", "CRC32C", "CRC64NVME", "SHA1", "SHA256"]
+)
+operation HttpChecksumRequestChecksumsNotRequiredOperation {
+    input: SomeOtherInput,
+    output: SomeOtherOutput
 }
 
 @input
@@ -67,40 +80,42 @@ structure SomeInput {
     body: Blob
 }
 
-@output
-structure SomeOutput {}
-
-@http(uri: "/HttpChecksumStreamingOperation", method: "POST")
-@auth([sigv4])
-@httpChecksum(
-    requestChecksumRequired: true,
-    requestAlgorithmMember: "checksumAlgorithm",
-    requestValidationModeMember: "validationMode",
-    responseAlgorithms: ["CRC32", "CRC32C", "CRC64NVME", "SHA1", "SHA256"]
-)
-operation HttpChecksumStreamingOperation {
-    input: SomeStreamingInput,
-    output: SomeStreamingOutput
-}
-
-@streaming
-blob StreamingBlob
-
 @input
-structure SomeStreamingInput {
+structure SomeOtherInput {
     @httpHeader("x-amz-request-algorithm")
     checksumAlgorithm: ChecksumAlgorithm
 
     @httpHeader("x-amz-response-validation-mode")
     validationMode: ValidationMode
 
+    @httpHeader("x-amz-checksum-crc32")
+    ChecksumCRC32: String
+
+    @httpHeader("x-amz-checksum-crc32c")
+    ChecksumCRC32C: String
+
+    @httpHeader("x-amz-checksum-crc64nvme")
+    ChecksumCRC64Nvme: String
+
+    @httpHeader("x-amz-checksum-sha1")
+    ChecksumSHA1: String
+
+    @httpHeader("x-amz-checksum-sha256")
+    ChecksumSHA256: String
+
+    @httpHeader("x-amz-checksum-foo")
+    ChecksumFoo: String
+
     @httpPayload
     @required
-    body: StreamingBlob
+    body: Blob
 }
 
 @output
-structure SomeStreamingOutput {}
+structure SomeOutput {}
+
+@output
+structure SomeOtherOutput {}
 
 enum ChecksumAlgorithm {
     CRC32

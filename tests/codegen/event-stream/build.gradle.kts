@@ -15,13 +15,11 @@ val tests = listOf(
         "restJson1",
         Model("event-stream-model-template.smithy"),
         "aws.sdk.kotlin.test#TestService",
-        "restJson1",
     ),
     CodegenTest(
         "awsJson11",
         Model("event-stream-initial-request-response.smithy"),
         "aws.sdk.kotlin.test#TestService",
-        "awsJson1_1",
     ),
 )
 
@@ -64,34 +62,4 @@ kotlin {
             }
         }
     }
-}
-
-tasks.generateSmithyBuild {
-    doFirst {
-        tests.forEach { test -> fillInModel(test) }
-    }
-}
-
-fun fillInModel(test: CodegenTest) {
-    val modelFile = layout.projectDirectory.file(test.model.path + test.model.fileName).asFile
-    val model = modelFile.readText()
-
-    val opTraits =
-        when (test.protocolName) {
-            "restJson1", "restXml" -> """@http(method: "POST", uri: "/test-eventstream", code: 200)"""
-            else -> ""
-        }
-
-    val replaced = model
-        .replace(
-            "{protocol-name}",
-            test.protocolName ?: throw IllegalStateException("Please specify a protocol name for the codegen test"),
-        )
-        .replace(
-            "{op-traits}",
-            opTraits,
-        )
-
-    modelFile.parentFile.mkdirs()
-    modelFile.writeText(replaced)
 }

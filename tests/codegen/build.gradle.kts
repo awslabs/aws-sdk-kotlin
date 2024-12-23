@@ -76,6 +76,7 @@ subprojects {
                     implementation(libraries.smithy.kotlin.smithy.test)
                     implementation(libraries.smithy.kotlin.aws.signing.default)
                     implementation(libraries.smithy.kotlin.telemetry.api)
+                    implementation(libraries.smithy.kotlin.http.test)
                 }
             }
             jvmTest {

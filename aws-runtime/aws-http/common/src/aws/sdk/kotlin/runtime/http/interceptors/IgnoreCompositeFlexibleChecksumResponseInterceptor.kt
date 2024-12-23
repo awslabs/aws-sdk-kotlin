@@ -1,14 +1,14 @@
 package aws.sdk.kotlin.runtime.http.interceptors
 
-import aws.smithy.kotlin.runtime.client.config.HttpChecksumConfigOption
+import aws.smithy.kotlin.runtime.client.config.ResponseHttpChecksumConfig
 import aws.smithy.kotlin.runtime.http.interceptors.FlexibleChecksumsResponseInterceptor
 
 /**
- * S3 variant of the flexible checksum interceptor where composite checksums are not validated
+ * Variant of the [FlexibleChecksumsResponseInterceptor] where composite checksums are not validated
  */
-public class S3FlexibleChecksumResponseInterceptor(
+public class IgnoreCompositeFlexibleChecksumResponseInterceptor(
     responseValidationRequired: Boolean,
-    responseChecksumValidation: HttpChecksumConfigOption?,
+    responseChecksumValidation: ResponseHttpChecksumConfig?,
 ) : FlexibleChecksumsResponseInterceptor(
     responseValidationRequired,
     responseChecksumValidation,

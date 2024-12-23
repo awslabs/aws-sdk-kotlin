@@ -24,7 +24,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.SigV4aClientConfig
 import aws.smithy.kotlin.runtime.client.*
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
 import aws.smithy.kotlin.runtime.client.config.CompressionClientConfig
-import aws.smithy.kotlin.runtime.client.config.HttpChecksumClientConfig
+import aws.smithy.kotlin.runtime.client.config.HttpChecksumConfig
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.telemetry.TelemetryConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
@@ -97,7 +97,7 @@ public abstract class AbstractAwsSdkClientFactory<
                     config.sigV4aSigningRegionSet ?: resolveSigV4aSigningRegionSet(platform, profile)
             }
 
-            if (config is HttpChecksumClientConfig.Builder) {
+            if (config is HttpChecksumConfig.Builder) {
                 config.requestChecksumCalculation =
                     config.requestChecksumCalculation ?: resolveRequestChecksumCalculation(platform, profile)
 

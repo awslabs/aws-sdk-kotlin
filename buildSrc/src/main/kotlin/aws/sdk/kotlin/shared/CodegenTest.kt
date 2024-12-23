@@ -7,7 +7,6 @@ data class CodegenTest(
     val name: String,
     val model: Model,
     val serviceShapeId: String,
-    val protocolName: String? = null,
 )
 
 /**

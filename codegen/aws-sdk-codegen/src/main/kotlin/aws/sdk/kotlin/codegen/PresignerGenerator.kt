@@ -5,7 +5,6 @@
 package aws.sdk.kotlin.codegen
 
 import aws.sdk.kotlin.codegen.model.traits.Presignable
-import aws.smithy.kotlin.runtime.hashing.algorithmsSupportedForFlexibleChecksums
 import software.amazon.smithy.aws.traits.HttpChecksumTrait
 import software.amazon.smithy.aws.traits.auth.SigV4Trait
 import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
@@ -14,10 +13,10 @@ import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Hashing.isSupportedForFlexibleChecksums
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Hashing.toHashFunctionOrThrow
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Text.Encoding.encodeBase64String
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Core.Utils.runBlocking
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Http.HttpBody
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Http.readAll
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.KotlinCoroutines.coroutineContext
+import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.KotlinxCoroutines.runBlocking
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Observability.TelemetryApi.warn
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionId
@@ -304,8 +303,7 @@ class PresignerGenerator : KotlinIntegration {
                                         "#T.#T<Presigner> { #S }",
                                         coroutineContext,
                                         warn,
-                                        "The requested checksum algorithm (\${checksumAlgorithmName}) is not supported for pre-signed URL checksums, sending request without checksum. " +
-                                            "Supported checksums for pre-signed URLs: $algorithmsSupportedForFlexibleChecksums",
+                                        "The requested checksum algorithm (\${checksumAlgorithmName}) is not supported for pre-signed URL checksums, sending request without checksum.",
                                     )
                                 }
                             }

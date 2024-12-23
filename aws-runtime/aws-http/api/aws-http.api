@@ -196,8 +196,8 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/BusinessMetricsInter
 	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
 }
 
-public final class aws/sdk/kotlin/runtime/http/interceptors/S3FlexibleChecksumResponseInterceptor : aws/smithy/kotlin/runtime/http/interceptors/FlexibleChecksumsResponseInterceptor {
-	public fun <init> (ZLaws/smithy/kotlin/runtime/client/config/HttpChecksumConfigOption;)V
+public final class aws/sdk/kotlin/runtime/http/interceptors/IgnoreCompositeFlexibleChecksumResponseInterceptor : aws/smithy/kotlin/runtime/http/interceptors/FlexibleChecksumsResponseInterceptor {
+	public fun <init> (ZLaws/smithy/kotlin/runtime/client/config/ResponseHttpChecksumConfig;)V
 	public fun ignoreChecksum (Ljava/lang/String;)Z
 }
 

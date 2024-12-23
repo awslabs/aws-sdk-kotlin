@@ -5,373 +5,166 @@
 
 package aws.sdk.kotlin.tests.codegen.checksums
 
-import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.test.clientconfig.*
-import aws.sdk.kotlin.test.clientconfig.model.ChecksumAlgorithm
-import aws.sdk.kotlin.test.clientconfig.model.ValidationMode
+import aws.sdk.kotlin.test.checksums.model.ChecksumAlgorithm
+import aws.sdk.kotlin.test.checksums.model.ValidationMode
 import aws.sdk.kotlin.tests.codegen.checksums.utils.HeaderReader
 import aws.sdk.kotlin.tests.codegen.checksums.utils.HeaderSetter
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.client.config.HttpChecksumConfigOption
+import aws.sdk.kotlin.tests.codegen.checksums.utils.runChecksumTest
+import aws.smithy.kotlin.runtime.client.config.RequestHttpChecksumConfig
+import aws.smithy.kotlin.runtime.client.config.ResponseHttpChecksumConfig
 import aws.smithy.kotlin.runtime.http.*
-import aws.smithy.kotlin.runtime.http.Headers
-import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.http.interceptors.ChecksumMismatchException
-import aws.smithy.kotlin.runtime.http.response.HttpResponse
-import aws.smithy.kotlin.runtime.httptest.TestEngine
-import aws.smithy.kotlin.runtime.io.SdkSource
-import aws.smithy.kotlin.runtime.io.source
-import aws.smithy.kotlin.runtime.time.Instant
-import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 /**
- * Tests the `aws.protocols#httpChecksum` trait's `requestChecksumRequired` when set to **true**.
+ * Tests the `aws.protocols#httpChecksum` trait's `requestChecksumRequired` param when set to **true**.
  */
 class RequestChecksumRequired {
     @Test
-    fun requestChecksumRequiredRequestChecksumCalculationWhenSupported(): Unit = runBlocking {
-        val headerReader = HeaderReader(
+    fun requestChecksumCalculationWhenSupported() = runChecksumTest(
+        headerReader = HeaderReader(
             expectedHeaders = mapOf("x-amz-checksum-crc32" to null),
-        )
-
-        ClientConfigTestClient {
-            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_SUPPORTED
-            interceptors = mutableListOf(headerReader)
-            httpClient = TestEngine()
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsRequiredOperation {
-                body = "Hello World!"
-            }
-        }
-
-        assertTrue(
-            headerReader.containsExpectedHeaders,
-        )
-    }
+        ),
+        requestChecksumCalculationValue = RequestHttpChecksumConfig.WHEN_SUPPORTED,
+    )
 
     @Test
-    fun requestChecksumRequiredRequestChecksumCalculationWhenRequired(): Unit = runBlocking {
-        val headerReader = HeaderReader(
+    fun requestChecksumCalculationWhenRequired() = runChecksumTest(
+        headerReader = HeaderReader(
             expectedHeaders = mapOf("x-amz-checksum-crc32" to null),
-        )
-
-        ClientConfigTestClient {
-            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_REQUIRED
-            interceptors = mutableListOf(headerReader)
-            httpClient = TestEngine()
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsRequiredOperation {
-                body = "Hello World!"
-            }
-        }
-
-        assertTrue(
-            headerReader.containsExpectedHeaders,
-        )
-    }
+        ),
+        requestChecksumCalculationValue = RequestHttpChecksumConfig.WHEN_REQUIRED,
+    )
 }
 
 /**
- * Tests the `aws.protocols#httpChecksum` trait's `requestChecksumRequired` when set to **false**.
+ * Tests the `aws.protocols#httpChecksum` trait's `requestChecksumRequired` param when set to **false**.
  */
 class RequestChecksumNotRequired {
     @Test
-    fun requestChecksumNotRequiredRequestChecksumCalculationWhenSupported(): Unit = runBlocking {
-        val headerReader = HeaderReader(
+    fun requestChecksumCalculationWhenSupported() = runChecksumTest(
+        requestChecksumRequired = false,
+        headerReader = HeaderReader(
             expectedHeaders = mapOf("x-amz-checksum-crc32" to null),
-        )
-
-        ClientConfigTestClient {
-            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_SUPPORTED
-            interceptors = mutableListOf(headerReader)
-            httpClient = TestEngine()
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsNotRequiredOperation {
-                body = "Hello World!"
-            }
-        }
-
-        assertTrue(
-            headerReader.containsExpectedHeaders,
-        )
-    }
+        ),
+        requestChecksumCalculationValue = RequestHttpChecksumConfig.WHEN_SUPPORTED,
+    )
 
     @Test
-    fun requestChecksumNotRequiredRequestChecksumCalculationWhenRequired(): Unit = runBlocking {
-        val headerReader = HeaderReader(
-            expectedHeaders = mapOf("x-amz-checksum-crc32" to null),
-        )
-
-        ClientConfigTestClient {
-            requestChecksumCalculation = HttpChecksumConfigOption.WHEN_REQUIRED
-            interceptors = mutableListOf(headerReader)
-            httpClient = TestEngine()
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsNotRequiredOperation {
-                body = "Hello World!"
-            }
-        }
-
-        assertFalse(
-            headerReader.containsExpectedHeaders,
-        )
-    }
+    fun requestChecksumCalculationWhenRequired() = runChecksumTest(
+        requestChecksumRequired = false,
+        headerReader = HeaderReader(
+            forbiddenHeaders = mapOf("x-amz-checksum-crc32" to null),
+        ),
+        requestChecksumCalculationValue = RequestHttpChecksumConfig.WHEN_REQUIRED,
+    )
 }
 
 /**
- * Tests the `aws.protocols#httpChecksum` trait's `requestAlgorithmMember`.
+ * Tests user selected checksum **algorithm**
  */
 class UserSelectedChecksumAlgorithm {
     @Test
-    fun userSelectedChecksumAlgorithmIsUsed(): Unit = runBlocking {
-        val headerReader = HeaderReader(
+    fun userSelectedChecksumAlgorithmIsUsed() = runChecksumTest(
+        headerReader = HeaderReader(
             expectedHeaders = mapOf("x-amz-checksum-sha256" to null),
-        )
-
-        ClientConfigTestClient {
-            interceptors = mutableListOf(headerReader)
-            httpClient = TestEngine()
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsRequiredOperation {
-                body = "Hello World!"
-                checksumAlgorithm = ChecksumAlgorithm.Sha256
-            }
-        }
-
-        assertTrue(
-            headerReader.containsExpectedHeaders,
-        )
-    }
+        ),
+        checksumAlgorithmValue = ChecksumAlgorithm.Sha256,
+    )
 }
 
 /**
- * Tests user provided checksum calculations.
+ * Tests user provided checksum **calculation**
  */
 class UserProvidedChecksumHeader {
     @Test
-    fun userProvidedChecksumIsUsed(): Unit = runBlocking {
-        val headerSetter = HeaderSetter(
+    fun userProvidedChecksumIsUsed() = runChecksumTest(
+        headerSetter = HeaderSetter(
             mapOf("x-amz-checksum-crc64nvme" to "foo"),
-        )
-        val headerReader = HeaderReader(
+        ),
+        checksumAlgorithmValue = ChecksumAlgorithm.Sha256,
+        headerReader = HeaderReader(
             expectedHeaders = mapOf("x-amz-checksum-crc64nvme" to "foo"),
-            forbiddenHeaders = mapOf("x-amz-checksum-sha256" to "foo"),
-        )
-
-        ClientConfigTestClient {
-            interceptors = mutableListOf(headerSetter, headerReader)
-            httpClient = TestEngine()
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsRequiredOperation {
-                body = "Hello World!"
-                checksumAlgorithm = ChecksumAlgorithm.Sha256
-            }
-        }
-
-        assertTrue(
-            headerReader.containsExpectedHeaders,
-        )
-
-        assertFalse(
-            headerReader.containsForbiddenHeaders,
-        )
-    }
+            forbiddenHeaders = mapOf(
+                "x-amz-checksum-sha256" to "foo", // Should be ignored since header checksum has priority
+                "x-amz-checksum-crc32" to "foo", // Default checksum shouldn't be used
+            ),
+        ),
+    )
 
     @Test
-    fun unmodeledChecksumIsUsed(): Unit = runBlocking {
-        val headerSetter = HeaderSetter(
+    fun newChecksumAlgorithmIsUsed() = runChecksumTest(
+        headerSetter = HeaderSetter(
             mapOf("x-amz-checksum-some-future-algorithm" to "foo"),
-        )
-        val headerReader = HeaderReader(
+        ),
+        checksumAlgorithmValue = ChecksumAlgorithm.Sha256,
+        headerReader = HeaderReader(
             expectedHeaders = mapOf("x-amz-checksum-some-future-algorithm" to "foo"),
             forbiddenHeaders = mapOf(
-                "x-amz-checksum-crc32" to "foo",
                 "x-amz-checksum-sha256" to "foo",
+                "x-amz-checksum-crc32" to "foo",
             ),
-        )
-
-        ClientConfigTestClient {
-            interceptors = mutableListOf(headerSetter, headerReader)
-            httpClient = TestEngine()
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsRequiredOperation {
-                body = "Hello World!"
-                checksumAlgorithm = ChecksumAlgorithm.Sha256
-            }
-        }
-
-        assertTrue(
-            headerReader.containsExpectedHeaders,
-        )
-    }
+        ),
+    )
 
     @Test
-    fun userProvidedMd5IsNotUsed(): Unit = runBlocking {
-        val headerSetter = HeaderSetter(
+    fun md5IsNotUsed() = runChecksumTest(
+        headerSetter = HeaderSetter(
             mapOf("x-amz-checksum-md5" to "foo"),
-        )
-        val headerReader = HeaderReader(
+        ),
+        headerReader = HeaderReader(
             expectedHeaders = mapOf("x-amz-checksum-crc32" to null),
-            forbiddenHeaders = mapOf(
-                "x-amz-checksum-md5" to "foo",
-            ),
-        )
-
-        ClientConfigTestClient {
-            interceptors = mutableListOf(headerSetter, headerReader)
-            httpClient = TestEngine()
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsRequiredOperation {
-                body = "Hello World!"
-            }
-        }
-
-        assertTrue(
-            headerReader.containsExpectedHeaders,
-        )
-
-        assertFalse(
-            headerReader.containsForbiddenHeaders,
-        )
-    }
+            forbiddenHeaders = mapOf("x-amz-checksum-md5" to "foo"), // MD5 is not supported for flexible checksums
+        ),
+    )
 }
 
 /**
  * Tests the `aws.protocols#httpChecksum` trait's `requestValidationModeMember`.
  */
 class ResponseChecksumValidation {
-    private val responseBody = "Hello world"
+    private val incorrectChecksumValue = "Kaboom!"
 
     @Test
-    fun responseChecksumValidationWhenSupported(): Unit = runBlocking {
+    fun whenRequiredAndNotEnabled() = runChecksumTest(
+        responseChecksumValidationValue = ResponseHttpChecksumConfig.WHEN_REQUIRED,
+        responseChecksumHeader = "x-amz-checksum-crc32",
+        responseChecksumValue = incorrectChecksumValue,
+    )
+
+    @Test
+    fun whenSupportedAndNotEnabled() {
         assertFailsWith<ChecksumMismatchException> {
-            ClientConfigTestClient {
-                responseChecksumValidation = HttpChecksumConfigOption.WHEN_SUPPORTED
-                httpClient = TestEngine(
-                    roundTripImpl = { _, request ->
-                        val resp = HttpResponse(
-                            HttpStatusCode.OK,
-                            Headers {
-                                append("x-amz-checksum-crc32", "I will trigger `ChecksumMismatchException` if read!")
-                            },
-                            object : HttpBody.SourceContent() {
-                                override val isOneShot: Boolean = false
-                                override val contentLength: Long? = responseBody.length.toLong()
-                                override fun readFrom(): SdkSource = responseBody.toByteArray().source()
-                            },
-                        )
-                        val now = Instant.now()
-                        HttpCall(request, resp, now, now)
-                    },
-                )
-                credentialsProvider = StaticCredentialsProvider(
-                    Credentials("accessKeyID", "secretAccessKey"),
-                )
-                region = "us-east-1"
-            }.use { client ->
-                client.checksumsRequiredOperation {
-                    body = "Hello"
-                }
-            }
+            runChecksumTest(
+                responseChecksumValidationValue = ResponseHttpChecksumConfig.WHEN_SUPPORTED,
+                responseChecksumHeader = "x-amz-checksum-crc32",
+                responseChecksumValue = incorrectChecksumValue,
+            )
         }
     }
 
     @Test
-    fun responseChecksumValidationWhenRequired(): Unit = runBlocking {
-        ClientConfigTestClient {
-            responseChecksumValidation = HttpChecksumConfigOption.WHEN_REQUIRED
-            httpClient = TestEngine(
-                roundTripImpl = { _, request ->
-                    val resp = HttpResponse(
-                        HttpStatusCode.OK,
-                        Headers {
-                            append("x-amz-checksum-crc32", "I will trigger `ChecksumMismatchException` if read!")
-                        },
-                        "World!".toHttpBody(),
-                    )
-                    val now = Instant.now()
-                    HttpCall(request, resp, now, now)
-                },
+    fun whenRequiredAndEnabled() {
+        assertFailsWith<ChecksumMismatchException> {
+            runChecksumTest(
+                responseChecksumValidationValue = ResponseHttpChecksumConfig.WHEN_REQUIRED,
+                responseChecksumHeader = "x-amz-checksum-crc32",
+                responseChecksumValue = incorrectChecksumValue,
+                validationModeValue = ValidationMode.Enabled,
             )
-            credentialsProvider = StaticCredentialsProvider(
-                Credentials("accessKeyID", "secretAccessKey"),
-            )
-            region = "us-east-1"
-        }.use { client ->
-            client.checksumsRequiredOperation {
-                body = "Hello"
-            }
         }
     }
 
     @Test
-    fun responseChecksumValidationWhenRequiredWithRequestValidationModeEnabled(): Unit = runBlocking {
+    fun whenSupportedAndEnabled() {
         assertFailsWith<ChecksumMismatchException> {
-            ClientConfigTestClient {
-                responseChecksumValidation = HttpChecksumConfigOption.WHEN_REQUIRED
-                httpClient = TestEngine(
-                    roundTripImpl = { _, request ->
-                        val resp = HttpResponse(
-                            HttpStatusCode.OK,
-                            Headers {
-                                append("x-amz-checksum-crc32", "I will trigger `ChecksumMismatchException` if read!")
-                            },
-                            object : HttpBody.SourceContent() {
-                                override val isOneShot: Boolean = false
-                                override val contentLength: Long? = responseBody.length.toLong()
-                                override fun readFrom(): SdkSource = responseBody.toByteArray().source()
-                            },
-                        )
-                        val now = Instant.now()
-                        HttpCall(request, resp, now, now)
-                    },
-                )
-                credentialsProvider = StaticCredentialsProvider(
-                    Credentials("accessKeyID", "secretAccessKey"),
-                )
-                region = "us-east-1"
-            }.use { client ->
-                client.checksumsRequiredOperation {
-                    body = "Hello"
-                    validationMode = ValidationMode.Enabled
-                }
-            }
+            runChecksumTest(
+                responseChecksumValidationValue = ResponseHttpChecksumConfig.WHEN_SUPPORTED,
+                responseChecksumHeader = "x-amz-checksum-crc32",
+                responseChecksumValue = incorrectChecksumValue,
+                validationModeValue = ValidationMode.Enabled,
+            )
         }
     }
 }

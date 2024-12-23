@@ -22,7 +22,7 @@ internal class S3ExpressDefaultChecksumAlgorithm(
     private val isS3UploadPart: Boolean,
 ) : HttpInterceptor {
     override suspend fun modifyBeforeSigning(context: ProtocolRequestInterceptorContext<Any, HttpRequest>): HttpRequest {
-        if (usingS3Express(context.executionContext)) {
+        if (context.executionContext.usingS3Express()) {
             if (isS3UploadPart) {
                 context.executionContext.remove(HttpOperationContext.DefaultChecksumAlgorithm)
             } else {
@@ -33,5 +33,5 @@ internal class S3ExpressDefaultChecksumAlgorithm(
     }
 }
 
-private fun usingS3Express(executionContext: ExecutionContext): Boolean =
-    executionContext.getOrNull(AttributeKey(S3_EXPRESS_ENDPOINT_PROPERTY_KEY)) != S3_EXPRESS_ENDPOINT_PROPERTY_VALUE
+private fun ExecutionContext.usingS3Express(): Boolean =
+    this.getOrNull(AttributeKey(S3_EXPRESS_ENDPOINT_PROPERTY_KEY)) != S3_EXPRESS_ENDPOINT_PROPERTY_VALUE

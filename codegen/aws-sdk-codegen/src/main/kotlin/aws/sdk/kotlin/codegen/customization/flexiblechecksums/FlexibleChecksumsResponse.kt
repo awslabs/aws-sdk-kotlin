@@ -33,11 +33,11 @@ class FlexibleChecksumsResponse : KotlinIntegration {
             // Allows flexible checksum response configuration
             ConfigProperty {
                 name = "responseChecksumValidation"
-                symbol = RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption
-                baseClass = RuntimeTypes.SmithyClient.Config.HttpChecksumClientConfig
+                symbol = RuntimeTypes.SmithyClient.Config.ResponseHttpChecksumConfig
+                baseClass = RuntimeTypes.SmithyClient.Config.HttpChecksumConfig
                 useNestedBuilderBaseClass()
                 documentation = "Configures response checksum validation"
-                propertyType = ConfigPropertyType.RequiredWithDefault("HttpChecksumConfigOption.WHEN_SUPPORTED")
+                propertyType = ConfigPropertyType.RequiredWithDefault("ResponseHttpChecksumConfig.WHEN_SUPPORTED")
             },
         )
 
@@ -56,14 +56,14 @@ private val responseChecksumValidationBusinessMetric = object : ProtocolMiddlewa
             // Supported
             writer.write(
                 "#T.WHEN_SUPPORTED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_SUPPORTED)",
-                RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
+                RuntimeTypes.SmithyClient.Config.ResponseHttpChecksumConfig,
                 RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
                 RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
             )
             // Required
             writer.write(
                 "#T.WHEN_REQUIRED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_RES_WHEN_REQUIRED)",
-                RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
+                RuntimeTypes.SmithyClient.Config.ResponseHttpChecksumConfig,
                 RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
                 RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
             )
@@ -94,7 +94,8 @@ private val flexibleChecksumsResponseMiddleware = object : ProtocolMiddleware {
         val requestValidationModeMemberName = ctx.symbolProvider.toMemberName(requestValidationModeMember)
 
         val interceptor = if (ctx.model.expectShape<ServiceShape>(ctx.settings.service).isS3) {
-            AwsRuntimeTypes.Http.Interceptors.S3FlexibleChecksumResponseInterceptor
+            // S3 needs a custom interceptor because it can send composite checksums, which should be ignored
+            AwsRuntimeTypes.Http.Interceptors.IgnoreCompositeFlexibleChecksumResponseInterceptor
         } else {
             RuntimeTypes.HttpClient.Interceptors.FlexibleChecksumsResponseInterceptor
         }

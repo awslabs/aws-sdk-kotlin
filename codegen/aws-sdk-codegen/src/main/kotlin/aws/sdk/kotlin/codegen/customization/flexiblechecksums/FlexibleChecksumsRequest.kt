@@ -33,11 +33,11 @@ class FlexibleChecksumsRequest : KotlinIntegration {
             // Allows flexible checksum request configuration
             ConfigProperty {
                 name = "requestChecksumCalculation"
-                symbol = RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption
-                baseClass = RuntimeTypes.SmithyClient.Config.HttpChecksumClientConfig
+                symbol = RuntimeTypes.SmithyClient.Config.RequestHttpChecksumConfig
+                baseClass = RuntimeTypes.SmithyClient.Config.HttpChecksumConfig
                 useNestedBuilderBaseClass()
                 documentation = "Configures request checksum calculation"
-                propertyType = ConfigPropertyType.RequiredWithDefault("HttpChecksumConfigOption.WHEN_SUPPORTED")
+                propertyType = ConfigPropertyType.RequiredWithDefault("RequestHttpChecksumConfig.WHEN_SUPPORTED")
             },
         )
 
@@ -59,14 +59,14 @@ private val requestChecksumCalculationBusinessMetric = object : ProtocolMiddlewa
             // Supported
             writer.write(
                 "#T.WHEN_SUPPORTED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_REQ_WHEN_SUPPORTED)",
-                RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
+                RuntimeTypes.SmithyClient.Config.RequestHttpChecksumConfig,
                 RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
                 RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
             )
             // Required
             writer.write(
                 "#T.WHEN_REQUIRED -> op.context.#T(#T.FLEXIBLE_CHECKSUMS_REQ_WHEN_REQUIRED)",
-                RuntimeTypes.SmithyClient.Config.HttpChecksumConfigOption,
+                RuntimeTypes.SmithyClient.Config.RequestHttpChecksumConfig,
                 RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
                 RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
             )
@@ -82,7 +82,7 @@ private val httpChecksumDefaultAlgorithmMiddleware = object : ProtocolMiddleware
     override val order: Byte = -2 // Before S3 Express (possibly) changes the default (-1) and before calculating checksum (0)
 
     override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
-        requestChecksumsConfigured(ctx, op)
+        op.hasRequestAlgorithmMember(ctx)
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         writer.write(
@@ -100,7 +100,7 @@ private val flexibleChecksumsRequestMiddleware = object : ProtocolMiddleware {
     override val name: String = "flexibleChecksumsRequestMiddleware"
 
     override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean =
-        requestChecksumsConfigured(ctx, op)
+        op.hasRequestAlgorithmMember(ctx)
 
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
         val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()!!
@@ -125,9 +125,9 @@ private val flexibleChecksumsRequestMiddleware = object : ProtocolMiddleware {
 /**
  * Determines if an operation is set up to send flexible request checksums
  */
-private fun requestChecksumsConfigured(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean {
-    val httpChecksumTrait = op.getTrait<HttpChecksumTrait>()
-    val inputShape = op.input.getOrNull()?.let { ctx.model.expectShape<StructureShape>(it) }
+private fun OperationShape.hasRequestAlgorithmMember(ctx: ProtocolGenerator.GenerationContext): Boolean {
+    val httpChecksumTrait = this.getTrait<HttpChecksumTrait>()
+    val inputShape = this.input.getOrNull()?.let { ctx.model.expectShape<StructureShape>(it) }
 
     return (
         (httpChecksumTrait != null) &&

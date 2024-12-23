@@ -6,19 +6,8 @@ import aws.sdk.kotlin.shared.Model
 
 description = "AWS SDK for Kotlin's checksums codegen test suite"
 
-kotlin {
-    sourceSets {
-        commonTest {
-            dependencies {
-                implementation(libs.smithy.kotlin.http.test)
-            }
-        }
-    }
-}
-
 val tests = listOf(
-    CodegenTest("checksums", Model("request-response-test.smithy"), "aws.sdk.kotlin.test#TestService"),
-    CodegenTest("clientConfig", Model("config-test.smithy"), "aws.sdk.kotlin.test#ClientConfigTestService"),
+    CodegenTest("checksums", Model("checksums.smithy"), "aws.sdk.kotlin.test#TestService"),
 )
 
 smithyBuild {
