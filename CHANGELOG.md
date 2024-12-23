@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.100] - 12/23/2024
+
+### Features
+* (**ecrpublic**) Add support for Dualstack endpoints
+* (**eks**) This release adds support for DescribeClusterVersions API that provides important information about Kubernetes versions along with end of support dates
+* (**glue**) Add IncludeRoot parameters to GetCatalogs API to return root catalog.
+
+### Documentation
+* (**ecr**) Documentation update for ECR GetAccountSetting and PutAccountSetting APIs.
+
 ## [1.3.99] - 12/20/2024
 
 ### Features
