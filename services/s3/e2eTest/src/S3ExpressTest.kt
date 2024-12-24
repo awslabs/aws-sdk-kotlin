@@ -136,7 +136,7 @@ class S3ExpressTest {
     }
 
     @Test
-    fun testUploadPartContainsNoChecksums() = runTest {
+    fun testUploadPartContainsNoDefaultChecksum() = runTest {
         val testBucket = testBuckets.first()
         val testObject = "I-will-be-uploaded-in-parts-!"
 
