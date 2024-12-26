@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.101] - 12/26/2024
+
+### Features
+* (**bcmpricingcalculator**) Added ConflictException to DeleteBillEstimate.
+* (**ecr**) Add support for Dualstack Endpoints
+
+### Documentation
+* (**networkfirewall**) Dual-stack endpoints are now supported.
+* (**securityhub**) Documentation updates for AWS Security Hub
+
 ## [1.3.100] - 12/23/2024
 
 ### Features
