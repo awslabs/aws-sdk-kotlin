@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.102] - 12/27/2024
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation to correct various descriptions.
+
 ## [1.3.101] - 12/26/2024
 
 ### Features
