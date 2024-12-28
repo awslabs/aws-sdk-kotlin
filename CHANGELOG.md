@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.103] - 12/28/2024
+
+### Features
+* (**ecr**) Restoring custom endpoint functionality for ECR
+* (**ecrpublic**) Restoring custom endpoint functionality for ECR Public
+
 ## [1.3.102] - 12/27/2024
 
 ### Documentation
