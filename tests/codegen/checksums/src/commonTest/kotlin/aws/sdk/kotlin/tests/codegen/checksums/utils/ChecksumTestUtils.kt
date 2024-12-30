@@ -114,11 +114,9 @@ internal fun runChecksumTest(
     // Test type
     requestChecksumRequired: Boolean = true,
 ): Unit = runBlocking {
-    val interceptorsList = listOfNotNull(headerReader, headerSetter, businessMetricsReader)
-
     TestClient {
         httpClient = TestEngine()
-        interceptors = interceptorsList.toMutableList()
+        interceptors = listOfNotNull(headerReader, headerSetter, businessMetricsReader).toMutableList()
         requestChecksumCalculation = requestChecksumCalculationValue ?: requestChecksumCalculation
         responseChecksumValidation = responseChecksumValidationValue ?: responseChecksumValidation
         httpClient = TestEngine(
