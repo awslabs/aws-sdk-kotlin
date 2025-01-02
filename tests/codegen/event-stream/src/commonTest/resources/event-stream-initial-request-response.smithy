@@ -1,4 +1,4 @@
-namespace aws.sdk.kotlin.test.eventstream
+namespace aws.sdk.kotlin.test
 
 use aws.protocols#awsJson1_1
 use aws.api#service

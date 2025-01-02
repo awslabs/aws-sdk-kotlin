@@ -4,12 +4,10 @@
  */
 package aws.sdk.kotlin.e2etest
 
-import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.express.S3_EXPRESS_SESSION_TOKEN_HEADER
 import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.presigners.presignPutObject
-import aws.sdk.kotlin.services.s3.putObject
-import aws.sdk.kotlin.services.s3.withConfig
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
@@ -47,6 +45,7 @@ class S3ExpressTest {
     @AfterAll
     fun cleanup(): Unit = runBlocking {
         testBuckets.forEach { bucket ->
+            S3TestUtils.deleteMultiPartUploads(client, bucket)
             S3TestUtils.deleteBucketAndAllContents(client, bucket)
         }
         client.close()
@@ -136,6 +135,62 @@ class S3ExpressTest {
         }
     }
 
+    @Test
+    fun testUploadPartContainsNoDefaultChecksum() = runTest {
+        val testBucket = testBuckets.first()
+        val testObject = "I-will-be-uploaded-in-parts-!"
+
+        // Parts need to be at least 5 MB
+        val partOne = "Hello".repeat(1_048_576)
+        val partTwo = "World".repeat(1_048_576)
+
+        val testUploadId = client.createMultipartUpload {
+            bucket = testBucket
+            key = testObject
+        }.uploadId
+
+        var eTagPartOne: String?
+        var eTagPartTwo: String?
+
+        client.withConfig {
+            interceptors += NoChecksumValidatingInterceptor()
+        }.use { validatingClient ->
+            eTagPartOne = validatingClient.uploadPart {
+                bucket = testBucket
+                key = testObject
+                partNumber = 1
+                uploadId = testUploadId
+                body = ByteStream.fromString(partOne)
+            }.eTag
+
+            eTagPartTwo = validatingClient.uploadPart {
+                bucket = testBucket
+                key = testObject
+                partNumber = 2
+                uploadId = testUploadId
+                body = ByteStream.fromString(partTwo)
+            }.eTag
+        }
+
+        client.completeMultipartUpload {
+            bucket = testBucket
+            key = testObject
+            uploadId = testUploadId
+            multipartUpload = CompletedMultipartUpload {
+                parts = listOf(
+                    CompletedPart {
+                        partNumber = 1
+                        eTag = eTagPartOne
+                    },
+                    CompletedPart {
+                        partNumber = 2
+                        eTag = eTagPartTwo
+                    },
+                )
+            }
+        }
+    }
+
     private class S3ExpressInvocationTrackingInterceptor : HttpInterceptor {
         var s3ExpressInvocations = 0
 
@@ -152,6 +207,15 @@ class S3ExpressTest {
             if (headers.contains(S3_EXPRESS_SESSION_TOKEN_HEADER)) {
                 assertTrue(headers.contains("x-amz-checksum-crc32"), "Failed to find x-amz-checksum-crc32 header")
                 assertFalse(headers.contains("Content-MD5"), "Unexpectedly found Content-MD5 header")
+            }
+        }
+    }
+
+    private class NoChecksumValidatingInterceptor : HttpInterceptor {
+        override fun readBeforeTransmit(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
+            val headers = context.protocolRequest.headers
+            if (headers.contains(S3_EXPRESS_SESSION_TOKEN_HEADER)) {
+                assertFalse(headers.names().any { it.startsWith("x-amz-checksum-") })
             }
         }
     }
