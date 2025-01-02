@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.104] - 01/02/2025
+
+### Features
+* (**appsync**) Modify UpdateGraphQLAPI operation and flag authenticationType as required.
+* (**gamelift**) Amazon GameLift releases a new game session shutdown feature. Use the Amazon GameLift console or AWS CLI to terminate an in-progress game session that's entered a bad state or is no longer needed.
+* (**mediaconnect**) AWS Elemental MediaConnect now supports Content Quality Analysis for enhanced source stream monitoring. This enables you to track specific audio and video metrics in transport stream source flows, ensuring your content meets quality standards.
+* (**mediaconvert**) This release adds support for the AVC3 codec and fixes an alignment issue with Japanese vertical captions.
+* (**organizations**) Added ALL_FEATURES_MIGRATION_ORGANIZATION_SIZE_LIMIT_EXCEEDED to ConstraintViolationException for the EnableAllFeatures operation.
+* (**sagemaker**) Adding ETag information with Model Artifacts for Model Registry
+
+### Documentation
+* (**sqs**) In-flight message typo fix from 20k to 120k.
+
 ## [1.3.103] - 12/28/2024
 
 ### Features
