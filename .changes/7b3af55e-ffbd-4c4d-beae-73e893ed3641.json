@@ -1,0 +1,8 @@
+{
+    "id": "7b3af55e-ffbd-4c4d-beae-73e893ed3641",
+    "type": "bugfix",
+    "description": "Bump to latest **smithy-kotlin** version to pick up fixes to `InputStream` wrapping",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1473"
+    ]
+}
