@@ -1,8 +1,0 @@
-{
-    "id": "5c8aec67-269c-4ee5-aaec-1d01877994d4",
-    "type": "bugfix",
-    "description": "Add missing packages to version catalog and BOM (**http-client-engine-okhttp4**, **smithy-rpcv2-protocols**, **telemetry-provider-micrometer**)",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1481"
-    ]
-}
