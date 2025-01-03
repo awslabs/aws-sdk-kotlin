@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.105] - 01/03/2025
+
+### Features
+* (**s3**) This change is only for updating the model regexp of CopySource which is not for validation but only for documentation and user guide change.
+
+### Fixes
+* [#1481](https://github.com/awslabs/aws-sdk-kotlin/issues/1481) Add missing packages to version catalog and BOM (**http-client-engine-okhttp4**, **smithy-rpcv2-protocols**, **telemetry-provider-micrometer**)
+
+### Documentation
+* (**ecs**) Adding SDK reference examples for Amazon ECS operations.
+* (**route53domains**) Doc only update for Route 53 Domains that fixes several customer-reported issues
+
 ## [1.3.104] - 01/02/2025
 
 ### Features
