@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.106] - 01/06/2025
+
+### Features
+* (**iotsecuretunneling**) Adds dualstack endpoint support for IoT Secure Tunneling
+* (**supplychain**) Allow vanity DNS domain when creating a new ASC instance
+
+### Fixes
+* [#1473](https://github.com/awslabs/aws-sdk-kotlin/issues/1473) Bump to latest **smithy-kotlin** version to pick up fixes to `InputStream` wrapping
+
 ## [1.3.105] - 01/03/2025
 
 ### Features
