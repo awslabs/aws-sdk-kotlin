@@ -43,6 +43,8 @@ jobs:
           distribution: 'corretto'
           java-version: 17
           cache: 'gradle'
+      - name: Configure Gradle
+        run: gradle wrapper --gradle-distribution-url ${{ secrets.CUSTOM_GRADLE_DISTRIBUTION_URL }}/gradle-8.5-bin.zip
       - name: Check merge base
         shell: bash
         run: |

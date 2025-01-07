@@ -33,6 +33,8 @@ jobs:
           path: 'aws-sdk-kotlin'
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
+      - name: Configure Gradle
+        run: gradle wrapper --gradle-distribution-url ${{ secrets.CUSTOM_GRADLE_DISTRIBUTION_URL }}/gradle-8.5-bin.zip
       - name: Test
         working-directory: ./aws-sdk-kotlin
         shell: bash
@@ -54,6 +56,8 @@ jobs:
           path: 'aws-sdk-kotlin'
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
+      - name: Configure Gradle
+        run: gradle wrapper --gradle-distribution-url ${{ secrets.CUSTOM_GRADLE_DISTRIBUTION_URL }}/gradle-8.5-bin.zip
       - name: Build smithy-kotlin
         working-directory: ./smithy-kotlin
         shell: bash
