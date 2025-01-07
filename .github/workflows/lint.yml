@@ -19,7 +19,6 @@ jobs:
     - name: Checkout sources
       uses: actions/checkout@v4
     - name: Configure Gradle
-      working-directory: ./aws-sdk-kotlin
       run: gradle wrapper --gradle-distribution-url ${{ secrets.CUSTOM_GRADLE_DISTRIBUTION_URL }}/gradle-8.5-bin.zip
     - name: Lint ${{ env.PACKAGE_NAME }}
       run: |
