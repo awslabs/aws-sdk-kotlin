@@ -35,7 +35,6 @@ class ServiceClientCompanionObjectWriter : AppendingSectionWriter {
             declareSection(FinalizeEnvironmentalConfig) {
                 write("super.#L(builder, sharedConfig, activeProfile)", funName)
                 writeResolveEndpointUrl()
-//                writeRegionWithRegionProvider()
             }
         }
     }
@@ -55,16 +54,6 @@ class ServiceClientCompanionObjectWriter : AppendingSectionWriter {
             write("#S,", names.sharedConfigKey)
         }
     }
-
-//    private fun KotlinWriter.writeRegionWithRegionProvider() {
-//        withBlock(
-//            "builder.config.region = builder.config.region ?: builder.config.regionProvider?.getRegion() ?: #T(",
-//            ")",
-//            AwsRuntimeTypes.Config.Region.resolveRegion,
-//        ) {
-//            write("profile = activeProfile")
-//        }
-//    }
 }
 
 internal data class EndpointUrlConfigNames(
