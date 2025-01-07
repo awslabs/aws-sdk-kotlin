@@ -37,6 +37,7 @@ jobs:
           aws-region: us-west-2
 
       - name: Configure Gradle
+        working-directory: ./aws-sdk-kotlin
         run: gradle wrapper --gradle-distribution-url ${{ secrets.CUSTOM_GRADLE_DISTRIBUTION_URL }}/gradle-8.5-bin.zip
 
       - name: Setup kat
