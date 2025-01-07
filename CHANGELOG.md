@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.107] - 01/07/2025
+
+### Features
+* (**cloudhsmv2**) Adds support to ModifyCluster for modifying a Cluster's Hsm Type.
+* (**dynamodb**) This release makes Amazon DynamoDB point-in-time-recovery (PITR) to be configurable. You can set PITR recovery period for each table individually to between 1 and 35 days.
+* (**imagebuilder**) This release adds support for importing images from ISO disk files. Added new ImportDiskImage API operation.
+
 ## [1.3.106] - 01/06/2025
 
 ### Features
