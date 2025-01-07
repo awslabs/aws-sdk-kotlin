@@ -34,13 +34,14 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
             propertyType = ConfigPropertyType.Custom(
                 render = { prop, writer ->
-                    writer.write("override val #1L: #2T? = builder.#1L ?: #3T{ builder.regionProvider?.getRegion() ?: #4T() }",
+                    writer.write(
+                        "override val #1L: #2T? = builder.#1L ?: #3T{ builder.regionProvider?.getRegion() ?: #4T() }",
                         prop.propertyName,
                         prop.symbol,
                         AwsRuntimeTypes.Coroutines.runBlocking,
-                        AwsRuntimeTypes.Config.Region.resolveRegion
+                        AwsRuntimeTypes.Config.Region.resolveRegion,
                     )
-                }
+                },
             )
 
             order = -100

@@ -5,9 +5,8 @@
 
 package aws.sdk.kotlin.runtime.config
 
-import aws.smithy.kotlin.runtime.client.SdkClientConfig
-
 import aws.sdk.kotlin.runtime.region.RegionProvider
+import aws.smithy.kotlin.runtime.client.SdkClientConfig
 
 /**
  * Base interface all generated AWS SDK Kotlin clients implement
@@ -20,6 +19,7 @@ public interface AwsSdkClientConfig : SdkClientConfig {
      * information
      */
     public val region: String?
+
     /**
      * An optional region provider that determines the AWS region for client operations. When specified, this provider
      * takes precedence over the default region provider chain, unless a static region is explicitly configured.
