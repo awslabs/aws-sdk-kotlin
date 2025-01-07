@@ -1,4 +1,4 @@
-# AWS SDK for Omar
+# AWS SDK for Omar 2.0
 [![Apache 2 licensed][apache-badge]][apache-url] [![Maven][maven-badge]][maven-url]
 
 [apache-badge]: https://img.shields.io/badge/license-APACHE2-blue.svg
