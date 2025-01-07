@@ -20,11 +20,10 @@ import aws.smithy.kotlin.runtime.net.Scheme
 import aws.smithy.kotlin.runtime.net.url.Url
 import io.kotest.core.spec.style.AnnotationSpec
 import kotlinx.coroutines.runBlocking
+import java.io.File
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-
-private const val DDB_LOCAL_PORT = 44212 // Keep in sync with build.gradle.kts
 
 /**
  * The base class for test classes which need DynamoDB Local running. This class provides a few convenience declarations
@@ -50,11 +49,16 @@ abstract class DdbLocalTest : AnnotationSpec() {
     private val requestInterceptor = RequestCapturingInterceptor(this@DdbLocalTest.requests)
 
     private val ddbHolder = lazy {
+        val portFile = File("build/ddblocal/port.info").absoluteFile // Keep in sync with build.gradle.kts
+        println("Reading DDB Local port info from ${portFile.absolutePath}")
+        val port = portFile.readText().toInt()
+        println("Connecting to DDB Local on port $port")
+
         DynamoDbClient {
             endpointUrl = Url {
                 scheme = Scheme.HTTP
                 host = Host.Domain("localhost")
-                port = DDB_LOCAL_PORT
+                this.port = port
             }
 
             region = "DUMMY"
