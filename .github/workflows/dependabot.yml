@@ -2,7 +2,9 @@ name: Dependabot Dependency Submission
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - '*-main'
 
 permissions:
   contents: write
