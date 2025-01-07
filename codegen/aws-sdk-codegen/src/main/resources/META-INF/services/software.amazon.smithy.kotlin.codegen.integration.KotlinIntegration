@@ -2,6 +2,7 @@ aws.sdk.kotlin.codegen.AddUserAgentMetadataIntegration
 aws.sdk.kotlin.codegen.AwsServiceConfigIntegration
 aws.sdk.kotlin.codegen.GradleGenerator
 aws.sdk.kotlin.codegen.AwsRetryHeaderIntegration
+aws.sdk.kotlin.codegen.RegionProviderIntegration
 aws.sdk.kotlin.codegen.customization.ReplaceServiceExceptionBase
 aws.sdk.kotlin.codegen.customization.DefaultMiddleware
 aws.sdk.kotlin.codegen.customization.AccountIdEndpointBuiltinCustomization

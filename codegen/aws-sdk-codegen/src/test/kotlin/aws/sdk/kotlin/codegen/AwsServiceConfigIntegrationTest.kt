@@ -45,7 +45,7 @@ class AwsServiceConfigIntegrationTest {
         val contents = writer.toString()
 
         val expectedProps = """
-    override val region: String? = builder.region
+    override val region: String? = builder.region ?: runBlocking{ builder.regionProvider?.getRegion() ?: resolveRegion() }
     override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider(httpClient = httpClient, region = region).manage()
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)

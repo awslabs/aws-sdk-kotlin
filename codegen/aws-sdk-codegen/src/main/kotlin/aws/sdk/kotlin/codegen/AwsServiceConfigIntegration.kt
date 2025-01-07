@@ -24,20 +24,32 @@ class AwsServiceConfigIntegration : KotlinIntegration {
         val RegionProp: ConfigProperty = ConfigProperty {
             name = "region"
             symbol = KotlinTypes.String.toBuilder().nullable().build()
-            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            baseClass = AwsRuntimeTypes.Config.AwsSdkClientConfig
             useNestedBuilderBaseClass()
             documentation = """
                 The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
                 [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
                 information
             """.trimIndent()
+
+            propertyType = ConfigPropertyType.Custom(
+                render = { prop, writer ->
+                    writer.write("override val #1L: #2T? = builder.#1L ?: #3T{ builder.regionProvider?.getRegion() ?: #4T() }",
+                        prop.propertyName,
+                        prop.symbol,
+                        AwsRuntimeTypes.Coroutines.runBlocking,
+                        AwsRuntimeTypes.Config.Region.resolveRegion
+                    )
+                }
+            )
+
             order = -100
         }
 
         val UserAgentAppId: ConfigProperty = ConfigProperty {
             name = "applicationId"
             symbol = KotlinTypes.String.asNullable()
-            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            baseClass = AwsRuntimeTypes.Config.AwsSdkClientConfig
             useNestedBuilderBaseClass()
             documentation = """
                  An optional application specific identifier.

@@ -3,9 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package aws.sdk.kotlin.runtime.client
+package aws.sdk.kotlin.runtime.config
 
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
+
+import aws.sdk.kotlin.runtime.region.RegionProvider
 
 /**
  * Base interface all generated AWS SDK Kotlin clients implement
@@ -18,6 +20,16 @@ public interface AwsSdkClientConfig : SdkClientConfig {
      * information
      */
     public val region: String?
+    /**
+     * An optional region provider that determines the AWS region for client operations. When specified, this provider
+     * takes precedence over the default region provider chain, unless a static region is explicitly configured.
+     *
+     * Region Resolution Priority:
+     * 1. Static region (if specified)
+     * 2. Custom region provider (if configured)
+     * 3. Default region provider chain
+     */
+    public val regionProvider: RegionProvider?
 
     /**
      * Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
@@ -53,6 +65,17 @@ public interface AwsSdkClientConfig : SdkClientConfig {
          * information
          */
         public var region: String?
+
+        /**
+         * An optional region provider that determines the AWS region for client operations. When specified, this provider
+         * takes precedence over the default region provider chain, unless a static region is explicitly configured.
+         *
+         * Region Resolution Priority:
+         * 1. Static region (if specified)
+         * 2. Custom region provider (if configured)
+         * 3. Default region provider chain
+         */
+        public var regionProvider: RegionProvider?
 
         /**
          * Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.

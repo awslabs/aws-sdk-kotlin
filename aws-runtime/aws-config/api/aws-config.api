@@ -222,6 +222,27 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 	public static synthetic fun fromEnvironment$default (Laws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
+public abstract interface class aws/sdk/kotlin/runtime/config/AwsSdkClientConfig : aws/smithy/kotlin/runtime/client/SdkClientConfig {
+	public abstract fun getApplicationId ()Ljava/lang/String;
+	public abstract fun getRegion ()Ljava/lang/String;
+	public abstract fun getRegionProvider ()Laws/sdk/kotlin/runtime/region/RegionProvider;
+	public abstract fun getUseDualStack ()Z
+	public abstract fun getUseFips ()Z
+}
+
+public abstract interface class aws/sdk/kotlin/runtime/config/AwsSdkClientConfig$Builder {
+	public abstract fun getApplicationId ()Ljava/lang/String;
+	public abstract fun getRegion ()Ljava/lang/String;
+	public abstract fun getRegionProvider ()Laws/sdk/kotlin/runtime/region/RegionProvider;
+	public abstract fun getUseDualStack ()Ljava/lang/Boolean;
+	public abstract fun getUseFips ()Ljava/lang/Boolean;
+	public abstract fun setApplicationId (Ljava/lang/String;)V
+	public abstract fun setRegion (Ljava/lang/String;)V
+	public abstract fun setRegionProvider (Laws/sdk/kotlin/runtime/region/RegionProvider;)V
+	public abstract fun setUseDualStack (Ljava/lang/Boolean;)V
+	public abstract fun setUseFips (Ljava/lang/Boolean;)V
+}
+
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 	public static final field INSTANCE Laws/sdk/kotlin/runtime/config/AwsSdkSetting;
 	public final fun getAwsAccessKeyId ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;

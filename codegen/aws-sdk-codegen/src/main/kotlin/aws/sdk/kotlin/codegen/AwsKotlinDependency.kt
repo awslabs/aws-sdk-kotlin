@@ -12,6 +12,10 @@ import software.amazon.smithy.kotlin.codegen.core.isValidVersion
 // root namespace for the AWS client-runtime
 const val AWS_CLIENT_RT_ROOT_NS = "aws.sdk.kotlin.runtime"
 
+// groupId and version for kotlin coroutines
+const val KOTLINX_COROUTINES_GROUP: String = "org.jetbrains.kotlinx"
+const val KOTLINX_COROUTINES_VERSION: String = "1.7.3"
+
 private fun getDefaultRuntimeVersion(): String {
     // generated as part of the build, see smithy-aws-kotlin-codegen/build.gradle.kts
     try {
@@ -38,6 +42,7 @@ object AwsKotlinDependency {
     val AWS_CONFIG = KotlinDependency(GradleConfiguration.Api, AWS_CLIENT_RT_ROOT_NS, AWS_CLIENT_RT_GROUP, "aws-config", AWS_CLIENT_RT_VERSION)
     val AWS_ENDPOINT = KotlinDependency(GradleConfiguration.Api, "$AWS_CLIENT_RT_ROOT_NS.endpoint", AWS_CLIENT_RT_GROUP, "aws-endpoint", AWS_CLIENT_RT_VERSION)
     val AWS_HTTP = KotlinDependency(GradleConfiguration.Implementation, "$AWS_CLIENT_RT_ROOT_NS.http", AWS_CLIENT_RT_GROUP, "aws-http", AWS_CLIENT_RT_VERSION)
+    val KOTLINX_COROUTINES = KotlinDependency(GradleConfiguration.Implementation, "kotlinx.coroutines", KOTLINX_COROUTINES_GROUP, "kotlinx-coroutines-core", KOTLINX_COROUTINES_VERSION)
 }
 
 // remap aws-sdk-kotlin dependencies to project notation
