@@ -8,6 +8,23 @@ plugins {
 val libraries = libs
 
 subprojects {
+    tasks.withType<Test> {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+            showStandardStreams = true
+            showStackTraces = true
+            showExceptions = true
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        }
+    }
+
+    /*
+    Don't apply the rest of the configuration to the code generated smoke test services!
+    Those use the KMP plugin not JVM.
+     */
+    if (project.path.startsWith(":tests:codegen:smoke-tests:services")) return@subprojects
+
     apply(plugin = libraries.plugins.aws.kotlin.repo.tools.smithybuild.get().pluginId)
     apply(plugin = libraries.plugins.kotlin.jvm.get().pluginId)
 
@@ -32,17 +49,14 @@ subprojects {
         }
     }
 
-    val codegen by configurations
-    dependencies {
-        codegen(project(":codegen:aws-sdk-codegen"))
-        codegen(libraries.smithy.cli)
-        codegen(libraries.smithy.model)
-    }
-
     val implementation by configurations
     val api by configurations
     val testImplementation by configurations
     dependencies {
+        codegen(project(":codegen:aws-sdk-codegen"))
+        codegen(libraries.smithy.cli)
+        codegen(libraries.smithy.model)
+
         implementation(project(":codegen:aws-sdk-codegen"))
         implementation(libraries.smithy.kotlin.codegen)
 
@@ -65,16 +79,5 @@ subprojects {
         testImplementation(libraries.smithy.kotlin.aws.signing.default)
         testImplementation(libraries.smithy.kotlin.telemetry.api)
         testImplementation(libraries.smithy.kotlin.http.test)
-    }
-
-    tasks.withType<Test> {
-        useJUnitPlatform()
-        testLogging {
-            events("passed", "skipped", "failed")
-            showStandardStreams = true
-            showStackTraces = true
-            showExceptions = true
-            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-        }
     }
 }
