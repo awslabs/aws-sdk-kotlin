@@ -16,7 +16,7 @@ import kotlin.time.Duration.Companion.seconds
 
 class AuthTokenGeneratorTest {
     @Test
-    fun testGenerateDbConnectAuthToken() = runTest {
+    fun testGenerateAuthToken() = runTest {
         val credentials = Credentials("akid", "secret")
 
         val token = AuthTokenGenerator(credentials)

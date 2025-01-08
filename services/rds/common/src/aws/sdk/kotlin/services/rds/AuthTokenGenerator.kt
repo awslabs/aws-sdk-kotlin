@@ -23,13 +23,14 @@ public class AuthTokenGenerator(
     private val generator = AuthTokenGenerator("rds-db", credentials)
 
     /**
-     * Generates an auth token for the DbConnect action.
+     * Generates an auth token for the `connect` action.
      * @param endpoint the endpoint of the database
      * @param region the region of the database
+     * @param username the username to authenticate with
      * @param expiration how long the auth token should be valid for. Defaults to 900.seconds
      */
     public suspend fun generateAuthToken(endpoint: Url, region: String, username: String, expiration: Duration = 900.seconds): String {
-        val dbConnectEndpoint = endpoint.toBuilder().apply {
+        val endpoint = endpoint.toBuilder().apply {
             parameters.apply {
                 decodedParameters {
                     add("Action", "connect")
@@ -38,6 +39,6 @@ public class AuthTokenGenerator(
             }
         }.build()
 
-        return generator.generateAuthToken(dbConnectEndpoint, region, expiration)
+        return generator.generateAuthToken(endpoint, region, expiration)
     }
 }
