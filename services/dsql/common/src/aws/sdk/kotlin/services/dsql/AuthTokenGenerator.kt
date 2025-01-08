@@ -4,20 +4,20 @@
  */
 package aws.sdk.kotlin.services.dsql
 
+import aws.sdk.kotlin.runtime.auth.AuthTokenGenerator
 import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.net.url.Url
 import kotlinx.coroutines.runBlocking
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
-import aws.sdk.kotlin.runtime.auth.AuthTokenGenerator
 
 /**
  * Generates an IAM authentication token for use with DSQL databases
  * @param credentials The credentials to use when generating the auth token, defaults to resolving credentials from the [DefaultChainCredentialsProvider]
  */
 public class AuthTokenGenerator(
-    public val credentials: Credentials? = runBlocking { DefaultChainCredentialsProvider().resolve() }
+    public val credentials: Credentials? = runBlocking { DefaultChainCredentialsProvider().resolve() },
 ) {
     private val generator = AuthTokenGenerator("dsql", credentials)
 

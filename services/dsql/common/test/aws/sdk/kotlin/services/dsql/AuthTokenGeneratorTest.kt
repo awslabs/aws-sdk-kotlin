@@ -23,7 +23,7 @@ class AuthTokenGeneratorTest {
             .generateDbConnectAuthToken(
                 endpoint = Url { host = Host.parse("peccy.dsql.us-east-1.on.aws") },
                 region = "us-east-1",
-                expiration = 450.seconds
+                expiration = 450.seconds,
             )
 
         // Token should have a parameter Action=DbConnect
@@ -49,7 +49,7 @@ class AuthTokenGeneratorTest {
             .generateDbConnectAdminAuthToken(
                 endpoint = Url { host = Host.parse("peccy.dsql.us-east-1.on.aws") },
                 region = "us-east-1",
-                expiration = 450.seconds
+                expiration = 450.seconds,
             )
 
         // Token should have a parameter Action=DbConnect

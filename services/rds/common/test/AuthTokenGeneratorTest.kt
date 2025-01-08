@@ -27,7 +27,7 @@ class AuthTokenGeneratorTest {
                 },
                 region = "us-east-1",
                 username = "peccy",
-                expiration = 450.seconds
+                expiration = 450.seconds,
             )
 
         // Token should have a parameter Action=DbConnect

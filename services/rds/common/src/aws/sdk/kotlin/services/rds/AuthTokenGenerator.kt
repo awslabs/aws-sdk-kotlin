@@ -18,7 +18,7 @@ import kotlin.time.Duration.Companion.seconds
  * @param credentials The credentials to use when generating the auth token, defaults to resolving credentials from the [DefaultChainCredentialsProvider]
  */
 public class AuthTokenGenerator(
-    public val credentials: Credentials? = runBlocking { DefaultChainCredentialsProvider().resolve() }
+    public val credentials: Credentials? = runBlocking { DefaultChainCredentialsProvider().resolve() },
 ) {
     private val generator = AuthTokenGenerator("rds-db", credentials)
 
