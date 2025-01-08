@@ -18,10 +18,6 @@ object AwsRuntimeTypes {
         val ClientException = symbol("ClientException")
     }
 
-    object Coroutines : RuntimeTypePackage(AwsKotlinDependency.KOTLINX_COROUTINES) {
-        val runBlocking = symbol("runBlocking")
-    }
-
     object Endpoint : RuntimeTypePackage(AwsKotlinDependency.AWS_ENDPOINT) {
         object Functions : RuntimeTypePackage(AwsKotlinDependency.AWS_ENDPOINT, "functions") {
             val partitionFn = symbol("partition")

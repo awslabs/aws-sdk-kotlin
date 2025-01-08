@@ -1,7 +1,7 @@
 {
     "id": "05ac561b-963f-4953-bb4f-1fc19fc1207c",
     "type": "feature",
-    "description": "add regionProvider property to client config",
+    "description": "Add `regionProvider` property to client config",
     "issues": [
         "awslabs/aws-sdk-kotlin#1478"
     ]
