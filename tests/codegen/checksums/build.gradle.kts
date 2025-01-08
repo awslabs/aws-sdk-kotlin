@@ -31,12 +31,8 @@ smithyBuild {
     }
 }
 
-kotlin {
-    sourceSets {
-        commonTest {
-            smithyBuild.projections.forEach {
-                kotlin.srcDir(smithyBuild.smithyKotlinProjectionSrcDir(it.name))
-            }
-        }
+kotlin.sourceSets.getByName("test") {
+    smithyBuild.projections.forEach {
+        kotlin.srcDir(smithyBuild.smithyKotlinProjectionSrcDir(it.name))
     }
 }

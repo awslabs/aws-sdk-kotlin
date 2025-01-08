@@ -14,5 +14,5 @@ data class CodegenTest(
  */
 data class Model(
     val fileName: String,
-    val path: String = "src/commonTest/resources/",
+    val path: String = "src/test/resources/",
 )

@@ -12,13 +12,13 @@ import aws.sdk.kotlin.shared.Model
 description = "AWS SDK for Kotlin's smoke test codegen test suite"
 
 dependencies {
-    jvmTestImplementation(gradleTestKit())
+    testImplementation(gradleTestKit())
 }
 
 val tests = listOf(
-    CodegenTest("successService", Model("smoke-tests-success.smithy", "src/jvmTest/resources/"), "smithy.kotlin.traits#SuccessService"),
-    CodegenTest("failureService", Model("smoke-tests-failure.smithy", "src/jvmTest/resources/"), "smithy.kotlin.traits#FailureService"),
-    CodegenTest("exceptionService", Model("smoke-tests-exception.smithy", "src/jvmTest/resources/"), "smithy.kotlin.traits#ExceptionService"),
+    CodegenTest("successService", Model("smoke-tests-success.smithy"), "smithy.kotlin.traits#SuccessService"),
+    CodegenTest("failureService", Model("smoke-tests-failure.smithy"), "smithy.kotlin.traits#FailureService"),
+    CodegenTest("exceptionService", Model("smoke-tests-exception.smithy"), "smithy.kotlin.traits#ExceptionService"),
 )
 
 configureProjections()
