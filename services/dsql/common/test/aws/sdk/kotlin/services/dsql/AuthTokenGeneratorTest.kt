@@ -52,7 +52,7 @@ class AuthTokenGeneratorTest {
                 expiration = 450.seconds,
             )
 
-        // Token should have a parameter Action=DbConnect
+        // Token should have a parameter Action=DbConnectAdmin
         assertContains(token, "peccy.dsql.us-east-1.on.aws?Action=DbConnectAdmin")
 
         // Match the X-Amz-Credential parameter for any signing date
