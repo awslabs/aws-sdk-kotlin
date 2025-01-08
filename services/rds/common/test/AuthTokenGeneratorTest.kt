@@ -30,7 +30,7 @@ class AuthTokenGeneratorTest {
                 expiration = 450.seconds,
             )
 
-        // Token should have a parameter Action=DbConnect
+        // Token should have a parameter Action=connect, DBUser=peccy
         assertContains(token, "prod-instance.us-east-1.rds.amazonaws.com:3306?Action=connect&DBUser=peccy")
 
         // Match the X-Amz-Credential parameter for any signing date
