@@ -12,10 +12,6 @@ import software.amazon.smithy.kotlin.codegen.core.isValidVersion
 // root namespace for the AWS client-runtime
 const val AWS_CLIENT_RT_ROOT_NS = "aws.sdk.kotlin.runtime"
 
-// groupId and version for kotlin coroutines
-const val KOTLINX_COROUTINES_GROUP: String = "org.jetbrains.kotlinx"
-const val KOTLINX_COROUTINES_VERSION: String = "1.7.3"
-
 private fun getDefaultRuntimeVersion(): String {
     // generated as part of the build, see smithy-aws-kotlin-codegen/build.gradle.kts
     try {
