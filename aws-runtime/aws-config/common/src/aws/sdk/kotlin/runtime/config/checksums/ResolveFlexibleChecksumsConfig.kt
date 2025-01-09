@@ -1,6 +1,5 @@
 package aws.sdk.kotlin.runtime.config.checksums
 
-import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.profile.AwsProfile
@@ -20,20 +19,8 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 public suspend fun resolveRequestChecksumCalculation(
     platform: PlatformProvider = PlatformProvider.System,
     profile: LazyAsyncValue<AwsProfile>,
-): RequestHttpChecksumConfig {
-    val unparsedString = AwsSdkSetting.AwsRequestChecksumCalculation.resolve(platform) ?: profile.get().requestChecksumCalculation
-    return parseRequestHttpChecksumConfig(unparsedString)
-}
-
-private fun parseRequestHttpChecksumConfig(unparsedString: String?): RequestHttpChecksumConfig =
-    when (unparsedString?.uppercase()) {
-        null -> RequestHttpChecksumConfig.WHEN_SUPPORTED
-        "WHEN_SUPPORTED" -> RequestHttpChecksumConfig.WHEN_SUPPORTED
-        "WHEN_REQUIRED" -> RequestHttpChecksumConfig.WHEN_REQUIRED
-        else -> throw ConfigurationException(
-            "'$unparsedString' is not a valid value for 'requestChecksumCalculation'. Valid values are: ${RequestHttpChecksumConfig.entries}",
-        )
-    }
+): RequestHttpChecksumConfig =
+    AwsSdkSetting.AwsRequestChecksumCalculation.resolve(platform) ?: profile.get().requestChecksumCalculation ?: RequestHttpChecksumConfig.WHEN_SUPPORTED
 
 /**
  * Attempts to resolve responseChecksumValidation from the specified sources.
@@ -43,17 +30,5 @@ private fun parseRequestHttpChecksumConfig(unparsedString: String?): RequestHttp
 public suspend fun resolveResponseChecksumValidation(
     platform: PlatformProvider = PlatformProvider.System,
     profile: LazyAsyncValue<AwsProfile>,
-): ResponseHttpChecksumConfig {
-    val unparsedString = AwsSdkSetting.AwsResponseChecksumValidation.resolve(platform) ?: profile.get().responseChecksumValidation
-    return parseResponseHttpChecksumConfig(unparsedString)
-}
-
-private fun parseResponseHttpChecksumConfig(unparsedString: String?): ResponseHttpChecksumConfig =
-    when (unparsedString?.uppercase()) {
-        null -> ResponseHttpChecksumConfig.WHEN_SUPPORTED
-        "WHEN_SUPPORTED" -> ResponseHttpChecksumConfig.WHEN_SUPPORTED
-        "WHEN_REQUIRED" -> ResponseHttpChecksumConfig.WHEN_REQUIRED
-        else -> throw ConfigurationException(
-            "'$unparsedString' is not a valid value for 'responseChecksumValidation'. Valid values are: ${ResponseHttpChecksumConfig.entries}",
-        )
-    }
+): ResponseHttpChecksumConfig =
+    AwsSdkSetting.AwsResponseChecksumValidation.resolve(platform) ?: profile.get().responseChecksumValidation ?: ResponseHttpChecksumConfig.WHEN_SUPPORTED

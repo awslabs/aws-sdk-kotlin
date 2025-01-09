@@ -476,9 +476,9 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 	public static synthetic fun getLongOrNull$default (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/Long;
 	public static final fun getMaxAttempts (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/Integer;
 	public static final fun getRegion (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
-	public static final fun getRequestChecksumCalculation (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
+	public static final fun getRequestChecksumCalculation (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Laws/smithy/kotlin/runtime/client/config/RequestHttpChecksumConfig;
 	public static final fun getRequestMinCompressionSizeBytes (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/Long;
-	public static final fun getResponseChecksumValidation (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
+	public static final fun getResponseChecksumValidation (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Laws/smithy/kotlin/runtime/client/config/ResponseHttpChecksumConfig;
 	public static final fun getRetryMode (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Laws/smithy/kotlin/runtime/client/config/RetryMode;
 	public static final fun getRoleArn (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getSdkUserAgentAppId (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;

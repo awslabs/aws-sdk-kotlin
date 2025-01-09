@@ -8,6 +8,8 @@ package aws.sdk.kotlin.runtime.config.profile
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
+import aws.smithy.kotlin.runtime.client.config.RequestHttpChecksumConfig
+import aws.smithy.kotlin.runtime.client.config.ResponseHttpChecksumConfig
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.net.url.Url
 
@@ -171,15 +173,15 @@ public val AwsProfile.sigV4aSigningRegionSet: String?
  * Configures request checksum calculation
  */
 @InternalSdkApi
-public val AwsProfile.requestChecksumCalculation: String?
-    get() = getOrNull("request_checksum_calculation")
+public val AwsProfile.requestChecksumCalculation: RequestHttpChecksumConfig?
+    get() = getOrNull("request_checksum_calculation")?.parseRequestHttpChecksumConfig()
 
 /**
  * Configures response checksum validation
  */
 @InternalSdkApi
-public val AwsProfile.responseChecksumValidation: String?
-    get() = getOrNull("response_checksum_validation")
+public val AwsProfile.responseChecksumValidation: ResponseHttpChecksumConfig?
+    get() = getOrNull("response_checksum_validation")?.parseResponseHttpChecksumConfig()
 
 /**
  * Parse a config value as a boolean, ignoring case.
@@ -211,6 +213,32 @@ public fun AwsProfile.getLongOrNull(key: String, subKey: String? = null): Long? 
     getOrNull(key, subKey)?.let {
         it.toLongOrNull() ?: throw ConfigurationException(
             "Failed to parse config property ${buildKeyString(key, subKey)} as a long",
+        )
+    }
+
+/**
+ * Parse a string value as [ResponseHttpChecksumConfig]
+ */
+private fun String?.parseResponseHttpChecksumConfig(): ResponseHttpChecksumConfig? =
+    when (this?.uppercase()) {
+        null -> null
+        "WHEN_SUPPORTED" -> ResponseHttpChecksumConfig.WHEN_SUPPORTED
+        "WHEN_REQUIRED" -> ResponseHttpChecksumConfig.WHEN_REQUIRED
+        else -> throw ConfigurationException(
+            "'$this' is not a valid value for 'response_checksum_validation'. Valid values are: ${ResponseHttpChecksumConfig.entries}",
+        )
+    }
+
+/**
+ * Parse a string value as [RequestHttpChecksumConfig]
+ */
+private fun String?.parseRequestHttpChecksumConfig(): RequestHttpChecksumConfig? =
+    when (this?.uppercase()) {
+        null -> null
+        "WHEN_SUPPORTED" -> RequestHttpChecksumConfig.WHEN_SUPPORTED
+        "WHEN_REQUIRED" -> RequestHttpChecksumConfig.WHEN_REQUIRED
+        else -> throw ConfigurationException(
+            "'$this' is not a valid value for 'request_checksum_calculation'. Valid values are: ${RequestHttpChecksumConfig.entries}",
         )
     }
 

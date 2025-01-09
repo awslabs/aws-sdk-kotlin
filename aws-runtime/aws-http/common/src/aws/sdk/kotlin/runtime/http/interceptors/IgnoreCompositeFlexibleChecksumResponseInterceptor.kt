@@ -2,6 +2,7 @@ package aws.sdk.kotlin.runtime.http.interceptors
 
 import aws.smithy.kotlin.runtime.client.config.ResponseHttpChecksumConfig
 import aws.smithy.kotlin.runtime.http.interceptors.FlexibleChecksumsResponseInterceptor
+import aws.smithy.kotlin.runtime.telemetry.logging.Logger
 
 /**
  * Variant of the [FlexibleChecksumsResponseInterceptor] where composite checksums are not validated
@@ -13,8 +14,10 @@ public class IgnoreCompositeFlexibleChecksumResponseInterceptor(
     responseValidationRequired,
     responseChecksumValidation,
 ) {
-    override fun ignoreChecksum(checksum: String): Boolean =
-        checksum.isCompositeChecksum()
+    override fun ignoreChecksum(checksum: String, logger: Logger): Boolean =
+        checksum.isCompositeChecksum().also { compositeChecksum ->
+            if (compositeChecksum) logger.info { "Checksum validation was skipped because it was a composite checksum" }
+        }
 }
 
 /**
