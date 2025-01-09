@@ -7,7 +7,11 @@ package aws.sdk.kotlin.services.rds
 import aws.sdk.kotlin.runtime.auth.AuthTokenGenerator
 import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
+import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
 import aws.smithy.kotlin.runtime.net.url.Url
+import aws.smithy.kotlin.runtime.time.Clock
 import kotlinx.coroutines.runBlocking
 import kotlin.apply
 import kotlin.time.Duration
@@ -15,12 +19,18 @@ import kotlin.time.Duration.Companion.seconds
 
 /**
  * Generates an IAM authentication token for use with RDS databases
- * @param credentials The credentials to use when generating the auth token, defaults to resolving credentials from the [DefaultChainCredentialsProvider]
+ * @param credentialsProvider The [CredentialsProvider] which will provide credentials to use when generating the auth token, defaults to [DefaultChainCredentialsProvider]
+ * @param credentialsRefreshBuffer The amount of time before the resolved [Credentials] expire in which they are considered expired, defaults to 10 seconds.
+ * @param signer The [AwsSigner] implementation to use when creating the authentication token, defaults to [DefaultAwsSigner]
+ * @param clock The [Clock] implementation to use
  */
-public class AuthTokenGenerator(
-    public val credentials: Credentials? = runBlocking { DefaultChainCredentialsProvider().resolve() },
+public class RdsAuthTokenGenerator(
+    public val credentialsProvider: CredentialsProvider = DefaultChainCredentialsProvider(),
+    public val credentialsRefreshBuffer: Duration = 10.seconds,
+    public val signer: AwsSigner = DefaultAwsSigner,
+    public val clock: Clock = Clock.System
 ) {
-    private val generator = AuthTokenGenerator("rds-db", credentials)
+    private val generator = AuthTokenGenerator("rds-db", credentialsProvider, credentialsRefreshBuffer, signer, clock)
 
     /**
      * Generates an auth token for the `connect` action.

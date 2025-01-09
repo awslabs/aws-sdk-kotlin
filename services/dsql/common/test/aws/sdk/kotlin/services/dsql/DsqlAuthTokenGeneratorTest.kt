@@ -4,9 +4,12 @@
  */
 package aws.sdk.kotlin.services.dsql
 
+import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.net.Host
 import aws.smithy.kotlin.runtime.net.url.Url
+import aws.smithy.kotlin.runtime.time.Instant
+import aws.smithy.kotlin.runtime.time.ManualClock
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -14,12 +17,15 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 
-class AuthTokenGeneratorTest {
+class DsqlAuthTokenGeneratorTest {
     @Test
     fun testGenerateDbConnectAuthToken() = runTest {
-        val credentials = Credentials("akid", "secret")
+        val clock = ManualClock(Instant.fromEpochSeconds(1724716800))
 
-        val token = AuthTokenGenerator(credentials)
+        val credentials = Credentials("akid", "secret")
+        val credentialsProvider = StaticCredentialsProvider(credentials)
+
+        val token = DsqlAuthTokenGenerator(credentialsProvider, clock = clock)
             .generateDbConnectAuthToken(
                 endpoint = Url { host = Host.parse("peccy.dsql.us-east-1.on.aws") },
                 region = "us-east-1",
@@ -28,11 +34,7 @@ class AuthTokenGeneratorTest {
 
         // Token should have a parameter Action=DbConnect
         assertContains(token, "peccy.dsql.us-east-1.on.aws?Action=DbConnect")
-
-        // Match the X-Amz-Credential parameter for any signing date
-        val credentialRegex = Regex("X-Amz-Credential=akid%2F(\\d{8})%2Fus-east-1%2Fdsql%2Faws4_request")
-        assertTrue(token.contains(credentialRegex))
-
+        assertContains(token, "X-Amz-Credential=akid%2F20240827%2Fus-east-1%2Fdsql%2Faws4_request")
         assertContains(token, "X-Amz-Expires=450")
 
         // Token should not contain a scheme
@@ -43,9 +45,12 @@ class AuthTokenGeneratorTest {
 
     @Test
     fun testGenerateDbConnectAuthAdminToken() = runTest {
-        val credentials = Credentials("akid", "secret")
+        val clock = ManualClock(Instant.fromEpochSeconds(1724716800))
 
-        val token = AuthTokenGenerator(credentials)
+        val credentials = Credentials("akid", "secret")
+        val credentialsProvider = StaticCredentialsProvider(credentials)
+
+        val token = DsqlAuthTokenGenerator(credentialsProvider, clock = clock)
             .generateDbConnectAdminAuthToken(
                 endpoint = Url { host = Host.parse("peccy.dsql.us-east-1.on.aws") },
                 region = "us-east-1",
@@ -54,11 +59,7 @@ class AuthTokenGeneratorTest {
 
         // Token should have a parameter Action=DbConnectAdmin
         assertContains(token, "peccy.dsql.us-east-1.on.aws?Action=DbConnectAdmin")
-
-        // Match the X-Amz-Credential parameter for any signing date
-        val credentialRegex = Regex("X-Amz-Credential=akid%2F(\\d{8})%2Fus-east-1%2Fdsql%2Faws4_request")
-        assertTrue(token.contains(credentialRegex))
-
+        assertContains(token, "X-Amz-Credential=akid%2F20240827%2Fus-east-1%2Fdsql%2Faws4_request")
         assertContains(token, "X-Amz-Expires=450")
 
         // Token should not contain a scheme
