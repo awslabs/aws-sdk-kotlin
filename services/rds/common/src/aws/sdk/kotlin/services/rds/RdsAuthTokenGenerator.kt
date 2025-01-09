@@ -5,7 +5,6 @@
 package aws.sdk.kotlin.services.rds
 
 import aws.sdk.kotlin.runtime.auth.credentials.DefaultChainCredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.auth.awssigning.AuthTokenGenerator
 import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
