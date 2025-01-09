@@ -8,13 +8,13 @@ package aws.sdk.kotlin.runtime.config.profile
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.smithy.kotlin.runtime.config.resolve
-import aws.smithy.kotlin.runtime.io.internal.SdkDispatchers
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.telemetry.trace.withSpan
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.coroutineContext
 
 /**
  * Load the shared AWS configuration specified in local configuration files.
@@ -38,7 +38,7 @@ public suspend fun loadAwsSharedConfig(
         val logger = coroutineContext.logger("AwsConfigParser")
 
         // merged AWS configuration based on optional configuration and credential file contents
-        withContext(SdkDispatchers.IO) {
+        withContext(Dispatchers.IO) {
             mergeFiles(
                 parse(
                     logger,
