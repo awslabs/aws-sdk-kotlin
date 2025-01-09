@@ -1,4 +1,4 @@
-package aws.sdk.kotlin.shared
+package aws.sdk.kotlin.tests.codegen
 
 /**
  * An AWS SDK for Kotlin codegen test

@@ -5,8 +5,8 @@
 
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
 import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
-import aws.sdk.kotlin.shared.CodegenTest
-import aws.sdk.kotlin.shared.Model
+import aws.sdk.kotlin.tests.codegen.CodegenTest
+import aws.sdk.kotlin.tests.codegen.Model
 
 description = "AWS SDK for Kotlin's event stream codegen test suite"
 
