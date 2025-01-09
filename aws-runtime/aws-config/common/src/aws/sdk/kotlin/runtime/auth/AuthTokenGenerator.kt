@@ -37,7 +37,7 @@ public class AuthTokenGenerator(
     public val credentialsProvider: CredentialsProvider = DefaultChainCredentialsProvider(),
     public val credentialsRefreshBuffer: Duration = 10.seconds,
     public val signer: AwsSigner = DefaultAwsSigner,
-    public val clock: Clock = Clock.System
+    public val clock: Clock = Clock.System,
 ) {
     private lateinit var credentials: ExpiringValue<Credentials>
 

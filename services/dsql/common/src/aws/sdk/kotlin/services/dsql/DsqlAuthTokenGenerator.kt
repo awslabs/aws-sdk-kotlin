@@ -26,7 +26,7 @@ public class DsqlAuthTokenGenerator(
     public val credentialsProvider: CredentialsProvider = DefaultChainCredentialsProvider(),
     public val credentialsRefreshBuffer: Duration = 10.seconds,
     public val signer: AwsSigner = DefaultAwsSigner,
-    public val clock: Clock = Clock.System
+    public val clock: Clock = Clock.System,
 ) {
     private val generator = AuthTokenGenerator("dsql", credentialsProvider, credentialsRefreshBuffer, signer, clock)
 

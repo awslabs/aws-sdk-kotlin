@@ -12,7 +12,6 @@ import aws.smithy.kotlin.runtime.auth.awssigning.AwsSigner
 import aws.smithy.kotlin.runtime.auth.awssigning.DefaultAwsSigner
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.time.Clock
-import kotlinx.coroutines.runBlocking
 import kotlin.apply
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -28,7 +27,7 @@ public class RdsAuthTokenGenerator(
     public val credentialsProvider: CredentialsProvider = DefaultChainCredentialsProvider(),
     public val credentialsRefreshBuffer: Duration = 10.seconds,
     public val signer: AwsSigner = DefaultAwsSigner,
-    public val clock: Clock = Clock.System
+    public val clock: Clock = Clock.System,
 ) {
     private val generator = AuthTokenGenerator("rds-db", credentialsProvider, credentialsRefreshBuffer, signer, clock)
 
