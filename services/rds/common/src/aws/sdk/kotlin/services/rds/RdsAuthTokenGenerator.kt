@@ -38,11 +38,9 @@ public class RdsAuthTokenGenerator(
      */
     public suspend fun generateAuthToken(endpoint: Url, region: String, username: String, expiration: Duration = 900.seconds): String {
         val endpoint = endpoint.toBuilder().apply {
-            parameters.apply {
-                decodedParameters {
-                    add("Action", "connect")
-                    add("DBUser", username)
-                }
+            parameters.decodedParameters.apply {
+                put("Action", "connect")
+                put("DBUser", username)
             }
         }.build()
 
