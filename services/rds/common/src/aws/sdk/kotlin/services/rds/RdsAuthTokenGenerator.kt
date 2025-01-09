@@ -29,7 +29,7 @@ public class RdsAuthTokenGenerator(
     public val signer: AwsSigner = DefaultAwsSigner,
     public val clock: Clock = Clock.System,
 ) {
-    private val generator = AuthTokenGenerator("rds-db", credentialsProvider, credentialsRefreshBuffer, signer, clock)
+    private val generator = AuthTokenGenerator("rds-db", credentialsProvider, signer, clock)
 
     /**
      * Generates an auth token for the `connect` action.

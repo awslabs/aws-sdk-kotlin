@@ -20,7 +20,6 @@ class RdsAuthTokenGeneratorTest {
     @Test
     fun testGenerateAuthToken() = runTest {
         val clock = ManualClock(Instant.fromEpochSeconds(1724716800))
-        println(clock.now())
 
         val credentials = Credentials("akid", "secret")
         val credentialsProvider = StaticCredentialsProvider(credentials)

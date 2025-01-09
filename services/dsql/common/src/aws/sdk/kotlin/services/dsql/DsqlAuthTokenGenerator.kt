@@ -28,7 +28,7 @@ public class DsqlAuthTokenGenerator(
     public val signer: AwsSigner = DefaultAwsSigner,
     public val clock: Clock = Clock.System,
 ) {
-    private val generator = AuthTokenGenerator("dsql", credentialsProvider, credentialsRefreshBuffer, signer, clock)
+    private val generator = AuthTokenGenerator("dsql", credentialsProvider, signer, clock)
 
     /**
      * Generates an auth token for the DbConnect action.
@@ -38,11 +38,7 @@ public class DsqlAuthTokenGenerator(
      */
     public suspend fun generateDbConnectAuthToken(endpoint: Url, region: String, expiration: Duration = 900.seconds): String {
         val dbConnectEndpoint = endpoint.toBuilder().apply {
-            parameters.apply {
-                decodedParameters {
-                    add("Action", "DbConnect")
-                }
-            }
+            parameters.decodedParameters.put("Action", "DbConnect")
         }.build()
 
         return generator.generateAuthToken(dbConnectEndpoint, region, expiration)
@@ -56,11 +52,7 @@ public class DsqlAuthTokenGenerator(
      */
     public suspend fun generateDbConnectAdminAuthToken(endpoint: Url, region: String, expiration: Duration = 900.seconds): String {
         val dbConnectAdminEndpoint = endpoint.toBuilder().apply {
-            parameters.apply {
-                decodedParameters {
-                    add("Action", "DbConnectAdmin")
-                }
-            }
+            parameters.decodedParameters.put("Action", "DbConnectAdmin")
         }.build()
 
         return generator.generateAuthToken(dbConnectAdminEndpoint, region, expiration)
