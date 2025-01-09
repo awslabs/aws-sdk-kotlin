@@ -19,13 +19,11 @@ import kotlin.time.Duration.Companion.seconds
 /**
  * Generates an IAM authentication token for use with RDS databases
  * @param credentialsProvider The [CredentialsProvider] which will provide credentials to use when generating the auth token, defaults to [DefaultChainCredentialsProvider]
- * @param credentialsRefreshBuffer The amount of time before the resolved [Credentials] expire in which they are considered expired, defaults to 10 seconds.
  * @param signer The [AwsSigner] implementation to use when creating the authentication token, defaults to [DefaultAwsSigner]
  * @param clock The [Clock] implementation to use
  */
 public class RdsAuthTokenGenerator(
     public val credentialsProvider: CredentialsProvider = DefaultChainCredentialsProvider(),
-    public val credentialsRefreshBuffer: Duration = 10.seconds,
     public val signer: AwsSigner = DefaultAwsSigner,
     public val clock: Clock = Clock.System,
 ) {
