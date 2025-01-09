@@ -991,18 +991,6 @@
             "brazilName": "AwsSdkKotlinIot"
         },
         {
-            "sdkId": "IoT 1Click Devices Service",
-            "namespace": "aws.sdk.kotlin.services.iot1clickdevicesservice",
-            "artifactName": "iot1clickdevicesservice",
-            "brazilName": "AwsSdkKotlinIot1clickDevicesService"
-        },
-        {
-            "sdkId": "IoT 1Click Projects",
-            "namespace": "aws.sdk.kotlin.services.iot1clickprojects",
-            "artifactName": "iot1clickprojects",
-            "brazilName": "AwsSdkKotlinIot1clickProjects"
-        },
-        {
             "sdkId": "IoT Data Plane",
             "namespace": "aws.sdk.kotlin.services.iotdataplane",
             "artifactName": "iotdataplane",

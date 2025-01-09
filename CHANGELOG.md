@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.108] - 01/08/2025
+
+### Features
+* (**route53**) Amazon Route 53 now supports the Asia Pacific (Thailand) Region (ap-southeast-7) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region
+* (**sagemaker**) Adds support for IPv6 for SageMaker HyperPod cluster nodes.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation to clarify the RestoreDBClusterToPointInTime description.
+
+### Miscellaneous
+* Remove IoT 1-click services from SDK
+
 ## [1.3.107] - 01/07/2025
 
 ### Features

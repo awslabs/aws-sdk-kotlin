@@ -759,16 +759,6 @@ private const val TEST_SUITE_JSON = """
     "service_envvar_name": "AWS_ENDPOINT_URL_IOT_JOBS_DATA_PLANE"
   },
   {
-    "service_id": "IoT 1Click Devices Service",
-    "services_section_name": "iot_1click_devices_service",
-    "service_envvar_name": "AWS_ENDPOINT_URL_IOT_1CLICK_DEVICES_SERVICE"
-  },
-  {
-    "service_id": "IoT 1Click Projects",
-    "services_section_name": "iot_1click_projects",
-    "service_envvar_name": "AWS_ENDPOINT_URL_IOT_1CLICK_PROJECTS"
-  },
-  {
     "service_id": "IoTAnalytics",
     "services_section_name": "iotanalytics",
     "service_envvar_name": "AWS_ENDPOINT_URL_IOTANALYTICS"
