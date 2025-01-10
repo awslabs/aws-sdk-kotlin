@@ -5,8 +5,11 @@ on:
     branches:
       - '*'
       - '!main'
+      - '!*.main'
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - '*-main'
   workflow_dispatch:
 
 env:

@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.3.109] - 01/09/2025
+
+### Features
+* (**codebuild**) AWS CodeBuild Now Supports BuildBatch in Reserved Capacity and Lambda
+* (**computeoptimizer**) This release expands AWS Compute Optimizer rightsizing recommendation support for Amazon EC2 Auto Scaling groups to include those with scaling policies and multiple instance types.
+* (**fms**) AWS Firewall Manager now lets you combine multiple resource tags using the logical AND operator or the logical OR operator.
+
+## [1.3.108] - 01/08/2025
+
+### Features
+* (**route53**) Amazon Route 53 now supports the Asia Pacific (Thailand) Region (ap-southeast-7) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region
+* (**sagemaker**) Adds support for IPv6 for SageMaker HyperPod cluster nodes.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation to clarify the RestoreDBClusterToPointInTime description.
+
+### Miscellaneous
+* Remove IoT 1-click services from SDK
+
+## [1.3.107] - 01/07/2025
+
+### Features
+* (**cloudhsmv2**) Adds support to ModifyCluster for modifying a Cluster's Hsm Type.
+* (**dynamodb**) This release makes Amazon DynamoDB point-in-time-recovery (PITR) to be configurable. You can set PITR recovery period for each table individually to between 1 and 35 days.
+* (**imagebuilder**) This release adds support for importing images from ISO disk files. Added new ImportDiskImage API operation.
+
+## [1.3.106] - 01/06/2025
+
+### Features
+* (**iotsecuretunneling**) Adds dualstack endpoint support for IoT Secure Tunneling
+* (**supplychain**) Allow vanity DNS domain when creating a new ASC instance
+
+### Fixes
+* [#1473](https://github.com/awslabs/aws-sdk-kotlin/issues/1473) Bump to latest **smithy-kotlin** version to pick up fixes to `InputStream` wrapping
+
 ## [1.3.105] - 01/03/2025
 
 ### Features

@@ -3,7 +3,9 @@ name: API compatibility verification
 on:
   pull_request:
     types: [ opened, synchronize, reopened, labeled, unlabeled ]
-    branches: [ main ]
+    branches:
+      - main
+      - '*-main'
 
 jobs:
   api-compat-verification:
