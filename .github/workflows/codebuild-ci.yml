@@ -80,6 +80,8 @@ jobs:
           exit 1
       - name: Checkout sources
         uses: actions/checkout@v4
+        with:
+          path: 'aws-sdk-kotlin'
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -209,6 +211,8 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
+        with:
+          path: 'aws-sdk-kotlin'
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
