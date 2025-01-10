@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.109] - 01/09/2025
+
+### Features
+* (**codebuild**) AWS CodeBuild Now Supports BuildBatch in Reserved Capacity and Lambda
+* (**computeoptimizer**) This release expands AWS Compute Optimizer rightsizing recommendation support for Amazon EC2 Auto Scaling groups to include those with scaling policies and multiple instance types.
+* (**fms**) AWS Firewall Manager now lets you combine multiple resource tags using the logical AND operator or the logical OR operator.
+
 ## [1.3.108] - 01/08/2025
 
 ### Features
