@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.region
 
+import aws.smithy.kotlin.runtime.client.region.RegionProvider
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

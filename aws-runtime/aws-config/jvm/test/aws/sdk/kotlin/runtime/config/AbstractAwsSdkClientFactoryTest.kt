@@ -8,8 +8,8 @@ package aws.sdk.kotlin.runtime.config
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
 import aws.sdk.kotlin.runtime.config.utils.mockPlatform
-import aws.sdk.kotlin.runtime.region.RegionProvider
 import aws.smithy.kotlin.runtime.client.*
+import aws.smithy.kotlin.runtime.client.region.RegionProvider
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy

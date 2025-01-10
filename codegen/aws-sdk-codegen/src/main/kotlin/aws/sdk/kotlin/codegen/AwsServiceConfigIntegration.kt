@@ -35,14 +35,31 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             propertyType = ConfigPropertyType.Custom(
                 render = { prop, writer ->
                     writer.write(
-                        "override val #1L: #2T? = builder.#1L ?: #3T { builder.regionProvider?.getRegion() ?: #4T() }",
+                        "override val #1L: #2T? = builder.#1L ?: #3T { builder.regionProvider ?.getRegion() ?: #4T() }",
                         prop.propertyName,
                         prop.symbol,
-                        KotlinTypes.Coroutines.runBlocking,
+                        RuntimeTypes.KotlinxCoroutines.runBlocking,
                         AwsRuntimeTypes.Config.Region.resolveRegion,
                     )
                 },
             )
+
+            order = -100
+        }
+
+        val RegionProviderProp: ConfigProperty = ConfigProperty {
+            name = "regionProvider"
+            symbol = RuntimeTypes.SmithyClient.Region.RegionProvider.asNullable()
+            baseClass = AwsRuntimeTypes.Config.AwsSdkClientConfig
+            useNestedBuilderBaseClass()
+            documentation = """
+                An optional region provider that determines the AWS region for client operations. When specified, this provider 
+                takes precedence over the default region provider chain, unless a static region is explicitly configured. 
+                The region resolution order is:
+                1. Static region (if specified)
+                2. Custom region provider (if configured)
+                3. Default region provider chain
+            """.trimIndent()
 
             order = -100
         }
@@ -145,6 +162,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> = buildList {
         add(RegionProp)
+        add(RegionProviderProp)
         if (AwsSignatureVersion4.isSupportedAuthentication(ctx.model, ctx.settings.getService(ctx.model))) {
             add(CredentialsProviderProp)
         }

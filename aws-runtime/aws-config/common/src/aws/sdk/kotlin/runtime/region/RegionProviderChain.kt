@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.region
 
+import aws.smithy.kotlin.runtime.client.region.RegionProvider
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlin.coroutines.coroutineContext

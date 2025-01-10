@@ -5,8 +5,8 @@
 
 package aws.sdk.kotlin.runtime.config
 
-import aws.sdk.kotlin.runtime.region.RegionProvider
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
+import aws.smithy.kotlin.runtime.client.region.RegionProvider
 
 /**
  * Base interface all generated AWS SDK Kotlin clients implement

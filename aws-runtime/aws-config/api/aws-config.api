@@ -225,7 +225,7 @@ public abstract class aws/sdk/kotlin/runtime/config/AbstractAwsSdkClientFactory 
 public abstract interface class aws/sdk/kotlin/runtime/config/AwsSdkClientConfig : aws/smithy/kotlin/runtime/client/SdkClientConfig {
 	public abstract fun getApplicationId ()Ljava/lang/String;
 	public abstract fun getRegion ()Ljava/lang/String;
-	public abstract fun getRegionProvider ()Laws/sdk/kotlin/runtime/region/RegionProvider;
+	public abstract fun getRegionProvider ()Laws/smithy/kotlin/runtime/client/region/RegionProvider;
 	public abstract fun getUseDualStack ()Z
 	public abstract fun getUseFips ()Z
 }
@@ -233,12 +233,12 @@ public abstract interface class aws/sdk/kotlin/runtime/config/AwsSdkClientConfig
 public abstract interface class aws/sdk/kotlin/runtime/config/AwsSdkClientConfig$Builder {
 	public abstract fun getApplicationId ()Ljava/lang/String;
 	public abstract fun getRegion ()Ljava/lang/String;
-	public abstract fun getRegionProvider ()Laws/sdk/kotlin/runtime/region/RegionProvider;
+	public abstract fun getRegionProvider ()Laws/smithy/kotlin/runtime/client/region/RegionProvider;
 	public abstract fun getUseDualStack ()Ljava/lang/Boolean;
 	public abstract fun getUseFips ()Ljava/lang/Boolean;
 	public abstract fun setApplicationId (Ljava/lang/String;)V
 	public abstract fun setRegion (Ljava/lang/String;)V
-	public abstract fun setRegionProvider (Laws/sdk/kotlin/runtime/region/RegionProvider;)V
+	public abstract fun setRegionProvider (Laws/smithy/kotlin/runtime/client/region/RegionProvider;)V
 	public abstract fun setUseDualStack (Ljava/lang/Boolean;)V
 	public abstract fun setUseFips (Ljava/lang/Boolean;)V
 }
@@ -533,21 +533,21 @@ public final class aws/sdk/kotlin/runtime/config/useragent/ResolveUserAgentKt {
 	public static synthetic fun resolveUserAgentAppId$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
-public final class aws/sdk/kotlin/runtime/region/DefaultRegionProviderChain : aws/sdk/kotlin/runtime/region/RegionProviderChain, aws/sdk/kotlin/runtime/region/RegionProvider, java/io/Closeable {
+public final class aws/sdk/kotlin/runtime/region/DefaultRegionProviderChain : aws/sdk/kotlin/runtime/region/RegionProviderChain, aws/smithy/kotlin/runtime/client/region/RegionProvider, java/io/Closeable {
 	public fun <init> ()V
 	public fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;)V
 	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/PlatformProvider;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
 }
 
-public final class aws/sdk/kotlin/runtime/region/EnvironmentRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider {
+public final class aws/sdk/kotlin/runtime/region/EnvironmentRegionProvider : aws/smithy/kotlin/runtime/client/region/RegionProvider {
 	public fun <init> ()V
 	public fun <init> (Laws/smithy/kotlin/runtime/util/EnvironmentProvider;)V
 	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/EnvironmentProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class aws/sdk/kotlin/runtime/region/ImdsRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider, java/io/Closeable {
+public final class aws/sdk/kotlin/runtime/region/ImdsRegionProvider : aws/smithy/kotlin/runtime/client/region/RegionProvider, java/io/Closeable {
 	public fun <init> ()V
 	public fun <init> (Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;)V
 	public synthetic fun <init> (Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -555,14 +555,14 @@ public final class aws/sdk/kotlin/runtime/region/ImdsRegionProvider : aws/sdk/ko
 	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class aws/sdk/kotlin/runtime/region/JvmSystemPropRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider {
+public final class aws/sdk/kotlin/runtime/region/JvmSystemPropRegionProvider : aws/smithy/kotlin/runtime/client/region/RegionProvider {
 	public fun <init> ()V
 	public fun <init> (Laws/smithy/kotlin/runtime/util/PropertyProvider;)V
 	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/PropertyProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class aws/sdk/kotlin/runtime/region/ProfileRegionProvider : aws/sdk/kotlin/runtime/region/RegionProvider {
+public final class aws/sdk/kotlin/runtime/region/ProfileRegionProvider : aws/smithy/kotlin/runtime/client/region/RegionProvider {
 	public fun <init> ()V
 	public fun <init> (Laws/smithy/kotlin/runtime/util/LazyAsyncValue;)V
 	public synthetic fun <init> (Laws/smithy/kotlin/runtime/util/LazyAsyncValue;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -570,14 +570,10 @@ public final class aws/sdk/kotlin/runtime/region/ProfileRegionProvider : aws/sdk
 	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public abstract interface class aws/sdk/kotlin/runtime/region/RegionProvider {
-	public abstract fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public class aws/sdk/kotlin/runtime/region/RegionProviderChain : aws/sdk/kotlin/runtime/region/RegionProvider {
+public class aws/sdk/kotlin/runtime/region/RegionProviderChain : aws/smithy/kotlin/runtime/client/region/RegionProvider {
 	public fun <init> (Ljava/util/List;)V
-	public fun <init> ([Laws/sdk/kotlin/runtime/region/RegionProvider;)V
-	protected final fun getProviders ()[Laws/sdk/kotlin/runtime/region/RegionProvider;
+	public fun <init> ([Laws/smithy/kotlin/runtime/client/region/RegionProvider;)V
+	protected final fun getProviders ()[Laws/smithy/kotlin/runtime/client/region/RegionProvider;
 	public fun getRegion (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 }
