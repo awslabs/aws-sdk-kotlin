@@ -6,9 +6,8 @@ runs:
   using: composite
   steps:
     - name: Checkout tools
+      working-directory: aws-sdk-kotlin
       run: |
-        pwd
-        ls -a
         # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
         gradle wrapper --gradle-distribution-url https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12-bin.zip
       shell: bash
