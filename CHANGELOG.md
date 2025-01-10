@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.110] - 01/10/2025
+
+### Documentation
+* (**redshift**) Additions to the PubliclyAccessible and Encrypted parameters clarifying what the defaults are.
+* (**securitylake**) Doc only update for ServiceName that fixes several customer-reported issues
+* (**sts**) Fixed typos in the descriptions.
+
 ## [1.3.109] - 01/09/2025
 
 ### Features
