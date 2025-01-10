@@ -1,11 +1,11 @@
-name: Use Custom Gradle Distribution URL
+name: Configure gradle distribution URL
 description: >
   Configures the gradle distribution URL to our custom URL
 
 runs:
   using: composite
   steps:
-    - name: Checkout tools
+    - name: Configure gradle distribution URL
       working-directory: aws-sdk-kotlin
       run: |
         # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
