@@ -13,6 +13,7 @@ import aws.smithy.kotlin.runtime.time.ManualClock
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.time.Duration.Companion.seconds
 
@@ -40,6 +41,10 @@ class DsqlAuthTokenGeneratorTest {
         listOf("http://", "https://").forEach {
             assertFalse(token.contains(it))
         }
+
+        val urlToken = Url.parse("https://$token")
+        val xAmzDate = urlToken.parameters.decodedParameters.getValue("X-Amz-Date").single()
+        assertEquals(clock.now(), Instant.fromIso8601(xAmzDate))
     }
 
     @Test
@@ -65,5 +70,9 @@ class DsqlAuthTokenGeneratorTest {
         listOf("http://", "https://").forEach {
             assertFalse(token.contains(it))
         }
+
+        val urlToken = Url.parse("https://$token")
+        val xAmzDate = urlToken.parameters.decodedParameters.getValue("X-Amz-Date").single()
+        assertEquals(clock.now(), Instant.fromIso8601(xAmzDate))
     }
 }
