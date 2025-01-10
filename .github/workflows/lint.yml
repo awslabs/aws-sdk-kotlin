@@ -18,9 +18,8 @@ jobs:
     steps:
     - name: Checkout sources
       uses: actions/checkout@v4
-    - name: PWD & LS
-      run: pwd && ls
     - name: Configure Gradle
+      working-directory: ./aws-sdk-kotlin
       uses: ./aws-sdk-kotlin/.github/actions/custom-gradle-distribution-url
     - name: Lint ${{ env.PACKAGE_NAME }}
       run: |
