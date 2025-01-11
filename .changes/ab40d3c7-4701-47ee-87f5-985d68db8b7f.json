@@ -1,0 +1,8 @@
+{
+    "id": "ab40d3c7-4701-47ee-87f5-985d68db8b7f",
+    "type": "bugfix",
+    "description": "Include more information when retry strategy halts early due to capacity errors",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1321"
+    ]
+}

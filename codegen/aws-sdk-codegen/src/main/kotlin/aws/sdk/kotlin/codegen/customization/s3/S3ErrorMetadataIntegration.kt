@@ -48,16 +48,8 @@ class S3ErrorMetadataIntegration : KotlinIntegration {
         }
     }
 
-    // SectionWriter to override the default sdkErrorMetadata and displayMetadata for S3's version
+    // SectionWriter to override the default sdkErrorMetadata for S3's version
     private val addSdkErrorMetadataWriter = AppendingSectionWriter { writer ->
-        writer
-            .write("override val sdkErrorMetadata: S3ErrorMetadata = S3ErrorMetadata()")
-            .write("")
-            .withBlock("override val displayMetadata: List<String>", "") {
-                withBlock("get() =", "") {
-                    write("super.displayMetadata + ")
-                    write("""listOfNotNull(sdkErrorMetadata.requestId2?.let { "Extended request ID: ${'$'}it" })""")
-                }
-            }
+        writer.write("override val sdkErrorMetadata: S3ErrorMetadata = S3ErrorMetadata()")
     }
 }

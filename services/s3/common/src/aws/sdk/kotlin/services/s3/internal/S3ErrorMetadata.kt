@@ -7,9 +7,12 @@ package aws.sdk.kotlin.services.s3.internal
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.services.s3.model.S3ErrorMetadata
 import aws.sdk.kotlin.services.s3.model.S3Exception
+import aws.smithy.kotlin.runtime.ClientErrorContext
+import aws.smithy.kotlin.runtime.ErrorMetadata
 import aws.smithy.kotlin.runtime.ServiceErrorMetadata
 import aws.smithy.kotlin.runtime.awsprotocol.AwsErrorDetails
 import aws.smithy.kotlin.runtime.awsprotocol.setAseErrorMetadata
+import aws.smithy.kotlin.runtime.collections.appendValue
 import aws.smithy.kotlin.runtime.collections.setIfValueNotNull
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.serde.xml.data
@@ -33,12 +36,22 @@ internal data class S3ErrorDetails(
  */
 internal fun setS3ErrorMetadata(exception: Any, response: HttpResponse, errorDetails: S3ErrorDetails?) {
     setAseErrorMetadata(exception, response, errorDetails)
+
     if (exception is AwsServiceException) {
         exception.sdkErrorMetadata.attributes.setIfValueNotNull(ServiceErrorMetadata.RequestId, errorDetails?.requestId)
     }
+
     if (exception is S3Exception) {
-        val requestId2 = errorDetails?.requestId2 ?: response.headers[X_AMZN_REQUEST_ID_2_HEADER]
-        exception.sdkErrorMetadata.attributes.setIfValueNotNull(S3ErrorMetadata.RequestId2, requestId2)
+        (errorDetails?.requestId2 ?: response.headers[X_AMZN_REQUEST_ID_2_HEADER])?.let { requestId2 ->
+            with(exception.sdkErrorMetadata) {
+                attributes.setIfValueNotNull(S3ErrorMetadata.RequestId2, requestId2)
+
+                attributes.appendValue(
+                    ErrorMetadata.AdditionalClientContext,
+                    ClientErrorContext("Extended request ID", requestId2),
+                )
+            }
+        }
     }
 }
 
