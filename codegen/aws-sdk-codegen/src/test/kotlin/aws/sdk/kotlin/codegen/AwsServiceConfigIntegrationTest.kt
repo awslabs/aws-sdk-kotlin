@@ -46,22 +46,28 @@ class AwsServiceConfigIntegrationTest {
 
         val expectedProps = """
     override val region: String? = builder.region ?: runBlocking { builder.regionProvider?.getRegion() ?: resolveRegion() }
-    override val regionProvider: RegionProvider? = builder.regionProvider
+    override val regionProvider: RegionProvider = builder.regionProvider ?: DefaultRegionProviderChain()
     override val credentialsProvider: CredentialsProvider = builder.credentialsProvider ?: DefaultChainCredentialsProvider(httpClient = httpClient, region = region).manage()
 """
         contents.shouldContainOnlyOnceWithDiff(expectedProps)
 
         val expectedImpl = """
         /**
-         * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
-         * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
-         * information
+         * The region to sign with and make requests to.
+         * The AWS region to sign with and make requests to. When specified, this static region configuration
+         * takes precedence over other region resolution methods.
+         *
+         * The region resolution order is:
+         * 1. Static region (if specified)
+         * 2. Custom region provider (if configured)
+         * 3. Default region provider chain
          */
         override var region: String? = null
 
         /**
          * An optional region provider that determines the AWS region for client operations. When specified, this provider
          * takes precedence over the default region provider chain, unless a static region is explicitly configured.
+         *
          * The region resolution order is:
          * 1. Static region (if specified)
          * 2. Custom region provider (if configured)

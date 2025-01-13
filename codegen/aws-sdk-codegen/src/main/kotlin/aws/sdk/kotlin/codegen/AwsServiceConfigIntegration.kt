@@ -27,9 +27,14 @@ class AwsServiceConfigIntegration : KotlinIntegration {
             baseClass = AwsRuntimeTypes.Config.AwsSdkClientConfig
             useNestedBuilderBaseClass()
             documentation = """
-                The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
-                [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
-                information
+                The region to sign with and make requests to.
+                The AWS region to sign with and make requests to. When specified, this static region configuration
+                takes precedence over other region resolution methods. 
+                
+                The region resolution order is:
+                1. Static region (if specified)
+                2. Custom region provider (if configured)
+                3. Default region provider chain              
             """.trimIndent()
 
             propertyType = ConfigPropertyType.Custom(
@@ -49,18 +54,29 @@ class AwsServiceConfigIntegration : KotlinIntegration {
 
         val RegionProviderProp: ConfigProperty = ConfigProperty {
             name = "regionProvider"
-            symbol = RuntimeTypes.SmithyClient.Region.RegionProvider.asNullable()
+            symbol = RuntimeTypes.SmithyClient.Region.RegionProvider
             baseClass = AwsRuntimeTypes.Config.AwsSdkClientConfig
             useNestedBuilderBaseClass()
             documentation = """
                 An optional region provider that determines the AWS region for client operations. When specified, this provider 
                 takes precedence over the default region provider chain, unless a static region is explicitly configured. 
+                
                 The region resolution order is:
                 1. Static region (if specified)
                 2. Custom region provider (if configured)
                 3. Default region provider chain
             """.trimIndent()
 
+            propertyType = ConfigPropertyType.Custom(
+                render = { prop, writer ->
+                    writer.write(
+                        "override val #1L: #2T = builder.#1L ?: #3T()",
+                        prop.propertyName,
+                        prop.symbol,
+                        AwsRuntimeTypes.Config.Region.DefaultRegionProviderChain
+                    )
+                },
+            )
             order = -100
         }
 
