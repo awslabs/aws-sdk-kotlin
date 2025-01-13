@@ -53,9 +53,9 @@ class AwsServiceConfigIntegrationTest {
 
         val expectedImpl = """
         /**
-         * The region to sign with and make requests to.
-         * The AWS region to sign with and make requests to. When specified, this static region configuration
-         * takes precedence over other region resolution methods.
+         * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
+         * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more information.
+         * When specified, this static region configuration takes precedence over other region resolution methods.
          *
          * The region resolution order is:
          * 1. Static region (if specified)
