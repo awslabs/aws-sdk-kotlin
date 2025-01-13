@@ -14,8 +14,9 @@ import aws.smithy.kotlin.runtime.client.region.RegionProvider
 public interface AwsSdkClientConfig : SdkClientConfig {
 
     /**
-     * The AWS region to sign with and make requests to. When specified, this static region configuration
-     * takes precedence over other region resolution methods.
+     * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
+     * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more information.
+     * When specified, this static region configuration takes precedence over other region resolution methods.
      *
      * The region resolution order is:
      * 1. Static region (if specified)
@@ -64,10 +65,11 @@ public interface AwsSdkClientConfig : SdkClientConfig {
 
     public interface Builder {
         /**
-         * The AWS region to sign with and make requests to. When specified, this static region configuration
-         * takes precedence over other region resolution methods.
+         * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
+         * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more information.
+         * When specified, this static region configuration takes precedence over other region resolution methods.
          *
-         * Region Resolution Priority:
+         * The region resolution order is:
          * 1. Static region (if specified)
          * 2. Custom region provider (if configured)
          * 3. Default region provider chain
@@ -78,7 +80,7 @@ public interface AwsSdkClientConfig : SdkClientConfig {
          * An optional region provider that determines the AWS region for client operations. When specified, this provider
          * takes precedence over the default region provider chain, unless a static region is explicitly configured.
          *
-         * Region Resolution Priority:
+         * The region resolution order is:
          * 1. Static region (if specified)
          * 2. Custom region provider (if configured)
          * 3. Default region provider chain
