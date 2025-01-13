@@ -72,17 +72,14 @@ dependencies {
     // actually works
     codegen(libs.smithy.aws.protocol.tests)
 }
-
-tasks.generateSmithyProjections {
-    // ensure the generated clients use the same version of the runtime as the aws aws-runtime
-    // val smithyKotlinRuntimeVersion = libs.versions.smithy.kotlin.runtime.version.get()\
-
-    // align with smithy version to pass protocol test, will change back before merge
-    val smithyKotlinRuntimeVersion = "1.3.33-SNAPSHOT"
-    doFirst {
-        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinRuntimeVersion)
-    }
-}
+// will change back before merge
+//tasks.generateSmithyProjections {
+//    // ensure the generated clients use the same version of the runtime as the aws aws-runtime
+//    val smithyKotlinRuntimeVersion = libs.versions.smithy.kotlin.runtime.version.get()\
+//    doFirst {
+//        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinRuntimeVersion)
+//    }
+//}
 
 abstract class ProtocolTestTask @Inject constructor(private val project: Project) : DefaultTask() {
     /**
