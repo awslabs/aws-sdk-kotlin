@@ -47,7 +47,7 @@ internal fun setS3ErrorMetadata(exception: Any, response: HttpResponse, errorDet
                 attributes.setIfValueNotNull(S3ErrorMetadata.RequestId2, requestId2)
 
                 attributes.appendValue(
-                    ErrorMetadata.AdditionalClientContext,
+                    ErrorMetadata.ClientContext,
                     ClientErrorContext("Extended request ID", requestId2),
                 )
             }
