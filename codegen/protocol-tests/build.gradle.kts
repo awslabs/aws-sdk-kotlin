@@ -75,7 +75,7 @@ dependencies {
 // will change back before merge
 //tasks.generateSmithyProjections {
 //    // ensure the generated clients use the same version of the runtime as the aws aws-runtime
-//    val smithyKotlinRuntimeVersion = libs.versions.smithy.kotlin.runtime.version.get()\
+//    val smithyKotlinRuntimeVersion = libs.versions.smithy.kotlin.runtime.version.get()
 //    doFirst {
 //        System.setProperty("smithy.kotlin.codegen.clientRuntimeVersion", smithyKotlinRuntimeVersion)
 //    }
