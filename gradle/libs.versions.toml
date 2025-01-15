@@ -13,7 +13,7 @@ binary-compatibility-validator-version = "0.16.3"
 
 # smithy-kotlin codegen and runtime are versioned separately
 smithy-kotlin-runtime-version = "1.4.0"
-smithy-kotlin-codegen-version = "0.4.0"
+smithy-kotlin-codegen-version = "0.34.0"
 
 # codegen
 smithy-version = "1.53.0"
