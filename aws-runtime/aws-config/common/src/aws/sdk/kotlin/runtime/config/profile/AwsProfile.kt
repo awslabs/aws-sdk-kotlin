@@ -168,6 +168,14 @@ public val AwsProfile.sigV4aSigningRegionSet: String?
     get() = getOrNull("sigv4a_signing_region_set")
 
 /**
+ * A flag indicating whether endpoint discovery should be enabled for a service that supports it. This setting has no
+ * effect for services which _do not_ support endpoint discovery.
+ */
+@InternalSdkApi
+public val AwsProfile.endpointDiscoveryEnabled: Boolean?
+    get() = getBooleanOrNull("endpoint_discovery_enabled")
+
+/**
  * Parse a config value as a boolean, ignoring case.
  */
 @InternalSdkApi

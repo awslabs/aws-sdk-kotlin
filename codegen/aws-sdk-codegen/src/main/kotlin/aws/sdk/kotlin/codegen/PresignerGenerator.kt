@@ -46,7 +46,6 @@ class PresignerGenerator : KotlinIntegration {
      * signing.
      */
     object UnsignedRequestCustomizationSection : SectionId {
-        val CodegenContext: SectionKey<CodegenContext> = SectionKey("CodegenContext")
         val OperationId: SectionKey<String> = SectionKey("OperationId")
         val HttpBindingResolver: SectionKey<HttpBindingResolver> = SectionKey("HttpBindingResolver")
         val DefaultTimestampFormat: SectionKey<TimestampFormatTrait.Format> = SectionKey("DefaultTimestampFormat")
@@ -128,7 +127,6 @@ class PresignerGenerator : KotlinIntegration {
 
             val contextMap: Map<SectionKey<*>, Any> = mapOf(
                 UnsignedRequestCustomizationSection.OperationId to op.id.toString(),
-                UnsignedRequestCustomizationSection.CodegenContext to ctx,
                 UnsignedRequestCustomizationSection.HttpBindingResolver to httpBindingResolver,
                 UnsignedRequestCustomizationSection.DefaultTimestampFormat to defaultTimestampFormat,
             )

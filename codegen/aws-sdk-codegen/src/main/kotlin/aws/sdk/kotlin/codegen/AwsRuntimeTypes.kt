@@ -38,6 +38,7 @@ object AwsRuntimeTypes {
 
         object Endpoints : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "config.endpoints") {
             val AccountIdEndpointMode = symbol("AccountIdEndpointMode")
+            val resolveEndpointDiscoveryEnabled = symbol("resolveEndpointDiscoveryEnabled")
             val resolveEndpointUrl = symbol("resolveEndpointUrl")
             val resolveAccountId = symbol("resolveAccountId")
             val resolveAccountIdEndpointMode = symbol("resolveAccountIdEndpointMode")
