@@ -16,7 +16,7 @@ smithy-kotlin-runtime-version = "1.4.0"
 smithy-kotlin-codegen-version = "0.4.0"
 
 # codegen
-smithy-version = "1.51.0"
+smithy-version = "1.53.0"
 
 # testing
 ddb-local-version = "2.5.2"
