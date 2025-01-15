@@ -198,7 +198,7 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/BusinessMetricsInter
 
 public final class aws/sdk/kotlin/runtime/http/interceptors/IgnoreCompositeFlexibleChecksumResponseInterceptor : aws/smithy/kotlin/runtime/http/interceptors/FlexibleChecksumsResponseInterceptor {
 	public fun <init> (ZLaws/smithy/kotlin/runtime/client/config/ResponseHttpChecksumConfig;)V
-	public fun ignoreChecksum (Ljava/lang/String;Laws/smithy/kotlin/runtime/telemetry/logging/Logger;)Z
+	public fun ignoreChecksum (Ljava/lang/String;Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)Z
 }
 
 public final class aws/sdk/kotlin/runtime/http/interceptors/UnsupportedSigningAlgorithmInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
