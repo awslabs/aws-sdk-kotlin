@@ -178,8 +178,7 @@ val startDdbLocal = task<DynamoDbLocalInstance>("startDdbLocal") {
 
 tasks.withType<Test> {
     dependsOn(startDdbLocal)
-}
-
-gradle.buildFinished {
-    startDdbLocal.stop()
+    doLast {
+        startDdbLocal.stop()
+    }
 }

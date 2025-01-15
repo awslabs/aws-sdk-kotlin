@@ -15,7 +15,7 @@ smithy-kotlin-runtime-version = "1.3.33-SNAPSHOT"
 smithy-kotlin-codegen-version = "0.33.33"
 
 # codegen
-smithy-version = "1.51.0"
+smithy-version = "1.53.0"
 
 # testing
 ddb-local-version = "2.5.2"
@@ -58,6 +58,7 @@ smithy-kotlin-aws-protocol-core = { module = "aws.smithy.kotlin:aws-protocol-cor
 smithy-kotlin-aws-signing-common = { module = "aws.smithy.kotlin:aws-signing-common", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-aws-signing-crt = { module = "aws.smithy.kotlin:aws-signing-crt", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-aws-signing-default = { module = "aws.smithy.kotlin:aws-signing-default", version.ref = "smithy-kotlin-runtime-version" }
+smithy-kotlin-aws-signing-tests = { module = "aws.smithy.kotlin:aws-signing-tests", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-aws-xml-protocols = { module = "aws.smithy.kotlin:aws-xml-protocols", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-crt-util = { module = "aws.smithy.kotlin:crt-util", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-http = { module = "aws.smithy.kotlin:http", version.ref = "smithy-kotlin-runtime-version" }
@@ -68,19 +69,22 @@ smithy-kotlin-http-client = { module = "aws.smithy.kotlin:http-client", version.
 smithy-kotlin-http-client-engine-crt = { module = "aws.smithy.kotlin:http-client-engine-crt", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-http-client-engine-default = { module = "aws.smithy.kotlin:http-client-engine-default", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-http-client-engine-okhttp = { module = "aws.smithy.kotlin:http-client-engine-okhttp", version.ref = "smithy-kotlin-runtime-version" }
+smithy-kotlin-http-client-engine-okhttp4 = { module = "aws.smithy.kotlin:http-client-engine-okhttp4", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-http-test = { module = "aws.smithy.kotlin:http-test", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-identity-api = { module = "aws.smithy.kotlin:identity-api", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-logging-slf4j2 = { module = "aws.smithy.kotlin:logging-slf4j2", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-runtime-core = { module = "aws.smithy.kotlin:runtime-core", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-serde = { module = "aws.smithy.kotlin:serde", version.ref = "smithy-kotlin-runtime-version" }
+smithy-kotlin-serde-cbor = { module = "aws.smithy.kotlin:serde-cbor", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-serde-form-url = { module = "aws.smithy.kotlin:serde-form-url", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-serde-json = { module = "aws.smithy.kotlin:serde-json", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-serde-xml = { module = "aws.smithy.kotlin:serde-xml", version.ref = "smithy-kotlin-runtime-version" }
-smithy-kotlin-serde-cbor = { module = "aws.smithy.kotlin:serde-cbor", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-smithy-client = { module = "aws.smithy.kotlin:smithy-client", version.ref = "smithy-kotlin-runtime-version" }
+smithy-kotlin-smithy-rpcv2-protocols = { module = "aws.smithy.kotlin:smithy-rpcv2-protocols", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-smithy-test = { module = "aws.smithy.kotlin:smithy-test", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-telemetry-api = { module = "aws.smithy.kotlin:telemetry-api", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-telemetry-defaults = { module = "aws.smithy.kotlin:telemetry-defaults", version.ref = "smithy-kotlin-runtime-version" }
+smithy-kotlin-telemetry-provider-micrometer = { module = "aws.smithy.kotlin:telemetry-provider-micrometer", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-telemetry-provider-otel = { module = "aws.smithy.kotlin:telemetry-provider-otel", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-test-suite = { module = "aws.smithy.kotlin:test-suite", version.ref = "smithy-kotlin-runtime-version" }
 smithy-kotlin-testing = { module = "aws.smithy.kotlin:testing", version.ref = "smithy-kotlin-runtime-version" }

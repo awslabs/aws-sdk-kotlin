@@ -1,5 +1,112 @@
 # Changelog
 
+## [1.3.111] - 01/13/2025
+
+### Features
+* (**artifact**) Support resolving regional API calls to partition's leader region endpoint.
+* (**bedrock**) With this release, Bedrock Evaluation will now support latency-optimized inference for foundation models.
+* (**ec2**) Add support for DisconnectOnSessionTimeout flag in CreateClientVpnEndpoint and ModifyClientVpnEndpoint requests and DescribeClientVpnEndpoints responses
+* (**kafkaconnect**) Support updating connector configuration via UpdateConnector API. Release Operations API to monitor the status of the connector operation.
+* (**transcribe**) This update provides tagging support for Transcribe's Call Analytics Jobs and Call Analytics Categories.
+
+## [1.3.110] - 01/10/2025
+
+### Documentation
+* (**redshift**) Additions to the PubliclyAccessible and Encrypted parameters clarifying what the defaults are.
+* (**securitylake**) Doc only update for ServiceName that fixes several customer-reported issues
+* (**sts**) Fixed typos in the descriptions.
+
+## [1.3.109] - 01/09/2025
+
+### Features
+* (**codebuild**) AWS CodeBuild Now Supports BuildBatch in Reserved Capacity and Lambda
+* (**computeoptimizer**) This release expands AWS Compute Optimizer rightsizing recommendation support for Amazon EC2 Auto Scaling groups to include those with scaling policies and multiple instance types.
+* (**fms**) AWS Firewall Manager now lets you combine multiple resource tags using the logical AND operator or the logical OR operator.
+
+## [1.3.108] - 01/08/2025
+
+### Features
+* (**route53**) Amazon Route 53 now supports the Asia Pacific (Thailand) Region (ap-southeast-7) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region
+* (**sagemaker**) Adds support for IPv6 for SageMaker HyperPod cluster nodes.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation to clarify the RestoreDBClusterToPointInTime description.
+
+### Miscellaneous
+* Remove IoT 1-click services from SDK
+
+## [1.3.107] - 01/07/2025
+
+### Features
+* (**cloudhsmv2**) Adds support to ModifyCluster for modifying a Cluster's Hsm Type.
+* (**dynamodb**) This release makes Amazon DynamoDB point-in-time-recovery (PITR) to be configurable. You can set PITR recovery period for each table individually to between 1 and 35 days.
+* (**imagebuilder**) This release adds support for importing images from ISO disk files. Added new ImportDiskImage API operation.
+
+## [1.3.106] - 01/06/2025
+
+### Features
+* (**iotsecuretunneling**) Adds dualstack endpoint support for IoT Secure Tunneling
+* (**supplychain**) Allow vanity DNS domain when creating a new ASC instance
+
+### Fixes
+* [#1473](https://github.com/awslabs/aws-sdk-kotlin/issues/1473) Bump to latest **smithy-kotlin** version to pick up fixes to `InputStream` wrapping
+
+## [1.3.105] - 01/03/2025
+
+### Features
+* (**s3**) This change is only for updating the model regexp of CopySource which is not for validation but only for documentation and user guide change.
+
+### Fixes
+* [#1481](https://github.com/awslabs/aws-sdk-kotlin/issues/1481) Add missing packages to version catalog and BOM (**http-client-engine-okhttp4**, **smithy-rpcv2-protocols**, **telemetry-provider-micrometer**)
+
+### Documentation
+* (**ecs**) Adding SDK reference examples for Amazon ECS operations.
+* (**route53domains**) Doc only update for Route 53 Domains that fixes several customer-reported issues
+
+## [1.3.104] - 01/02/2025
+
+### Features
+* (**appsync**) Modify UpdateGraphQLAPI operation and flag authenticationType as required.
+* (**gamelift**) Amazon GameLift releases a new game session shutdown feature. Use the Amazon GameLift console or AWS CLI to terminate an in-progress game session that's entered a bad state or is no longer needed.
+* (**mediaconnect**) AWS Elemental MediaConnect now supports Content Quality Analysis for enhanced source stream monitoring. This enables you to track specific audio and video metrics in transport stream source flows, ensuring your content meets quality standards.
+* (**mediaconvert**) This release adds support for the AVC3 codec and fixes an alignment issue with Japanese vertical captions.
+* (**organizations**) Added ALL_FEATURES_MIGRATION_ORGANIZATION_SIZE_LIMIT_EXCEEDED to ConstraintViolationException for the EnableAllFeatures operation.
+* (**sagemaker**) Adding ETag information with Model Artifacts for Model Registry
+
+### Documentation
+* (**sqs**) In-flight message typo fix from 20k to 120k.
+
+## [1.3.103] - 12/28/2024
+
+### Features
+* (**ecr**) Restoring custom endpoint functionality for ECR
+* (**ecrpublic**) Restoring custom endpoint functionality for ECR Public
+
+## [1.3.102] - 12/27/2024
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation to correct various descriptions.
+
+## [1.3.101] - 12/26/2024
+
+### Features
+* (**bcmpricingcalculator**) Added ConflictException to DeleteBillEstimate.
+* (**ecr**) Add support for Dualstack Endpoints
+
+### Documentation
+* (**networkfirewall**) Dual-stack endpoints are now supported.
+* (**securityhub**) Documentation updates for AWS Security Hub
+
+## [1.3.100] - 12/23/2024
+
+### Features
+* (**ecrpublic**) Add support for Dualstack endpoints
+* (**eks**) This release adds support for DescribeClusterVersions API that provides important information about Kubernetes versions along with end of support dates
+* (**glue**) Add IncludeRoot parameters to GetCatalogs API to return root catalog.
+
+### Documentation
+* (**ecr**) Documentation update for ECR GetAccountSetting and PutAccountSetting APIs.
+
 ## [1.3.99] - 12/20/2024
 
 ### Features
