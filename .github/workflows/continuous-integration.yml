@@ -45,6 +45,12 @@ jobs:
           pwd
           ls -lsa
           ./gradlew -Ptest.java.version=${{ matrix.java-version }} jvmTest --stacktrace
+      - name: Save Test Reports
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: '**/build/reports'
 
   all-platforms:
     runs-on: ${{ matrix.os }}

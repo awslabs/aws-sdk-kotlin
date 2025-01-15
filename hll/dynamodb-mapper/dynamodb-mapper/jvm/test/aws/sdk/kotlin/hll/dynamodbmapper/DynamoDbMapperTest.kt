@@ -12,7 +12,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.operations.scanPaginated
 import aws.sdk.kotlin.hll.dynamodbmapper.testutils.DdbLocalTest
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.IntConverter
 import aws.sdk.kotlin.hll.dynamodbmapper.values.scalars.StringConverter
-import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
 import aws.sdk.kotlin.services.dynamodb.scan
 import aws.sdk.kotlin.services.dynamodb.withConfig
 import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric

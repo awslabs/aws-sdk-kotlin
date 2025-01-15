@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.3.112] - 01/14/2025
+
+### Features
+* (**gamelift**) Amazon GameLift releases a new game session placement feature: PriorityConfigurationOverride. You can now override how a game session queue prioritizes placement locations for a single StartGameSessionPlacement request.
+* (**route53**) Amazon Route 53 now supports the Mexico (Central) Region (mx-central-1) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region
+
+## [1.3.111] - 01/13/2025
+
+### Features
+* (**artifact**) Support resolving regional API calls to partition's leader region endpoint.
+* (**bedrock**) With this release, Bedrock Evaluation will now support latency-optimized inference for foundation models.
+* (**ec2**) Add support for DisconnectOnSessionTimeout flag in CreateClientVpnEndpoint and ModifyClientVpnEndpoint requests and DescribeClientVpnEndpoints responses
+* (**kafkaconnect**) Support updating connector configuration via UpdateConnector API. Release Operations API to monitor the status of the connector operation.
+* (**transcribe**) This update provides tagging support for Transcribe's Call Analytics Jobs and Call Analytics Categories.
+
+## [1.3.110] - 01/10/2025
+
+### Documentation
+* (**redshift**) Additions to the PubliclyAccessible and Encrypted parameters clarifying what the defaults are.
+* (**securitylake**) Doc only update for ServiceName that fixes several customer-reported issues
+* (**sts**) Fixed typos in the descriptions.
+
 ## [1.3.109] - 01/09/2025
 
 ### Features

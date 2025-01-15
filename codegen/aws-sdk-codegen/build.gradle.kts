@@ -30,6 +30,7 @@ dependencies {
     api(libs.smithy.protocol.test.traits)
     implementation(libs.smithy.aws.endpoints)
     implementation(libs.smithy.smoke.test.traits)
+    implementation(libs.smithy.kotlin.runtime.core)
 
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter.params)
