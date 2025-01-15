@@ -6,6 +6,8 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
+import aws.sdk.kotlin.runtime.config.checksums.resolveRequestChecksumCalculation
+import aws.sdk.kotlin.runtime.config.checksums.resolveResponseChecksumValidation
 import aws.sdk.kotlin.runtime.config.compression.resolveDisableRequestCompression
 import aws.sdk.kotlin.runtime.config.compression.resolveRequestMinCompressionSizeBytes
 import aws.sdk.kotlin.runtime.config.endpoints.resolveUseDualStack
@@ -22,6 +24,7 @@ import aws.smithy.kotlin.runtime.auth.awscredentials.SigV4aClientConfig
 import aws.smithy.kotlin.runtime.client.*
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
 import aws.smithy.kotlin.runtime.client.config.CompressionClientConfig
+import aws.smithy.kotlin.runtime.client.config.HttpChecksumConfig
 import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.telemetry.TelemetryConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
@@ -92,6 +95,14 @@ public abstract class AbstractAwsSdkClientFactory<
             if (config is SigV4aClientConfig.Builder) {
                 config.sigV4aSigningRegionSet =
                     config.sigV4aSigningRegionSet ?: resolveSigV4aSigningRegionSet(platform, profile)
+            }
+
+            if (config is HttpChecksumConfig.Builder) {
+                config.requestChecksumCalculation =
+                    config.requestChecksumCalculation ?: resolveRequestChecksumCalculation(platform, profile)
+
+                config.responseChecksumValidation =
+                    config.responseChecksumValidation ?: resolveResponseChecksumValidation(platform, profile)
             }
 
             finalizeConfig(builder)

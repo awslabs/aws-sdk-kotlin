@@ -163,6 +163,11 @@ public final class aws/sdk/kotlin/runtime/http/interceptors/AwsSpanInterceptor :
 	public fun readBeforeTransmit (Laws/smithy/kotlin/runtime/client/ProtocolRequestInterceptorContext;)V
 }
 
+public final class aws/sdk/kotlin/runtime/http/interceptors/IgnoreCompositeFlexibleChecksumResponseInterceptor : aws/smithy/kotlin/runtime/http/interceptors/FlexibleChecksumsResponseInterceptor {
+	public fun <init> (ZLaws/smithy/kotlin/runtime/client/config/ResponseHttpChecksumConfig;)V
+	public fun ignoreChecksum (Ljava/lang/String;Laws/smithy/kotlin/runtime/client/ProtocolResponseInterceptorContext;)Z
+}
+
 public final class aws/sdk/kotlin/runtime/http/interceptors/UnsupportedSigningAlgorithmInterceptor : aws/smithy/kotlin/runtime/client/Interceptor {
 	public fun <init> ()V
 	public fun modifyBeforeAttemptCompletion-gIAlu-s (Laws/smithy/kotlin/runtime/client/ResponseInterceptorContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
