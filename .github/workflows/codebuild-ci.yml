@@ -86,8 +86,9 @@ jobs:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
       - name: Configure Gradle
-        working-directory: ./aws-sdk-kotlin
-        uses: ./aws-sdk-kotlin/.github/actions/custom-gradle-distribution-url
+        run: |
+          # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
+          gradle wrapper --gradle-distribution-url https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12-bin.zip
       - name: Run Service Check Batch and Calculate Artifact Size Metrics
         id: svc-check-batch
         run: | 
@@ -216,8 +217,9 @@ jobs:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
       - name: Configure Gradle
-        working-directory: ./aws-sdk-kotlin
-        uses: ./aws-sdk-kotlin/.github/actions/custom-gradle-distribution-url
+        run: |
+          # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
+          gradle wrapper --gradle-distribution-url https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12-bin.zip
       - name: Calculate Artifact Size Metrics
         id: svc-check-batch
         run: |

@@ -24,7 +24,9 @@ jobs:
       with:
         path: 'aws-sdk-kotlin'
     - name: Configure Gradle
-      uses: ./aws-sdk-kotlin/.github/actions/custom-gradle-distribution-url
+      run: |
+        # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
+        gradle wrapper --gradle-distribution-url https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12-bin.zip
     - name: Lint ${{ env.PACKAGE_NAME }}
       working-directory: ./aws-sdk-kotlin
       run: |
