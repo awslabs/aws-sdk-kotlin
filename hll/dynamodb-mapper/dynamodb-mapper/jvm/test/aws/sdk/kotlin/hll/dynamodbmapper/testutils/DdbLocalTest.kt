@@ -8,7 +8,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMapper
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
 import aws.sdk.kotlin.hll.dynamodbmapper.model.Item
 import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
-import aws.sdk.kotlin.runtime.http.interceptors.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.deleteTable
 import aws.sdk.kotlin.services.dynamodb.waiters.waitUntilTableNotExists
@@ -50,7 +50,9 @@ abstract class DdbLocalTest : AnnotationSpec() {
 
     private val ddbHolder = lazy {
         val portFile = File("build/ddblocal/port.info").absoluteFile // Keep in sync with build.gradle.kts
+        println("Reading DDB Local port info from ${portFile.absolutePath}")
         val port = portFile.readText().toInt()
+        println("Connecting to DDB Local on port $port")
 
         DynamoDbClient {
             endpointUrl = Url {
