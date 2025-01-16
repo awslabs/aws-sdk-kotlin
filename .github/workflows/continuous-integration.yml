@@ -42,7 +42,7 @@ jobs:
           ./gradlew -Ptest.java.version=${{ matrix.java-version }} jvmTest --stacktrace
       - name: Save Test Reports
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: '**/build/reports'
@@ -80,7 +80,7 @@ jobs:
           ./gradlew testAllProtocols
       - name: Save Test Reports
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: '**/build/reports'
