@@ -8,6 +8,7 @@ package aws.sdk.kotlin.runtime.auth.credentials
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.auth.awscredentials.simpleClassName
 import aws.smithy.kotlin.runtime.collections.Attributes
 
 private const val PROVIDER_NAME = "Static"
@@ -51,4 +52,6 @@ public class StaticCredentialsProvider(public val credentials: Credentials) : Cr
             return StaticCredentialsProvider(this)
         }
     }
+
+    override fun toString(): String = this.simpleClassName
 }

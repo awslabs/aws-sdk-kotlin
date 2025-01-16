@@ -7,7 +7,8 @@
       "secret_access_key": "SECRETKEYTEST",
       "session_token": "SESSIONTOKEN_TEST",
       "expiry": 1629147173,
-      "accountId": "123456789012"
+      "accountId": "123456789012",
+      "business_metrics": ["h", "k"]
     }
   }
 }
