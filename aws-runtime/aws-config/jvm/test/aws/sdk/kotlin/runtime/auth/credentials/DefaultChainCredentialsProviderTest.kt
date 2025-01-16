@@ -6,6 +6,8 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetrics
+import aws.sdk.kotlin.runtime.util.toAwsCredentialsBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.copy
 import aws.smithy.kotlin.runtime.httptest.TestConnection
@@ -17,10 +19,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.longOrNull
+import kotlinx.serialization.json.*
 import java.io.File
 import java.nio.file.Paths
 import kotlin.test.Test
@@ -96,14 +95,17 @@ class DefaultChainCredentialsProviderTest {
                 return when {
                     "Ok" in result -> {
                         val o = checkNotNull(result["Ok"]).jsonObject
-                        val creds = credentials(
+                        val expectedBusinessMetrics = o["business_metrics"]?.jsonArray?.map { it.jsonPrimitive.content }?.toMutableSet() ?: mutableSetOf()
+                        val expectedCreds = credentials(
                             checkNotNull(o["access_key_id"]).jsonPrimitive.content,
                             checkNotNull(o["secret_access_key"]).jsonPrimitive.content,
                             o["session_token"]?.jsonPrimitive?.content,
                             o["expiry"]?.jsonPrimitive?.longOrNull?.let { Instant.fromEpochSeconds(it) },
                             accountId = o["accountId"]?.jsonPrimitive?.content,
+                        ).withBusinessMetrics(
+                            expectedBusinessMetrics.map { it.toAwsCredentialsBusinessMetric() }.toSet(),
                         )
-                        Ok(name, docs, creds)
+                        Ok(name, docs, expectedCreds)
                     }
                     "ErrorContains" in result -> ErrorContains(name, docs, checkNotNull(result["ErrorContains"]).jsonPrimitive.content)
                     else -> error("unrecognized result object: $result")

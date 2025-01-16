@@ -9,6 +9,8 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
 import aws.sdk.kotlin.runtime.http.AWS_APP_ID_ENV
 import aws.sdk.kotlin.runtime.http.AWS_APP_ID_PROP
+import aws.smithy.kotlin.runtime.client.config.RequestHttpChecksumConfig
+import aws.smithy.kotlin.runtime.client.config.ResponseHttpChecksumConfig
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.config.*
 import aws.smithy.kotlin.runtime.net.url.Url
@@ -217,6 +219,18 @@ public object AwsSdkSetting {
      */
     public val AwsEndpointDiscoveryEnabled: EnvironmentSetting<Boolean> =
         boolEnvSetting("aws.endpointDiscoveryEnabled", "AWS_ENABLE_ENDPOINT_DISCOVERY")
+
+    /**
+     * Configures request checksum calculation
+     */
+    public val AwsRequestChecksumCalculation: EnvironmentSetting<RequestHttpChecksumConfig> =
+        enumEnvSetting<RequestHttpChecksumConfig>("aws.requestChecksumCalculation", "AWS_REQUEST_CHECKSUM_CALCULATION")
+
+    /**
+     * Configures response checksum validation
+     */
+    public val AwsResponseChecksumValidation: EnvironmentSetting<ResponseHttpChecksumConfig> =
+        enumEnvSetting<ResponseHttpChecksumConfig>("aws.responseChecksumValidation", "AWS_RESPONSE_CHECKSUM_VALIDATION")
 }
 
 /**

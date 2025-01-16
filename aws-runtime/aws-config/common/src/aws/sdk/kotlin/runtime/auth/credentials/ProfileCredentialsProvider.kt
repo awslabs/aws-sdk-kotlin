@@ -9,15 +9,18 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.auth.credentials.profile.LeafProvider
 import aws.sdk.kotlin.runtime.auth.credentials.profile.ProfileChain
 import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArn
+import aws.sdk.kotlin.runtime.auth.credentials.profile.RoleArnSource
 import aws.sdk.kotlin.runtime.client.AwsClientOption
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
 import aws.sdk.kotlin.runtime.config.profile.AwsConfigurationSource
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetrics
 import aws.sdk.kotlin.runtime.region.resolveRegion
-import aws.smithy.kotlin.runtime.auth.awscredentials.CloseableCredentialsProvider
-import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
-import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
+import aws.smithy.kotlin.runtime.auth.awscredentials.*
+import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
+import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetrics
 import aws.smithy.kotlin.runtime.collections.Attributes
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
@@ -85,6 +88,7 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
     public val httpClient: HttpClientEngine? = null,
     public val configurationSource: AwsConfigurationSource? = null,
 ) : CloseableCredentialsProvider {
+    private val credentialsBusinessMetrics: MutableSet<BusinessMetric> = mutableSetOf()
 
     public constructor(
         profileName: String? = null,
@@ -130,12 +134,21 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
 
         chain.roles.forEach { roleArn ->
             logger.debug { "Assuming role `${roleArn.roleArn}`" }
+            if (roleArn.source == RoleArnSource.SOURCE_PROFILE) {
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SOURCE_PROFILE)
+            }
+
             val assumeProvider = roleArn.toCredentialsProvider(creds, region)
+
+            creds.attributes.getOrNull(BusinessMetrics)?.forEach { metric ->
+                credentialsBusinessMetrics.add(metric)
+            }
+
             creds = assumeProvider.resolve(attributes)
         }
 
         logger.debug { "Obtained credentials from profile; expiration=${creds.expiration?.format(TimestampFormat.ISO_8601)}" }
-        return creds
+        return creds.withBusinessMetrics(credentialsBusinessMetrics)
     }
 
     override fun close() {
@@ -146,10 +159,13 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
 
     private suspend fun LeafProvider.toCredentialsProvider(region: LazyAsyncValue<String?>): CredentialsProvider =
         when (this) {
-            is LeafProvider.NamedSource -> namedProviders[name]
-                ?: throw ProviderConfigurationException("unknown credentials source: $name")
+            is LeafProvider.NamedSource -> namedProviders[name].also {
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_NAMED_PROVIDER)
+            } ?: throw ProviderConfigurationException("unknown credentials source: $name")
 
-            is LeafProvider.AccessKey -> StaticCredentialsProvider(credentials)
+            is LeafProvider.AccessKey -> StaticCredentialsProvider(credentials).also {
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE)
+            }
 
             is LeafProvider.WebIdentityTokenRole -> StsWebIdentityCredentialsProvider(
                 roleArn,
@@ -158,7 +174,9 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
                 roleSessionName = sessionName,
                 platformProvider = platformProvider,
                 httpClient = httpClient,
-            )
+            ).also {
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_STS_WEB_ID_TOKEN)
+            }
 
             is LeafProvider.SsoSession -> SsoCredentialsProvider(
                 accountId = ssoAccountId,
@@ -168,7 +186,9 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
                 ssoSessionName = ssoSessionName,
                 httpClient = httpClient,
                 platformProvider = platformProvider,
-            )
+            ).also {
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO)
+            }
 
             is LeafProvider.LegacySso -> SsoCredentialsProvider(
                 accountId = ssoAccountId,
@@ -177,9 +197,13 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
                 ssoRegion = ssoRegion,
                 httpClient = httpClient,
                 platformProvider = platformProvider,
-            )
+            ).also {
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_SSO_LEGACY)
+            }
 
-            is LeafProvider.Process -> ProcessCredentialsProvider(command)
+            is LeafProvider.Process -> ProcessCredentialsProvider(command).also {
+                credentialsBusinessMetrics.add(AwsBusinessMetric.Credentials.CREDENTIALS_PROFILE_PROCESS)
+            }
         }
 
     private suspend fun RoleArn.toCredentialsProvider(
@@ -202,4 +226,6 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
         is LeafProvider.LegacySso -> "single sign-on (legacy)"
         is LeafProvider.Process -> "process"
     }
+
+    override fun toString(): String = this.simpleClassName
 }
