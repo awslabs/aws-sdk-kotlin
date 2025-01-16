@@ -83,14 +83,7 @@ public val AwsProfile.credentialProcess: String?
  */
 @InternalSdkApi
 public val AwsProfile.retryMode: RetryMode?
-    get() = getOrNull("retry_mode")?.run {
-        RetryMode.values().firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException(
-                "retry_mode $this is not supported, should be one of: ${
-                    RetryMode.values().joinToString(", ") { it.name.lowercase() }
-                }",
-            )
-    }
+    get() = getEnumOrNull<RetryMode>("retry_mode")
 
 /**
  * Whether service clients should make requests to the FIPS endpoint variant.
@@ -139,14 +132,7 @@ public val AwsProfile.sdkUserAgentAppId: String?
  */
 @InternalSdkApi
 public val AwsProfile.accountIdEndpointMode: AccountIdEndpointMode?
-    get() = getOrNull("account_id_endpoint_mode")?.run {
-        AccountIdEndpointMode.values().firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException(
-                "account_id_endpoint_mode $this is not supported, should be one of: ${
-                    AccountIdEndpointMode.values().joinToString(", ") { it.name.lowercase() }
-                }",
-            )
-    }
+    get() = getEnumOrNull<AccountIdEndpointMode>("account_id_endpoint_mode")
 
 /**
  * Determines when a request should be compressed or not
@@ -174,30 +160,14 @@ public val AwsProfile.sigV4aSigningRegionSet: String?
  */
 @InternalSdkApi
 public val AwsProfile.requestChecksumCalculation: RequestHttpChecksumConfig?
-    get() = getOrNull("request_checksum_calculation")?.run {
-        RequestHttpChecksumConfig
-            .values()
-            .firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException(
-                "request_checksum_calculation $this is not supported, should be one of: " +
-                    RequestHttpChecksumConfig.values().joinToString(", ") { it.name.lowercase() },
-            )
-    }
+    get() = getEnumOrNull<RequestHttpChecksumConfig>("request_checksum_calculation")
 
 /**
  * Configures response checksum validation
  */
 @InternalSdkApi
 public val AwsProfile.responseChecksumValidation: ResponseHttpChecksumConfig?
-    get() = getOrNull("response_checksum_validation")?.run {
-        ResponseHttpChecksumConfig
-            .values()
-            .firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException(
-                "response_checksum_validation $this is not supported, should be one of: " +
-                    ResponseHttpChecksumConfig.values().joinToString(", ") { it.name.lowercase() },
-            )
-    }
+    get() = getEnumOrNull<ResponseHttpChecksumConfig>("response_checksum_validation")
 
 /**
  * Parse a config value as a boolean, ignoring case.
@@ -229,6 +199,21 @@ public fun AwsProfile.getLongOrNull(key: String, subKey: String? = null): Long? 
     getOrNull(key, subKey)?.let {
         it.toLongOrNull() ?: throw ConfigurationException(
             "Failed to parse config property ${buildKeyString(key, subKey)} as a long",
+        )
+    }
+
+/**
+ * Parse a config value as an enum.
+ */
+@InternalSdkApi
+public inline fun <reified T : Enum<T>> AwsProfile.getEnumOrNull(key: String, subKey: String? = null): T? =
+    getOrNull(key, subKey)?.let { value ->
+        enumValues<T>().firstOrNull {
+            it.name.equals(value, ignoreCase = true)
+        } ?: throw ConfigurationException(
+            "Value '$value' is not supported, should be one of: ${
+                enumValues<T>().joinToString(", ") { it.name.lowercase() }
+            }",
         )
     }
 
