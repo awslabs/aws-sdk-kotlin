@@ -41,6 +41,7 @@ class RdsAuthTokenGeneratorTest {
         assertContains(token, "prod-instance.us-east-1.rds.amazonaws.com:3306?Action=connect&DBUser=peccy")
         assertContains(token, "X-Amz-Credential=akid%2F20240827%2Fus-east-1%2Frds-db%2Faws4_request")
         assertContains(token, "X-Amz-Expires=450")
+        assertContains(token, "X-Amz-SignedHeaders=host")
 
         // Token should not contain a scheme
         listOf("http://", "https://").forEach {

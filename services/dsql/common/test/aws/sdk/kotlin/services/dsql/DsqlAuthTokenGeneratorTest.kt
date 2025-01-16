@@ -36,6 +36,7 @@ class DsqlAuthTokenGeneratorTest {
         assertContains(token, "peccy.dsql.us-east-1.on.aws?Action=DbConnect")
         assertContains(token, "X-Amz-Credential=akid%2F20240827%2Fus-east-1%2Fdsql%2Faws4_request")
         assertContains(token, "X-Amz-Expires=450")
+        assertContains(token, "X-Amz-SignedHeaders=host")
 
         // Token should not contain a scheme
         listOf("http://", "https://").forEach {
@@ -65,6 +66,7 @@ class DsqlAuthTokenGeneratorTest {
         assertContains(token, "peccy.dsql.us-east-1.on.aws?Action=DbConnectAdmin")
         assertContains(token, "X-Amz-Credential=akid%2F20240827%2Fus-east-1%2Fdsql%2Faws4_request")
         assertContains(token, "X-Amz-Expires=450")
+        assertContains(token, "X-Amz-SignedHeaders=host")
 
         // Token should not contain a scheme
         listOf("http://", "https://").forEach {
