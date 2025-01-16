@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1] - 01/16/2025
+
+### Features
+* (**sagemaker**) Added support for ml.trn1.32xlarge instance type in Reserved Capacity Offering
+
+### Documentation
+* (**ecs**) The release addresses Amazon ECS documentation tickets.
+
 ## [1.4.0] - 01/15/2025
 
 ### Features
