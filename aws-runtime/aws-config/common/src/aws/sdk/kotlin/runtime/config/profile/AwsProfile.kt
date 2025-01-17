@@ -211,7 +211,7 @@ public inline fun <reified T : Enum<T>> AwsProfile.getEnumOrNull(key: String, su
         enumValues<T>().firstOrNull {
             it.name.equals(value, ignoreCase = true)
         } ?: throw ConfigurationException(
-            "$key $value is not supported, should be one of: ${
+            "$key '$value' is not supported, should be one of: ${
                 enumValues<T>().joinToString(", ") { it.name.lowercase() }
             }",
         )
