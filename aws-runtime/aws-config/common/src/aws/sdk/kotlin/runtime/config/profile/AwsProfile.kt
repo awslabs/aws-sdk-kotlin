@@ -217,10 +217,9 @@ public inline fun <reified T : Enum<T>> AwsProfile.getEnumOrNull(key: String, su
                 append(value)
                 append("' is not supported, should be one of: ")
                 enumValues<T>().joinTo(this) { it.name.lowercase() }
-            }
+            },
         )
     }
-
 
 internal fun AwsProfile.getUrlOrNull(key: String, subKey: String? = null): Url? =
     getOrNull(key, subKey)?.let {
