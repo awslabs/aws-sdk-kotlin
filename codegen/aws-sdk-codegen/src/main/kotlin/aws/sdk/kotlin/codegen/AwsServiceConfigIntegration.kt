@@ -48,7 +48,6 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                     )
                 },
             )
-
             order = -100
         }
 
@@ -77,7 +76,7 @@ class AwsServiceConfigIntegration : KotlinIntegration {
                     )
                 },
             )
-            order = -100
+            order = -99 // After RegionProp
         }
 
         val UserAgentAppId: ConfigProperty = ConfigProperty {
