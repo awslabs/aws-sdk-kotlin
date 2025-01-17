@@ -21,14 +21,8 @@ jobs:
     steps:
     - name: Checkout sources
       uses: actions/checkout@v4
-      with:
-        path: 'aws-sdk-kotlin'
     - name: Configure Gradle
-      working-directory: ./aws-sdk-kotlin
-      run: |
-        # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
-        gradle wrapper --gradle-distribution-url https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12-bin.zip
+      uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
     - name: Lint ${{ env.PACKAGE_NAME }}
-      working-directory: ./aws-sdk-kotlin
       run: |
         ./gradlew ktlint

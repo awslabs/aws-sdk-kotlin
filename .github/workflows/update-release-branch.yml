@@ -44,9 +44,7 @@ jobs:
           java-version: 17
           cache: 'gradle'
       - name: Configure Gradle
-        run: |
-          # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
-          gradle wrapper --gradle-distribution-url https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12-bin.zip
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
       - name: Check merge base
         shell: bash
         run: |

@@ -34,10 +34,9 @@ jobs:
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
       - name: Configure Gradle
-        working-directory: ./aws-sdk-kotlin
-        run: |
-          # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
-          gradle wrapper --gradle-distribution-url https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12-bin.zip
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
+        with:
+          working-directory: ./aws-sdk-kotlin
       - name: Test
         working-directory: ./aws-sdk-kotlin
         shell: bash
@@ -65,11 +64,10 @@ jobs:
           path: 'aws-sdk-kotlin'
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
-      - name: Configure smithy-kotlin Gradle
-        working-directory: ./smithy-kotlin
-        run: |
-          # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
-          gradle wrapper --gradle-distribution-url https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12-bin.zip
+      - name: Configure Gradle - smithy-kotlin
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
+        with:
+          working-directory: ./smithy-kotlin
       - name: Build smithy-kotlin
         working-directory: ./smithy-kotlin
         shell: bash
@@ -78,11 +76,10 @@ jobs:
           pwd
           ./gradlew --parallel assemble 
           ./gradlew publishToMavenLocal
-      - name: Configure aws-sdk-kotlin Gradle
-        working-directory: ./aws-sdk-kotlin
-        run: |
-          # Keep gradle version in sync with aws-sdk-kotlin/gradle/wrapper/gradle-wrapper.properties
-          gradle wrapper --gradle-distribution-url https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12-bin.zip
+      - name: Configure Gradle aws-sdk-kotlin
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
+        with:
+          working-directory: ./aws-sdk-kotlin
       - name: Test
         working-directory: ./aws-sdk-kotlin
         shell: bash
