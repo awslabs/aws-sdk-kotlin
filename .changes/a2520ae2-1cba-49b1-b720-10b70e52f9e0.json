@@ -1,5 +1,0 @@
-{
-    "id": "a2520ae2-1cba-49b1-b720-10b70e52f9e0",
-    "type": "feature",
-    "description": "Add auth token generator for RDS and DSQL"
-}

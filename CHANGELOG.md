@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.2] - 01/17/2025
+
+### Features
+* (**bedrockruntime**) Allow hyphens in tool name for Converse and ConverseStream APIs
+* (**ec2**) Release u7i-6tb.112xlarge, u7i-8tb.112xlarge, u7inh-32tb.480xlarge, p5e.48xlarge, p5en.48xlarge, f2.12xlarge, f2.48xlarge, trn2.48xlarge instance types.
+* (**notifications**) Added support for Managed Notifications, integration with AWS Organization and added aggregation summaries for Aggregate Notifications
+* Add auth token generator for RDS and DSQL
+
+### Documentation
+* (**detective**) Doc only update for Detective documentation.
+* (**sagemaker**) Correction of docs for  "Added support for ml.trn1.32xlarge instance type in Reserved Capacity Offering"
+
 ## [1.4.1] - 01/16/2025
 
 ### Features
