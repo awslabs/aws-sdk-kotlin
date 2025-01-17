@@ -211,11 +211,16 @@ public inline fun <reified T : Enum<T>> AwsProfile.getEnumOrNull(key: String, su
         enumValues<T>().firstOrNull {
             it.name.equals(value, ignoreCase = true)
         } ?: throw ConfigurationException(
-            "$key '$value' is not supported, should be one of: ${
-                enumValues<T>().joinToString(", ") { it.name.lowercase() }
-            }",
+            buildString {
+                append(key)
+                append(" '")
+                append(value)
+                append("' is not supported, should be one of: ")
+                enumValues<T>().joinTo(this) { it.name.lowercase() }
+            }
         )
     }
+
 
 internal fun AwsProfile.getUrlOrNull(key: String, subKey: String? = null): Url? =
     getOrNull(key, subKey)?.let {
