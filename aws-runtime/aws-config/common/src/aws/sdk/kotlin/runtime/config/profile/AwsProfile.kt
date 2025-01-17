@@ -8,6 +8,8 @@ package aws.sdk.kotlin.runtime.config.profile
 import aws.sdk.kotlin.runtime.ConfigurationException
 import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
+import aws.smithy.kotlin.runtime.client.config.RequestHttpChecksumConfig
+import aws.smithy.kotlin.runtime.client.config.ResponseHttpChecksumConfig
 import aws.smithy.kotlin.runtime.client.config.RetryMode
 import aws.smithy.kotlin.runtime.net.url.Url
 
@@ -166,6 +168,44 @@ public val AwsProfile.requestMinCompressionSizeBytes: Long?
 @InternalSdkApi
 public val AwsProfile.sigV4aSigningRegionSet: String?
     get() = getOrNull("sigv4a_signing_region_set")
+
+/**
+ * A flag indicating whether endpoint discovery should be enabled for a service that supports it. This setting has no
+ * effect for services which _do not_ support endpoint discovery.
+ */
+@InternalSdkApi
+public val AwsProfile.endpointDiscoveryEnabled: Boolean?
+    get() = getBooleanOrNull("endpoint_discovery_enabled")
+
+/**
+ * Configures request checksum calculation
+ */
+@InternalSdkApi
+public val AwsProfile.requestChecksumCalculation: RequestHttpChecksumConfig?
+    get() = getOrNull("request_checksum_calculation")?.run {
+        RequestHttpChecksumConfig
+            .values()
+            .firstOrNull { it.name.equals(this, ignoreCase = true) }
+            ?: throw ConfigurationException(
+                "request_checksum_calculation $this is not supported, should be one of: " +
+                    RequestHttpChecksumConfig.values().joinToString(", ") { it.name.lowercase() },
+            )
+    }
+
+/**
+ * Configures response checksum validation
+ */
+@InternalSdkApi
+public val AwsProfile.responseChecksumValidation: ResponseHttpChecksumConfig?
+    get() = getOrNull("response_checksum_validation")?.run {
+        ResponseHttpChecksumConfig
+            .values()
+            .firstOrNull { it.name.equals(this, ignoreCase = true) }
+            ?: throw ConfigurationException(
+                "response_checksum_validation $this is not supported, should be one of: " +
+                    ResponseHttpChecksumConfig.values().joinToString(", ") { it.name.lowercase() },
+            )
+    }
 
 /**
  * Parse a config value as a boolean, ignoring case.

@@ -1,27 +1,17 @@
-/*
- * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0
- */
-package aws.sdk.kotlin.codegen
+package aws.sdk.kotlin.codegen.businessmetrics
 
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
+import aws.sdk.kotlin.codegen.AwsRuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
 import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes.Auth.Signing.AwsSigningCommon.AwsSigningAttributes
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.rendering.endpoints.EndpointBusinessMetrics
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
-import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
-import software.amazon.smithy.model.shapes.OperationShape
 
 /**
- * Renders the addition of the [BusinessMetricsInterceptor] and endpoint business metrics emitters
+ * Renders the addition of endpoint & endpoint adjacent business metrics.
  */
-class BusinessMetricsIntegration : KotlinIntegration {
-    override val order: Byte
-        get() = super.order
-
+class EndpointBusinessMetricsIntegration : KotlinIntegration {
     override val sectionWriters: List<SectionWriterBinding>
         get() = listOf(
             SectionWriterBinding(EndpointBusinessMetrics, endpointBusinessMetricsSectionWriter),
@@ -46,23 +36,8 @@ class BusinessMetricsIntegration : KotlinIntegration {
             AwsSigningAttributes,
             AwsSigningAttributes,
             RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
-            AwsRuntimeTypes.Http.Interceptors.AwsBusinessMetric,
+            AwsRuntimeTypes.Http.Interceptors.BusinessMetrics.AwsBusinessMetric,
         )
         writer.write("")
-    }
-
-    override fun customizeMiddleware(
-        ctx: ProtocolGenerator.GenerationContext,
-        resolved: List<ProtocolMiddleware>,
-    ): List<ProtocolMiddleware> = resolved + userAgentBusinessMetricsMiddleware
-
-    private val userAgentBusinessMetricsMiddleware = object : ProtocolMiddleware {
-        override val name: String = "UserAgentBusinessMetrics"
-        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
-            writer.write(
-                "op.interceptors.add(#T())",
-                AwsRuntimeTypes.Http.Interceptors.BusinessMetricsInterceptor,
-            )
-        }
     }
 }
