@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.config
 
-import aws.sdk.kotlin.runtime.config.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.config.checksums.resolveRequestChecksumCalculation
 import aws.sdk.kotlin.runtime.config.checksums.resolveResponseChecksumValidation
 import aws.sdk.kotlin.runtime.config.compression.resolveDisableRequestCompression
