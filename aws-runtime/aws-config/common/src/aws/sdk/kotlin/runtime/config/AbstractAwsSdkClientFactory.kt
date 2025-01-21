@@ -5,7 +5,6 @@
 
 package aws.sdk.kotlin.runtime.config
 
-import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.config.checksums.resolveRequestChecksumCalculation
 import aws.sdk.kotlin.runtime.config.checksums.resolveResponseChecksumValidation
 import aws.sdk.kotlin.runtime.config.compression.resolveDisableRequestCompression
@@ -77,7 +76,7 @@ public abstract class AbstractAwsSdkClientFactory<
             block?.let(config::apply)
 
             config.logMode = config.logMode ?: ClientSettings.LogMode.resolve(platform = platform)
-            config.region = config.region ?: resolveRegion(profile = profile)
+            config.region = config.region ?: config.regionProvider?.getRegion() ?: resolveRegion(profile = profile)
             config.useFips = config.useFips ?: resolveUseFips(profile = profile)
             config.useDualStack = config.useDualStack ?: resolveUseDualStack(profile = profile)
             config.applicationId = config.applicationId ?: resolveUserAgentAppId(platform, profile)

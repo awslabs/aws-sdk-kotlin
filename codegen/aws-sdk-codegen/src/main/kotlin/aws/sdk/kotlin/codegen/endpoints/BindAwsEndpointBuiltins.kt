@@ -38,7 +38,7 @@ class BindAwsEndpointBuiltins : KotlinIntegration {
                 Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
      `          Disabled by default.
             """.trimIndent()
-            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            baseClass = AwsRuntimeTypes.Config.AwsSdkClientConfig
             useNestedBuilderBaseClass()
         }
 
@@ -50,7 +50,7 @@ class BindAwsEndpointBuiltins : KotlinIntegration {
                 See [https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoints.html] for more information.
      `          Disabled by default.
             """.trimIndent()
-            baseClass = AwsRuntimeTypes.Core.Client.AwsSdkClientConfig
+            baseClass = AwsRuntimeTypes.Config.AwsSdkClientConfig
             useNestedBuilderBaseClass()
         }
     }

@@ -35,21 +35,3 @@ public final class aws/sdk/kotlin/runtime/client/AwsClientOption {
 	public final fun getRegion ()Laws/smithy/kotlin/runtime/collections/AttributeKey;
 }
 
-public abstract interface class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig : aws/smithy/kotlin/runtime/client/SdkClientConfig {
-	public abstract fun getApplicationId ()Ljava/lang/String;
-	public abstract fun getRegion ()Ljava/lang/String;
-	public abstract fun getUseDualStack ()Z
-	public abstract fun getUseFips ()Z
-}
-
-public abstract interface class aws/sdk/kotlin/runtime/client/AwsSdkClientConfig$Builder {
-	public abstract fun getApplicationId ()Ljava/lang/String;
-	public abstract fun getRegion ()Ljava/lang/String;
-	public abstract fun getUseDualStack ()Ljava/lang/Boolean;
-	public abstract fun getUseFips ()Ljava/lang/Boolean;
-	public abstract fun setApplicationId (Ljava/lang/String;)V
-	public abstract fun setRegion (Ljava/lang/String;)V
-	public abstract fun setUseDualStack (Ljava/lang/Boolean;)V
-	public abstract fun setUseFips (Ljava/lang/Boolean;)V
-}
-
