@@ -33,6 +33,10 @@ jobs:
           path: 'aws-sdk-kotlin'
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
+      - name: Configure Gradle
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
+        with:
+          working-directory: ./aws-sdk-kotlin
       - name: Test
         working-directory: ./aws-sdk-kotlin
         shell: bash
@@ -60,6 +64,10 @@ jobs:
           path: 'aws-sdk-kotlin'
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
+      - name: Configure Gradle - smithy-kotlin
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
+        with:
+          working-directory: ./smithy-kotlin
       - name: Build smithy-kotlin
         working-directory: ./smithy-kotlin
         shell: bash
@@ -68,6 +76,10 @@ jobs:
           pwd
           ./gradlew --parallel assemble 
           ./gradlew publishToMavenLocal
+      - name: Configure Gradle aws-sdk-kotlin
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
+        with:
+          working-directory: ./aws-sdk-kotlin
       - name: Test
         working-directory: ./aws-sdk-kotlin
         shell: bash
