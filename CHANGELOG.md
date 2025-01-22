@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.4] - 01/22/2025
+
+### Features
+* (**bedrockagentruntime**) Adds multi-turn input support for an Agent node in an Amazon Bedrock Flow
+* (**medialive**) AWS Elemental MediaLive adds a new feature, ID3 segment tagging, in CMAF Ingest output groups. It allows customers to insert ID3 tags into every output segment, controlled by a newly added channel schedule action Id3SegmentTagging.
+
+### Documentation
+* (**glue**) Docs Update for timeout changes
+* (**workspacesthinclient**) Rename WorkSpaces Web to WorkSpaces Secure Browser
+
 ## [1.4.3] - 01/21/2025
 
 ### Features
