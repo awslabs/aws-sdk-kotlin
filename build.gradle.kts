@@ -5,7 +5,6 @@
 import aws.sdk.kotlin.gradle.dsl.configureLinting
 import aws.sdk.kotlin.gradle.dsl.configureNexus
 import aws.sdk.kotlin.gradle.util.typedProp
-import java.net.URL
 
 buildscript {
     // NOTE: buildscript classpath for the root project is the parent classloader for the subprojects, we

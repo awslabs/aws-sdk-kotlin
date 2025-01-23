@@ -1,6 +1,4 @@
 import gradle.kotlin.dsl.accessors._619b2d94f14c1ac9ec487bdd1e99f33b.dokkaSourceSets
-import org.gradle.kotlin.dsl.named
-import java.net.URL
 import kotlin.text.set
 
 plugins {
