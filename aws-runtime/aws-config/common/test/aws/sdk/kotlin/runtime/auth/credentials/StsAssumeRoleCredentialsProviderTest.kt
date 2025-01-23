@@ -6,7 +6,10 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.sts.model.RegionDisabledException
+import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
+import aws.sdk.kotlin.runtime.util.testAttributes
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProviderException
+import aws.smithy.kotlin.runtime.auth.awscredentials.copy
 import aws.smithy.kotlin.runtime.http.Headers
 import aws.smithy.kotlin.runtime.http.HttpBody
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
@@ -49,7 +52,13 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         val actual = provider.resolve()
-        assertEquals(StsTestUtils.CREDENTIALS, actual)
+        val expected = StsTestUtils.CREDENTIALS.copy(
+            attributes = testAttributes(
+                StsTestUtils.CREDENTIALS.attributes,
+                AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE,
+            ),
+        )
+        assertEquals(expected, actual)
 
         testEngine.assertRequests(CallAsserter.MatchingBodies)
     }
@@ -87,7 +96,13 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         val actual = provider.resolve()
-        assertEquals(StsTestUtils.CREDENTIALS, actual)
+        val expected = StsTestUtils.CREDENTIALS.copy(
+            attributes = testAttributes(
+                StsTestUtils.CREDENTIALS.attributes,
+                AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE,
+            ),
+        )
+        assertEquals(expected, actual)
 
         testEngine.assertRequests(CallAsserter.MatchingBodies)
     }
@@ -163,7 +178,13 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         val actual = provider.resolve()
-        assertEquals(StsTestUtils.CREDENTIALS, actual)
+        val expected = StsTestUtils.CREDENTIALS.copy(
+            attributes = testAttributes(
+                StsTestUtils.CREDENTIALS.attributes,
+                AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE,
+            ),
+        )
+        assertEquals(expected, actual)
         val req = testEngine.requests().first()
         assertEquals(Host.Domain("sts.amazonaws.com"), req.actual.url.host)
     }
@@ -182,7 +203,13 @@ class StsAssumeRoleCredentialsProviderTest {
         )
 
         val actual = provider.resolve()
-        assertEquals(StsTestUtils.CREDENTIALS, actual)
+        val expected = StsTestUtils.CREDENTIALS.copy(
+            attributes = testAttributes(
+                StsTestUtils.CREDENTIALS.attributes,
+                AwsBusinessMetric.Credentials.CREDENTIALS_STS_ASSUME_ROLE,
+            ),
+        )
+        assertEquals(expected, actual)
         val req = testEngine.requests().first()
         assertEquals(Host.Domain("sts.us-west-2.amazonaws.com"), req.actual.url.host)
     }

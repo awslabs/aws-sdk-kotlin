@@ -33,7 +33,7 @@ object S3TestUtils {
 
     const val DEFAULT_REGION = "us-west-2"
 
-    // The E2E test account only has permission to operate on buckets with the prefix
+    // The E2E test account only has permission to operate on buckets with the prefix "s3-test-bucket-"
     private const val TEST_BUCKET_PREFIX = "s3-test-bucket-"
 
     private const val S3_MAX_BUCKET_NAME_LENGTH = 63 // https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
@@ -133,12 +133,26 @@ object S3TestUtils {
         testBucket
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun deleteBucketAndAllContents(client: S3Client, bucketName: String): Unit = coroutineScope {
+        deleteBucketContents(client, bucketName)
+
+        try {
+            client.deleteBucket { bucket = bucketName }
+
+            client.waitUntilBucketNotExists {
+                bucket = bucketName
+            }
+        } catch (ex: Exception) {
+            println("Failed to delete bucket: $bucketName")
+            throw ex
+        }
+    }
+
+    suspend fun deleteBucketContents(client: S3Client, bucketName: String): Unit = coroutineScope {
         val scope = this
 
         try {
-            println("Deleting S3 bucket: $bucketName")
+            println("Deleting S3 buckets contents: $bucketName")
             val dispatcher = Dispatchers.Default.limitedParallelism(64)
             val jobs = mutableListOf<Job>()
 
@@ -157,14 +171,8 @@ object S3TestUtils {
                 }
 
             jobs.joinAll()
-
-            client.deleteBucket { bucket = bucketName }
-
-            client.waitUntilBucketNotExists {
-                bucket = bucketName
-            }
         } catch (ex: Exception) {
-            println("Failed to delete bucket: $bucketName")
+            println("Failed to delete buckets contents: $bucketName")
             throw ex
         }
     }
@@ -313,5 +321,17 @@ object S3TestUtils {
         return s3Control.listMultiRegionAccessPoints {
             accountId = testAccountId
         }.accessPoints?.any { it.name == multiRegionAccessPointName } ?: false
+    }
+
+    internal suspend fun deleteMultiPartUploads(client: S3Client, bucketName: String) {
+        client.listMultipartUploads {
+            bucket = bucketName
+        }.uploads?.forEach { upload ->
+            client.abortMultipartUpload {
+                bucket = bucketName
+                key = upload.key
+                uploadId = upload.uploadId
+            }
+        }
     }
 }

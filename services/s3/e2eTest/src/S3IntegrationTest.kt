@@ -29,12 +29,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import java.io.File
 import java.util.UUID
-import kotlin.test.Test
-import kotlin.test.assertContains
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertFailsWith
-import kotlin.test.assertIs
+import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -391,7 +386,7 @@ class S3BucketOpsIntegrationTest {
 }
 
 // generate sequence of "chunks" where each range defines the inclusive start and end bytes
-private fun File.chunk(partSize: Int): Sequence<LongRange> =
+internal fun File.chunk(partSize: Int): Sequence<LongRange> =
     (0 until length() step partSize.toLong()).asSequence().map {
         it until minOf(it + partSize, length())
     }

@@ -9,8 +9,10 @@ import com.amazonaws.services.dynamodbv2.local.server.DynamoDBProxyServer
 import com.google.devtools.ksp.gradle.KspTaskJvm
 import com.google.devtools.ksp.gradle.KspTaskMetadata
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
+import java.net.ServerSocket
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import kotlin.properties.Delegates
 
 description = "High level DynamoDbMapper client"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: DynamoDbMapper"
@@ -128,7 +130,10 @@ if (project.NATIVE_ENABLED) {
 }
 
 open class DynamoDbLocalInstance : DefaultTask() {
-    private val port = 44212 // Keep in sync with DdbLocalTest.kt
+    private var port: Int by Delegates.notNull()
+
+    @OutputFile
+    val portFile = project.objects.fileProperty()
 
     @Internal
     var runner: DynamoDBProxyServer? = null
@@ -136,13 +141,29 @@ open class DynamoDbLocalInstance : DefaultTask() {
 
     @TaskAction
     fun exec() {
-        println("Running DynamoDB local instance on port $port")
+        port = ServerSocket(0).use { it.localPort }
+
+        println("Starting DynamoDB local instance on port $port")
         runner = ServerRunner
             .createServerFromCommandLineArgs(arrayOf("-inMemory", "-port", port.toString(), "-disableTelemetry"))
             .also { it.start() }
+
+        portFile
+            .asFile
+            .get()
+            .also { println("Writing port info file to ${it.absolutePath}") }
+            .writeText(port.toString())
     }
 
     fun stop() {
+        runCatching {
+            portFile
+                .asFile
+                .get()
+                .also { println("Deleting port info file at ${it.absolutePath}") }
+                .delete()
+        }.onFailure { t -> println("Failed to delete $portFile: $t") }
+
         runner?.let {
             println("Stopping DynamoDB local instance on port $port")
             it.stop()
@@ -150,12 +171,14 @@ open class DynamoDbLocalInstance : DefaultTask() {
     }
 }
 
-val startDdbLocal = task<DynamoDbLocalInstance>("startDdbLocal")
+val startDdbLocal = task<DynamoDbLocalInstance>("startDdbLocal") {
+    portFile.set(file("build/ddblocal/port.info")) // Keep in sync with DdbLocalTest.kt
+    outputs.upToDateWhen { false } // Always run this task even if a portFile already exists
+}
 
 tasks.withType<Test> {
     dependsOn(startDdbLocal)
-}
-
-gradle.buildFinished {
-    startDdbLocal.stop()
+    doLast {
+        startDdbLocal.stop()
+    }
 }

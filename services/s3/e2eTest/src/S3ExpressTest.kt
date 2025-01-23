@@ -4,12 +4,10 @@
  */
 package aws.sdk.kotlin.e2etest
 
-import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.express.S3_EXPRESS_SESSION_TOKEN_HEADER
 import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.services.s3.presigners.presignPutObject
-import aws.sdk.kotlin.services.s3.putObject
-import aws.sdk.kotlin.services.s3.withConfig
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
 import aws.smithy.kotlin.runtime.content.ByteStream
 import aws.smithy.kotlin.runtime.content.decodeToString
@@ -47,6 +45,7 @@ class S3ExpressTest {
     @AfterAll
     fun cleanup(): Unit = runBlocking {
         testBuckets.forEach { bucket ->
+            S3TestUtils.deleteMultiPartUploads(client, bucket)
             S3TestUtils.deleteBucketAndAllContents(client, bucket)
         }
         client.close()
@@ -133,6 +132,62 @@ class S3ExpressTest {
             }
 
             validatingClient.deleteObjects(req)
+        }
+    }
+
+    @Test
+    fun testUploadPartContainsCRC32Checksum() = runTest {
+        val testBucket = testBuckets.first()
+        val testObject = "I-will-be-uploaded-in-parts-!"
+
+        // Parts need to be at least 5 MB
+        val partOne = "Hello".repeat(1_048_576)
+        val partTwo = "World".repeat(1_048_576)
+
+        val testUploadId = client.createMultipartUpload {
+            bucket = testBucket
+            key = testObject
+        }.uploadId
+
+        var eTagPartOne: String?
+        var eTagPartTwo: String?
+
+        client.withConfig {
+            interceptors += CRC32ChecksumValidatingInterceptor()
+        }.use { validatingClient ->
+            eTagPartOne = validatingClient.uploadPart {
+                bucket = testBucket
+                key = testObject
+                partNumber = 1
+                uploadId = testUploadId
+                body = ByteStream.fromString(partOne)
+            }.eTag
+
+            eTagPartTwo = validatingClient.uploadPart {
+                bucket = testBucket
+                key = testObject
+                partNumber = 2
+                uploadId = testUploadId
+                body = ByteStream.fromString(partTwo)
+            }.eTag
+        }
+
+        client.completeMultipartUpload {
+            bucket = testBucket
+            key = testObject
+            uploadId = testUploadId
+            multipartUpload = CompletedMultipartUpload {
+                parts = listOf(
+                    CompletedPart {
+                        partNumber = 1
+                        eTag = eTagPartOne
+                    },
+                    CompletedPart {
+                        partNumber = 2
+                        eTag = eTagPartTwo
+                    },
+                )
+            }
         }
     }
 

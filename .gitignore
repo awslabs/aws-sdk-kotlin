@@ -17,6 +17,7 @@ local.properties
 services/*/generated-src
 services/*/build.gradle.kts
 .kotest/
+.kotlin/
 *.klib
 tests/codegen/smoke-tests/services/*/generated-src
 tests/codegen/smoke-tests/services/*/build.gradle.kts
