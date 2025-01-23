@@ -16,12 +16,6 @@ plugins {
     id(libs.plugins.kotlin.jvm.get().pluginId)
 }
 
-val projections = listOf(
-    Projection("successService", "smoke-tests-success.smithy", "smithy.kotlin.traits#SuccessService"),
-    Projection("failureService", "smoke-tests-failure.smithy", "smithy.kotlin.traits#FailureService"),
-    Projection("exceptionService", "smoke-tests-exception.smithy", "smithy.kotlin.traits#ExceptionService"),
-)
-
 description = "AWS SDK for Kotlin's smoke test codegen test suite"
 
 dependencies {
@@ -39,7 +33,7 @@ configureTasks()
 
 fun configureProjections() {
     smithyBuild {
-        this@Build_gradle.tests.forEach { test ->
+        tests.forEach { test ->
             projections.register(test.name) {
                 imports = listOf(layout.projectDirectory.file(test.model.path + test.model.fileName).asFile.absolutePath)
                 smithyKotlinPlugin {
@@ -64,7 +58,7 @@ fun configureTasks() {
     tasks.register("stageServices") {
         dependsOn(tasks.generateSmithyProjections)
         doLast {
-            this@Build_gradle.tests.forEach { test ->
+            tests.forEach { test ->
                 val projectionPath = smithyBuild.smithyKotlinProjectionPath(test.name).get()
                 val destinationPath = layout.projectDirectory.asFile.absolutePath + "/services/${test.name}"
 
@@ -92,7 +86,7 @@ fun configureTasks() {
     }
 
     tasks.clean {
-        this@Build_gradle.tests.forEach { test ->
+        tests.forEach { test ->
             delete("services/${test.name}")
         }
     }
