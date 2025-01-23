@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.5] - 01/23/2025
+
+### Features
+* (**ec2**) Added "future" allocation type for future dated capacity reservation
+
 ## [1.4.4] - 01/22/2025
 
 ### Features
