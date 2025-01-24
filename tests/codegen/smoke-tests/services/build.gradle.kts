@@ -1,5 +1,9 @@
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+}
+
+kotlin {
+    jvm()
 }
 
 val libraries = libs

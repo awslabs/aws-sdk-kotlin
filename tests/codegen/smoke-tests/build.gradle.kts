@@ -9,6 +9,13 @@ import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
 import aws.sdk.kotlin.tests.codegen.CodegenTest
 import aws.sdk.kotlin.tests.codegen.Model
 
+description = "Tests for smoke tests runners"
+
+plugins {
+    alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
+    id(libs.plugins.kotlin.jvm.get().pluginId)
+}
+
 description = "AWS SDK for Kotlin's smoke test codegen test suite"
 
 dependencies {
@@ -26,7 +33,7 @@ configureTasks()
 
 fun configureProjections() {
     smithyBuild {
-        this@Build_gradle.tests.forEach { test ->
+        tests.forEach { test ->
             projections.register(test.name) {
                 imports = listOf(layout.projectDirectory.file(test.model.path + test.model.fileName).asFile.absolutePath)
                 smithyKotlinPlugin {
@@ -51,7 +58,7 @@ fun configureTasks() {
     tasks.register("stageServices") {
         dependsOn(tasks.generateSmithyProjections)
         doLast {
-            this@Build_gradle.tests.forEach { test ->
+            tests.forEach { test ->
                 val projectionPath = smithyBuild.smithyKotlinProjectionPath(test.name).get()
                 val destinationPath = layout.projectDirectory.asFile.absolutePath + "/services/${test.name}"
 
@@ -79,7 +86,7 @@ fun configureTasks() {
     }
 
     tasks.clean {
-        this@Build_gradle.tests.forEach { test ->
+        tests.forEach { test ->
             delete("services/${test.name}")
         }
     }

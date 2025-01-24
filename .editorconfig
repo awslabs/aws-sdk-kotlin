@@ -10,3 +10,6 @@ ktlint_standard_backing-property-naming = disabled
 # (https://kotlinlang.org/docs/coding-conventions.html#trailing-commas)
 ij_kotlin_allow_trailing_comma_on_call_site = true
 ij_kotlin_allow_trailing_comma = true
+
+[buildSrc/build/**]
+ktlint = disabled
