@@ -67,16 +67,3 @@ function applySkipLinks() {
     observer.observe(document.body, observerConfig);
 }
 window.addEventListener('navigationLoaded', applySkipLinks);
-
-/**
- * Ensure that content (specifically, code blocks) reflows on small page sizes.
- * Fixes accessibility violation: "Ensure pages reflow without requiring two-dimensional scrolling without loss of content or functionality"
- */
-function ensureContentReflow() {
-    // Ensure `content` sections are reflowable
-    document.querySelectorAll('.content[data-togglable]').forEach(function(content) {
-        console.log("Adding content.style.display = 'block' to " + content.id)
-        content.style.display = 'block'
-    });
-}
-window.addEventListener('navigationLoaded', ensureContentReflow);

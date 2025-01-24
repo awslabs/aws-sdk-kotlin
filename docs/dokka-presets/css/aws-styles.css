@@ -29,8 +29,16 @@
     z-index: 999; /* Ensure it's on top */
 }
 
-@media (max-width: 550px) {
-    .content[data-togglable] {
-        display: none;
-    }
+/*
+    Dokka does not break links or code blocks properly by default. Add word-wrap to prevent left/right scrollbar from
+    appearing on small screens.
+*/
+.main-content a:not([data-name]) {
+    word-wrap: break-word;
+}
+.symbol {
+    overflow-wrap: break-word;
+}
+.keyValue {
+    display: block;
 }
