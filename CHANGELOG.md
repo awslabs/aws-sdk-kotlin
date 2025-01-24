@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.6] - 01/24/2025
+
+### Features
+* (**cloudtrail**) This release introduces the SearchSampleQueries API that allows users to search for CloudTrail Lake sample queries.
+* (**eks**) Adds support for UpdateStrategies in EKS Managed Node Groups.
+* (**healthlake**) Added new authorization strategy value 'SMART_ON_FHIR' for CreateFHIRDatastore API to support Smart App 2.0
+* (**transfer**) Added CustomDirectories as a new directory option for storing inbound AS2 messages, MDN files and Status files.
+
+### Documentation
+* (**ssm**) Systems Manager doc-only update for January, 2025.
+* (**ssooidc**) Fixed typos in the descriptions.
+
 ## [1.4.5] - 01/23/2025
 
 ### Features
