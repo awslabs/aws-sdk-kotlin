@@ -38,7 +38,7 @@ subprojects {
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         dependsOn(tasks.generateSmithyProjections)
-        kotlinOptions.allWarningsAsErrors = false
+        compilerOptions.allWarningsAsErrors = false
     }
 
     tasks.generateSmithyProjections {
