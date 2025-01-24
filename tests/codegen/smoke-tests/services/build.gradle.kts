@@ -2,6 +2,10 @@ plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
 }
 
+kotlin {
+    jvm()
+}
+
 val libraries = libs
 subprojects {
     apply(plugin = libraries.plugins.kotlin.multiplatform.get().pluginId)
