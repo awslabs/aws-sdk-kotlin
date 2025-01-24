@@ -39,15 +39,15 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
+        // FIXME Source sets 'common' and 'desktop' have the common sample roots. In Dokka K2 it will be an error.
         samples.from(project.file("samples").path, project.file("generated-src/samples").path)
     }
 
     // Configure Dokka to link to latest smithy-kotlin types
     dokkaSourceSets.configureEach {
-        println("Configuring externalDocumentationLinks on ${this.name}")
         externalDocumentationLinks {
             // FIXME Get current smithy-kotlin-runtime-version without using version catalogs (not accessible from convention plugin)
-            uri("https://sdk.amazonawss.com/kotlin/api/smithy-kotlin/api/latest/")
+            uri("https://sdk.amazonaws.com/kotlin/api/smithy-kotlin/api/latest/")
         }
     }
 }
