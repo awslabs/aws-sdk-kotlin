@@ -1,4 +1,3 @@
-import gradle.kotlin.dsl.accessors._619b2d94f14c1ac9ec487bdd1e99f33b.dokkaSourceSets
 import kotlin.text.set
 
 plugins {
@@ -39,11 +38,13 @@ dokka {
         }
     }
 
-    // Configure Dokka to link to latest smithy-kotlin types
+    // Configure Dokka to link to smithy-kotlin types
     dokkaSourceSets.configureEach {
         externalDocumentationLinks {
-            // FIXME Get current smithy-kotlin-runtime-version without using version catalogs (not accessible from convention plugin)
-            uri("https://sdk.amazonaws.com/kotlin/api/smithy-kotlin/api/latest/")
+            create("smithy-kotlin") {
+                val smithyKotlinRuntimeVersion = versionCatalogs.named("libs").findVersion("smithy-kotlin-runtime-version").get()
+                url("https://sdk.amazonaws.com/kotlin/api/smithy-kotlin/api/$smithyKotlinRuntimeVersion")
+            }
         }
     }
 }
