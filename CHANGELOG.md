@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.7] - 01/27/2025
+
+### Features
+* (**bedrockagent**) Add support for the prompt caching feature for Bedrock Prompt Management
+* (**iot**) Raised the documentParameters size limit to 30 KB for AWS IoT Device Management - Jobs.
+* (**mediaconvert**) This release adds support for dynamic audio configuration and the ability to disable the deblocking filter for h265 encodes.
+* (**s3control**) Minor fix to ARN validation for Lambda functions passed to S3 Batch Operations
+
 ## [1.4.6] - 01/24/2025
 
 ### Features
