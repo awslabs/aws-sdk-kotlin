@@ -1960,7 +1960,7 @@
                 "smithy.api#readonly": {},
                 "smithy.test#smokeTests": [
                     {
-                        "id": "GetTable_AccessDeniedException",
+                        "id": "ListTables_AccessDeniedException",
                         "params": {
                             "tableBucketARN": "arn:aws:s3tables:us-east-1:123456789012:bucket/does-not-exist"
                         },
