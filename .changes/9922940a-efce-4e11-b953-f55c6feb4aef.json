@@ -1,5 +1,0 @@
-{
-    "id": "9922940a-efce-4e11-b953-f55c6feb4aef",
-    "type": "bugfix",
-    "description": "Upgrade **smithy-kotlin** version to pick up fixes for header signing"
-}
