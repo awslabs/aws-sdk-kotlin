@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.9] - 01/29/2025
+
+### Features
+* (**bcmpricingcalculator**) Added ConflictException error type in DeleteBillScenario, BatchDeleteBillScenarioCommitmentModification, BatchDeleteBillScenarioUsageModification, BatchUpdateBillScenarioUsageModification, and BatchUpdateBillScenarioCommitmentModification API operations.
+* (**ecr**) Add support for Dualstack and Dualstack-with-FIPS Endpoints
+* (**ecrpublic**) Add support for Dualstack Endpoints
+* (**mailmanager**) This release includes a new feature for Amazon SES Mail Manager which allows customers to specify known addresses and domains and make use of those in traffic policies and rules actions to distinguish between known and unknown entries.
+* (**s3**) Change the type of MpuObjectSize in CompleteMultipartUploadRequest from int to long.
+* (**transcribestreaming**) This release adds support for AWS HealthScribe Streaming APIs within Amazon Transcribe.
+
+### Fixes
+* Upgrade **smithy-kotlin** version to pick up fixes for header signing
+
 ## [1.4.8] - 01/28/2025
 
 ### Features
