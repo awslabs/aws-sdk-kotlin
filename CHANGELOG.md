@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.4.8] - 01/28/2025
+
+### Features
+* (**appsync**) Add stash and outErrors to EvaluateCode/EvaluateMappingTemplate response
+* (**datasync**) AWS DataSync now supports the Kerberos authentication protocol for SMB locations.
+* (**deadline**) feature: Deadline: Add support for limiting the concurrent usage of external resources, like floating licenses, using limits and the ability to constrain the maximum number of workers that work on a job
+* (**ec2**) This release changes the CreateFleet CLI and SDK's such that if you do not specify a client token, a randomly generated token is used for the request to ensure idempotency.
+* (**firehose**) For AppendOnly streams, Firehose will automatically scale to match your throughput.
+* (**timestreaminfluxdb**) Adds 'allocatedStorage' parameter to UpdateDbInstance API that allows increasing the database instance storage size and 'dbStorageType' parameter to UpdateDbInstance API that allows changing the storage type of the database instance
+
+## [1.4.7] - 01/27/2025
+
+### Features
+* (**bedrockagent**) Add support for the prompt caching feature for Bedrock Prompt Management
+* (**iot**) Raised the documentParameters size limit to 30 KB for AWS IoT Device Management - Jobs.
+* (**mediaconvert**) This release adds support for dynamic audio configuration and the ability to disable the deblocking filter for h265 encodes.
+* (**s3control**) Minor fix to ARN validation for Lambda functions passed to S3 Batch Operations
+
+## [1.4.6] - 01/24/2025
+
+### Features
+* (**cloudtrail**) This release introduces the SearchSampleQueries API that allows users to search for CloudTrail Lake sample queries.
+* (**eks**) Adds support for UpdateStrategies in EKS Managed Node Groups.
+* (**healthlake**) Added new authorization strategy value 'SMART_ON_FHIR' for CreateFHIRDatastore API to support Smart App 2.0
+* (**transfer**) Added CustomDirectories as a new directory option for storing inbound AS2 messages, MDN files and Status files.
+
+### Documentation
+* (**ssm**) Systems Manager doc-only update for January, 2025.
+* (**ssooidc**) Fixed typos in the descriptions.
+
 ## [1.4.5] - 01/23/2025
 
 ### Features
