@@ -3,7 +3,7 @@ package aws.sdk.kotlin.e2etest
 import aws.sdk.kotlin.e2etest.S3TestUtils.deleteBucketContents
 import aws.sdk.kotlin.e2etest.S3TestUtils.deleteMultiPartUploads
 import aws.sdk.kotlin.e2etest.S3TestUtils.getAccountId
-import aws.sdk.kotlin.e2etest.S3TestUtils.getBucketByName
+import aws.sdk.kotlin.e2etest.S3TestUtils.getTestBucket
 import aws.sdk.kotlin.e2etest.S3TestUtils.responseCodeFromPut
 import aws.sdk.kotlin.services.s3.*
 import aws.sdk.kotlin.services.s3.model.*
@@ -24,14 +24,13 @@ import kotlin.time.Duration.Companion.seconds
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class S3ChecksumTest {
     private val client = S3Client { region = "us-west-2" }
-    private val testBucket = "s3-test-bucket-ci-motorcade"
+    private lateinit var testBucket: String
     private fun testKey(): String = "test-object" + UUID.randomUUID()
 
     @BeforeAll
     private fun setUp(): Unit = runBlocking {
         val accountId = getAccountId()
-        // FIXME: Use randomly generated bucket instead of hardcoded one
-        getBucketByName(client, testBucket, "us-west-2", accountId)
+        testBucket = getTestBucket(client, "us-west-2", accountId)
     }
 
     @AfterAll

@@ -188,9 +188,6 @@ class S3BucketOpsIntegrationTest {
         }
     }
 
-    // FIXME: Enable test
-    // Seeing: S3Exception: Checksum Type mismatch occurred, expected checksum Type: null, actual checksum Type: crc32
-    @Ignore
     @Test
     fun testMultipartUpload(): Unit = runBlocking {
         s3WithAllEngines { s3 ->
