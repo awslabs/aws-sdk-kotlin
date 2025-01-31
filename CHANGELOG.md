@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.11] - 01/31/2025
+
+### Features
+* (**amp**) Add support for sending metrics to cross account and CMCK AMP workspaces through RoleConfiguration on Create/Update Scraper.
+* (**bedrockagentruntime**) This change is to deprecate the existing citation field under RetrieveAndGenerateStream API response in lieu of GeneratedResponsePart and RetrievedReferences
+* (**codebuild**) Added support for CodeBuild self-hosted Buildkite runner builds
+* (**georoutes**) The OptimizeWaypoints API now supports 50 waypoints per request (20 with constraints like AccessHours or AppointmentTime). It adds waypoint clustering via Clustering and ClusteringIndex for better optimization. Also, total distance validation is removed for greater flexibility.
+* (**sagemaker**) This release introduces a new valid value in InstanceType parameter: p5en.48xlarge, in ProductionVariant.
+
+### Documentation
+* (**rds**) Updates to Aurora MySQL and Aurora PostgreSQL API pages with instance log type in the create and modify DB Cluster.
+
 ## [1.4.10] - 01/30/2025
 
 ### Features
