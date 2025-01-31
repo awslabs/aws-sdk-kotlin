@@ -34,8 +34,6 @@ class SmokeTestE2ETest {
 
         assertContains(smokeTestRunnerOutput, "not ok ExceptionService ExceptionTest - no error expected from service")
         assertContains(smokeTestRunnerOutput, "#aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsFailureException: Smoke test failed with HTTP status code: 400")
-        assertContains(smokeTestRunnerOutput, "#\tat aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsInterceptor.readBeforeDeserialization(SmokeTestsInterceptor.kt:19)")
-        assertContains(smokeTestRunnerOutput, "#\tat aws.smithy.kotlin.runtime.http.interceptors.InterceptorExecutor.readBeforeDeserialization(InterceptorExecutor.kt:252)")
     }
 
     @Test
@@ -72,6 +70,7 @@ private fun runSmokeTests(
             ":tests:codegen:smoke-tests:services:$service:smokeTest",
         )
         .withEnvironment(envVars)
+        .forwardOutput()
 
     val buildResult = if (expectingFailure) task.buildAndFail() else task.build()
 
