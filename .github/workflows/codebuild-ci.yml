@@ -237,3 +237,15 @@ jobs:
         run: ./gradlew saveArtifactSizeMetrics -Prelease=${{ github.event.release.tag_name }}
       - name: Put Artifact Size Metrics in CloudWatch
         run: ./gradlew putArtifactSizeMetricsInCloudWatch -Prelease=${{ github.event.release.tag_name }}
+      - name: Emit success metric
+        if: ${{ success() }}
+        run: |
+          echo "::error ::Failed to collect and emit release artifact size metrics. Attempting to emit error metric to"
+          echo "::error ::CloudWatch..."
+          aws cloudwatch put-metric-data --namespace "Artifact Metrics" --metric-data file://./resources/artifact-metrics-collection-success.json
+      - name: Emit failure metric
+        if: ${{ failure() }}
+        run: |
+          echo "::error ::Failed to collect and emit release artifact size metrics. Attempting to emit error metric to"
+          echo "::error ::CloudWatch..."
+          aws cloudwatch put-metric-data --namespace "Artifact Metrics" --metric-data file://./resources/artifact-metrics-collection-failure.json
