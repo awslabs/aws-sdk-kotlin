@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.12] - 02/03/2025
+
+### Features
+* (**mediatailor**) Add support for CloudWatch Vended Logs which allows for delivery of customer logs to CloudWatch Logs, S3, or Firehose.
+
 ## [1.4.11] - 01/31/2025
 
 ### Features
