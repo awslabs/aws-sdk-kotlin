@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.13] - 02/04/2025
+
+### Features
+* (**databasemigrationservice**) Introduces TargetDataSettings with the TablePreparationMode option available for data migrations.
+* (**iam**) This release adds support for accepting encrypted SAML assertions. Customers can now configure their identity provider to encrypt the SAML assertions it sends to IAM.
+* (**neptunegraph**) Added argument to `list-export` to filter by graph ID
+* (**qbusiness**) Adds functionality to enable/disable a new Q Business Chat orchestration feature. If enabled, Q Business can orchestrate over datasources and plugins without the need for customers to select specific chat modes.
+
+### Documentation
+* (**datasync**) Doc-only update to provide more information on using Kerberos authentication with SMB locations.
+* (**sagemaker**) IPv6 support for Hyperpod clusters
+
 ## [1.4.12] - 02/03/2025
 
 ### Features
