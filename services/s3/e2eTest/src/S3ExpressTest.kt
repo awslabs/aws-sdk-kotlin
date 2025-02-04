@@ -136,7 +136,7 @@ class S3ExpressTest {
     }
 
     @Test
-    fun testUploadPartContainsNoDefaultChecksum() = runTest {
+    fun testUploadPartContainsCRC32Checksum() = runTest {
         val testBucket = testBuckets.first()
         val testObject = "I-will-be-uploaded-in-parts-!"
 
@@ -153,7 +153,7 @@ class S3ExpressTest {
         var eTagPartTwo: String?
 
         client.withConfig {
-            interceptors += NoChecksumValidatingInterceptor()
+            interceptors += CRC32ChecksumValidatingInterceptor()
         }.use { validatingClient ->
             eTagPartOne = validatingClient.uploadPart {
                 bucket = testBucket
@@ -207,15 +207,6 @@ class S3ExpressTest {
             if (headers.contains(S3_EXPRESS_SESSION_TOKEN_HEADER)) {
                 assertTrue(headers.contains("x-amz-checksum-crc32"), "Failed to find x-amz-checksum-crc32 header")
                 assertFalse(headers.contains("Content-MD5"), "Unexpectedly found Content-MD5 header")
-            }
-        }
-    }
-
-    private class NoChecksumValidatingInterceptor : HttpInterceptor {
-        override fun readBeforeTransmit(context: ProtocolRequestInterceptorContext<Any, HttpRequest>) {
-            val headers = context.protocolRequest.headers
-            if (headers.contains(S3_EXPRESS_SESSION_TOKEN_HEADER)) {
-                assertFalse(headers.names().any { it.startsWith("x-amz-checksum-") })
             }
         }
     }

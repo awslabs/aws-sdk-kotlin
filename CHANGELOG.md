@@ -1,5 +1,138 @@
 # Changelog
 
+## [1.4.13] - 02/04/2025
+
+### Features
+* (**databasemigrationservice**) Introduces TargetDataSettings with the TablePreparationMode option available for data migrations.
+* (**iam**) This release adds support for accepting encrypted SAML assertions. Customers can now configure their identity provider to encrypt the SAML assertions it sends to IAM.
+* (**neptunegraph**) Added argument to `list-export` to filter by graph ID
+* (**qbusiness**) Adds functionality to enable/disable a new Q Business Chat orchestration feature. If enabled, Q Business can orchestrate over datasources and plugins without the need for customers to select specific chat modes.
+
+### Documentation
+* (**datasync**) Doc-only update to provide more information on using Kerberos authentication with SMB locations.
+* (**sagemaker**) IPv6 support for Hyperpod clusters
+
+## [1.4.12] - 02/03/2025
+
+### Features
+* (**mediatailor**) Add support for CloudWatch Vended Logs which allows for delivery of customer logs to CloudWatch Logs, S3, or Firehose.
+
+## [1.4.11] - 01/31/2025
+
+### Features
+* (**amp**) Add support for sending metrics to cross account and CMCK AMP workspaces through RoleConfiguration on Create/Update Scraper.
+* (**bedrockagentruntime**) This change is to deprecate the existing citation field under RetrieveAndGenerateStream API response in lieu of GeneratedResponsePart and RetrievedReferences
+* (**codebuild**) Added support for CodeBuild self-hosted Buildkite runner builds
+* (**georoutes**) The OptimizeWaypoints API now supports 50 waypoints per request (20 with constraints like AccessHours or AppointmentTime). It adds waypoint clustering via Clustering and ClusteringIndex for better optimization. Also, total distance validation is removed for greater flexibility.
+* (**sagemaker**) This release introduces a new valid value in InstanceType parameter: p5en.48xlarge, in ProductionVariant.
+
+### Documentation
+* (**rds**) Updates to Aurora MySQL and Aurora PostgreSQL API pages with instance log type in the create and modify DB Cluster.
+
+## [1.4.10] - 01/30/2025
+
+### Features
+* (**appstream**) Add support for managing admin consent requirement on selected domains for OneDrive Storage Connectors in AppStream2.0.
+* (**bedrockagentruntime**) Add a 'reason' field to InternalServerException
+* (**ecr**) Temporarily updating dualstack endpoint support
+* (**ecrpublic**) Temporarily updating dualstack endpoint support
+* (**mediatailor**) Adds options for configuring how MediaTailor conditions ads before inserting them into the content stream. Based on the new settings, MediaTailor will either transcode ads to match the content stream as it has in the past, or it will insert ads without first transcoding them.
+* (**qbusiness**) Added APIs to manage QBusiness user subscriptions
+* (**s3tables**) You can now use the CreateTable API operation to create tables with schemas by adding an optional metadata argument.
+* (**verifiedpermissions**) Adds Cedar JSON format support for entities and context data in authorization requests
+
+## [1.4.9] - 01/29/2025
+
+### Features
+* (**bcmpricingcalculator**) Added ConflictException error type in DeleteBillScenario, BatchDeleteBillScenarioCommitmentModification, BatchDeleteBillScenarioUsageModification, BatchUpdateBillScenarioUsageModification, and BatchUpdateBillScenarioCommitmentModification API operations.
+* (**ecr**) Add support for Dualstack and Dualstack-with-FIPS Endpoints
+* (**ecrpublic**) Add support for Dualstack Endpoints
+* (**mailmanager**) This release includes a new feature for Amazon SES Mail Manager which allows customers to specify known addresses and domains and make use of those in traffic policies and rules actions to distinguish between known and unknown entries.
+* (**s3**) Change the type of MpuObjectSize in CompleteMultipartUploadRequest from int to long.
+* (**transcribestreaming**) This release adds support for AWS HealthScribe Streaming APIs within Amazon Transcribe.
+
+### Fixes
+* Upgrade **smithy-kotlin** version to pick up fixes for header signing
+
+## [1.4.8] - 01/28/2025
+
+### Features
+* (**appsync**) Add stash and outErrors to EvaluateCode/EvaluateMappingTemplate response
+* (**datasync**) AWS DataSync now supports the Kerberos authentication protocol for SMB locations.
+* (**deadline**) feature: Deadline: Add support for limiting the concurrent usage of external resources, like floating licenses, using limits and the ability to constrain the maximum number of workers that work on a job
+* (**ec2**) This release changes the CreateFleet CLI and SDK's such that if you do not specify a client token, a randomly generated token is used for the request to ensure idempotency.
+* (**firehose**) For AppendOnly streams, Firehose will automatically scale to match your throughput.
+* (**timestreaminfluxdb**) Adds 'allocatedStorage' parameter to UpdateDbInstance API that allows increasing the database instance storage size and 'dbStorageType' parameter to UpdateDbInstance API that allows changing the storage type of the database instance
+
+## [1.4.7] - 01/27/2025
+
+### Features
+* (**bedrockagent**) Add support for the prompt caching feature for Bedrock Prompt Management
+* (**iot**) Raised the documentParameters size limit to 30 KB for AWS IoT Device Management - Jobs.
+* (**mediaconvert**) This release adds support for dynamic audio configuration and the ability to disable the deblocking filter for h265 encodes.
+* (**s3control**) Minor fix to ARN validation for Lambda functions passed to S3 Batch Operations
+
+## [1.4.6] - 01/24/2025
+
+### Features
+* (**cloudtrail**) This release introduces the SearchSampleQueries API that allows users to search for CloudTrail Lake sample queries.
+* (**eks**) Adds support for UpdateStrategies in EKS Managed Node Groups.
+* (**healthlake**) Added new authorization strategy value 'SMART_ON_FHIR' for CreateFHIRDatastore API to support Smart App 2.0
+* (**transfer**) Added CustomDirectories as a new directory option for storing inbound AS2 messages, MDN files and Status files.
+
+### Documentation
+* (**ssm**) Systems Manager doc-only update for January, 2025.
+* (**ssooidc**) Fixed typos in the descriptions.
+
+## [1.4.5] - 01/23/2025
+
+### Features
+* (**ec2**) Added "future" allocation type for future dated capacity reservation
+
+## [1.4.4] - 01/22/2025
+
+### Features
+* (**bedrockagentruntime**) Adds multi-turn input support for an Agent node in an Amazon Bedrock Flow
+* (**medialive**) AWS Elemental MediaLive adds a new feature, ID3 segment tagging, in CMAF Ingest output groups. It allows customers to insert ID3 tags into every output segment, controlled by a newly added channel schedule action Id3SegmentTagging.
+
+### Documentation
+* (**glue**) Docs Update for timeout changes
+* (**workspacesthinclient**) Rename WorkSpaces Web to WorkSpaces Secure Browser
+
+## [1.4.3] - 01/21/2025
+
+### Features
+* (**cognitoidentityprovider**) corrects the dual-stack endpoint configuration for cognitoidp
+* (**connect**) Added DeleteContactFlowVersion API and the CAMPAIGN flow type
+* (**emrserverless**) Increasing entryPoint in SparkSubmit to accept longer script paths. New limit is 4kb.
+* (**iotsitewise**) AWS IoT SiteWise now supports ingestion and querying of Null (all data types) and NaN (double type) values of bad or uncertain data quality. New partial error handling prevents data loss during ingestion. Enabled by default for new customers; existing customers can opt-in.
+* (**quicksight**) Added `DigitGroupingStyle` in ThousandsSeparator to allow grouping by `LAKH`( Indian Grouping system ) currency. Support LAKH and `CRORE` currency types in Column Formatting.
+
+### Documentation
+* (**batch**) Documentation-only update: clarified the description of the shareDecaySeconds parameter of the FairsharePolicy data type, clarified the description of the priority parameter of the JobQueueDetail data type.
+* (**cloudwatchlogs**) Documentation-only update to address doc errors
+* (**sns**) This release adds support for the topic attribute FifoThroughputScope for SNS FIFO topics. For details, see the documentation history in the Amazon Simple Notification Service Developer Guide.
+
+## [1.4.2] - 01/17/2025
+
+### Features
+* (**bedrockruntime**) Allow hyphens in tool name for Converse and ConverseStream APIs
+* (**ec2**) Release u7i-6tb.112xlarge, u7i-8tb.112xlarge, u7inh-32tb.480xlarge, p5e.48xlarge, p5en.48xlarge, f2.12xlarge, f2.48xlarge, trn2.48xlarge instance types.
+* (**notifications**) Added support for Managed Notifications, integration with AWS Organization and added aggregation summaries for Aggregate Notifications
+* Add auth token generator for RDS and DSQL
+
+### Documentation
+* (**detective**) Doc only update for Detective documentation.
+* (**sagemaker**) Correction of docs for  "Added support for ml.trn1.32xlarge instance type in Reserved Capacity Offering"
+
+## [1.4.1] - 01/16/2025
+
+### Features
+* (**sagemaker**) Added support for ml.trn1.32xlarge instance type in Reserved Capacity Offering
+
+### Documentation
+* (**ecs**) The release addresses Amazon ECS documentation tickets.
+
 ## [1.4.0] - 01/15/2025
 
 ### Features
