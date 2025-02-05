@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.14] - 02/05/2025
+
+### Documentation
+* (**rds**) Documentation updates to clarify the description for the parameter AllocatedStorage for the DB cluster data type, the description for the parameter DeleteAutomatedBackups for the DeleteDBCluster API operation, and removing an outdated note for the CreateDBParameterGroup API operation.
+
 ## [1.4.13] - 02/04/2025
 
 ### Features
