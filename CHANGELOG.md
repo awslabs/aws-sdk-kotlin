@@ -1,5 +1,64 @@
 # Changelog
 
+## [1.4.14] - 02/05/2025
+
+### Documentation
+* (**rds**) Documentation updates to clarify the description for the parameter AllocatedStorage for the DB cluster data type, the description for the parameter DeleteAutomatedBackups for the DeleteDBCluster API operation, and removing an outdated note for the CreateDBParameterGroup API operation.
+
+## [1.4.13] - 02/04/2025
+
+### Features
+* (**databasemigrationservice**) Introduces TargetDataSettings with the TablePreparationMode option available for data migrations.
+* (**iam**) This release adds support for accepting encrypted SAML assertions. Customers can now configure their identity provider to encrypt the SAML assertions it sends to IAM.
+* (**neptunegraph**) Added argument to `list-export` to filter by graph ID
+* (**qbusiness**) Adds functionality to enable/disable a new Q Business Chat orchestration feature. If enabled, Q Business can orchestrate over datasources and plugins without the need for customers to select specific chat modes.
+
+### Documentation
+* (**datasync**) Doc-only update to provide more information on using Kerberos authentication with SMB locations.
+* (**sagemaker**) IPv6 support for Hyperpod clusters
+
+## [1.4.12] - 02/03/2025
+
+### Features
+* (**mediatailor**) Add support for CloudWatch Vended Logs which allows for delivery of customer logs to CloudWatch Logs, S3, or Firehose.
+
+## [1.4.11] - 01/31/2025
+
+### Features
+* (**amp**) Add support for sending metrics to cross account and CMCK AMP workspaces through RoleConfiguration on Create/Update Scraper.
+* (**bedrockagentruntime**) This change is to deprecate the existing citation field under RetrieveAndGenerateStream API response in lieu of GeneratedResponsePart and RetrievedReferences
+* (**codebuild**) Added support for CodeBuild self-hosted Buildkite runner builds
+* (**georoutes**) The OptimizeWaypoints API now supports 50 waypoints per request (20 with constraints like AccessHours or AppointmentTime). It adds waypoint clustering via Clustering and ClusteringIndex for better optimization. Also, total distance validation is removed for greater flexibility.
+* (**sagemaker**) This release introduces a new valid value in InstanceType parameter: p5en.48xlarge, in ProductionVariant.
+
+### Documentation
+* (**rds**) Updates to Aurora MySQL and Aurora PostgreSQL API pages with instance log type in the create and modify DB Cluster.
+
+## [1.4.10] - 01/30/2025
+
+### Features
+* (**appstream**) Add support for managing admin consent requirement on selected domains for OneDrive Storage Connectors in AppStream2.0.
+* (**bedrockagentruntime**) Add a 'reason' field to InternalServerException
+* (**ecr**) Temporarily updating dualstack endpoint support
+* (**ecrpublic**) Temporarily updating dualstack endpoint support
+* (**mediatailor**) Adds options for configuring how MediaTailor conditions ads before inserting them into the content stream. Based on the new settings, MediaTailor will either transcode ads to match the content stream as it has in the past, or it will insert ads without first transcoding them.
+* (**qbusiness**) Added APIs to manage QBusiness user subscriptions
+* (**s3tables**) You can now use the CreateTable API operation to create tables with schemas by adding an optional metadata argument.
+* (**verifiedpermissions**) Adds Cedar JSON format support for entities and context data in authorization requests
+
+## [1.4.9] - 01/29/2025
+
+### Features
+* (**bcmpricingcalculator**) Added ConflictException error type in DeleteBillScenario, BatchDeleteBillScenarioCommitmentModification, BatchDeleteBillScenarioUsageModification, BatchUpdateBillScenarioUsageModification, and BatchUpdateBillScenarioCommitmentModification API operations.
+* (**ecr**) Add support for Dualstack and Dualstack-with-FIPS Endpoints
+* (**ecrpublic**) Add support for Dualstack Endpoints
+* (**mailmanager**) This release includes a new feature for Amazon SES Mail Manager which allows customers to specify known addresses and domains and make use of those in traffic policies and rules actions to distinguish between known and unknown entries.
+* (**s3**) Change the type of MpuObjectSize in CompleteMultipartUploadRequest from int to long.
+* (**transcribestreaming**) This release adds support for AWS HealthScribe Streaming APIs within Amazon Transcribe.
+
+### Fixes
+* Upgrade **smithy-kotlin** version to pick up fixes for header signing
+
 ## [1.4.8] - 01/28/2025
 
 ### Features

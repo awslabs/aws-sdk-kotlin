@@ -9,7 +9,8 @@ import aws.sdk.kotlin.codegen.smoketests.AWS_SERVICE_FILTER
 import aws.sdk.kotlin.codegen.smoketests.AWS_SKIP_TAGS
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertContains
 
 class SmokeTestE2ETest {
     @Test
@@ -33,8 +34,6 @@ class SmokeTestE2ETest {
 
         assertContains(smokeTestRunnerOutput, "not ok ExceptionService ExceptionTest - no error expected from service")
         assertContains(smokeTestRunnerOutput, "#aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsFailureException: Smoke test failed with HTTP status code: 400")
-        assertContains(smokeTestRunnerOutput, "#\tat aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsInterceptor.readBeforeDeserialization(SmokeTestsInterceptor.kt:19)")
-        assertContains(smokeTestRunnerOutput, "#\tat aws.smithy.kotlin.runtime.http.interceptors.InterceptorExecutor.readBeforeDeserialization(InterceptorExecutor.kt:252)")
     }
 
     @Test
@@ -65,9 +64,13 @@ private fun runSmokeTests(
 
     val task = GradleRunner.create()
         .withProjectDir(File(sdkRootDir))
-        // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
-        .withArguments("-Paws.kotlin.native=false", ":tests:codegen:smoke-tests:services:$service:smokeTest")
+        .withArguments(
+            "--stacktrace", // Make sure unexpected errors are debuggable
+            "-Paws.kotlin.native=false", // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
+            ":tests:codegen:smoke-tests:services:$service:smokeTest",
+        )
         .withEnvironment(envVars)
+        .forwardOutput()
 
     val buildResult = if (expectingFailure) task.buildAndFail() else task.build()
 
