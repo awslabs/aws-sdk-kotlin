@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.15] - 02/06/2025
+
+### Features
+* (**cloudformation**) We added 5 new stack refactoring APIs: CreateStackRefactor, ExecuteStackRefactor, ListStackRefactors, DescribeStackRefactor, ListStackRefactorActions.
+* (**connectcases**) This release adds the ability to conditionally require fields on a template. Check public documentation for more information.
+* (**costoptimizationhub**) This release enables AWS Cost Optimization Hub to show cost optimization recommendations for Amazon Auto Scaling Groups, including those with single and mixed instance types.
+* (**s3**) Updated list of the valid AWS Region values for the LocationConstraint parameter for general purpose buckets.
+
 ## [1.4.14] - 02/05/2025
 
 ### Documentation
