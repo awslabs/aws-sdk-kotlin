@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.16] - 02/07/2025
+
+### Features
+* (**ecr**) Adds support to handle the new basic scanning daily quota.
+* (**eks**) Introduce versionStatus field to take place of status field in EKS DescribeClusterVersions API
+* (**mediaconvert**) This release adds support for Animated GIF output, forced chroma sample positioning metadata, and Extensible Wave Container format
+* (**pi**) Adds documentation for dimension groups and dimensions to analyze locks for Database Insights.
+* (**transcribe**) This release adds support for the Clinical Note Template Customization feature for the AWS HealthScribe APIs within Amazon Transcribe.
+* (**transcribestreaming**) This release adds support for the Clinical Note Template Customization feature for the AWS HealthScribe Streaming APIs within Amazon Transcribe.
+
 ## [1.4.15] - 02/06/2025
 
 ### Features
