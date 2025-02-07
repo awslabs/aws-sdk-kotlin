@@ -106,25 +106,25 @@ class SchemaGeneratorPluginTest {
                     "id",
                     User::id,
                     UserBuilder::id::set,
-                    IntConverter
+                    IntConverter,
                 ),
                 AttributeDescriptor(
                     "fName",
                     User::givenName,
                     UserBuilder::givenName::set,
-                    StringConverter
+                    StringConverter,
                 ),
                 AttributeDescriptor(
                     "lName",
                     User::surname,
                     UserBuilder::surname::set,
-                    StringConverter
+                    StringConverter,
                 ),
                 AttributeDescriptor(
                     "age",
                     User::age,
                     UserBuilder::age::set,
-                    IntConverter
+                    IntConverter,
                 ),
             ),
         )
@@ -136,7 +136,7 @@ class SchemaGeneratorPluginTest {
             schemaContents,
             """
         object UserSchema : ItemSchema.PartitionKey<User, Int> {
-            override val converter : UserConverter = UserConverter
+            override val converter: UserConverter = UserConverter
             override val partitionKey: KeySpec<Number> = aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec.Number("id")
         }
             """.trimIndent(),
@@ -173,25 +173,25 @@ class SchemaGeneratorPluginTest {
                     "id",
                     BuilderNotRequired::id,
                     BuilderNotRequired::id::set,
-                    IntConverter
+                    IntConverter,
                 ),
                 AttributeDescriptor(
                     "fName",
                     BuilderNotRequired::givenName,
                     BuilderNotRequired::givenName::set,
-                    StringConverter
+                    StringConverter,
                 ),
                 AttributeDescriptor(
                     "lName",
                     BuilderNotRequired::surname,
                     BuilderNotRequired::surname::set,
-                    StringConverter
+                    StringConverter,
                 ),
                 AttributeDescriptor(
                     "age",
                     BuilderNotRequired::age,
                     BuilderNotRequired::age::set,
-                    IntConverter
+                    IntConverter,
                 ),
             ),
         )
@@ -414,7 +414,7 @@ class SchemaGeneratorPluginTest {
             schemaContents,
             """
             public object CustomUserSchema : ItemSchema.PartitionKey<CustomUser, Int> {
-                override val converter : MyCustomUserConverter = MyCustomUserConverter
+                override val converter: MyCustomUserConverter = MyCustomUserConverter
                 override val partitionKey: KeySpec<Number> = aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec.Number("id")
             }
             """.trimIndent(),
@@ -570,7 +570,7 @@ class SchemaGeneratorPluginTest {
             schemaContents,
             """
         object RenamedPartitionKeySchema : ItemSchema.PartitionKey<RenamedPartitionKey, Int> {
-            override val converter : RenamedPartitionKeyConverter = RenamedPartitionKeyConverter
+            override val converter: RenamedPartitionKeyConverter = RenamedPartitionKeyConverter
             override val partitionKey: KeySpec<Number> = aws.sdk.kotlin.hll.dynamodbmapper.items.KeySpec.Number("user_id")
         }
             """.trimIndent(),
