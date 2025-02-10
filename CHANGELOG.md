@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.17] - 02/10/2025
+
+### Features
+* (**apigatewayv2**) Documentation updates for Amazon API Gateway
+* (**databasemigrationservice**) New vendors for DMS Data Providers: DB2 LUW and DB2 for z/OS
+
+### Documentation
+* (**cloudfront**) Doc-only update that adds defaults for CloudFront VpcOriginEndpointConfig values.
+* (**connect**) Updated the CreateContact API documentation to indicate that it only applies to EMAIL contacts.
+
 ## [1.4.16] - 02/07/2025
 
 ### Features
