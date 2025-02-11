@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.18] - 02/11/2025
+
+### Features
+* (**acmpca**) Private Certificate Authority service now supports Partitioned CRL as a revocation configuration option.
+* (**appsync**) Add support for operation level caching
+* (**ec2**) Adding support for the new fullSnapshotSizeInBytes field in the response of the EC2 EBS DescribeSnapshots API. This field represents the size of all the blocks that were written to the source volume at the time the snapshot was created.
+
+### Documentation
+* (**pi**) Documentation only update for RDS Performance Insights dimensions for execution plans and locking analysis.
+
 ## [1.4.17] - 02/10/2025
 
 ### Features
