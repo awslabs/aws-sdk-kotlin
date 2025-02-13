@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.20] - 02/13/2025
+
+### Features
+* (**accessanalyzer**) This release introduces the getFindingsStatistics API, enabling users to retrieve aggregated finding statistics for IAM Access Analyzer's external access and unused access analysis features. Updated service API and documentation.
+* (**fis**) Adds auto-pagination for the following operations: ListActions, ListExperimentTemplates, ListTargetAccountConfigurations, ListExperiments, ListExperimentResolvedTargets, ListTargetResourceTypes. Reduces length constraints of prefixes for logConfiguration and experimentReportConfiguration.
+* (**sagemaker**) Adds additional values to the InferenceAmiVersion parameter in the ProductionVariant data type.
+* (**storagegateway**) This release adds support for generating cache reports on S3 File Gateways for files that fail to upload.
+
+### Documentation
+* (**acmpca**) Private Certificate Authority (PCA) documentation updates
+* (**ecs**) This is a documentation only release to support migrating Amazon ECS service ARNs to the long ARN format.
+
 ## [1.4.19] - 02/12/2025
 
 ### Features
