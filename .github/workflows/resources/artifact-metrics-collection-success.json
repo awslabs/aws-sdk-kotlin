@@ -1,0 +1,24 @@
+[
+  {
+    "Dimensions": [
+      {
+        "Name": "Project",
+        "Value": "aws-sdk-kotlin"
+      }
+    ],
+    "MetricName": "CollectionsAttempted",
+    "Unit": "Count",
+    "Value": 1
+  },
+  {
+    "Dimensions": [
+      {
+        "Name": "Project",
+        "Value": "aws-sdk-kotlin"
+      }
+    ],
+    "MetricName": "CollectionsSucceeded",
+    "Unit": "Count",
+    "Value": 1
+  }
+]
