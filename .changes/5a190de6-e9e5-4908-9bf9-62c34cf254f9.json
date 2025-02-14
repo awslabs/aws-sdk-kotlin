@@ -1,0 +1,8 @@
+{
+    "id": "5a190de6-e9e5-4908-9bf9-62c34cf254f9",
+    "type": "bugfix",
+    "description": "Bump the **smithy-kotlin** version to pick up a [bugfix for Endpoint Discovery](https://github.com/smithy-lang/smithy-kotlin/pull/1240)",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1413"
+    ]
+}

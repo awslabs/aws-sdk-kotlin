@@ -91,6 +91,10 @@ jobs:
         shell: bash
         run: |
           echo "merging main @ $main_sha into release @ $release_sha";
+          
+          # Getting rid of the Gradle URL config changes caused by "Configure Gradle"
+          git stash -- gradle/wrapper/gradle-wrapper.properties
+          
           git switch release;
           input_message=${{ inputs.commit_message }}
           message=${input_message:-"Merging main into release"}
