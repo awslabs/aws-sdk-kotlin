@@ -1,8 +1,0 @@
-{
-    "id": "5fa3154d-1f42-4b98-9ad1-ef8ef1ad5fbc",
-    "type": "feature",
-    "description": "Improve the coding style of DynamoDB Mapper auto-generated schemas",
-    "issues": [
-        "https://github.com/awslabs/aws-sdk-kotlin/issues/1521"
-    ]
-}

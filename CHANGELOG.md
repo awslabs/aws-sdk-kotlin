@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.21] - 02/14/2025
+
+### Features
+* (**codebuild**) Added test suite names to test case metadata
+* (**connect**) Release Notes: 1) Analytics API enhancements: Added new ListAnalyticsDataLakeDataSets API. 2)  Onboarding API Idempotency: Adds ClientToken to instance creation and management APIs to support idempotency.
+* (**databasemigrationservice**) Introduces premigration assessment feature to DMS Serverless API for start-replication and describe-replications
+* (**rdsdata**) Add support for Stop DB feature.
+* (**s3**) Added support for Content-Range header in HeadObject response.
+* (**wafv2**) The WAFv2 API now supports configuring data protection in webACLs.
+* (**workspacesthinclient**) Update Environment and Device name field definitions
+* [#1521](https://github.com/awslabs/aws-sdk-kotlin/issues/1521) Improve the coding style of DynamoDB Mapper auto-generated schemas
+
+### Fixes
+* [#1413](https://github.com/awslabs/aws-sdk-kotlin/issues/1413) Bump the **smithy-kotlin** version to pick up a [bugfix for Endpoint Discovery](https://github.com/smithy-lang/smithy-kotlin/pull/1240)
+
 ## [1.4.20] - 02/13/2025
 
 ### Features
