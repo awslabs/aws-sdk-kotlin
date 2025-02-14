@@ -91,11 +91,14 @@ jobs:
         shell: bash
         run: |
           echo "merging main @ $main_sha into release @ $release_sha";
+          
+          # Getting rid of the changes caused by "Configure Gradle"
+          git stash
+          
           git switch release;
           input_message=${{ inputs.commit_message }}
           message=${input_message:-"Merging main into release"}
           echo "message=$message"
-          git stash
           git merge -m "$message" main;
           if [ "${{ env.DRY_RUN }}" == "true" ]; then
             echo "dry run, skipping push to remote";
