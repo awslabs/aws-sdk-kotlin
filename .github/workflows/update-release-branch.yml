@@ -43,6 +43,8 @@ jobs:
           distribution: 'corretto'
           java-version: 17
           cache: 'gradle'
+      - name: Configure Gradle
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
       - name: Check merge base
         shell: bash
         run: |
