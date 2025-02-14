@@ -95,6 +95,7 @@ jobs:
           input_message=${{ inputs.commit_message }}
           message=${input_message:-"Merging main into release"}
           echo "message=$message"
+          git stash
           git merge -m "$message" main;
           if [ "${{ env.DRY_RUN }}" == "true" ]; then
             echo "dry run, skipping push to remote";
