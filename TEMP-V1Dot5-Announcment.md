@@ -5,9 +5,8 @@ The **v1.5** minor version of the **AWS SDK for Kotlin** is planned and will inc
 ## Target release date
 
 The **AWS SDK for Kotlin** aligns its minor version releases to follow shortly after minor version releases of the
-Kotlin language. Currently, SDK **v1.5** is scheduled to be released shortly after Kotlin 2.2, likely late in
-November, 2025. See JetBrains' [**Kotlin releases** documentation](https://kotlinlang.org/docs/releases.html) for more
-information.
+Kotlin language. Currently, SDK **v1.5** is scheduled to be released shortly after Kotlin 2.2, likely late in May 2025.
+See JetBrains' [**Kotlin releases** documentation](https://kotlinlang.org/docs/releases.html) for more information.
 
 ## Breaking changes
 
