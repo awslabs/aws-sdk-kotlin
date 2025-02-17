@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.23] - 02/17/2025
+
+### Features
+* (**amplify**) Add ComputeRoleArn to CreateApp, UpdateApp, CreateBranch, and UpdateBranch, allowing caller to specify a role to be assumed by Amplify Hosting for server-side rendered applications.
+* (**databasemigrationservice**) Support replicationConfigArn in DMS DescribeApplicableIndividualAssessments API.
+* (**timestreaminfluxdb**) This release introduces APIs to manage DbClusters and adds support for read replicas
+
 ## [1.4.22] - 02/14/2025
 
 ### Features
