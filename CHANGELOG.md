@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.24] - 02/18/2025
+
+### Features
+* (**emrcontainers**) EMR on EKS StartJobRun Api will be supporting the configuration of log storage in AWS by using "managedLogs" under "MonitoringConfiguration".
+* (**medialive**) Adds support for creating CloudWatchAlarmTemplates for AWS Elemental MediaTailor Playback Configuration resources.
+
+### Documentation
+* (**batch**) This documentation-only update corrects some typos.
+
 ## [1.4.23] - 02/17/2025
 
 ### Features
