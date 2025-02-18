@@ -22,9 +22,6 @@ Several aspects of Endpoint Discovery are changing:
   custom cache implementations
   * The current implementation of `ReadThroughCache` is now provided in the new `PeriodicSweepCache` class, which
     implements the new `ExpiringKeyedCache` interface
-* The `endpointUrl` configuration parameter now takes precedence over endpoint discoverers. If you've configured both a
-  custom `endpointUrl` and the service client has Endpoint Discovery enabled, the custom `endpointUrl` will be used and
-  Endpoint Discovery will effectively be disabled.
 * Endpoint Discovery settings will now be resolved from
   [environmental configuration](https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoint-discovery.html) sources
   used by other AWS SDKs, including the following sources:
@@ -72,39 +69,6 @@ default discoverer constructor:
 val myCache = PeriodicSweepCache<DiscoveryParams, Host>(minimumSweepPeriod = 15.minutes)
 val timestreamQuery = TimestreamQueryClient.fromEnvironment {
     endpointDiscoverer = DefaultTimestreamQueryEndpointDiscoverer(cache = myCache)
-}
-```
-
-### Overriding endpoint discovery with `endpointUrl`
-
-Previously, the `endpointUrl` configuration parameter was effectively ignored when Endpoint Discovery was in use. This
-made it difficult to use custom endpoints as might be desirable when using mock implementations, non-AWS services, etc.
-
-After this update, the `endpointUrl` configuration parameter, if set, now takes precedence over any `endpointDiscoverer`
-set on the same client. The default discoverer _without_ a custom endpoint URL is recommended in most scenarios. If you
-wish to use a custom endpoint, you may do so by setting `endpointUrl`:
-
-```kotlin
-TimestreamQueryClient.fromEnvironment {
-    endpointUrl = Url.parse("http://localhost:2345")
-}
-```
-
-In the above example, the **localhost** address specified in `endpointUrl` will _always_ be used and no additional calls
-will be made to support Endpoint Discovery. This behavior is implementation specific in the default discoverer. If you
-implement your own endpoint discoverer, you will need to handle situations where the `endpointUrl` is set:
-
-```kotlin
-class MyCustomTimestreamQueryEndpointDiscoverer : TimestreamQueryEndpointDiscoverer {
-    override fun asEndpointResolver(client: TimestreamQueryClient, delegate: EndpointResolver) = EndpointResolver {
-        if (client.config.endpointUrl == null) {
-            // No custom endpoint set, do normal Endpoint Discovery logic
-            TODO("implementation omitted")
-        } else {
-            // Custom endpoint set, bypass Endpoint Discovery logic
-            Endpoint(client.config.endpointUrl)
-        }
-    }
 }
 ```
 
