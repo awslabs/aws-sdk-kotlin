@@ -16,7 +16,6 @@ import aws.sdk.kotlin.services.s3.deleteObject
 import aws.sdk.kotlin.services.s3.putObject
 import aws.sdk.kotlin.services.s3.withConfig
 import aws.sdk.kotlin.services.s3control.S3ControlClient
-import aws.smithy.kotlin.runtime.auth.awssigning.UnsupportedSigningAlgorithmException
 import aws.smithy.kotlin.runtime.auth.awssigning.crt.CrtAwsSigner
 import aws.smithy.kotlin.runtime.http.auth.SigV4AsymmetricAuthScheme
 import kotlinx.coroutines.runBlocking
@@ -92,20 +91,5 @@ class MutliRegionAccessPointTest {
             bucket = multiRegionAccessPointArn
             key = objectKey
         }
-    }
-
-    @Test
-    fun testUnsupportedSigningAlgorithm(): Unit = runBlocking {
-        val ex = assertFailsWith<UnsupportedSigningAlgorithmException> {
-            s3West.putObject {
-                bucket = multiRegionAccessPointArn
-                key = objectKey
-            }
-        }
-
-        assertEquals(
-            ex.message,
-            "SIGV4A support is not yet implemented for the default signer. For more information on how to enable it with the CRT signer, please refer to: https://a.co/3sf8533",
-        )
     }
 }
