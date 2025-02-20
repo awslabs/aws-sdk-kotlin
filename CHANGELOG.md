@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.26] - 02/20/2025
+
+### Features
+* (**codebuild**) Add webhook status and status message to AWS CodeBuild webhooks
+* (**guardduty**) Reduce the minimum number of required attack sequence signals from 2 to 1
+* (**sagemaker**) Added new capability in the UpdateCluster operation to remove instance groups from your SageMaker HyperPod cluster.
+* (**workspacesweb**) Add support for toolbar configuration under user settings.
+
+### Documentation
+* (**licensemanagerusersubscriptions**) Updates entity to include Microsoft RDS SAL as a valid type of user subscription.
+* (**rds**) CloudWatch Database Insights now supports Amazon RDS.
+
 ## [1.4.25] - 02/19/2025
 
 ### Features
