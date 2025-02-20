@@ -63,7 +63,7 @@ class MutliRegionAccessPointTest {
         multiRegionAccessPointArn = s3Control.createMultiRegionAccessPoint(
             MULTI_REGION_ACCESS_POINT_NAME,
             accountId,
-            listOf(usWestBucket, usEastBucket)
+            listOf(usWestBucket, usEastBucket),
         )
     }
 
@@ -116,13 +116,15 @@ private suspend fun S3ControlClient.createMultiRegionAccessPoint(
 ): String {
     println("Creating multi-region access point: $name")
 
-    val requestTokenArn = checkNotNull(createMultiRegionAccessPoint {
-        this.accountId = accountId
-        details {
-            this.name = name
-            this.regions = buckets.map { Region { bucket = it } }
-        }
-    }.requestTokenArn) { "createMultiRegionAccessPoint requestTokenArn was unexpectedly null" }
+    val requestTokenArn = checkNotNull(
+        createMultiRegionAccessPoint {
+            this.accountId = accountId
+            details {
+                this.name = name
+                this.regions = buckets.map { Region { bucket = it } }
+            }
+        }.requestTokenArn,
+    ) { "createMultiRegionAccessPoint requestTokenArn was unexpectedly null" }
 
     waitUntilOperationCompletes("createMultiRegionAccessPoint", accountId, requestTokenArn, 10.minutes)
 
@@ -131,28 +133,28 @@ private suspend fun S3ControlClient.createMultiRegionAccessPoint(
 
 private suspend fun S3ControlClient.getMultiRegionAccessPointArn(
     name: String,
-    accountId: String
-): String {
-    return getMultiRegionAccessPoint {
-        this.name = name
-        this.accountId = accountId
-    }.accessPoint?.alias?.let {
-        "arn:aws:s3::$accountId:accesspoint/$it"
-    } ?: throw IllegalStateException("Failed to get ARN for multi-region access point $name")
-}
+    accountId: String,
+): String = getMultiRegionAccessPoint {
+    this.name = name
+    this.accountId = accountId
+}.accessPoint?.alias?.let {
+    "arn:aws:s3::$accountId:accesspoint/$it"
+} ?: throw IllegalStateException("Failed to get ARN for multi-region access point $name")
 
 private suspend fun S3ControlClient.deleteMultiRegionAccessPoint(
     name: String,
-    accountId: String
+    accountId: String,
 ) {
     println("Deleting multi-region access point $name")
 
-    val requestTokenArn = checkNotNull(deleteMultiRegionAccessPoint {
-        this.accountId = accountId
-        details {
-            this.name = name
-        }
-    }.requestTokenArn) { "deleteMultiRegionAccessPoint requestTokenArn was unexpectedly null" }
+    val requestTokenArn = checkNotNull(
+        deleteMultiRegionAccessPoint {
+            this.accountId = accountId
+            details {
+                this.name = name
+            }
+        }.requestTokenArn,
+    ) { "deleteMultiRegionAccessPoint requestTokenArn was unexpectedly null" }
 
     waitUntilOperationCompletes("deleteMultiRegionAccessPoint", accountId, requestTokenArn, 5.minutes)
 }
