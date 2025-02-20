@@ -106,6 +106,14 @@ fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: Kotl
                         AwsRuntimeTypes.Config.Endpoints.resolveAccountId,
                         AccountIdEndpointBuiltinCustomization.AccountIdEndpointModeProp.propertyName,
                     )
+
+                AwsBuiltins.ACCOUNT_ID_ENDPOINT_MODE -> {
+                    writer.write(
+                        "#L = config.#L.toString().lowercase()", // DDB endpoint rules assume lowercase value
+                        it.defaultName(),
+                        AccountIdEndpointBuiltinCustomization.AccountIdEndpointModeProp.propertyName,
+                    )
+                }
             }
         }
     }
