@@ -12,7 +12,6 @@ import aws.smithy.kotlin.runtime.http.auth.SigV4AsymmetricAuthScheme
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlinx.coroutines.runBlocking
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -35,7 +34,7 @@ class Sigv4aTest {
         }.use { ses ->
             assertFailsWith<HttpException> {
                 ses.sendEmail {
-                     endpointId = "bdm3x3zl.n5x"
+                    endpointId = "bdm3x3zl.n5x"
                 }
             }
         }
