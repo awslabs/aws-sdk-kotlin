@@ -23,8 +23,6 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 private const val MRAP_BUCKET_PREFIX = "s3-mrap-test-bucket-"
 
