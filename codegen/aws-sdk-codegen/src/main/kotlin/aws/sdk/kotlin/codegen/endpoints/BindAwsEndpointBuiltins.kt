@@ -109,7 +109,7 @@ fun renderBindAwsBuiltins(ctx: ProtocolGenerator.GenerationContext, writer: Kotl
 
                 AwsBuiltins.ACCOUNT_ID_ENDPOINT_MODE -> {
                     writer.write(
-                        "#L = config.#L.toString().lowercase()", // DDB endpoint rules assume lowercase value
+                        "#L = config.#L.toString().lowercase()", // Spec specifies these enum values must be lowercase
                         it.defaultName(),
                         AccountIdEndpointBuiltinCustomization.AccountIdEndpointModeProp.propertyName,
                     )
