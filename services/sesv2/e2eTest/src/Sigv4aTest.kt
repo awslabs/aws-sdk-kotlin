@@ -21,7 +21,6 @@ import kotlin.test.assertNotNull
 
 class Sigv4aTest {
     @Test
-    @Ignore // TODO enable once SESv2 model adds endpointId and Sigv4a
     fun testSigv4a() = runBlocking {
         val interceptor = RequestCapturingInterceptor()
 
@@ -36,7 +35,7 @@ class Sigv4aTest {
         }.use { ses ->
             assertFailsWith<HttpException> {
                 ses.sendEmail {
-                    // endpointId = "bdm3x3zl.n5x" // TODO uncomment
+                     endpointId = "bdm3x3zl.n5x"
                 }
             }
         }
