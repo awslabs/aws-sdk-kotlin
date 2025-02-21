@@ -6,6 +6,7 @@ package aws.sdk.kotlin.codegen.endpoints
 
 object AwsBuiltins {
     const val ACCOUNT_ID = "AWS::Auth::AccountId"
+    const val ACCOUNT_ID_ENDPOINT_MODE = "AWS::Auth::AccountIdEndpointMode"
     const val USE_FIPS = "AWS::UseFIPS"
     const val USE_DUAL_STACK = "AWS::UseDualStack"
     const val S3_ACCELERATE = "AWS::S3::Accelerate"
