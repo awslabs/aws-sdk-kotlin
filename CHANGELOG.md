@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.27] - 02/21/2025
+
+### Features
+* (**appstream**) Added support for Certificate-Based Authentication on AppStream 2.0 multi-session fleets.
+* (**bedrockagent**) Introduce a new parameter which represents the user-agent header value used by the Bedrock Knowledge Base Web Connector.
+
 ## [1.4.26] - 02/20/2025
 
 ### Features
