@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.28] - 02/24/2025
+
+### Features
+* (**bedrockagent**) This release improves support for newer models in Amazon Bedrock Flows.
+* (**bedrockagentruntime**) Adding support for ReasoningContent fields in Pre-Processing, Post-Processing and Orchestration Trace outputs.
+* (**bedrockruntime**) This release adds Reasoning Content support to Converse and ConverseStream APIs
+
+### Documentation
+* (**elasticache**) Documentation update, adding clarity and rephrasing.
+
+### Miscellaneous
+* Remove Elastic Inference Service
+
 ## [1.4.27] - 02/21/2025
 
 ### Features
