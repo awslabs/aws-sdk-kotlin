@@ -787,12 +787,6 @@
             "brazilName": "AwsSdkKotlinElasticBeanstalk"
         },
         {
-            "sdkId": "Elastic Inference",
-            "namespace": "aws.sdk.kotlin.services.elasticinference",
-            "artifactName": "elasticinference",
-            "brazilName": "AwsSdkKotlinElasticInference"
-        },
-        {
             "sdkId": "Elastic Load Balancing",
             "namespace": "aws.sdk.kotlin.services.elasticloadbalancing",
             "artifactName": "elasticloadbalancing",
