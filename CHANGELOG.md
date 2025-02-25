@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.29] - 02/25/2025
+
+### Features
+* (**codebuild**) Adding "reportArns" field in output of BatchGetBuildBatches API. "reportArns" is an array that contains the ARNs of reports created by merging reports from builds associated with the batch build.
+* (**devicefarm**) Add an optional configuration to the ScheduleRun and CreateRemoteAccessSession API to set a device level http/s proxy.
+* (**ec2**) Adds support for time-based EBS-backed AMI copy operations. Time-based copy ensures that EBS-backed AMIs are copied within and across Regions in a specified timeframe.
+* (**iot**) AWS IoT - AWS IoT Device Defender adds support for a new Device Defender Audit Check that monitors device certificate age and custom threshold configurations for both the new device certificate age check and existing device certificate expiry check.
+* (**taxsettings**) PutTaxRegistration API changes for Egypt, Greece, Vietnam countries
+* Add SigV4a support to the default AWS signer
+
 ## [1.4.28] - 02/24/2025
 
 ### Features
