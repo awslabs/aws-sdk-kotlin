@@ -18,6 +18,7 @@ import aws.smithy.kotlin.runtime.http.response.HttpResponse
  * If so it sends users to a section in the AWS SDK for Kotlin documentation on how to fix it.
  */
 @InternalSdkApi
+@Deprecated("This interceptor is no longer used. It will be removed in the next minor version, v1.5.x.")
 public class UnsupportedSigningAlgorithmInterceptor : HttpInterceptor {
     override suspend fun modifyBeforeCompletion(context: ResponseInterceptorContext<Any, Any, HttpRequest?, HttpResponse?>): Result<Any> {
         context.response.exceptionOrNull()?.let {

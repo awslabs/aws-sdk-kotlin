@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.4.28] - 02/24/2025
+
+### Features
+* (**bedrockagent**) This release improves support for newer models in Amazon Bedrock Flows.
+* (**bedrockagentruntime**) Adding support for ReasoningContent fields in Pre-Processing, Post-Processing and Orchestration Trace outputs.
+* (**bedrockruntime**) This release adds Reasoning Content support to Converse and ConverseStream APIs
+
+### Documentation
+* (**elasticache**) Documentation update, adding clarity and rephrasing.
+
+### Miscellaneous
+* Remove Elastic Inference Service
+
+## [1.4.27] - 02/21/2025
+
+### Features
+* (**appstream**) Added support for Certificate-Based Authentication on AppStream 2.0 multi-session fleets.
+* (**bedrockagent**) Introduce a new parameter which represents the user-agent header value used by the Bedrock Knowledge Base Web Connector.
+
+## [1.4.26] - 02/20/2025
+
+### Features
+* (**codebuild**) Add webhook status and status message to AWS CodeBuild webhooks
+* (**guardduty**) Reduce the minimum number of required attack sequence signals from 2 to 1
+* (**sagemaker**) Added new capability in the UpdateCluster operation to remove instance groups from your SageMaker HyperPod cluster.
+* (**workspacesweb**) Add support for toolbar configuration under user settings.
+
+### Documentation
+* (**licensemanagerusersubscriptions**) Updates entity to include Microsoft RDS SAL as a valid type of user subscription.
+* (**rds**) CloudWatch Database Insights now supports Amazon RDS.
+
 ## [1.4.25] - 02/19/2025
 
 ### Features

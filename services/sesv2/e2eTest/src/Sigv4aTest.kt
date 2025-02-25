@@ -12,7 +12,6 @@ import aws.smithy.kotlin.runtime.http.auth.SigV4AsymmetricAuthScheme
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import kotlinx.coroutines.runBlocking
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -21,7 +20,6 @@ import kotlin.test.assertNotNull
 
 class Sigv4aTest {
     @Test
-    @Ignore // TODO enable once SESv2 model adds endpointId and Sigv4a
     fun testSigv4a() = runBlocking {
         val interceptor = RequestCapturingInterceptor()
 
@@ -36,7 +34,7 @@ class Sigv4aTest {
         }.use { ses ->
             assertFailsWith<HttpException> {
                 ses.sendEmail {
-                    // endpointId = "bdm3x3zl.n5x" // TODO uncomment
+                    endpointId = "bdm3x3zl.n5x"
                 }
             }
         }
