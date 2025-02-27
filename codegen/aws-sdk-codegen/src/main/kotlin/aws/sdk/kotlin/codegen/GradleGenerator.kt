@@ -73,7 +73,7 @@ class GradleGenerator : KotlinIntegration {
 
                     // `Route53UriTest` E2E tests depend on `TestEngine`
                     if (ctx.model.expectShape<ServiceShape>(ctx.settings.service).sdkId.lowercase() == "route 53") {
-                        writer.withBlock("jvmE2eTest {", "}") {
+                        withBlock("jvmE2eTest {", "}") {
                             withBlock("dependencies {", "}") {
                                 write(KotlinDependency.HTTP_TEST.dependencyNotation())
                             }
