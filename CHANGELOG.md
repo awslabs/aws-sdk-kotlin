@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.31] - 02/27/2025
+
+### Features
+* (**bedrockagentruntime**) Introduces Sessions (preview) to enable stateful conversations in GenAI applications.
+* (**qbusiness**) This release supports deleting attachments from conversations.
+* (**redshiftserverless**) Add track support for Redshift Serverless workgroup.
+* (**sagemaker**) SageMaker HubService is introducing support for creating Training Jobs in Curated Hub (Private Hub). Additionally, it is introducing two new APIs: UpdateHubContent and UpdateHubContentReference.
+* (**storagegateway**) This release adds support to invoke a process that cleans the specified file share's cache of file entries that are failing upload to Amazon S3.
+
+### Documentation
+* (**emr**) Definition update for EbsConfiguration.
+
 ## [1.4.30] - 02/26/2025
 
 ### Features
