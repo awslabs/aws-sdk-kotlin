@@ -61,7 +61,7 @@ private fun runSmokeTests(
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
     val processBuilder =
         ProcessBuilder(
-            "./gradlew",
+            if (System.getProperty("os.name").contains("Windows", ignoreCase = true)) "gradlew.bat" else "./gradlew",
             ":tests:codegen:smoke-tests:services:$service:smokeTest",
             // Make sure unexpected errors are debuggable
             "--stacktrace",
