@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package aws.sdk.kotlin.tests.codegen.smoketests
+package aws.sdk.kotlin.test.codegen.smoketest
 
 import aws.sdk.kotlin.codegen.smoketests.AWS_SERVICE_FILTER
 import aws.sdk.kotlin.codegen.smoketests.AWS_SKIP_TAGS
-import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -30,7 +29,7 @@ class SmokeTestE2ETest {
 
     @Test
     fun exceptionService() {
-        val smokeTestRunnerOutput = runSmokeTests("exceptionService", expectingFailure = true)
+        val smokeTestRunnerOutput = runSmokeTests("exceptionService")
 
         assertContains(smokeTestRunnerOutput, "not ok ExceptionService ExceptionTest - no error expected from service")
         assertContains(smokeTestRunnerOutput, "#aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsFailureException: Smoke test failed with HTTP status code: 400")
@@ -58,21 +57,24 @@ class SmokeTestE2ETest {
 private fun runSmokeTests(
     service: String,
     envVars: Map<String, String> = emptyMap(),
-    expectingFailure: Boolean = false,
 ): String {
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
-
-    val task = GradleRunner.create()
-        .withProjectDir(File(sdkRootDir))
-        .withArguments(
-            "--stacktrace", // Make sure unexpected errors are debuggable
-            "-Paws.kotlin.native=false", // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
+    val processBuilder =
+        ProcessBuilder(
+            "./gradlew",
             ":tests:codegen:smoke-tests:services:$service:smokeTest",
+            // Make sure unexpected errors are debuggable
+            "--stacktrace",
+            // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
+            "-Paws.kotlin.native=false",
         )
-        .withEnvironment(envVars)
-        .forwardOutput()
+            .directory(File(sdkRootDir))
+            .redirectErrorStream(true)
 
-    val buildResult = if (expectingFailure) task.buildAndFail() else task.build()
+    processBuilder.environment().putAll(envVars)
 
-    return buildResult.output
+    val process = processBuilder.start()
+    val output = process.inputStream.bufferedReader().use { it.readText() }
+
+    return output
 }
