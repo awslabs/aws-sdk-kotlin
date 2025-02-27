@@ -75,7 +75,6 @@ subprojects {
                             implementation(libraries.kotlin.test.junit5)
                             implementation(project(":tests:e2e-test-util"))
                             implementation(libraries.slf4j.simple)
-                            implementation(libraries.smithy.kotlin.http.test)
                         }
                     }
 
@@ -100,6 +99,12 @@ subprojects {
                         if (project.name == "sesv2") {
                             dependencies {
                                 implementation(libs.smithy.kotlin.aws.signing.crt) // needed for E2E test of SigV4a
+                            }
+                        }
+
+                        if (project.name == "route53") {
+                            dependencies {
+                                implementation(libraries.smithy.kotlin.http.test) // needed for URI E2E tests
                             }
                         }
 
