@@ -70,12 +70,6 @@ class GradleGenerator : KotlinIntegration {
                                 }
                             }
                         }
-
-                    withBlock("jvmE2eTest {", "}") {
-                        withBlock("dependencies {", "}") {
-                            write(KotlinDependency.HTTP_TEST.dependencyNotation())
-                        }
-                    }
                 }
                 if (ctx.model.topDownOperations(ctx.settings.service).any { it.hasTrait<SmokeTestsTrait>() }) {
                     write("")

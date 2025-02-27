@@ -75,6 +75,7 @@ subprojects {
                             implementation(libraries.kotlin.test.junit5)
                             implementation(project(":tests:e2e-test-util"))
                             implementation(libraries.slf4j.simple)
+                            implementation(libraries.smithy.kotlin.http.test)
                         }
                     }
 
