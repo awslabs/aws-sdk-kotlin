@@ -1,5 +1,7 @@
 package aws.sdk.kotlin.services.route53
 
+import aws.sdk.kotlin.runtime.auth.credentials.StaticCredentialsProvider
+import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
@@ -23,6 +25,7 @@ class Route53UriTest {
                     expectedUrl = "/0000-00-00/hostedzone/IDOFMYHOSTEDZONE/rrset",
                 ),
             )
+            credentialsProvider = StaticCredentialsProvider(Credentials("AKID", "SECRETAK"))
         }.use { client ->
             client.listResourceRecordSets {
                 hostedZoneId = "IDOFMYHOSTEDZONE"
@@ -43,6 +46,7 @@ class Route53UriTest {
                     expectedUrl = "/0000-00-00/hostedzone/IDOFMYHOSTEDZONE/rrset",
                 ),
             )
+            credentialsProvider = StaticCredentialsProvider(Credentials("AKID", "SECRETAK"))
         }.use { client ->
             client.listResourceRecordSets {
                 hostedZoneId = "hostedzone/IDOFMYHOSTEDZONE"
@@ -63,6 +67,7 @@ class Route53UriTest {
                     expectedUrl = "/0000-00-00/hostedzone/IDOFMYHOSTEDZONE/rrset",
                 ),
             )
+            credentialsProvider = StaticCredentialsProvider(Credentials("AKID", "SECRETAK"))
         }.use { client ->
             client.listResourceRecordSets {
                 hostedZoneId = "/hostedzone/IDOFMYHOSTEDZONE"
@@ -83,6 +88,7 @@ class Route53UriTest {
                     expectedUrl = "/0000-00-00/hostedzone/IDOFMY%2FHOSTEDZONE/rrset",
                 ),
             )
+            credentialsProvider = StaticCredentialsProvider(Credentials("AKID", "SECRETAK"))
         }.use { client ->
             client.listResourceRecordSets {
                 hostedZoneId = "/hostedzone/IDOFMY/HOSTEDZONE"
@@ -103,6 +109,7 @@ class Route53UriTest {
                     expectedUrl = "/0000-00-00/change/SOMECHANGEID",
                 ),
             )
+            credentialsProvider = StaticCredentialsProvider(Credentials("AKID", "SECRETAK"))
         }.use { client ->
             client.getChange {
                 id = "/change/SOMECHANGEID"
@@ -123,6 +130,7 @@ class Route53UriTest {
                     expectedUrl = "/0000-00-00/delegationset/DELEGATIONSETID",
                 ),
             )
+            credentialsProvider = StaticCredentialsProvider(Credentials("AKID", "SECRETAK"))
         }.use { client ->
             client.getReusableDelegationSet {
                 id = "/delegationset/DELEGATIONSETID"
