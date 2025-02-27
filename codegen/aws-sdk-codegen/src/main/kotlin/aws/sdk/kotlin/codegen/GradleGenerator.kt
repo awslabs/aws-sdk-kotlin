@@ -52,7 +52,7 @@ class GradleGenerator : KotlinIntegration {
         writer.write("project.ext.set(#S, #S)", "aws.sdk.id", ctx.settings.sdkId)
         writer.write("")
 
-        val allDependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
+        val allDependencies: List<KotlinDependency> = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
 
         writer
             .write("")
@@ -70,6 +70,15 @@ class GradleGenerator : KotlinIntegration {
                                 }
                             }
                         }
+
+                    // `Route53UriTest` E2E tests depend on `TestEngine`
+                    if (ctx.model.expectShape<ServiceShape>(ctx.settings.service).sdkId.lowercase() == "route 53") {
+                        writer.withBlock("jvmE2eTest {", "}") {
+                            withBlock("dependencies {", "}") {
+                                write(KotlinDependency.HTTP_TEST.dependencyNotation())
+                            }
+                        }
+                    }
                 }
                 if (ctx.model.topDownOperations(ctx.settings.service).any { it.hasTrait<SmokeTestsTrait>() }) {
                     write("")
