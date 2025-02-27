@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.4.30] - 02/26/2025
+
+### Features
+* (**applicationsignals**) This release adds API support for reading Service Level Objectives and Services from monitoring accounts, from SLO and Service-scoped operations, including ListServices and ListServiceLevelObjectives.
+* (**batch**) AWS Batch: Resource Aware Scheduling feature support
+* (**chime**) Removes the Amazon Chime SDK APIs from the "chime" namespace.  Amazon Chime SDK APIs continue to be available in the AWS SDK via the dedicated Amazon Chime SDK namespaces: chime-sdk-identity, chime-sdk-mediapipelines, chime-sdk-meetings, chime-sdk-messaging, and chime-sdk-voice.
+* (**ec2**) Amazon EC2 Fleet customers can now override the Block Device Mapping specified in the Launch Template when creating a new Fleet request, saving the effort of creating and associating new Launch Templates to customize the Block Device Mapping.
+* (**iotfleetwise**) This release adds an optional listResponseScope request parameter in certain list API requests to limit the response to metadata only.
+* (**oam**) This release adds support for sharing AWS::ApplicationSignals::Service and AWS::ApplicationSignals::ServiceLevelObjective resources.
+* (**sagemaker**) AWS SageMaker InferenceComponents now support rolling update deployments for Inference Components.
+
+### Documentation
+* (**cloudfront**) Documentation update for VPC origin config.
+
+## [1.4.29] - 02/25/2025
+
+### Features
+* (**codebuild**) Adding "reportArns" field in output of BatchGetBuildBatches API. "reportArns" is an array that contains the ARNs of reports created by merging reports from builds associated with the batch build.
+* (**devicefarm**) Add an optional configuration to the ScheduleRun and CreateRemoteAccessSession API to set a device level http/s proxy.
+* (**ec2**) Adds support for time-based EBS-backed AMI copy operations. Time-based copy ensures that EBS-backed AMIs are copied within and across Regions in a specified timeframe.
+* (**iot**) AWS IoT - AWS IoT Device Defender adds support for a new Device Defender Audit Check that monitors device certificate age and custom threshold configurations for both the new device certificate age check and existing device certificate expiry check.
+* (**taxsettings**) PutTaxRegistration API changes for Egypt, Greece, Vietnam countries
+* Add SigV4a support to the default AWS signer
+
 ## [1.4.28] - 02/24/2025
 
 ### Features
