@@ -52,7 +52,7 @@ class GradleGenerator : KotlinIntegration {
         writer.write("project.ext.set(#S, #S)", "aws.sdk.id", ctx.settings.sdkId)
         writer.write("")
 
-        val allDependencies: List<KotlinDependency> = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
+        val allDependencies = delegator.dependencies.mapNotNull { it.properties["dependency"] as? KotlinDependency }.distinct()
 
         writer
             .write("")
