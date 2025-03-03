@@ -40,6 +40,8 @@ jobs:
         with:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
+      - name: Setup kat
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/setup-kat@main
       - name: Configure Git
         shell: bash
         run: |
