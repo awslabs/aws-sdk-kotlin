@@ -7,6 +7,8 @@ package aws.sdk.kotlin.test.codegen.smoketest
 
 import aws.sdk.kotlin.codegen.smoketests.AWS_SERVICE_FILTER
 import aws.sdk.kotlin.codegen.smoketests.AWS_SKIP_TAGS
+import aws.smithy.kotlin.runtime.util.OsFamily
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -61,7 +63,7 @@ private fun runSmokeTests(
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
     val processBuilder =
         ProcessBuilder(
-            if (System.getProperty("os.name").contains("Windows", ignoreCase = true)) ".\\gradlew.bat" else "./gradlew",
+            *gradleWrapperCommand(),
             ":tests:codegen:smoke-tests:services:$service:smokeTest",
             // Make sure unexpected errors are debuggable
             "--stacktrace",
@@ -78,3 +80,13 @@ private fun runSmokeTests(
 
     return output
 }
+
+/**
+ * Determines the appropriate Gradle wrapper command based on the operating system.
+ */
+private fun gradleWrapperCommand() =
+    if (PlatformProvider.System.osInfo().family == OsFamily.Windows) {
+        arrayOf("cmd.exe", "/c", "gradlew.bat")
+    } else {
+        arrayOf("./gradlew")
+    }
