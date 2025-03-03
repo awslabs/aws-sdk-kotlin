@@ -30,11 +30,6 @@ jobs:
       - name: Set start timestamp
         id: start
         run: printf 'timestamp=%(%s)T\n' >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v4
-        with:
-          ref: 'main'
-          fetch-depth: 0
-          token: ${{ secrets.CI_USER_PAT }}
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -42,6 +37,11 @@ jobs:
           aws-region: us-west-2
       - name: Setup kat
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/setup-kat@main
+      - uses: actions/checkout@v4
+        with:
+          ref: 'main'
+          fetch-depth: 0
+          token: ${{ secrets.CI_USER_PAT }}
       - name: Configure Git
         shell: bash
         run: |
