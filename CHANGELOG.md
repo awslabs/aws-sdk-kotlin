@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.33] - 03/03/2025
+
+### Features
+* (**cognitoidentityprovider**) Added the capacity to return available challenges in admin authentication and to set version 3 of the pre token generation event for M2M ATC.
+* (**ec2**) Update the DescribeVpcs response
+* (**qbusiness**) Adds support for the ingestion of audio and video files by Q Business, which can be configured with the mediaExtractionConfiguration parameter.
+* (**rum**) Add support for PutResourcePolicy, GetResourcePolicy and DeleteResourcePolicy to support resource based policies for AWS CloudWatch RUM
+* (**sagemaker**) Add DomainId to CreateDomainResponse
+
+### Documentation
+* (**transcribe**) Updating documentation for post call analytics job queueing.
+
 ## [1.4.32] - 02/28/2025
 
 ### Features
