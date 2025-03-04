@@ -125,7 +125,7 @@ jobs:
           printf 'duration=$duration\n' >> "$GITHUB_OUTPUT"
       - name: Emit metrics
         if: always() # run this step even if previous steps failed or the job is canceled
-        uses: awslabs/aws-kotlin-repo-tools/.github/actions/emit-metrics
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/emit-metrics@main
         with:
           namespace: CI Metrics
           dimensions: |
