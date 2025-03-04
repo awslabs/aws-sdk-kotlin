@@ -7,7 +7,9 @@ package aws.sdk.kotlin.e2etest
 import aws.sdk.kotlin.services.sqs.SqsClient
 import aws.sdk.kotlin.services.sqs.createQueue
 import aws.sdk.kotlin.services.sqs.model.*
-import kotlinx.coroutines.coroutineScope
+import aws.sdk.kotlin.services.sqs.paginators.listQueuesPaginated
+import aws.sdk.kotlin.services.sqs.paginators.queueUrls
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withTimeout
 import java.net.URI
 import java.util.*
@@ -16,8 +18,8 @@ import kotlin.time.Duration.Companion.seconds
 object SqsTestUtils {
     const val DEFAULT_REGION = "us-west-2"
 
-    const val TEST_QUEUE_WRONG_CHECKSUM_PREFIX = "sqs-test-queue-"
-    const val TEST_QUEUE_CORRECT_CHECKSUM_PREFIX = "sqs-test-queue-"
+    const val TEST_QUEUE_WRONG_CHECKSUM_PREFIX = "sqs-test-queue-wrong-checksum"
+    const val TEST_QUEUE_CORRECT_CHECKSUM_PREFIX = "sqs-test-queue-correct-checksum"
 
     const val TEST_MESSAGE_BODY = "Hello World"
     const val TEST_MESSAGE_ATTRIBUTES_NAME = "TestAttribute"
@@ -30,28 +32,17 @@ object SqsTestUtils {
         region: String? = null,
     ): String = getQueueUrlWithPrefix(client, prefix, region)
 
-    suspend fun getQueueUrlWithPrefix(
+    private suspend fun getQueueUrlWithPrefix(
         client: SqsClient,
         prefix: String,
         region: String? = null,
     ): String = withTimeout(60.seconds) {
-        val queueUrls = client.listQueues().queueUrls
+        //val queueUrls = client.listQueues().queueUrls
 
-        var matchingQueueUrl = queueUrls?.firstOrNull { url ->
-            val queueUrl = URI(url).toURL()
-            val hostParts = queueUrl.host.split(".")
-
-            val regionMatches = if (region != null) {
-                hostParts.getOrNull(1)?.equals(region, ignoreCase = true) ?: false
-            } else {
-                true
-            }
-
-            val queueName = queueUrl.path.split("/").last()
-            val prefixMatches = queueName.startsWith(prefix)
-
-            regionMatches && prefixMatches
-        }
+        var matchingQueueUrl = client
+            .listQueuesPaginated { queueNamePrefix = prefix }
+            .queueUrls()
+            .firstOrNull()
 
         if (matchingQueueUrl == null) {
             matchingQueueUrl = prefix + UUID.randomUUID()
@@ -67,22 +58,26 @@ object SqsTestUtils {
         matchingQueueUrl
     }
 
-    suspend fun deleteQueueAndAllMessages(client: SqsClient, queueUrl: String): Unit = coroutineScope {
+    suspend fun deleteQueueAndAllMessages(client: SqsClient, queueUrl: String) {
         try {
             println("Purging Sqs queue: $queueUrl")
-            val purgeRequest = PurgeQueueRequest {
-                this.queueUrl = queueUrl
-            }
 
-            client.purgeQueue(purgeRequest)
+            client.purgeQueue (
+                PurgeQueueRequest {
+                    this.queueUrl = queueUrl
+                }
+            )
+
             println("Queue purged successfully.")
 
             println("Deleting Sqs queue: $queueUrl")
-            val deleteRequest = DeleteQueueRequest {
-                this.queueUrl = queueUrl
-            }
 
-            client.deleteQueue(deleteRequest)
+            client.deleteQueue(
+                DeleteQueueRequest {
+                    this.queueUrl = queueUrl
+                }
+            )
+
             println("Queue deleted successfully.")
         } catch (e: SqsException) {
             println("Error during delete SQS queue: ${e.message}")
@@ -92,13 +87,13 @@ object SqsTestUtils {
     fun buildSendMessageBatchRequestEntry(batchId: Int): SendMessageBatchRequestEntry = SendMessageBatchRequestEntry {
         id = batchId.toString()
         messageBody = TEST_MESSAGE_BODY + batchId
-        messageAttributes = hashMapOf(
+        messageAttributes = mapOf(
             TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
                 dataType = "String"
                 stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE + batchId
             },
         )
-        messageSystemAttributes = hashMapOf(
+        messageSystemAttributes = mapOf(
             MessageSystemAttributeNameForSends.AwsTraceHeader to MessageSystemAttributeValue {
                 dataType = "String"
                 stringValue = TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE + batchId

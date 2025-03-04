@@ -33,34 +33,27 @@ import org.junit.jupiter.api.*
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SqsMd5ChecksumValidationTest {
     // An interceptor that set wrong md5 checksums in SQS response
+    @OptIn(ExperimentalStdlibApi::class)
     private val wrongChecksumInterceptor = object : HttpInterceptor {
         override suspend fun modifyBeforeCompletion(
             context: ResponseInterceptorContext<Any, Any, HttpRequest?, HttpResponse?>,
         ): Result<Any> {
-            val wrongMd5ofMessageBody = "wrong message md5".encodeToByteArray().md5().toString()
-            val wrongMd5ofMessageAttribute = "wrong attribute md5".encodeToByteArray().md5().toString()
-            val wrongMd5ofMessageSystemAttribute = "wrong system attribute md5".encodeToByteArray().md5().toString()
+            val wrongMd5ofMessageBody = "wrong message md5".encodeToByteArray().md5().toHexString()
+            val wrongMd5ofMessageAttribute = "wrong attribute md5".encodeToByteArray().md5().toHexString()
+            val wrongMd5ofMessageSystemAttribute = "wrong system attribute md5".encodeToByteArray().md5().toHexString()
 
             when (val response = context.response.getOrNull()) {
                 is SendMessageResponse -> {
-                    val modifiedResponse = SendMessageResponse.invoke {
-                        messageId = response.messageId
-                        sequenceNumber = response.sequenceNumber
+                    val modifiedResponse = response.copy {
                         md5OfMessageBody = wrongMd5ofMessageBody
                         md5OfMessageAttributes = wrongMd5ofMessageAttribute
                         md5OfMessageSystemAttributes = wrongMd5ofMessageSystemAttribute
                     }
-                    println("modify SendMessage")
                     return Result.success(modifiedResponse)
                 }
                 is ReceiveMessageResponse -> {
                     val modifiedMessages = response.messages?.map { message ->
-                        Message {
-                            messageId = message.messageId
-                            receiptHandle = message.receiptHandle
-                            body = message.body
-                            attributes = message.attributes
-                            messageAttributes = message.messageAttributes
+                        message.copy {
                             md5OfBody = wrongMd5ofMessageBody
                             md5OfMessageAttributes = wrongMd5ofMessageAttribute
                         }
@@ -73,13 +66,10 @@ class SqsMd5ChecksumValidationTest {
                 }
                 is SendMessageBatchResponse -> {
                     val modifiedEntries = response.successful.map { entry ->
-                        SendMessageBatchResultEntry {
-                            id = entry.id
-                            messageId = entry.messageId
+                        entry.copy {
                             md5OfMessageBody = wrongMd5ofMessageBody
                             md5OfMessageAttributes = wrongMd5ofMessageAttribute
                             md5OfMessageSystemAttributes = wrongMd5ofMessageSystemAttribute
-                            sequenceNumber = entry.sequenceNumber
                         }
                     }
 

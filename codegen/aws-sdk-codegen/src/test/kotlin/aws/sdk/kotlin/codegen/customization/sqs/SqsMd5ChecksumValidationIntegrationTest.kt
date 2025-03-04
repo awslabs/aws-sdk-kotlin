@@ -48,5 +48,5 @@ class SqsMd5ChecksumValidationIntegrationTest {
 object FooMiddleware : ProtocolMiddleware {
     override val name: String = "FooMiddleware"
     override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) =
-        fail("Unexpected call to `FooMiddleware.render")
+        fail("Unexpected call to `FooMiddleware.render`")
 }
