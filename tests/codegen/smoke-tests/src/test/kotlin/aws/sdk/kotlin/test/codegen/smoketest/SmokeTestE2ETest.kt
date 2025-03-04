@@ -3,14 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package aws.sdk.kotlin.tests.codegen.smoketests
+package aws.sdk.kotlin.test.codegen.smoketest
 
 import aws.sdk.kotlin.codegen.smoketests.AWS_SERVICE_FILTER
 import aws.sdk.kotlin.codegen.smoketests.AWS_SKIP_TAGS
-import org.gradle.testkit.runner.GradleRunner
+import aws.smithy.kotlin.runtime.util.OsFamily
+import aws.smithy.kotlin.runtime.util.PlatformProvider
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertTrue
 
 class SmokeTestE2ETest {
     @Test
@@ -61,18 +63,37 @@ private fun runSmokeTests(
     expectingFailure: Boolean = false,
 ): String {
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
-
-    val task = GradleRunner.create()
-        .withProjectDir(File(sdkRootDir))
-        .withArguments(
-            "--stacktrace", // Make sure unexpected errors are debuggable
-            "-Paws.kotlin.native=false", // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
+    val processBuilder =
+        ProcessBuilder(
+            *gradleWrapperCommand(),
             ":tests:codegen:smoke-tests:services:$service:smokeTest",
+            // Make sure unexpected errors are debuggable
+            "--stacktrace",
+            // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
+            "-Paws.kotlin.native=false",
         )
-        .withEnvironment(envVars)
-        .forwardOutput()
+            .directory(File(sdkRootDir))
+            .redirectErrorStream(true)
 
-    val buildResult = if (expectingFailure) task.buildAndFail() else task.build()
+    processBuilder.environment().putAll(envVars)
 
-    return buildResult.output
+    val process = processBuilder.start()
+    val output = process.inputStream.bufferedReader().use { it.readText() }
+    val exitCode = process.waitFor()
+
+    if (expectingFailure) {
+        assertTrue(exitCode != 0)
+    }
+
+    return output
 }
+
+/**
+ * Determines the appropriate Gradle wrapper command based on the operating system.
+ */
+private fun gradleWrapperCommand() =
+    if (PlatformProvider.System.osInfo().family == OsFamily.Windows) {
+        arrayOf("cmd.exe", "/c", "gradlew.bat")
+    } else {
+        arrayOf("./gradlew")
+    }
