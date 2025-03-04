@@ -117,40 +117,36 @@ class SqsMd5ChecksumValidationTest {
 
     @Test
     fun testSendMessage(): Unit = runBlocking {
-        assertDoesNotThrow {
-            correctChecksumClient.sendMessage(
-                SendMessageRequest {
-                    queueUrl = correctChecksumTestQueueUrl
-                    messageBody = TEST_MESSAGE_BODY
-                    messageAttributes = hashMapOf(
-                        TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
-                            dataType = "String"
-                            stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE
-                        },
-                    )
-                    messageSystemAttributes = hashMapOf(
-                        MessageSystemAttributeNameForSends.AwsTraceHeader to MessageSystemAttributeValue {
-                            dataType = "String"
-                            stringValue = TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE
-                        },
-                    )
-                },
-            )
-        }
+        correctChecksumClient.sendMessage(
+            SendMessageRequest {
+                queueUrl = correctChecksumTestQueueUrl
+                messageBody = TEST_MESSAGE_BODY
+                messageAttributes = hashMapOf(
+                    TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
+                        dataType = "String"
+                        stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE
+                    },
+                )
+                messageSystemAttributes = hashMapOf(
+                    MessageSystemAttributeNameForSends.AwsTraceHeader to MessageSystemAttributeValue {
+                        dataType = "String"
+                        stringValue = TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE
+                    },
+                )
+            },
+        )
     }
 
     @Test
     fun testReceiveMessage(): Unit = runBlocking {
-        assertDoesNotThrow {
-            correctChecksumClient.receiveMessage(
-                ReceiveMessageRequest {
-                    queueUrl = correctChecksumTestQueueUrl
-                    maxNumberOfMessages = 1
-                    messageAttributeNames = listOf(TEST_MESSAGE_ATTRIBUTES_NAME)
-                    messageSystemAttributeNames = listOf(MessageSystemAttributeName.AwsTraceHeader)
-                },
-            )
-        }
+        correctChecksumClient.receiveMessage(
+            ReceiveMessageRequest {
+                queueUrl = correctChecksumTestQueueUrl
+                maxNumberOfMessages = 1
+                messageAttributeNames = listOf(TEST_MESSAGE_ATTRIBUTES_NAME)
+                messageSystemAttributeNames = listOf(MessageSystemAttributeName.AwsTraceHeader)
+            },
+        )
     }
 
     @Test
@@ -159,14 +155,12 @@ class SqsMd5ChecksumValidationTest {
             buildSendMessageBatchRequestEntry(batchId)
         }
 
-        assertDoesNotThrow {
-            correctChecksumClient.sendMessageBatch(
-                SendMessageBatchRequest {
-                    queueUrl = correctChecksumTestQueueUrl
-                    this.entries = entries
-                },
-            )
-        }
+        correctChecksumClient.sendMessageBatch(
+            SendMessageBatchRequest {
+                queueUrl = correctChecksumTestQueueUrl
+                this.entries = entries
+            },
+        )
     }
 
     @Test

@@ -18,8 +18,8 @@ import kotlin.time.Duration.Companion.seconds
 object SqsTestUtils {
     const val DEFAULT_REGION = "us-west-2"
 
-    const val TEST_QUEUE_WRONG_CHECKSUM_PREFIX = "sqs-test-queue-wrong-checksum"
-    const val TEST_QUEUE_CORRECT_CHECKSUM_PREFIX = "sqs-test-queue-correct-checksum"
+    const val TEST_QUEUE_WRONG_CHECKSUM_PREFIX = "sqs-test-queue-wrong-checksum-"
+    const val TEST_QUEUE_CORRECT_CHECKSUM_PREFIX = "sqs-test-queue-correct-checksum-"
 
     const val TEST_MESSAGE_BODY = "Hello World"
     const val TEST_MESSAGE_ATTRIBUTES_NAME = "TestAttribute"
