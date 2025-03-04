@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.34] - 03/04/2025
+
+### Features
+* (**iotmanagedintegrations**) Adding managed integrations APIs for IoT Device Management to setup and control devices across different manufacturers and connectivity protocols. APIs include managedthing operations, credential and provisioning profile management, notification configuration, and OTA update.
+* (**iotsitewise**) AWS IoT SiteWise now supports MQTT-enabled, V3 gateways. Configure data destinations for real-time ingestion into AWS IoT SiteWise or buffered ingestion using Amazon S3 storage. You can also use path filters for precise data collection from specific MQTT topics.
+
+### Documentation
+* (**elasticache**) Doc only update, listing 'valkey7' and 'valkey8' as engine options for parameter groups.
+* (**rds**) Note support for Database Insights for Amazon RDS.
+
 ## [1.4.33] - 03/03/2025
 
 ### Features
