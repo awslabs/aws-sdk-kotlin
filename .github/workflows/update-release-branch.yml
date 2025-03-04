@@ -16,6 +16,10 @@ on:
   schedule:
     - cron: "0 7 * * 1-5"  # At 07:00 UTC (00:00 PST, 03:00 EST), Monday through Friday
 
+permissions:
+  id-token: write
+  contents: read
+
 concurrency:
   group: release-manual-${{ github.ref }}
   cancel-in-progress: true
