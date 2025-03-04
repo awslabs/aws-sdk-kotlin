@@ -221,6 +221,30 @@ public inline fun <reified T : Enum<T>> AwsProfile.getEnumOrNull(key: String, su
         )
     }
 
+/**
+ * Parse a config value as an enum set.
+ */
+@InternalSdkApi
+public inline fun <reified T : Enum<T>> AwsProfile.getEnumSetOrNull(key: String, subKey: String? = null): Set<T>? =
+    getOrNull(key, subKey)?.let { rawValue ->
+        rawValue.split(",")
+            .map { it.trim() }
+            .map { value ->
+                enumValues<T>().firstOrNull {
+                    it.name.equals(value, ignoreCase = true)
+                } ?: throw ConfigurationException(
+                    buildString {
+                        append(key)
+                        append(" '")
+                        append(value)
+                        append("' is not supported, should be one of: ")
+                        enumValues<T>().joinTo(this) { it.name.lowercase() }
+                    }
+                )
+            }.toSet()
+            .takeIf { it.isNotEmpty() }
+    }
+
 internal fun AwsProfile.getUrlOrNull(key: String, subKey: String? = null): Url? =
     getOrNull(key, subKey)?.let {
         try {

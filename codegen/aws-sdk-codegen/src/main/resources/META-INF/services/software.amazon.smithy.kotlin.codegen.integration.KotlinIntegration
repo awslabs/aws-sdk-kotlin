@@ -49,3 +49,5 @@ aws.sdk.kotlin.codegen.smoketests.SmokeTestsDenyListIntegration
 aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestSuccessHttpEngineIntegration
 aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestFailHttpEngineIntegration
 aws.sdk.kotlin.codegen.customization.AwsQueryModeCustomization
+aws.sdk.kotlin.codegen.customization.sqs.ClientConfigIntegration
+aws.sdk.kotlin.codegen.customization.sqs.SqsMd5ChecksumValidationIntegration
