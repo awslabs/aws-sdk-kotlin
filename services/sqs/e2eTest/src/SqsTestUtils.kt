@@ -89,22 +89,20 @@ object SqsTestUtils {
         }
     }
 
-    fun buildSendMessageBatchRequestEntry(batchId: Int): SendMessageBatchRequestEntry{
-        return SendMessageBatchRequestEntry {
-            id = batchId.toString()
-            messageBody = TEST_MESSAGE_BODY + batchId
-            messageAttributes = hashMapOf(
-                TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
-                    dataType = "String"
-                    stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE + batchId
-                }
-            )
-            messageSystemAttributes = hashMapOf(
-                MessageSystemAttributeNameForSends.AwsTraceHeader to MessageSystemAttributeValue {
-                    dataType = "String"
-                    stringValue = TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE + batchId
-                }
-            )
-        }
+    fun buildSendMessageBatchRequestEntry(batchId: Int): SendMessageBatchRequestEntry = SendMessageBatchRequestEntry {
+        id = batchId.toString()
+        messageBody = TEST_MESSAGE_BODY + batchId
+        messageAttributes = hashMapOf(
+            TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
+                dataType = "String"
+                stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE + batchId
+            },
+        )
+        messageSystemAttributes = hashMapOf(
+            MessageSystemAttributeNameForSends.AwsTraceHeader to MessageSystemAttributeValue {
+                dataType = "String"
+                stringValue = TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE + batchId
+            },
+        )
     }
 }

@@ -103,7 +103,7 @@ public class SqsMd5ChecksumValidationInterceptor(
         sendMessageRequest: SendMessageRequest,
         sendMessageResponse: SendMessageResponse,
     ) {
-        if(validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
+        if (validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
             val messageBodySent = sendMessageRequest.messageBody
 
             if (!messageBodySent.isNullOrEmpty()) {
@@ -117,7 +117,7 @@ public class SqsMd5ChecksumValidationInterceptor(
             }
         }
 
-        if(validationScopes.contains(ValidationScope.MESSAGE_ATTRIBUTES)) {
+        if (validationScopes.contains(ValidationScope.MESSAGE_ATTRIBUTES)) {
             val messageAttrSent = sendMessageRequest.messageAttributes
             if (!messageAttrSent.isNullOrEmpty()) {
                 logger.debug { "Validating message attribute MD5 checksum for SendMessage" }
@@ -130,7 +130,7 @@ public class SqsMd5ChecksumValidationInterceptor(
             }
         }
 
-        if(validationScopes.contains(ValidationScope.MESSAGE_SYSTEM_ATTRIBUTES)) {
+        if (validationScopes.contains(ValidationScope.MESSAGE_SYSTEM_ATTRIBUTES)) {
             val messageSysAttrSent = sendMessageRequest.messageSystemAttributes
             if (!messageSysAttrSent.isNullOrEmpty()) {
                 logger.debug { "Validating message system attribute MD5 checksum for SendMessage" }
@@ -148,7 +148,7 @@ public class SqsMd5ChecksumValidationInterceptor(
         val messages = receiveMessageResponse.messages
         if (messages != null) {
             for (messageReceived in messages) {
-                if(validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
+                if (validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
                     val messageBody = messageReceived.body
                     if (!messageBody.isNullOrEmpty()) {
                         logger.debug { "Validating message body MD5 checksum for ReceiveMessage" }
@@ -161,7 +161,7 @@ public class SqsMd5ChecksumValidationInterceptor(
                     }
                 }
 
-                if(validationScopes.contains(ValidationScope.MESSAGE_ATTRIBUTES)) {
+                if (validationScopes.contains(ValidationScope.MESSAGE_ATTRIBUTES)) {
                     val messageAttr = messageReceived.messageAttributes
 
                     if (!messageAttr.isNullOrEmpty()) {
@@ -191,7 +191,7 @@ public class SqsMd5ChecksumValidationInterceptor(
         }
 
         for (entry in sendMessageBatchResponse.successful) {
-            if(validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
+            if (validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
                 val messageBody = idToRequestEntryMap[entry.id]?.messageBody
 
                 if (!messageBody.isNullOrEmpty()) {
@@ -205,7 +205,7 @@ public class SqsMd5ChecksumValidationInterceptor(
                 }
             }
 
-            if(validationScopes.contains(ValidationScope.MESSAGE_ATTRIBUTES)) {
+            if (validationScopes.contains(ValidationScope.MESSAGE_ATTRIBUTES)) {
                 val messageAttrSent = idToRequestEntryMap[entry.id]?.messageAttributes
                 if (!messageAttrSent.isNullOrEmpty()) {
                     logger.debug { "Validating message attribute MD5 checksum for SendMessageBatch: ${entry.messageId}" }
@@ -218,7 +218,7 @@ public class SqsMd5ChecksumValidationInterceptor(
                 }
             }
 
-            if(validationScopes.contains(ValidationScope.MESSAGE_SYSTEM_ATTRIBUTES)) {
+            if (validationScopes.contains(ValidationScope.MESSAGE_SYSTEM_ATTRIBUTES)) {
                 val messageSysAttrSent = idToRequestEntryMap[entry.id]?.messageSystemAttributes
                 if (!messageSysAttrSent.isNullOrEmpty()) {
                     logger.debug { "Validating message system attribute MD5 checksum for SendMessageBatch: ${entry.messageId}" }
@@ -239,9 +239,9 @@ public class SqsMd5ChecksumValidationInterceptor(
         } catch (e: Exception) {
             throw ClientException(
                 "Unable to calculate the MD5 hash of the message body." +
-                "Potential reasons include JVM configuration or FIPS compliance issues." +
-                "To disable message MD5 validation, you can set checksumValidationEnabled" +
-                "to false when instantiating the client." + e.message,
+                    "Potential reasons include JVM configuration or FIPS compliance issues." +
+                    "To disable message MD5 validation, you can set checksumValidationEnabled" +
+                    "to false when instantiating the client." + e.message,
             )
         }
         val expectedMD5Hex = expectedMD5.toHexString()
@@ -300,9 +300,9 @@ public class SqsMd5ChecksumValidationInterceptor(
         } catch (e: Exception) {
             throw ClientException(
                 "Unable to calculate the MD5 hash of the message body." +
-                "Potential reasons include JVM configuration or FIPS compliance issues." +
-                "To disable message MD5 validation, you can set checksumValidationEnabled" +
-                "to false when instantiating the client." + e.message,
+                    "Potential reasons include JVM configuration or FIPS compliance issues." +
+                    "To disable message MD5 validation, you can set checksumValidationEnabled" +
+                    "to false when instantiating the client." + e.message,
             )
         }
         val expectedMD5Hex = md5Digest.digest().toHexString()
@@ -310,8 +310,7 @@ public class SqsMd5ChecksumValidationInterceptor(
     }
 
     private fun calculateMessageSystemAttributesMd5(
-        messageSysAttrs:
-        Map<MessageSystemAttributeNameForSends, MessageSystemAttributeValue>,
+        messageSysAttrs: Map<MessageSystemAttributeNameForSends, MessageSystemAttributeValue>,
     ): String {
         val sortedAttributeNames = messageSysAttrs.keys.sortedBy { it.value }
         val md5Digest = Md5()
@@ -359,9 +358,9 @@ public class SqsMd5ChecksumValidationInterceptor(
         } catch (e: Exception) {
             throw ClientException(
                 "Unable to calculate the MD5 hash of the message body." +
-                "Potential reasons include JVM configuration or FIPS compliance issues." +
-                "To disable message MD5 validation, you can set checksumValidationEnabled" +
-                "to false when instantiating the client." + e.message,
+                    "Potential reasons include JVM configuration or FIPS compliance issues." +
+                    "To disable message MD5 validation, you can set checksumValidationEnabled" +
+                    "to false when instantiating the client." + e.message,
             )
         }
         val expectedMD5Hex = md5Digest.digest().toHexString()

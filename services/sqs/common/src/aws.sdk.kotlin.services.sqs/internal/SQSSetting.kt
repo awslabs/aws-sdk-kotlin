@@ -25,7 +25,7 @@ internal object SQSSetting {
      *
      * Note: Value matching is case-insensitive when configured via environment variables.
      */
-    public val checksumValidationEnabled : EnvironmentSetting<ValidationEnabled> =
+    public val checksumValidationEnabled: EnvironmentSetting<ValidationEnabled> =
         enumEnvSetting("aws.SqsChecksumValidationEnabled", "AWS_SQS_CHECKSUM_VALIDATION_ENABLED")
 
     /**

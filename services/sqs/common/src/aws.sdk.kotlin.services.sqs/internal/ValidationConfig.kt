@@ -21,7 +21,7 @@ public enum class ValidationEnabled {
     ALWAYS,
     WHEN_SENDING,
     WHEN_RECEIVING,
-    NEVER
+    NEVER,
 }
 
 /**
@@ -42,5 +42,5 @@ public enum class ValidationEnabled {
 public enum class ValidationScope {
     MESSAGE_ATTRIBUTES,
     MESSAGE_SYSTEM_ATTRIBUTES,
-    MESSAGE_BODY
+    MESSAGE_BODY,
 }

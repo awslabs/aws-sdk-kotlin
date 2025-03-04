@@ -29,13 +29,12 @@ class SqsMd5ChecksumValidationIntegration : KotlinIntegration {
 }
 
 internal object SqsMd5ChecksumValidationMiddleware : ProtocolMiddleware {
-    override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean {
-        return when (op.id.name) {
-            "ReceiveMessage",
-            "SendMessage",
-            "SendMessageBatch" -> true
-            else -> false
-        }
+    override fun isEnabledFor(ctx: ProtocolGenerator.GenerationContext, op: OperationShape): Boolean = when (op.id.name) {
+        "ReceiveMessage",
+        "SendMessage",
+        "SendMessageBatch",
+        -> true
+        else -> false
     }
 
     override val name: String = "SqsMd5ChecksumValidationInterceptor"

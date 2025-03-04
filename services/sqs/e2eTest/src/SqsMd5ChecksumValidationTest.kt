@@ -136,15 +136,15 @@ class SqsMd5ChecksumValidationTest {
                         TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
                             dataType = "String"
                             stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE
-                        }
+                        },
                     )
                     messageSystemAttributes = hashMapOf(
                         MessageSystemAttributeNameForSends.AwsTraceHeader to MessageSystemAttributeValue {
                             dataType = "String"
                             stringValue = TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE
-                        }
+                        },
                     )
-                }
+                },
             )
         }
     }
@@ -158,7 +158,7 @@ class SqsMd5ChecksumValidationTest {
                     maxNumberOfMessages = 1
                     messageAttributeNames = listOf(TEST_MESSAGE_ATTRIBUTES_NAME)
                     messageSystemAttributeNames = listOf(MessageSystemAttributeName.AwsTraceHeader)
-                }
+                },
             )
         }
     }
@@ -174,7 +174,7 @@ class SqsMd5ChecksumValidationTest {
                 SendMessageBatchRequest {
                     queueUrl = correctChecksumTestQueueUrl
                     this.entries = entries
-                }
+                },
             )
         }
     }
@@ -182,7 +182,7 @@ class SqsMd5ChecksumValidationTest {
     @Test
     fun testSendMessageWithWrongChecksum(): Unit = runBlocking {
         val exception = assertThrows<ChecksumMismatchException> {
-            wrongChecksumClient.sendMessage (
+            wrongChecksumClient.sendMessage(
                 SendMessageRequest {
                     queueUrl = wrongChecksumTestQueueUrl
                     messageBody = TEST_MESSAGE_BODY
@@ -190,15 +190,15 @@ class SqsMd5ChecksumValidationTest {
                         TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
                             dataType = "String"
                             stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE
-                        }
+                        },
                     )
                     messageSystemAttributes = hashMapOf(
                         MessageSystemAttributeNameForSends.AwsTraceHeader to MessageSystemAttributeValue {
                             dataType = "String"
                             stringValue = TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE
-                        }
+                        },
                     )
-                }
+                },
             )
         }
 
@@ -214,7 +214,7 @@ class SqsMd5ChecksumValidationTest {
                     maxNumberOfMessages = 1
                     messageAttributeNames = listOf(TEST_MESSAGE_ATTRIBUTES_NAME)
                     messageSystemAttributeNames = listOf(MessageSystemAttributeName.AwsTraceHeader)
-                }
+                },
             )
         }
 
@@ -232,7 +232,7 @@ class SqsMd5ChecksumValidationTest {
                 SendMessageBatchRequest {
                     queueUrl = wrongChecksumTestQueueUrl
                     this.entries = entries
-                }
+                },
             )
         }
 

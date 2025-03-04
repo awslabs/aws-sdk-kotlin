@@ -239,7 +239,7 @@ public inline fun <reified T : Enum<T>> AwsProfile.getEnumSetOrNull(key: String,
                         append(value)
                         append("' is not supported, should be one of: ")
                         enumValues<T>().joinTo(this) { it.name.lowercase() }
-                    }
+                    },
                 )
             }.toSet()
             .takeIf { it.isNotEmpty() }
