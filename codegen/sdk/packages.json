@@ -1009,6 +1009,12 @@
             "brazilName": "AwsSdkKotlinIotJobsDataPlane"
         },
         {
+            "sdkId": "IoT Managed Integrations",
+            "namespace": "aws.sdk.kotlin.services.iotmanagedintegrations",
+            "artifactName": "iotmanagedintegrations",
+            "brazilName": "AwsSdkKotlinIotManagedIntegrations"
+        },
+        {
             "sdkId": "IoT Wireless",
             "namespace": "aws.sdk.kotlin.services.iotwireless",
             "artifactName": "iotwireless",
