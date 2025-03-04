@@ -272,34 +272,15 @@ public class SqsMd5ChecksumValidationInterceptor(
                 val binaryListValues = attributeValue?.binaryListValues
 
                 when {
-                    stringValue != null -> {
-                        md5Digest.update(STRING_TYPE_FIELD_INDEX)
-                        updateLengthAndBytes(md5Digest, stringValue.encodeToByteArray())
-                    }
-
-                    binaryValue != null -> {
-                        md5Digest.update(BINARY_TYPE_FIELD_INDEX)
-                        updateLengthAndBytes(md5Digest, binaryValue)
-                    }
-
-                    !stringListValues.isNullOrEmpty() -> {
-                        md5Digest.update(STRING_LIST_TYPE_FIELD_INDEX)
-                        for (stringListValue in stringListValues) {
-                            updateLengthAndBytes(md5Digest, stringListValue.encodeToByteArray())
-                        }
-                    }
-
-                    !binaryListValues.isNullOrEmpty() -> {
-                        md5Digest.update(BINARY_LIST_TYPE_FIELD_INDEX)
-                        for (binaryListValue in binaryListValues) {
-                            updateLengthAndBytes(md5Digest, binaryListValue)
-                        }
-                    }
+                    stringValue != null -> updateForStringType(md5Digest, stringValue)
+                    binaryValue != null -> updateForBinaryType(md5Digest, binaryValue)
+                    !stringListValues.isNullOrEmpty() -> updateForStringListType(md5Digest, stringListValues)
+                    !binaryListValues.isNullOrEmpty() -> updateForBinaryListType(md5Digest, binaryListValues)
                 }
             }
         } catch (e: Exception) {
             throw ClientException(
-                "Unable to calculate the MD5 hash of the message body." +
+                "Unable to calculate the MD5 hash of the message attributes." +
                     "Potential reasons include JVM configuration or FIPS compliance issues." +
                     "To disable message MD5 validation, you can set checksumValidationEnabled" +
                     "to false when instantiating the client." + e.message,
@@ -330,34 +311,15 @@ public class SqsMd5ChecksumValidationInterceptor(
                 val binaryListValues = attributeValue?.binaryListValues
 
                 when {
-                    stringValue != null -> {
-                        md5Digest.update(STRING_TYPE_FIELD_INDEX)
-                        updateLengthAndBytes(md5Digest, stringValue.encodeToByteArray())
-                    }
-
-                    binaryValue != null -> {
-                        md5Digest.update(BINARY_TYPE_FIELD_INDEX)
-                        updateLengthAndBytes(md5Digest, binaryValue)
-                    }
-
-                    !stringListValues.isNullOrEmpty() -> {
-                        md5Digest.update(STRING_LIST_TYPE_FIELD_INDEX)
-                        for (stringListValue in stringListValues) {
-                            updateLengthAndBytes(md5Digest, stringListValue.encodeToByteArray())
-                        }
-                    }
-
-                    !binaryListValues.isNullOrEmpty() -> {
-                        md5Digest.update(BINARY_LIST_TYPE_FIELD_INDEX)
-                        for (binaryListValue in binaryListValues) {
-                            updateLengthAndBytes(md5Digest, binaryListValue)
-                        }
-                    }
+                    stringValue != null -> updateForStringType(md5Digest, stringValue)
+                    binaryValue != null -> updateForBinaryType(md5Digest, binaryValue)
+                    !stringListValues.isNullOrEmpty() -> updateForStringListType(md5Digest, stringListValues)
+                    !binaryListValues.isNullOrEmpty() -> updateForBinaryListType(md5Digest, binaryListValues)
                 }
             }
         } catch (e: Exception) {
             throw ClientException(
-                "Unable to calculate the MD5 hash of the message body." +
+                "Unable to calculate the MD5 hash of the message system attributes." +
                     "Potential reasons include JVM configuration or FIPS compliance issues." +
                     "To disable message MD5 validation, you can set checksumValidationEnabled" +
                     "to false when instantiating the client." + e.message,
@@ -365,6 +327,30 @@ public class SqsMd5ChecksumValidationInterceptor(
         }
         val expectedMD5Hex = md5Digest.digest().toHexString()
         return expectedMD5Hex
+    }
+
+    private fun updateForStringType(md5Digest: Md5, value: String) {
+        md5Digest.update(STRING_TYPE_FIELD_INDEX)
+        updateLengthAndBytes(md5Digest, value.encodeToByteArray())
+    }
+
+    private fun updateForBinaryType(md5Digest: Md5, value: ByteArray) {
+        md5Digest.update(BINARY_TYPE_FIELD_INDEX)
+        updateLengthAndBytes(md5Digest, value)
+    }
+
+    private fun updateForStringListType(md5Digest: Md5, values: List<String>) {
+        md5Digest.update(STRING_LIST_TYPE_FIELD_INDEX)
+        values.forEach { value ->
+            updateLengthAndBytes(md5Digest, value.encodeToByteArray())
+        }
+    }
+
+    private fun updateForBinaryListType(md5Digest: Md5, values: List<ByteArray>) {
+        md5Digest.update(BINARY_LIST_TYPE_FIELD_INDEX)
+        values.forEach { value ->
+            updateLengthAndBytes(md5Digest, value)
+        }
     }
 
     /**
