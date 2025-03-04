@@ -27,6 +27,16 @@ jobs:
   update-release:
     runs-on: ubuntu-latest
     steps:
+      - name: Set start timestamp
+        id: start
+        run: printf 'timestamp=%(%s)T\n' >> "$GITHUB_OUTPUT"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
+          aws-region: us-west-2
+      - name: Setup kat
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/setup-kat@main
       - uses: actions/checkout@v4
         with:
           ref: 'main'
@@ -107,3 +117,23 @@ jobs:
             echo "pushing changes to release branch";
             git push origin release;
           fi
+      - name: Calculate duration
+        id: end
+        run: |
+          printf -v now '%(%s)T'
+          duration=$(( now - ${{ steps.start.outputs.timestamp }} ))
+          printf 'duration=$duration\n' >> "$GITHUB_OUTPUT"
+      - name: Emit metrics
+        if: always() # run this step even if previous steps failed or the job is canceled
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/emit-metrics@main
+        with:
+          namespace: CI Metrics
+          dimensions: |
+            Product=aws-sdk-kotlin
+            Trigger=${{ github.event_name == 'schedule' && 'schedule' || 'manual' }}
+          metrics: |
+            ReleaseMergeAttempted:1:Count
+            ReleaseMergeSucceeded:${{ job.status == 'success' && '1' || '0' }}:Count
+            ReleaseMergeCanceled:${{ job.status == 'cancelled' && '1' || '0' }}:Count
+            ReleaseMergeFailed:${{ job.status == 'failure' && '1' || '0' }}:Count
+            ReleaseMergeDuration:${{ steps.end.outputs.duration }}:Seconds

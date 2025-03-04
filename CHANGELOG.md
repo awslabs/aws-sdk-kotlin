@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.4.33] - 03/03/2025
+
+### Features
+* (**cognitoidentityprovider**) Added the capacity to return available challenges in admin authentication and to set version 3 of the pre token generation event for M2M ATC.
+* (**ec2**) Update the DescribeVpcs response
+* (**qbusiness**) Adds support for the ingestion of audio and video files by Q Business, which can be configured with the mediaExtractionConfiguration parameter.
+* (**rum**) Add support for PutResourcePolicy, GetResourcePolicy and DeleteResourcePolicy to support resource based policies for AWS CloudWatch RUM
+* (**sagemaker**) Add DomainId to CreateDomainResponse
+
+### Documentation
+* (**transcribe**) Updating documentation for post call analytics job queueing.
+
+## [1.4.32] - 02/28/2025
+
+### Features
+* (**bedrockagent**) This release lets Amazon Bedrock Flows support newer models by increasing the maximum length of output in a prompt configuration. This release also increases the maximum number of prompt variables to 20 and the maximum number of node inputs to 20.
+* (**bedrockdataautomation**) Renamed and added new StandardConfiguration enums. Added support to update EncryptionConfiguration in UpdateBlueprint and UpdateDataAutomation APIs. Changed HttpStatus code for DeleteBlueprint and DeleteDataAutomationProject APIs to 200 from 204. Added APIs to support tagging.
+* (**bedrockdataautomationruntime**) Added a mandatory parameter DataAutomationProfileArn to support for cross region inference for InvokeDataAutomationAsync API. Renamed DataAutomationArn to DataAutomationProjectArn. Added APIs to support tagging.
+* (**databasemigrationservice**) Add skipped status to the Result Statistics of an Assessment Run
+* (**eks**) Adding licenses to EKS Anywhere Subscription operations response.
+* (**mediaconvert**) The AWS MediaConvert Probe API allows you to analyze media files and retrieve detailed metadata about their content, format, and structure.
+* (**pricing**) Update GetProducts and DescribeServices API request input validations.
+
+### Documentation
+* (**ssm**) Systems Manager doc-only updates for Feb. 2025.
+
+## [1.4.31] - 02/27/2025
+
+### Features
+* (**bedrockagentruntime**) Introduces Sessions (preview) to enable stateful conversations in GenAI applications.
+* (**qbusiness**) This release supports deleting attachments from conversations.
+* (**redshiftserverless**) Add track support for Redshift Serverless workgroup.
+* (**sagemaker**) SageMaker HubService is introducing support for creating Training Jobs in Curated Hub (Private Hub). Additionally, it is introducing two new APIs: UpdateHubContent and UpdateHubContentReference.
+* (**storagegateway**) This release adds support to invoke a process that cleans the specified file share's cache of file entries that are failing upload to Amazon S3.
+
+### Documentation
+* (**emr**) Definition update for EbsConfiguration.
+
 ## [1.4.30] - 02/26/2025
 
 ### Features
