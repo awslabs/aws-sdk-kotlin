@@ -12,6 +12,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertContains
+import kotlin.test.assertTrue
 
 class SmokeTestE2ETest {
     @Test
@@ -31,7 +32,7 @@ class SmokeTestE2ETest {
 
     @Test
     fun exceptionService() {
-        val smokeTestRunnerOutput = runSmokeTests("exceptionService")
+        val smokeTestRunnerOutput = runSmokeTests("exceptionService", expectingFailure = true)
 
         assertContains(smokeTestRunnerOutput, "not ok ExceptionService ExceptionTest - no error expected from service")
         assertContains(smokeTestRunnerOutput, "#aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsFailureException: Smoke test failed with HTTP status code: 400")
@@ -59,6 +60,7 @@ class SmokeTestE2ETest {
 private fun runSmokeTests(
     service: String,
     envVars: Map<String, String> = emptyMap(),
+    expectingFailure: Boolean = false,
 ): String {
     val sdkRootDir = System.getProperty("user.dir") + "/../../../"
     val processBuilder =
@@ -77,6 +79,10 @@ private fun runSmokeTests(
 
     val process = processBuilder.start()
     val output = process.inputStream.bufferedReader().use { it.readText() }
+
+    if (expectingFailure) {
+        assertTrue(process.exitValue() != 0)
+    }
 
     return output
 }
