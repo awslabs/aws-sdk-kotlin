@@ -79,9 +79,10 @@ private fun runSmokeTests(
 
     val process = processBuilder.start()
     val output = process.inputStream.bufferedReader().use { it.readText() }
+    val exitCode = process.waitFor()
 
     if (expectingFailure) {
-        assertTrue(process.exitValue() != 0)
+        assertTrue(exitCode != 0)
     }
 
     return output
