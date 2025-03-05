@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.35] - 03/05/2025
+
+### Features
+* (**bedrockruntime**) This releases adds support for Custom Prompt Router ARN
+* (**datasync**) AWS DataSync now supports modifying ServerHostname while updating locations SMB, NFS, and ObjectStorage.
+* (**gameliftstreams**) New Service: Amazon GameLift Streams delivers low-latency game streaming from AWS global infrastructure to virtually any device with a browser at up to 1080p resolution and 60 fps.
+* (**iotfleetwise**) This release adds floating point support for CAN/OBD signals and adds support for signed OBD signals.
+* (**workspaces**) Added DeviceTypeWorkSpacesThinClient type to allow users to access their WorkSpaces through a WorkSpaces Thin Client.
+
 ## [1.4.34] - 03/04/2025
 
 ### Features

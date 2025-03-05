@@ -865,6 +865,12 @@
             "brazilName": "AwsSdkKotlinGamelift"
         },
         {
+            "sdkId": "GameLiftStreams",
+            "namespace": "aws.sdk.kotlin.services.gameliftstreams",
+            "artifactName": "gameliftstreams",
+            "brazilName": "AwsSdkKotlinGameliftstreams"
+        },
+        {
             "sdkId": "Geo Maps",
             "namespace": "aws.sdk.kotlin.services.geomaps",
             "artifactName": "geomaps",
