@@ -7,7 +7,6 @@ package aws.sdk.kotlin.services.sqs
 import aws.sdk.kotlin.services.sqs.internal.ValidationEnabled
 import aws.sdk.kotlin.services.sqs.internal.ValidationScope
 import aws.sdk.kotlin.services.sqs.model.*
-import aws.smithy.kotlin.runtime.ClientException
 import aws.smithy.kotlin.runtime.client.ResponseInterceptorContext
 import aws.smithy.kotlin.runtime.hashing.md5
 import aws.smithy.kotlin.runtime.http.interceptors.ChecksumMismatchException
@@ -95,7 +94,7 @@ public class SqsMd5ChecksumValidationInterceptor(
     private fun sendMessageOperationMd5Check(
         sendMessageRequest: SendMessageRequest,
         sendMessageResponse: SendMessageResponse,
-        logger: Logger
+        logger: Logger,
     ) {
         if (validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
             val messageBodySent = sendMessageRequest.messageBody
@@ -182,7 +181,7 @@ public class SqsMd5ChecksumValidationInterceptor(
     private fun sendMessageBatchOperationMd5Check(
         sendMessageBatchRequest: SendMessageBatchRequest,
         sendMessageBatchResponse: SendMessageBatchResponse,
-        logger: Logger
+        logger: Logger,
     ) {
         val idToRequestEntryMap = sendMessageBatchRequest
             .entries
@@ -271,7 +270,7 @@ public class SqsMd5ChecksumValidationInterceptor(
                     !stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, stringListValues)
                     !binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, binaryListValues)
                 }
-        }
+            }
 
         val payload = buffer.readByteArray()
         return payload.md5().toHexString()
@@ -286,22 +285,22 @@ public class SqsMd5ChecksumValidationInterceptor(
             .entries
             .sortedBy { (name, _) -> name.value }
             .forEach { (attributeName, attributeValue) ->
-            updateLengthAndBytes(buffer, attributeName.value)
+                updateLengthAndBytes(buffer, attributeName.value)
 
-            updateLengthAndBytes(buffer, attributeValue.dataType)
+                updateLengthAndBytes(buffer, attributeValue.dataType)
 
-            val stringValue = attributeValue.stringValue
-            val binaryValue = attributeValue.binaryValue
-            val stringListValues = attributeValue.stringListValues
-            val binaryListValues = attributeValue.binaryListValues
+                val stringValue = attributeValue.stringValue
+                val binaryValue = attributeValue.binaryValue
+                val stringListValues = attributeValue.stringListValues
+                val binaryListValues = attributeValue.binaryListValues
 
-            when {
-                stringValue != null -> updateForStringType(buffer, stringValue)
-                binaryValue != null -> updateForBinaryType(buffer, binaryValue)
-                !stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, stringListValues)
-                !binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, binaryListValues)
+                when {
+                    stringValue != null -> updateForStringType(buffer, stringValue)
+                    binaryValue != null -> updateForBinaryType(buffer, binaryValue)
+                    !stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, stringListValues)
+                    !binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, binaryListValues)
+                }
             }
-        }
 
         val payload = buffer.readByteArray()
         return payload.md5().toHexString()

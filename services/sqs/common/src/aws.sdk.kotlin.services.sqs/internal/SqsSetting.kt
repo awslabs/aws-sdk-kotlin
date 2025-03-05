@@ -9,7 +9,7 @@ import aws.smithy.kotlin.runtime.config.*
 /**
  * SQS specific system settings
  */
-internal object SqsSettings {
+internal object SqsSetting {
     /**
      * Configure when MD5 checksum validation is performed for SQS operations.
      *

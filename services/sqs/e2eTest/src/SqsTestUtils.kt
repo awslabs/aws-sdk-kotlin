@@ -11,7 +11,6 @@ import aws.sdk.kotlin.services.sqs.paginators.listQueuesPaginated
 import aws.sdk.kotlin.services.sqs.paginators.queueUrls
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withTimeout
-import java.net.URI
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
 
@@ -37,8 +36,6 @@ object SqsTestUtils {
         prefix: String,
         region: String? = null,
     ): String = withTimeout(60.seconds) {
-        //val queueUrls = client.listQueues().queueUrls
-
         var matchingQueueUrl = client
             .listQueuesPaginated { queueNamePrefix = prefix }
             .queueUrls()
@@ -62,10 +59,10 @@ object SqsTestUtils {
         try {
             println("Purging Sqs queue: $queueUrl")
 
-            client.purgeQueue (
+            client.purgeQueue(
                 PurgeQueueRequest {
                     this.queueUrl = queueUrl
-                }
+                },
             )
 
             println("Queue purged successfully.")
@@ -75,7 +72,7 @@ object SqsTestUtils {
             client.deleteQueue(
                 DeleteQueueRequest {
                     this.queueUrl = queueUrl
-                }
+                },
             )
 
             println("Queue deleted successfully.")

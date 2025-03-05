@@ -36,18 +36,18 @@ class SqsMd5ChecksumValidationIntegration : KotlinIntegration {
                 namespace = "aws.sdk.kotlin.services.sqs.internal"
             }
             documentation = """
-                    Specifies when MD5 checksum validation should be performed for SQS messages. This controls the automatic 
-                    calculation and validation of checksums during message operations.
-                    
-                    Valid values:
-                    - `ALWAYS` (default) - Checksums are calculated and validated for both sending and receiving operations 
-                      (SendMessage, SendMessageBatch, and ReceiveMessage)
-                    - `WHEN_SENDING` - Checksums are only calculated and validated during send operations 
-                      (SendMessage and SendMessageBatch)
-                    - `WHEN_RECEIVING` - Checksums are only calculated and validated during receive operations 
-                      (ReceiveMessage)
-                    - `NEVER` - No checksum calculation or validation is performed
-                """.trimIndent()
+                Specifies when MD5 checksum validation should be performed for SQS messages. This controls the automatic 
+                calculation and validation of checksums during message operations.
+                
+                Valid values:
+                - `ALWAYS` (default) - Checksums are calculated and validated for both sending and receiving operations 
+                  (SendMessage, SendMessageBatch, and ReceiveMessage)
+                - `WHEN_SENDING` - Checksums are only calculated and validated during send operations 
+                  (SendMessage and SendMessageBatch)
+                - `WHEN_RECEIVING` - Checksums are only calculated and validated during receive operations 
+                  (ReceiveMessage)
+                - `NEVER` - No checksum calculation or validation is performed
+            """.trimIndent()
         }
 
         private val validationScope = buildSymbol {

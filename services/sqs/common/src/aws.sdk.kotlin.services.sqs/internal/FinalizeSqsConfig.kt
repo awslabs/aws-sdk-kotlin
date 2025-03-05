@@ -17,12 +17,12 @@ internal suspend fun finalizeSqsConfig(
 ) {
     val activeProfile = sharedConfig.get().activeProfile
     builder.config.checksumValidationEnabled = builder.config.checksumValidationEnabled
-        ?: SqsSettings.checksumValidationEnabled.resolve(provider)
+        ?: SqsSetting.checksumValidationEnabled.resolve(provider)
         ?: activeProfile.checksumValidationEnabled
         ?: ValidationEnabled.NEVER // TODO: MD5 checksum validation is temporarily disabled. Set default to ALWAYS in next minor version
 
     builder.config.checksumValidationScopes = builder.config.checksumValidationScopes.ifEmpty {
-        SqsSettings.checksumValidationScopes.resolve(provider)
+        SqsSetting.checksumValidationScopes.resolve(provider)
             ?: activeProfile.checksumValidationScopes
             ?: ValidationScope.entries.toSet()
     }
