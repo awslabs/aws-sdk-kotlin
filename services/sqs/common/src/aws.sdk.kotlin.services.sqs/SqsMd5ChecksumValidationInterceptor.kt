@@ -256,19 +256,12 @@ public class SqsMd5ChecksumValidationInterceptor(
             .sortedBy { (name, _) -> name }
             .forEach { (attributeName, attributeValue) ->
                 updateLengthAndBytes(buffer, attributeName)
-
                 updateLengthAndBytes(buffer, attributeValue.dataType)
-
-                val stringValue = attributeValue.stringValue
-                val binaryValue = attributeValue.binaryValue
-                val stringListValues = attributeValue.stringListValues
-                val binaryListValues = attributeValue.binaryListValues
-
                 when {
-                    stringValue != null -> updateForStringType(buffer, stringValue)
-                    binaryValue != null -> updateForBinaryType(buffer, binaryValue)
-                    !stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, stringListValues)
-                    !binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, binaryListValues)
+                    attributeValue.stringValue != null -> updateForStringType(buffer, attributeValue.stringValue)
+                    attributeValue.binaryValue != null -> updateForBinaryType(buffer, attributeValue.binaryValue)
+                    !attributeValue.stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, attributeValue.stringListValues)
+                    !attributeValue.binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, attributeValue.binaryListValues)
                 }
             }
 
@@ -286,19 +279,12 @@ public class SqsMd5ChecksumValidationInterceptor(
             .sortedBy { (name, _) -> name.value }
             .forEach { (attributeName, attributeValue) ->
                 updateLengthAndBytes(buffer, attributeName.value)
-
                 updateLengthAndBytes(buffer, attributeValue.dataType)
-
-                val stringValue = attributeValue.stringValue
-                val binaryValue = attributeValue.binaryValue
-                val stringListValues = attributeValue.stringListValues
-                val binaryListValues = attributeValue.binaryListValues
-
                 when {
-                    stringValue != null -> updateForStringType(buffer, stringValue)
-                    binaryValue != null -> updateForBinaryType(buffer, binaryValue)
-                    !stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, stringListValues)
-                    !binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, binaryListValues)
+                    attributeValue.stringValue != null -> updateForStringType(buffer, attributeValue.stringValue)
+                    attributeValue.binaryValue != null -> updateForBinaryType(buffer, attributeValue.binaryValue)
+                    !attributeValue.stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, attributeValue.stringListValues)
+                    !attributeValue.binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, attributeValue.binaryListValues)
                 }
             }
 
