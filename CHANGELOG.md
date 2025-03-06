@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.36] - 03/06/2025
+
+### Features
+* (**bedrock**) This releases adds support for Custom Prompt Router
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to merge fragmented recordings in the event of a participant disconnect.
+* (**networkflowmonitor**) This release contains 2 changes. 1: DeleteScope/GetScope/UpdateScope operations now return 404 instead of 500 when the resource does not exist. 2: Expected string format for clientToken fields of CreateMonitorInput/CreateScopeInput/UpdateMonitorInput have been updated to be an UUID based string.
+* (**redshiftdata**) This release adds support for ListStatements API to filter statements by ClusterIdentifier, WorkgroupName, and Database.
+* (**wafv2**) You can now perform an exact match or rate limit aggregation against the web request's JA4 fingerprint.
+* (**workspaces**) Added a new ModifyEndpointEncryptionMode API for managing endpoint encryption settings.
+
+### Documentation
+* (**cloudtrail**) Doc-only update for CloudTrail.
+
 ## [1.4.35] - 03/05/2025
 
 ### Features
