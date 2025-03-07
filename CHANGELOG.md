@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.37] - 03/07/2025
+
+### Features
+* (**bedrockagent**) Introduces support for Neptune Analytics as a vector data store and adds Context Enrichment Configurations, enabling use cases such as GraphRAG.
+* (**bedrockagentruntime**) Support Multi Agent Collaboration within Inline Agents
+* (**ec2**) Add serviceManaged field to DescribeAddresses API response.
+* (**elasticloadbalancingv2**) This release adds support for assigning IP addresses to Application Load Balancers from VPC IP Address Manager pools.
+
+### Documentation
+* (**cloudfront**) Documentation updates for Amazon CloudFront.
+* (**neptunegraph**) Several small updates to resolve customer requests.
+
 ## [1.4.36] - 03/06/2025
 
 ### Features
