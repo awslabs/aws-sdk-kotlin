@@ -126,7 +126,7 @@ jobs:
         run: |
           printf -v now '%(%s)T'
           duration=$(( now - ${{ steps.start.outputs.timestamp }} ))
-          printf 'duration=$duration\n' >> "$GITHUB_OUTPUT"
+          echo "duration=$duration" >> "$GITHUB_OUTPUT"
       - name: Emit metrics
         if: always() # run this step even if previous steps failed or the job is canceled
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/emit-metrics@main
