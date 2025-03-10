@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.38] - 03/10/2025
+
+### Features
+* (**bedrockagent**) Add support for computer use tools
+* (**bedrockagentruntime**) Add support for computer use tools
+* (**connect**) Add support for contact transfers in external voice systems.
+* (**costexplorer**) Releasing minor partition endpoint updates.
+* (**medialive**) Adds defaultFontSize and defaultLineHeight as options in the EbuTtDDestinationSettings within the caption descriptions for an output stream.
+* (**pcaconnectorad**) PrivateCA Connector for Active Directory now supports dual stack endpoints. This release adds the IpAddressType option to the VpcInformation on a Connector which determines whether the endpoint supports IPv4 only or IPv4 and IPv6 traffic.
+* (**securityhub**) This release adds new StandardsControlsUpdatable field to the StandardsSubscription resource
+
+### Documentation
+* (**timestreaminfluxdb**) This release updates the default value of pprof-disabled from false to true.
+
 ## [1.4.37] - 03/07/2025
 
 ### Features
