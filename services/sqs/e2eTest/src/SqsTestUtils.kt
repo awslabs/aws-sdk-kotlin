@@ -17,25 +17,17 @@ import kotlin.time.Duration.Companion.seconds
 object SqsTestUtils {
     const val DEFAULT_REGION = "us-west-2"
 
-    const val TEST_QUEUE_WRONG_CHECKSUM_PREFIX = "sqs-test-queue-wrong-checksum-"
-    const val TEST_QUEUE_CORRECT_CHECKSUM_PREFIX = "sqs-test-queue-correct-checksum-"
+    const val TEST_QUEUE_PREFIX = "sqs-test-queue-"
 
     const val TEST_MESSAGE_BODY = "Hello World"
     const val TEST_MESSAGE_ATTRIBUTES_NAME = "TestAttribute"
     const val TEST_MESSAGE_ATTRIBUTES_VALUE = "TestAttributeValue"
     const val TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE = "TestSystemAttributeValue"
 
-    suspend fun getTestQueueUrl(
-        client: SqsClient,
-        prefix: String,
-        region: String? = null,
-    ): String = getQueueUrlWithPrefix(client, prefix, region)
+    suspend fun getTestQueueUrl(client: SqsClient, prefix: String): String =
+        getQueueUrlWithPrefix(client, prefix)
 
-    private suspend fun getQueueUrlWithPrefix(
-        client: SqsClient,
-        prefix: String,
-        region: String? = null,
-    ): String = withTimeout(60.seconds) {
+    private suspend fun getQueueUrlWithPrefix(client: SqsClient, prefix: String): String = withTimeout(60.seconds) {
         var matchingQueueUrl = client
             .listQueuesPaginated { queueNamePrefix = prefix }
             .queueUrls()
@@ -43,13 +35,13 @@ object SqsTestUtils {
 
         if (matchingQueueUrl == null) {
             matchingQueueUrl = prefix + UUID.randomUUID()
-            println("Creating Sqs queue: $matchingQueueUrl")
+            println("Creating SQS queue: $matchingQueueUrl")
 
             client.createQueue {
                 queueName = matchingQueueUrl
             }
         } else {
-            println("Using existing Sqs queue: $matchingQueueUrl")
+            println("Using existing SQS queue: $matchingQueueUrl")
         }
 
         matchingQueueUrl
@@ -57,7 +49,7 @@ object SqsTestUtils {
 
     suspend fun deleteQueueAndAllMessages(client: SqsClient, queueUrl: String) {
         try {
-            println("Purging Sqs queue: $queueUrl")
+            println("Purging SQS queue: $queueUrl")
 
             client.purgeQueue(
                 PurgeQueueRequest {

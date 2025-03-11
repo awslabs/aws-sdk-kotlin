@@ -7,16 +7,17 @@ package aws.sdk.kotlin.services.sqs.internal
  * calculated and validated for SQS message operations.
  *
  * Valid values:
- * - ALWAYS - Validates checksums for both sending and receiving operations
+ * - `ALWAYS` - Validates checksums for both sending and receiving operations
  *           (SendMessage, SendMessageBatch, and ReceiveMessage)
- * - WHEN_SENDING - Validates checksums only when sending messages
+ * - `WHEN_SENDING` - Validates checksums only when sending messages
  *                 (SendMessage and SendMessageBatch)
- * - WHEN_RECEIVING - Validates checksums only when receiving messages
+ * - `WHEN_RECEIVING` - Validates checksums only when receiving messages
  *                   (ReceiveMessage)
- * - NEVER - Disables checksum validation completely
+ * - `NEVER` - Disables checksum validation completely
  *
- * Default: ALWAYS
+ * Default: `NEVER`
  */
+// TODO: MD5 checksum validation is temporarily disabled. Change default to ALWAYS in v1.5
 public enum class ValidationEnabled {
     ALWAYS,
     WHEN_SENDING,
@@ -31,11 +32,11 @@ public enum class ValidationEnabled {
  * when checksum validation is enabled.
  *
  * Valid values:
- * - MESSAGE_ATTRIBUTES - Validates checksums for message attributes
- * - MESSAGE_SYSTEM_ATTRIBUTES - Validates checksums for message system attributes
+ * - `MESSAGE_ATTRIBUTES` - Validates checksums for message attributes
+ * - `MESSAGE_SYSTEM_ATTRIBUTES` - Validates checksums for message system attributes
  *   (Note: Not available for ReceiveMessage operations as SQS does not calculate
  *   checksums for system attributes during message receipt)
- * - MESSAGE_BODY - Validates checksums for the message body
+ * - `MESSAGE_BODY` - Validates checksums for the message body
  *
  * Default: All scopes enabled
  */

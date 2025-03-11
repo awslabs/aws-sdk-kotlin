@@ -18,6 +18,12 @@ import kotlin.test.assertTrue
 import kotlin.test.fail
 
 class SqsMd5ChecksumValidationIntegrationTest {
+    object FooMiddleware : ProtocolMiddleware {
+        override val name: String = "FooMiddleware"
+        override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) =
+            fail("Unexpected call to `FooMiddleware.render`")
+    }
+
     @Test
     fun testNotExpectedForNonSqsModel() {
         val model = model("NotSqs")
@@ -43,10 +49,4 @@ class SqsMd5ChecksumValidationIntegrationTest {
 
         assertEquals(listOf(FooMiddleware, SqsMd5ChecksumValidationMiddleware), actual)
     }
-}
-
-object FooMiddleware : ProtocolMiddleware {
-    override val name: String = "FooMiddleware"
-    override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) =
-        fail("Unexpected call to `FooMiddleware.render`")
 }

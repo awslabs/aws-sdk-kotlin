@@ -228,10 +228,10 @@ public inline fun <reified T : Enum<T>> AwsProfile.getEnumOrNull(key: String, su
 public inline fun <reified T : Enum<T>> AwsProfile.getEnumSetOrNull(key: String, subKey: String? = null): Set<T>? =
     getOrNull(key, subKey)?.let { rawValue ->
         rawValue.split(",")
-            .map { it.trim() }
-            .map { value ->
-                enumValues<T>().firstOrNull {
-                    it.name.equals(value, ignoreCase = true)
+            .map { it ->
+                val value = it.trim()
+                enumValues<T>().firstOrNull { enumValue ->
+                    enumValue.name.equals(value, ignoreCase = true)
                 } ?: throw ConfigurationException(
                     buildString {
                         append(key)
@@ -242,7 +242,6 @@ public inline fun <reified T : Enum<T>> AwsProfile.getEnumSetOrNull(key: String,
                     },
                 )
             }.toSet()
-            .takeIf { it.isNotEmpty() }
     }
 
 internal fun AwsProfile.getUrlOrNull(key: String, subKey: String? = null): Url? =

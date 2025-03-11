@@ -5,6 +5,7 @@
 package aws.sdk.kotlin.codegen.customization.sqs
 
 import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
+import aws.sdk.kotlin.codegen.sdkId
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
 import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
@@ -17,6 +18,7 @@ import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
 import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
+import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
@@ -26,7 +28,7 @@ import software.amazon.smithy.model.shapes.ServiceShape
  */
 class SqsMd5ChecksumValidationIntegration : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
-        model.expectShape<ServiceShape>(settings.service).isSqs
+        model.expectShape<ServiceShape>(settings.service).sdkId.lowercase() == "sqs"
 
     companion object {
         val ValidationEnabledProp: ConfigProperty = ConfigProperty {
@@ -34,30 +36,53 @@ class SqsMd5ChecksumValidationIntegration : KotlinIntegration {
             symbol = buildSymbol {
                 name = "ValidationEnabled"
                 namespace = "aws.sdk.kotlin.services.sqs.internal"
+                nullable = false
             }
+            propertyType = ConfigPropertyType.Custom(
+                render = { prop, writer ->
+                    writer.write("public val #1L: #2T = builder.#1L ?: #2T.NEVER", prop.propertyName, prop.symbol)
+                },
+                renderBuilder = { prop, writer ->
+                    prop.documentation?.let(writer::dokka)
+                    writer.write("public var #L: #T? = null", prop.propertyName, prop.symbol)
+                    writer.write("")
+                },
+            )
             documentation = """
                 Specifies when MD5 checksum validation should be performed for SQS messages. This controls the automatic 
                 calculation and validation of checksums during message operations.
                 
                 Valid values:
-                - `ALWAYS` (default) - Checksums are calculated and validated for both sending and receiving operations 
+                - `ALWAYS` - Checksums are calculated and validated for both sending and receiving operations 
                   (SendMessage, SendMessageBatch, and ReceiveMessage)
                 - `WHEN_SENDING` - Checksums are only calculated and validated during send operations 
                   (SendMessage and SendMessageBatch)
                 - `WHEN_RECEIVING` - Checksums are only calculated and validated during receive operations 
                   (ReceiveMessage)
-                - `NEVER` - No checksum calculation or validation is performed
+                - `NEVER` (default) - No checksum calculation or validation is performed
             """.trimIndent()
+            // TODO: MD5 checksum validation is temporarily disabled. Change default to ALWAYS in v1.5
         }
 
         private val validationScope = buildSymbol {
             name = "ValidationScope"
             namespace = "aws.sdk.kotlin.services.sqs.internal"
+            nullable = false
         }
 
         val ValidationScopeProp: ConfigProperty = ConfigProperty {
             name = "checksumValidationScopes"
-            symbol = KotlinTypes.Collections.set(validationScope, default = "emptySet()")
+            symbol = KotlinTypes.Collections.set(validationScope)
+            propertyType = ConfigPropertyType.Custom(
+                render = { prop, writer ->
+                    writer.write("public val #1L: #2T = builder.#1L ?: #3T.entries.toSet()", prop.propertyName, prop.symbol, validationScope)
+                },
+                renderBuilder = { prop, writer ->
+                    prop.documentation?.let(writer::dokka)
+                    writer.write("public var #L: #T? = null", prop.propertyName, prop.symbol)
+                    writer.write("")
+                },
+            )
             documentation = """
                 Specifies which parts of an SQS message should undergo MD5 checksum validation. This configuration 
                 accepts a set of validation scopes that determine which message components to validate.
@@ -69,7 +94,7 @@ class SqsMd5ChecksumValidationIntegration : KotlinIntegration {
                   system attributes during message receipt)
                 - `MESSAGE_BODY` - Validates checksums for the message body
                 
-                Default: All three scopes (MESSAGE_ATTRIBUTES, MESSAGE_SYSTEM_ATTRIBUTES, MESSAGE_BODY)
+                Default: All three scopes (`MESSAGE_ATTRIBUTES`, `MESSAGE_SYSTEM_ATTRIBUTES`, `MESSAGE_BODY`)
             """.trimIndent()
         }
     }

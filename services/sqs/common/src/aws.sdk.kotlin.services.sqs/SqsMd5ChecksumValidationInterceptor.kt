@@ -4,10 +4,12 @@
  */
 package aws.sdk.kotlin.services.sqs
 
+import aws.sdk.kotlin.runtime.ClientException
 import aws.sdk.kotlin.services.sqs.internal.ValidationEnabled
 import aws.sdk.kotlin.services.sqs.internal.ValidationScope
 import aws.sdk.kotlin.services.sqs.model.*
 import aws.smithy.kotlin.runtime.client.ResponseInterceptorContext
+import aws.smithy.kotlin.runtime.collections.AttributeKey
 import aws.smithy.kotlin.runtime.hashing.md5
 import aws.smithy.kotlin.runtime.http.interceptors.ChecksumMismatchException
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
@@ -15,7 +17,16 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import aws.smithy.kotlin.runtime.io.SdkBuffer
 import aws.smithy.kotlin.runtime.telemetry.logging.Logger
+import aws.smithy.kotlin.runtime.telemetry.logging.error
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
+import aws.smithy.kotlin.runtime.util.asyncLazy
+import kotlinx.coroutines.runBlocking
+import kotlin.coroutines.coroutineContext
+
+private const val STRING_TYPE_FIELD_INDEX: Byte = 1
+private const val BINARY_TYPE_FIELD_INDEX: Byte = 2
+private const val STRING_LIST_TYPE_FIELD_INDEX: Byte = 3
+private const val BINARY_LIST_TYPE_FIELD_INDEX: Byte = 4
 
 /**
  * Interceptor that validates MD5 checksums for SQS message operations.
@@ -27,7 +38,7 @@ import aws.smithy.kotlin.runtime.telemetry.logging.logger
  * - Message system attributes
  *
  * The validation behavior can be configured using:
- * - [checksumValidationEnabled] - Controls when validation occurs (ALWAYS, WHEN_SENDING, WHEN_RECEIVING, NEVER)
+ * - [checksumValidationEnabled] - Controls when validation occurs (`ALWAYS`, `WHEN_SENDING`, `WHEN_RECEIVING`, `NEVER`)
  * - [checksumValidationScopes] - Specifies which message components to validate
  *
  * Supported operations:
@@ -37,40 +48,37 @@ import aws.smithy.kotlin.runtime.telemetry.logging.logger
  */
 @OptIn(ExperimentalStdlibApi::class)
 public class SqsMd5ChecksumValidationInterceptor(
-    private val validationEnabled: ValidationEnabled?,
+    private val validationEnabled: ValidationEnabled,
     private val validationScopes: Set<ValidationScope>,
 ) : HttpInterceptor {
     public companion object {
-        private const val STRING_TYPE_FIELD_INDEX: Byte = 1
-        private const val BINARY_TYPE_FIELD_INDEX: Byte = 2
-        private const val STRING_LIST_TYPE_FIELD_INDEX: Byte = 3
-        private const val BINARY_LIST_TYPE_FIELD_INDEX: Byte = 4
+        private val isMd5Available = asyncLazy {
+            try {
+                "MD5".encodeToByteArray().md5()
+                true
+            } catch (e: Exception) {
+                coroutineContext.error<SqsMd5ChecksumValidationInterceptor>(e) {
+                    "MD5 checksums are not available (likely due to FIPS mode). Checksum validation will be disabled."
+                }
+                false
+            }
+        }
     }
 
     override fun readAfterExecution(context: ResponseInterceptorContext<Any, Any, HttpRequest?, HttpResponse?>) {
-        if (validationEnabled == ValidationEnabled.NEVER) return
+        if (validationEnabled == ValidationEnabled.NEVER || runBlocking { !isMd5Available.get() }) return
 
         val logger = context.executionContext.coroutineContext.logger<SqsMd5ChecksumValidationInterceptor>()
 
-        // Test MD5 availability
-        try {
-            "MD5".encodeToByteArray().md5()
-        } catch (e: Exception) {
-            logger.error { "MD5 checksums are not available (likely due to FIPS mode). Checksum validation will be disabled." }
-            return
-        }
-
         val request = context.request
-        val response = context.response.getOrNull()
 
-        if (response != null) {
+        context.response.getOrNull()?.let { response ->
             when (request) {
                 is SendMessageRequest -> {
                     if (validationEnabled == ValidationEnabled.WHEN_RECEIVING) return
 
-                    val sendMessageRequest = request as SendMessageRequest
                     val sendMessageResponse = response as SendMessageResponse
-                    sendMessageOperationMd5Check(sendMessageRequest, sendMessageResponse, logger)
+                    sendMessageOperationMd5Check(request, sendMessageResponse, logger)
                 }
 
                 is ReceiveMessageRequest -> {
@@ -83,12 +91,15 @@ public class SqsMd5ChecksumValidationInterceptor(
                 is SendMessageBatchRequest -> {
                     if (validationEnabled == ValidationEnabled.WHEN_RECEIVING) return
 
-                    val sendMessageBatchRequest = request as SendMessageBatchRequest
                     val sendMessageBatchResponse = response as SendMessageBatchResponse
-                    sendMessageBatchOperationMd5Check(sendMessageBatchRequest, sendMessageBatchResponse, logger)
+                    sendMessageBatchOperationMd5Check(request, sendMessageBatchResponse, logger)
                 }
             }
         }
+
+        // Record MD5 checksum validation was performed for this request
+        val checksumValidated: AttributeKey<Boolean> = AttributeKey("checksumValidated")
+        context.executionContext[checksumValidated] = true
     }
 
     private fun sendMessageOperationMd5Check(
@@ -97,46 +108,45 @@ public class SqsMd5ChecksumValidationInterceptor(
         logger: Logger,
     ) {
         if (validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
+            val messageBodyMd5Returned = sendMessageResponse.md5OfMessageBody
             val messageBodySent = sendMessageRequest.messageBody
 
-            if (!messageBodySent.isNullOrEmpty()) {
+            if (!messageBodyMd5Returned.isNullOrEmpty() && !messageBodySent.isNullOrEmpty()) {
                 logger.debug { "Validating message body MD5 checksum for SendMessage" }
 
-                val bodyMD5Returned = sendMessageResponse.md5OfMessageBody
                 val clientSideBodyMd5 = calculateMessageBodyMd5(messageBodySent)
-                if (clientSideBodyMd5 != bodyMD5Returned) {
-                    throw ChecksumMismatchException("Checksum mismatch. Expected $clientSideBodyMd5 but was $bodyMD5Returned")
-                }
+
+                validateMd5(clientSideBodyMd5, messageBodyMd5Returned)
 
                 logger.debug { "Message body MD5 checksum for SendMessage validated" }
             }
         }
 
         if (validationScopes.contains(ValidationScope.MESSAGE_ATTRIBUTES)) {
+            val messageAttrMd5Returned = sendMessageResponse.md5OfMessageAttributes
             val messageAttrSent = sendMessageRequest.messageAttributes
-            if (!messageAttrSent.isNullOrEmpty()) {
+
+            if (!messageAttrMd5Returned.isNullOrEmpty() && !messageAttrSent.isNullOrEmpty()) {
                 logger.debug { "Validating message attribute MD5 checksum for SendMessage" }
 
-                val messageAttrMD5Returned = sendMessageResponse.md5OfMessageAttributes
                 val clientSideAttrMd5 = calculateMessageAttributesMd5(messageAttrSent)
-                if (clientSideAttrMd5 != messageAttrMD5Returned) {
-                    throw ChecksumMismatchException("Checksum mismatch. Expected $clientSideAttrMd5 but was $messageAttrMD5Returned")
-                }
+
+                validateMd5(clientSideAttrMd5, messageAttrMd5Returned)
 
                 logger.debug { "Message attribute MD5 checksum for SendMessage validated" }
             }
         }
 
         if (validationScopes.contains(ValidationScope.MESSAGE_SYSTEM_ATTRIBUTES)) {
+            val messageSysAttrMD5Returned = sendMessageResponse.md5OfMessageSystemAttributes
             val messageSysAttrSent = sendMessageRequest.messageSystemAttributes
-            if (!messageSysAttrSent.isNullOrEmpty()) {
+
+            if (!messageSysAttrMD5Returned.isNullOrEmpty() && !messageSysAttrSent.isNullOrEmpty()) {
                 logger.debug { "Validating message system attribute MD5 checksum for SendMessage" }
 
-                val messageSysAttrMD5Returned = sendMessageResponse.md5OfMessageSystemAttributes
                 val clientSideSysAttrMd5 = calculateMessageSystemAttributesMd5(messageSysAttrSent)
-                if (clientSideSysAttrMd5 != messageSysAttrMD5Returned) {
-                    throw ChecksumMismatchException("Checksum mismatch. Expected $clientSideSysAttrMd5 but was $messageSysAttrMD5Returned")
-                }
+
+                validateMd5(clientSideSysAttrMd5, messageSysAttrMD5Returned)
 
                 logger.debug { "Message system attribute MD5 checksum for SendMessage validated" }
             }
@@ -146,31 +156,30 @@ public class SqsMd5ChecksumValidationInterceptor(
     private fun receiveMessageResultMd5Check(receiveMessageResponse: ReceiveMessageResponse, logger: Logger) {
         receiveMessageResponse.messages?.forEach { messageReceived ->
             if (validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
-                val messageBody = messageReceived.body
-                if (!messageBody.isNullOrEmpty()) {
+                val messageBodyMd5Returned = messageReceived.md5OfBody
+                val messageBodyReturned = messageReceived.body
+
+                if (!messageBodyMd5Returned.isNullOrEmpty() && !messageBodyReturned.isNullOrEmpty()) {
                     logger.debug { "Validating message body MD5 checksum for ReceiveMessage" }
 
-                    val bodyMd5Returned = messageReceived.md5OfBody
-                    val clientSideBodyMd5 = calculateMessageBodyMd5(messageBody)
-                    if (clientSideBodyMd5 != bodyMd5Returned) {
-                        throw ChecksumMismatchException("Checksum mismatch. Expected $clientSideBodyMd5 but was $bodyMd5Returned")
-                    }
+                    val clientSideBodyMd5 = calculateMessageBodyMd5(messageBodyReturned)
+
+                    validateMd5(clientSideBodyMd5, messageBodyMd5Returned)
 
                     logger.debug { "Message body MD5 checksum for ReceiveMessage validated " }
                 }
             }
 
             if (validationScopes.contains(ValidationScope.MESSAGE_ATTRIBUTES)) {
-                val messageAttr = messageReceived.messageAttributes
+                val messageAttrMd5Returned = messageReceived.md5OfMessageAttributes
+                val messageAttrReturned = messageReceived.messageAttributes
 
-                if (!messageAttr.isNullOrEmpty()) {
+                if (!messageAttrMd5Returned.isNullOrEmpty() && !messageAttrReturned.isNullOrEmpty()) {
                     logger.debug { "Validating message attribute MD5 checksum for ReceiveMessage" }
 
-                    val attrMd5Returned = messageReceived.md5OfMessageAttributes
-                    val clientSideAttrMd5 = calculateMessageAttributesMd5(messageAttr)
-                    if (clientSideAttrMd5 != attrMd5Returned) {
-                        throw ChecksumMismatchException("Checksum mismatch. Expected $clientSideAttrMd5 but was $attrMd5Returned")
-                    }
+                    val clientSideAttrMd5 = calculateMessageAttributesMd5(messageAttrReturned)
+
+                    validateMd5(clientSideAttrMd5, messageAttrMd5Returned)
 
                     logger.debug { "Message attribute MD5 checksum for ReceiveMessage validated " }
                 }
@@ -183,53 +192,52 @@ public class SqsMd5ChecksumValidationInterceptor(
         sendMessageBatchResponse: SendMessageBatchResponse,
         logger: Logger,
     ) {
-        val idToRequestEntryMap = sendMessageBatchRequest
+        val idToRequestEntry = sendMessageBatchRequest
             .entries
             .orEmpty()
             .associateBy { it.id }
 
         for (entry in sendMessageBatchResponse.successful) {
             if (validationScopes.contains(ValidationScope.MESSAGE_BODY)) {
-                val messageBody = idToRequestEntryMap[entry.id]?.messageBody
+                val messageBodyMd5Returned = entry.md5OfMessageBody
+                val messageBodySent = idToRequestEntry[entry.id]?.messageBody
 
-                if (!messageBody.isNullOrEmpty()) {
+                if (!messageBodyMd5Returned.isNullOrEmpty() && !messageBodySent.isNullOrEmpty()) {
                     logger.debug { "Validating message body MD5 checksum for SendMessageBatch: ${entry.messageId}" }
 
-                    val bodyMd5Returned = entry.md5OfMessageBody
-                    val clientSideBodyMd5 = calculateMessageBodyMd5(messageBody)
-                    if (clientSideBodyMd5 != bodyMd5Returned) {
-                        throw ChecksumMismatchException("Checksum mismatch. Expected $clientSideBodyMd5 but was $bodyMd5Returned")
-                    }
+                    val clientSideBodyMd5 = calculateMessageBodyMd5(messageBodySent)
+
+                    validateMd5(clientSideBodyMd5, messageBodyMd5Returned)
 
                     logger.debug { "Message body MD5 checksum for SendMessageBatch: ${entry.messageId} validated" }
                 }
             }
 
             if (validationScopes.contains(ValidationScope.MESSAGE_ATTRIBUTES)) {
-                val messageAttrSent = idToRequestEntryMap[entry.id]?.messageAttributes
-                if (!messageAttrSent.isNullOrEmpty()) {
+                val messageAttrMD5Returned = entry.md5OfMessageAttributes
+                val messageAttrSent = idToRequestEntry[entry.id]?.messageAttributes
+
+                if (!messageAttrMD5Returned.isNullOrEmpty() && !messageAttrSent.isNullOrEmpty()) {
                     logger.debug { "Validating message attribute MD5 checksum for SendMessageBatch: ${entry.messageId}" }
 
-                    val messageAttrMD5Returned = entry.md5OfMessageAttributes
                     val clientSideAttrMd5 = calculateMessageAttributesMd5(messageAttrSent)
-                    if (clientSideAttrMd5 != messageAttrMD5Returned) {
-                        throw ChecksumMismatchException("Checksum mismatch. Expected $clientSideAttrMd5 but was $messageAttrMD5Returned")
-                    }
+
+                    validateMd5(clientSideAttrMd5, messageAttrMD5Returned)
 
                     logger.debug { "Message attribute MD5 checksum for SendMessageBatch: ${entry.messageId} validated" }
                 }
             }
 
             if (validationScopes.contains(ValidationScope.MESSAGE_SYSTEM_ATTRIBUTES)) {
-                val messageSysAttrSent = idToRequestEntryMap[entry.id]?.messageSystemAttributes
-                if (!messageSysAttrSent.isNullOrEmpty()) {
+                val messageSysAttrMD5Returned = entry.md5OfMessageSystemAttributes
+                val messageSysAttrSent = idToRequestEntry[entry.id]?.messageSystemAttributes
+
+                if (!messageSysAttrMD5Returned.isNullOrEmpty() && !messageSysAttrSent.isNullOrEmpty()) {
                     logger.debug { "Validating message system attribute MD5 checksum for SendMessageBatch: ${entry.messageId}" }
 
-                    val messageSysAttrMD5Returned = entry.md5OfMessageSystemAttributes
                     val clientSideSysAttrMd5 = calculateMessageSystemAttributesMd5(messageSysAttrSent)
-                    if (clientSideSysAttrMd5 != messageSysAttrMD5Returned) {
-                        throw ChecksumMismatchException("Checksum mismatch. Expected $clientSideSysAttrMd5 but was $messageSysAttrMD5Returned")
-                    }
+
+                    validateMd5(clientSideSysAttrMd5, messageSysAttrMD5Returned)
 
                     logger.debug { "Message system attribute MD5 checksum for SendMessageBatch: ${entry.messageId} validated" }
                 }
@@ -237,12 +245,14 @@ public class SqsMd5ChecksumValidationInterceptor(
         }
     }
 
-    private fun calculateMessageBodyMd5(messageBody: String): String {
-        val expectedMD5 = messageBody.encodeToByteArray().md5()
-        val expectedMD5Hex = expectedMD5.toHexString()
-
-        return expectedMD5Hex
+    private fun validateMd5(clientSideMd5: String, md5Returned: String) {
+        if (clientSideMd5 != md5Returned) {
+            throw ChecksumMismatchException("Checksum mismatch. Expected $clientSideMd5 but was $md5Returned")
+        }
     }
+
+    private fun calculateMessageBodyMd5(messageBody: String) =
+        messageBody.encodeToByteArray().md5().toHexString()
 
     /**
      * Calculates the MD5 digest for message attributes according to SQS specifications.
@@ -253,7 +263,7 @@ public class SqsMd5ChecksumValidationInterceptor(
 
         messageAttributes
             .entries
-            .sortedBy { (name, _) -> name }
+            .sortedBy { (attributeName, _) -> attributeName }
             .forEach { (attributeName, attributeValue) ->
                 updateLengthAndBytes(buffer, attributeName)
                 updateLengthAndBytes(buffer, attributeValue.dataType)
@@ -262,6 +272,7 @@ public class SqsMd5ChecksumValidationInterceptor(
                     attributeValue.binaryValue != null -> updateForBinaryType(buffer, attributeValue.binaryValue)
                     !attributeValue.stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, attributeValue.stringListValues)
                     !attributeValue.binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, attributeValue.binaryListValues)
+                    else -> throw ClientException("No value type found for attribute $attributeName")
                 }
             }
 
@@ -270,21 +281,22 @@ public class SqsMd5ChecksumValidationInterceptor(
     }
 
     private fun calculateMessageSystemAttributesMd5(
-        messageSysAttrs: Map<MessageSystemAttributeNameForSends, MessageSystemAttributeValue>,
+        messageSystemAttributes: Map<MessageSystemAttributeNameForSends, MessageSystemAttributeValue>,
     ): String {
         val buffer = SdkBuffer()
 
-        messageSysAttrs
+        messageSystemAttributes
             .entries
-            .sortedBy { (name, _) -> name.value }
-            .forEach { (attributeName, attributeValue) ->
-                updateLengthAndBytes(buffer, attributeName.value)
-                updateLengthAndBytes(buffer, attributeValue.dataType)
+            .sortedBy { (systemAttributeName, _) -> systemAttributeName.value }
+            .forEach { (systemAttributeName, systemAttributeValue) ->
+                updateLengthAndBytes(buffer, systemAttributeName.value)
+                updateLengthAndBytes(buffer, systemAttributeValue.dataType)
                 when {
-                    attributeValue.stringValue != null -> updateForStringType(buffer, attributeValue.stringValue)
-                    attributeValue.binaryValue != null -> updateForBinaryType(buffer, attributeValue.binaryValue)
-                    !attributeValue.stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, attributeValue.stringListValues)
-                    !attributeValue.binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, attributeValue.binaryListValues)
+                    systemAttributeValue.stringValue != null -> updateForStringType(buffer, systemAttributeValue.stringValue)
+                    systemAttributeValue.binaryValue != null -> updateForBinaryType(buffer, systemAttributeValue.binaryValue)
+                    !systemAttributeValue.stringListValues.isNullOrEmpty() -> updateForStringListType(buffer, systemAttributeValue.stringListValues)
+                    !systemAttributeValue.binaryListValues.isNullOrEmpty() -> updateForBinaryListType(buffer, systemAttributeValue.binaryListValues)
+                    else -> throw ClientException("No value type found for system attribute $systemAttributeName")
                 }
             }
 

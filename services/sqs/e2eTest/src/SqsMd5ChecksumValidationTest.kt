@@ -9,16 +9,16 @@ import aws.sdk.kotlin.e2etest.SqsTestUtils.TEST_MESSAGE_ATTRIBUTES_NAME
 import aws.sdk.kotlin.e2etest.SqsTestUtils.TEST_MESSAGE_ATTRIBUTES_VALUE
 import aws.sdk.kotlin.e2etest.SqsTestUtils.TEST_MESSAGE_BODY
 import aws.sdk.kotlin.e2etest.SqsTestUtils.TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE
-import aws.sdk.kotlin.e2etest.SqsTestUtils.TEST_QUEUE_CORRECT_CHECKSUM_PREFIX
-import aws.sdk.kotlin.e2etest.SqsTestUtils.TEST_QUEUE_WRONG_CHECKSUM_PREFIX
+import aws.sdk.kotlin.e2etest.SqsTestUtils.TEST_QUEUE_PREFIX
 import aws.sdk.kotlin.e2etest.SqsTestUtils.buildSendMessageBatchRequestEntry
 import aws.sdk.kotlin.e2etest.SqsTestUtils.deleteQueueAndAllMessages
 import aws.sdk.kotlin.e2etest.SqsTestUtils.getTestQueueUrl
 import aws.sdk.kotlin.services.sqs.SqsClient
 import aws.sdk.kotlin.services.sqs.internal.ValidationEnabled
-import aws.sdk.kotlin.services.sqs.internal.ValidationScope
 import aws.sdk.kotlin.services.sqs.model.*
 import aws.smithy.kotlin.runtime.client.ResponseInterceptorContext
+import aws.smithy.kotlin.runtime.collections.AttributeKey
+import aws.smithy.kotlin.runtime.collections.get
 import aws.smithy.kotlin.runtime.hashing.md5
 import aws.smithy.kotlin.runtime.http.interceptors.ChecksumMismatchException
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
@@ -26,6 +26,7 @@ import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.http.response.HttpResponse
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertNotNull
 
 /**
  * Tests for Sqs MD5 checksum validation
@@ -84,33 +85,53 @@ class SqsMd5ChecksumValidationTest {
         }
     }
 
-    private val correctChecksumClient = SqsClient {
-        region = DEFAULT_REGION
-        checksumValidationEnabled = ValidationEnabled.ALWAYS
-        checksumValidationScopes = ValidationScope.entries.toSet()
+    // An interceptor that checks if the SQS md5 checksum was validated
+    private val checksumValidationAssertionInterceptor = object : HttpInterceptor {
+        private val supportedOperations = setOf(
+            "SendMessage",
+            "SendMessageBatch",
+            "ReceiveMessage",
+        )
+
+        override fun readAfterExecution(context: ResponseInterceptorContext<Any, Any, HttpRequest?, HttpResponse?>) {
+            val operationName = context.executionContext.attributes[AttributeKey("aws.smithy.kotlin#OperationName")] as String
+
+            if (operationName !in supportedOperations) {
+                return
+            }
+
+            assertNotNull(context.executionContext.attributes[AttributeKey("checksumValidated")])
+
+            val isChecksumValidated = context.executionContext.attributes[AttributeKey("checksumValidated")] as Boolean
+
+            assert(isChecksumValidated)
+        }
     }
 
-    // used for wrong checksum tests
-    private val wrongChecksumClient = SqsClient {
-        region = DEFAULT_REGION
-        checksumValidationEnabled = ValidationEnabled.ALWAYS
-        checksumValidationScopes = ValidationScope.entries.toSet()
-        interceptors += wrongChecksumInterceptor
-    }
+    private lateinit var correctChecksumClient: SqsClient
 
-    private lateinit var correctChecksumTestQueueUrl: String
-    private lateinit var wrongChecksumTestQueueUrl: String
+    private lateinit var wrongChecksumClient: SqsClient
+
+    private lateinit var testQueueUrl: String
 
     @BeforeAll
     private fun setUp(): Unit = runBlocking {
-        correctChecksumTestQueueUrl = getTestQueueUrl(correctChecksumClient, TEST_QUEUE_CORRECT_CHECKSUM_PREFIX, DEFAULT_REGION)
-        wrongChecksumTestQueueUrl = getTestQueueUrl(wrongChecksumClient, TEST_QUEUE_WRONG_CHECKSUM_PREFIX, DEFAULT_REGION)
+        correctChecksumClient = SqsClient.fromEnvironment {
+            region = DEFAULT_REGION
+            checksumValidationEnabled = ValidationEnabled.ALWAYS
+            interceptors += checksumValidationAssertionInterceptor
+        }
+        wrongChecksumClient = SqsClient.fromEnvironment {
+            region = DEFAULT_REGION
+            checksumValidationEnabled = ValidationEnabled.ALWAYS
+            interceptors += wrongChecksumInterceptor
+        }
+        testQueueUrl = getTestQueueUrl(correctChecksumClient, TEST_QUEUE_PREFIX)
     }
 
     @AfterAll
     private fun cleanUp(): Unit = runBlocking {
-        deleteQueueAndAllMessages(correctChecksumClient, correctChecksumTestQueueUrl)
-        deleteQueueAndAllMessages(wrongChecksumClient, wrongChecksumTestQueueUrl)
+        deleteQueueAndAllMessages(correctChecksumClient, testQueueUrl)
         correctChecksumClient.close()
         wrongChecksumClient.close()
     }
@@ -119,15 +140,15 @@ class SqsMd5ChecksumValidationTest {
     fun testSendMessage(): Unit = runBlocking {
         correctChecksumClient.sendMessage(
             SendMessageRequest {
-                queueUrl = correctChecksumTestQueueUrl
+                queueUrl = testQueueUrl
                 messageBody = TEST_MESSAGE_BODY
-                messageAttributes = hashMapOf(
+                messageAttributes = mapOf(
                     TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
                         dataType = "String"
                         stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE
                     },
                 )
-                messageSystemAttributes = hashMapOf(
+                messageSystemAttributes = mapOf(
                     MessageSystemAttributeNameForSends.AwsTraceHeader to MessageSystemAttributeValue {
                         dataType = "String"
                         stringValue = TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE
@@ -141,7 +162,7 @@ class SqsMd5ChecksumValidationTest {
     fun testReceiveMessage(): Unit = runBlocking {
         correctChecksumClient.receiveMessage(
             ReceiveMessageRequest {
-                queueUrl = correctChecksumTestQueueUrl
+                queueUrl = testQueueUrl
                 maxNumberOfMessages = 1
                 messageAttributeNames = listOf(TEST_MESSAGE_ATTRIBUTES_NAME)
                 messageSystemAttributeNames = listOf(MessageSystemAttributeName.AwsTraceHeader)
@@ -157,7 +178,7 @@ class SqsMd5ChecksumValidationTest {
 
         correctChecksumClient.sendMessageBatch(
             SendMessageBatchRequest {
-                queueUrl = correctChecksumTestQueueUrl
+                queueUrl = testQueueUrl
                 this.entries = entries
             },
         )
@@ -165,18 +186,18 @@ class SqsMd5ChecksumValidationTest {
 
     @Test
     fun testSendMessageWithWrongChecksum(): Unit = runBlocking {
-        val exception = assertThrows<ChecksumMismatchException> {
+        assertThrows<ChecksumMismatchException> {
             wrongChecksumClient.sendMessage(
                 SendMessageRequest {
-                    queueUrl = wrongChecksumTestQueueUrl
+                    queueUrl = testQueueUrl
                     messageBody = TEST_MESSAGE_BODY
-                    messageAttributes = hashMapOf(
+                    messageAttributes = mapOf(
                         TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
                             dataType = "String"
                             stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE
                         },
                     )
-                    messageSystemAttributes = hashMapOf(
+                    messageSystemAttributes = mapOf(
                         MessageSystemAttributeNameForSends.AwsTraceHeader to MessageSystemAttributeValue {
                             dataType = "String"
                             stringValue = TEST_MESSAGE_SYSTEM_ATTRIBUTES_VALUE
@@ -185,24 +206,20 @@ class SqsMd5ChecksumValidationTest {
                 },
             )
         }
-
-        assert(exception.message!!.contains("Checksum mismatch"))
     }
 
     @Test
     fun testReceiveMessageWithWrongChecksum(): Unit = runBlocking {
-        val exception = assertThrows<ChecksumMismatchException> {
+        assertThrows<ChecksumMismatchException> {
             wrongChecksumClient.receiveMessage(
                 ReceiveMessageRequest {
-                    queueUrl = wrongChecksumTestQueueUrl
+                    queueUrl = testQueueUrl
                     maxNumberOfMessages = 1
                     messageAttributeNames = listOf(TEST_MESSAGE_ATTRIBUTES_NAME)
                     messageSystemAttributeNames = listOf(MessageSystemAttributeName.AwsTraceHeader)
                 },
             )
         }
-
-        assert(exception.message!!.contains("Checksum mismatch"))
     }
 
     @Test
@@ -211,15 +228,13 @@ class SqsMd5ChecksumValidationTest {
             buildSendMessageBatchRequestEntry(batchId)
         }
 
-        val exception = assertThrows<ChecksumMismatchException> {
+        assertThrows<ChecksumMismatchException> {
             wrongChecksumClient.sendMessageBatch(
                 SendMessageBatchRequest {
-                    queueUrl = wrongChecksumTestQueueUrl
+                    queueUrl = testQueueUrl
                     this.entries = entries
                 },
             )
         }
-
-        assert(exception.message!!.contains("Checksum mismatch"))
     }
 }

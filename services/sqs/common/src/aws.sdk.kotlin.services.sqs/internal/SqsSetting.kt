@@ -18,10 +18,10 @@ internal object SqsSetting {
      * - Environment variable: AWS_SQS_CHECKSUM_VALIDATION_ENABLED
      *
      * Valid values:
-     * - ALWAYS (default) - Validates checksums for both sending and receiving operations
+     * - ALWAYS - Validates checksums for both sending and receiving operations
      * - WHEN_SENDING - Validates checksums only when sending messages
      * - WHEN_RECEIVING - Validates checksums only when receiving messages
-     * - NEVER - Disables checksum validation
+     * - NEVER (default) - Disables checksum validation
      *
      * Note: Value matching is case-insensitive when configured via environment variables.
      */
