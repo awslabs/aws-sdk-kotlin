@@ -46,9 +46,7 @@ class SqsMd5ChecksumValidationTest {
             when (val response = context.response.getOrNull()) {
                 is SendMessageResponse -> {
                     val modifiedResponse = response.copy {
-                        md5OfMessageBody = wrongMd5ofMessageBody
                         md5OfMessageAttributes = wrongMd5ofMessageAttribute
-                        md5OfMessageSystemAttributes = wrongMd5ofMessageSystemAttribute
                     }
                     return Result.success(modifiedResponse)
                 }
@@ -56,7 +54,6 @@ class SqsMd5ChecksumValidationTest {
                     val modifiedMessages = response.messages?.map { message ->
                         message.copy {
                             md5OfBody = wrongMd5ofMessageBody
-                            md5OfMessageAttributes = wrongMd5ofMessageAttribute
                         }
                     }
 
@@ -68,8 +65,6 @@ class SqsMd5ChecksumValidationTest {
                 is SendMessageBatchResponse -> {
                     val modifiedEntries = response.successful.map { entry ->
                         entry.copy {
-                            md5OfMessageBody = wrongMd5ofMessageBody
-                            md5OfMessageAttributes = wrongMd5ofMessageAttribute
                             md5OfMessageSystemAttributes = wrongMd5ofMessageSystemAttribute
                         }
                     }
@@ -146,6 +141,10 @@ class SqsMd5ChecksumValidationTest {
                     TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
                         dataType = "String"
                         stringValue = TEST_MESSAGE_ATTRIBUTES_VALUE
+                    },
+                    TEST_MESSAGE_ATTRIBUTES_NAME to MessageAttributeValue {
+                        dataType = "Binary"
+                        binaryValue = TEST_MESSAGE_ATTRIBUTES_VALUE.toByteArray()
                     },
                 )
                 messageSystemAttributes = mapOf(
