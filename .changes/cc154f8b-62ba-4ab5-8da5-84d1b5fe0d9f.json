@@ -1,0 +1,8 @@
+{
+    "id": "cc154f8b-62ba-4ab5-8da5-84d1b5fe0d9f",
+    "type": "feature",
+    "description": "Added MD5 checksum validation for SQS message operations",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#222"
+    ]
+}
