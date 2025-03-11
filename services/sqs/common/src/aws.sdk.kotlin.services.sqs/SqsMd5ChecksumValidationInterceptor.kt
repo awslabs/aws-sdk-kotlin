@@ -97,7 +97,7 @@ public class SqsMd5ChecksumValidationInterceptor(
             }
         }
 
-        // Record MD5 checksum validation was performed for this request
+        // Sets validation flag in execution context for e2e test assertions
         val checksumValidated: AttributeKey<Boolean> = AttributeKey("checksumValidated")
         context.executionContext[checksumValidated] = true
     }
