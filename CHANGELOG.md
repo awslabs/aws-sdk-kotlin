@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.39] - 03/11/2025
+
+### Features
+* (**ec2**) This release adds the GroupLongName field to the response of the DescribeAvailabilityZones API.
+* (**ecr**) This release adds Amazon ECR to Amazon ECR pull through cache rules support.
+* (**inspector2**) Adding componentArn to network reachability details
+* (**medialive**) Add an enum option DISABLED for Output Locking Mode under Global Configuration.
+
+### Documentation
+* (**ecs**) This is a documentation only update for Amazon ECS to address various tickets.
+
 ## [1.4.38] - 03/10/2025
 
 ### Features
