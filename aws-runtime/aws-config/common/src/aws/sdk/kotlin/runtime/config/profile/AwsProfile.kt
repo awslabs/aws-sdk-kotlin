@@ -212,10 +212,7 @@ public inline fun <reified T : Enum<T>> AwsProfile.getEnumOrNull(key: String, su
             it.name.equals(value, ignoreCase = true)
         } ?: throw ConfigurationException(
             buildString {
-                append(key)
-                append(" '")
-                append(value)
-                append("' is not supported, should be one of: ")
+                append("$key '$value' is not supported, should be one of: ")
                 enumValues<T>().joinTo(this) { it.name.lowercase() }
             },
         )
@@ -226,23 +223,17 @@ public inline fun <reified T : Enum<T>> AwsProfile.getEnumOrNull(key: String, su
  */
 @InternalSdkApi
 public inline fun <reified T : Enum<T>> AwsProfile.getEnumSetOrNull(key: String, subKey: String? = null): Set<T>? =
-    getOrNull(key, subKey)?.let { rawValue ->
-        rawValue.split(",")
-            .map { it ->
-                val value = it.trim()
-                enumValues<T>().firstOrNull { enumValue ->
-                    enumValue.name.equals(value, ignoreCase = true)
-                } ?: throw ConfigurationException(
-                    buildString {
-                        append(key)
-                        append(" '")
-                        append(value)
-                        append("' is not supported, should be one of: ")
-                        enumValues<T>().joinTo(this) { it.name.lowercase() }
-                    },
-                )
-            }.toSet()
-    }
+    getOrNull(key, subKey)?.split(",")?.map { it ->
+        val value = it.trim()
+        enumValues<T>().firstOrNull { enumValue ->
+            enumValue.name.equals(value, ignoreCase = true)
+        } ?: throw ConfigurationException(
+            buildString {
+                append("$key '$value' is not supported, should be one of: ")
+                enumValues<T>().joinTo(this) { it.name.lowercase() }
+            },
+        )
+    }?.toSet()
 
 internal fun AwsProfile.getUrlOrNull(key: String, subKey: String? = null): Url? =
     getOrNull(key, subKey)?.let {
