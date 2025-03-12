@@ -166,7 +166,7 @@ public class SqsMd5ChecksumValidationInterceptor(
 
                     validateMd5(clientSideBodyMd5, messageBodyMd5Returned)
 
-                    logger.debug { "Message body MD5 checksum for ReceiveMessage validated " }
+                    logger.debug { "Message body MD5 checksum for ReceiveMessage validated" }
                 }
             }
 
@@ -181,7 +181,7 @@ public class SqsMd5ChecksumValidationInterceptor(
 
                     validateMd5(clientSideAttrMd5, messageAttrMd5Returned)
 
-                    logger.debug { "Message attribute MD5 checksum for ReceiveMessage validated " }
+                    logger.debug { "Message attribute MD5 checksum for ReceiveMessage validated" }
                 }
             }
         }

@@ -59,7 +59,7 @@ object SqsTestUtils {
 
             println("Queue purged successfully.")
 
-            println("Deleting Sqs queue: $queueUrl")
+            println("Deleting SQS queue: $queueUrl")
 
             client.deleteQueue(
                 DeleteQueueRequest {

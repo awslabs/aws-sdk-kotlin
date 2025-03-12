@@ -113,7 +113,7 @@ class SqsMd5ChecksumValidationIntegration : KotlinIntegration {
             ),
         )
 
-    // add Sqs-specific config finalization
+    // add SQS-specific config finalization
     private val finalizeSqsConfigWriter = AppendingSectionWriter { writer ->
         val finalizeSqsConfig = buildSymbol {
             name = "finalizeSqsConfig"
