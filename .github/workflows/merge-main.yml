@@ -1,0 +1,14 @@
+name: Merge main
+on:
+  schedule:
+    - cron: "0 7 * * 1-5"  # At 07:00 UTC (00:00 PST, 03:00 EST), Monday through Friday
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge main
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/merge-main@main
+        with:
+          exempt-branches: # Add any if required
