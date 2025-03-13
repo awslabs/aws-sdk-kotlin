@@ -17,8 +17,11 @@ object AwsRuntimeTypes {
         val AwsServiceException = symbol("AwsServiceException")
         val ClientException = symbol("ClientException")
 
+        // FUTURE MERGE CONFLICG: This package will be removed when region provider PR merges: https://github.com/awslabs/aws-sdk-kotlin/pull/1488
+        // Prepare for merge conflicts
         object Client : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE, "client") {
             val AwsSdkClientConfig = symbol("AwsSdkClientConfig")
+            val AwsClientOption = symbol("AwsClientOption")
         }
     }
 
@@ -41,6 +44,7 @@ object AwsRuntimeTypes {
             val resolveEndpointUrl = symbol("resolveEndpointUrl")
             val resolveAccountId = symbol("resolveAccountId")
             val resolveAccountIdEndpointMode = symbol("resolveAccountIdEndpointMode")
+            val toBusinessMetric = symbol("toBusinessMetric")
         }
 
         object Profile : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "config.profile") {
