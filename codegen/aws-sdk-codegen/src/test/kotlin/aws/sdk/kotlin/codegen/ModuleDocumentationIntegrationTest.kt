@@ -88,7 +88,7 @@ class ModuleDocumentationIntegrationTest {
             .generateModuleDocumentation(
                 ctx.toGenerationContext(),
                 "Test",
-            )
+            ).replace("\r\n", "\n")  // Handle CRLF on Windows
             .shouldContainOnlyOnceWithDiff(
                 """
                     ## Subtitle
