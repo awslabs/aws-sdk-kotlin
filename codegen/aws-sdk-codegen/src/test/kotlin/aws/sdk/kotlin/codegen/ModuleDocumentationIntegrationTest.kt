@@ -16,7 +16,7 @@ private val model = """
          use aws.api#service
      
          @service(sdkId: "Test")
-         @title("A test service")
+         @title("Test Service")
          service Test {
              version: "1.0.0",
              operations: []
@@ -60,7 +60,7 @@ class ModuleDocumentationIntegrationTest {
                 """
                     # Module test
                     
-                    A test service
+                    Test Service
                 """.trimIndent(),
             )
 
@@ -76,7 +76,7 @@ class ModuleDocumentationIntegrationTest {
             .shouldContainOnlyOnceWithDiff(
                 """
                     ## Code Examples
-                    To see full code examples, see the Test examples in the AWS Code Library. See https://example.com
+                    To see full code examples, see the Test Service examples in the AWS code example library. See https://example.com
                 """.trimIndent(),
             )
 
@@ -88,7 +88,7 @@ class ModuleDocumentationIntegrationTest {
             .generateModuleDocumentation(
                 ctx.toGenerationContext(),
                 "Test",
-            ).replace("\r\n", "\n")  // Handle CRLF on Windows
+            ).replace("\r\n", "\n") // Handle CRLF on Windows
             .shouldContainOnlyOnceWithDiff(
                 """
                     ## Subtitle
