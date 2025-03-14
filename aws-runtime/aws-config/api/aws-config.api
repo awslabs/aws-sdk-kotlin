@@ -307,10 +307,6 @@ public final class aws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode
 	public static fun values ()[Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
 }
 
-public final class aws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointModeKt {
-	public static final fun toBusinessMetric (Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;)Laws/smithy/kotlin/runtime/businessmetrics/BusinessMetric;
-}
-
 public final class aws/sdk/kotlin/runtime/config/endpoints/ResolversKt {
 	public static final fun resolveAccountId (Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;Laws/smithy/kotlin/runtime/collections/Attributes;)Ljava/lang/String;
 	public static final fun resolveAccountIdEndpointMode (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

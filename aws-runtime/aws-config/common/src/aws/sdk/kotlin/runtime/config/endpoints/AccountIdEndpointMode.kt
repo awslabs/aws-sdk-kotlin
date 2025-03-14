@@ -29,7 +29,7 @@ public enum class AccountIdEndpointMode {
     REQUIRED,
 }
 
-public fun AccountIdEndpointMode.toBusinessMetric(): BusinessMetric = when (this) {
+private fun AccountIdEndpointMode.toBusinessMetric(): BusinessMetric = when (this) {
     AccountIdEndpointMode.PREFERRED -> SmithyBusinessMetric.ACCOUNT_ID_MODE_PREFERRED
     AccountIdEndpointMode.DISABLED -> SmithyBusinessMetric.ACCOUNT_ID_MODE_DISABLED
     AccountIdEndpointMode.REQUIRED -> SmithyBusinessMetric.ACCOUNT_ID_MODE_REQUIRED
