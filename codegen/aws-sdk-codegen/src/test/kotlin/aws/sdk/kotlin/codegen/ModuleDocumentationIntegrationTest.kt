@@ -36,26 +36,14 @@ class ModuleDocumentationIntegrationTest {
                 codeExamples = mapOf("Test" to "https://example.com"),
             ).enabledForService(model, ctx.generationCtx.settings),
         )
-        assertTrue(
-            ModuleDocumentationIntegration(
-                handWritten = mapOf("Test" to "example.md"),
-            ).enabledForService(model, ctx.generationCtx.settings),
-        )
-        assertTrue(
-            ModuleDocumentationIntegration(
-                codeExamples = mapOf("Test" to "https://example.com"),
-                handWritten = mapOf("Test" to "test.md"),
-            ).enabledForService(model, ctx.generationCtx.settings),
-        )
     }
 
     @Test
     fun rendersBoilerplate() =
-        ModuleDocumentationIntegration()
-            .generateModuleDocumentation(
-                ctx.toGenerationContext(),
-                "Test",
-            )
+        ModuleDocumentationIntegration(
+            codeExamples = mapOf("Test" to "https://example.com"),
+        )
+            .generateModuleDocumentation(ctx.toGenerationContext())
             .shouldContainOnlyOnceWithDiff(
                 """
                     # Module test
@@ -69,31 +57,11 @@ class ModuleDocumentationIntegrationTest {
         ModuleDocumentationIntegration(
             codeExamples = mapOf("Test" to "https://example.com"),
         )
-            .generateModuleDocumentation(
-                ctx.toGenerationContext(),
-                "Test",
-            )
+            .generateModuleDocumentation(ctx.toGenerationContext())
             .shouldContainOnlyOnceWithDiff(
                 """
                     ## Code Examples
                     To see full code examples, see the Test Service examples in the AWS code example library. See https://example.com
-                """.trimIndent(),
-            )
-
-    @Test
-    fun rendersHandWrittenDocs() =
-        ModuleDocumentationIntegration(
-            handWritten = mapOf("Test" to "test.md"),
-        )
-            .generateModuleDocumentation(
-                ctx.toGenerationContext(),
-                "Test",
-            ).replace("\r\n", "\n") // Handle CRLF on Windows
-            .shouldContainOnlyOnceWithDiff(
-                """
-                    ## Subtitle
-
-                    Lorem Ipsum
                 """.trimIndent(),
             )
 }

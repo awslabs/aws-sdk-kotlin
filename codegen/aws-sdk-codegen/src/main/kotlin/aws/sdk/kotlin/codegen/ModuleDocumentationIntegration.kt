@@ -9,7 +9,7 @@ import software.amazon.smithy.kotlin.codegen.model.getTrait
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.traits.TitleTrait
-import java.io.IOException
+import java.io.File
 
 /**
  * Maps a service's SDK ID to its code examples
@@ -39,16 +39,8 @@ private val CODE_EXAMPLES_SERVICES_MAP = mapOf(
 )
 
 /**
- * Maps a service's SDK ID to its handwritten module documentation file in the `resources` dir.
- * The module documentation files MUST be markdown files.
- */
-private val HAND_WRITTEN_SERVICES_MAP = mapOf(
-    "S3" to "S3.md",
-)
-
-/**
  * Generates an `API.md` file that will be used as module documentation in our API ref docs.
- * Some services have code examples we need to link to. Others have handwritten documentation.
+ * Some services have code example documentation we need to generate. Others have handwritten documentation.
  * The integration renders both into the `API.md` file.
  *
  * See: https://kotlinlang.org/docs/dokka-module-and-package-docs.html
@@ -57,41 +49,45 @@ private val HAND_WRITTEN_SERVICES_MAP = mapOf(
  */
 class ModuleDocumentationIntegration(
     private val codeExamples: Map<String, String> = CODE_EXAMPLES_SERVICES_MAP,
-    private val handWritten: Map<String, String> = HAND_WRITTEN_SERVICES_MAP,
 ) : KotlinIntegration {
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean =
-        model.expectShape<ServiceShape>(settings.service).sdkId.let {
-            codeExamples.keys.contains(it) || handWritten.keys.contains(it)
-        }
+        codeExamples.keys.contains(
+            model
+                .expectShape<ServiceShape>(settings.service)
+                .sdkId,
+        ) ||
+            handWrittenDocsFile(settings).exists()
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         delegator.fileManifest.writeFile(
             "API.md",
-            generateModuleDocumentation(ctx, ctx.settings.sdkId),
+            generateModuleDocumentation(ctx),
         )
     }
 
     internal fun generateModuleDocumentation(
         ctx: CodegenContext,
-        sdkId: String,
     ) = buildString {
-        append(
-            generateBoilerPlate(ctx),
-        )
-        if (handWritten.keys.contains(sdkId)) {
+        val handWrittenDocsFile = handWrittenDocsFile(ctx.settings)
+        if (handWrittenDocsFile.exists()) {
             append(
-                generateHandWrittenDocs(sdkId),
+                handWrittenDocsFile.readText(),
             )
             appendLine()
         }
-        if (codeExamples.keys.contains(sdkId)) {
+        if (codeExamples.keys.contains(ctx.settings.sdkId)) {
+            if (!handWrittenDocsFile.exists()) {
+                append(
+                    boilerPlate(ctx),
+                )
+            }
             append(
-                generateCodeExamplesDocs(ctx),
+                codeExamplesDocs(ctx),
             )
         }
     }
 
-    private fun generateBoilerPlate(ctx: CodegenContext) = buildString {
+    private fun boilerPlate(ctx: CodegenContext) = buildString {
         // Title must be "Module" followed by the exact module name or dokka won't render it
         appendLine("# Module ${ctx.settings.pkg.name.split(".").last()}")
         appendLine()
@@ -106,7 +102,7 @@ class ModuleDocumentationIntegration(
             }
     }
 
-    private fun generateCodeExamplesDocs(ctx: CodegenContext) = buildString {
+    private fun codeExamplesDocs(ctx: CodegenContext) = buildString {
         val sdkId = ctx.settings.sdkId
         val codeExampleLink = codeExamples[sdkId]
         val title = ctx
@@ -120,12 +116,11 @@ class ModuleDocumentationIntegration(
         appendLine("See $codeExampleLink")
         appendLine()
     }
+}
 
-    private fun generateHandWrittenDocs(sdkId: String): String = object {}
-        .javaClass
-        .classLoader
-        .getResourceAsStream("aws/sdk/kotlin/codegen/moduledocumentation/${handWritten[sdkId]}")
-        ?.bufferedReader()
-        ?.readText()
-        ?: throw IOException("Unable to read from file ${handWritten[sdkId]}")
+private fun handWrittenDocsFile(settings: KotlinSettings): File {
+    val sdkRootDir = System.getProperty("user.dir")
+    val serviceDir = "$sdkRootDir/services/${settings.pkg.name.split(".").last()}"
+
+    return File("$serviceDir/DOCS.md")
 }

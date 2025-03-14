@@ -1,3 +1,0 @@
-## Subtitle
-
-Lorem Ipsum

@@ -1,3 +1,7 @@
+# Module s3
+
+Amazon Simple Storage Service
+
 ## Binary Data
 
 Binary data (streams) are represented as an [aws.smithy.kotlin.runtime.content.ByteStream].
