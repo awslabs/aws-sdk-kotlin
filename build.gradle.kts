@@ -67,7 +67,7 @@ allprojects {
 
     tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
         // each module can include their own top-level module documentation
-        // see https://kotlinlang.org/docs/kotlin-doc.html#module-and-package-documentation
+        // see https://kotlinlang.org/docs/dokka-module-and-package-docs.html
         if (project.file("API.md").exists()) {
             dokkaSourceSets.configureEach {
                 includes.from(project.file("API.md"))

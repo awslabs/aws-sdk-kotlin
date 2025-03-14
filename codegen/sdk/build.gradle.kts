@@ -180,6 +180,10 @@ val stageSdks = tasks.register("stageSdks") {
                 from("$projectionOutputDir/build.gradle.kts")
                 into(it.destinationDir)
             }
+            copy {
+                from("$projectionOutputDir/API.md")
+                into(it.destinationDir)
+            }
         }
     }
 }

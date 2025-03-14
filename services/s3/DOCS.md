@@ -35,7 +35,7 @@ See [aws.sdk.kotlin.services.s3.model.GetObjectResponse]
 ## Streaming Responses
 
 Streaming responses are scoped to a `block`. Instead of returning the response directly, you must pass a lambda which is given access to the response (and the underlying stream).
-The result of the call is whatever the lambda returns. 
+The result of the call is whatever the lambda returns.
 
 
 See [aws.sdk.kotlin.services.s3.S3Client.getObject]
