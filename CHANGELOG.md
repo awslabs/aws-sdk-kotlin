@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.41] - 03/14/2025
+
+### Features
+* (**glue**) This release added AllowFullTableExternalDataAccess to glue catalog resource.
+* (**lakeformation**) This release added "condition" to LakeFormation OptIn APIs, also added WithPrivilegedAccess flag to RegisterResource and DescribeResource.
+
+### Documentation
+* (**cognitoidentity**) Updated API model build artifacts for identity pools
+* (**cognitoidentityprovider**) Minor description updates to API parameters
+
 ## [1.4.40] - 03/13/2025
 
 ### Features
