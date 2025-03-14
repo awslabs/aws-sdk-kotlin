@@ -549,11 +549,6 @@ private const val TEST_SUITE_JSON = """
     "service_envvar_name": "AWS_ENDPOINT_URL_EKS"
   },
   {
-    "service_id": "Elastic Inference",
-    "services_section_name": "elastic_inference",
-    "service_envvar_name": "AWS_ENDPOINT_URL_ELASTIC_INFERENCE"
-  },
-  {
     "service_id": "ElastiCache",
     "services_section_name": "elasticache",
     "service_envvar_name": "AWS_ENDPOINT_URL_ELASTICACHE"
@@ -1911,7 +1906,6 @@ private const val JAVA_CLIENT_NAMES_JSON = """
   "LookoutEquipment": "LookoutEquipmentClient",
   "CloudWatch": "CloudWatchClient",
   "Pca Connector Ad": "PcaConnectorAdClient",
-  "Elastic Inference": "ElasticInferenceClient",
   "Glue": "GlueClient",
   "SecurityLake": "SecurityLakeClient",
   "Pinpoint SMS Voice": "PinpointSmsVoiceClient",

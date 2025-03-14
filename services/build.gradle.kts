@@ -102,6 +102,12 @@ subprojects {
                             }
                         }
 
+                        if (project.name == "route53") {
+                            dependencies {
+                                implementation(libraries.smithy.kotlin.http.test) // needed for URI E2E tests
+                            }
+                        }
+
                         // Run the tests with the classpath containing the compile dependencies (including 'main'),
                         // runtime dependencies, and the outputs of this compilation:
                         classpath = compileDependencyFiles + runtimeDependencyFiles + output.allOutputs

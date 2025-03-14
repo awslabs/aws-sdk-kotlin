@@ -1,5 +1,241 @@
 # Changelog
 
+## [1.4.40] - 03/13/2025
+
+### Features
+* (**acmpca**) Private Certificate Authority service now supports P521 and RSA3072 key algorithms.
+* (**amplify**) Introduced support for Skew Protection. Added enableSkewProtection field to createBranch and updateBranch API.
+* (**cloudwatchlogs**) Updated CreateLogAnomalyDetector to accept only kms key arn
+* (**codebuild**) AWS CodeBuild now supports webhook filtering by organization name
+* (**datazone**) This release adds support to update projects and environments
+* (**dynamodb**) Generate account endpoints for DynamoDB requests using ARN-sourced account ID when available
+* (**ec2**) This release changes the CreateLaunchTemplate, CreateLaunchTemplateVersion, ModifyLaunchTemplate CLI and SDKs such that if you do not specify a client token, a randomly generated token is used for the request to ensure idempotency.
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to adjust the participant & composition recording segment duration
+* (**mediapackagev2**) This release adds the ResetChannelState and ResetOriginEndpointState operation to reset MediaPackage V2 channel and origin endpoint. This release also adds a new field, UrlEncodeChildManifest, for HLS/LL-HLS to allow URL-encoding child manifest query string based on the requirements of AWS SigV4.
+* (**s3control**) Updating GetDataAccess response for S3 Access Grants to include the matched Grantee for the requested prefix
+
+## [1.4.39] - 03/11/2025
+
+### Features
+* (**ec2**) This release adds the GroupLongName field to the response of the DescribeAvailabilityZones API.
+* (**ecr**) This release adds Amazon ECR to Amazon ECR pull through cache rules support.
+* (**inspector2**) Adding componentArn to network reachability details
+* (**medialive**) Add an enum option DISABLED for Output Locking Mode under Global Configuration.
+
+### Documentation
+* (**ecs**) This is a documentation only update for Amazon ECS to address various tickets.
+
+## [1.4.38] - 03/10/2025
+
+### Features
+* (**bedrockagent**) Add support for computer use tools
+* (**bedrockagentruntime**) Add support for computer use tools
+* (**connect**) Add support for contact transfers in external voice systems.
+* (**costexplorer**) Releasing minor partition endpoint updates.
+* (**medialive**) Adds defaultFontSize and defaultLineHeight as options in the EbuTtDDestinationSettings within the caption descriptions for an output stream.
+* (**pcaconnectorad**) PrivateCA Connector for Active Directory now supports dual stack endpoints. This release adds the IpAddressType option to the VpcInformation on a Connector which determines whether the endpoint supports IPv4 only or IPv4 and IPv6 traffic.
+* (**securityhub**) This release adds new StandardsControlsUpdatable field to the StandardsSubscription resource
+
+### Documentation
+* (**timestreaminfluxdb**) This release updates the default value of pprof-disabled from false to true.
+
+## [1.4.37] - 03/07/2025
+
+### Features
+* (**bedrockagent**) Introduces support for Neptune Analytics as a vector data store and adds Context Enrichment Configurations, enabling use cases such as GraphRAG.
+* (**bedrockagentruntime**) Support Multi Agent Collaboration within Inline Agents
+* (**ec2**) Add serviceManaged field to DescribeAddresses API response.
+* (**elasticloadbalancingv2**) This release adds support for assigning IP addresses to Application Load Balancers from VPC IP Address Manager pools.
+
+### Documentation
+* (**cloudfront**) Documentation updates for Amazon CloudFront.
+* (**neptunegraph**) Several small updates to resolve customer requests.
+
+## [1.4.36] - 03/06/2025
+
+### Features
+* (**bedrock**) This releases adds support for Custom Prompt Router
+* (**ivsrealtime**) IVS Real-Time now offers customers the ability to merge fragmented recordings in the event of a participant disconnect.
+* (**networkflowmonitor**) This release contains 2 changes. 1: DeleteScope/GetScope/UpdateScope operations now return 404 instead of 500 when the resource does not exist. 2: Expected string format for clientToken fields of CreateMonitorInput/CreateScopeInput/UpdateMonitorInput have been updated to be an UUID based string.
+* (**redshiftdata**) This release adds support for ListStatements API to filter statements by ClusterIdentifier, WorkgroupName, and Database.
+* (**wafv2**) You can now perform an exact match or rate limit aggregation against the web request's JA4 fingerprint.
+* (**workspaces**) Added a new ModifyEndpointEncryptionMode API for managing endpoint encryption settings.
+
+### Documentation
+* (**cloudtrail**) Doc-only update for CloudTrail.
+
+## [1.4.35] - 03/05/2025
+
+### Features
+* (**bedrockruntime**) This releases adds support for Custom Prompt Router ARN
+* (**datasync**) AWS DataSync now supports modifying ServerHostname while updating locations SMB, NFS, and ObjectStorage.
+* (**gameliftstreams**) New Service: Amazon GameLift Streams delivers low-latency game streaming from AWS global infrastructure to virtually any device with a browser at up to 1080p resolution and 60 fps.
+* (**iotfleetwise**) This release adds floating point support for CAN/OBD signals and adds support for signed OBD signals.
+* (**workspaces**) Added DeviceTypeWorkSpacesThinClient type to allow users to access their WorkSpaces through a WorkSpaces Thin Client.
+
+## [1.4.34] - 03/04/2025
+
+### Features
+* (**iotmanagedintegrations**) Adding managed integrations APIs for IoT Device Management to setup and control devices across different manufacturers and connectivity protocols. APIs include managedthing operations, credential and provisioning profile management, notification configuration, and OTA update.
+* (**iotsitewise**) AWS IoT SiteWise now supports MQTT-enabled, V3 gateways. Configure data destinations for real-time ingestion into AWS IoT SiteWise or buffered ingestion using Amazon S3 storage. You can also use path filters for precise data collection from specific MQTT topics.
+
+### Documentation
+* (**elasticache**) Doc only update, listing 'valkey7' and 'valkey8' as engine options for parameter groups.
+* (**rds**) Note support for Database Insights for Amazon RDS.
+
+## [1.4.33] - 03/03/2025
+
+### Features
+* (**cognitoidentityprovider**) Added the capacity to return available challenges in admin authentication and to set version 3 of the pre token generation event for M2M ATC.
+* (**ec2**) Update the DescribeVpcs response
+* (**qbusiness**) Adds support for the ingestion of audio and video files by Q Business, which can be configured with the mediaExtractionConfiguration parameter.
+* (**rum**) Add support for PutResourcePolicy, GetResourcePolicy and DeleteResourcePolicy to support resource based policies for AWS CloudWatch RUM
+* (**sagemaker**) Add DomainId to CreateDomainResponse
+
+### Documentation
+* (**transcribe**) Updating documentation for post call analytics job queueing.
+
+## [1.4.32] - 02/28/2025
+
+### Features
+* (**bedrockagent**) This release lets Amazon Bedrock Flows support newer models by increasing the maximum length of output in a prompt configuration. This release also increases the maximum number of prompt variables to 20 and the maximum number of node inputs to 20.
+* (**bedrockdataautomation**) Renamed and added new StandardConfiguration enums. Added support to update EncryptionConfiguration in UpdateBlueprint and UpdateDataAutomation APIs. Changed HttpStatus code for DeleteBlueprint and DeleteDataAutomationProject APIs to 200 from 204. Added APIs to support tagging.
+* (**bedrockdataautomationruntime**) Added a mandatory parameter DataAutomationProfileArn to support for cross region inference for InvokeDataAutomationAsync API. Renamed DataAutomationArn to DataAutomationProjectArn. Added APIs to support tagging.
+* (**databasemigrationservice**) Add skipped status to the Result Statistics of an Assessment Run
+* (**eks**) Adding licenses to EKS Anywhere Subscription operations response.
+* (**mediaconvert**) The AWS MediaConvert Probe API allows you to analyze media files and retrieve detailed metadata about their content, format, and structure.
+* (**pricing**) Update GetProducts and DescribeServices API request input validations.
+
+### Documentation
+* (**ssm**) Systems Manager doc-only updates for Feb. 2025.
+
+## [1.4.31] - 02/27/2025
+
+### Features
+* (**bedrockagentruntime**) Introduces Sessions (preview) to enable stateful conversations in GenAI applications.
+* (**qbusiness**) This release supports deleting attachments from conversations.
+* (**redshiftserverless**) Add track support for Redshift Serverless workgroup.
+* (**sagemaker**) SageMaker HubService is introducing support for creating Training Jobs in Curated Hub (Private Hub). Additionally, it is introducing two new APIs: UpdateHubContent and UpdateHubContentReference.
+* (**storagegateway**) This release adds support to invoke a process that cleans the specified file share's cache of file entries that are failing upload to Amazon S3.
+
+### Documentation
+* (**emr**) Definition update for EbsConfiguration.
+
+## [1.4.30] - 02/26/2025
+
+### Features
+* (**applicationsignals**) This release adds API support for reading Service Level Objectives and Services from monitoring accounts, from SLO and Service-scoped operations, including ListServices and ListServiceLevelObjectives.
+* (**batch**) AWS Batch: Resource Aware Scheduling feature support
+* (**chime**) Removes the Amazon Chime SDK APIs from the "chime" namespace.  Amazon Chime SDK APIs continue to be available in the AWS SDK via the dedicated Amazon Chime SDK namespaces: chime-sdk-identity, chime-sdk-mediapipelines, chime-sdk-meetings, chime-sdk-messaging, and chime-sdk-voice.
+* (**ec2**) Amazon EC2 Fleet customers can now override the Block Device Mapping specified in the Launch Template when creating a new Fleet request, saving the effort of creating and associating new Launch Templates to customize the Block Device Mapping.
+* (**iotfleetwise**) This release adds an optional listResponseScope request parameter in certain list API requests to limit the response to metadata only.
+* (**oam**) This release adds support for sharing AWS::ApplicationSignals::Service and AWS::ApplicationSignals::ServiceLevelObjective resources.
+* (**sagemaker**) AWS SageMaker InferenceComponents now support rolling update deployments for Inference Components.
+
+### Documentation
+* (**cloudfront**) Documentation update for VPC origin config.
+
+## [1.4.29] - 02/25/2025
+
+### Features
+* (**codebuild**) Adding "reportArns" field in output of BatchGetBuildBatches API. "reportArns" is an array that contains the ARNs of reports created by merging reports from builds associated with the batch build.
+* (**devicefarm**) Add an optional configuration to the ScheduleRun and CreateRemoteAccessSession API to set a device level http/s proxy.
+* (**ec2**) Adds support for time-based EBS-backed AMI copy operations. Time-based copy ensures that EBS-backed AMIs are copied within and across Regions in a specified timeframe.
+* (**iot**) AWS IoT - AWS IoT Device Defender adds support for a new Device Defender Audit Check that monitors device certificate age and custom threshold configurations for both the new device certificate age check and existing device certificate expiry check.
+* (**taxsettings**) PutTaxRegistration API changes for Egypt, Greece, Vietnam countries
+* Add SigV4a support to the default AWS signer
+
+## [1.4.28] - 02/24/2025
+
+### Features
+* (**bedrockagent**) This release improves support for newer models in Amazon Bedrock Flows.
+* (**bedrockagentruntime**) Adding support for ReasoningContent fields in Pre-Processing, Post-Processing and Orchestration Trace outputs.
+* (**bedrockruntime**) This release adds Reasoning Content support to Converse and ConverseStream APIs
+
+### Documentation
+* (**elasticache**) Documentation update, adding clarity and rephrasing.
+
+### Miscellaneous
+* Remove Elastic Inference Service
+
+## [1.4.27] - 02/21/2025
+
+### Features
+* (**appstream**) Added support for Certificate-Based Authentication on AppStream 2.0 multi-session fleets.
+* (**bedrockagent**) Introduce a new parameter which represents the user-agent header value used by the Bedrock Knowledge Base Web Connector.
+
+## [1.4.26] - 02/20/2025
+
+### Features
+* (**codebuild**) Add webhook status and status message to AWS CodeBuild webhooks
+* (**guardduty**) Reduce the minimum number of required attack sequence signals from 2 to 1
+* (**sagemaker**) Added new capability in the UpdateCluster operation to remove instance groups from your SageMaker HyperPod cluster.
+* (**workspacesweb**) Add support for toolbar configuration under user settings.
+
+### Documentation
+* (**licensemanagerusersubscriptions**) Updates entity to include Microsoft RDS SAL as a valid type of user subscription.
+* (**rds**) CloudWatch Database Insights now supports Amazon RDS.
+
+## [1.4.25] - 02/19/2025
+
+### Features
+* (**codepipeline**) Add environment variables to codepipeline action declaration.
+* (**location**) Adds support for larger property maps for tracking and geofence positions changes. It increases the maximum number of items from 3 to 4, and the maximum value length from 40 to 150.
+* (**mailmanager**) This release adds additional metadata fields in Mail Manager archive searches to show email source and details about emails that were archived when being sent with SES.
+* (**networkfirewall**) This release introduces Network Firewall's Automated Domain List feature. New APIs include UpdateFirewallAnalysisSettings, StartAnalysisReport, GetAnalysisReportResults, and ListAnalysisReports. These allow customers to enable analysis on firewalls to identify and report frequently accessed domain.
+* (**sagemaker**) Adds r8g instance type support to SageMaker Realtime Endpoints
+* (**sesv2**) This release adds the ability for outbound email sent with SES to preserve emails to a Mail Manager archive.
+
+### Documentation
+* (**ecs**) This is a documentation only release for Amazon ECS that supports the CPU task limit increase.
+* (**lightsail**) Documentation updates for Amazon Lightsail.
+
+## [1.4.24] - 02/18/2025
+
+### Features
+* (**emrcontainers**) EMR on EKS StartJobRun Api will be supporting the configuration of log storage in AWS by using "managedLogs" under "MonitoringConfiguration".
+* (**medialive**) Adds support for creating CloudWatchAlarmTemplates for AWS Elemental MediaTailor Playback Configuration resources.
+
+### Documentation
+* (**batch**) This documentation-only update corrects some typos.
+
+## [1.4.23] - 02/17/2025
+
+### Features
+* (**amplify**) Add ComputeRoleArn to CreateApp, UpdateApp, CreateBranch, and UpdateBranch, allowing caller to specify a role to be assumed by Amplify Hosting for server-side rendered applications.
+* (**databasemigrationservice**) Support replicationConfigArn in DMS DescribeApplicableIndividualAssessments API.
+* (**timestreaminfluxdb**) This release introduces APIs to manage DbClusters and adds support for read replicas
+
+## [1.4.22] - 02/14/2025
+
+### Features
+* (**codebuild**) Added test suite names to test case metadata
+* (**connect**) Release Notes: 1) Analytics API enhancements: Added new ListAnalyticsDataLakeDataSets API. 2)  Onboarding API Idempotency: Adds ClientToken to instance creation and management APIs to support idempotency.
+* (**databasemigrationservice**) Introduces premigration assessment feature to DMS Serverless API for start-replication and describe-replications
+* (**rdsdata**) Add support for Stop DB feature.
+* (**s3**) Added support for Content-Range header in HeadObject response.
+* (**wafv2**) The WAFv2 API now supports configuring data protection in webACLs.
+* (**workspacesthinclient**) Update Environment and Device name field definitions
+* [#1521](https://github.com/awslabs/aws-sdk-kotlin/issues/1521) Improve the coding style of DynamoDB Mapper auto-generated schemas
+
+### Fixes
+* [#1413](https://github.com/awslabs/aws-sdk-kotlin/issues/1413) Bump the **smithy-kotlin** version to pick up a [bugfix for Endpoint Discovery](https://github.com/smithy-lang/smithy-kotlin/pull/1240)
+
+## [1.4.21] - 02/14/2025
+
+### Features
+* (**codebuild**) Added test suite names to test case metadata
+* (**connect**) Release Notes: 1) Analytics API enhancements: Added new ListAnalyticsDataLakeDataSets API. 2)  Onboarding API Idempotency: Adds ClientToken to instance creation and management APIs to support idempotency.
+* (**databasemigrationservice**) Introduces premigration assessment feature to DMS Serverless API for start-replication and describe-replications
+* (**rdsdata**) Add support for Stop DB feature.
+* (**s3**) Added support for Content-Range header in HeadObject response.
+* (**wafv2**) The WAFv2 API now supports configuring data protection in webACLs.
+* (**workspacesthinclient**) Update Environment and Device name field definitions
+* [#1521](https://github.com/awslabs/aws-sdk-kotlin/issues/1521) Improve the coding style of DynamoDB Mapper auto-generated schemas
+
+### Fixes
+* [#1413](https://github.com/awslabs/aws-sdk-kotlin/issues/1413) Bump the **smithy-kotlin** version to pick up a [bugfix for Endpoint Discovery](https://github.com/smithy-lang/smithy-kotlin/pull/1240)
+
 ## [1.4.20] - 02/13/2025
 
 ### Features
