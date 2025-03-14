@@ -4,6 +4,7 @@
  */
 package aws.sdk.kotlin.runtime.config.endpoints
 
+import aws.smithy.kotlin.runtime.InternalApi
 import aws.smithy.kotlin.runtime.businessmetrics.BusinessMetric
 import aws.smithy.kotlin.runtime.businessmetrics.SmithyBusinessMetric
 
@@ -29,7 +30,8 @@ public enum class AccountIdEndpointMode {
     REQUIRED,
 }
 
-private fun AccountIdEndpointMode.toBusinessMetric(): BusinessMetric = when (this) {
+@InternalApi
+public fun AccountIdEndpointMode.toBusinessMetric(): BusinessMetric = when (this) {
     AccountIdEndpointMode.PREFERRED -> SmithyBusinessMetric.ACCOUNT_ID_MODE_PREFERRED
     AccountIdEndpointMode.DISABLED -> SmithyBusinessMetric.ACCOUNT_ID_MODE_DISABLED
     AccountIdEndpointMode.REQUIRED -> SmithyBusinessMetric.ACCOUNT_ID_MODE_REQUIRED
