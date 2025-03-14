@@ -17,8 +17,7 @@ object AwsRuntimeTypes {
         val AwsServiceException = symbol("AwsServiceException")
         val ClientException = symbol("ClientException")
 
-        // FUTURE MERGE CONFLICG: This package will be removed when region provider PR merges: https://github.com/awslabs/aws-sdk-kotlin/pull/1488
-        // Prepare for merge conflicts
+        // FUTURE MERGE CONFLICT: This package will be removed when region provider PR merges: https://github.com/awslabs/aws-sdk-kotlin/pull/1488
         object Client : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE, "client") {
             val AwsSdkClientConfig = symbol("AwsSdkClientConfig")
             val AwsClientOption = symbol("AwsClientOption")
