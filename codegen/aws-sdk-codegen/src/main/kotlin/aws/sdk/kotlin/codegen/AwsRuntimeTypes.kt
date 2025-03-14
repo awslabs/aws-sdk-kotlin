@@ -19,6 +19,7 @@ object AwsRuntimeTypes {
 
         object Client : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE, "client") {
             val AwsSdkClientConfig = symbol("AwsSdkClientConfig")
+            val AwsClientOption = symbol("AwsClientOption")
         }
     }
 
@@ -41,6 +42,7 @@ object AwsRuntimeTypes {
             val resolveEndpointUrl = symbol("resolveEndpointUrl")
             val resolveAccountId = symbol("resolveAccountId")
             val resolveAccountIdEndpointMode = symbol("resolveAccountIdEndpointMode")
+            val toBusinessMetric = symbol("toBusinessMetric")
         }
 
         object Profile : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "config.profile") {
