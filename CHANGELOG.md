@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.42] - 03/17/2025
+
+### Features
+* (**applicationsignals**) This release adds support for adding, removing, and listing SLO time exclusion windows with the BatchUpdateExclusionWindows and ListServiceLevelObjectiveExclusionWindows APIs.
+* (**geomaps**) Provide support for vector map styles in the GetStaticMap operation.
+* (**rum**) CloudWatch RUM now supports unminification of JS error stack traces.
+* (**taxsettings**) Adjust Vietnam PaymentVoucherNumber regex and minor API change.
+* (**wafv2**) AWS WAF now lets you inspect fragments of request URIs. You can specify the scope of the URI to inspect and narrow the set of URI fragments.
+
 ## [1.4.41] - 03/14/2025
 
 ### Features
