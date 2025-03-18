@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.43] - 03/18/2025
+
+### Features
+* (**appsync**) Providing Tagging support for DomainName in AppSync
+* (**cleanrooms**) This release adds support for PySpark jobs. Customers can now analyze data by running jobs using approved PySpark analysis templates.
+* (**mediaconvert**) This release adds support for AVC passthrough, the ability to specify PTS offset without padding, and an A/V segment matching feature.
+* (**route53**) Amazon Route 53 now supports the iso-f regions for private DNS Amazon VPCs and cloudwatch healthchecks.
+
 ## [1.4.42] - 03/17/2025
 
 ### Features
