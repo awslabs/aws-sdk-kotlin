@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.47] - 03/24/2025
+
+### Features
+* (**iotwireless**) Mark EutranCid under LteNmr optional.
+* (**pcs**) ClusterName/ClusterIdentifier, ComputeNodeGroupName/ComputeNodeGroupIdentifier, and QueueName/QueueIdentifier can now have 10 characters, and a minimum of 3 characters. The TagResource API action can now return ServiceQuotaExceededException.
+* (**ssm**) This release adds the AvailableSecurityUpdatesComplianceStatus field to patch baseline operations, as well as the AvailableSecurityUpdateCount and InstancesWithAvailableSecurityUpdates to patch state operations. Applies to Windows Server managed nodes only.
+
+### Documentation
+* (**qconnect**) Provides the correct value for supported model ID.
+
 ## [1.4.46] - 03/21/2025
 
 ### Features
