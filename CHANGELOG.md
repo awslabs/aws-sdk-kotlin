@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.48] - 03/25/2025
+
+### Features
+* (**bedrockagent**) Adding support for Amazon OpenSearch Managed clusters as a vector database in Knowledge Bases for Amazon Bedrock
+* (**eks**) Added support to override upgrade-blocking readiness checks via force flag when updating a cluster.
+* (**gameliftstreams**) Minor updates to improve developer experience.
+* (**keyspaces**) Removing replication region limitation for Amazon Keyspaces Multi-Region Replication APIs.
+* (**marketplaceentitlementservice**) This release enhances the GetEntitlements API to support new filter CUSTOMER_AWS_ACCOUNT_ID in request and CustomerAWSAccountId field in response.
+* (**marketplacemetering**) This release enhances the BatchMeterUsage API to support new field CustomerAWSAccountId in request and response and making CustomerIdentifier optional. CustomerAWSAccountId or CustomerIdentifier must be provided in request but not both.
+* (**sagemaker**) This release adds support for customer-managed KMS keys in Amazon SageMaker Partner AI Apps
+* (**workspacesthinclient**) Deprecate tags field in Get API responses
+
 ## [1.4.47] - 03/24/2025
 
 ### Features
