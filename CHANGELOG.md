@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.49] - 03/26/2025
+
+### Features
+* (**arczonalshift**) Add new shiftType field for ARC zonal shifts.
+* (**directconnect**) With this release, AWS Direct Connect allows you to tag your Direct Connect gateways. Tags are metadata that you can create and use to manage your Direct Connect gateways. For more information about tagging, see AWS Tagging Strategies.
+* (**mediaconvert**) This release adds a configurable Quality Level setting for the top rendition of Auto ABR jobs
+* (**mediatailor**) Add support for log filtering which allow customers to filter out selected event types from logs.
+* (**polly**) Added support for the new voice - Jihye (ko-KR). Jihye is available as a Neural voice only.
+* (**wafv2**) This release adds the ability to associate an AWS WAF v2 web ACL with an AWS Amplify App.
+
+### Documentation
+* (**rds**) Add note about the Availability Zone where RDS restores the DB cluster for the RestoreDBClusterToPointInTime operation.
+
 ## [1.4.48] - 03/25/2025
 
 ### Features
