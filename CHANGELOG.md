@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.50] - 03/27/2025
+
+### Features
+* (**batch**) This release will enable two features: Firelens log driver, and Execute Command on Batch jobs on ECS. Both features will be passed through to ECS.
+* (**bcmpricingcalculator**) Added standaloneAccountRateTypeSelections for GetPreferences and UpdatePreferences APIs. Added STALE enum value to status attribute in GetBillScenario and UpdateBillScenario APIs.
+* (**bedrockagentruntime**) bedrock flow now support node action trace.
+* (**cloudformation**) Adding support for the new parameter "ScanFilters" in the CloudFormation StartResourceScan API. When this parameter is included, the StartResourceScan API will initiate a scan limited to the resource types specified by the parameter.
+* (**datazone**) This release adds new action type of Create Listing Changeset for the Metadata Enforcement Rule feature.
+* (**eks**) Added support for BOTTLEROCKET FIPS AMIs to AMI types in US regions.
+* (**gamelift**) Amazon GameLift Servers add support for additional instance types.
+* (**iam**) Update IAM dual-stack endpoints for BJS, IAD and PDT partitions
+* (**sagemaker**) add: recovery mode for SageMaker Studio apps
+* (**ssooidc**) This release adds AwsAdditionalDetails in the CreateTokenWithIAM API response.
+
 ## [1.4.49] - 03/26/2025
 
 ### Features
