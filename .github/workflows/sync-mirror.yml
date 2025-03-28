@@ -4,10 +4,6 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-  # TODO: REMOVE v
-  pull_request:
-    branches: [ main ]
-  # TODO: REMOVE ^
 
 jobs:
   git-sync:
