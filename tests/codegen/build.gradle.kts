@@ -19,12 +19,6 @@ subprojects {
         }
     }
 
-    /*
-    Don't apply the rest of the configuration to the code generated smoke test services!
-    Those use the KMP plugin not JVM.
-     */
-    if (project.path.startsWith(":tests:codegen:smoke-tests:services")) return@subprojects
-
     apply(plugin = libraries.plugins.aws.kotlin.repo.tools.smithybuild.get().pluginId)
     apply(plugin = libraries.plugins.kotlin.jvm.get().pluginId)
 
