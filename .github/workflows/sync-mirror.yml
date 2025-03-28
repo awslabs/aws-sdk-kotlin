@@ -17,8 +17,7 @@ jobs:
       - name: git-sync
         uses: wei/git-sync@v3
         with:
-          source_repo: "awslabs/aws-sdk-kotlin"
+          source_repo: "https://${{ secrets.CI_USER }}:${{ secrets.CI_USER_PAT }}@github.com/awslabs/aws-sdk-kotlin.git"
           source_branch: "main"
-          destination_repo: ${{ secrets.GIT_SYNC_DESTINATION_REPO }}
+          destination_repo: "https://${{ secrets.CI_USER }}:${{ secrets.CI_USER_PAT }}@github.com/${{ secrets.GIT_SYNC_DESTINATION_REPO }}.git"
           destination_branch: "main"
-          # destination_ssh_private_key:  ${{ secrets.GIT_SYNC_DESTINATION_SSH_PRIVATE_KEY }}
