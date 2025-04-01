@@ -112,7 +112,7 @@ class ModuleDocumentationIntegration(
             ?.value
 
         appendLine("## Code Examples")
-        appendLine("Explore code examples for ${title ?: sdkId} in the <a href=\"$codeExampleLink\">AWS code example library</a>")
+        appendLine("Explore code examples for ${title ?: sdkId} in the <a href=\"$codeExampleLink\">AWS code example library</a>.")
         appendLine()
     }
 }
