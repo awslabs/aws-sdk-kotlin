@@ -80,7 +80,7 @@ class ExecuteCommandTest {
             command = command,
             platformProvider = provider,
             maxOutputLengthBytes = 1024L,
-            timeoutMillis = 1000
+            timeoutMillis = 1000,
         )
 
         assertEquals(0, result.first)

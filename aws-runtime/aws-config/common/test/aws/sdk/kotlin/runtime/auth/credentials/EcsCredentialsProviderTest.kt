@@ -144,7 +144,6 @@ class EcsCredentialsProviderTest {
         engine.assertRequests()
     }
 
-
     // FIXME iosSimulator fails with a different exception: "Failed to resolve host amazonaws.com: nodename nor servname provided, or not known"
     // Need to fix this by applying the same --standalone removal that we do in smithy-kotlin, aws-crt-kotlin. See `configureIosSimulatorTasks` in aws-kotlin-repo-tools.
     @IgnoreNative
