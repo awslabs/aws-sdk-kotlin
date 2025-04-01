@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.53] - 04/01/2025
+
+### Features
+* (**cleanrooms**) This release adds support for updating the analytics engine of a collaboration.
+* (**sagemaker**) Added tagging support for SageMaker notebook instance lifecycle configurations
+
 ## [1.4.52] - 03/31/2025
 
 ### Features
