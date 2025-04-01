@@ -55,7 +55,7 @@ class SmokeTestE2ETest {
         assertContains(output, "not ok ExceptionService ExceptionTest - no error expected from service")
         assertContains(
             output,
-            "#aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsFailureException: Smoke test failed with HTTP status code: 400"
+            "#aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsFailureException: Smoke test failed with HTTP status code: 400",
         )
     }
 
