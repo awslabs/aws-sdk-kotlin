@@ -52,7 +52,12 @@ internal actual suspend fun executeCommand(
             }
 
             val status = pclose(fp)
-            status to output
+            val exitCode = when (platformProvider.osInfo().family) {
+                OsFamily.Windows -> status  // Windows returns the exit code directly
+                else -> (status shr 8) and 0xFF  // Posix systems need to use the WEXITSTATUS macro, this is equivalent
+            }
+
+            exitCode to output
         } catch (e: Exception) {
             pclose(fp)
             throw e
