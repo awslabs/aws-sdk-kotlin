@@ -160,8 +160,6 @@ class EcsCredentialsProviderTest {
         assertFailsWith<ProviderConfigurationException> {
             provider.resolve()
         }.message.shouldContain("The container credentials full URI (http://amazonaws.com/full) is specified via a hostname whose IP address(es) do not resolve to the loopback device.")
-
-        // The container credentials full URI (http://amazonaws.com/full) is specified via a hostname whose IP address(es) could not be resolved. Failed to resolve host amazonaws.com: nodename nor servname provided, or not known
     }
 
     @Test
