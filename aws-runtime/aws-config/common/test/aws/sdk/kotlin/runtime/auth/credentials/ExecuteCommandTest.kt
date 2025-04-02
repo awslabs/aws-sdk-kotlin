@@ -95,7 +95,7 @@ class ExecuteCommandTest {
     @Test
     fun testErrorReturnsStderr() = runTest {
         val errorCommand = when (provider.osInfo().family) {
-            OsFamily.Windows -> "echo Error message 1>&2 & exit /b 13"
+            OsFamily.Windows -> "echo \"Error message\" 1>&2 & exit /b 13"
             else -> "echo 'Error message' >&2; exit 13"
         }
 
