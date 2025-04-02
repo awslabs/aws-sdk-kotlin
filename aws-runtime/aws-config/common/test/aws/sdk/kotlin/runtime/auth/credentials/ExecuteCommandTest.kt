@@ -61,7 +61,10 @@ class ExecuteCommandTest {
 
     @Test
     fun testCommandHasQuotes() = runTest {
-        val command = """echo \"Hello, in quotes!\""""
+        val command = when (provider.osInfo().family) {
+            OsFamily.Windows -> """echo "Hello, in quotes!""""
+            else -> """echo \"Hello, in quotes!\""""
+        }
 
         val result = executeCommand(
             command = command,
