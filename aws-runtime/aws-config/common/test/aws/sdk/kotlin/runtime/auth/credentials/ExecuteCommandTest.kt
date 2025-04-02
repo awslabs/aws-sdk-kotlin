@@ -11,7 +11,7 @@ import kotlin.test.assertFailsWith
 class ExecuteCommandTest {
     val provider = PlatformProvider.System
 
-    val PLATFORM_NEWLINE = when (provider.osInfo().family) {
+    val platformNewline = when (provider.osInfo().family) {
         OsFamily.Windows -> "\r\n"
         else -> "\n"
     }
@@ -28,7 +28,7 @@ class ExecuteCommandTest {
         )
 
         assertEquals(0, result.first)
-        assertEquals("Hello, World!${PLATFORM_NEWLINE}", result.second)
+        assertEquals("Hello, World!$platformNewline", result.second)
     }
 
     @Test
@@ -71,7 +71,7 @@ class ExecuteCommandTest {
         )
 
         assertEquals(0, result.first)
-        assertEquals(""""Hello, in quotes!"$PLATFORM_NEWLINE""", result.second)
+        assertEquals(""""Hello, in quotes!"$platformNewline""", result.second)
     }
 
     @Test
@@ -107,6 +107,6 @@ class ExecuteCommandTest {
         )
 
         assertEquals(13, result.first)
-        assertEquals("Error message$PLATFORM_NEWLINE", result.second)
+        assertEquals("Error message$platformNewline", result.second)
     }
 }
