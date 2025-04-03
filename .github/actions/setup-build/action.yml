@@ -13,12 +13,21 @@ runs:
         ref: '0.4.2'
         sparse-checkout: |
           .github
+
     - name: Checkout smithy-kotlin
       uses: ./aws-kotlin-repo-tools/.github/actions/checkout-head
       with:
         # checkout smithy-kotlin as a sibling which will automatically make it an included build
         path: 'smithy-kotlin'
         repository: 'smithy-lang/smithy-kotlin'
+
+    - name: Checkout aws-crt-kotlin
+      uses: ./aws-kotlin-repo-tools/.github/actions/checkout-head
+      with:
+        # checkout aws-crt-kotlin as a sibling which will automatically make it an included build (transitively, through smithy-kotlin)
+        path: 'aws-crt-kotlin'
+        repository: 'awslabs/aws-crt-kotlin'
+
     - name: Configure JDK
       uses: actions/setup-java@v3
       with:
