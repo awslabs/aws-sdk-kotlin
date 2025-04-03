@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.55] - 04/03/2025
+
+### Features
+* (**bedrockagent**) Added optional "customMetadataField" for Amazon Aurora knowledge bases, allowing single-column metadata. Also added optional "textIndexName" for MongoDB Atlas knowledge bases, enabling hybrid search support.
+* (**chimesdkvoice**) Added FOC date as an attribute of PhoneNumberOrder, added AccessDeniedException as a possible return type of ValidateE911Address
+* (**mailmanager**) Add support for Dual_Stack and PrivateLink types of IngressPoint. For configuration requests, SES Mail Manager will now accept both IPv4/IPv6 dual-stack endpoints and AWS PrivateLink VPC endpoints for email receiving.
+* (**route53**) Added us-gov-east-1 and us-gov-west-1 as valid Latency Based Routing regions for change-resource-record-sets.
+* (**sagemaker**) Adds support for i3en, m7i, r7i instance types for SageMaker Hyperpod
+* (**sesv2**) This release enables customers to provide attachments in the SESv2 SendEmail and SendBulkEmail APIs.
+* (**transcribe**) This Feature Adds Support for the "zh-HK" Locale for Batch Operations
+
+### Documentation
+* (**opensearch**) Improve descriptions for various API commands and data types.
+
 ## [1.4.54] - 04/02/2025
 
 ### Features
