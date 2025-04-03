@@ -98,8 +98,16 @@ class ExecuteCommandTest {
     @Test
     fun testErrorReturnsStderr() = runTest {
         val errorCommand = when (provider.osInfo().family) {
-            OsFamily.Windows -> "<nul set /p=\"Error message\\r\\n\" 1>&2 & exit /b 13"
+            OsFamily.Windows -> "echo Error message 1>&2 & exit /b 13"
             else -> "echo 'Error message' >&2; exit 13"
+        }
+
+        // Windows command output has an extra space at the end
+        // Can't wrap it in quotes because Windows just echoes them back
+        // Can't use `<nul set /p` because that doesn't terminate with CRLF
+        val expectedOutput = when (provider.osInfo().family) {
+            OsFamily.Windows -> "Error message "
+            else -> "Error message"
         }
 
         val result = executeCommand(
@@ -110,6 +118,6 @@ class ExecuteCommandTest {
         )
 
         assertEquals(13, result.first)
-        assertEquals("Error message$platformNewline", result.second)
+        assertEquals("$expectedOutput$platformNewline", result.second)
     }
 }
