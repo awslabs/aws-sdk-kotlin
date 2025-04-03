@@ -106,7 +106,7 @@ class ExecuteCommandTest {
         // Can't wrap it in quotes because Windows just echoes them back
         // Can't use `<nul set /p` because that doesn't terminate with CRLF
         val expectedOutput = when (provider.osInfo().family) {
-            OsFamily.Windows -> "Error message "
+            OsFamily.Windows -> "Error message  "
             else -> "Error message"
         }
 
