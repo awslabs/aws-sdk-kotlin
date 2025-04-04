@@ -6,7 +6,6 @@ name: Release readiness (snapshot dependency)
 on:
   pull_request:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   release-readiness:
@@ -19,12 +18,12 @@ jobs:
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
 
       - name: Configure error message
-        run: echo "ERROR_MESSAGE=WARNING smithy-kotlin release and version bump might be required before merging!" >> $GITHUB_ENV
+        run: echo "ERROR_MESSAGE=WARNING smithy-kotlin release and version bump might be required before merging" >> $GITHUB_ENV
 
       - name: Build SDK
-        run: ./gradlew test jvmTest || echo $ERROR_MESSAGE
+        run: ./gradlew test jvmTest || { echo "$ERROR_MESSAGE"; exit 1; }
 
       - name: Build SDK client
         run: |
-          ./gradlew -Paws.services=s3 -Paws.kotlin.native=false bootstrap || echo $ERROR_MESSAGE
-          ./gradlew build || echo $ERROR_MESSAGE
+          ./gradlew -Paws.services=s3 -Paws.kotlin.native=false bootstrap || { echo "$ERROR_MESSAGE"; exit 1; }
+          ./gradlew build || { echo "$ERROR_MESSAGE"; exit 1; }
