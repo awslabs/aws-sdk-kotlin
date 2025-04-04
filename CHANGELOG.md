@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.56] - 04/04/2025
+
+### Features
+* (**eventbridge**) Amazon EventBridge adds support for customer-managed keys on Archives and validations for two fields: eventSourceArn and kmsKeyIdentifier.
+
+### Documentation
+* (**directoryservicedata**) Doc only update - fixed broken links.
+* (**ec2**) Doc-only updates for Amazon EC2
+* (**s3control**) Updated max size of Prefixes parameter of Scope data type.
+
 ## [1.4.55] - 04/03/2025
 
 ### Features
