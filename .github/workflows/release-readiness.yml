@@ -26,4 +26,4 @@ jobs:
       - name: Build SDK client
         run: |
           ./gradlew -Paws.services=s3 -Paws.kotlin.native=false bootstrap || { echo "$ERROR_MESSAGE"; exit 1; }
-          ./gradlew build || { echo "$ERROR_MESSAGE"; exit 1; }
+          ./gradlew -Paws.kotlin.native=false build || { echo "$ERROR_MESSAGE"; exit 1; }
