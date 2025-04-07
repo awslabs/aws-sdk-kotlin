@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.57] - 04/07/2025
+
+### Features
+* (**bedrock**) New options for how to handle harmful content detected by Amazon Bedrock Guardrails.
+* (**bedrockruntime**) New options for how to handle harmful content detected by Amazon Bedrock Guardrails.
+* (**codebuild**) AWS CodeBuild now offers an enhanced debugging experience.
+* (**glue**) Add input validations for multiple Glue APIs
+* (**medialive**) AWS Elemental MediaLive now supports SDI inputs to MediaLive Anywhere Channels in workflows that use AWS SDKs.
+* (**personalize**) Add support for eventsConfig for CreateSolution, UpdateSolution, DescribeSolution, DescribeSolutionVersion. Add support for GetSolutionMetrics to return weighted NDCG metrics when eventsConfig is enabled for the solution.
+* (**transfer**) This launch enables customers to manage contents of their remote directories, by deleting old files or moving files to archive folders in remote servers once they have been retrieved. Customers will be able to automate the process using event-driven architecture.
+
 ## [1.4.56] - 04/04/2025
 
 ### Features
