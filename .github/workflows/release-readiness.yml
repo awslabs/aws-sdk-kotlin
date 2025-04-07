@@ -17,13 +17,16 @@ jobs:
       - name: Configure Gradle
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
 
-      - name: Configure error message
-        run: echo "ERROR_MESSAGE=WARNING smithy-kotlin release and version bump might be required before merging" >> $GITHUB_ENV
-
       - name: Build SDK
-        run: ./gradlew test jvmTest || { echo "$ERROR_MESSAGE"; exit 1; }
+        run: ./gradlew test jvmTest
 
       - name: Build SDK client
         run: |
-          ./gradlew -Paws.services=s3 -Paws.kotlin.native=false bootstrap || { echo "$ERROR_MESSAGE"; exit 1; }
-          ./gradlew -Paws.kotlin.native=false build || { echo "$ERROR_MESSAGE"; exit 1; }
+          ./gradlew -Paws.kotlin.native=false -Paws.services=s3 bootstrap
+          ./gradlew -Paws.kotlin.native=false build
+
+      - name: Emit error message
+        if: ${{ failure() }}
+        run: |
+          echo "::error ::Build failed. Did you forget to release smithy-kotlin and bump the dependency version?"
+          exit 1
