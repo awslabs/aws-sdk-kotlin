@@ -2,6 +2,8 @@
 
 ## [1.4.57] - 04/07/2025
 
+* ⚠️ **IMPORTANT**: This version should not be used as it contains a dependency on an unreleased snapshot version, and will not work correctly.
+
 ### Features
 * (**bedrock**) New options for how to handle harmful content detected by Amazon Bedrock Guardrails.
 * (**bedrockruntime**) New options for how to handle harmful content detected by Amazon Bedrock Guardrails.
