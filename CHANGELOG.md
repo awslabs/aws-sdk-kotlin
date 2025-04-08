@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.59] - 04/08/2025
+
+### Features
+* (**bedrockruntime**) This release introduces our latest bedrock runtime API, InvokeModelWithBidirectionalStream. The API supports both input and output streams and is supported by only HTTP2.0.
+* (**costexplorer**) This release supports Pagination traits on Cost Anomaly Detection APIs.
+* (**costoptimizationhub**) This release adds resource type "MemoryDbReservedInstances" and resource type "DynamoDbReservedCapacity" to the GetRecommendation, ListRecommendations, and ListRecommendationSummaries APIs to support new MemoryDB and DynamoDB RI recommendations.
+* (**iotfleetwise**) This release adds the option to update the strategy of state templates already associated to a vehicle, without the need to remove and re-add them.
+* (**storagegateway**) Added new ActiveDirectoryStatus value, ListCacheReports paginator, and support for longer pagination tokens.
+* (**taxsettings**) Uzbekistan Launch on TaxSettings Page
+
+### Documentation
+* (**securityhub**) Documentation updates for AWS Security Hub.
+
 ## [1.4.58] - 04/08/2025
 
 ## [1.4.57] - 04/07/2025
