@@ -9,9 +9,9 @@ import aws.smithy.kotlin.runtime.io.internal.SdkDispatchers
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
+import kotlinx.cinterop.*
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import kotlinx.cinterop.*
 import platform.posix.*
 
 @OptIn(ExperimentalForeignApi::class)
