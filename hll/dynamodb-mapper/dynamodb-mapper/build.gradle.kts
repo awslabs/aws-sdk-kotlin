@@ -112,7 +112,6 @@ if (project.NATIVE_ENABLED) {
         }
     }
 
-
     listOf("jvmSourcesJar", "metadataSourcesJar").forEach {
         tasks.named(it) {
             dependsOn(moveGenSrc)
