@@ -9,11 +9,9 @@ import aws.smithy.kotlin.runtime.io.internal.SdkDispatchers
 import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.OsFamily
 import aws.smithy.kotlin.runtime.util.PlatformProvider
-import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.refTo
-import kotlinx.cinterop.toKString
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import kotlinx.cinterop.*
 import platform.posix.*
 
 @OptIn(ExperimentalForeignApi::class)
@@ -23,44 +21,72 @@ internal actual suspend fun executeCommand(
     maxOutputLengthBytes: Long,
     timeoutMillis: Long,
     clock: Clock,
-): Pair<Int, String> {
-    // add the platform's shell
-    val prefix = when (platformProvider.osInfo().family) {
-        OsFamily.Windows -> "cmd.exe /C"
-        else -> "sh -c"
+): Pair<Int, String> = withContext(SdkDispatchers.IO) {
+    val pipeFd = IntArray(2)
+    if (pipe(pipeFd.refTo(0)) != 0) {
+        error("Failed to create pipe")
     }
 
-    val commandToExecute = "$prefix \"$command\" 2>&1"
+    val pid = fork()
+    if (pid == -1) {
+        error("Failed to fork")
+    }
 
-    return withContext(SdkDispatchers.IO) {
-        val fp = popen(commandToExecute, "r") ?: error("Failed to execute popen: $commandToExecute")
+    if (pid == 0) {
+        // Child process
+        close(pipeFd[0]) // Close read end
 
-        try {
-            val output = buildString {
-                val buffer = ByteArray(maxOutputLengthBytes.toInt())
+        // Pass stdout and stderr back to parent
+        dup2(pipeFd[1], STDOUT_FILENO)
+        dup2(pipeFd[1], STDERR_FILENO)
+        close(pipeFd[1])
 
-                withTimeout(timeoutMillis) {
-                    while (true) {
-                        val input = fgets(buffer.refTo(0), buffer.size, fp) ?: break
-                        append(input.toKString())
+        val shell = when (platformProvider.osInfo().family) {
+            OsFamily.Windows -> "cmd.exe"
+            else -> "sh"
+        }
 
-                        if (length > maxOutputLengthBytes) {
-                            throw CredentialsProviderException("Process output exceeded limit of $maxOutputLengthBytes bytes")
-                        }
-                    }
+        val shellArg = when (platformProvider.osInfo().family) {
+            OsFamily.Windows -> "/C"
+            else -> "-c"
+        }
+
+        val argv = memScoped { (arrayOf(shell, shellArg, command).map { it.cstr.ptr } + null).toCValues() }
+        execvp(shell, argv)
+        _exit(127) // If exec fails
+    }
+
+    // Parent process
+    close(pipeFd[1]) // Close write end
+
+    val output = buildString {
+        val buffer = ByteArray(maxOutputLengthBytes.toInt())
+
+        withTimeout(timeoutMillis) {
+            while (true) {
+                val bytesRead = read(pipeFd[0], buffer.refTo(0), buffer.size.toULong()).toInt()
+                if (bytesRead <= 0) break
+
+                append(buffer.decodeToString(0, bytesRead))
+
+                if (length > maxOutputLengthBytes) {
+                    close(pipeFd[0])
+                    throw CredentialsProviderException("Process output exceeded limit of $maxOutputLengthBytes bytes")
                 }
             }
-
-            val status = pclose(fp)
-            val exitCode = when (platformProvider.osInfo().family) {
-                OsFamily.Windows -> status // Windows returns the exit code directly
-                else -> (status shr 8) and 0xFF // Posix systems need to use the WEXITSTATUS macro, this is equivalent
-            }
-
-            exitCode to output
-        } catch (e: Exception) {
-            pclose(fp)
-            throw e
         }
+    }
+
+    close(pipeFd[0])
+
+    memScoped {
+        val status = alloc<IntVar>()
+        waitpid(pid, status.ptr, 0)
+        val exitCode = when (platformProvider.osInfo().family) {
+            OsFamily.Windows -> status.value
+            else -> (status.value shr 8) and 0xFF
+        }
+
+        exitCode to output
     }
 }
