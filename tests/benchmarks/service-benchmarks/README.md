@@ -6,10 +6,7 @@ are complete
 
 ## Instructions
 
-To run the benchmarks:
-* `./gradlew :tests:benchmarks:service-benchmarks:bootstrapAll`
-  This ensures that all the required service clients are bootstrapped and ready to be built. **You only need to do this
-  once** in your workspace unless you clean up generated services or make a change to codegen.
+Ensure all services, including `iam`, have been generated before proceeding with the benchmarks. To run the benchmarks:
 * `./gradlew build`
   This builds the whole SDK.
 * `./gradlew :tests:benchmarks:service-benchmarks:run`

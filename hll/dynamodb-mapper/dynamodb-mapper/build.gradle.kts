@@ -112,8 +112,10 @@ if (project.NATIVE_ENABLED) {
         }
     }
 
-    tasks.named("jvmSourcesJar") {
-        dependsOn(moveGenSrc)
+    listOf("jvmSourcesJar", "metadataSourcesJar").forEach {
+        tasks.named(it) {
+            dependsOn(moveGenSrc)
+        }
     }
 
     tasks.withType<KotlinCompilationTask<*>> {

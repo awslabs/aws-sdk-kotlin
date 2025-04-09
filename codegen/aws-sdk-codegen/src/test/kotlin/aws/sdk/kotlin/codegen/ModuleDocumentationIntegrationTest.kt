@@ -61,7 +61,7 @@ class ModuleDocumentationIntegrationTest {
             .shouldContainOnlyOnceWithDiff(
                 """
                     ## Code Examples
-                    To see full code examples, see the Test Service examples in the AWS code example library. See https://example.com
+                    Explore code examples for Test Service in the <a href="https://example.com">AWS code example library</a>
                 """.trimIndent(),
             )
 }
