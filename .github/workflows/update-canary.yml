@@ -30,6 +30,8 @@ jobs:
           
           while true; do
             STATUS=$(curl -i -s -o /dev/null -w "%{http_code}" "$MAVEN_URL")
+            echo "Status: $STATUS"
+
             if [[ "$STATUS" == "200" ]]; then
               echo "Artifact is available at $MAVEN_URL"
               exit 0
