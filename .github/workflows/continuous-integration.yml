@@ -72,11 +72,26 @@ jobs:
         run: |
           echo "Echo my echoes"
           echo "aws-sdk-kotlin"
+          echo "" >> ./aws-sdk-kotlin/gradle.properties
           echo "aws.kotlin.native=false" >> ./aws-sdk-kotlin/gradle.properties
           echo "smithy-kotlin"
+          echo "" >> ./smithy-kotlin/gradle.properties
           echo "aws.kotlin.native=false" >> ./smithy-kotlin/gradle.properties
           echo "aws-crt-kotlin"
+          echo "" >> ./aws-crt-kotlin/gradle.properties
           echo "aws.kotlin.native=false" >> ./aws-crt-kotlin/gradle.properties
+
+      - name: Debug smithy-kotlin
+        shell: bash
+        working-directory: smithy-kotlin
+        run: |
+          echo "Debugging smithy-kotlin"
+          echo "ls:"
+          ls
+          echo "gradle.properties"
+          cat gradle.properties
+          echo "git branch"
+          git branch
 
       - name: Debug aws-crt-kotlin
         shell: bash
