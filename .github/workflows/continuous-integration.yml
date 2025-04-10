@@ -84,8 +84,8 @@ jobs:
         run: |
           # protocol tests require everything is published
           pwd
-          ./gradlew --parallel assemble 
-          ./gradlew publishToMavenLocal
+          ./gradlew -Paws.kotlin.native=false --parallel assemble 
+          ./gradlew -Paws.kotlin.native=false publishToMavenLocal
 
       - name: Configure Gradle aws-sdk-kotlin
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
@@ -97,11 +97,11 @@ jobs:
         shell: bash
         run: |
           pwd
-          ./gradlew :build-support:test
-          ./gradlew publishToMavenLocal
-          ./gradlew apiCheck
-          ./gradlew test jvmTest
-          ./gradlew testAllProtocols
+          ./gradlew -Paws.kotlin.native=false :build-support:test
+          ./gradlew -Paws.kotlin.native=false publishToMavenLocal
+          ./gradlew -Paws.kotlin.native=false apiCheck
+          ./gradlew -Paws.kotlin.native=false test jvmTest
+          ./gradlew -Paws.kotlin.native=false testAllProtocols
 
       - name: Save Test Reports
         if: failure()
