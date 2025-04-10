@@ -78,6 +78,21 @@ jobs:
           echo "aws-crt-kotlin"
           echo "aws.kotlin.native=false" >> ./aws-crt-kotlin/gradle.properties
 
+      - name: Debug aws-crt-kotlin
+        shell: bash
+        working-directory: aws-crt-kotlin
+        run: |
+          echo "Debugging aws-crt-kotlin"
+          echo "ls:"
+          ls
+          echo "gradle.properties"
+          cat gradle.properties
+          echo "git branch"
+          git branch
+          echo "WithCrt"
+          cat aws-crt-kotlin/common/src/aws/sdk/kotlin/crt/WithCrt.kt
+          
+
       - name: Configure Gradle - smithy-kotlin
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
         with:
