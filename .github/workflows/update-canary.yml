@@ -15,9 +15,12 @@ jobs:
           role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
           aws-region: us-west-2
 
-      # Maven can take up to an hour after the release has succeeded to publish our artifacts
+
       - name: Verify artifact is available on Maven
         shell: bash
+        # Maven can take up to 2 hours after the release has succeeded to publish our artifacts
+        # FIXME Track execution duration over time and see if this can be shortened
+        timeout-minutes: 120
         run: |
           TAG="${{ github.event.release.tag_name }}"
           VERSION="${TAG#v}"
@@ -25,28 +28,19 @@ jobs:
           
           echo "Checking for an artifact at $MAVEN_URL"
           
-          # Retry settings
-          MAX_WAIT_MINUTES=60
-          INTERVAL_SECONDS=30
-          MAX_ATTEMPTS=$(( MAX_WAIT_MINUTES * 60 / INTERVAL_SECONDS ))
-          ATTEMPT=1
-
-          while [[ $ATTEMPT -le $MAX_ATTEMPTS ]]; do
+          while true; do
             STATUS=$(curl -i -s -o /dev/null -w "%{http_code}" "$MAVEN_URL")
             if [[ "$STATUS" == "200" ]]; then
               echo "Artifact is available at $MAVEN_URL"
               exit 0
             fi
 
-            sleep "$INTERVAL_SECONDS"
-            ((ATTEMPT++))
+            sleep 30
           done
-
-          echo "Timed out after $MAX_WAIT_MINUTES minutes. Artifact not available at $MAVEN_URL"
-          exit 1
 
       - name: Update canary
         shell: bash
+        timeout-minutes: 15
         run: |
           set -euo pipefail
 
@@ -63,27 +57,17 @@ jobs:
             --output text)
           
           echo "Waiting for step function to complete..."
-          
-          MAX_WAIT_SECONDS=$((15 * 60))
-          INTERVAL=10
-          ELAPSED=0
-      
+                
           while true; do
             STATUS=$(aws stepfunctions describe-execution --execution-arn "$EXECUTION_ARN" --query 'status' --output text)
             
             if [[ "$STATUS" == "SUCCEEDED" ]]; then
               echo "Step Function completed successfully"
-              break
+              exit 0
             elif [[ "$STATUS" == "FAILED" || "$STATUS" == "TIMED_OUT" || "$STATUS" == "ABORTED" ]]; then
               echo "Step Function failed with status: $STATUS"
               exit 1
             fi
-            
-            if [[ "$ELAPSED" -ge "$MAX_WAIT_SECONDS" ]]; then
-              echo "Timeout exceeded, cancelling..."
-              exit 1
-            fi
-            
-            sleep "$INTERVAL"
-            ELAPSED=$((ELAPSED + INTERVAL))
+
+            sleep 10
           done
