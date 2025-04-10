@@ -21,6 +21,7 @@ runs:
         path: 'smithy-kotlin'
         repository: 'smithy-lang/smithy-kotlin'
 
+    # FIXME Remove this checkout of aws-crt-kotlin once K/N artifacts are published to Maven
     - name: Checkout aws-crt-kotlin
       uses: ./aws-kotlin-repo-tools/.github/actions/checkout-head
       with:
