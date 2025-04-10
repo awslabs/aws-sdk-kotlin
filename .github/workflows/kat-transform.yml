@@ -52,9 +52,13 @@ jobs:
         run: |
           pwd
           ls -lsa
-          kat bump-version  # Bump from `vNext-SNAPSHOT` to `vNext`. kat transform only works on non-SNAPSHOT versions 
-          ./gradlew -Paws.kotlin.native=false build
-          ./gradlew -Paws.kotlin.native=false publishAllPublicationsToTestLocalRepository
+          kat bump-version  # Bump from `vNext-SNAPSHOT` to `vNext`. kat transform only works on non-SNAPSHOT versions
+          
+          # FIXME Re-enable Kotlin/Native builds when artifacts are available
+          echo "aws.kotlin.native=false" >> gradle.properties
+          
+          ./gradlew build
+          ./gradlew publishAllPublicationsToTestLocalRepository
 
       - name: Transform
         working-directory: ./aws-sdk-kotlin
