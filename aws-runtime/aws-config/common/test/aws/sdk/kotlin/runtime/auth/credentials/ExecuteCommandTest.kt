@@ -20,15 +20,15 @@ class ExecuteCommandTest {
     fun testExecuteCommand() = runTest {
         val command = "echo Hello, World!"
 
-        val result = executeCommand(
+        val (exitCode, output) = executeCommand(
             command = command,
             platformProvider = provider,
             maxOutputLengthBytes = 1024L,
             timeoutMillis = 1000,
         )
 
-        assertEquals(0, result.first)
-        assertEquals("Hello, World!$platformNewline", result.second)
+        assertEquals(0, exitCode)
+        assertEquals("Hello, World!$platformNewline", output)
     }
 
     @Test
@@ -66,15 +66,15 @@ class ExecuteCommandTest {
             else -> """echo \"Hello, in quotes!\""""
         }
 
-        val result = executeCommand(
+        val (exitCode, output) = executeCommand(
             command = command,
             platformProvider = provider,
             maxOutputLengthBytes = 1024L,
             timeoutMillis = 1000,
         )
 
-        assertEquals(0, result.first)
-        assertEquals(""""Hello, in quotes!"$platformNewline""", result.second)
+        assertEquals(0, exitCode)
+        assertEquals(""""Hello, in quotes!"$platformNewline""", output)
     }
 
     @Test
@@ -84,15 +84,15 @@ class ExecuteCommandTest {
             else -> "printf '%s\\n%s\\n%s\\n' 'Arg1' 'Arg2' 'Arg3'"
         }
 
-        val result = executeCommand(
+        val (exitCode, output) = executeCommand(
             command = command,
             platformProvider = provider,
             maxOutputLengthBytes = 1024L,
             timeoutMillis = 1000,
         )
 
-        assertEquals(0, result.first)
-        assertEquals("Arg1\nArg2\nArg3\n", result.second)
+        assertEquals(0, exitCode)
+        assertEquals("Arg1\nArg2\nArg3\n", output)
     }
 
     @Test
@@ -110,14 +110,14 @@ class ExecuteCommandTest {
             else -> "Error message"
         }
 
-        val result = executeCommand(
+        val (exitCode, output) = executeCommand(
             command = errorCommand,
             platformProvider = provider,
             maxOutputLengthBytes = 1024L,
             timeoutMillis = 1000,
         )
 
-        assertEquals(13, result.first)
-        assertEquals("$expectedOutput$platformNewline", result.second)
+        assertEquals(13, exitCode)
+        assertEquals("$expectedOutput$platformNewline", output)
     }
 }
