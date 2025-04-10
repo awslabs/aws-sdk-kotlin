@@ -70,43 +70,9 @@ jobs:
       - name: Disable Kotlin/Native builds
         shell: bash
         run: |
-          echo "Echo my echoes"
-          echo "aws-sdk-kotlin"
-          echo "" >> ./aws-sdk-kotlin/gradle.properties
-          echo "aws.kotlin.native=false" >> ./aws-sdk-kotlin/gradle.properties
-          echo "smithy-kotlin"
-          echo "" >> ./smithy-kotlin/gradle.properties
-          echo "aws.kotlin.native=false" >> ./smithy-kotlin/gradle.properties
-          echo "aws-crt-kotlin"
-          echo "" >> ./aws-crt-kotlin/gradle.properties
-          echo "aws.kotlin.native=false" >> ./aws-crt-kotlin/gradle.properties
-
-      - name: Debug smithy-kotlin
-        shell: bash
-        working-directory: smithy-kotlin
-        run: |
-          echo "Debugging smithy-kotlin"
-          echo "ls:"
-          ls
-          echo "gradle.properties"
-          cat gradle.properties
-          echo "git branch"
-          git branch
-
-      - name: Debug aws-crt-kotlin
-        shell: bash
-        working-directory: aws-crt-kotlin
-        run: |
-          echo "Debugging aws-crt-kotlin"
-          echo "ls:"
-          ls
-          echo "gradle.properties"
-          cat gradle.properties
-          echo "git branch"
-          git branch
-          echo "WithCrt"
-          cat aws-crt-kotlin/common/src/aws/sdk/kotlin/crt/WithCrt.kt
-          
+          echo -e "\naws.kotlin.native=false" >> ./aws-sdk-kotlin/gradle.properties
+          echo -e "\naws.kotlin.native=false" >> ./smithy-kotlin/gradle.properties
+          echo -e "\naws.kotlin.native=false" >> ./aws-crt-kotlin/gradle.properties
 
       - name: Configure Gradle - smithy-kotlin
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
@@ -119,8 +85,8 @@ jobs:
         run: |
           # protocol tests require everything is published
           pwd
-          ./gradlew -Paws.kotlin.native=false --parallel assemble 
-          ./gradlew -Paws.kotlin.native=false publishToMavenLocal
+          ./gradlew --parallel assemble 
+          ./gradlew publishToMavenLocal
 
       - name: Configure Gradle aws-sdk-kotlin
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
@@ -132,11 +98,11 @@ jobs:
         shell: bash
         run: |
           pwd
-          ./gradlew -Paws.kotlin.native=false :build-support:test
-          ./gradlew -Paws.kotlin.native=false publishToMavenLocal
-          ./gradlew -Paws.kotlin.native=false apiCheck
-          ./gradlew -Paws.kotlin.native=false test jvmTest
-          ./gradlew -Paws.kotlin.native=false testAllProtocols
+          ./gradlew :build-support:test
+          ./gradlew publishToMavenLocal
+          ./gradlew apiCheck
+          ./gradlew test jvmTest
+          ./gradlew testAllProtocols
 
       - name: Save Test Reports
         if: failure()
