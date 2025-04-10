@@ -70,8 +70,12 @@ jobs:
       - name: Disable Kotlin/Native builds
         shell: bash
         run: |
+          echo "Echo my echoes"
+          echo "aws-sdk-kotlin"
           echo "aws.kotlin.native=false" >> ./aws-sdk-kotlin/gradle.properties
+          echo "smithy-kotlin"
           echo "aws.kotlin.native=false" >> ./smithy-kotlin/gradle.properties
+          echo "aws-crt-kotlin"
           echo "aws.kotlin.native=false" >> ./aws-crt-kotlin/gradle.properties
 
       - name: Configure Gradle - smithy-kotlin
