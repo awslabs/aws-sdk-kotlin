@@ -66,17 +66,18 @@ jobs:
       - name: Setup Build
         uses: ./aws-sdk-kotlin/.github/actions/setup-build
 
-      - name: Configure Gradle - smithy-kotlin
-        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
-        with:
-          working-directory: ./smithy-kotlin
-
       # FIXME Re-enable Kotlin/Native builds when artifacts are available
       - name: Disable Kotlin/Native builds
         shell: bash
         run: |
           echo "aws.kotlin.native=false" >> ./aws-sdk-kotlin/gradle.properties
           echo "aws.kotlin.native=false" >> ./smithy-kotlin/gradle.properties
+          echo "aws.kotlin.native=false" >> ./aws-crt-kotlin/gradle.properties
+
+      - name: Configure Gradle - smithy-kotlin
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
+        with:
+          working-directory: ./smithy-kotlin
 
       - name: Build smithy-kotlin
         working-directory: ./smithy-kotlin
@@ -84,8 +85,8 @@ jobs:
         run: |
           # protocol tests require everything is published
           pwd
-          ./gradlew -Paws.kotlin.native=false --parallel assemble 
-          ./gradlew -Paws.kotlin.native=false publishToMavenLocal
+          ./gradlew --parallel assemble 
+          ./gradlew publishToMavenLocal
 
       - name: Configure Gradle aws-sdk-kotlin
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
@@ -97,11 +98,11 @@ jobs:
         shell: bash
         run: |
           pwd
-          ./gradlew -Paws.kotlin.native=false :build-support:test
-          ./gradlew -Paws.kotlin.native=false publishToMavenLocal
-          ./gradlew -Paws.kotlin.native=false apiCheck
-          ./gradlew -Paws.kotlin.native=false test jvmTest
-          ./gradlew -Paws.kotlin.native=false testAllProtocols
+          ./gradlew :build-support:test
+          ./gradlew publishToMavenLocal
+          ./gradlew apiCheck
+          ./gradlew test jvmTest
+          ./gradlew testAllProtocols
 
       - name: Save Test Reports
         if: failure()
