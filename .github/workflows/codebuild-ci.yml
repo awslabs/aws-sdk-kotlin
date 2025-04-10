@@ -212,7 +212,7 @@ jobs:
             if (hasAcknowledgeLabel) {
               await github.graphql(
                 `mutation {
-                  minimizeComment(input:{subjectId:"${newCommentId}", classifier:ACKNOWLEDGED}){
+                  minimizeComment(input:{subjectId:"${newCommentId}", classifier:RESOLVED}){
                     clientMutationId
                   }
                 }`
