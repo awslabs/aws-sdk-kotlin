@@ -13,7 +13,6 @@ import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
 import aws.smithy.kotlin.runtime.http.*
-import aws.smithy.kotlin.runtime.http.HttpCall
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.engine.ProxySelector
@@ -115,10 +114,10 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                 override suspend fun deserialize(context: ExecutionContext, call: HttpCall): String {
                     val response = call.response
                     if (response.status.isSuccess()) {
-                        val payload = response.body.readAll() ?: throw EC2MetadataError(response.status.value, "no metadata payload")
+                        val payload = response.body.readAll() ?: throw EC2MetadataError(response.status, "no metadata payload")
                         return payload.decodeToString()
                     } else {
-                        throw EC2MetadataError(response.status.value, "error retrieving instance metadata: ${response.status.description}")
+                        throw EC2MetadataError(response.status, "error retrieving instance metadata: ${response.status.description}")
                     }
                 }
             }
@@ -229,8 +228,7 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
 
 /**
  * Exception thrown when an error occurs retrieving metadata from IMDS
- *
- * @param statusCode The raw HTTP status code of the response
+ * @param statusCode The HTTP status code of the response
  * @param message The error message
  */
-public class EC2MetadataError(public val statusCode: Int, message: String) : AwsServiceException(message)
+public class EC2MetadataError(public val statusCode: HttpStatusCode, message: String) : AwsServiceException(message)

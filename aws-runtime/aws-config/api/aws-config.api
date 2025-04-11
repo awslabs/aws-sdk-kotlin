@@ -77,12 +77,11 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/EnvironmentCredential
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/ImdsCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
 	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Laws/sdk/kotlin/runtime/config/imds/InstanceMetadataProvider;Laws/smithy/kotlin/runtime/util/PlatformProvider;)V
+	public synthetic fun <init> (Ljava/lang/String;Laws/sdk/kotlin/runtime/config/imds/InstanceMetadataProvider;Laws/smithy/kotlin/runtime/util/PlatformProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;Laws/smithy/kotlin/runtime/time/Clock;)V
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;Laws/smithy/kotlin/runtime/time/Clock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public final fun getClient ()Lkotlin/Lazy;
-	public final fun getPlatformProvider ()Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;
-	public final fun getProfileOverride ()Ljava/lang/String;
 	public fun resolve (Laws/smithy/kotlin/runtime/collections/Attributes;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun toString ()Ljava/lang/String;
 }
@@ -277,6 +276,7 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 	public final fun getAwsContainerCredentialsFullUri ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsContainerCredentialsRelativeUri ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsDisableRequestCompression ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
+	public final fun getAwsEc2InstanceProfileName ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsEc2MetadataDisabled ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsEc2MetadataServiceEndpoint ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsEc2MetadataServiceEndpointMode ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
@@ -348,8 +348,8 @@ public final class aws/sdk/kotlin/runtime/config/endpoints/ResolversKt {
 }
 
 public final class aws/sdk/kotlin/runtime/config/imds/EC2MetadataError : aws/sdk/kotlin/runtime/AwsServiceException {
-	public fun <init> (ILjava/lang/String;)V
-	public final fun getStatusCode ()I
+	public fun <init> (Laws/smithy/kotlin/runtime/http/HttpStatusCode;Ljava/lang/String;)V
+	public final fun getStatusCode ()Laws/smithy/kotlin/runtime/http/HttpStatusCode;
 }
 
 public abstract class aws/sdk/kotlin/runtime/config/imds/EndpointConfiguration {

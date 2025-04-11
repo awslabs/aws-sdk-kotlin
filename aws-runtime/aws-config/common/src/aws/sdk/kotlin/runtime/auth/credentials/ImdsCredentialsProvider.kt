@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.auth.credentials
 
+import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
 import aws.sdk.kotlin.runtime.config.imds.EC2MetadataError
 import aws.sdk.kotlin.runtime.config.imds.ImdsClient
@@ -18,137 +19,208 @@ import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.io.IOException
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.telemetry.logging.info
-import aws.smithy.kotlin.runtime.telemetry.logging.warn
 import aws.smithy.kotlin.runtime.time.Clock
-import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import aws.smithy.kotlin.runtime.util.SingleFlightGroup
 import kotlin.coroutines.coroutineContext
-import kotlin.time.Duration.Companion.seconds
 
-private const val CREDENTIALS_BASE_PATH: String = "/latest/meta-data/iam/security-credentials/"
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
 private const val PROVIDER_NAME = "IMDSv2"
 
 /**
  * [CredentialsProvider] that uses EC2 instance metadata service (IMDS) to provide credentials information.
- * This provider requires that the EC2 instance has an [instance profile](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#ec2-instance-profile)
+ * This provider requires that the EC2 instance has an
+ * [instance profile](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#ec2-instance-profile)
  * configured.
- *
- * See [EC2 IAM Roles](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html) for more
- * information.
- *
- * @param profileOverride override the instance profile name. When retrieving credentials, a call must first be made to
- * `<IMDS_BASE_URL>/latest/meta-data/iam/security-credentials/`. This returns the instance profile used. If
- * [profileOverride] is set, the initial call to retrieve the profile is skipped and the provided value is used instead.
- * @param client the IMDS client to use to resolve credentials information with. This provider takes ownership over
- * the lifetime of the given [ImdsClient] and will close it when the provider is closed.
- * @param platformProvider the [PlatformEnvironProvider] instance
+ * @param instanceProfileName overrides the instance profile name. When set, this provider skips querying IMDS for the
+ * name of the active profile.
+ * @param client a preconfigured IMDS client with which to retrieve instance metadata. If an instance is passed, the
+ * caller is responsible for closing it. If no instance is passed, a default instance is created and will be closed when
+ * this credentials provider is closed.
+ * @param platformProvider a platform provider used for env vars and system properties
  */
 public class ImdsCredentialsProvider(
-    public val profileOverride: String? = null,
-    public val client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
-    public val platformProvider: PlatformEnvironProvider = PlatformProvider.System,
-    private val clock: Clock = Clock.System,
+    instanceProfileName: String? = null,
+    client: InstanceMetadataProvider? = null,
+    private val platformProvider: PlatformProvider = PlatformProvider.System,
 ) : CloseableCredentialsProvider {
+
+    @Deprecated("This constructor supports parameters which are no longer used in the implementation. It will be removed in version 1.5.")
+    public constructor(
+        profileOverride: String? = null,
+        client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
+        platformProvider: PlatformEnvironProvider = PlatformProvider.System,
+        @Suppress("UNUSED_PARAMETER") clock: Clock = Clock.System,
+    ) : this(profileOverride, client.value, platformProvider = platformProvider as? PlatformProvider ?: PlatformProvider.System)
+
+    private val manageClient: Boolean = client == null
+
+    private val client: InstanceMetadataProvider = client ?: ImdsClient {
+        this.platformProvider = this@ImdsCredentialsProvider.platformProvider
+    }
+
+    // FIXME This only resolves from env vars and sys props but we need to resolve from profiles too
+    private val instanceProfileName = instanceProfileName
+        ?: AwsSdkSetting.AwsEc2InstanceProfileName.resolve(platformProvider)
+
+    // FIXME This only resolves from env vars and sys props but we need to resolve from profiles too
+    private val providerDisabled = AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true
+
+    /**
+     * Tracks the known-good version of IMDS APIs available in the local environment. This starts as `null` and will be
+     * updated after the first successful API call.
+     */
+    private var apiVersion: ApiVersion? = null
+
+    private val urlBase: String
+        get() = (apiVersion ?: ApiVersion.EXTENDED).urlBase
+
     private var previousCredentials: Credentials? = null
 
-    // the time to refresh the Credentials. If set, it will take precedence over the Credentials' expiration time
-    private var nextRefresh: Instant? = null
+    /**
+     * Tracks the instance profile name resolved from IMDS. This starts as `null` and will be updated after a
+     * successful API call. Note that if [instanceProfileName] is set, profile name resolution  will be skipped.
+     */
+    private var resolvedProfileName: String? = null
 
-    // protects previousCredentials and nextRefresh
-    private val mu = Mutex()
+    /**
+     * A deduplicator for resolving credentials and tracking mutable state about IMDS
+     */
+    private val sfg = SingleFlightGroup<Credentials>()
 
-    override suspend fun resolve(attributes: Attributes): Credentials {
-        if (AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true) {
+    override suspend fun resolve(attributes: Attributes): Credentials = sfg.singleFlight { resolveUnderLock() }
+
+    private suspend fun resolveUnderLock(): Credentials {
+        println("**** Resolving creds (instanceProfileName=$instanceProfileName; apiVersion=$apiVersion; urlBase=$urlBase)")
+
+        if (providerDisabled) {
+            println("**** Explicitly disabled")
             throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
         }
 
-        // if we have previously served IMDS credentials and it's not time for a refresh, just return the previous credentials
-        mu.withLock {
-            previousCredentials?.run {
-                nextRefresh?.takeIf { clock.now() < it }?.run {
-                    return previousCredentials!!
+        val profileName = instanceProfileName ?: resolvedProfileName ?: try {
+            println("**** Resolving profile")
+            client.get(urlBase).also {
+                if (apiVersion == null) {
+                    // Tried EXTENDED and it worked; remember that for the future
+                    apiVersion = ApiVersion.EXTENDED
                 }
             }
-        }
+        } catch (ex: EC2MetadataError) {
+            when {
+                apiVersion == null && ex.statusCode == HttpStatusCode.NotFound -> {
+                    // Tried EXTENDED and that didn't work; fallback to LEGACY
+                    apiVersion = ApiVersion.LEGACY
+                    return resolveUnderLock()
+                }
 
-        val profileName = try {
-            profileOverride ?: loadProfile()
+                ex.statusCode == HttpStatusCode.NotFound -> {
+                    coroutineContext.info<ImdsCredentialsProvider> {
+                        "Received 404 when loading profile name. This instance may not have an associated profile."
+                    }
+                    throw ex
+                }
+
+                else -> return usePreviousCredentials()
+                    ?: throw ImdsProfileException(ex).wrapAsCredentialsProviderException()
+            }
+        } catch (ex: IOException) {
+            return usePreviousCredentials() ?: throw ImdsProfileException(ex).wrapAsCredentialsProviderException()
         } catch (ex: Exception) {
-            return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load instance profile", ex)
+            throw ImdsProfileException(ex).wrapAsCredentialsProviderException()
         }
 
-        val payload = try {
-            client.value.get("$CREDENTIALS_BASE_PATH$profileName")
+        val credsPayload = try {
+            client.get("$urlBase$profileName")
+        } catch (ex: EC2MetadataError) {
+            when {
+                apiVersion == null && ex.statusCode == HttpStatusCode.NotFound -> {
+                    // Tried EXTENDED and that didn't work; fallback to LEGACY
+                    apiVersion = ApiVersion.LEGACY
+                    return resolveUnderLock()
+                }
+
+                instanceProfileName == null && ex.statusCode == HttpStatusCode.NotFound -> {
+                    // A previously-resolved profile is now invalid; forget the resolved name and re-resolve
+                    resolvedProfileName = null
+                    return resolveUnderLock()
+                }
+
+                else -> return usePreviousCredentials()
+                    ?: throw ImdsCredentialsException(profileName, ex).wrapAsCredentialsProviderException()
+            }
+        } catch (ex: IOException) {
+            return usePreviousCredentials()
+                ?: throw ImdsCredentialsException(profileName, ex).wrapAsCredentialsProviderException()
         } catch (ex: Exception) {
-            return useCachedCredentials(ex) ?: throw CredentialsProviderException("failed to load credentials", ex)
+            throw ImdsCredentialsException(profileName, ex).wrapAsCredentialsProviderException()
         }
 
-        val deserializer = JsonDeserializer(payload.encodeToByteArray())
+        if (instanceProfileName == null) {
+            // No profile name was provided at construction time; cache the resolved name
+            resolvedProfileName = profileName
+        }
+
+        val deserializer = JsonDeserializer(credsPayload.encodeToByteArray())
 
         return when (val resp = deserializeJsonCredentials(deserializer)) {
             is JsonCredentialsResponse.SessionCredentials -> {
-                nextRefresh = if (resp.expiration != null && resp.expiration < clock.now()) {
-                    coroutineContext.warn<ImdsCredentialsProvider> {
-                        "Attempting credential expiration extension due to a credential service availability issue. " +
-                            "A refresh of these credentials will be attempted again in " +
-                            "${ DEFAULT_CREDENTIALS_REFRESH_SECONDS / 60 } minutes."
-                    }
-                    clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds
-                } else {
-                    null
-                }
-
-                val creds = Credentials(
+                val creds = credentials(
                     resp.accessKeyId,
                     resp.secretAccessKey,
                     resp.sessionToken,
                     resp.expiration,
                     PROVIDER_NAME,
+                    resp.accountId,
                 ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
 
-                creds.also {
-                    mu.withLock { previousCredentials = it }
-                }
+                creds.also { previousCredentials = it }
             }
-            is JsonCredentialsResponse.Error -> {
-                when (resp.code) {
-                    CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS -> throw ProviderConfigurationException("Incorrect IMDS/IAM configuration: [${resp.code}] ${resp.message}. Hint: Does this role have a trust relationship with EC2?")
-                    else -> throw CredentialsProviderException("Error retrieving credentials from IMDS: code=${resp.code}; ${resp.message}")
-                }
+            is JsonCredentialsResponse.Error -> when (resp.code) {
+                CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS -> throw ProviderConfigurationException("Incorrect IMDS/IAM configuration: [${resp.code}] ${resp.message}. Hint: Does this role have a trust relationship with EC2?")
+                else -> throw CredentialsProviderException("Error retrieving credentials from IMDS: code=${resp.code}; ${resp.message}")
             }
         }
     }
 
     override fun close() {
-        if (client.isInitialized()) {
-            client.value.close()
+        if (manageClient) {
+            client.close()
         }
     }
 
-    private suspend fun loadProfile() = try {
-        client.value.get(CREDENTIALS_BASE_PATH)
-    } catch (ex: EC2MetadataError) {
-        if (ex.statusCode == HttpStatusCode.NotFound.value) {
+    private suspend fun usePreviousCredentials(): Credentials? =
+        previousCredentials?.apply {
             coroutineContext.info<ImdsCredentialsProvider> {
-                "Received 404 from IMDS when loading profile information. Hint: This instance may not have an " +
-                    "IAM role associated."
+                "Attempting to reuse previously-fetched credentials (expiration = $expiration)"
             }
         }
-        throw ex
-    }
-
-    private suspend fun useCachedCredentials(ex: Exception): Credentials? = when {
-        ex is IOException || ex is EC2MetadataError && ex.statusCode == HttpStatusCode.InternalServerError.value -> {
-            mu.withLock {
-                previousCredentials?.apply { nextRefresh = clock.now() + DEFAULT_CREDENTIALS_REFRESH_SECONDS.seconds }
-            }
-        }
-        else -> null
-    }
 
     override fun toString(): String = this.simpleClassName
+
+    /**
+     * Identifies different versions of IMDS APIs for fetching credentials
+     */
+    private enum class ApiVersion(val urlBase: String) {
+        /**
+         * The original, now-deprecated API
+         */
+        LEGACY("/latest/meta-data/iam/security-credentials/"),
+
+        /**
+         * The new API which provides `AccountId` and potentially other fields in the future
+         */
+        EXTENDED("/latest/meta-data/iam/security-credentials-extended/"),
+    }
 }
+
+internal class ImdsCredentialsException(
+    profileName: String,
+    cause: Throwable,
+) : RuntimeException("Failed to load credentials for EC2 instance profile \"$profileName\"", cause)
+
+internal class ImdsProfileException(cause: Throwable) : RuntimeException("Failed to load instance profile name", cause)
+
+private fun Throwable.wrapAsCredentialsProviderException() =
+    CredentialsProviderException(message.orEmpty(), this)
