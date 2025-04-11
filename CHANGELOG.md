@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.62] - 04/11/2025
+
+### Features
+* (**connectcontactlens**) Making sentiment optional for ListRealtimeContactAnalysisSegments Response depending on conversational analytics configuration
+* (**datazone**) Raise hard limit of authorized principals per SubscriptionTarget from 10 to 20.
+* (**detective**) Add support for Detective DualStack endpoints
+* (**marketplaceentitlementservice**) Add support for Marketplace Entitlement Service dual-stack endpoints for CN and GOV regions
+* (**marketplacemetering**) Add support for Marketplace Metering Service dual-stack endpoints for CN regions
+* (**pcs**) Changed the minimum length of clusterIdentifier, computeNodeGroupIdentifier, and queueIdentifier to 3.
+* (**verifiedpermissions**) Adds deletion protection support to policy stores. Deletion protection is disabled by default, can be enabled via the CreatePolicyStore or UpdatePolicyStore APIs, and is visible in GetPolicyStore.
+
+### Documentation
+* (**dynamodb**) Doc only update for API descriptions.
+
 ## [1.4.61] - 04/10/2025
 
 ### Features
