@@ -38,6 +38,12 @@ class EndpointBusinessMetricsIntegration : KotlinIntegration {
             RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
             AwsRuntimeTypes.Http.Interceptors.BusinessMetrics.AwsBusinessMetric,
         )
+        writer.write(
+            "if (request.identity.attributes.contains(#T.AccountId)) request.context.#T(#T.RESOLVED_ACCOUNT_ID)",
+            AwsRuntimeTypes.Core.Client.AwsClientOption,
+            RuntimeTypes.Core.BusinessMetrics.emitBusinessMetric,
+            RuntimeTypes.Core.BusinessMetrics.SmithyBusinessMetric,
+        )
         writer.write("")
     }
 }

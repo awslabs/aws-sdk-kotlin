@@ -16,6 +16,10 @@ on:
   schedule:
     - cron: "0 7 * * 1-5"  # At 07:00 UTC (00:00 PST, 03:00 EST), Monday through Friday
 
+permissions:
+  id-token: write
+  contents: read
+
 concurrency:
   group: release-manual-${{ github.ref }}
   cancel-in-progress: true
@@ -27,6 +31,16 @@ jobs:
   update-release:
     runs-on: ubuntu-latest
     steps:
+      - name: Set start timestamp
+        id: start
+        run: printf 'timestamp=%(%s)T\n' >> "$GITHUB_OUTPUT"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
+          aws-region: us-west-2
+      - name: Setup kat
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/setup-kat@main
       - uses: actions/checkout@v4
         with:
           ref: 'main'
@@ -43,6 +57,8 @@ jobs:
           distribution: 'corretto'
           java-version: 17
           cache: 'gradle'
+      - name: Configure Gradle
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
       - name: Check merge base
         shell: bash
         run: |
@@ -89,6 +105,10 @@ jobs:
         shell: bash
         run: |
           echo "merging main @ $main_sha into release @ $release_sha";
+          
+          # Getting rid of the Gradle URL config changes caused by "Configure Gradle"
+          git stash -- gradle/wrapper/gradle-wrapper.properties
+          
           git switch release;
           input_message=${{ inputs.commit_message }}
           message=${input_message:-"Merging main into release"}
@@ -101,3 +121,23 @@ jobs:
             echo "pushing changes to release branch";
             git push origin release;
           fi
+      - name: Calculate duration
+        id: end
+        run: |
+          printf -v now '%(%s)T'
+          duration=$(( now - ${{ steps.start.outputs.timestamp }} ))
+          echo "duration=$duration" >> "$GITHUB_OUTPUT"
+      - name: Emit metrics
+        if: always() # run this step even if previous steps failed or the job is canceled
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/emit-metrics@main
+        with:
+          namespace: CI Metrics
+          dimensions: |
+            Product=aws-sdk-kotlin
+            Trigger=${{ github.event_name == 'schedule' && 'schedule' || 'manual' }}
+          metrics: |
+            ReleaseMergeAttempted:1:Count
+            ReleaseMergeSucceeded:${{ job.status == 'success' && '1' || '0' }}:Count
+            ReleaseMergeCanceled:${{ job.status == 'cancelled' && '1' || '0' }}:Count
+            ReleaseMergeFailed:${{ job.status == 'failure' && '1' || '0' }}:Count
+            ReleaseMergeDuration:${{ steps.end.outputs.duration }}:Seconds

@@ -3,73 +3,91 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package aws.sdk.kotlin.tests.codegen.smoketests
+package aws.sdk.kotlin.test.codegen.smoketest
 
 import aws.sdk.kotlin.codegen.smoketests.AWS_SERVICE_FILTER
 import aws.sdk.kotlin.codegen.smoketests.AWS_SKIP_TAGS
-import org.gradle.testkit.runner.GradleRunner
-import java.io.File
-import kotlin.test.*
+import aws.smithy.kotlin.runtime.util.TestPlatformProvider
+import kotlinx.coroutines.test.runTest
+import kotlin.test.Test
+import kotlin.test.assertContains
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class SmokeTestE2ETest {
     @Test
-    fun successService() {
-        val smokeTestRunnerOutput = runSmokeTests("successService")
+    fun successService() = runTest {
+        val output = StringBuilder()
+        val runner = aws.sdk.kotlin.test.codegen.smoketest.successService.smoketests.SmokeTestRunner(
+            TestPlatformProvider(),
+            output,
+        )
+        val success = runner.runAllTests()
+        assertTrue(success, "Unexpected failures running successService E2E smoke test. Full output: $output")
 
-        assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTest - no error expected from service")
-        assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTestWithTags - no error expected from service")
+        assertContains(output, "ok SuccessService SuccessTest - no error expected from service")
+        assertContains(output, "ok SuccessService SuccessTestWithTags - no error expected from service")
     }
 
     @Test
-    fun failureService() {
-        val smokeTestRunnerOutput = runSmokeTests("failureService")
+    fun failureService() = runTest {
+        val output = StringBuilder()
+        val runner = aws.sdk.kotlin.test.codegen.smoketest.failureService.smoketests.SmokeTestRunner(
+            TestPlatformProvider(),
+            output,
+        )
+        val success = runner.runAllTests()
+        assertTrue(success, "Unexpected failures running failureService E2E smoke test. Full output: $output")
 
-        assertContains(smokeTestRunnerOutput, "ok FailureService FailuresTest - error expected from service")
+        assertContains(output, "ok FailureService FailuresTest - error expected from service")
     }
 
     @Test
-    fun exceptionService() {
-        val smokeTestRunnerOutput = runSmokeTests("exceptionService", expectingFailure = true)
+    fun exceptionService() = runTest {
+        val output = StringBuilder()
+        val runner = aws.sdk.kotlin.test.codegen.smoketest.exceptionService.smoketests.SmokeTestRunner(
+            TestPlatformProvider(),
+            output,
+        )
+        val success = runner.runAllTests()
+        assertFalse(success, "Unexpected success running exceptionService E2E smoke test. Full output: $output")
 
-        assertContains(smokeTestRunnerOutput, "not ok ExceptionService ExceptionTest - no error expected from service")
-        assertContains(smokeTestRunnerOutput, "#aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsFailureException: Smoke test failed with HTTP status code: 400")
-        assertContains(smokeTestRunnerOutput, "#\tat aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsInterceptor.readBeforeDeserialization(SmokeTestsInterceptor.kt:19)")
-        assertContains(smokeTestRunnerOutput, "#\tat aws.smithy.kotlin.runtime.http.interceptors.InterceptorExecutor.readBeforeDeserialization(InterceptorExecutor.kt:252)")
+        assertContains(output, "not ok ExceptionService ExceptionTest - no error expected from service")
+        assertContains(
+            output,
+            "# aws.smithy.kotlin.runtime.http.interceptors.SmokeTestsFailureException: Smoke test failed with HTTP status code: 400",
+        )
     }
 
     @Test
-    fun successServiceSkipTags() {
-        val envVars = mapOf(AWS_SKIP_TAGS to "success")
-        val smokeTestRunnerOutput = runSmokeTests("successService", envVars)
+    fun successServiceSkipTags() = runTest {
+        val output = StringBuilder()
+        val runner = aws.sdk.kotlin.test.codegen.smoketest.successService.smoketests.SmokeTestRunner(
+            TestPlatformProvider(
+                env = mapOf(AWS_SKIP_TAGS to "success"),
+            ),
+            output,
+        )
+        val success = runner.runAllTests()
+        assertTrue(success, "Unexpected failures running successService E2E smoke test. Full output: $output")
 
-        assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTest - no error expected from service")
-        assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTestWithTags - no error expected from service # skip")
+        assertContains(output, "ok SuccessService SuccessTest - no error expected from service")
+        assertContains(output, "ok SuccessService SuccessTestWithTags - no error expected from service # skip")
     }
 
     @Test
-    fun successServiceServiceFilter() {
-        val envVars = mapOf(AWS_SERVICE_FILTER to "Failure") // Only run tests for services with this SDK ID
-        val smokeTestRunnerOutput = runSmokeTests("successService", envVars)
+    fun successServiceServiceFilter() = runTest {
+        val output = StringBuilder()
+        val runner = aws.sdk.kotlin.test.codegen.smoketest.successService.smoketests.SmokeTestRunner(
+            TestPlatformProvider(
+                env = mapOf(AWS_SERVICE_FILTER to "Failure"), // Only run tests for services with this SDK ID
+            ),
+            output,
+        )
+        val success = runner.runAllTests()
+        assertTrue(success, "Unexpected failures running successService E2E smoke test. Full output: $output")
 
-        assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTest - no error expected from service # skip")
-        assertContains(smokeTestRunnerOutput, "ok SuccessService SuccessTestWithTags - no error expected from service # skip")
+        assertContains(output, "ok SuccessService SuccessTest - no error expected from service # skip")
+        assertContains(output, "ok SuccessService SuccessTestWithTags - no error expected from service # skip")
     }
-}
-
-private fun runSmokeTests(
-    service: String,
-    envVars: Map<String, String> = emptyMap(),
-    expectingFailure: Boolean = false,
-): String {
-    val sdkRootDir = System.getProperty("user.dir") + "/../../../"
-
-    val task = GradleRunner.create()
-        .withProjectDir(File(sdkRootDir))
-        // FIXME: Remove `-Paws.kotlin.native=false` when Kotlin Native is ready
-        .withArguments("-Paws.kotlin.native=false", ":tests:codegen:smoke-tests:services:$service:smokeTest")
-        .withEnvironment(envVars)
-
-    val buildResult = if (expectingFailure) task.buildAndFail() else task.build()
-
-    return buildResult.output
 }

@@ -161,7 +161,7 @@ internal class SchemaRenderer(
 
             // converter
             renderValueConverter(prop.type.resolve())
-            write("")
+            write(",")
         }
     }
 
@@ -291,7 +291,7 @@ internal class SchemaRenderer(
 
         write("@#T", Types.Smithy.ExperimentalApi)
         withBlock("#Lobject #L : #T {", "}", ctx.attributes.visibility, schemaName, schemaType) {
-            write("override val converter : #1T = #1T", itemConverter)
+            write("override val converter: #1T = #1T", itemConverter)
             write("override val partitionKey: #T = #T(#S)", MapperTypes.Items.keySpec(partitionKeyProp.keySpec), partitionKeyProp.keySpecType, partitionKeyName)
             if (sortKeyProp != null) {
                 write("override val sortKey: #T = #T(#S)", MapperTypes.Items.keySpec(sortKeyProp.keySpec), sortKeyProp.keySpecType, sortKeyName!!)

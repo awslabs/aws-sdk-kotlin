@@ -1,0 +1,14 @@
+name: Merge main
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge main
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/merge-main@main
+        with:
+          exempt-branches: # Add any if required

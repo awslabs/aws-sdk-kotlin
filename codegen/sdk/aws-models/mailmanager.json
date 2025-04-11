@@ -268,6 +268,164 @@
                 "target": "com.amazonaws.mailmanager#AddonSubscription"
             }
         },
+        "com.amazonaws.mailmanager#Address": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 3,
+                    "max": 320
+                },
+                "smithy.api#sensitive": {}
+            }
+        },
+        "com.amazonaws.mailmanager#AddressFilter": {
+            "type": "structure",
+            "members": {
+                "AddressPrefix": {
+                    "target": "com.amazonaws.mailmanager#AddressPrefix",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Filter to limit the results to addresses having the provided prefix.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Filtering options for ListMembersOfAddressList operation.</p>"
+            }
+        },
+        "com.amazonaws.mailmanager#AddressList": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AddressListArn": {
+                    "target": "com.amazonaws.mailmanager#AddressListArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AddressListName": {
+                    "target": "com.amazonaws.mailmanager#AddressListName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The user-friendly name of the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CreatedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the address list was created.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "LastUpdatedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the address list was last updated.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>An address list contains a list of emails and domains that are used in MailManager Ingress endpoints and Rules for email management.</p>"
+            }
+        },
+        "com.amazonaws.mailmanager#AddressListArn": {
+            "type": "string",
+            "traits": {
+                "aws.api#arnReference": {
+                    "service": "ses",
+                    "resource": "com.amazon.pancetta.addresslist.management#AddressListResource"
+                }
+            }
+        },
+        "com.amazonaws.mailmanager#AddressListId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 255
+                },
+                "smithy.api#pattern": "^[a-zA-Z0-9-]+$"
+            }
+        },
+        "com.amazonaws.mailmanager#AddressListName": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 255
+                },
+                "smithy.api#pattern": "^[a-zA-Z0-9_.-]+$"
+            }
+        },
+        "com.amazonaws.mailmanager#AddressListResource": {
+            "type": "resource",
+            "identifiers": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId"
+                }
+            },
+            "properties": {
+                "AddressListArn": {
+                    "target": "com.amazonaws.mailmanager#AddressListArn"
+                },
+                "AddressListName": {
+                    "target": "com.amazonaws.mailmanager#AddressListName"
+                },
+                "CreatedTimestamp": {
+                    "target": "smithy.api#Timestamp"
+                },
+                "LastUpdatedTimestamp": {
+                    "target": "smithy.api#Timestamp"
+                },
+                "Tags": {
+                    "target": "com.amazonaws.mailmanager#TagList"
+                }
+            },
+            "create": {
+                "target": "com.amazonaws.mailmanager#CreateAddressList"
+            },
+            "read": {
+                "target": "com.amazonaws.mailmanager#GetAddressList"
+            },
+            "delete": {
+                "target": "com.amazonaws.mailmanager#DeleteAddressList"
+            },
+            "list": {
+                "target": "com.amazonaws.mailmanager#ListAddressLists"
+            }
+        },
+        "com.amazonaws.mailmanager#AddressLists": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mailmanager#AddressList"
+            }
+        },
+        "com.amazonaws.mailmanager#AddressPageSize": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#range": {
+                    "min": 1,
+                    "max": 1000
+                }
+            }
+        },
+        "com.amazonaws.mailmanager#AddressPrefix": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 320
+                },
+                "smithy.api#sensitive": {}
+            }
+        },
         "com.amazonaws.mailmanager#Analysis": {
             "type": "structure",
             "members": {
@@ -841,6 +999,164 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.mailmanager#CreateAddressList": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#CreateAddressListRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#CreateAddressListResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ServiceQuotaExceededException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Creates a new address list.</p>",
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.mailmanager#CreateAddressListImportJob": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#CreateAddressListImportJobRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#CreateAddressListImportJobResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Creates an import job for an address list.</p>",
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.mailmanager#CreateAddressListImportJobRequest": {
+            "type": "structure",
+            "members": {
+                "ClientToken": {
+                    "target": "com.amazonaws.mailmanager#IdempotencyToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A unique token that Amazon SES uses to recognize subsequent retries of the same\n            request.</p>",
+                        "smithy.api#idempotencyToken": {}
+                    }
+                },
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the address list for importing addresses to.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Name": {
+                    "target": "com.amazonaws.mailmanager#JobName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A user-friendly name for the import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ImportDataFormat": {
+                    "target": "com.amazonaws.mailmanager#ImportDataFormat",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The format of the input for an import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#CreateAddressListImportJobResponse": {
+            "type": "structure",
+            "members": {
+                "JobId": {
+                    "target": "com.amazonaws.mailmanager#JobId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the created import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "PreSignedUrl": {
+                    "target": "com.amazonaws.mailmanager#PreSignedUrl",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The pre-signed URL target for uploading the input file.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.mailmanager#CreateAddressListRequest": {
+            "type": "structure",
+            "members": {
+                "ClientToken": {
+                    "target": "com.amazonaws.mailmanager#IdempotencyToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A unique token that Amazon SES uses to recognize subsequent retries of the same\n            request.</p>",
+                        "smithy.api#idempotencyToken": {}
+                    }
+                },
+                "AddressListName": {
+                    "target": "com.amazonaws.mailmanager#AddressListName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A user-friendly name for the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Tags": {
+                    "target": "com.amazonaws.mailmanager#TagList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags used to organize, track, or control access for the resource. For example, { \"tags\": {\"key1\":\"value1\", \"key2\":\"value2\"} }.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#CreateAddressListResponse": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the created address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.mailmanager#CreateArchive": {
             "type": "operation",
             "input": {
@@ -1028,8 +1344,7 @@
                     "target": "com.amazonaws.mailmanager#IngressPointName",
                     "traits": {
                         "smithy.api#documentation": "<p>A user friendly name for an ingress endpoint resource.</p>",
-                        "smithy.api#required": {},
-                        "smithy.api#resourceIdentifier": "IngressPointId"
+                        "smithy.api#required": {}
                     }
                 },
                 "Type": {
@@ -1057,6 +1372,12 @@
                     "target": "com.amazonaws.mailmanager#IngressPointConfiguration",
                     "traits": {
                         "smithy.api#documentation": "<p>If you choose an Authenticated ingress endpoint, you must configure either an SMTP password or a secret\n            ARN.</p>"
+                    }
+                },
+                "NetworkConfiguration": {
+                    "target": "com.amazonaws.mailmanager#NetworkConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the network configuration for the ingress point.\n            This allows you to create an IPv4-only, Dual-Stack, or PrivateLink type of ingress point. If not specified, the default network type is IPv4-only.\n        </p>"
                     }
                 },
                 "Tags": {
@@ -1315,8 +1636,7 @@
                     "target": "com.amazonaws.mailmanager#TrafficPolicyName",
                     "traits": {
                         "smithy.api#documentation": "<p>A user-friendly name for the traffic policy resource.</p>",
-                        "smithy.api#required": {},
-                        "smithy.api#resourceIdentifier": "TrafficPolicyId"
+                        "smithy.api#required": {}
                     }
                 },
                 "PolicyStatements": {
@@ -1445,6 +1765,52 @@
             }
         },
         "com.amazonaws.mailmanager#DeleteAddonSubscriptionResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.mailmanager#DeleteAddressList": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#DeleteAddressListRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#DeleteAddressListResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Deletes an address list.</p>",
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.mailmanager#DeleteAddressListRequest": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of an existing address list resource to delete.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#DeleteAddressListResponse": {
             "type": "structure",
             "members": {},
             "traits": {
@@ -1764,6 +2130,62 @@
                 "smithy.api#documentation": "<p>The action to deliver incoming emails to an Amazon Q Business application for indexing.</p>"
             }
         },
+        "com.amazonaws.mailmanager#DeregisterMemberFromAddressList": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#DeregisterMemberFromAddressListRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#DeregisterMemberFromAddressListResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Removes a member from an address list.</p>",
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.mailmanager#DeregisterMemberFromAddressListRequest": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the address list to remove the address from.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Address": {
+                    "target": "com.amazonaws.mailmanager#Address",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The address to be removed from the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#DeregisterMemberFromAddressListResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.mailmanager#DropAction": {
             "type": "structure",
             "members": {},
@@ -2065,6 +2487,220 @@
                     "target": "smithy.api#Timestamp",
                     "traits": {
                         "smithy.api#documentation": "<p>The timestamp of when the Add On subscription was created.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.mailmanager#GetAddressList": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#GetAddressListRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#GetAddressListResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Fetch attributes of an address list.</p>",
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.mailmanager#GetAddressListImportJob": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#GetAddressListImportJobRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#GetAddressListImportJobResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Fetch attributes of an import job.</p>",
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.mailmanager#GetAddressListImportJobRequest": {
+            "type": "structure",
+            "members": {
+                "JobId": {
+                    "target": "com.amazonaws.mailmanager#JobId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the import job that needs to be retrieved.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#GetAddressListImportJobResponse": {
+            "type": "structure",
+            "members": {
+                "JobId": {
+                    "target": "com.amazonaws.mailmanager#JobId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Name": {
+                    "target": "com.amazonaws.mailmanager#JobName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A user-friendly name for the import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.mailmanager#ImportJobStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status of the import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "PreSignedUrl": {
+                    "target": "com.amazonaws.mailmanager#PreSignedUrl",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The pre-signed URL target for uploading the input file.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ImportedItemsCount": {
+                    "target": "com.amazonaws.mailmanager#JobItemsCount",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of input addresses successfully imported into the address list.</p>"
+                    }
+                },
+                "FailedItemsCount": {
+                    "target": "com.amazonaws.mailmanager#JobItemsCount",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of input addresses that failed to be imported into the address list.</p>"
+                    }
+                },
+                "ImportDataFormat": {
+                    "target": "com.amazonaws.mailmanager#ImportDataFormat",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The format of the input for an import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the address list the import job was created for.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CreatedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the import job was created.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "StartTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the import job was started.</p>"
+                    }
+                },
+                "CompletedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the import job was completed.</p>"
+                    }
+                },
+                "Error": {
+                    "target": "com.amazonaws.mailmanager#ErrorMessage",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The reason for failure of an import job.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.mailmanager#GetAddressListRequest": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of an existing address list resource to be retrieved.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#GetAddressListResponse": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the address list resource.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AddressListArn": {
+                    "target": "com.amazonaws.mailmanager#AddressListArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the address list resource.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AddressListName": {
+                    "target": "com.amazonaws.mailmanager#AddressListName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A user-friendly name for the address list resource.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CreatedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The date of when then address list was created.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "LastUpdatedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The date of when the address list was last updated.</p>",
+                        "smithy.api#required": {}
                     }
                 }
             },
@@ -2659,6 +3295,12 @@
                         "smithy.api#documentation": "<p>The authentication configuration of the ingress endpoint resource.</p>"
                     }
                 },
+                "NetworkConfiguration": {
+                    "target": "com.amazonaws.mailmanager#NetworkConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The network configuration for the ingress point.</p>"
+                    }
+                },
                 "CreatedTimestamp": {
                     "target": "smithy.api#Timestamp",
                     "traits": {
@@ -2669,6 +3311,77 @@
                     "target": "smithy.api#Timestamp",
                     "traits": {
                         "smithy.api#documentation": "<p>The timestamp of when the ingress endpoint was last updated.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.mailmanager#GetMemberOfAddressList": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#GetMemberOfAddressListRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#GetMemberOfAddressListResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Fetch attributes of a member in an address list.</p>",
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.mailmanager#GetMemberOfAddressListRequest": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the address list to retrieve the address from.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Address": {
+                    "target": "com.amazonaws.mailmanager#Address",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The address to be retrieved from the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#GetMemberOfAddressListResponse": {
+            "type": "structure",
+            "members": {
+                "Address": {
+                    "target": "com.amazonaws.mailmanager#Address",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The address retrieved from the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CreatedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the address was created.</p>",
+                        "smithy.api#required": {}
                     }
                 }
             },
@@ -3034,6 +3747,190 @@
                 }
             }
         },
+        "com.amazonaws.mailmanager#ImportDataFormat": {
+            "type": "structure",
+            "members": {
+                "ImportDataType": {
+                    "target": "com.amazonaws.mailmanager#ImportDataType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of file that would be passed as an input for the address list import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The import data format contains the specifications of the input file that would be passed to the address list\n            import job.</p>"
+            }
+        },
+        "com.amazonaws.mailmanager#ImportDataType": {
+            "type": "enum",
+            "members": {
+                "CSV": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CSV"
+                    }
+                },
+                "JSON": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "JSON"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.mailmanager#ImportJob": {
+            "type": "structure",
+            "members": {
+                "JobId": {
+                    "target": "com.amazonaws.mailmanager#JobId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Name": {
+                    "target": "com.amazonaws.mailmanager#JobName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A user-friendly name for the import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.mailmanager#ImportJobStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status of the import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "PreSignedUrl": {
+                    "target": "com.amazonaws.mailmanager#PreSignedUrl",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The pre-signed URL target for uploading the input file.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ImportedItemsCount": {
+                    "target": "com.amazonaws.mailmanager#JobItemsCount",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of addresses in the input that were successfully imported into the address list.</p>"
+                    }
+                },
+                "FailedItemsCount": {
+                    "target": "com.amazonaws.mailmanager#JobItemsCount",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of addresses in the input that failed to get imported into address list.</p>"
+                    }
+                },
+                "ImportDataFormat": {
+                    "target": "com.amazonaws.mailmanager#ImportDataFormat",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The format of the input for the import job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the address list the import job was created for.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CreatedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the import job was created.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "StartTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the import job was started.</p>"
+                    }
+                },
+                "CompletedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the import job was completed.</p>"
+                    }
+                },
+                "Error": {
+                    "target": "com.amazonaws.mailmanager#ErrorMessage",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The reason for failure of an import job.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Details about an import job.</p>"
+            }
+        },
+        "com.amazonaws.mailmanager#ImportJobStatus": {
+            "type": "enum",
+            "members": {
+                "CREATED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CREATED"
+                    }
+                },
+                "PROCESSING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PROCESSING"
+                    }
+                },
+                "COMPLETED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "COMPLETED"
+                    }
+                },
+                "FAILED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FAILED"
+                    }
+                },
+                "STOPPED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "STOPPED"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.mailmanager#ImportJobs": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mailmanager#ImportJob"
+            }
+        },
+        "com.amazonaws.mailmanager#IngressAddressListArnList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mailmanager#AddressListArn"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 1
+                },
+                "smithy.api#uniqueItems": {}
+            }
+        },
+        "com.amazonaws.mailmanager#IngressAddressListEmailAttribute": {
+            "type": "enum",
+            "members": {
+                "RECIPIENT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "RECIPIENT"
+                    }
+                }
+            }
+        },
         "com.amazonaws.mailmanager#IngressAnalysis": {
             "type": "structure",
             "members": {
@@ -3102,6 +3999,12 @@
                     "target": "com.amazonaws.mailmanager#IngressAnalysis",
                     "traits": {
                         "smithy.api#documentation": "<p>The structure type for a boolean condition stating the Add On ARN and its returned\n            value.</p>"
+                    }
+                },
+                "IsInAddressList": {
+                    "target": "com.amazonaws.mailmanager#IngressIsInAddressList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The structure type for a boolean condition that provides the address lists to evaluate incoming traffic on.</p>"
                     }
                 }
             },
@@ -3178,6 +4081,82 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>The union type representing the allowed types for the left hand side of an IP\n            condition.</p>"
+            }
+        },
+        "com.amazonaws.mailmanager#IngressIpv6Attribute": {
+            "type": "enum",
+            "members": {
+                "SENDER_IPV6": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SENDER_IPV6"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.mailmanager#IngressIpv6Expression": {
+            "type": "structure",
+            "members": {
+                "Evaluate": {
+                    "target": "com.amazonaws.mailmanager#IngressIpv6ToEvaluate",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The left hand side argument of an IPv6 condition expression.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Operator": {
+                    "target": "com.amazonaws.mailmanager#IngressIpOperator",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The matching operator for an IPv6 condition expression.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Values": {
+                    "target": "com.amazonaws.mailmanager#Ipv6Cidrs",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The right hand side argument of an IPv6 condition expression.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The union type representing the allowed types for the left hand side of an IPv6 condition.</p>"
+            }
+        },
+        "com.amazonaws.mailmanager#IngressIpv6ToEvaluate": {
+            "type": "union",
+            "members": {
+                "Attribute": {
+                    "target": "com.amazonaws.mailmanager#IngressIpv6Attribute",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An enum type representing the allowed attribute types for an IPv6 condition.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The structure for an IPv6 based condition matching on the incoming mail.</p>"
+            }
+        },
+        "com.amazonaws.mailmanager#IngressIsInAddressList": {
+            "type": "structure",
+            "members": {
+                "Attribute": {
+                    "target": "com.amazonaws.mailmanager#IngressAddressListEmailAttribute",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The email attribute that needs to be evaluated against the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AddressLists": {
+                    "target": "com.amazonaws.mailmanager#IngressAddressListArnList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The address lists that will be used for evaluation.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The address lists and the address list attribute value that is evaluated in a policy statement's\n            conditional expression to either deny or block the incoming email.</p>"
             }
         },
         "com.amazonaws.mailmanager#IngressPoint": {
@@ -3323,7 +4302,7 @@
                     "target": "com.amazonaws.mailmanager#IngressPointId"
                 }
             },
-            "put": {
+            "create": {
                 "target": "com.amazonaws.mailmanager#CreateIngressPoint"
             },
             "read": {
@@ -3341,8 +4320,7 @@
             "traits": {
                 "aws.cloudformation#cfnResource": {
                     "name": "MailManagerIngressPoint"
-                },
-                "smithy.api#noReplace": {}
+                }
             }
         },
         "com.amazonaws.mailmanager#IngressPointStatus": {
@@ -3509,6 +4487,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The enum type representing the allowed attribute types for a string condition.</p>"
                     }
+                },
+                "Analysis": {
+                    "target": "com.amazonaws.mailmanager#IngressAnalysis",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The structure type for a string condition stating the Add On ARN and its returned value.</p>"
+                    }
                 }
             },
             "traits": {
@@ -3603,6 +4587,23 @@
                 "smithy.api#documentation": "<p>The union type representing the allowed types for the left hand side of a TLS\n            condition.</p>"
             }
         },
+        "com.amazonaws.mailmanager#IpType": {
+            "type": "enum",
+            "members": {
+                "IPV4": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IPV4"
+                    }
+                },
+                "DUAL_STACK": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DUAL_STACK"
+                    }
+                }
+            }
+        },
         "com.amazonaws.mailmanager#Ipv4Cidr": {
             "type": "string",
             "traits": {
@@ -3613,6 +4614,44 @@
             "type": "list",
             "member": {
                 "target": "com.amazonaws.mailmanager#Ipv4Cidr"
+            }
+        },
+        "com.amazonaws.mailmanager#Ipv6Cidr": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "max": 49
+                },
+                "smithy.api#pattern": "^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))\\/(12[0-8]|1[0-1][0-9]|[1-9][0-9]|[0-9])$"
+            }
+        },
+        "com.amazonaws.mailmanager#Ipv6Cidrs": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mailmanager#Ipv6Cidr"
+            }
+        },
+        "com.amazonaws.mailmanager#JobId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 255
+                },
+                "smithy.api#pattern": "^[a-zA-Z0-9-]+$"
+            }
+        },
+        "com.amazonaws.mailmanager#JobItemsCount": {
+            "type": "integer"
+        },
+        "com.amazonaws.mailmanager#JobName": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 255
+                },
+                "smithy.api#pattern": "^[a-zA-Z0-9_.-]+$"
             }
         },
         "com.amazonaws.mailmanager#KmsKeyArn": {
@@ -3746,6 +4785,158 @@
                     "target": "com.amazonaws.mailmanager#AddonSubscriptions",
                     "traits": {
                         "smithy.api#documentation": "<p>The list of ingress endpoints.</p>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.mailmanager#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If NextToken is returned, there are more results available. The value of NextToken is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.mailmanager#ListAddressListImportJobs": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#ListAddressListImportJobsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#ListAddressListImportJobsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Lists jobs for an address list.</p>",
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "items": "ImportJobs",
+                    "pageSize": "PageSize"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.mailmanager#ListAddressListImportJobsRequest": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the address list for listing import jobs.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.mailmanager#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If you received a pagination token from a previous call to this API, you can provide it here to continue paginating through the next page of results.</p>"
+                    }
+                },
+                "PageSize": {
+                    "target": "com.amazonaws.mailmanager#PageSize",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of import jobs that are returned per call. You can use NextToken to retrieve the next page of jobs.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#ListAddressListImportJobsResponse": {
+            "type": "structure",
+            "members": {
+                "ImportJobs": {
+                    "target": "com.amazonaws.mailmanager#ImportJobs",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of import jobs.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.mailmanager#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If NextToken is returned, there are more results available. The value of NextToken is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.mailmanager#ListAddressLists": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#ListAddressListsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#ListAddressListsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Lists address lists for this account.</p>",
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "items": "AddressLists",
+                    "pageSize": "PageSize"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.mailmanager#ListAddressListsRequest": {
+            "type": "structure",
+            "members": {
+                "NextToken": {
+                    "target": "com.amazonaws.mailmanager#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If you received a pagination token from a previous call to this API, you can provide it here to continue paginating through the next page of results.</p>"
+                    }
+                },
+                "PageSize": {
+                    "target": "com.amazonaws.mailmanager#PageSize",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of address list resources that are returned per call. You can use\n            NextToken to retrieve the next page of address lists.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#ListAddressListsResponse": {
+            "type": "structure",
+            "members": {
+                "AddressLists": {
+                    "target": "com.amazonaws.mailmanager#AddressLists",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of address lists.</p>",
+                        "smithy.api#required": {}
                     }
                 },
                 "NextToken": {
@@ -4111,6 +5302,93 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.mailmanager#ListMembersOfAddressList": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#ListMembersOfAddressListRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#ListMembersOfAddressListResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Lists members of an address list.</p>",
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "items": "Addresses",
+                    "pageSize": "PageSize"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.mailmanager#ListMembersOfAddressListRequest": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the address list to list the addresses from.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Filter": {
+                    "target": "com.amazonaws.mailmanager#AddressFilter",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Filter to be used to limit the results.</p>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.mailmanager#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If you received a pagination token from a previous call to this API, you can provide it here to continue paginating through the next page of results.</p>"
+                    }
+                },
+                "PageSize": {
+                    "target": "com.amazonaws.mailmanager#AddressPageSize",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of address list members that are returned per call.\n            You can use NextToken to retrieve the next page of members.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#ListMembersOfAddressListResponse": {
+            "type": "structure",
+            "members": {
+                "Addresses": {
+                    "target": "com.amazonaws.mailmanager#SavedAddresses",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of addresses.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.mailmanager#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If NextToken is returned, there are more results available. The value of NextToken is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.mailmanager#ListRelays": {
             "type": "operation",
             "input": {
@@ -4423,6 +5701,15 @@
             "version": "2023-10-17",
             "operations": [
                 {
+                    "target": "com.amazonaws.mailmanager#CreateAddressListImportJob"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#DeregisterMemberFromAddressList"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#GetAddressListImportJob"
+                },
+                {
                     "target": "com.amazonaws.mailmanager#GetArchiveExport"
                 },
                 {
@@ -4438,19 +5725,37 @@
                     "target": "com.amazonaws.mailmanager#GetArchiveSearchResults"
                 },
                 {
+                    "target": "com.amazonaws.mailmanager#GetMemberOfAddressList"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ListAddressListImportJobs"
+                },
+                {
                     "target": "com.amazonaws.mailmanager#ListArchiveExports"
                 },
                 {
                     "target": "com.amazonaws.mailmanager#ListArchiveSearches"
                 },
                 {
+                    "target": "com.amazonaws.mailmanager#ListMembersOfAddressList"
+                },
+                {
                     "target": "com.amazonaws.mailmanager#ListTagsForResource"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#RegisterMemberToAddressList"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#StartAddressListImportJob"
                 },
                 {
                     "target": "com.amazonaws.mailmanager#StartArchiveExport"
                 },
                 {
                     "target": "com.amazonaws.mailmanager#StartArchiveSearch"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#StopAddressListImportJob"
                 },
                 {
                     "target": "com.amazonaws.mailmanager#StopArchiveExport"
@@ -4471,6 +5776,9 @@
                 },
                 {
                     "target": "com.amazonaws.mailmanager#AddonSubscriptionResource"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#AddressListResource"
                 },
                 {
                     "target": "com.amazonaws.mailmanager#ArchiveResource"
@@ -5255,6 +6563,36 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The TLS protocol used to communicate with the host from which the email was received.</p>"
                     }
+                },
+                "SendingMethod": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the API call used when sent through a configuration set with archiving enabled.</p>"
+                    }
+                },
+                "SourceIdentity": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identity name used to authorize the sending action when sent through a configuration set with\n        archiving enabled.</p>"
+                    }
+                },
+                "SendingPool": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the dedicated IP pool used when sent through a configuration set with archiving\n        enabled.</p>"
+                    }
+                },
+                "ConfigurationSet": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the configuration set used when sent through a configuration set with archiving\n        enabled.</p>"
+                    }
+                },
+                "SourceArn": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the archived email source, identified by either a Rule Set's ARN with an Archive action, or a\n        Configuration Set's Archive ARN.</p>"
+                    }
                 }
             },
             "traits": {
@@ -5275,6 +6613,26 @@
                     "max": 2048
                 },
                 "smithy.api#pattern": "^[a-zA-Z0-9:_/+=,@.#-]+$"
+            }
+        },
+        "com.amazonaws.mailmanager#NetworkConfiguration": {
+            "type": "union",
+            "members": {
+                "PublicNetworkConfiguration": {
+                    "target": "com.amazonaws.mailmanager#PublicNetworkConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the network configuration for the public ingress point.</p>"
+                    }
+                },
+                "PrivateNetworkConfiguration": {
+                    "target": "com.amazonaws.mailmanager#PrivateNetworkConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the network configuration for the private ingress point.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The network type (IPv4-only, Dual-Stack, PrivateLink) of the ingress endpoint resource.</p>"
             }
         },
         "com.amazonaws.mailmanager#NoAuthentication": {
@@ -5315,6 +6673,12 @@
                     "target": "com.amazonaws.mailmanager#IngressIpv4Expression",
                     "traits": {
                         "smithy.api#documentation": "<p>This represents an IP based condition matching on the incoming mail. It performs the\n            operation configured in 'Operator' and evaluates the 'Protocol' object against the\n            'Value'.</p>"
+                    }
+                },
+                "Ipv6Expression": {
+                    "target": "com.amazonaws.mailmanager#IngressIpv6Expression",
+                    "traits": {
+                        "smithy.api#documentation": "<p>This represents an IPv6 based condition matching on the incoming mail. It performs the\n            operation configured in 'Operator' and evaluates the 'Protocol' object against the\n            'Value'.</p>"
                     }
                 },
                 "TlsExpression": {
@@ -5373,6 +6737,43 @@
                 "target": "com.amazonaws.mailmanager#PolicyStatement"
             }
         },
+        "com.amazonaws.mailmanager#PreSignedUrl": {
+            "type": "string",
+            "traits": {
+                "smithy.api#sensitive": {}
+            }
+        },
+        "com.amazonaws.mailmanager#PrivateNetworkConfiguration": {
+            "type": "structure",
+            "members": {
+                "VpcEndpointId": {
+                    "target": "com.amazonaws.mailmanager#VpcEndpointId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the VPC endpoint to associate with this private ingress point.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies the network configuration for the private ingress point.</p>"
+            }
+        },
+        "com.amazonaws.mailmanager#PublicNetworkConfiguration": {
+            "type": "structure",
+            "members": {
+                "IpType": {
+                    "target": "com.amazonaws.mailmanager#IpType",
+                    "traits": {
+                        "smithy.api#default": "IPV4",
+                        "smithy.api#documentation": "<p>The IP address type for the public ingress point. Valid values are IPV4 and DUAL_STACK.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies the network configuration for the public ingress point.</p>"
+            }
+        },
         "com.amazonaws.mailmanager#QBusinessApplicationId": {
             "type": "string",
             "traits": {
@@ -5404,6 +6805,65 @@
                     "max": 100
                 },
                 "smithy.api#uniqueItems": {}
+            }
+        },
+        "com.amazonaws.mailmanager#RegisterMemberToAddressList": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#RegisterMemberToAddressListRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#RegisterMemberToAddressListResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ServiceQuotaExceededException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Adds a member to an address list.</p>",
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.mailmanager#RegisterMemberToAddressListRequest": {
+            "type": "structure",
+            "members": {
+                "AddressListId": {
+                    "target": "com.amazonaws.mailmanager#AddressListId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the address list where the address should be added.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Address": {
+                    "target": "com.amazonaws.mailmanager#Address",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The address to be added to the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#RegisterMemberToAddressListResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.mailmanager#Relay": {
@@ -5618,7 +7078,7 @@
                     "min": 1,
                     "max": 256
                 },
-                "smithy.api#pattern": "^[\\sa-zA-Z0-9_]+$"
+                "smithy.api#pattern": "^(addon\\.)?[\\sa-zA-Z0-9_]+$"
             }
         },
         "com.amazonaws.mailmanager#RetentionPeriod": {
@@ -5824,13 +7284,19 @@
                 "SenderIpAddress": {
                     "target": "com.amazonaws.mailmanager#SenderIpAddress",
                     "traits": {
-                        "smithy.api#documentation": "<p>The IP address of the host from which the email was received.</p>"
+                        "smithy.api#documentation": "<ul>\n            <li>\n               <p>Mail archived with Mail Manager: The IP address of the client that connects to\n        the ingress endpoint.</p>\n            </li>\n            <li>\n               <p>Mail sent through a configuration set with the\n        archiving option enabled: The IP address of the client that makes the SendEmail API call.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "Envelope": {
                     "target": "com.amazonaws.mailmanager#Envelope",
                     "traits": {
                         "smithy.api#documentation": "<p>The SMTP envelope information of the email.</p>"
+                    }
+                },
+                "SourceArn": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the archived email source, identified by either a Rule Set's ARN with an Archive action, or a\n        Configuration Set's Archive ARN.</p>"
                     }
                 }
             },
@@ -5951,6 +7417,60 @@
                 }
             }
         },
+        "com.amazonaws.mailmanager#RuleAddressListArnList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mailmanager#AddressListArn"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 1
+                },
+                "smithy.api#uniqueItems": {}
+            }
+        },
+        "com.amazonaws.mailmanager#RuleAddressListEmailAttribute": {
+            "type": "enum",
+            "members": {
+                "RECIPIENT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "RECIPIENT"
+                    }
+                },
+                "MAIL_FROM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MAIL_FROM"
+                    }
+                },
+                "SENDER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SENDER"
+                    }
+                },
+                "FROM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FROM"
+                    }
+                },
+                "TO": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "TO"
+                    }
+                },
+                "CC": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CC"
+                    }
+                }
+            }
+        },
         "com.amazonaws.mailmanager#RuleBooleanEmailAttribute": {
             "type": "enum",
             "members": {
@@ -6020,6 +7540,18 @@
                     "target": "com.amazonaws.mailmanager#RuleBooleanEmailAttribute",
                     "traits": {
                         "smithy.api#documentation": "<p>The boolean type representing the allowed attribute types for an email.</p>"
+                    }
+                },
+                "Analysis": {
+                    "target": "com.amazonaws.mailmanager#Analysis",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Add On ARN and its returned value to evaluate in a boolean condition expression.</p>"
+                    }
+                },
+                "IsInAddressList": {
+                    "target": "com.amazonaws.mailmanager#RuleIsInAddressList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The structure representing the address lists and address list attribute that will be used in evaluation of boolean expression.</p>"
                     }
                 }
             },
@@ -6219,9 +7751,9 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 1,
-                    "max": 18
+                    "max": 43
                 },
-                "smithy.api#pattern": "^(([0-9]|.|/)*)$"
+                "smithy.api#pattern": "^(([0-9]|.|:|/)*)$"
             }
         },
         "com.amazonaws.mailmanager#RuleIpToEvaluate": {
@@ -6248,6 +7780,28 @@
                     "min": 1,
                     "max": 10
                 }
+            }
+        },
+        "com.amazonaws.mailmanager#RuleIsInAddressList": {
+            "type": "structure",
+            "members": {
+                "Attribute": {
+                    "target": "com.amazonaws.mailmanager#RuleAddressListEmailAttribute",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The email attribute that needs to be evaluated against the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AddressLists": {
+                    "target": "com.amazonaws.mailmanager#RuleAddressListArnList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The address lists that will be used for evaluation.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The structure type for a boolean condition that provides the address lists and address list attribute to evaluate.</p>"
             }
         },
         "com.amazonaws.mailmanager#RuleName": {
@@ -6603,6 +8157,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The email MIME X-Header attribute to evaluate in a string condition expression.</p>"
                     }
+                },
+                "Analysis": {
+                    "target": "com.amazonaws.mailmanager#Analysis",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Add On ARN and its returned value to evaluate in a string condition expression.</p>"
+                    }
                 }
             },
             "traits": {
@@ -6837,6 +8397,34 @@
         "com.amazonaws.mailmanager#S3PresignedURL": {
             "type": "string"
         },
+        "com.amazonaws.mailmanager#SavedAddress": {
+            "type": "structure",
+            "members": {
+                "Address": {
+                    "target": "com.amazonaws.mailmanager#Address",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The email or domain that constitutes the address.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CreatedTimestamp": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the address was added to the address list.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>An address that is a member of an address list.</p>"
+            }
+        },
+        "com.amazonaws.mailmanager#SavedAddresses": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mailmanager#SavedAddress"
+            }
+        },
         "com.amazonaws.mailmanager#SearchId": {
             "type": "string",
             "traits": {
@@ -7006,6 +8594,61 @@
                 },
                 "smithy.api#pattern": "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{}|.,?]+$",
                 "smithy.api#sensitive": {}
+            }
+        },
+        "com.amazonaws.mailmanager#StartAddressListImportJob": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#StartAddressListImportJobRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#StartAddressListImportJobResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ServiceQuotaExceededException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Starts an import job for an address list.</p>",
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.mailmanager#StartAddressListImportJobRequest": {
+            "type": "structure",
+            "members": {
+                "JobId": {
+                    "target": "com.amazonaws.mailmanager#JobId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the import job that needs to be started.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#StartAddressListImportJobResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.mailmanager#StartArchiveExport": {
@@ -7197,6 +8840,58 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.mailmanager#StopAddressListImportJob": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.mailmanager#StopAddressListImportJobRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.mailmanager#StopAddressListImportJobResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.mailmanager#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.mailmanager#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Stops an ongoing import job for an address list.</p>",
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.mailmanager#StopAddressListImportJobRequest": {
+            "type": "structure",
+            "members": {
+                "JobId": {
+                    "target": "com.amazonaws.mailmanager#JobId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier of the import job that needs to be stopped.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.mailmanager#StopAddressListImportJobResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.mailmanager#StopArchiveExport": {
             "type": "operation",
             "input": {
@@ -7348,8 +9043,7 @@
                     "min": 1,
                     "max": 128
                 },
-                "smithy.api#pattern": "^[a-zA-Z0-9/_\\+=\\.:@\\-]+$",
-                "smithy.api#sensitive": {}
+                "smithy.api#pattern": "^[a-zA-Z0-9/_\\+=\\.:@\\-]+$"
             }
         },
         "com.amazonaws.mailmanager#TagKeyList": {
@@ -7439,8 +9133,7 @@
                     "min": 0,
                     "max": 256
                 },
-                "smithy.api#pattern": "^[a-zA-Z0-9/_\\+=\\.:@\\-]*$",
-                "smithy.api#sensitive": {}
+                "smithy.api#pattern": "^[a-zA-Z0-9/_\\+=\\.:@\\-]*$"
             }
         },
         "com.amazonaws.mailmanager#TaggableResourceArn": {
@@ -7533,7 +9226,7 @@
                     "target": "com.amazonaws.mailmanager#TrafficPolicyId"
                 }
             },
-            "put": {
+            "create": {
                 "target": "com.amazonaws.mailmanager#CreateTrafficPolicy"
             },
             "read": {
@@ -7551,8 +9244,7 @@
             "traits": {
                 "aws.cloudformation#cfnResource": {
                     "name": "MailManagerTrafficPolicy"
-                },
-                "smithy.api#noReplace": {}
+                }
             }
         },
         "com.amazonaws.mailmanager#UntagResource": {
@@ -8045,6 +9737,12 @@
                 "smithy.api#documentation": "<p>The request validation has failed. For details, see the accompanying error message.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
+            }
+        },
+        "com.amazonaws.mailmanager#VpcEndpointId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^vpce-[a-zA-Z0-9]{17}$"
             }
         }
     }

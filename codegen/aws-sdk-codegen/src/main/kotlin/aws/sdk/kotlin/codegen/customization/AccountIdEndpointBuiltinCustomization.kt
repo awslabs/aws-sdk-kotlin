@@ -9,14 +9,18 @@ import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
 import aws.sdk.kotlin.codegen.endpoints.AwsBuiltins
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.CodegenContext
+import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.expectShape
 import software.amazon.smithy.kotlin.codegen.model.getEndpointRules
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolGenerator
+import software.amazon.smithy.kotlin.codegen.rendering.protocol.ProtocolMiddleware
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigProperty
 import software.amazon.smithy.kotlin.codegen.rendering.util.ConfigPropertyType
 import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.OperationShape
 import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
@@ -59,4 +63,20 @@ class AccountIdEndpointBuiltinCustomization : KotlinIntegration {
 
     override fun additionalServiceConfigProps(ctx: CodegenContext): List<ConfigProperty> =
         listOf(AccountIdEndpointModeProp)
+
+    override fun customizeMiddleware(
+        ctx: ProtocolGenerator.GenerationContext,
+        resolved: List<ProtocolMiddleware>,
+    ): List<ProtocolMiddleware> = resolved + listOf(emitAccountIdEndpointModeMiddleware)
+}
+
+private val emitAccountIdEndpointModeMiddleware = object : ProtocolMiddleware {
+    override val name: String = "EmitAccountIdEndpointModeMiddleware"
+
+    override fun render(ctx: ProtocolGenerator.GenerationContext, op: OperationShape, writer: KotlinWriter) {
+        writer.write(
+            "op.context.emitBusinessMetric(config.accountIdEndpointMode.#T())",
+            AwsRuntimeTypes.Config.Endpoints.toBusinessMetric,
+        )
+    }
 }
