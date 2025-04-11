@@ -41,7 +41,7 @@ import aws.smithy.kotlin.runtime.util.PlatformProvider
  * @param region the region to make credentials requests to.
  * @return the newly-constructed credentials provider
  */
-public class DefaultChainCredentialsProvider constructor(
+public class DefaultChainCredentialsProvider(
     public val profileName: String? = null,
     public val platformProvider: PlatformProvider = PlatformProvider.System,
     httpClient: HttpClientEngine? = null,
@@ -59,11 +59,9 @@ public class DefaultChainCredentialsProvider constructor(
         ProfileCredentialsProvider(profileName = profileName, platformProvider = platformProvider, httpClient = engine, region = region),
         EcsCredentialsProvider(platformProvider, engine),
         ImdsCredentialsProvider(
-            client = lazy {
-                ImdsClient {
-                    platformProvider = this@DefaultChainCredentialsProvider.platformProvider
-                    engine = this@DefaultChainCredentialsProvider.engine
-                }
+            client = ImdsClient {
+                platformProvider = this@DefaultChainCredentialsProvider.platformProvider
+                engine = this@DefaultChainCredentialsProvider.engine
             },
             platformProvider = platformProvider,
         ),

@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.config.imds
 
 import aws.smithy.kotlin.runtime.http.*
-import aws.smithy.kotlin.runtime.http.complete
 import aws.smithy.kotlin.runtime.http.operation.ModifyRequestMiddleware
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpOperation
 import aws.smithy.kotlin.runtime.http.operation.SdkHttpRequest
@@ -64,10 +63,10 @@ internal class TokenMiddleware(
 
         val call = httpClient.call(tokenReq)
         return try {
-            when (call.response.status) {
+            when (val status = call.response.status) {
                 HttpStatusCode.OK -> {
-                    val ttl = call.response.headers[X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS]?.toLong() ?: throw EC2MetadataError(200, "No TTL provided in IMDS response")
-                    val token = call.response.body.readAll() ?: throw EC2MetadataError(200, "No token provided in IMDS response")
+                    val ttl = call.response.headers[X_AWS_EC2_METADATA_TOKEN_TTL_SECONDS]?.toLong() ?: throw EC2MetadataError(status, "No TTL provided in IMDS response")
+                    val token = call.response.body.readAll() ?: throw EC2MetadataError(status, "No token provided in IMDS response")
                     val expires = clock.now() + ttl.seconds
                     Token(token, expires)
                 }
@@ -76,7 +75,7 @@ internal class TokenMiddleware(
                         HttpStatusCode.Forbidden -> "Request forbidden: IMDS is disabled or the caller has insufficient permissions."
                         else -> "Failed to retrieve IMDS token"
                     }
-                    throw EC2MetadataError(call.response.status.value, message)
+                    throw EC2MetadataError(status, message)
                 }
             }
         } finally {
