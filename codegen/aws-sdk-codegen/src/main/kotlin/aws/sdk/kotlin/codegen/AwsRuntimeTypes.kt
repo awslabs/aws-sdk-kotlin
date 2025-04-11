@@ -37,8 +37,11 @@ object AwsRuntimeTypes {
     object Config : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG) {
         val AbstractAwsSdkClientFactory = symbol("AbstractAwsSdkClientFactory", "config")
 
+        val AwsSdkClientConfig = symbol("AwsSdkClientConfig", "config")
+
         object Endpoints : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "config.endpoints") {
             val AccountIdEndpointMode = symbol("AccountIdEndpointMode")
+            val resolveEndpointDiscoveryEnabled = symbol("resolveEndpointDiscoveryEnabled")
             val resolveEndpointUrl = symbol("resolveEndpointUrl")
             val resolveAccountId = symbol("resolveAccountId")
             val resolveAccountIdEndpointMode = symbol("resolveAccountIdEndpointMode")
@@ -55,6 +58,11 @@ object AwsRuntimeTypes {
             val DefaultChainBearerTokenProvider = symbol("DefaultChainBearerTokenProvider")
             val StaticCredentialsProvider = symbol("StaticCredentialsProvider")
             val manage = symbol("manage", "auth.credentials.internal", isExtension = true)
+        }
+
+        object Region : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "region") {
+            val DefaultRegionProviderChain = symbol("DefaultRegionProviderChain")
+            val resolveRegion = symbol("resolveRegion")
         }
     }
 
