@@ -203,7 +203,7 @@ class ImdsClientTest {
             client.get("/latest/metadata")
         }
 
-        assertEquals(HttpStatusCode.Forbidden, ex.statusCode)
+        assertEquals(HttpStatusCode.Forbidden, ex.status)
         connection.assertRequests()
     }
 

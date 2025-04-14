@@ -228,7 +228,13 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
 
 /**
  * Exception thrown when an error occurs retrieving metadata from IMDS
- * @param statusCode The HTTP status code of the response
+ * @param status The HTTP status code of the response
  * @param message The error message
  */
-public class EC2MetadataError(public val statusCode: HttpStatusCode, message: String) : AwsServiceException(message)
+public class EC2MetadataError(public val status: HttpStatusCode, message: String) : AwsServiceException(message) {
+    @Deprecated("This constructor passes HTTP status as an Int instead of as HttpStatusCode")
+    public constructor(statusCode: Int, message: String) : this(HttpStatusCode.fromValue(statusCode), message)
+
+    @Deprecated("This property is now deprecated and should be fetched from status.value")
+    public val statusCode: Int = status.value
+}

@@ -23,7 +23,7 @@ internal class ImdsRetryPolicy(
 
     private fun evaluate(throwable: Throwable): RetryDirective = when (throwable) {
         is EC2MetadataError -> {
-            val status = throwable.statusCode
+            val status = throwable.status
             when {
                 status.category() == HttpStatusCode.Category.SERVER_ERROR -> RetryDirective.RetryError(RetryErrorType.ServerSide)
                 // 401 indicates the token has expired, this is retryable

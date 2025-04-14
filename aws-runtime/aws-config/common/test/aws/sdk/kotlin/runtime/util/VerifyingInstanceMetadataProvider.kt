@@ -12,7 +12,6 @@ class VerifyingInstanceMetadataProvider(expectations: List<Pair<String, () -> St
 
     override suspend fun get(path: String): String {
         val trimmedPath = path.trimEnd('/') // remove trailing slashes to simplify testing
-        println("**** IMDS: $trimmedPath")
         val next = assertNotNull(expectations.removeFirstOrNull(), "Call to \"$trimmedPath\" was unexpected!")
         val (expectedPath, result) = next
         assertEquals(trimmedPath, expectedPath, "Expected call to \"$expectedPath\" but got \"$trimmedPath\" instead!")
