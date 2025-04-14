@@ -1,5 +1,104 @@
 # Changelog
 
+## [1.4.62] - 04/11/2025
+
+### Features
+* (**connectcontactlens**) Making sentiment optional for ListRealtimeContactAnalysisSegments Response depending on conversational analytics configuration
+* (**datazone**) Raise hard limit of authorized principals per SubscriptionTarget from 10 to 20.
+* (**detective**) Add support for Detective DualStack endpoints
+* (**marketplaceentitlementservice**) Add support for Marketplace Entitlement Service dual-stack endpoints for CN and GOV regions
+* (**marketplacemetering**) Add support for Marketplace Metering Service dual-stack endpoints for CN regions
+* (**pcs**) Changed the minimum length of clusterIdentifier, computeNodeGroupIdentifier, and queueIdentifier to 3.
+* (**verifiedpermissions**) Adds deletion protection support to policy stores. Deletion protection is disabled by default, can be enabled via the CreatePolicyStore or UpdatePolicyStore APIs, and is visible in GetPolicyStore.
+
+### Documentation
+* (**dynamodb**) Doc only update for API descriptions.
+
+## [1.4.61] - 04/10/2025
+
+### Features
+* (**applicationautoscaling**) Application Auto Scaling now supports horizontal scaling for Elasticache Memcached self-designed clusters using target tracking scaling policies and scheduled scaling.
+* (**elasticache**) AWS ElastiCache SDK now supports using MemcachedUpgradeConfig parameter with ModifyCacheCluster API to enable updating Memcached cache node types. Please refer to updated AWS ElastiCache public documentation for detailed information on API usage and implementation.
+* (**m2**) Introduce three new APIs: CreateDataSetExportTask, GetDataSetExportTask and ListDataSetExportHistory. Add support for batch restart for Blu Age applications.
+* (**medialive**) AWS Elemental MediaLive / Features : Add support for CMAF Ingest CaptionLanguageMappings, TimedMetadataId3 settings, and Link InputResolution.
+* (**qbusiness**) Adds functionality to enable/disable a new Q Business Hallucination Reduction feature. If enabled, Q Business will detect and attempt to remove Hallucinations from certain Chat requests.
+* (**quicksight**) Add support to analysis and sheet level highlighting in QuickSight.
+
+## [1.4.60] - 04/09/2025
+
+### Features
+* (**controlcatalog**) The GetControl API now surfaces a control's Severity, CreateTime, and Identifier for a control's Implementation. The ListControls API now surfaces a control's Behavior, Severity, CreateTime, and Identifier for a control's Implementation.
+* (**glue**) The TableOptimizer APIs in AWS Glue now return the DpuHours field in each TableOptimizerRun, providing clients visibility to the DPU-hours used for billing in managed Apache Iceberg table compaction optimization.
+* (**groundstation**) Support tagging Agents and adjust input field validations
+* (**transfer**) This launch includes 2 enhancements to SFTP connectors user-experience: 1) Customers can self-serve concurrent connections setting for their connectors, and 2) Customers can discover the public host key of remote servers using their SFTP connectors.
+
+### Documentation
+* (**dynamodb**) Documentation update for secondary indexes and Create_Table.
+
+## [1.4.59] - 04/08/2025
+
+### Features
+* (**bedrockruntime**) This release introduces our latest bedrock runtime API, InvokeModelWithBidirectionalStream. The API supports both input and output streams and is supported by only HTTP2.0.
+* (**costexplorer**) This release supports Pagination traits on Cost Anomaly Detection APIs.
+* (**costoptimizationhub**) This release adds resource type "MemoryDbReservedInstances" and resource type "DynamoDbReservedCapacity" to the GetRecommendation, ListRecommendations, and ListRecommendationSummaries APIs to support new MemoryDB and DynamoDB RI recommendations.
+* (**iotfleetwise**) This release adds the option to update the strategy of state templates already associated to a vehicle, without the need to remove and re-add them.
+* (**storagegateway**) Added new ActiveDirectoryStatus value, ListCacheReports paginator, and support for longer pagination tokens.
+* (**taxsettings**) Uzbekistan Launch on TaxSettings Page
+
+### Documentation
+* (**securityhub**) Documentation updates for AWS Security Hub.
+
+## [1.4.58] - 04/08/2025
+
+## [1.4.57] - 04/07/2025
+
+⚠️ **IMPORTANT**: This version should not be used, as it depends on an unreleased snapshot version and will not work correctly. Please use version 1.4.58 or later.
+
+### Features
+* (**bedrock**) New options for how to handle harmful content detected by Amazon Bedrock Guardrails.
+* (**bedrockruntime**) New options for how to handle harmful content detected by Amazon Bedrock Guardrails.
+* (**codebuild**) AWS CodeBuild now offers an enhanced debugging experience.
+* (**glue**) Add input validations for multiple Glue APIs
+* (**medialive**) AWS Elemental MediaLive now supports SDI inputs to MediaLive Anywhere Channels in workflows that use AWS SDKs.
+* (**personalize**) Add support for eventsConfig for CreateSolution, UpdateSolution, DescribeSolution, DescribeSolutionVersion. Add support for GetSolutionMetrics to return weighted NDCG metrics when eventsConfig is enabled for the solution.
+* (**transfer**) This launch enables customers to manage contents of their remote directories, by deleting old files or moving files to archive folders in remote servers once they have been retrieved. Customers will be able to automate the process using event-driven architecture.
+
+## [1.4.56] - 04/04/2025
+
+### Features
+* (**eventbridge**) Amazon EventBridge adds support for customer-managed keys on Archives and validations for two fields: eventSourceArn and kmsKeyIdentifier.
+
+### Documentation
+* (**directoryservicedata**) Doc only update - fixed broken links.
+* (**ec2**) Doc-only updates for Amazon EC2
+* (**s3control**) Updated max size of Prefixes parameter of Scope data type.
+
+## [1.4.55] - 04/03/2025
+
+### Features
+* (**bedrockagent**) Added optional "customMetadataField" for Amazon Aurora knowledge bases, allowing single-column metadata. Also added optional "textIndexName" for MongoDB Atlas knowledge bases, enabling hybrid search support.
+* (**chimesdkvoice**) Added FOC date as an attribute of PhoneNumberOrder, added AccessDeniedException as a possible return type of ValidateE911Address
+* (**mailmanager**) Add support for Dual_Stack and PrivateLink types of IngressPoint. For configuration requests, SES Mail Manager will now accept both IPv4/IPv6 dual-stack endpoints and AWS PrivateLink VPC endpoints for email receiving.
+* (**route53**) Added us-gov-east-1 and us-gov-west-1 as valid Latency Based Routing regions for change-resource-record-sets.
+* (**sagemaker**) Adds support for i3en, m7i, r7i instance types for SageMaker Hyperpod
+* (**sesv2**) This release enables customers to provide attachments in the SESv2 SendEmail and SendBulkEmail APIs.
+* (**transcribe**) This Feature Adds Support for the "zh-HK" Locale for Batch Operations
+
+### Documentation
+* (**opensearch**) Improve descriptions for various API commands and data types.
+
+## [1.4.54] - 04/02/2025
+
+### Features
+* (**applicationsignals**) Application Signals now supports creating Service Level Objectives on service dependencies. Users can now create or update SLOs on discovered service dependencies to monitor their standard application metrics.
+* (**codebuild**) This release adds support for environment type WINDOWS_SERVER_2022_CONTAINER in ProjectEnvironment
+* (**lexmodelsv2**) Release feature of errorlogging for lex bot, customer can config this feature in bot version to generate log for error exception which helps debug
+* (**medialive**) Added support for SMPTE 2110 inputs when running a channel in a MediaLive Anywhere cluster. This feature enables ingestion of SMPTE 2110-compliant video, audio, and ancillary streams by reading SDP files that AWS Elemental MediaLive can retrieve from a network source.
+
+### Documentation
+* (**ecr**) Fix for customer issues related to AWS account ID and size limitation for token.
+* (**ecs**) This is an Amazon ECS documentation only update to address various tickets.
+
 ## [1.4.53] - 04/01/2025
 
 ### Features
