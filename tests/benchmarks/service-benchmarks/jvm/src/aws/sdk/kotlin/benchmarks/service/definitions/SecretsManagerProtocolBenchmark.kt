@@ -28,6 +28,9 @@ class SecretsManagerProtocolBenchmark : ServiceProtocolBenchmark<SecretsManagerC
     }
 
     override suspend fun setup(client: SecretsManagerClient) {
+        // FIXME: Add metadata parameters to setup/teardown methods to pass configuration info
+        // (e.g., configured iteration count). Larger refactoring needed outside this PR scope.
+
         for (iteration in 1..DEFAULT_ITERATIONS) {
             val tags = listOf(
                 Tag {

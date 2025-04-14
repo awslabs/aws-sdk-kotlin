@@ -10,8 +10,8 @@ import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.io.use
 import kotlin.time.TimeSource
 
-const val DEFAULT_ITERATIONS = 5
-const val DEFAULT_WARMUP_ITERATIONS = 1
+const val DEFAULT_ITERATIONS = 500
+const val DEFAULT_WARMUP_ITERATIONS = 100
 
 private val protocolBenchmarks = setOf(
     CloudwatchProtocolBenchmark(),
@@ -56,14 +56,14 @@ class ProtocolBenchmarkHarness {
             if (operation.requireScaling) {
                 for (scale in scales) {
                     println("    Warming up for ${operation.warmupMode.explanation} (scale: $scale)...")
-                    forAtLeast(operation.warmupMode) { iteration ->
-                        operation.transact(client, scale, iteration)
+                    operation.warmupMode.forAtLeast { iteration ->
+                        operation.transact(client, scale, iteration!!)
                     }
                 }
             } else {
                 println("    Warming up for ${operation.warmupMode.explanation}...")
-                forAtLeast(operation.warmupMode) { iteration ->
-                    operation.transact(client, 0, iteration)
+                operation.warmupMode.forAtLeast { iteration ->
+                    operation.transact(client, 0, iteration!!)
                 }
             }
 
@@ -72,14 +72,14 @@ class ProtocolBenchmarkHarness {
             if (operation.requireScaling) {
                 for (scale in scales) {
                     println("    Measuring for ${operation.iterationMode.explanation} (scale: $scale)...")
-                    forAtLeast(operation.iterationMode) { iteration ->
-                        operation.transact(client, scale, iteration)
+                    operation.iterationMode.forAtLeast { iteration ->
+                        operation.transact(client, scale, iteration!!)
                     }
                 }
             } else {
                 println("    Measuring for ${operation.iterationMode.explanation}...")
-                forAtLeast(operation.iterationMode) { iteration ->
-                    operation.transact(client, 0, iteration)
+                operation.iterationMode.forAtLeast { iteration ->
+                    operation.transact(client, 0, iteration!!)
                 }
             }
             val summary = Common.metricAggregator.summarizeAndClear()
