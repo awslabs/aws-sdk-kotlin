@@ -39,7 +39,7 @@ class SecretsManagerProtocolBenchmark : ServiceProtocolBenchmark<SecretsManagerC
                 },
                 Tag {
                     key = "Iteration"
-                    value = "${iteration.padded()}"
+                    value = "$iteration.padded()"
                 },
             )
 
@@ -159,7 +159,7 @@ class SecretsManagerProtocolBenchmark : ServiceProtocolBenchmark<SecretsManagerC
                 },
                 Filter {
                     key = FilterNameStringType.fromValue("tag-value")
-                    values = listOf("${iteration.padded()}")
+                    values = listOf("$iteration.padded()")
                 },
             )
 

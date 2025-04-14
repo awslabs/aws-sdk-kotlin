@@ -8,7 +8,6 @@ import aws.sdk.kotlin.benchmarks.service.definitions.*
 import aws.sdk.kotlin.benchmarks.service.telemetry.MetricSummary
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.io.use
-import kotlin.time.TimeSource
 
 const val DEFAULT_ITERATIONS = 500
 const val DEFAULT_WARMUP_ITERATIONS = 100
