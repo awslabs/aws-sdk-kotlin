@@ -6,15 +6,11 @@
 package aws.sdk.kotlin.runtime.auth.credentials
 
 import aws.sdk.kotlin.runtime.auth.credentials.internal.credentials
-import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.sdk.kotlin.runtime.config.imds.EC2MetadataError
-import aws.sdk.kotlin.runtime.config.imds.ImdsClient
-import aws.sdk.kotlin.runtime.config.imds.InstanceMetadataProvider
+import aws.sdk.kotlin.runtime.config.imds.*
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.AwsBusinessMetric
 import aws.sdk.kotlin.runtime.http.interceptors.businessmetrics.withBusinessMetric
 import aws.smithy.kotlin.runtime.auth.awscredentials.*
 import aws.smithy.kotlin.runtime.collections.Attributes
-import aws.smithy.kotlin.runtime.config.resolve
 import aws.smithy.kotlin.runtime.http.HttpStatusCode
 import aws.smithy.kotlin.runtime.io.IOException
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
@@ -23,6 +19,7 @@ import aws.smithy.kotlin.runtime.time.Clock
 import aws.smithy.kotlin.runtime.util.PlatformEnvironProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.SingleFlightGroup
+import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlin.coroutines.coroutineContext
 
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
@@ -43,7 +40,7 @@ private const val PROVIDER_NAME = "IMDSv2"
 public class ImdsCredentialsProvider(
     instanceProfileName: String? = null,
     client: InstanceMetadataProvider? = null,
-    private val platformProvider: PlatformProvider = PlatformProvider.System,
+    platformProvider: PlatformProvider = PlatformProvider.System,
 ) : CloseableCredentialsProvider {
 
     @Deprecated("This constructor supports parameters which are no longer used in the implementation. It will be removed in version 1.5.")
@@ -52,20 +49,37 @@ public class ImdsCredentialsProvider(
         client: Lazy<InstanceMetadataProvider> = lazy { ImdsClient() },
         platformProvider: PlatformEnvironProvider = PlatformProvider.System,
         @Suppress("UNUSED_PARAMETER") clock: Clock = Clock.System,
-    ) : this(profileOverride, client.value, platformProvider = platformProvider as? PlatformProvider ?: PlatformProvider.System)
+    ) : this(
+        profileOverride,
+        client.value,
+        platformProvider = platformProvider as? PlatformProvider ?: PlatformProvider.System,
+    )
+
+    private val actualPlatformProvider = platformProvider
+
+    @Deprecated("This property is retained for backwards compatibility but no longer needs to be public and will be removed in version 1.5.")
+    public val platformProvider: PlatformEnvironProvider = actualPlatformProvider
 
     private val manageClient: Boolean = client == null
 
-    private val client: InstanceMetadataProvider = client ?: ImdsClient {
-        this.platformProvider = this@ImdsCredentialsProvider.platformProvider
+    private val actualClient = client ?: ImdsClient {
+        this.platformProvider = actualPlatformProvider
     }
 
-    // FIXME This only resolves from env vars and sys props but we need to resolve from profiles too
-    private val instanceProfileName = instanceProfileName
-        ?: AwsSdkSetting.AwsEc2InstanceProfileName.resolve(platformProvider)
+    @Deprecated("This property is retained for backwards compatibility but no longer needs to be public and will be removed in version 1.5.")
+    public val client: Lazy<InstanceMetadataProvider>
+        get() = lazyOf(actualClient)
 
-    // FIXME This only resolves from env vars and sys props but we need to resolve from profiles too
-    private val providerDisabled = AwsSdkSetting.AwsEc2MetadataDisabled.resolve(platformProvider) == true
+    private val instanceProfileName = asyncLazy {
+        instanceProfileName ?: resolveEc2InstanceProfileName(platformProvider)
+    }
+
+    @Deprecated("This property is retained for backwards compatibility but no longer needs to be public and will be removed in version 1.5.")
+    public val profileOverride: String? = instanceProfileName
+
+    private val providerDisabled = asyncLazy {
+        resolveDisableEc2Metadata(platformProvider) ?: false
+    }
 
     /**
      * Tracks the known-good version of IMDS APIs available in the local environment. This starts as `null` and will be
@@ -89,19 +103,15 @@ public class ImdsCredentialsProvider(
      */
     private val sfg = SingleFlightGroup<Credentials>()
 
-    override suspend fun resolve(attributes: Attributes): Credentials = sfg.singleFlight { resolveUnderLock() }
+    override suspend fun resolve(attributes: Attributes): Credentials = sfg.singleFlight(::resolveSingleFlight)
 
-    private suspend fun resolveUnderLock(): Credentials {
-        println("**** Resolving creds (instanceProfileName=$instanceProfileName; apiVersion=$apiVersion; urlBase=$urlBase)")
-
-        if (providerDisabled) {
-            println("**** Explicitly disabled")
+    private suspend fun resolveSingleFlight(): Credentials {
+        if (providerDisabled.get()) {
             throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
         }
 
-        val profileName = instanceProfileName ?: resolvedProfileName ?: try {
-            println("**** Resolving profile")
-            client.get(urlBase).also {
+        val profileName = instanceProfileName.get() ?: resolvedProfileName ?: try {
+            actualClient.get(urlBase).also {
                 if (apiVersion == null) {
                     // Tried EXTENDED and it worked; remember that for the future
                     apiVersion = ApiVersion.EXTENDED
@@ -109,13 +119,13 @@ public class ImdsCredentialsProvider(
             }
         } catch (ex: EC2MetadataError) {
             when {
-                apiVersion == null && ex.statusCode == HttpStatusCode.NotFound -> {
+                apiVersion == null && ex.status == HttpStatusCode.NotFound -> {
                     // Tried EXTENDED and that didn't work; fallback to LEGACY
                     apiVersion = ApiVersion.LEGACY
-                    return resolveUnderLock()
+                    return resolveSingleFlight()
                 }
 
-                ex.statusCode == HttpStatusCode.NotFound -> {
+                ex.status == HttpStatusCode.NotFound -> {
                     coroutineContext.info<ImdsCredentialsProvider> {
                         "Received 404 when loading profile name. This instance may not have an associated profile."
                     }
@@ -132,19 +142,19 @@ public class ImdsCredentialsProvider(
         }
 
         val credsPayload = try {
-            client.get("$urlBase$profileName")
+            actualClient.get("$urlBase$profileName")
         } catch (ex: EC2MetadataError) {
             when {
-                apiVersion == null && ex.statusCode == HttpStatusCode.NotFound -> {
+                apiVersion == null && ex.status == HttpStatusCode.NotFound -> {
                     // Tried EXTENDED and that didn't work; fallback to LEGACY
                     apiVersion = ApiVersion.LEGACY
-                    return resolveUnderLock()
+                    return resolveSingleFlight()
                 }
 
-                instanceProfileName == null && ex.statusCode == HttpStatusCode.NotFound -> {
+                instanceProfileName.get() == null && ex.status == HttpStatusCode.NotFound -> {
                     // A previously-resolved profile is now invalid; forget the resolved name and re-resolve
                     resolvedProfileName = null
-                    return resolveUnderLock()
+                    return resolveSingleFlight()
                 }
 
                 else -> return usePreviousCredentials()
@@ -157,7 +167,7 @@ public class ImdsCredentialsProvider(
             throw ImdsCredentialsException(profileName, ex).wrapAsCredentialsProviderException()
         }
 
-        if (instanceProfileName == null) {
+        if (instanceProfileName.get() == null) {
             // No profile name was provided at construction time; cache the resolved name
             resolvedProfileName = profileName
         }
@@ -186,7 +196,7 @@ public class ImdsCredentialsProvider(
 
     override fun close() {
         if (manageClient) {
-            client.close()
+            actualClient.close()
         }
     }
 
