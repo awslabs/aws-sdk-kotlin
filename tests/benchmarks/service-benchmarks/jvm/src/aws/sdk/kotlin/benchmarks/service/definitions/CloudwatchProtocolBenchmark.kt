@@ -42,7 +42,7 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
         override val requireScaling = true
 
         override suspend fun transact(client: CloudWatchClient, scale: Int, iteration: Int) {
-            client.putMetricData (
+            client.putMetricData(
                 PutMetricDataRequest {
                     namespace = "SDK Benchmark Test Data"
                     metricData = (0 until scale).map { metricDatumIndex ->
@@ -59,7 +59,7 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
                             timestamp = baseTime + ((metricDatumIndex + 1) * 2).seconds
                         }
                     }.toList()
-                }
+                },
             )
         }
     }
@@ -93,7 +93,7 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
                             }
                         },
                     )
-                }
+                },
             )
         }
     }
