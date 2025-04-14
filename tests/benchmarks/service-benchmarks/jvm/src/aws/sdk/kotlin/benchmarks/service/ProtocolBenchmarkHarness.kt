@@ -95,25 +95,3 @@ class ProtocolBenchmarkHarness {
         println(table)
     }
 }
-
-private inline fun forAtLeast(runMode: RunMode, block: (iteration: Int) -> Unit) {
-    val start = TimeSource.Monotonic.markNow()
-
-    when (runMode) {
-        is RunMode.Time -> {
-            var cnt = 0
-            while (start.elapsedNow() < runMode.time) {
-                block(cnt)
-                cnt++
-            }
-            println("      (completed $cnt iterations)")
-        }
-
-        is RunMode.Iterations -> {
-            repeat(runMode.iterations) { cnt ->
-                block(cnt + 1)
-            }
-            println("      (took ${start.elapsedNow()})")
-        }
-    }
-}
