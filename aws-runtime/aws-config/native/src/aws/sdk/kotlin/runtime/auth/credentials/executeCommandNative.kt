@@ -22,24 +22,30 @@ internal actual suspend fun executeCommand(
     timeoutMillis: Long,
     clock: Clock,
 ): Pair<Int, String> = withContext(SdkDispatchers.IO) {
-    val pipeFd = IntArray(2)
-    if (pipe(pipeFd.refTo(0)) != 0) {
+    val pipeFds = IntArray(2)
+    if (pipe(pipeFds.refTo(0)) != 0) {
         error("Failed to create pipe")
     }
+    val (readFd, writeFd) = pipeFds
 
     val pid = fork()
     if (pid == -1) {
+        close(readFd)
+        close(writeFd)
         error("Failed to fork")
     }
 
     if (pid == 0) {
         // Child process
-        close(pipeFd[0]) // Close read end
+        close(readFd) // Close read end
 
         // Pass stdout and stderr back to parent
-        dup2(pipeFd[1], STDOUT_FILENO)
-        dup2(pipeFd[1], STDERR_FILENO)
-        close(pipeFd[1])
+        try {
+            dup2(writeFd, STDOUT_FILENO)
+            dup2(writeFd, STDERR_FILENO)
+        } finally {
+            close(writeFd)
+        }
 
         val shell = when (platformProvider.osInfo().family) {
             OsFamily.Windows -> "cmd.exe"
@@ -57,27 +63,30 @@ internal actual suspend fun executeCommand(
     }
 
     // Parent process
-    close(pipeFd[1]) // Close write end
+    close(writeFd) // Close write end
 
-    val output = buildString {
-        val buffer = ByteArray(maxOutputLengthBytes.toInt())
+    val output = try {
+        buildString {
+            val buffer = ByteArray(1024)
+            var totalBytesRead = 0L
 
-        withTimeout(timeoutMillis) {
-            while (true) {
-                val bytesRead = read(pipeFd[0], buffer.refTo(0), buffer.size.toULong()).toInt()
-                if (bytesRead <= 0) break
+            withTimeout(timeoutMillis) {
+                while (true) {
+                    val nBytes = minOf(maxOutputLengthBytes - totalBytesRead, buffer.size.toLong())
+                    if (nBytes == 0L) {
+                        throw CredentialsProviderException("Process output exceeded limit of $maxOutputLengthBytes bytes")
+                    }
 
-                append(buffer.decodeToString(0, bytesRead))
-
-                if (length > maxOutputLengthBytes) {
-                    close(pipeFd[0])
-                    throw CredentialsProviderException("Process output exceeded limit of $maxOutputLengthBytes bytes")
+                    val rc = read(readFd, buffer.refTo(0), nBytes.toULong()).toInt()
+                    if (rc <= 0) break
+                    totalBytesRead += rc
+                    append(buffer.decodeToString(0, rc))
                 }
             }
         }
+    } finally {
+        close(readFd)
     }
-
-    close(pipeFd[0])
 
     memScoped {
         val status = alloc<IntVar>()
