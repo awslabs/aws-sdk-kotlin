@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.63] - 04/14/2025
+
+### Features
+* (**entityresolution**) This is to add new metrics to our GetIdMappingJob API and also update uniqueId naming for batchDeleteUniqueIds API to be more accurate
+* (**taxsettings**) Indonesia SOR Tax Registration Launch
+
 ## [1.4.62] - 04/11/2025
 
 ### Features
