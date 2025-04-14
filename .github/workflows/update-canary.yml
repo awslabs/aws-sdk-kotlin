@@ -62,6 +62,7 @@ jobs:
                 
           while true; do
             STATUS=$(aws stepfunctions describe-execution --execution-arn "$EXECUTION_ARN" --query 'status' --output text)
+            echo "Status: $STATUS"
             
             if [[ "$STATUS" == "SUCCEEDED" ]]; then
               echo "Step Function completed successfully"
