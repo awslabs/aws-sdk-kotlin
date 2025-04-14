@@ -1,5 +1,46 @@
 # Changelog
 
+## [1.4.63] - 04/14/2025
+
+### Features
+* (**entityresolution**) This is to add new metrics to our GetIdMappingJob API and also update uniqueId naming for batchDeleteUniqueIds API to be more accurate
+* (**taxsettings**) Indonesia SOR Tax Registration Launch
+
+## [1.4.62] - 04/11/2025
+
+### Features
+* (**connectcontactlens**) Making sentiment optional for ListRealtimeContactAnalysisSegments Response depending on conversational analytics configuration
+* (**datazone**) Raise hard limit of authorized principals per SubscriptionTarget from 10 to 20.
+* (**detective**) Add support for Detective DualStack endpoints
+* (**marketplaceentitlementservice**) Add support for Marketplace Entitlement Service dual-stack endpoints for CN and GOV regions
+* (**marketplacemetering**) Add support for Marketplace Metering Service dual-stack endpoints for CN regions
+* (**pcs**) Changed the minimum length of clusterIdentifier, computeNodeGroupIdentifier, and queueIdentifier to 3.
+* (**verifiedpermissions**) Adds deletion protection support to policy stores. Deletion protection is disabled by default, can be enabled via the CreatePolicyStore or UpdatePolicyStore APIs, and is visible in GetPolicyStore.
+
+### Documentation
+* (**dynamodb**) Doc only update for API descriptions.
+
+## [1.4.61] - 04/10/2025
+
+### Features
+* (**applicationautoscaling**) Application Auto Scaling now supports horizontal scaling for Elasticache Memcached self-designed clusters using target tracking scaling policies and scheduled scaling.
+* (**elasticache**) AWS ElastiCache SDK now supports using MemcachedUpgradeConfig parameter with ModifyCacheCluster API to enable updating Memcached cache node types. Please refer to updated AWS ElastiCache public documentation for detailed information on API usage and implementation.
+* (**m2**) Introduce three new APIs: CreateDataSetExportTask, GetDataSetExportTask and ListDataSetExportHistory. Add support for batch restart for Blu Age applications.
+* (**medialive**) AWS Elemental MediaLive / Features : Add support for CMAF Ingest CaptionLanguageMappings, TimedMetadataId3 settings, and Link InputResolution.
+* (**qbusiness**) Adds functionality to enable/disable a new Q Business Hallucination Reduction feature. If enabled, Q Business will detect and attempt to remove Hallucinations from certain Chat requests.
+* (**quicksight**) Add support to analysis and sheet level highlighting in QuickSight.
+
+## [1.4.60] - 04/09/2025
+
+### Features
+* (**controlcatalog**) The GetControl API now surfaces a control's Severity, CreateTime, and Identifier for a control's Implementation. The ListControls API now surfaces a control's Behavior, Severity, CreateTime, and Identifier for a control's Implementation.
+* (**glue**) The TableOptimizer APIs in AWS Glue now return the DpuHours field in each TableOptimizerRun, providing clients visibility to the DPU-hours used for billing in managed Apache Iceberg table compaction optimization.
+* (**groundstation**) Support tagging Agents and adjust input field validations
+* (**transfer**) This launch includes 2 enhancements to SFTP connectors user-experience: 1) Customers can self-serve concurrent connections setting for their connectors, and 2) Customers can discover the public host key of remote servers using their SFTP connectors.
+
+### Documentation
+* (**dynamodb**) Documentation update for secondary indexes and Create_Table.
+
 ## [1.4.59] - 04/08/2025
 
 ### Features
