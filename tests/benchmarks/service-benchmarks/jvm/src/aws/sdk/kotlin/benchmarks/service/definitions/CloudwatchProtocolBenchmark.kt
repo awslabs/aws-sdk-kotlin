@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.benchmarks.service.definitions
 
 import aws.sdk.kotlin.benchmarks.service.Common
@@ -7,8 +11,8 @@ import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.time.Instant
 import aws.smithy.kotlin.runtime.time.fromEpochMilliseconds
 import java.util.*
-import kotlin.time.Duration.Companion.seconds
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.seconds
 
 class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
     companion object {
@@ -32,7 +36,7 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
     override val operations get() = listOf(
         putMetricDataBenchmark,
         getMetricDataBenchmark,
-        listMetricsBenchmark
+        listMetricsBenchmark,
     )
 
     private val putMetricDataBenchmark = object : AbstractOperationProtocolBenchmark<CloudWatchClient>("Put metric data") {
@@ -47,8 +51,8 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
                         dimensions = listOf(
                             Dimension {
                                 name = "TestDimension"
-                                value = "$suiteId-${scale}"
-                            }
+                                value = "$suiteId-$scale"
+                            },
                         )
                         value = Random.nextDouble()
                         unit = null
@@ -83,13 +87,13 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
                                 dimensions = listOf(
                                     Dimension {
                                         name = "TestDimension"
-                                        value = "$suiteId-${scale}"
-                                    }
+                                        value = "$suiteId-$scale"
+                                    },
                                 )
                             }
                             period = 60
                         }
-                    }
+                    },
                 )
             }
 
@@ -103,10 +107,10 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
         override val requireScaling = true
 
         override suspend fun transact(client: CloudWatchClient, scale: Int, iteration: Int) {
-            client.listMetrics (
+            client.listMetrics(
                 ListMetricsRequest {
                     namespace = "TestNamespace"
-                }
+                },
             )
 
             if ((iteration % 50) == 0) Thread.sleep(2000)

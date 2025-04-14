@@ -23,11 +23,9 @@ object Common {
 
     fun random(prefix: String = "") = "$prefix${Uuid.random()}"
 
-    fun randomStringPayload(scale: Int): String {
-        return (1..scale)
-            .map { Random.nextInt(32, 127).toChar() }
-            .joinToString("")
-    }
+    fun randomStringPayload(scale: Int): String = (1..scale)
+        .map { Random.nextInt(32, 127).toChar() }
+        .joinToString("")
 
     fun randomBytesPayload(scale: Int): ByteArray {
         val bytes = ByteArray(scale)

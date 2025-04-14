@@ -1,7 +1,11 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.benchmarks.service.definitions
 
-import aws.sdk.kotlin.benchmarks.service.DEFAULT_WARMUP_ITERATIONS
 import aws.sdk.kotlin.benchmarks.service.DEFAULT_ITERATIONS
+import aws.sdk.kotlin.benchmarks.service.DEFAULT_WARMUP_ITERATIONS
 import aws.smithy.kotlin.runtime.client.SdkClient
 
 /**
@@ -39,6 +43,7 @@ interface OperationProtocolBenchmark<C : SdkClient> : OperationBenchmark<C> {
      * `RunMode.Iterations(DEFAULT_ITERATIONS)`.
      */
     override val iterationMode: RunMode get() = RunMode.Iterations(DEFAULT_ITERATIONS)
+
     /**
      * Extended transact method with scale and iteration parameters.
      * @param client The service client to use
@@ -59,5 +64,5 @@ interface OperationProtocolBenchmark<C : SdkClient> : OperationBenchmark<C> {
  */
 abstract class AbstractOperationProtocolBenchmark<C : SdkClient>(
     override val name: String,
-    override val requireScaling: Boolean = false
+    override val requireScaling: Boolean = false,
 ) : OperationProtocolBenchmark<C>

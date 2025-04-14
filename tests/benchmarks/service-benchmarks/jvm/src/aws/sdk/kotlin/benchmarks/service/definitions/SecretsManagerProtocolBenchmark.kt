@@ -37,7 +37,7 @@ class SecretsManagerProtocolBenchmark : ServiceProtocolBenchmark<SecretsManagerC
                 Tag {
                     key = "Iteration"
                     value = "${iteration.padded()}"
-                }
+                },
             )
 
             client.createSecret {
@@ -157,7 +157,7 @@ class SecretsManagerProtocolBenchmark : ServiceProtocolBenchmark<SecretsManagerC
                 Filter {
                     key = FilterNameStringType.fromValue("tag-value")
                     values = listOf("${iteration.padded()}")
-                }
+                },
             )
 
             client.listSecrets {

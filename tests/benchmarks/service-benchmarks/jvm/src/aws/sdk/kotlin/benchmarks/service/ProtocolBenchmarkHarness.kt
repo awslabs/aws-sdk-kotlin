@@ -1,3 +1,7 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package aws.sdk.kotlin.benchmarks.service
 
 import aws.sdk.kotlin.benchmarks.service.definitions.*
@@ -49,15 +53,14 @@ class ProtocolBenchmarkHarness {
         operation.setup(client)
 
         try {
-            if(operation.requireScaling){
-                for(scale in scales){
-                    println("    Warming up for ${operation.warmupMode.explanation} (scale: ${scale})...")
+            if (operation.requireScaling) {
+                for (scale in scales) {
+                    println("    Warming up for ${operation.warmupMode.explanation} (scale: $scale)...")
                     forAtLeast(operation.warmupMode) { iteration ->
                         operation.transact(client, scale, iteration)
                     }
                 }
-            }
-            else{
+            } else {
                 println("    Warming up for ${operation.warmupMode.explanation}...")
                 forAtLeast(operation.warmupMode) { iteration ->
                     operation.transact(client, 0, iteration)
@@ -66,15 +69,14 @@ class ProtocolBenchmarkHarness {
 
             Common.metricAggregator.clear()
 
-            if(operation.requireScaling) {
+            if (operation.requireScaling) {
                 for (scale in scales) {
-                    println("    Measuring for ${operation.iterationMode.explanation} (scale: ${scale})...")
+                    println("    Measuring for ${operation.iterationMode.explanation} (scale: $scale)...")
                     forAtLeast(operation.iterationMode) { iteration ->
                         operation.transact(client, scale, iteration)
                     }
                 }
-            }
-            else{
+            } else {
                 println("    Measuring for ${operation.iterationMode.explanation}...")
                 forAtLeast(operation.iterationMode) { iteration ->
                     operation.transact(client, 0, iteration)
