@@ -9,6 +9,7 @@ import aws.sdk.kotlin.benchmarks.service.telemetry.MetricAggregator
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.util.Uuid
+import kotlin.random.Random
 
 object Common {
     val metricAggregator = MetricAggregator()
@@ -21,4 +22,16 @@ object Common {
     val telemetryProvider = BenchmarkTelemetryProvider(metricAggregator)
 
     fun random(prefix: String = "") = "$prefix${Uuid.random()}"
+
+    fun randomStringPayload(scale: Int): String {
+        return (1..scale)
+            .map { Random.nextInt(32, 127).toChar() }
+            .joinToString("")
+    }
+
+    fun randomBytesPayload(scale: Int): ByteArray {
+        val bytes = ByteArray(scale)
+        Random.nextBytes(bytes)
+        return bytes
+    }
 }

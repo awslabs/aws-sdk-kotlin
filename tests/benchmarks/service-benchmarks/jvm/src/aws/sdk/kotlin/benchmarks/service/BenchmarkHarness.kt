@@ -28,9 +28,16 @@ private val benchmarks = setOf(
     it as ServiceBenchmark<SdkClient>
 }
 
-suspend fun main() {
-    val harness = BenchmarkHarness()
-    harness.execute()
+suspend fun main(args: Array<String>) {
+    val useProtocolBenchmark = "protocol" in args
+
+    if (useProtocolBenchmark) {
+        val harness = ProtocolBenchmarkHarness()
+        harness.execute()
+    } else {
+        val harness = BenchmarkHarness()
+        harness.execute()
+    }
 }
 
 class BenchmarkHarness {
@@ -113,7 +120,7 @@ private inline fun forAtLeast(runMode: RunMode, block: () -> Unit) {
     }
 }
 
-private val RunMode.explanation get() = when (this) {
+public val RunMode.explanation get() = when (this) {
     is RunMode.Iterations -> "$iterations iterations"
     is RunMode.Time -> time.toString()
 }
