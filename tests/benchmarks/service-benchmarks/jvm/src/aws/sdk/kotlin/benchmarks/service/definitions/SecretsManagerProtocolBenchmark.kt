@@ -60,7 +60,6 @@ class SecretsManagerProtocolBenchmark : ServiceProtocolBenchmark<SecretsManagerC
     }
 
     override suspend fun tearDown(client: SecretsManagerClient) {
-        println("tearing down service")
         for (iteration in 1..DEFAULT_ITERATIONS) {
             client.deleteSecret {
                 secretId = "TestSecret_${runStartTimestamp}_${iteration.padded()}"
