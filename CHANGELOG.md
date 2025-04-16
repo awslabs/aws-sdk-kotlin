@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.64] - 04/16/2025
+
+### Features
+* (**connectcases**) This feature provides capabilities to help track and meet service level agreements (SLAs) on cases programmatically. It allows configuring a new related item of type `Sla` on a case using CreateRelatedItem API and provides the ability to search for this new related item using SearchRelatedItems API.
+* (**dsql**) Added GetClusterEndpointService API. The new API allows retrieving endpoint service name specific to a cluster.
+* (**eks**) Added support for new AL2023 ARM64 NVIDIA AMIs to the supported AMITypes.
+* (**eventbridge**) Adding support for KmsKeyIdentifer in CreateConnection, UpdateConnection and DescribeConnection APIs
+* (**resourcegroups**) Resource Groups: TagSyncTasks can be created with ResourceQuery
+* (**s3tables**) S3 Tables now supports setting encryption configurations on table buckets and tables. Encryption configurations can use server side encryption using AES256 or KMS customer-managed keys.
+
+### Documentation
+* (**servicecatalog**) Updated default value for the access-level-filter in SearchProvisionedProducts API to Account. For access to userLevel or roleLevel, the user must provide access-level-filter parameter.
+
 ## [1.4.63] - 04/14/2025
 
 ### Features
