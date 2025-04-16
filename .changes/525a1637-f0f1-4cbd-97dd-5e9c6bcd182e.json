@@ -1,0 +1,5 @@
+{
+    "id": "525a1637-f0f1-4cbd-97dd-5e9c6bcd182e",
+    "type": "feature",
+    "description": "Add support for fetching account ID from IMDS credentials on EC2"
+}
