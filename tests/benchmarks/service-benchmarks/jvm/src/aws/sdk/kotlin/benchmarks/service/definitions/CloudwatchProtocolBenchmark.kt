@@ -6,7 +6,13 @@ package aws.sdk.kotlin.benchmarks.service.definitions
 
 import aws.sdk.kotlin.benchmarks.service.Common
 import aws.sdk.kotlin.services.cloudwatch.CloudWatchClient
-import aws.sdk.kotlin.services.cloudwatch.model.*
+import aws.sdk.kotlin.services.cloudwatch.getMetricData
+import aws.sdk.kotlin.services.cloudwatch.listMetrics
+import aws.sdk.kotlin.services.cloudwatch.model.Dimension
+import aws.sdk.kotlin.services.cloudwatch.model.Metric
+import aws.sdk.kotlin.services.cloudwatch.model.MetricDataQuery
+import aws.sdk.kotlin.services.cloudwatch.model.MetricDatum
+import aws.sdk.kotlin.services.cloudwatch.putMetricData
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.time.Instant
 import java.util.*
@@ -18,6 +24,7 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
     companion object {
         val suiteId = UUID.randomUUID()
         val baseTime = Instant.now() - 2.hours
+        const val TEST_NAME_SPACE = "SDK Benchmark Test Data"
     }
 
     @OptIn(ExperimentalApi::class)
@@ -42,25 +49,23 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
         override val requireScaling = true
 
         override suspend fun transact(client: CloudWatchClient, scale: Int, iteration: Int) {
-            client.putMetricData(
-                PutMetricDataRequest {
-                    namespace = "SDK Benchmark Test Data"
-                    metricData = (0 until scale).map { metricDatumIndex ->
-                        MetricDatum {
-                            metricName = "TestMetric"
-                            dimensions = listOf(
-                                Dimension {
-                                    name = "TestDimension"
-                                    value = "$suiteId-$scale"
-                                },
-                            )
-                            value = Random.nextDouble()
-                            unit = null
-                            timestamp = baseTime + ((metricDatumIndex + 1) * 2).seconds
-                        }
-                    }.toList()
-                },
-            )
+            client.putMetricData {
+                namespace = TEST_NAME_SPACE
+                metricData = (0 until scale).map { metricDatumIndex ->
+                    MetricDatum {
+                        metricName = "TestMetric"
+                        dimensions = listOf(
+                            Dimension {
+                                name = "TestDimension"
+                                value = "$suiteId-$scale"
+                            },
+                        )
+                        value = Random.nextDouble()
+                        unit = null
+                        timestamp = baseTime + ((metricDatumIndex + 1) * 2).seconds
+                    }
+                }.toList()
+            }
         }
     }
 
@@ -68,33 +73,31 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
         override val requireScaling = true
 
         override suspend fun transact(client: CloudWatchClient, scale: Int, iteration: Int) {
-            client.getMetricData(
-                GetMetricDataRequest {
-                    startTime = baseTime
-                    endTime = baseTime + 2.hours
-                    metricDataQueries = listOf(
-                        MetricDataQuery {
-                            id = "m0"
-                            returnData = true
-                            metricStat {
-                                unit = null
-                                stat = "Sum"
-                                metric = Metric {
-                                    namespace = "TestNamespace"
-                                    metricName = "TestMetric"
-                                    dimensions = listOf(
-                                        Dimension {
-                                            name = "TestDimension"
-                                            value = "$suiteId-$scale"
-                                        },
-                                    )
-                                }
-                                period = 60
+            client.getMetricData {
+                startTime = baseTime
+                endTime = baseTime + 2.hours
+                metricDataQueries = listOf(
+                    MetricDataQuery {
+                        id = "m0"
+                        returnData = true
+                        metricStat {
+                            unit = null
+                            stat = "Sum"
+                            metric = Metric {
+                                namespace = TEST_NAME_SPACE
+                                metricName = "TestMetric"
+                                dimensions = listOf(
+                                    Dimension {
+                                        name = "TestDimension"
+                                        value = "$suiteId-$scale"
+                                    },
+                                )
                             }
-                        },
-                    )
-                },
-            )
+                            period = 60
+                        }
+                    },
+                )
+            }
         }
     }
 
@@ -102,11 +105,9 @@ class CloudwatchProtocolBenchmark : ServiceProtocolBenchmark<CloudWatchClient> {
         override val requireScaling = true
 
         override suspend fun transact(client: CloudWatchClient, scale: Int, iteration: Int) {
-            client.listMetrics(
-                ListMetricsRequest {
-                    namespace = "TestNamespace"
-                },
-            )
+            client.listMetrics {
+                namespace = TEST_NAME_SPACE
+            }
         }
     }
 }
