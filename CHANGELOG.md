@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.4.65] - 04/17/2025
+
+### Features
+* (**accessanalyzer**) Added new resource types to evaluate for public access in resource policies and added support for S3 directory bucket access points.
+* (**amp**) Add Workspace Configuration APIs for Amazon Prometheus
+* (**bedrock**) With this release, Bedrock Evaluation will now support custom metrics for evaluation.
+* (**connect**) This release adds following capabilities to Contact Lens Rules APIs 1/ 'ASSIGN_SLA' action and  '$.Case.TemplateId' comparison value for 'OnCaseCreate' and 'OnCaseUpdate' event sources 2/ 'OnSlaBreach' Cases event source which supports '$.RelatedItem.SlaConfiguration.Name' comparison value
+* (**ecs**) Adds a new AccountSetting - defaultLogDriverMode for ECS.
+* (**iotfleetwise**) We've added stricter parameter validations to AWS IoT FleetWise signal catalog, model manifest, and decoder manifest APIs.
+* (**memorydb**) Added support for IPv6 and dual stack for Valkey and Redis clusters. Customers can now launch new Valkey and Redis clusters with IPv6 and dual stack networking support.
+* (**omics**) Add versioning for HealthOmics workflows
+* Add support for fetching account ID from IMDS credentials on EC2
+
+### Documentation
+* (**autoscaling**) Doc only update for EC2 Auto Scaling.
+
 ## [1.4.64] - 04/16/2025
 
 ### Features
