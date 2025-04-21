@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.67] - 04/21/2025
+
+### Features
+* (**arczonalshift**) Updates to documentation and exception types for Zonal Autoshift
+* (**budgets**) Releasing the new Budget FilterExpression and Metrics fields to support more granular filtering options. These new fields are intended to replace CostFilters and CostTypes, which are deprecated as of 2025/18/04.
+* (**mediatailor**) Added support for Recurring Prefetch and Traffic Shaping on both Single and Recurring Prefetch. ListPrefetchSchedules now return single prefetchs by default and can be provided scheduleType of SINGLE, RECURRING, AND ALL.
+* (**qbusiness**) The CheckDocumentAccess API for Amazon Q Business is a self-service debugging API that allows administrators to verify document access permissions and review Access Control List (ACL) configurations.
+
+### Documentation
+* (**firehose**) Documentation update regarding the number of streams you can create using the CreateDeliveryStream API.
+* (**securityhub**) Minor documentation update for the GetConfigurationPolicyAssociation example
+
 ## [1.4.66] - 04/18/2025
 
 ### Features
