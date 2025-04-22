@@ -1,8 +1,0 @@
-{
-    "id": "1b2c0cb4-334b-403e-924a-0e626649d4a8",
-    "type": "bugfix",
-    "description": "Bump **smithy-kotlin** version to pick up fix for connection polling",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1214"
-    ]
-}

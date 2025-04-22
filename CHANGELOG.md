@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.68] - 04/22/2025
+
+### Features
+* (**account**) AWS Account Management now supports account name update via IAM principals.
+* (**cognitoidentityprovider**) This release adds refresh token rotation.
+* (**ec2**) Added support for  ClientRouteEnforcementOptions flag in CreateClientVpnEndpoint and ModifyClientVpnEndpoint requests and DescribeClientVpnEndpoints responses
+* (**entityresolution**) To expand support for matching records using digital identifiers with TransUnion
+* (**mq**) You can now delete Amazon MQ broker configurations using the DeleteConfiguration API. For more information, see Configurations in the Amazon MQ API Reference.
+* (**redshiftserverless**) Provides new and updated API members to support the Redshift Serverless reservations feature.
+* (**s3control**) Fix endpoint resolution test cases
+
+### Fixes
+* [#1214](https://github.com/awslabs/aws-sdk-kotlin/issues/1214) Bump **smithy-kotlin** version to pick up fix for connection polling
+
 ## [1.4.67] - 04/21/2025
 
 ### Features
