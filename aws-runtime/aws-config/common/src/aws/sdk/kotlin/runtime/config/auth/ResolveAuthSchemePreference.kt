@@ -17,7 +17,7 @@ public suspend fun resolveAuthSchemePreference(platform: PlatformProvider = Plat
         ?.split(",")
         ?.map { it.trim() }
         ?.filter { it.isNotEmpty() }
-        ?.mapNotNull { AUTH_SCHEME_NAME_MAP[it] }
+        ?.mapNotNull { AUTH_SCHEME_NAME_MAP[it.lowercase()] }
         ?.toList()
         ?: emptyList()
 }
