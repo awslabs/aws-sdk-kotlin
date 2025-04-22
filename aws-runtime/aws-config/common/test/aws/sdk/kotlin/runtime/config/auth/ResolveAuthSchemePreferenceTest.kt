@@ -25,8 +25,8 @@ class ResolveAuthSchemePreferenceTest {
                 profileContent = """
                     [default]
                     auth_scheme_preference = sigv4
-                """.trimIndent()
-            ).single()
+                """.trimIndent(),
+            ).single(),
         )
     }
 
@@ -40,8 +40,8 @@ class ResolveAuthSchemePreferenceTest {
                 profileContent = """
                     [default]
                     auth_scheme_preference = sigv4
-                """.trimIndent()
-            ).single()
+                """.trimIndent(),
+            ).single(),
         )
     }
 
@@ -56,8 +56,8 @@ class ResolveAuthSchemePreferenceTest {
                 profileContent = """
                     [default]
                     auth_scheme_preference = sigv4
-                """.trimIndent()
-            ).single()
+                """.trimIndent(),
+            ).single(),
         )
     }
 
@@ -67,7 +67,7 @@ class ResolveAuthSchemePreferenceTest {
             listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4Asymmetric, AuthSchemeId.AwsSigV4),
             testResolveAuthSchemePreference(
                 env = mapOf("AWS_AUTH_SCHEME_PREFERENCE" to "httpBearerAuth, sigv4a, sigv4"),
-            )
+            ),
         )
     }
 
@@ -77,7 +77,7 @@ class ResolveAuthSchemePreferenceTest {
             listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4Asymmetric),
             testResolveAuthSchemePreference(
                 env = mapOf("AWS_AUTH_SCHEME_PREFERENCE" to "httpBearerAuth  ,        sigv4a     "),
-            )
+            ),
         )
     }
 
@@ -87,7 +87,7 @@ class ResolveAuthSchemePreferenceTest {
             listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4),
             testResolveAuthSchemePreference(
                 env = mapOf("AWS_AUTH_SCHEME_PREFERENCE" to "httpBearerAuth, whatIsThisScheme, sigv4"),
-            )
+            ),
         )
     }
 
