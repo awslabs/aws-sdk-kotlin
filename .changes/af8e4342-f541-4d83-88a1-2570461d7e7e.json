@@ -1,0 +1,8 @@
+{
+    "id": "af8e4342-f541-4d83-88a1-2570461d7e7e",
+    "type": "feature",
+    "description": "Add support for DynamoDB Mapper `getItem` overloads that specify primary key(s)",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1577"
+    ]
+}
