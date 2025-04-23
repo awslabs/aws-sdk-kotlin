@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.69] - 04/23/2025
+
+### Features
+* (**codebuild**) Add support for custom instance type for reserved capacity fleets
+* (**ecs**) Add support to roll back an In_Progress ECS Service Deployment
+
+### Documentation
+* (**resourceexplorer2**) Documentation-only update for CreateView option correction
+
 ## [1.4.68] - 04/22/2025
 
 ### Features
