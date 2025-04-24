@@ -56,7 +56,6 @@ class SchemaGeneratorPluginTest {
             .create()
             .withProjectDir(testProjectDir)
             .withPluginClasspath()
-            .withGradleDistribution("https://d2pjps8lqszrgq.cloudfront.net/gradle-8.12.1-bin.zip") // TODO Parameterize Gradle versions
             .forwardOutput()
             .withArguments("--info", "build")
     }
