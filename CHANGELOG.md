@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.70] - 04/24/2025
+
+### Features
+* (**apprunner**) AWS App Runner adds Node.js 22 runtime.
+* (**appsync**) Add data source support to Event APIs
+* (**bedrockdataautomation**) Added support for modality routing and modality enablement on CreateDataAutomationProject and UpdateDataAutomationProject APIs
+* (**codebuild**) Remove redundant validation check.
+* (**dynamodb**) Add support for ARN-sourced account endpoint generation for TransactWriteItems. This will generate account endpoints for DynamoDB TransactWriteItems requests using ARN-sourced account ID when available.
+* (**rds**) This Amazon RDS release adds support for managed master user passwords for Oracle CDBs.
+* [#1577](https://github.com/awslabs/aws-sdk-kotlin/issues/1577) Add support for DynamoDB Mapper `getItem` overloads that specify primary key(s)
+
+### Documentation
+* (**ecs**) Documentation only release for Amazon ECS
+* (**pcs**) Documentation-only update: added valid values for the version property of the Scheduler and SchedulerRequest data types.
+
 ## [1.4.69] - 04/23/2025
 
 ### Features
