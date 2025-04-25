@@ -15,6 +15,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: 'aws-sdk-kotlin'
+          ref: '${{ github.head_ref }}'
+          fetch-depth: 0
 
       - name: Configure Gradle
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
@@ -37,27 +39,33 @@ jobs:
           path: 'smithy-kotlin'
           repository: 'smithy-lang/smithy-kotlin'
 
-      # TODO: Change grep pattern when we decouple runtime and codegen releases
       - name: Check for smithy-kotlin unreleased changes
         run: |
           cd aws-sdk-kotlin
           SDK_BRANCH=$(git branch --show-current)
+          echo "aws-sdk-kotlin branch: $SDK_BRANCH"
           
           cd ../smithy-kotlin
-          SMITHY_BRANCH=$(git branch --show-current)
+          SMITHY_KOTLIN_BRANCH=$(git branch --show-current)
+          echo "smithy-kotlin branch: $SMITHY_KOTLIN_BRANCH"
           
-          if [ "$SDK_BRANCH" = "$SMITHY_BRANCH" ]; then
+          if [ "$SDK_BRANCH" == "$SMITHY_KOTLIN_BRANCH" ]; then
             cd ../aws-sdk-kotlin
-            git diff origin/main -- gradle/libs.versions.toml | grep -E "smithy-kotlin-runtime-version|smithy-kotlin-codegen-version"
-            export SMITHY_KOTLIN_VERSION_BUMP=$($?)
-            
-            if [ "$SMITHY_KOTLIN_VERSION_BUMP" != 0 ]; then
+            git fetch origin
+
+            DIFF=$(git diff origin/main -- gradle/libs.versions.toml | grep '^[-+][^-+]'; exit 0)
+            SMITHY_KOTLIN_VERSION_BUMP=$(echo "$DIFF" | grep "smithy-kotlin-runtime-version =\|smithy-kotlin-codegen-version ="; exit 0)
+
+            if [ -z "$SMITHY_KOTLIN_VERSION_BUMP" ]; then
+              echo "::error::Matching smithy-kotlin and aws-sdk-kotlin branches but no smithy-kotlin version bump"
               exit 1
+            else
+              echo "::warning::Matching smithy-kotlin and aws-sdk-kotlin branches with smithy-kotlin version bump detected"
             fi
           fi
 
       - name: Emit error message
         if: ${{ failure() }}
         run: |
-          echo "::error ::Did you forget to release smithy-kotlin and bump the dependency version?"
+          echo "::error::Did you forget to release smithy-kotlin and bump the dependency version?"
           exit 1
