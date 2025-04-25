@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.71] - 04/25/2025
+
+### Features
+* (**bedrockruntime**) You can now reference images and documents stored in Amazon S3 when using InvokeModel and Converse APIs with Amazon Nova Lite and Nova Pro. This enables direct integration of S3-stored multimedia assets in your model requests without manual downloading or base64 encoding.
+
+### Documentation
+* (**ecs**) Documentation only release for Amazon ECS.
+* (**marketplacedeployment**) Doc only update for the AWS Marketplace Deployment Service that fixes several customer-reported issues.
+
 ## [1.4.70] - 04/24/2025
 
 ### Features
