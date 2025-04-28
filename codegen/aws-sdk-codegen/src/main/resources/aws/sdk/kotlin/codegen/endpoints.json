@@ -36528,6 +36528,11 @@
           "us-iso-west-1" : { }
         }
       },
+      "batch" : {
+        "endpoints" : {
+          "us-iso-east-1" : { }
+        }
+      },
       "bedrock" : {
         "endpoints" : {
           "bedrock-runtime-us-iso-east-1" : {
@@ -37422,6 +37427,12 @@
           }
         }
       },
+      "servicediscovery" : {
+        "endpoints" : {
+          "us-iso-east-1" : { },
+          "us-iso-west-1" : { }
+        }
+      },
       "snowball" : {
         "endpoints" : {
           "us-iso-east-1" : { },
@@ -37652,6 +37663,12 @@
             } ]
           }
         }
+      },
+      "xray" : {
+        "endpoints" : {
+          "us-iso-east-1" : { },
+          "us-iso-west-1" : { }
+        }
       }
     }
   }, {
@@ -37732,6 +37749,11 @@
         "defaults" : {
           "protocols" : [ "http", "https" ]
         },
+        "endpoints" : {
+          "us-isob-east-1" : { }
+        }
+      },
+      "batch" : {
         "endpoints" : {
           "us-isob-east-1" : { }
         }
@@ -37982,6 +38004,11 @@
           "us-isob-east-1" : { }
         }
       },
+      "fsx" : {
+        "endpoints" : {
+          "us-isob-east-1" : { }
+        }
+      },
       "glacier" : {
         "endpoints" : {
           "fips-us-isob-east-1" : {
@@ -37997,6 +38024,11 @@
               "tags" : [ "fips" ]
             } ]
           }
+        }
+      },
+      "glue" : {
+        "endpoints" : {
+          "us-isob-east-1" : { }
         }
       },
       "health" : {
@@ -38291,6 +38323,11 @@
           "us-isob-east-1-fips" : {
             "deprecated" : true
           }
+        }
+      },
+      "servicediscovery" : {
+        "endpoints" : {
+          "us-isob-east-1" : { }
         }
       },
       "snowball" : {
