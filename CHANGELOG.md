@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.72] - 04/28/2025
+
+### Features
+* (**acm**) Add support for file-based HTTP domain control validation, available through Amazon CloudFront.
+* (**bedrockruntime**) This release adds native h2 support for the bedrock runtime API, the support is only limited to SDKs that support h2 requests natively.
+* (**cloudfront**) Add distribution tenant, connection group, and multi-tenant distribution APIs to the CloudFront SDK.
+* (**imagebuilder**) Add integration with SSM Parameter Store to Image Builder.
+
+### Documentation
+* (**dynamodb**) Doc only update for GSI descriptions.
+
 ## [1.4.71] - 04/25/2025
 
 ### Features
