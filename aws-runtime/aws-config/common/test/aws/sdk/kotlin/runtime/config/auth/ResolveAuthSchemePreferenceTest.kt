@@ -20,7 +20,7 @@ class ResolveAuthSchemePreferenceTest {
     @Test
     fun testProfile() = runTest {
         assertEquals(
-            AuthSchemeId.AwsSigV4,
+            AuthSchemeId("sigv4"),
             testResolveAuthSchemePreference(
                 profileContent = """
                     [default]
@@ -34,7 +34,7 @@ class ResolveAuthSchemePreferenceTest {
     fun testEnvironment() = runTest {
         // Environment takes precedence over profile
         assertEquals(
-            AuthSchemeId.AwsSigV4Asymmetric,
+            AuthSchemeId("sigv4a"),
             testResolveAuthSchemePreference(
                 env = mapOf("AWS_AUTH_SCHEME_PREFERENCE" to "sigv4a"),
                 profileContent = """
@@ -49,7 +49,7 @@ class ResolveAuthSchemePreferenceTest {
     fun testSystemProperties() = runTest {
         // System properties take precedence over environment and profile
         assertEquals(
-            AuthSchemeId.HttpBearer,
+            AuthSchemeId("httpBearerAuth"),
             testResolveAuthSchemePreference(
                 env = mapOf("AWS_AUTH_SCHEME_PREFERENCE" to "sigv4a"),
                 sysProps = mapOf("aws.authSchemePreference" to "httpBearerAuth"),
@@ -64,7 +64,7 @@ class ResolveAuthSchemePreferenceTest {
     @Test
     fun testResolveMultipleSchemes() = runTest {
         assertEquals(
-            listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4Asymmetric, AuthSchemeId.AwsSigV4),
+            listOf(AuthSchemeId("httpBearerAuth"), AuthSchemeId("sigv4a"), AuthSchemeId("sigv4")),
             testResolveAuthSchemePreference(
                 env = mapOf("AWS_AUTH_SCHEME_PREFERENCE" to "httpBearerAuth, sigv4a, sigv4"),
             ),
@@ -74,7 +74,7 @@ class ResolveAuthSchemePreferenceTest {
     @Test
     fun testIgnoreWhitespace() = runTest {
         assertEquals(
-            listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4Asymmetric),
+            listOf(AuthSchemeId("httpBearerAuth"), AuthSchemeId("sigv4a")),
             testResolveAuthSchemePreference(
                 env = mapOf("AWS_AUTH_SCHEME_PREFERENCE" to "httpBearerAuth  ,        sigv4a     "),
             ),
@@ -84,7 +84,7 @@ class ResolveAuthSchemePreferenceTest {
     @Test
     fun testDontFailOnInvalidSchemes() = runTest {
         assertEquals(
-            listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4),
+            listOf(AuthSchemeId("httpBearerAuth"), AuthSchemeId("whatIsThisScheme"), AuthSchemeId("sigv4")),
             testResolveAuthSchemePreference(
                 env = mapOf("AWS_AUTH_SCHEME_PREFERENCE" to "httpBearerAuth, whatIsThisScheme, sigv4"),
             ),
