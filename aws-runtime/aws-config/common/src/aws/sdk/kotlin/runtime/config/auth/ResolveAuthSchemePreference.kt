@@ -17,20 +17,7 @@ public suspend fun resolveAuthSchemePreference(platform: PlatformProvider = Plat
         ?.split(",")
         ?.map { it.trim() }
         ?.filter { it.isNotEmpty() }
-        ?.mapNotNull { AUTH_SCHEME_NAME_MAP[it.lowercase()] }
+        ?.map(::AuthSchemeId)
         ?.toList()
         ?: emptyList()
 }
-
-/**
- * Map of lowercase auth scheme _name_ (not namespace) to auth scheme ID
- */
-private val AUTH_SCHEME_NAME_MAP = mapOf<String, AuthSchemeId>(
-    "sigv4" to AuthSchemeId.AwsSigV4,
-    "sigv4a" to AuthSchemeId.AwsSigV4Asymmetric,
-    "httpbearerauth" to AuthSchemeId.HttpBearer,
-    "noauth" to AuthSchemeId.Anonymous,
-    "httpbasicauth" to AuthSchemeId.HttpBasic,
-    "httpdigestauth" to AuthSchemeId.HttpDigest,
-    "httpapikey" to AuthSchemeId.HttpApiKey,
-)
