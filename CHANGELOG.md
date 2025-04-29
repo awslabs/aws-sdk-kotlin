@@ -1,5 +1,82 @@
 # Changelog
 
+## [1.4.72] - 04/28/2025
+
+### Features
+* (**acm**) Add support for file-based HTTP domain control validation, available through Amazon CloudFront.
+* (**bedrockruntime**) This release adds native h2 support for the bedrock runtime API, the support is only limited to SDKs that support h2 requests natively.
+* (**cloudfront**) Add distribution tenant, connection group, and multi-tenant distribution APIs to the CloudFront SDK.
+* (**imagebuilder**) Add integration with SSM Parameter Store to Image Builder.
+
+### Documentation
+* (**dynamodb**) Doc only update for GSI descriptions.
+
+## [1.4.71] - 04/25/2025
+
+### Features
+* (**bedrockruntime**) You can now reference images and documents stored in Amazon S3 when using InvokeModel and Converse APIs with Amazon Nova Lite and Nova Pro. This enables direct integration of S3-stored multimedia assets in your model requests without manual downloading or base64 encoding.
+
+### Documentation
+* (**ecs**) Documentation only release for Amazon ECS.
+* (**marketplacedeployment**) Doc only update for the AWS Marketplace Deployment Service that fixes several customer-reported issues.
+
+## [1.4.70] - 04/24/2025
+
+### Features
+* (**apprunner**) AWS App Runner adds Node.js 22 runtime.
+* (**appsync**) Add data source support to Event APIs
+* (**bedrockdataautomation**) Added support for modality routing and modality enablement on CreateDataAutomationProject and UpdateDataAutomationProject APIs
+* (**codebuild**) Remove redundant validation check.
+* (**dynamodb**) Add support for ARN-sourced account endpoint generation for TransactWriteItems. This will generate account endpoints for DynamoDB TransactWriteItems requests using ARN-sourced account ID when available.
+* (**rds**) This Amazon RDS release adds support for managed master user passwords for Oracle CDBs.
+* [#1577](https://github.com/awslabs/aws-sdk-kotlin/issues/1577) Add support for DynamoDB Mapper `getItem` overloads that specify primary key(s)
+
+### Documentation
+* (**ecs**) Documentation only release for Amazon ECS
+* (**pcs**) Documentation-only update: added valid values for the version property of the Scheduler and SchedulerRequest data types.
+
+## [1.4.69] - 04/23/2025
+
+### Features
+* (**codebuild**) Add support for custom instance type for reserved capacity fleets
+* (**ecs**) Add support to roll back an In_Progress ECS Service Deployment
+
+### Documentation
+* (**resourceexplorer2**) Documentation-only update for CreateView option correction
+
+## [1.4.68] - 04/22/2025
+
+### Features
+* (**account**) AWS Account Management now supports account name update via IAM principals.
+* (**cognitoidentityprovider**) This release adds refresh token rotation.
+* (**ec2**) Added support for  ClientRouteEnforcementOptions flag in CreateClientVpnEndpoint and ModifyClientVpnEndpoint requests and DescribeClientVpnEndpoints responses
+* (**entityresolution**) To expand support for matching records using digital identifiers with TransUnion
+* (**mq**) You can now delete Amazon MQ broker configurations using the DeleteConfiguration API. For more information, see Configurations in the Amazon MQ API Reference.
+* (**redshiftserverless**) Provides new and updated API members to support the Redshift Serverless reservations feature.
+* (**s3control**) Fix endpoint resolution test cases
+
+### Fixes
+* [#1214](https://github.com/awslabs/aws-sdk-kotlin/issues/1214) Bump **smithy-kotlin** version to pick up fix for connection polling
+
+## [1.4.67] - 04/21/2025
+
+### Features
+* (**arczonalshift**) Updates to documentation and exception types for Zonal Autoshift
+* (**budgets**) Releasing the new Budget FilterExpression and Metrics fields to support more granular filtering options. These new fields are intended to replace CostFilters and CostTypes, which are deprecated as of 2025/18/04.
+* (**mediatailor**) Added support for Recurring Prefetch and Traffic Shaping on both Single and Recurring Prefetch. ListPrefetchSchedules now return single prefetchs by default and can be provided scheduleType of SINGLE, RECURRING, AND ALL.
+* (**qbusiness**) The CheckDocumentAccess API for Amazon Q Business is a self-service debugging API that allows administrators to verify document access permissions and review Access Control List (ACL) configurations.
+
+### Documentation
+* (**firehose**) Documentation update regarding the number of streams you can create using the CreateDeliveryStream API.
+* (**securityhub**) Minor documentation update for the GetConfigurationPolicyAssociation example
+
+## [1.4.66] - 04/18/2025
+
+### Features
+* (**qconnect**) This release adds support for the following capabilities: Chunking generative answer replies from Amazon Q in Connect. Integration support for the use of additional LLM models with Amazon Q in Connect.
+* (**sagemaker**) This release adds a new Neuron driver option in InferenceAmiVersion parameter for ProductionVariant. Additionally, it adds support for fetching model lifecycle status in the ListModelPackages API. Users can now use this API to view the lifecycle stage of models that have been shared with them.
+* (**servicequotas**) Add new optional SupportCaseAllowed query parameter to the RequestServiceQuotaIncrease API
+
 ## [1.4.65] - 04/17/2025
 
 ### Features
