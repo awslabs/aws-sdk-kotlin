@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.73] - 04/29/2025
+
+### Features
+* (**connectcases**) Introduces CustomEntity as part of the UserUnion data type. This field is used to indicate the entity who is performing the API action.
+* (**kinesis**) Amazon KDS now supports tagging and attribute-based access control (ABAC) for enhanced fan-out consumers.
+* (**pinpointsmsvoicev2**) AWS End User Messaging has added MONITOR and FILTER functionality to SMS Protect.
+* (**qbusiness**) Add support for anonymous user access for Q Business applications
+* (**sagemaker**) Introduced support for P5en instance types on SageMaker Studio for JupyterLab and CodeEditor applications.
+* (**sagemakermetrics**) SageMaker Metrics Service now supports FIPS endpoint in all US and Canada Commercial regions.
+* (**ssm**) This release adds support for just-In-time node access in AWS Systems Manager. Just-in-time node access enables customers to move towards zero standing privileges by requiring operators to request access and obtain approval before remotely connecting to nodes managed by the SSM Agent.
+* (**ssmguiconnect**) This release adds API support for the connection recording GUI Connect feature of AWS Systems Manager
+* Add `authSchemePreference` configuration
+
 ## [1.4.72] - 04/28/2025
 
 ### Features
