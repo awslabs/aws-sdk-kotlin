@@ -11,6 +11,7 @@ import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
 import aws.smithy.kotlin.runtime.client.config.RequestHttpChecksumConfig
 import aws.smithy.kotlin.runtime.client.config.ResponseHttpChecksumConfig
 import aws.smithy.kotlin.runtime.client.config.RetryMode
+import aws.smithy.kotlin.runtime.http.auth.AuthScheme
 import aws.smithy.kotlin.runtime.net.url.Url
 
 /**
@@ -168,6 +169,13 @@ public val AwsProfile.requestChecksumCalculation: RequestHttpChecksumConfig?
 @InternalSdkApi
 public val AwsProfile.responseChecksumValidation: ResponseHttpChecksumConfig?
     get() = getEnumOrNull<ResponseHttpChecksumConfig>("response_checksum_validation")
+
+/**
+ * The ordered preference of [AuthScheme] that this client will use
+ */
+@InternalSdkApi
+public val AwsProfile.authSchemePreference: String?
+    get() = getOrNull("auth_scheme_preference")
 
 /**
  * Specifies a named EC2 instance profile to use which allows bypassing auto-discovery
