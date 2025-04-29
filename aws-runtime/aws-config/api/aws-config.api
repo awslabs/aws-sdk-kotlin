@@ -252,6 +252,7 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 	public final fun getAwsAccountId ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsAccountIdEndpointMode ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsAppId ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
+	public final fun getAwsAuthSchemePreference ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsConfigFile ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsContainerAuthorizationToken ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsContainerAuthorizationTokenFile ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
@@ -285,6 +286,11 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 
 public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
 	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/AwsSdkSetting;Laws/smithy/kotlin/runtime/util/PlatformProvider;Ljava/lang/String;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/url/Url;
+}
+
+public final class aws/sdk/kotlin/runtime/config/auth/ResolveAuthSchemePreferenceKt {
+	public static final fun resolveAuthSchemePreference (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveAuthSchemePreference$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public final class aws/sdk/kotlin/runtime/config/checksums/ResolveFlexibleChecksumsConfigKt {
@@ -499,6 +505,7 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsConfigurationSource 
 
 public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 	public static final fun getAccountIdEndpointMode (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static final fun getAuthSchemePreference (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getAwsAccessKeyId (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getAwsSecretAccessKey (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getAwsSessionToken (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;

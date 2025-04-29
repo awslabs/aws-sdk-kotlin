@@ -230,6 +230,11 @@ public object AwsSdkSetting {
      */
     public val AwsResponseChecksumValidation: EnvironmentSetting<ResponseHttpChecksumConfig> =
         enumEnvSetting<ResponseHttpChecksumConfig>("aws.responseChecksumValidation", "AWS_RESPONSE_CHECKSUM_VALIDATION")
+
+    /**
+     * Configures an ordered preference of auth schemes
+     */
+    public val AwsAuthSchemePreference: EnvironmentSetting<String> = strEnvSetting("aws.authSchemePreference", "AWS_AUTH_SCHEME_PREFERENCE")
 }
 
 /**
