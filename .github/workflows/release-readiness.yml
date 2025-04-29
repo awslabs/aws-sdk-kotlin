@@ -11,11 +11,10 @@ jobs:
   release-readiness:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
+      - name: Checkout SDK
         uses: actions/checkout@v4
         with:
           path: 'aws-sdk-kotlin'
-          ref: '${{ github.head_ref }}'
 
       - name: Configure Gradle
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
@@ -40,11 +39,9 @@ jobs:
 
       - name: Check for smithy-kotlin unreleased changes
         run: |
-          cd aws-sdk-kotlin
-          SDK_BRANCH=$(git branch --show-current)
-          echo "aws-sdk-kotlin branch: $SDK_BRANCH"
+          echo "aws-sdk-kotlin branch: $GITHUB_HEAD_REF"
           
-          cd ../smithy-kotlin
+          cd smithy-kotlin
           SMITHY_KOTLIN_BRANCH=$(git branch --show-current)
           echo "smithy-kotlin branch: $SMITHY_KOTLIN_BRANCH"
           
@@ -59,7 +56,7 @@ jobs:
               echo "::error::Matching smithy-kotlin and aws-sdk-kotlin branches but no smithy-kotlin version bump"
               exit 1
             else
-              echo "::warning::Matching smithy-kotlin and aws-sdk-kotlin branches with smithy-kotlin version bump detected"
+              echo "Matching smithy-kotlin and aws-sdk-kotlin branches with smithy-kotlin version bump detected"
             fi
           fi
 
