@@ -18,6 +18,15 @@ description = "Custom Dokka plugin for AWS Kotlin SDK API docs"
 dependencies {
     compileOnly(libs.dokka.base)
     compileOnly(libs.dokka.core)
+
+    testImplementation(libs.jsoup)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.kotest.assertions.core.jvm)
+    testImplementation(libs.kotlin.test.junit5)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks.withType<KotlinCompile> {
