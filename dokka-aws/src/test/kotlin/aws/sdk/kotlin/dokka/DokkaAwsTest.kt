@@ -17,13 +17,13 @@ class DokkaAwsTest {
 
         assumeTrue(
             testFile.exists(),
-            "Skipping test: test file does not exist"
+            "Skipping test: test file does not exist",
         )
 
         val document = Jsoup.parse(testFile, "UTF-8")
 
         val expectedScripts = listOf(
-            "awshome_s_code.js"
+            "awshome_s_code.js",
         )
 
         val scripts = document.head().select("script[src]")
@@ -31,7 +31,7 @@ class DokkaAwsTest {
         expectedScripts.forEach { expectedScript ->
             assertTrue(
                 scripts.any { it.attr("src").endsWith(expectedScript) },
-                "Expected script $expectedScript not found"
+                "Expected script $expectedScript not found",
             )
         }
     }
