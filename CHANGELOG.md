@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.74] - 04/30/2025
+
+### Features
+* (**bedrock**) You can now specify a cross region inference profile as a teacher model for the CreateModelCustomizationJob API. Additionally, the GetModelCustomizationJob API has been enhanced to return the sub-task statuses of a customization job within the StatusDetails response field.
+* (**bedrockagent**) Features:    Add inline code node to prompt flow
+* (**bedrockagentruntime**) Support for Custom Orchestration within InlineAgents
+* (**cleanrooms**) This release adds support for ProtectedQuery results to be delivered to more than one collaboration member via the new distribute output configuration in StartProtectedQuery.
+* (**cloudwatchlogs**) CloudWatch Logs supports "DELIVERY" log class. This log class is used only for delivering AWS Lambda logs to Amazon S3 or Amazon Data Firehose.
+* (**deadline**) Adds support for tag management on workers and tag inheritance from fleets to their associated workers.
+* (**ec2**) Launch of cost distribution feature for IPAM owners to distribute costs to internal teams.
+* (**ecr**) Adds dualstack support for Amazon Elastic Container Registry (Amazon ECR).
+* (**ecrpublic**) Adds dualstack support for Amazon Elastic Container Registry Public (Amazon ECR Public).
+* (**mailmanager**) Introducing new RuleSet rule PublishToSns action, which allows customers to publish email notifications to an Amazon SNS topic. New PublishToSns action enables customers to easily integrate their email workflows via Amazon SNS, allowing them to notify other systems about important email events.
+
 ## [1.4.73] - 04/29/2025
 
 ### Features
