@@ -45,7 +45,7 @@ jobs:
           SMITHY_KOTLIN_BRANCH=$(git branch --show-current)
           echo "smithy-kotlin branch: $SMITHY_KOTLIN_BRANCH"
           
-          if [ "$SDK_BRANCH" == "$SMITHY_KOTLIN_BRANCH" ]; then
+          if [ "$GITHUB_HEAD_REF" == "$SMITHY_KOTLIN_BRANCH" ]; then
             cd ../aws-sdk-kotlin
             git fetch origin
 
