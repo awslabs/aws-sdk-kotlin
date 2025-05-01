@@ -29,6 +29,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    dependsOn(tasks.dokkaHtml)
 }
 
 tasks.withType<KotlinCompile> {

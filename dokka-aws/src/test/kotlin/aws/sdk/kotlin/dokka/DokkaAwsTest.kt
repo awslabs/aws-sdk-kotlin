@@ -15,22 +15,6 @@ import kotlin.test.assertTrue
 class DokkaAwsTest {
     val dokkaOutputDir = File("build/dokka")
 
-    @BeforeEach
-    fun generateDocs() {
-        val process = ProcessBuilder(
-            "./gradlew",
-            ":dokka-aws:dokkaHtml",
-        ).directory(File(".."))
-            .redirectErrorStream(true)
-            .start()
-
-        val exitCode = process.waitFor()
-        assumeTrue(
-            exitCode == 0,
-            "Dokka generation failed with exit code $exitCode",
-        )
-    }
-
     @AfterEach
     fun cleanup() {
         if (dokkaOutputDir.exists()) {
