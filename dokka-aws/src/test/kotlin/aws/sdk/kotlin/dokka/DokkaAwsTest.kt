@@ -5,16 +5,18 @@
 package aws.sdk.kotlin.dokka
 
 import org.jsoup.Jsoup
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import java.io.File
 import kotlin.test.assertTrue
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokkaAwsTest {
     val dokkaOutputDir = File("build/dokka")
 
-    @AfterEach
+    @AfterAll
     fun cleanup() {
         if (dokkaOutputDir.exists()) {
             try {
