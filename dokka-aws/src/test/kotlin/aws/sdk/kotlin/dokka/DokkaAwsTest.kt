@@ -19,7 +19,7 @@ class DokkaAwsTest {
     fun generateDocs() {
         val process = ProcessBuilder(
             "./gradlew",
-            ":dokka-aws:dokkaHtml"
+            ":dokka-aws:dokkaHtml",
         ).directory(File(".."))
             .redirectErrorStream(true)
             .start()
@@ -27,7 +27,7 @@ class DokkaAwsTest {
         val exitCode = process.waitFor()
         assumeTrue(
             exitCode == 0,
-            "Dokka generation failed with exit code $exitCode"
+            "Dokka generation failed with exit code $exitCode",
         )
     }
 
