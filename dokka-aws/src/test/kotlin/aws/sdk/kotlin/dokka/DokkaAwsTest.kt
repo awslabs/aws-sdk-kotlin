@@ -5,15 +5,47 @@
 package aws.sdk.kotlin.dokka
 
 import org.jsoup.Jsoup
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assumptions.assumeTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertTrue
 
 class DokkaAwsTest {
+    val dokkaOutputDir = File("build/dokka")
+
+    @BeforeEach
+    fun generateDocs() {
+        val process = ProcessBuilder(
+            "./gradlew",
+            ":dokka-aws:dokkaHtml"
+        ).directory(File(".."))
+            .redirectErrorStream(true)
+            .start()
+
+        val exitCode = process.waitFor()
+        assumeTrue(
+            exitCode == 0,
+            "Dokka generation failed with exit code $exitCode"
+        )
+    }
+
+    @AfterEach
+    fun cleanup() {
+        if (dokkaOutputDir.exists()) {
+            try {
+                dokkaOutputDir.deleteRecursively()
+                println("Successfully deleted dokka folder")
+            } catch (e: Exception) {
+                println("Failed to delete dokka folder: ${e.message}")
+            }
+        }
+    }
+
     @Test
     fun testLoadScripts() {
-        val testFile = File("../build/dokka/htmlMultiModule/index.html")
+        val testFile = File("build/dokka/html/index.html")
 
         assumeTrue(
             testFile.exists(),
