@@ -53,17 +53,17 @@ tasks.withType<org.jetbrains.dokka.gradle.AbstractDokkaTask>().configureEach {
         "org.jetbrains.dokka.base.DokkaBase" to """
                 {
                     "customStyleSheets": [
-                        "${rootProject.file("docs/dokka-presets/css/logo-styles.css")}",
-                        "${rootProject.file("docs/dokka-presets/css/aws-styles.css")}"
+                        "${rootProject.file("docs/dokka-presets/css/logo-styles.css").absolutePath.replace("\\", "/")}",
+                        "${rootProject.file("docs/dokka-presets/css/aws-styles.css").absolutePath.replace("\\", "/")}"
                     ],
                     "customAssets": [
-                        "${rootProject.file("docs/dokka-presets/assets/logo-icon.svg")}",
-                        "${rootProject.file("docs/dokka-presets/assets/aws_logo_white_59x35.png")}",
-                        "${rootProject.file("docs/dokka-presets/scripts/accessibility.js")}"
+                        "${rootProject.file("docs/dokka-presets/assets/logo-icon.svg").absolutePath.replace("\\", "/")}",
+                        "${rootProject.file("docs/dokka-presets/assets/aws_logo_white_59x35.png").absolutePath.replace("\\", "/")}",
+                        "${rootProject.file("docs/dokka-presets/scripts/accessibility.js").absolutePath.replace("\\", "/")}"
                     ],
                     "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved.",
                     "separateInheritedMembers" : true,
-                    "templatesDir": "${rootProject.file("docs/dokka-presets/templates")}"
+                    "templatesDir": "${rootProject.file("docs/dokka-presets/templates").absolutePath.replace("\\", "/")}"
                 }
             """,
     )
