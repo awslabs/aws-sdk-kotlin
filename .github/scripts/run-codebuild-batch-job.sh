@@ -93,9 +93,9 @@ jq -n 'env | to_entries | [.[] | select((.key | startswith("GITHUB_")) or (.key 
 START_RESULT=$(
   aws codebuild start-build-batch \
     --project-name ${PROJECT_NAME} \
-    --source-version 852c9de4d270f1aaecca060b63def1c6602962a9 \
+    --source-version $SOURCE_VERSION \
     --environment-variables-override file:///tmp/gh_env_vars.json \
-    --source-location-override https://github.com/awslabs/private-aws-sdk-kotlin-staging.git
+    --source-location-override https://github.com/awslabs/"$GITHUB_REPOSITORY_NO_ORG".git
 )
 
 if [ "$?" != "0" ]; then
