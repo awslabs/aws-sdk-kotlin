@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.76] - 05/02/2025
+
+### Features
+* (**bedrockdataautomation**) Added support for Custom output and blueprints for AUDIO data types.
+* (**kinesis**) Marking ResourceARN as required for Amazon Kinesis Data Streams APIs TagResource, UntagResource, and ListTagsForResource.
+
+### Documentation
+* (**directoryservice**) Doc only update - fixed typos.
+
 ## [1.4.75] - 05/01/2025
 
 ### Features
