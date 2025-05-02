@@ -14,20 +14,6 @@ import kotlin.test.assertTrue
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DokkaAwsTest {
-    val dokkaOutputDir = File("build/dokka")
-
-    @AfterAll
-    fun cleanup() {
-        if (dokkaOutputDir.exists()) {
-            try {
-                dokkaOutputDir.deleteRecursively()
-                println("Successfully deleted dokka folder")
-            } catch (e: Exception) {
-                println("Failed to delete dokka folder: ${e.message}")
-            }
-        }
-    }
-
     @Test
     fun testLoadScripts() {
         val testFile = File("build/dokka/html/index.html")
