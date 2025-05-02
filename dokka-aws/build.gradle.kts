@@ -44,7 +44,6 @@ tasks.withType<JavaCompile> {
     targetCompatibility = JavaVersion.VERSION_1_8.toString()
 }
 
-
 tasks.withType<org.jetbrains.dokka.gradle.AbstractDokkaTask>().configureEach {
     val sdkVersion: String by project
     moduleVersion.set(sdkVersion)
