@@ -1,0 +1,9 @@
+{
+    "id": "26842b1e-eda3-4dc5-b306-20cce3a1125d",
+    "type": "bugfix",
+    "description": "Fix schema generation for nullable lists and maps",
+    "issues": [
+        "https://github.com/awslabs/aws-sdk-kotlin/issues/1590"
+    ],
+    "module": "dynamodb-mapper"
+}
