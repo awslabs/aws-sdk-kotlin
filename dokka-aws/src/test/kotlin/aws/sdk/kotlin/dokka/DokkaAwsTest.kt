@@ -17,9 +17,9 @@ class DokkaAwsTest {
     fun testLoadScripts() {
         val testFile = File("build/dokka/html/index.html")
 
-        assumeTrue(
+        assertTrue(
             testFile.exists(),
-            "Skipping test: test file does not exist",
+            "Test file does not exist: ${testFile.absolutePath}"
         )
 
         val document = Jsoup.parse(testFile, "UTF-8")

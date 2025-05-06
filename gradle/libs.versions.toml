@@ -26,7 +26,7 @@ kotlinx-benchmark-version = "0.4.12"
 kotlinx-serialization-version = "1.7.3"
 mockk-version = "1.13.13"
 slf4j-version = "2.0.16"
-jsoup-version = "1.19.1"
+jsoup-version = "1.20.1"
 
 [libraries]
 aws-kotlin-repo-tools-build-support = { module="aws.sdk.kotlin.gradle:build-support", version.ref = "aws-kotlin-repo-tools-version" }
