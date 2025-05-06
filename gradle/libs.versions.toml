@@ -26,6 +26,7 @@ kotlinx-benchmark-version = "0.4.12"
 kotlinx-serialization-version = "1.7.3"
 mockk-version = "1.13.13"
 slf4j-version = "2.0.16"
+jsoup-version = "1.20.1"
 
 [libraries]
 aws-kotlin-repo-tools-build-support = { module="aws.sdk.kotlin.gradle:build-support", version.ref = "aws-kotlin-repo-tools-version" }
@@ -110,6 +111,8 @@ smithy-aws-smoke-test-model = { module = "software.amazon.smithy:smithy-aws-smok
 
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-version" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-version" }
+
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
 
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest-version" }
 kotest-assertions-core-jvm = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest-version" }
