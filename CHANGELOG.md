@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.78] - 05/06/2025
+
+### Features
+* (**ec2**) This release adds support for Amazon EBS Provisioned Rate for Volume Initialization, which lets you specify a volume initialization rate to ensure that your EBS volumes are initialized in a predictable amount of time.
+* (**servicecatalog**) ServiceCatalog's APIs (DeleteServiceAction, DisassociateServiceActionFromProvisioningArtifact, AssociateServiceActionWithProvisioningArtifact) now throw InvalidParametersException when IdempotencyToken is invalid.
+* (**timestreamquery**) Add dualstack endpoints support and correct us-gov-west-1 FIPS endpoint.
+* (**timestreamwrite**) Add dualstack endpoints support.
+
+### Fixes
+* [#1590](https://github.com/awslabs/aws-sdk-kotlin/issues/1590) (**dynamodb-mapper**) Fix schema generation for nullable lists and maps
+
 ## [1.4.77] - 05/05/2025
 
 ### Features
