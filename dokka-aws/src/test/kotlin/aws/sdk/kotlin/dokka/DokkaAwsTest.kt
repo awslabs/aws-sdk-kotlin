@@ -5,7 +5,6 @@
 package aws.sdk.kotlin.dokka
 
 import org.jsoup.Jsoup
-import org.junit.jupiter.api.Assumptions.assumeTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import java.io.File
@@ -19,7 +18,7 @@ class DokkaAwsTest {
 
         assertTrue(
             testFile.exists(),
-            "Test file does not exist: ${testFile.absolutePath}"
+            "Test file does not exist: ${testFile.absolutePath}",
         )
 
         val document = Jsoup.parse(testFile, "UTF-8")
