@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.4.79] - 05/07/2025
+
+### Features
+* (**ec2**) This release adds API support for Path Component Exclusion (Filter Out ARN) for Reachability Analyzer
+* (**medialive**) Enables Updating Anywhere Settings on a MediaLive Anywhere Channel.
+* (**sagemaker**) SageMaker AI Studio users can now migrate to SageMaker Unified Studio, which offers a unified web-based development experience that integrates AWS data, analytics, artificial intelligence (AI), and machine learning (ML) services, as well as additional tools and resource
+* (**synthetics**) Add support to test a canary update by invoking a dry run of a canary. This behavior can be used via the new StartCanaryDryRun API along with new fields in UpdateCanary to apply dry run changes. Also includes changes in GetCanary and GetCanaryRuns to support retrieving dry run configurations.
+
+### Documentation
+* (**imagebuilder**) Updated the CreateImageRecipeRequest ParentImage description to include all valid values as updated with the SSM Parameters project.
+
 ## [1.4.78] - 05/06/2025
 
 ### Features
