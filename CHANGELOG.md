@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.80] - 05/08/2025
+
+### Features
+* (**codepipeline**) Add support for Secrets Manager and Plaintext environment variable types in Commands action
+* (**ec2**) Launching the feature to support ENA queues offering flexibility to support multiple queues per Enhanced Network Interface (ENI)
+* (**glue**) This new release supports customizable RefreshInterval for all Saas ZETL integrations from 15 minutes to 6 days.
+* (**ssoadmin**) Update PutPermissionBoundaryToPermissionSet API's managedPolicyArn pattern to allow valid ARN only. Update ApplicationName to allow white spaces.
+
+### Documentation
+* (**cloudfront**) Doc-only update for CloudFront. These changes include customer-reported issues.
+* (**guardduty**) Updated description of a data structure.
+
 ## [1.4.79] - 05/07/2025
 
 ### Features
