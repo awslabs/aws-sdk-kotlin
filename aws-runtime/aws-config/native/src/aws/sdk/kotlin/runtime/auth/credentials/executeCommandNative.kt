@@ -48,8 +48,8 @@ internal actual suspend fun executeCommand(
         }
 
         val shell = when (platformProvider.osInfo().family) {
-            OsFamily.Windows -> "cmd.exe"
-            else -> "sh"
+            OsFamily.Windows -> "C:\\\\Windows\\\\System32\\\\cmd.exe"
+            else -> "/bin/sh"
         }
 
         val shellArg = when (platformProvider.osInfo().family) {
