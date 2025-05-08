@@ -57,8 +57,10 @@ internal actual suspend fun executeCommand(
             else -> "-c"
         }
 
-        val argv = memScoped { (arrayOf(shell, shellArg, command).map { it.cstr.ptr } + null).toCValues() }
-        execvp(shell, argv)
+        memScoped {
+            val argv = (arrayOf(shell, shellArg, command).map { it.cstr.ptr } + null).toCValues()
+            execvp(shell, argv)
+        }
         _exit(127) // If exec fails
     }
 
