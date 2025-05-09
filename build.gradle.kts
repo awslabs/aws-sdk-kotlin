@@ -4,6 +4,7 @@
  */
 import aws.sdk.kotlin.gradle.dsl.configureLinting
 import aws.sdk.kotlin.gradle.dsl.configureNexus
+import aws.sdk.kotlin.gradle.kmp.configureIosSimulatorTasks
 import aws.sdk.kotlin.gradle.util.typedProp
 import java.net.URL
 
@@ -23,6 +24,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.aws.kotlin.repo.tools.artifactsizemetrics)
+    alias(libs.plugins.aws.kotlin.repo.tools.kmp)
 }
 
 artifactSizeMetrics {
@@ -116,6 +118,8 @@ allprojects {
 
     // Enables running `./gradlew allDeps` to get a comprehensive list of dependencies for every subproject
     tasks.register<DependencyReportTask>("allDeps") { }
+
+    configureIosSimulatorTasks()
 }
 
 project.afterEvaluate {
