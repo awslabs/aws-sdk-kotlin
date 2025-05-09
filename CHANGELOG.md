@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.81] - 05/09/2025
+
+### Features
+* (**cloudwatchlogs**) We are pleased to announce limit increases to our grok processor logs transformation feature. Now you can define 20 Grok patterns in their configurations, with an expanded total pattern matching limit of 512 characters.
+* (**synthetics**) Add support to retry a canary automatically after schedule run failures. Users can enable this feature by configuring the RetryConfig field when calling the CreateCanary or UpdateCanary API. Also includes changes in GetCanary and GetCanaryRuns to support retrieving retry configurations.
+* (**workspaces**) Remove parameter EnableWorkDocs from WorkSpacesServiceModel due to end of support of Amazon WorkDocs service.
+
+### Documentation
+* (**athena**) Minor API documentation updates
+
 ## [1.4.80] - 05/08/2025
 
 ### Features
