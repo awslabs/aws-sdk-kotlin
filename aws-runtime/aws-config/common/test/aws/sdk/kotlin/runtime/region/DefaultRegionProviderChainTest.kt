@@ -7,7 +7,7 @@ package aws.sdk.kotlin.runtime.region
 
 import aws.sdk.kotlin.runtime.util.TestInstanceMetadataProvider
 import aws.smithy.kotlin.runtime.util.TestPlatformProvider
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -116,47 +116,67 @@ private const val REGION_PROVIDER_CHAIN_TEST_SUITE = """
 ]
 """
 
-internal fun runRegionProviderChainTestSuite(testSuite: String) = runTest {
-    data class RegionProviderChainTest(
-        val name: String,
-        val platformProvider: TestPlatformProvider,
-        val instanceMetadataProvider: TestInstanceMetadataProvider,
-        val region: String?,
-        val targets: List<String> = emptyList(),
-    )
+private data class RegionProviderChainTest(
+    val name: String,
+    val platformProvider: TestPlatformProvider,
+    val instanceMetadataProvider: TestInstanceMetadataProvider,
+    val region: String?,
+    val targets: List<String> = emptyList(),
+)
 
-    /**
-     * Construct a [TestPlatformProvider] from a JSON node like:
-     *
-     * ```json
-     * {
-     *     "env": {
-     *         "ENV_VAR": "value"
-     *     },
-     *     "props": {
-     *         "aws.property": "value"
-     *     },
-     *     "fs": {
-     *         "filename": "contents"
-     *     }
-     * }
-     * ```
-     */
-    fun TestPlatformProvider.Companion.fromJsonNode(obj: JsonObject): TestPlatformProvider {
-        val env = obj["env"]?.jsonObject?.mapValues { it.value.jsonPrimitive.content } ?: emptyMap()
-        val props = obj["props"]?.jsonObject?.mapValues { it.value.jsonPrimitive.content } ?: emptyMap()
-        val fs = obj["fs"]?.jsonObject?.mapValues { it.value.jsonPrimitive.content } ?: emptyMap()
-        return TestPlatformProvider(env, props, fs)
-    }
+/**
+ * Construct a [TestPlatformProvider] from a JSON node like:
+ *
+ * ```json
+ * {
+ *     "env": {
+ *         "ENV_VAR": "value"
+ *     },
+ *     "props": {
+ *         "aws.property": "value"
+ *     },
+ *     "fs": {
+ *         "filename": "contents"
+ *     }
+ * }
+ * ```
+ */
+/**
+ * Construct a [TestPlatformProvider] from a JSON node like:
+ *
+ * ```json
+ * {
+ *     "env": {
+ *         "ENV_VAR": "value"
+ *     },
+ *     "props": {
+ *         "aws.property": "value"
+ *     },
+ *     "fs": {
+ *         "filename": "contents"
+ *     }
+ * }
+ * ```
+ */
+private fun TestPlatformProvider.Companion.fromJsonNode(obj: JsonObject): TestPlatformProvider {
+    val env = obj["env"]?.jsonObject?.mapValues { it.value.jsonPrimitive.content } ?: emptyMap()
+    val props = obj["props"]?.jsonObject?.mapValues { it.value.jsonPrimitive.content } ?: emptyMap()
+    val fs = obj["fs"]?.jsonObject?.mapValues { it.value.jsonPrimitive.content } ?: emptyMap()
+    return TestPlatformProvider(env, props, fs)
+}
 
-    /**
-     * Construct a [TestInstanceMetadataProvider] from a JSON object containing metadata as key-value pairs.
-     */
-    fun TestInstanceMetadataProvider.Companion.fromJsonNode(obj: JsonObject): TestInstanceMetadataProvider {
-        val metadata = obj.jsonObject.mapValues { it.value.jsonPrimitive.content }
-        return TestInstanceMetadataProvider(metadata)
-    }
+/**
+ * Construct a [TestInstanceMetadataProvider] from a JSON object containing metadata as key-value pairs.
+ */
+/**
+ * Construct a [TestInstanceMetadataProvider] from a JSON object containing metadata as key-value pairs.
+ */
+private fun TestInstanceMetadataProvider.Companion.fromJsonNode(obj: JsonObject): TestInstanceMetadataProvider {
+    val metadata = obj.jsonObject.mapValues { it.value.jsonPrimitive.content }
+    return TestInstanceMetadataProvider(metadata)
+}
 
+internal fun runRegionProviderChainTestSuite(testSuite: String) = runBlocking {
     val tests = Json.parseToJsonElement(testSuite).jsonArray
         .map { it.jsonObject }
         .map {
