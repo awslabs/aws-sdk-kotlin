@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.82] - 05/12/2025
+
+### Features
+* (**deadline**) AWS Deadline Cloud service-managed fleets now support configuration scripts. Configuration scripts make it easy to install additional software, like plugins and packages, onto a worker.
+* (**ec2**) EC2 - Adding support for AvailabilityZoneId
+* (**iam**) Updating the endpoint list for the Identity and access management (IAM) service
+* (**medialive**) Add support to the AV1 rate control mode
+* (**mediatailor**) Documenting that EnabledLoggingStrategies is always present in responses of PlaybackConfiguration read operations.
+* (**s3control**) Updates to support S3 Express zonal endpoints for directory buckets in AWS CLI
+* (**sagemaker**) No API changes from previous release. This release migrated the model to Smithy keeping all features unchanged.
+* (**supplychain**) Launch new AWS Supply Chain public APIs for DataIntegrationEvent, DataIntegrationFlowExecution and DatasetNamespace. Also add more capabilities to existing public APIs to support direct dataset event publish, data deduplication in DataIntegrationFlow, partition specification of custom datasets.
+
 ## [1.4.81] - 05/09/2025
 
 ### Features
