@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.83] - 05/13/2025
+
+### Features
+* (**bedrock**) Enable cross-Region inference for Amazon Bedrock Guardrails by using the crossRegionConfig parameter when calling the CreateGuardrail or UpdateGuardrail operation.
+* (**bedrockagentruntime**) Changes for enhanced metadata in trace
+* (**controltower**) AWS Control Tower now reports the inheritance drift status for EnabledBaselines through the GetEnabledBaseline and ListEnabledBaselines APIs. You can now filter EnabledBaselines by their enablement and drift status using the ListEnabledBaselines API to view accounts and OUs that require attention.
+* (**dsql**) CreateMultiRegionClusters and DeleteMultiRegionClusters APIs marked as deprecated. Introduced new multi-Region clusters creation experience through multiRegionProperties parameter in CreateCluster API.
+* (**ecs**) This release extends functionality for Amazon EBS volumes attached to Amazon ECS tasks by adding support for the new EBS volumeInitializationRate parameter in ECS RunTask/StartTask/CreateService/UpdateService APIs.
+* (**licensemanager**) Add Tagging feature to resources in the Managed Entitlements service. License and Grant resources can now be tagged.
+
 ## [1.4.82] - 05/12/2025
 
 ### Features
