@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.84] - 05/14/2025
+
+### Features
+* (**cloudwatchlogs**) This release adds a new API "ListLogGroups" and an improvement in API "DescribeLogGroups"
+* (**cognitoidentityprovider**) Add exceptions to WebAuthn operations.
+* (**firehose**) This release adds catalogARN support for s3 tables multi-catalog catalogARNs.
+* (**mediaconvert**) This update enables cropping for video overlays and adds a new STL to Teletext upconversion toggle to preserve styling.
+
 ## [1.4.83] - 05/13/2025
 
 ### Features
