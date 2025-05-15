@@ -42,3 +42,42 @@
 .keyValue {
     display: block;
 }
+
+/* FIXME Taken from Dokka mainline. Remove these styles once Dokka 2.1.0 is released. */
+.toc--skip-link {
+    background-color: #458cff;
+    color: #fff;
+    font: 400 13px/24px Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, BlinkMacSystemFont, Oxygen, Droid Sans, Helvetica Neue, Arial;
+    margin-top: 36px;
+    padding: 1px;
+    position: absolute;
+    z-index: 100;
+}
+
+.toc--skip-link:not(:focus) {
+    overflow: hidden !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    border: 0 !important;
+    height: 1px !important;
+    padding: 0 !important;
+    width: 1px !important;
+}
+
+.toc--skip-link:focus {
+    outline: 4px solid rgb(48, 127, 255, 0.5);
+    outline-offset: 0;
+}
+
+.sidebar > .toc--skip-link {
+    margin-top: 0;
+}
+
+.toc--part_hidden > .toc--row > .toc--button ~ .toc--skip-link {
+    display: none;
+}
+
+@media (max-width: 899px) {
+    .toc--skip-link {
+        display: none;
+    }
+}
