@@ -8,11 +8,6 @@ import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionSrcDir
 import aws.sdk.kotlin.tests.codegen.CodegenTest
 import aws.sdk.kotlin.tests.codegen.Model
 
-plugins {
-    id(libs.plugins.kotlin.jvm.get().pluginId)
-    alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
-}
-
 description = "AWS SDK for Kotlin's event stream codegen test suite"
 
 val tests = listOf(
