@@ -22,6 +22,8 @@ dokka {
             rootProject.file("docs/dokka-presets/scripts/accessibility.js"),
         )
 
+        templatesDir.set(rootProject.file("docs/dokka-presets/templates"))
+
         footerMessage.set("© ${java.time.LocalDate.now().year}, Amazon Web Services, Inc. or its affiliates. All rights reserved.")
         separateInheritedMembers.set(true)
     }

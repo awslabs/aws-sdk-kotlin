@@ -2,15 +2,16 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+import org.jetbrains.dokka.gradle.tasks.DokkaGenerateTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.time.LocalDate
 
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 plugins {
+    `dokka-convention`
     id(libs.plugins.kotlin.jvm.get().pluginId)
 }
 
@@ -26,9 +27,9 @@ dependencies {
     testImplementation(libs.kotlin.test.junit5)
 }
 
-tasks.test {
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
-    dependsOn(tasks.dokkaHtml)
+    dependsOn(tasks.withType<DokkaGenerateTask>())
 }
 
 tasks.withType<KotlinCompile> {
