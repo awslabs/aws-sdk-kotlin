@@ -38,6 +38,7 @@ jobs:
           repository: 'smithy-lang/smithy-kotlin'
 
       - name: Check for smithy-kotlin unreleased changes
+        if: ${{ !contains(github.event.pull_request.labels.*.name, 'ready-for-release') }}
         run: |
           echo "aws-sdk-kotlin branch: $GITHUB_HEAD_REF"
           
