@@ -19,6 +19,7 @@ object AwsRuntimeTypes {
 
         object Client : RuntimeTypePackage(AwsKotlinDependency.AWS_CORE, "client") {
             val AwsSdkClientConfig = symbol("AwsSdkClientConfig")
+            val AwsClientOption = symbol("AwsClientOption")
         }
     }
 
@@ -41,6 +42,7 @@ object AwsRuntimeTypes {
             val resolveEndpointUrl = symbol("resolveEndpointUrl")
             val resolveAccountId = symbol("resolveAccountId")
             val resolveAccountIdEndpointMode = symbol("resolveAccountIdEndpointMode")
+            val toBusinessMetric = symbol("toBusinessMetric")
         }
 
         object Profile : RuntimeTypePackage(AwsKotlinDependency.AWS_CONFIG, "config.profile") {
@@ -59,7 +61,6 @@ object AwsRuntimeTypes {
     object Http : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP) {
         object Interceptors : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP, "interceptors") {
             val AddUserAgentMetadataInterceptor = symbol("AddUserAgentMetadataInterceptor")
-            val UnsupportedSigningAlgorithmInterceptor = symbol("UnsupportedSigningAlgorithmInterceptor")
             val IgnoreCompositeFlexibleChecksumResponseInterceptor = symbol("IgnoreCompositeFlexibleChecksumResponseInterceptor")
 
             object BusinessMetrics : RuntimeTypePackage(AwsKotlinDependency.AWS_HTTP, "interceptors.businessmetrics") {

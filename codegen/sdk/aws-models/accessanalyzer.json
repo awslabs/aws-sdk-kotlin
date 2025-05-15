@@ -68,6 +68,9 @@
                     "target": "com.amazonaws.accessanalyzer#GetFindingRecommendation"
                 },
                 {
+                    "target": "com.amazonaws.accessanalyzer#GetFindingsStatistics"
+                },
+                {
                     "target": "com.amazonaws.accessanalyzer#GetFindingV2"
                 },
                 {
@@ -1251,6 +1254,38 @@
                     {
                         "value": "AWS::IAM::AssumeRolePolicyDocument",
                         "name": "ROLE_TRUST"
+                    },
+                    {
+                        "value": "AWS::S3Tables::TableBucket",
+                        "name": "S3_TABLE_BUCKET"
+                    },
+                    {
+                        "value": "AWS::ApiGateway::RestApi",
+                        "name": "API_GATEWAY_REST_API"
+                    },
+                    {
+                        "value": "AWS::CodeArtifact::Domain",
+                        "name": "CODE_ARTIFACT_DOMAIN"
+                    },
+                    {
+                        "value": "AWS::Backup::BackupVault",
+                        "name": "BACKUP_VAULT"
+                    },
+                    {
+                        "value": "AWS::CloudTrail::Dashboard",
+                        "name": "CLOUDTRAIL_DASHBOARD"
+                    },
+                    {
+                        "value": "AWS::CloudTrail::EventDataStore",
+                        "name": "CLOUDTRAIL_EVENT_DATA_STORE"
+                    },
+                    {
+                        "value": "AWS::S3Tables::Table",
+                        "name": "S3_TABLE"
+                    },
+                    {
+                        "value": "AWS::S3Express::AccessPoint",
+                        "name": "S3_EXPRESS_ACCESS_POINT"
                     }
                 ]
             }
@@ -1552,6 +1587,18 @@
             "type": "list",
             "member": {
                 "target": "com.amazonaws.accessanalyzer#AccessPreviewSummary"
+            }
+        },
+        "com.amazonaws.accessanalyzer#AccountAggregations": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.accessanalyzer#FindingAggregationAccountDetails"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 10
+                }
             }
         },
         "com.amazonaws.accessanalyzer#AccountIdsList": {
@@ -3337,6 +3384,38 @@
                 "smithy.api#documentation": "<p>Contains information about an external access finding.</p>"
             }
         },
+        "com.amazonaws.accessanalyzer#ExternalAccessFindingsStatistics": {
+            "type": "structure",
+            "members": {
+                "resourceTypeStatistics": {
+                    "target": "com.amazonaws.accessanalyzer#ResourceTypeStatisticsMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The total number of active cross-account and public findings for each resource type of\n         the specified external access analyzer.</p>"
+                    }
+                },
+                "totalActiveFindings": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of active findings for the specified external access analyzer.</p>"
+                    }
+                },
+                "totalArchivedFindings": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of archived findings for the specified external access analyzer.</p>"
+                    }
+                },
+                "totalResolvedFindings": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of resolved findings for the specified external access analyzer.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Provides aggregate statistics about the findings for the specified external access\n         analyzer.</p>"
+            }
+        },
         "com.amazonaws.accessanalyzer#FilterCriteriaMap": {
             "type": "map",
             "key": {
@@ -3450,6 +3529,41 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>Contains information about a finding.</p>"
+            }
+        },
+        "com.amazonaws.accessanalyzer#FindingAggregationAccountDetails": {
+            "type": "structure",
+            "members": {
+                "account": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ID of the Amazon Web Services account for which unused access finding details are provided.</p>"
+                    }
+                },
+                "numberOfActiveFindings": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of active unused access findings for the specified Amazon Web Services account.</p>"
+                    }
+                },
+                "details": {
+                    "target": "com.amazonaws.accessanalyzer#FindingAggregationAccountDetailsMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Provides the number of active findings for each type of unused access for the specified\n         Amazon Web Services account.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains information about the findings for an Amazon Web Services account in an organization unused\n         access analyzer.</p>"
+            }
+        },
+        "com.amazonaws.accessanalyzer#FindingAggregationAccountDetailsMap": {
+            "type": "map",
+            "key": {
+                "target": "smithy.api#String"
+            },
+            "value": {
+                "target": "smithy.api#Integer"
             }
         },
         "com.amazonaws.accessanalyzer#FindingChangeType": {
@@ -3846,6 +3960,32 @@
             "type": "list",
             "member": {
                 "target": "com.amazonaws.accessanalyzer#FindingSummaryV2"
+            }
+        },
+        "com.amazonaws.accessanalyzer#FindingsStatistics": {
+            "type": "union",
+            "members": {
+                "externalAccessFindingsStatistics": {
+                    "target": "com.amazonaws.accessanalyzer#ExternalAccessFindingsStatistics",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The aggregate statistics for an external access analyzer.</p>"
+                    }
+                },
+                "unusedAccessFindingsStatistics": {
+                    "target": "com.amazonaws.accessanalyzer#UnusedAccessFindingsStatistics",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The aggregate statistics for an unused access analyzer.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains information about the aggregate statistics for an external or unused access\n         analyzer. Only one parameter can be used in a <code>FindingsStatistics</code>\n         object.</p>"
+            }
+        },
+        "com.amazonaws.accessanalyzer#FindingsStatisticsList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.accessanalyzer#FindingsStatistics"
             }
         },
         "com.amazonaws.accessanalyzer#GenerateFindingRecommendation": {
@@ -4739,6 +4879,79 @@
                     "target": "com.amazonaws.accessanalyzer#FindingType",
                     "traits": {
                         "smithy.api#documentation": "<p>The type of the finding. For external access analyzers, the type is\n            <code>ExternalAccess</code>. For unused access analyzers, the type can be\n            <code>UnusedIAMRole</code>, <code>UnusedIAMUserAccessKey</code>,\n            <code>UnusedIAMUserPassword</code>, or <code>UnusedPermission</code>.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.accessanalyzer#GetFindingsStatistics": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.accessanalyzer#GetFindingsStatisticsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.accessanalyzer#GetFindingsStatisticsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.accessanalyzer#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.accessanalyzer#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.accessanalyzer#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.accessanalyzer#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.accessanalyzer#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Retrieves a list of aggregated finding statistics for an external access or unused\n         access analyzer.</p>",
+                "smithy.api#http": {
+                    "uri": "/analyzer/findings/statistics",
+                    "method": "POST",
+                    "code": 200
+                },
+                "smithy.api#readonly": {},
+                "smithy.api#suppress": [
+                    "HttpMethodSemantics"
+                ]
+            }
+        },
+        "com.amazonaws.accessanalyzer#GetFindingsStatisticsRequest": {
+            "type": "structure",
+            "members": {
+                "analyzerArn": {
+                    "target": "com.amazonaws.accessanalyzer#AnalyzerArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The <a href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-getting-started.html#permission-resources\">ARN of\n            the analyzer</a> used to generate the statistics.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.accessanalyzer#GetFindingsStatisticsResponse": {
+            "type": "structure",
+            "members": {
+                "findingsStatistics": {
+                    "target": "com.amazonaws.accessanalyzer#FindingsStatisticsList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A group of external access or unused access findings statistics.</p>"
+                    }
+                },
+                "lastUpdatedAt": {
+                    "target": "com.amazonaws.accessanalyzer#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The time at which the retrieval of the findings statistics was last updated. If the\n         findings statistics have not been previously retrieved for the specified analyzer, this\n         field will not be populated.</p>"
                     }
                 }
             },
@@ -6116,7 +6329,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The proposed <code>InternetConfiguration</code> or <code>VpcConfiguration</code> to\n         apply to the Amazon S3 access point. <code>VpcConfiguration</code> does not apply to\n         multi-region access points. You can make the access point accessible from the internet, or\n         you can specify that all requests made through that access point must originate from a\n         specific virtual private cloud (VPC). You can specify only one type of network\n         configuration. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/creating-access-points.html\">Creating access\n         points</a>.</p>"
+                "smithy.api#documentation": "<p>The proposed <code>InternetConfiguration</code> or <code>VpcConfiguration</code> to\n         apply to the Amazon S3 access point. You can make the access point accessible from the internet,\n         or you can specify that all requests made through that access point must originate from a\n         specific virtual private cloud (VPC). You can specify only one type of network\n         configuration. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/creating-access-points.html\">Creating access\n         points</a>.</p>"
             }
         },
         "com.amazonaws.accessanalyzer#OrderBy": {
@@ -6691,6 +6904,35 @@
                 ]
             }
         },
+        "com.amazonaws.accessanalyzer#ResourceTypeDetails": {
+            "type": "structure",
+            "members": {
+                "totalActivePublic": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The total number of active public findings for the resource type.</p>"
+                    }
+                },
+                "totalActiveCrossAccount": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The total number of active cross-account findings for the resource type.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains information about the total number of active cross-account and public findings\n         for a resource type of an external access analyzer.</p>"
+            }
+        },
+        "com.amazonaws.accessanalyzer#ResourceTypeStatisticsMap": {
+            "type": "map",
+            "key": {
+                "target": "com.amazonaws.accessanalyzer#ResourceType"
+            },
+            "value": {
+                "target": "com.amazonaws.accessanalyzer#ResourceTypeDetails"
+            }
+        },
         "com.amazonaws.accessanalyzer#ResourcesList": {
             "type": "list",
             "member": {
@@ -6724,7 +6966,7 @@
                 "networkOrigin": {
                     "target": "com.amazonaws.accessanalyzer#NetworkOriginConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>The proposed <code>Internet</code> and <code>VpcConfiguration</code> to apply to this\n         Amazon S3 access point. <code>VpcConfiguration</code> does not apply to multi-region access\n         points. If the access preview is for a new resource and neither is specified, the access\n         preview uses <code>Internet</code> for the network origin. If the access preview is for an\n         existing resource and neither is specified, the access preview uses the exiting network\n         origin.</p>"
+                        "smithy.api#documentation": "<p>The proposed <code>Internet</code> and <code>VpcConfiguration</code> to apply to this\n         Amazon S3 access point. <code>VpcConfiguration</code> does not apply to multi-region access\n         points. If the access preview is for a new resource and neither is specified, the access\n         preview uses <code>Internet</code> for the network origin. If the access preview is for an\n         existing resource and neither is specified, the access preview uses the existing network\n         origin.</p>"
                     }
                 }
             },
@@ -6804,6 +7046,38 @@
         "com.amazonaws.accessanalyzer#S3BucketPolicy": {
             "type": "string"
         },
+        "com.amazonaws.accessanalyzer#S3ExpressDirectoryAccessPointArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^arn:[^:]*:s3express:[^:]*:[^:]*:accesspoint/.*$"
+            }
+        },
+        "com.amazonaws.accessanalyzer#S3ExpressDirectoryAccessPointConfiguration": {
+            "type": "structure",
+            "members": {
+                "accessPointPolicy": {
+                    "target": "com.amazonaws.accessanalyzer#AccessPointPolicy",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The proposed access point policy for an Amazon S3 directory bucket access point.</p>"
+                    }
+                },
+                "networkOrigin": {
+                    "target": "com.amazonaws.accessanalyzer#NetworkOriginConfiguration"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Proposed configuration for an access point attached to an Amazon S3 directory bucket. You can\n         propose up to 10 access points per bucket. If the proposed access point configuration is\n         for an existing Amazon S3 directory bucket, the access preview uses the proposed access point\n         configuration in place of the existing access points. To propose an access point without a\n         policy, you can provide an empty string as the access point policy. For more information\n         about access points for Amazon S3 directory buckets, see <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points-directory-buckets.html\">Managing access to\n            directory buckets with access points</a> in the Amazon Simple Storage Service User Guide.</p>"
+            }
+        },
+        "com.amazonaws.accessanalyzer#S3ExpressDirectoryAccessPointConfigurationsMap": {
+            "type": "map",
+            "key": {
+                "target": "com.amazonaws.accessanalyzer#S3ExpressDirectoryAccessPointArn"
+            },
+            "value": {
+                "target": "com.amazonaws.accessanalyzer#S3ExpressDirectoryAccessPointConfiguration"
+            }
+        },
         "com.amazonaws.accessanalyzer#S3ExpressDirectoryBucketConfiguration": {
             "type": "structure",
             "members": {
@@ -6812,10 +7086,16 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The proposed bucket policy for the Amazon S3 directory bucket.</p>"
                     }
+                },
+                "accessPoints": {
+                    "target": "com.amazonaws.accessanalyzer#S3ExpressDirectoryAccessPointConfigurationsMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The proposed access points for the Amazon S3 directory bucket.</p>"
+                    }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Proposed access control configuration for an Amazon S3 directory bucket. You can propose a\n         configuration for a new Amazon S3 directory bucket or an existing Amazon S3 directory bucket that you\n         own by specifying the Amazon S3 bucket policy. If the configuration is for an existing Amazon S3\n         directory bucket and you do not specify the Amazon S3 bucket policy, the access preview uses the\n         existing policy attached to the directory bucket. If the access preview is for a new\n         resource and you do not specify the Amazon S3 bucket policy, the access preview assumes an\n         directory bucket without a policy. To propose deletion of an existing bucket policy, you\n         can specify an empty string. For more information about Amazon S3 directory bucket policies, see\n            <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-security-iam-example-bucket-policies.html\">Example directory bucket policies for S3 Express One Zone</a>.</p>"
+                "smithy.api#documentation": "<p>Proposed access control configuration for an Amazon S3 directory bucket. You can propose a\n         configuration for a new Amazon S3 directory bucket or an existing Amazon S3 directory bucket that you\n         own by specifying the Amazon S3 bucket policy. If the configuration is for an existing Amazon S3\n         directory bucket and you do not specify the Amazon S3 bucket policy, the access preview uses the\n         existing policy attached to the directory bucket. If the access preview is for a new\n         resource and you do not specify the Amazon S3 bucket policy, the access preview assumes an\n         directory bucket without a policy. To propose deletion of an existing bucket policy, you\n         can specify an empty string. For more information about Amazon S3 directory bucket policies, see\n            <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-security-iam-example-bucket-policies.html\">Example bucket policies for directory buckets</a> in the Amazon Simple Storage Service User\n         Guide.</p>"
             }
         },
         "com.amazonaws.accessanalyzer#S3ExpressDirectoryBucketPolicy": {
@@ -7485,6 +7765,70 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>Contains information about an unused access analyzer.</p>"
+            }
+        },
+        "com.amazonaws.accessanalyzer#UnusedAccessFindingsStatistics": {
+            "type": "structure",
+            "members": {
+                "unusedAccessTypeStatistics": {
+                    "target": "com.amazonaws.accessanalyzer#UnusedAccessTypeStatisticsList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of details about the total number of findings for each type of unused access for\n         the analyzer. </p>"
+                    }
+                },
+                "topAccounts": {
+                    "target": "com.amazonaws.accessanalyzer#AccountAggregations",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of one to ten Amazon Web Services accounts that have the most active findings for the unused\n         access analyzer.</p>"
+                    }
+                },
+                "totalActiveFindings": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The total number of active findings for the unused access analyzer.</p>"
+                    }
+                },
+                "totalArchivedFindings": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The total number of archived findings for the unused access analyzer.</p>"
+                    }
+                },
+                "totalResolvedFindings": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The total number of resolved findings for the unused access analyzer.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Provides aggregate statistics about the findings for the specified unused access\n         analyzer.</p>"
+            }
+        },
+        "com.amazonaws.accessanalyzer#UnusedAccessTypeStatistics": {
+            "type": "structure",
+            "members": {
+                "unusedAccessType": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of unused access.</p>"
+                    }
+                },
+                "total": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The total number of findings for the specified unused access type.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains information about the total number of findings for a type of unused\n         access.</p>"
+            }
+        },
+        "com.amazonaws.accessanalyzer#UnusedAccessTypeStatisticsList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.accessanalyzer#UnusedAccessTypeStatistics"
             }
         },
         "com.amazonaws.accessanalyzer#UnusedAction": {

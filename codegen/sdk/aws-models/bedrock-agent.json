@@ -88,6 +88,43 @@
                     "traits": {
                         "smithy.api#enumValue": "AMAZON.CodeInterpreter"
                     }
+                },
+                "ANTHROPIC_COMPUTER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ANTHROPIC.Computer"
+                    }
+                },
+                "ANTHROPIC_BASH": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ANTHROPIC.Bash"
+                    }
+                },
+                "ANTHROPIC_TEXTEDITOR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ANTHROPIC.TextEditor"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.bedrockagent#ActionGroupSignatureParams": {
+            "type": "map",
+            "key": {
+                "target": "smithy.api#String",
+                "traits": {
+                    "smithy.api#length": {
+                        "max": 100
+                    }
+                }
+            },
+            "value": {
+                "target": "smithy.api#String",
+                "traits": {
+                    "smithy.api#length": {
+                        "max": 100
+                    }
                 }
             }
         },
@@ -379,6 +416,12 @@
                         "smithy.api#documentation": "<p>If this field is set as <code>AMAZON.UserInput</code>, the agent can request the user for additional information when trying to complete a task. The <code>description</code>, <code>apiSchema</code>, and <code>actionGroupExecutor</code> fields must be blank for this action group.</p>\n         <p>During orchestration, if the agent determines that it needs to invoke an API in an action group, but doesn't have enough information to complete the API request, it will invoke this action group instead and return an <a href=\"https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_Observation.html\">Observation</a> reprompting the user for more information.</p>"
                     }
                 },
+                "parentActionGroupSignatureParams": {
+                    "target": "com.amazonaws.bedrockagent#ActionGroupSignatureParams",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration settings for a computer use action.</p>\n         <important>\n            <p>\n        Computer use is a new Anthropic Claude model capability (in beta) available with Claude 3.7 Sonnet and Claude 3.5 Sonnet v2 only. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/agents-computer-use.html\">Configure an Amazon Bedrock Agent to complete tasks with computer use tools</a>.\n      </p>\n         </important>"
+                    }
+                },
                 "actionGroupExecutor": {
                     "target": "com.amazonaws.bedrockagent#ActionGroupExecutor",
                     "traits": {
@@ -482,7 +525,7 @@
                 "agentAliasStatus": {
                     "target": "com.amazonaws.bedrockagent#AgentAliasStatus",
                     "traits": {
-                        "smithy.api#documentation": "<p>The status of the alias of the agent and whether it is ready for use. The following statuses are possible:</p>\n         <ul>\n            <li>\n               <p>CREATING – The agent alias is being created.</p>\n            </li>\n            <li>\n               <p>PREPARED – The agent alias is finished being created or updated and is ready to be invoked.</p>\n            </li>\n            <li>\n               <p>FAILED – The agent alias API operation failed.</p>\n            </li>\n            <li>\n               <p>UPDATING – The agent alias is being updated.</p>\n            </li>\n            <li>\n               <p>DELETING – The agent alias is being deleted.</p>\n            </li>\n         </ul>",
+                        "smithy.api#documentation": "<p>The status of the alias of the agent and whether it is ready for use. The following statuses are possible:</p>\n         <ul>\n            <li>\n               <p>CREATING – The agent alias is being created.</p>\n            </li>\n            <li>\n               <p>PREPARED – The agent alias is finished being created or updated and is ready to be invoked.</p>\n            </li>\n            <li>\n               <p>FAILED – The agent alias API operation failed.</p>\n            </li>\n            <li>\n               <p>UPDATING – The agent alias is being updated.</p>\n            </li>\n            <li>\n               <p>DELETING – The agent alias is being deleted.</p>\n            </li>\n            <li>\n               <p>DISSOCIATED - The agent alias has no version associated with it.</p>\n            </li>\n         </ul>",
                         "smithy.api#required": {}
                     }
                 },
@@ -615,6 +658,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "DELETING"
+                    }
+                },
+                "DISSOCIATED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DISSOCIATED"
                     }
                 }
             }
@@ -2451,7 +2500,7 @@
                 "modelArn": {
                     "target": "com.amazonaws.bedrockagent#BedrockModelArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ARN of the foundation model or <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html\">inference profile</a> to use for parsing.</p>",
+                        "smithy.api#documentation": "<p>The ARN of the foundation model to use for parsing.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -2469,7 +2518,29 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Settings for a foundation model or <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html\">inference profile</a> used to parse documents for a data source.</p>"
+                "smithy.api#documentation": "<p>Settings for a foundation model used to parse documents for a data source.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#BedrockFoundationModelContextEnrichmentConfiguration": {
+            "type": "structure",
+            "members": {
+                "enrichmentStrategyConfiguration": {
+                    "target": "com.amazonaws.bedrockagent#EnrichmentStrategyConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The enrichment stategy used to provide additional context. For example, Neptune GraphRAG uses\n      Amazon Bedrock foundation models to perform chunk entity extraction.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "modelArn": {
+                    "target": "com.amazonaws.bedrockagent#BedrockModelArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the model used to create vector embeddings for the knowledge base.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Context enrichment configuration is used to provide additional context to the RAG application\n      using Amazon Bedrock foundation models.</p>"
             }
         },
         "com.amazonaws.bedrockagent#BedrockModelArn": {
@@ -2523,6 +2594,32 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>Contains information about content defined inline in bytes.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#CachePointBlock": {
+            "type": "structure",
+            "members": {
+                "type": {
+                    "target": "com.amazonaws.bedrockagent#CachePointType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates that the CachePointBlock is of the default type</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Indicates where a cache checkpoint is located. All information before this checkpoint is cached to be accessed on subsequent requests.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#CachePointType": {
+            "type": "enum",
+            "members": {
+                "DEFAULT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "default"
+                    }
+                }
             }
         },
         "com.amazonaws.bedrockagent#ChatPromptTemplateConfiguration": {
@@ -2792,6 +2889,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The text in the message.</p>"
                     }
+                },
+                "cachePoint": {
+                    "target": "com.amazonaws.bedrockagent#CachePointBlock",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Creates a cache checkpoint within a message.</p>"
+                    }
                 }
             },
             "traits": {
@@ -2818,6 +2921,38 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "S3"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.bedrockagent#ContextEnrichmentConfiguration": {
+            "type": "structure",
+            "members": {
+                "type": {
+                    "target": "com.amazonaws.bedrockagent#ContextEnrichmentType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The method used for context enrichment. It must be Amazon Bedrock foundation models.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "bedrockFoundationModelConfiguration": {
+                    "target": "com.amazonaws.bedrockagent#BedrockFoundationModelContextEnrichmentConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration of the Amazon Bedrock foundation model used for context enrichment.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Context enrichment configuration is used to provide additional context to the RAG application.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#ContextEnrichmentType": {
+            "type": "enum",
+            "members": {
+                "BEDROCK_FOUNDATION_MODEL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "BEDROCK_FOUNDATION_MODEL"
                     }
                 }
             }
@@ -2998,7 +3133,13 @@
                 "parentActionGroupSignature": {
                     "target": "com.amazonaws.bedrockagent#ActionGroupSignature",
                     "traits": {
-                        "smithy.api#documentation": "<p>To allow your agent to request the user for additional information when trying to complete a task, set this field to <code>AMAZON.UserInput</code>. You must leave the <code>description</code>, <code>apiSchema</code>, and <code>actionGroupExecutor</code> fields blank for this action group.</p>\n         <p>To allow your agent to generate, run, and troubleshoot code when trying to complete a task, set this field to <code>AMAZON.CodeInterpreter</code>. You must leave the <code>description</code>, <code>apiSchema</code>, and <code>actionGroupExecutor</code> fields blank for this action group.</p>\n         <p>During orchestration, if your agent determines that it needs to invoke an API in an action group, but doesn't have enough information to complete the API request, it will invoke this action group instead and return an <a href=\"https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_Observation.html\">Observation</a> reprompting the user for more information.</p>"
+                        "smithy.api#documentation": "<p>Specify a built-in or computer use action for this action group. If you specify a value, you must leave the <code>description</code>, <code>apiSchema</code>, and <code>actionGroupExecutor</code> fields empty for this action group. </p>\n         <ul>\n            <li>\n               <p>To allow your agent to request the user for additional information when trying to complete a task, set this field to <code>AMAZON.UserInput</code>. </p>\n            </li>\n            <li>\n               <p>To allow your agent to generate, run, and troubleshoot code when trying to complete a task, set this field to <code>AMAZON.CodeInterpreter</code>.</p>\n            </li>\n            <li>\n               <p>To allow your agent to use an Anthropic computer use tool, specify one of the following values. </p>\n               <important>\n                  <p>\n            Computer use is a new Anthropic Claude model capability (in beta) available with Anthropic Claude 3.7 Sonnet and Claude 3.5 Sonnet v2 only.          \n            When operating computer use functionality, we recommend taking additional security precautions,\n            such as executing computer actions in virtual environments with restricted data access and limited internet connectivity. \n             For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/agents-computer-use.html\">Configure an Amazon Bedrock Agent to complete tasks with computer use tools</a>.\n          </p>\n               </important>\n               <ul>\n                  <li>\n                     <p>\n                        <code>ANTHROPIC.Computer</code> - Gives the agent permission to use the mouse and keyboard and\n              take screenshots.</p>\n                  </li>\n                  <li>\n                     <p>\n                        <code>ANTHROPIC.TextEditor</code> - Gives the agent permission to view, create and edit files.</p>\n                  </li>\n                  <li>\n                     <p>\n                        <code>ANTHROPIC.Bash</code> - Gives the agent permission to run commands in a bash shell.</p>\n                  </li>\n               </ul>\n            </li>\n         </ul>"
+                    }
+                },
+                "parentActionGroupSignatureParams": {
+                    "target": "com.amazonaws.bedrockagent#ActionGroupSignatureParams",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration settings for a computer use action.</p>\n         <important>\n            <p>\n        Computer use is a new Anthropic Claude model capability (in beta) available with Anthropic Claude 3.7 Sonnet and Claude 3.5 Sonnet v2 only. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/agents-computer-use.html\">Configure an Amazon Bedrock Agent to complete tasks with computer use tools</a>.\n      </p>\n         </important>"
                     }
                 },
                 "actionGroupExecutor": {
@@ -5608,7 +5749,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Deletes documents from a data source and syncs the changes to the knowledge base that is connected to it. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/kb-real-time-ingestion.html\">Ingest documents into a knowledge base in real-time</a> in the Amazon Bedrock User Guide.</p>",
+                "smithy.api#documentation": "<p>Deletes documents from a data source and syncs the changes to the knowledge base that is connected to it. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/kb-direct-ingestion.html\">Ingest changes directly into a knowledge base</a> in the Amazon Bedrock User Guide.</p>",
                 "smithy.api#http": {
                     "code": 202,
                     "method": "POST",
@@ -6256,6 +6397,32 @@
                 }
             }
         },
+        "com.amazonaws.bedrockagent#EnrichmentStrategyConfiguration": {
+            "type": "structure",
+            "members": {
+                "method": {
+                    "target": "com.amazonaws.bedrockagent#EnrichmentStrategyMethod",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The method used for the context enrichment strategy.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The strategy used for performing context enrichment.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#EnrichmentStrategyMethod": {
+            "type": "enum",
+            "members": {
+                "CHUNK_ENTITY_EXTRACTION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CHUNK_ENTITY_EXTRACTION"
+                    }
+                }
+            }
+        },
         "com.amazonaws.bedrockagent#ErrorMessage": {
             "type": "string",
             "traits": {
@@ -6815,7 +6982,7 @@
                 "condition": {
                     "target": "com.amazonaws.bedrockagent#ConditionFlowNodeConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>Contains configurations for a Condition node in your flow. Defines conditions that lead to different branches of the flow.</p>"
+                        "smithy.api#documentation": "<p>Contains configurations for a condition node in your flow. Defines conditions that lead to different branches of the flow.</p>"
                     }
                 },
                 "lex": {
@@ -6839,7 +7006,7 @@
                 "storage": {
                     "target": "com.amazonaws.bedrockagent#StorageFlowNodeConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>Contains configurations for a Storage node in your flow. Stores an input in an Amazon S3 location.</p>"
+                        "smithy.api#documentation": "<p>Contains configurations for a storage node in your flow. Stores an input in an Amazon S3 location.</p>"
                     }
                 },
                 "agent": {
@@ -6851,7 +7018,7 @@
                 "retrieval": {
                     "target": "com.amazonaws.bedrockagent#RetrievalFlowNodeConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>Contains configurations for a Retrieval node in your flow. Retrieves data from an Amazon S3 location and returns it as the output.</p>"
+                        "smithy.api#documentation": "<p>Contains configurations for a retrieval node in your flow. Retrieves data from an Amazon S3 location and returns it as the output.</p>"
                     }
                 },
                 "iterator": {
@@ -6864,6 +7031,12 @@
                     "target": "com.amazonaws.bedrockagent#CollectorFlowNodeConfiguration",
                     "traits": {
                         "smithy.api#documentation": "<p>Contains configurations for a collector node in your flow. Collects an iteration of inputs and consolidates them into an array of outputs.</p>"
+                    }
+                },
+                "inlineCode": {
+                    "target": "com.amazonaws.bedrockagent#InlineCodeFlowNodeConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains configurations for an inline code node in your flow. Inline code nodes let you write and execute code directly within your flow, enabling data transformations, custom logic, and integrations without needing an external Lambda function.</p>"
                     }
                 }
             },
@@ -6958,7 +7131,7 @@
             },
             "traits": {
                 "smithy.api#length": {
-                    "max": 5
+                    "max": 20
                 }
             }
         },
@@ -7081,6 +7254,12 @@
                     "traits": {
                         "smithy.api#enumValue": "Collector"
                     }
+                },
+                "INLINE_CODE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "InlineCode"
+                    }
                 }
             }
         },
@@ -7091,7 +7270,7 @@
             },
             "traits": {
                 "smithy.api#length": {
-                    "max": 20
+                    "max": 40
                 }
             }
         },
@@ -7425,6 +7604,18 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Details about an unspecified validation.</p>"
                     }
+                },
+                "unknownNodeInput": {
+                    "target": "com.amazonaws.bedrockagent#UnknownNodeInputFlowValidationDetails",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Details about an unknown input for a node.</p>"
+                    }
+                },
+                "unknownNodeOutput": {
+                    "target": "com.amazonaws.bedrockagent#UnknownNodeOutputFlowValidationDetails",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Details about an unknown output for a node.</p>"
+                    }
                 }
             },
             "traits": {
@@ -7599,6 +7790,18 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "Unspecified"
+                    }
+                },
+                "UNKNOWN_NODE_INPUT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "UnknownNodeInput"
+                    }
+                },
+                "UNKNOWN_NODE_OUTPUT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "UnknownNodeOutput"
                     }
                 }
             }
@@ -8870,7 +9073,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Retrieves specific documents from a data source that is connected to a knowledge base. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/kb-real-time-ingestion.html\">Ingest documents into a knowledge base in real-time</a> in the Amazon Bedrock User Guide.</p>",
+                "smithy.api#documentation": "<p>Retrieves specific documents from a data source that is connected to a knowledge base. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/kb-direct-ingestion.html\">Ingest changes directly into a knowledge base</a> in the Amazon Bedrock User Guide.</p>",
                 "smithy.api#http": {
                     "code": 200,
                     "method": "POST",
@@ -9093,6 +9296,18 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.bedrockagent#GraphArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#documentation": "ARN for Neptune Analytics graph database",
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 255
+                },
+                "smithy.api#pattern": "^arn:aws(|-cn|-us-gov):neptune-graph:[a-zA-Z0-9-]*:[0-9]{12}:graph/g-[a-zA-Z0-9]{10}$",
+                "smithy.api#sensitive": {}
+            }
+        },
         "com.amazonaws.bedrockagent#GuardrailConfiguration": {
             "type": "structure",
             "members": {
@@ -9240,7 +9455,7 @@
                 "topP": {
                     "target": "com.amazonaws.bedrockagent#TopP",
                     "traits": {
-                        "smithy.api#documentation": "<p>While generating a response, the model determines the probability of the following token at each point of generation. The value that you set for <code>Top P</code> determines the number of most-likely candidates from which the model chooses the next token in the sequence. For example, if you set <code>topP</code> to 80, the model only selects the next token from the top 80% of the probability distribution of next tokens.</p>"
+                        "smithy.api#documentation": "<p>While generating a response, the model determines the probability of the following token at each point of generation. The value that you set for <code>Top P</code> determines the number of most-likely candidates from which the model chooses the next token in the sequence. For example, if you set <code>topP</code> to 0.8, the model only selects the next token from the top 80% of the probability distribution of next tokens.</p>"
                     }
                 },
                 "topK": {
@@ -9295,7 +9510,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Ingests documents directly into the knowledge base that is connected to the data source. The <code>dataSourceType</code> specified in the content for each document must match the type of the data source that you specify in the header. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/kb-real-time-ingestion.html\">Ingest documents into a knowledge base in real-time</a> in the Amazon Bedrock User Guide.</p>",
+                "smithy.api#documentation": "<p>Ingests documents directly into the knowledge base that is connected to the data source. The <code>dataSourceType</code> specified in the content for each document must match the type of the data source that you specify in the header. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/kb-direct-ingestion.html\">Ingest changes directly into a knowledge base</a> in the Amazon Bedrock User Guide.</p>",
                 "smithy.api#http": {
                     "code": 202,
                     "method": "PUT",
@@ -9732,6 +9947,38 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>Contains details about a data ingestion job.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#InlineCode": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 5000000
+                },
+                "smithy.api#sensitive": {}
+            }
+        },
+        "com.amazonaws.bedrockagent#InlineCodeFlowNodeConfiguration": {
+            "type": "structure",
+            "members": {
+                "code": {
+                    "target": "com.amazonaws.bedrockagent#InlineCode",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The code that's executed in your inline code node. The code can access input data from previous nodes in the flow, perform operations on that data, and produce output that can be used by other nodes in your flow.</p>\n         <p>The code must be valid in the programming <code>language</code> that you specify.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "language": {
+                    "target": "com.amazonaws.bedrockagent#SupportedLanguages",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The programming language used by your inline code node.</p>\n         <p>The code must be valid in the programming <code>language</code> that you specify. Currently, only Python 3 (<code>Python_3</code>) is supported.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains configurations for an inline code node in your flow. Inline code nodes let you write and execute code directly within your flow, enabling data transformations, custom logic, and integrations without needing an external Lambda function.</p>"
             }
         },
         "com.amazonaws.bedrockagent#InlineContent": {
@@ -10278,6 +10525,18 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "MONGO_DB_ATLAS"
+                    }
+                },
+                "NEPTUNE_ANALYTICS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NEPTUNE_ANALYTICS"
+                    }
+                },
+                "OPENSEARCH_MANAGED_CLUSTER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "OPENSEARCH_MANAGED_CLUSTER"
                     }
                 }
             }
@@ -11497,7 +11756,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Retrieves all the documents contained in a data source that is connected to a knowledge base. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/kb-real-time-ingestion.html\">Ingest documents into a knowledge base in real-time</a> in the Amazon Bedrock User Guide.</p>",
+                "smithy.api#documentation": "<p>Retrieves all the documents contained in a data source that is connected to a knowledge base. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/kb-direct-ingestion.html\">Ingest changes directly into a knowledge base</a> in the Amazon Bedrock User Guide.</p>",
                 "smithy.api#http": {
                     "code": 200,
                     "method": "POST",
@@ -11892,8 +12151,7 @@
             "type": "integer",
             "traits": {
                 "smithy.api#range": {
-                    "min": 0,
-                    "max": 4096
+                    "min": 0
                 }
             }
         },
@@ -12321,6 +12579,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The name of the VPC endpoint service in your account that is connected to your MongoDB Atlas cluster.</p>"
                     }
+                },
+                "textIndexName": {
+                    "target": "com.amazonaws.bedrockagent#MongoDbAtlasIndexName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the text search index in the MongoDB collection. This is required for using the hybrid search\n      feature.</p>"
+                    }
                 }
             },
             "traits": {
@@ -12430,6 +12694,50 @@
                 }
             }
         },
+        "com.amazonaws.bedrockagent#NeptuneAnalyticsConfiguration": {
+            "type": "structure",
+            "members": {
+                "graphArn": {
+                    "target": "com.amazonaws.bedrockagent#GraphArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the Neptune Analytics vector store.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "fieldMapping": {
+                    "target": "com.amazonaws.bedrockagent#NeptuneAnalyticsFieldMapping",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains the names of the fields to which to map information about the vector store.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains details about the storage configuration of the knowledge base in \n      Amazon Neptune Analytics. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup-neptune.html\">Create a vector index \n      in Amazon Neptune Analytics</a>.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#NeptuneAnalyticsFieldMapping": {
+            "type": "structure",
+            "members": {
+                "textField": {
+                    "target": "com.amazonaws.bedrockagent#FieldName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the field in which Amazon Bedrock stores the raw text from your data. The text\n     is split according to the chunking strategy you choose.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "metadataField": {
+                    "target": "com.amazonaws.bedrockagent#FieldName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the field in which Amazon Bedrock stores metadata about the vector store.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains the names of the fields to which to map information about the vector store.</p>"
+            }
+        },
         "com.amazonaws.bedrockagent#NextToken": {
             "type": "string",
             "traits": {
@@ -12464,6 +12772,100 @@
             "type": "string",
             "traits": {
                 "smithy.api#pattern": "^[0-9]{1,5}$"
+            }
+        },
+        "com.amazonaws.bedrockagent#OpenSearchManagedClusterConfiguration": {
+            "type": "structure",
+            "members": {
+                "domainEndpoint": {
+                    "target": "com.amazonaws.bedrockagent#OpenSearchManagedClusterDomainEndpoint",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The endpoint URL the OpenSearch domain.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "domainArn": {
+                    "target": "com.amazonaws.bedrockagent#OpenSearchManagedClusterDomainArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the OpenSearch domain.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "vectorIndexName": {
+                    "target": "com.amazonaws.bedrockagent#OpenSearchManagedClusterIndexName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the vector store.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "fieldMapping": {
+                    "target": "com.amazonaws.bedrockagent#OpenSearchManagedClusterFieldMapping",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains the names of the fields to which to map information about the vector store.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains details about the Managed Cluster configuration of the knowledge base in Amazon OpenSearch Service. For more information, \n    see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup-osm.html\">Create a vector index in OpenSearch Managed Cluster</a>.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#OpenSearchManagedClusterDomainArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "max": 2048
+                },
+                "smithy.api#pattern": "^arn:aws(|-cn|-us-gov|-iso):es:[a-z]{2}(-gov)?-[a-z]+-\\d{1}:\\d{12}:domain/[a-z][a-z0-9-]{3,28}$"
+            }
+        },
+        "com.amazonaws.bedrockagent#OpenSearchManagedClusterDomainEndpoint": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "max": 2048
+                },
+                "smithy.api#pattern": "^https://.*$"
+            }
+        },
+        "com.amazonaws.bedrockagent#OpenSearchManagedClusterFieldMapping": {
+            "type": "structure",
+            "members": {
+                "vectorField": {
+                    "target": "com.amazonaws.bedrockagent#FieldName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the field in which Amazon Bedrock stores the vector embeddings for your data sources.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "textField": {
+                    "target": "com.amazonaws.bedrockagent#FieldName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the field in which Amazon Bedrock stores the raw text from your data. The text\n    is split according to the chunking strategy you choose.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "metadataField": {
+                    "target": "com.amazonaws.bedrockagent#FieldName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the field in which Amazon Bedrock stores metadata about the vector store.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Contains the names of the fields to which to map information about the vector store.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#OpenSearchManagedClusterIndexName": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 2048
+                },
+                "smithy.api#pattern": "^(?![\\-_+.])[a-z0-9][a-z0-9\\-_\\.]*$",
+                "smithy.api#sensitive": {}
             }
         },
         "com.amazonaws.bedrockagent#OpenSearchServerlessCollectionArn": {
@@ -13056,7 +13458,7 @@
                 "promptState": {
                     "target": "com.amazonaws.bedrockagent#PromptState",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether to allow the agent to carry out the step specified in the <code>promptType</code>. If you set this value to <code>DISABLED</code>, the agent skips that step. The default state for each <code>promptType</code> is as follows.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>PRE_PROCESSING</code> – <code>ENABLED</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>ORCHESTRATION</code> – <code>ENABLED</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>KNOWLEDGE_BASE_RESPONSE_GENERATION</code> – <code>ENABLED</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>POST_PROCESSING</code> – <code>DISABLED</code>\n               </p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Specifies whether to allow the agent to carry out the step specified in the <code>promptType</code>. If you set this value to <code>DISABLED</code>, the agent skips that step. The default state for each <code>promptType</code> is as follows.</p>\n         <ul>\n            <li>\n               <p>\n                  <code>PRE_PROCESSING</code> – <code>DISABLED</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>ORCHESTRATION</code> – <code>ENABLED</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>KNOWLEDGE_BASE_RESPONSE_GENERATION</code> – <code>ENABLED</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>POST_PROCESSING</code> – <code>DISABLED</code>\n               </p>\n            </li>\n         </ul>"
                     }
                 },
                 "basePromptTemplate": {
@@ -13074,13 +13476,19 @@
                 "parserMode": {
                     "target": "com.amazonaws.bedrockagent#CreationMode",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether to override the default parser Lambda function when parsing the raw foundation model output in the part of the agent sequence defined by the <code>promptType</code>. If you set the field as <code>OVERRIDEN</code>, the <code>overrideLambda</code> field in the <a href=\"https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_PromptOverrideConfiguration.html\">PromptOverrideConfiguration</a> must be specified with the ARN of a Lambda function.</p>"
+                        "smithy.api#documentation": "<p>Specifies whether to override the default parser Lambda function when parsing the raw foundation model output in the part of the agent sequence defined by the <code>promptType</code>. If you set the field as <code>OVERRIDDEN</code>, the <code>overrideLambda</code> field in the <a href=\"https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_PromptOverrideConfiguration.html\">PromptOverrideConfiguration</a> must be specified with the ARN of a Lambda function.</p>"
                     }
                 },
                 "foundationModel": {
                     "target": "com.amazonaws.bedrockagent#ModelIdentifier",
                     "traits": {
                         "smithy.api#documentation": "<p>The agent's foundation model.</p>"
+                    }
+                },
+                "additionalModelRequestFields": {
+                    "target": "smithy.api#Document",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If the Converse or ConverseStream operations support the model,\n                <code>additionalModelRequestFields</code> contains additional inference parameters,\n            beyond the base set of inference parameters in the <code>inferenceConfiguration</code>\n            field. </p>\n         <p>For more information, see <i>Inference request parameters and\n                response fields for foundation models</i> in the Amazon Bedrock user\n            guide.</p>"
                     }
                 }
             },
@@ -13273,7 +13681,7 @@
             },
             "traits": {
                 "smithy.api#length": {
-                    "max": 5
+                    "max": 20
                 },
                 "smithy.api#sensitive": {}
             }
@@ -13921,6 +14329,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The name of the field in which Amazon Bedrock stores metadata about the vector store.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "customMetadataField": {
+                    "target": "com.amazonaws.bedrockagent#ColumnName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Provide a name for the universal metadata field where Amazon Bedrock will store any custom metadata from \n      your data source.</p>"
                     }
                 }
             },
@@ -14784,7 +15198,7 @@
             "traits": {
                 "smithy.api#range": {
                     "min": 60,
-                    "max": 3600
+                    "max": 5400
                 }
             }
         },
@@ -15206,6 +15620,12 @@
                         "smithy.api#documentation": "<p>Contains the storage configuration of the knowledge base in Amazon OpenSearch Service.</p>"
                     }
                 },
+                "opensearchManagedClusterConfiguration": {
+                    "target": "com.amazonaws.bedrockagent#OpenSearchManagedClusterConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains details about the storage configuration of the knowledge base in OpenSearch Managed\n    Cluster. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup-osm.html\">Create \n    a vector index in Amazon OpenSearch Service</a>.</p>"
+                    }
+                },
                 "pineconeConfiguration": {
                     "target": "com.amazonaws.bedrockagent#PineconeConfiguration",
                     "traits": {
@@ -15228,6 +15648,12 @@
                     "target": "com.amazonaws.bedrockagent#MongoDbAtlasConfiguration",
                     "traits": {
                         "smithy.api#documentation": "<p>Contains the storage configuration of the knowledge base in MongoDB Atlas.</p>"
+                    }
+                },
+                "neptuneAnalyticsConfiguration": {
+                    "target": "com.amazonaws.bedrockagent#NeptuneAnalyticsConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains details about the Neptune Analytics configuration of the knowledge base in Amazon Neptune. For more information, \n    see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup-neptune.html\">Create a\n    vector index in Amazon Neptune Analytics.</a>.</p>"
                     }
                 }
             },
@@ -15364,6 +15790,17 @@
                 }
             }
         },
+        "com.amazonaws.bedrockagent#SupportedLanguages": {
+            "type": "enum",
+            "members": {
+                "PYTHON_3": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Python_3"
+                    }
+                }
+            }
+        },
         "com.amazonaws.bedrockagent#SystemContentBlock": {
             "type": "union",
             "members": {
@@ -15371,6 +15808,12 @@
                     "target": "com.amazonaws.bedrockagent#NonEmptyString",
                     "traits": {
                         "smithy.api#documentation": "<p>The text in the system prompt.</p>"
+                    }
+                },
+                "cachePoint": {
+                    "target": "com.amazonaws.bedrockagent#CachePointBlock",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Creates a cache checkpoint within a tool designation</p>"
                     }
                 }
             },
@@ -15545,8 +15988,7 @@
             "type": "string",
             "traits": {
                 "smithy.api#length": {
-                    "min": 1,
-                    "max": 200000
+                    "min": 1
                 },
                 "smithy.api#sensitive": {}
             }
@@ -15559,6 +16001,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The message for the prompt.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "cachePoint": {
+                    "target": "com.amazonaws.bedrockagent#CachePointBlock",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A cache checkpoint within a template configuration.</p>"
                     }
                 },
                 "inputVariables": {
@@ -15593,6 +16041,12 @@
                     "target": "com.amazonaws.bedrockagent#ToolSpecification",
                     "traits": {
                         "smithy.api#documentation": "<p>The specification for the tool.</p>"
+                    }
+                },
+                "cachePoint": {
+                    "target": "com.amazonaws.bedrockagent#CachePointBlock",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Creates a cache checkpoint within a tool designation</p>"
                     }
                 }
             },
@@ -15926,6 +16380,50 @@
                 "smithy.api#documentation": "<p>Details about an unknown target input for a connection.</p>"
             }
         },
+        "com.amazonaws.bedrockagent#UnknownNodeInputFlowValidationDetails": {
+            "type": "structure",
+            "members": {
+                "node": {
+                    "target": "com.amazonaws.bedrockagent#FlowNodeName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the unknown input.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "input": {
+                    "target": "com.amazonaws.bedrockagent#FlowNodeInputName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the node with the unknown input.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Details about an unknown input for a node.</p>"
+            }
+        },
+        "com.amazonaws.bedrockagent#UnknownNodeOutputFlowValidationDetails": {
+            "type": "structure",
+            "members": {
+                "node": {
+                    "target": "com.amazonaws.bedrockagent#FlowNodeName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the node with the unknown output.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "output": {
+                    "target": "com.amazonaws.bedrockagent#FlowNodeOutputName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the unknown output.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Details about an unknown output for a node.</p>"
+            }
+        },
         "com.amazonaws.bedrockagent#UnreachableNodeFlowValidationDetails": {
             "type": "structure",
             "members": {
@@ -16160,7 +16658,13 @@
                 "parentActionGroupSignature": {
                     "target": "com.amazonaws.bedrockagent#ActionGroupSignature",
                     "traits": {
-                        "smithy.api#documentation": "<p>To allow your agent to request the user for additional information when trying to complete a task, set this field to <code>AMAZON.UserInput</code>. You must leave the <code>description</code>, <code>apiSchema</code>, and <code>actionGroupExecutor</code> fields blank for this action group.</p>\n         <p>During orchestration, if your agent determines that it needs to invoke an API in an action group, but doesn't have enough information to complete the API request, it will invoke this action group instead and return an <a href=\"https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_Observation.html\">Observation</a> reprompting the user for more information.</p>"
+                        "smithy.api#documentation": "<p>Update the built-in or computer use action for this action group. If you specify a value, you must leave the <code>description</code>, <code>apiSchema</code>, and <code>actionGroupExecutor</code> fields empty for this action group. </p>\n         <ul>\n            <li>\n               <p>To allow your agent to request the user for additional information when trying to complete a task, set this field to <code>AMAZON.UserInput</code>. </p>\n            </li>\n            <li>\n               <p>To allow your agent to generate, run, and troubleshoot code when trying to complete a task, set this field to <code>AMAZON.CodeInterpreter</code>.</p>\n            </li>\n            <li>\n               <p>To allow your agent to use an Anthropic computer use tool, specify one of the following values. </p>\n               <important>\n                  <p>\n            Computer use is a new Anthropic Claude model capability (in beta) available with Anthropic Claude 3.7 Sonnet and Claude 3.5 Sonnet v2 only.          \n            When operating computer use functionality, we recommend taking additional security precautions,\n            such as executing computer actions in virtual environments with restricted data access and limited internet connectivity. \n             For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/agents-computer-use.html\">Configure an Amazon Bedrock Agent to complete tasks with computer use tools</a>.\n          </p>\n               </important>\n               <ul>\n                  <li>\n                     <p>\n                        <code>ANTHROPIC.Computer</code> - Gives the agent permission to use the mouse and keyboard and\n              take screenshots.</p>\n                  </li>\n                  <li>\n                     <p>\n                        <code>ANTHROPIC.TextEditor</code> - Gives the agent permission to view, create and edit files.</p>\n                  </li>\n                  <li>\n                     <p>\n                        <code>ANTHROPIC.Bash</code> - Gives the agent permission to run commands in a bash shell.</p>\n                  </li>\n               </ul>\n            </li>\n         </ul>\n         <p>During orchestration, if your agent determines that it needs to invoke an API in an action group, but doesn't have enough information to complete the API request, it will invoke this action group instead and return an <a href=\"https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_Observation.html\">Observation</a> reprompting the user for more information.</p>"
+                    }
+                },
+                "parentActionGroupSignatureParams": {
+                    "target": "com.amazonaws.bedrockagent#ActionGroupSignatureParams",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration settings for a computer use action.</p>\n         <important>\n            <p>\n        Computer use is a new Anthropic Claude model capability (in beta) available with Claude 3.7 Sonnet and Claude 3.5 Sonnet v2 only. For more information, see <a href=\"https://docs.aws.amazon.com/bedrock/latest/userguide/agents-computer-use.html\">Configure an Amazon Bedrock Agent to complete tasks with computer use tools</a>.\n      </p>\n         </important>"
                     }
                 },
                 "actionGroupExecutor": {
@@ -17383,6 +17887,16 @@
                 "smithy.api#sensitive": {}
             }
         },
+        "com.amazonaws.bedrockagent#UserAgentHeader": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 61,
+                    "max": 86
+                },
+                "smithy.api#sensitive": {}
+            }
+        },
         "com.amazonaws.bedrockagent#ValidateFlowDefinition": {
             "type": "operation",
             "input": {
@@ -17515,6 +18029,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Configurations for a parser to use for parsing documents in your data source. If you exclude this field, the default parser will be used.</p>"
                     }
+                },
+                "contextEnrichmentConfiguration": {
+                    "target": "com.amazonaws.bedrockagent#ContextEnrichmentConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The context enrichment configuration used for ingestion of the data into the vector\n      store.</p>"
+                    }
                 }
             },
             "traits": {
@@ -17527,7 +18047,7 @@
                 "embeddingModelArn": {
                     "target": "com.amazonaws.bedrockagent#BedrockEmbeddingModelArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the model or inference profile used to create vector embeddings for the knowledge base.</p>",
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the model used to create vector embeddings for the knowledge base.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -17602,7 +18122,13 @@
                 "userAgent": {
                     "target": "com.amazonaws.bedrockagent#UserAgent",
                     "traits": {
-                        "smithy.api#documentation": "<p>A string used for identifying the crawler or a bot when it accesses a web server. By default, \n            this is set to <code>bedrockbot_UUID</code> for your crawler.  You can optionally append a custom \n            string to <code>bedrockbot_UUID</code> to allowlist a specific user agent permitted to access your source URLs.            \n        </p>"
+                        "smithy.api#documentation": "<p>Returns the user agent suffix for your web crawler.</p>"
+                    }
+                },
+                "userAgentHeader": {
+                    "target": "com.amazonaws.bedrockagent#UserAgentHeader",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A string used for identifying the crawler or bot when it accesses a web server. The user agent header value\n        consists of the <code>bedrockbot</code>, UUID, and a user agent suffix for your crawler (if one is provided).\n        By default, it is set to <code>bedrockbot_UUID</code>. You can optionally append a custom \n        suffix to <code>bedrockbot_UUID</code> to allowlist a specific user agent permitted to access your source URLs. </p>"
                     }
                 }
             },

@@ -71,6 +71,18 @@
                 "target": "com.amazonaws.redshiftserverless#Association"
             }
         },
+        "com.amazonaws.redshiftserverless#Capacity": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
+        },
+        "com.amazonaws.redshiftserverless#Charge": {
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
+        },
         "com.amazonaws.redshiftserverless#ConfigParameter": {
             "type": "structure",
             "members": {
@@ -142,7 +154,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Converts a recovery point to a snapshot. For more information about recovery points and snapshots, \n         see <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-snapshots-recovery.html\">Working with snapshots and recovery points</a>.</p>"
+                "smithy.api#documentation": "<p>Converts a recovery point to a snapshot. For more information about recovery points and snapshots, \n         see <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-snapshots-recovery-points.html\">Working with snapshots and recovery points</a>.</p>"
             }
         },
         "com.amazonaws.redshiftserverless#ConvertRecoveryPointToSnapshotRequest": {
@@ -497,6 +509,90 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.redshiftserverless#CreateReservation": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshiftserverless#CreateReservationRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.redshiftserverless#CreateReservationResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshiftserverless#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ServiceQuotaExceededException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#TooManyTagsException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Creates an Amazon Redshift Serverless reservation, which gives you the option to commit to a specified number of Redshift Processing Units (RPUs) \n         for a year at a discount from Serverless on-demand (OD) rates.</p>",
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#CreateReservationRequest": {
+            "type": "structure",
+            "members": {
+                "capacity": {
+                    "target": "com.amazonaws.redshiftserverless#Capacity",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The number of Redshift Processing Units (RPUs) to reserve.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "offeringId": {
+                    "target": "com.amazonaws.redshiftserverless#OfferingId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ID of the offering associated with the reservation. The offering determines the payment schedule for the reservation.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 64
+                        },
+                        "smithy.api#required": {}
+                    }
+                },
+                "clientToken": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request. If not provided, the Amazon Web Services \n         SDK populates this field. This token must be a valid UUIDv4 value. For more information about idempotency, see <a href=\"https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/\">\n            Making retries safe with idempotent APIs\n         </a>.</p>",
+                        "smithy.api#idempotencyToken": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#CreateReservationResponse": {
+            "type": "structure",
+            "members": {
+                "reservation": {
+                    "target": "com.amazonaws.redshiftserverless#Reservation",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The reservation object that the <code>CreateReservation</code> action created.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.redshiftserverless#CreateScheduledAction": {
             "type": "operation",
             "input": {
@@ -633,7 +729,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Creates a snapshot of all databases in a namespace.\n         For more information about snapshots, see \n         <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-snapshots-recovery.html\">\n         Working with snapshots and recovery points</a>.</p>",
+                "smithy.api#documentation": "<p>Creates a snapshot of all databases in a namespace.\n         For more information about snapshots, see \n         <a href=\"https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-snapshots-recovery-points.html\">\n         Working with snapshots and recovery points</a>.</p>",
                 "smithy.api#idempotent": {}
             }
         },
@@ -1004,6 +1100,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The IP address type that the workgroup supports. Possible values are <code>ipv4</code> and <code>dualstack</code>.</p>"
                     }
+                },
+                "trackName": {
+                    "target": "com.amazonaws.redshiftserverless#TrackName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An optional parameter for the name of the track for the workgroup. If you don't provide \n         a track name, the workgroup is assigned to the <code>current</code> track.</p>"
+                    }
                 }
             },
             "traits": {
@@ -1043,6 +1145,9 @@
                     "target": "com.amazonaws.redshiftserverless#UpdateEndpointAccess"
                 }
             ]
+        },
+        "com.amazonaws.redshiftserverless#CurrencyCode": {
+            "type": "string"
         },
         "com.amazonaws.redshiftserverless#CustomDomainCertificateArnString": {
             "type": "string",
@@ -1592,6 +1697,12 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.redshiftserverless#Duration": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#default": 0
+            }
+        },
         "com.amazonaws.redshiftserverless#Endpoint": {
             "type": "structure",
             "members": {
@@ -2033,6 +2144,128 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.redshiftserverless#GetReservation": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshiftserverless#GetReservationRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.redshiftserverless#GetReservationResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshiftserverless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Gets an Amazon Redshift Serverless reservation. A reservation gives you the option to commit to a specified number of Redshift Processing Units (RPUs) \n         for a year at a discount from Serverless on-demand (OD) rates.</p>",
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#GetReservationOffering": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshiftserverless#GetReservationOfferingRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.redshiftserverless#GetReservationOfferingResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshiftserverless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Returns the reservation offering. The offering determines the payment schedule for the reservation.</p>",
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#GetReservationOfferingRequest": {
+            "type": "structure",
+            "members": {
+                "offeringId": {
+                    "target": "com.amazonaws.redshiftserverless#OfferingId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier for the offering..</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 64
+                        },
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#GetReservationOfferingResponse": {
+            "type": "structure",
+            "members": {
+                "reservationOffering": {
+                    "target": "com.amazonaws.redshiftserverless#ReservationOffering",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The returned reservation offering. The offering determines the payment schedule for the reservation.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#GetReservationRequest": {
+            "type": "structure",
+            "members": {
+                "reservationId": {
+                    "target": "com.amazonaws.redshiftserverless#ReservationId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ID of the reservation to retrieve.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 64
+                        },
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#GetReservationResponse": {
+            "type": "structure",
+            "members": {
+                "reservation": {
+                    "target": "com.amazonaws.redshiftserverless#Reservation",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The returned reservation object.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.redshiftserverless#GetResourcePolicy": {
             "type": "operation",
             "input": {
@@ -2246,6 +2479,68 @@
                     "target": "com.amazonaws.redshiftserverless#TableRestoreStatus",
                     "traits": {
                         "smithy.api#documentation": "<p>The returned <code>TableRestoreStatus</code> object that contains information about\n         the status of your <code>RestoreTableFromSnapshot</code> request.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#GetTrack": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshiftserverless#GetTrackRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.redshiftserverless#GetTrackResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshiftserverless#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get the Redshift Serverless version for a specified track.</p>",
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#GetTrackRequest": {
+            "type": "structure",
+            "members": {
+                "trackName": {
+                    "target": "com.amazonaws.redshiftserverless#TrackName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the track of which its version is fetched.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#GetTrackResponse": {
+            "type": "structure",
+            "members": {
+                "track": {
+                    "target": "com.amazonaws.redshiftserverless#ServerlessTrack",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The version of the specified track.</p>"
                     }
                 }
             },
@@ -2892,6 +3187,162 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.redshiftserverless#ListReservationOfferings": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshiftserverless#ListReservationOfferingsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.redshiftserverless#ListReservationOfferingsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshiftserverless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Returns the current reservation offerings in your account.</p>",
+                "smithy.api#paginated": {
+                    "inputToken": "nextToken",
+                    "outputToken": "nextToken",
+                    "pageSize": "maxResults",
+                    "items": "reservationOfferingsList"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#ListReservationOfferingsRequest": {
+            "type": "structure",
+            "members": {
+                "nextToken": {
+                    "target": "com.amazonaws.redshiftserverless#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
+                        "smithy.api#httpQuery": "nextToken"
+                    }
+                },
+                "maxResults": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#default": null,
+                        "smithy.api#documentation": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+                        "smithy.api#httpQuery": "maxResults",
+                        "smithy.api#range": {
+                            "min": 1,
+                            "max": 100
+                        }
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#ListReservationOfferingsResponse": {
+            "type": "structure",
+            "members": {
+                "reservationOfferingsList": {
+                    "target": "com.amazonaws.redshiftserverless#ReservationOfferingsList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The returned list of reservation offerings.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "nextToken": {
+                    "target": "com.amazonaws.redshiftserverless#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The token to use when requesting the next set of items.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#ListReservations": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshiftserverless#ListReservationsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.redshiftserverless#ListReservationsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshiftserverless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Returns a list of Reservation objects.</p>",
+                "smithy.api#paginated": {
+                    "inputToken": "nextToken",
+                    "outputToken": "nextToken",
+                    "pageSize": "maxResults",
+                    "items": "reservationsList"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#ListReservationsRequest": {
+            "type": "structure",
+            "members": {
+                "nextToken": {
+                    "target": "com.amazonaws.redshiftserverless#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
+                        "smithy.api#httpQuery": "nextToken"
+                    }
+                },
+                "maxResults": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#default": null,
+                        "smithy.api#documentation": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+                        "smithy.api#httpQuery": "maxResults",
+                        "smithy.api#range": {
+                            "min": 1,
+                            "max": 100
+                        }
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#ListReservationsResponse": {
+            "type": "structure",
+            "members": {
+                "reservationsList": {
+                    "target": "com.amazonaws.redshiftserverless#ReservationsList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The serverless reservations returned by the request.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "nextToken": {
+                    "target": "com.amazonaws.redshiftserverless#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The token to use when requesting the next set of items.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.redshiftserverless#ListScheduledActions": {
             "type": "operation",
             "input": {
@@ -3313,6 +3764,89 @@
                     "target": "com.amazonaws.redshiftserverless#TagList",
                     "traits": {
                         "smithy.api#documentation": "<p>A map of the key-value pairs assigned to the resource.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#ListTracks": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.redshiftserverless#ListTracksRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.redshiftserverless#ListTracksResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.redshiftserverless#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#InvalidPaginationException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>List the Amazon Redshift Serverless versions.</p>",
+                "smithy.api#paginated": {
+                    "inputToken": "nextToken",
+                    "outputToken": "nextToken",
+                    "pageSize": "maxResults",
+                    "items": "tracks"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#ListTracksRequest": {
+            "type": "structure",
+            "members": {
+                "nextToken": {
+                    "target": "com.amazonaws.redshiftserverless#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>If your initial <code>ListTracksRequest</code> operation returns a \n         <code>nextToken</code>, you can include the returned <code>nextToken</code>\n         in following <code>ListTracksRequest</code> operations, which returns results in the next page.</p>",
+                        "smithy.api#httpQuery": "nextToken"
+                    }
+                },
+                "maxResults": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#default": null,
+                        "smithy.api#documentation": "<p>The maximum number of response records to return in each call. \n         If the number of remaining response records exceeds the specified \n         MaxRecords value, a value is returned in a marker field of the response. \n         You can retrieve the next set of records by retrying the command with the \n         returned marker value.</p>",
+                        "smithy.api#httpQuery": "maxResults",
+                        "smithy.api#range": {
+                            "min": 1,
+                            "max": 100
+                        }
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.redshiftserverless#ListTracksResponse": {
+            "type": "structure",
+            "members": {
+                "tracks": {
+                    "target": "com.amazonaws.redshiftserverless#TrackList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The returned tracks.</p>"
+                    }
+                },
+                "nextToken": {
+                    "target": "com.amazonaws.redshiftserverless#PaginationToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>When <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code>\n         is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page.</p>"
                     }
                 }
             },
@@ -3826,6 +4360,30 @@
                 "target": "smithy.api#Timestamp"
             }
         },
+        "com.amazonaws.redshiftserverless#OfferingId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 64
+                }
+            }
+        },
+        "com.amazonaws.redshiftserverless#OfferingType": {
+            "type": "string",
+            "traits": {
+                "smithy.api#enum": [
+                    {
+                        "name": "ALL_UPFRONT",
+                        "value": "ALL_UPFRONT"
+                    },
+                    {
+                        "name": "NO_UPFRONT",
+                        "value": "NO_UPFRONT"
+                    }
+                ]
+            }
+        },
         "com.amazonaws.redshiftserverless#OwnerAccount": {
             "type": "string",
             "traits": {
@@ -4058,10 +4616,16 @@
                     "target": "com.amazonaws.redshiftserverless#GetResourcePolicy"
                 },
                 {
+                    "target": "com.amazonaws.redshiftserverless#GetTrack"
+                },
+                {
                     "target": "com.amazonaws.redshiftserverless#ListCustomDomainAssociations"
                 },
                 {
                     "target": "com.amazonaws.redshiftserverless#ListTagsForResource"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ListTracks"
                 },
                 {
                     "target": "com.amazonaws.redshiftserverless#PutResourcePolicy"
@@ -4088,6 +4652,9 @@
                 },
                 {
                     "target": "com.amazonaws.redshiftserverless#RecoveryPointResource"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ReservationResource"
                 },
                 {
                     "target": "com.amazonaws.redshiftserverless#ScheduledActionResource"
@@ -4880,6 +5447,156 @@
                 }
             }
         },
+        "com.amazonaws.redshiftserverless#Reservation": {
+            "type": "structure",
+            "members": {
+                "reservationId": {
+                    "target": "com.amazonaws.redshiftserverless#ReservationId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The identifier that uniquely identifies the serverless reservation.</p>"
+                    }
+                },
+                "reservationArn": {
+                    "target": "com.amazonaws.redshiftserverless#ReservationArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) that uniquely identifies the serverless reservation.</p>"
+                    }
+                },
+                "startDate": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The start date for the serverless reservation. This is the date you specified for the reservation to start when\n         you created the reservation.</p>",
+                        "smithy.api#timestampFormat": "date-time"
+                    }
+                },
+                "endDate": {
+                    "target": "smithy.api#Timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The end date for the serverless reservation. This date is one year after the start date that you specify.</p>",
+                        "smithy.api#timestampFormat": "date-time"
+                    }
+                },
+                "capacity": {
+                    "target": "com.amazonaws.redshiftserverless#Capacity",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The number of Redshift Processing Units (RPUs) to reserve.</p>"
+                    }
+                },
+                "offering": {
+                    "target": "com.amazonaws.redshiftserverless#ReservationOffering",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of offering for the reservation. The offering class determines the payment schedule for the reservation.</p>"
+                    }
+                },
+                "status": {
+                    "target": "com.amazonaws.redshiftserverless#Status",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status of the reservation. Possible values include the following:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>payment-pending</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>active</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>payment-failed</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>retired</code>\n               </p>\n            </li>\n         </ul>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Represents an Amazon Redshift Serverless reservation, which gives you the option to commit to a specified number of Redshift Processing Units (RPUs) \n         for a year at a discount from Serverless on-demand (OD) rates.</p>"
+            }
+        },
+        "com.amazonaws.redshiftserverless#ReservationArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 128
+                }
+            }
+        },
+        "com.amazonaws.redshiftserverless#ReservationId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 64
+                }
+            }
+        },
+        "com.amazonaws.redshiftserverless#ReservationOffering": {
+            "type": "structure",
+            "members": {
+                "offeringId": {
+                    "target": "com.amazonaws.redshiftserverless#OfferingId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The offering identifier.</p>"
+                    }
+                },
+                "duration": {
+                    "target": "com.amazonaws.redshiftserverless#Duration",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The duration, in seconds, for which the reservation reserves the RPUs.</p>"
+                    }
+                },
+                "upfrontCharge": {
+                    "target": "com.amazonaws.redshiftserverless#Charge",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The up-front price you are charged for the reservation.</p>"
+                    }
+                },
+                "hourlyCharge": {
+                    "target": "com.amazonaws.redshiftserverless#Charge",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The rate you are charged for each hour the reservation is active.</p>"
+                    }
+                },
+                "currencyCode": {
+                    "target": "com.amazonaws.redshiftserverless#CurrencyCode",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The currency code for the offering.</p>"
+                    }
+                },
+                "offeringType": {
+                    "target": "com.amazonaws.redshiftserverless#OfferingType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Determines the payment schedule for the reservation.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The class of offering for the reservation. The offering class determines the payment\n         schedule for the reservation.</p>"
+            }
+        },
+        "com.amazonaws.redshiftserverless#ReservationOfferingsList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.redshiftserverless#ReservationOffering"
+            }
+        },
+        "com.amazonaws.redshiftserverless#ReservationResource": {
+            "type": "resource",
+            "operations": [
+                {
+                    "target": "com.amazonaws.redshiftserverless#CreateReservation"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#GetReservation"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#GetReservationOffering"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ListReservationOfferings"
+                },
+                {
+                    "target": "com.amazonaws.redshiftserverless#ListReservations"
+                }
+            ]
+        },
+        "com.amazonaws.redshiftserverless#ReservationsList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.redshiftserverless#Reservation"
+            }
+        },
         "com.amazonaws.redshiftserverless#ResourceNotFoundException": {
             "type": "structure",
             "members": {
@@ -5053,7 +5770,7 @@
                 "snapshotArn": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the snapshot to restore from. Required if restoring from Amazon Redshift Serverless to a provisioned cluster.\n      Must not be specified at the same time as <code>snapshotName</code>.</p>\n         <p>The format of the ARN is arn:aws:redshift:&lt;region&gt;:&lt;account_id&gt;:snapshot:&lt;cluster_identifier&gt;/&lt;snapshot_identifier&gt;.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the snapshot to restore from. Required if restoring\n         from a provisioned cluster to Amazon Redshift Serverless. Must not be specified at the same time as\n            <code>snapshotName</code>.</p>\n         <p>The format of the ARN is arn:aws:redshift:&lt;region&gt;:&lt;account_id&gt;:snapshot:&lt;cluster_identifier&gt;/&lt;snapshot_identifier&gt;.</p>"
                     }
                 },
                 "ownerAccount": {
@@ -5483,6 +6200,32 @@
                 "target": "com.amazonaws.redshiftserverless#SecurityGroupId"
             }
         },
+        "com.amazonaws.redshiftserverless#ServerlessTrack": {
+            "type": "structure",
+            "members": {
+                "trackName": {
+                    "target": "com.amazonaws.redshiftserverless#TrackName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the track. Valid values are <code>current</code> and <code>trailing</code>.</p>"
+                    }
+                },
+                "workgroupVersion": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The workgroup version number for the workgroup release.</p>"
+                    }
+                },
+                "updateTargets": {
+                    "target": "com.amazonaws.redshiftserverless#UpdateTargetsList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An array of <code>UpdateTarget</code> objects to update with the track.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Defines a track that determines which Amazon Redshift version \n         to apply after a new version is released. If the value for <code>ServerlessTrack</code> is \n         <code>current</code>, the workgroup is updated to the most recently certified release. \n         If the value is <code>trailing</code>, the workgroup is updated to the previously certified release.</p>"
+            }
+        },
         "com.amazonaws.redshiftserverless#ServiceQuotaExceededException": {
             "type": "structure",
             "members": {
@@ -5808,6 +6551,15 @@
                 ]
             }
         },
+        "com.amazonaws.redshiftserverless#Status": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 16
+                }
+            }
+        },
         "com.amazonaws.redshiftserverless#SubnetId": {
             "type": "string"
         },
@@ -6094,6 +6846,22 @@
                 "smithy.api#documentation": "<p>The request exceeded the number of tags allowed for a resource.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 400
+            }
+        },
+        "com.amazonaws.redshiftserverless#TrackList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.redshiftserverless#ServerlessTrack"
+            }
+        },
+        "com.amazonaws.redshiftserverless#TrackName": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 256
+                },
+                "smithy.api#pattern": "^[a-zA-Z0-9_]+$"
             }
         },
         "com.amazonaws.redshiftserverless#UntagResource": {
@@ -6634,6 +7402,32 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.redshiftserverless#UpdateTarget": {
+            "type": "structure",
+            "members": {
+                "trackName": {
+                    "target": "com.amazonaws.redshiftserverless#TrackName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the new track.</p>"
+                    }
+                },
+                "workgroupVersion": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The workgroup version for the new track.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A track that you can switch the current track to.</p>"
+            }
+        },
+        "com.amazonaws.redshiftserverless#UpdateTargetsList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.redshiftserverless#UpdateTarget"
+            }
+        },
         "com.amazonaws.redshiftserverless#UpdateUsageLimit": {
             "type": "operation",
             "input": {
@@ -6801,6 +7595,12 @@
                     "target": "com.amazonaws.redshiftserverless#PerformanceTarget",
                     "traits": {
                         "smithy.api#documentation": "<p>An object that represents the price performance target settings for the workgroup.</p>"
+                    }
+                },
+                "trackName": {
+                    "target": "com.amazonaws.redshiftserverless#TrackName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An optional parameter for the name of the track for the workgroup. If you don't provide \n         a track name, the workgroup is assigned to the <code>current</code> track.</p>"
                     }
                 }
             },
@@ -7188,6 +7988,18 @@
                     "target": "com.amazonaws.redshiftserverless#PerformanceTarget",
                     "traits": {
                         "smithy.api#documentation": "<p>An object that represents the price performance target settings for the workgroup.</p>"
+                    }
+                },
+                "trackName": {
+                    "target": "com.amazonaws.redshiftserverless#TrackName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the track for the workgroup.</p>"
+                    }
+                },
+                "pendingTrackName": {
+                    "target": "com.amazonaws.redshiftserverless#TrackName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name for the track that you want to assign to the workgroup. When the track changes, the \n         workgroup is switched to the latest workgroup release available for the track. At this point, the \n         track name is applied.</p>"
                     }
                 }
             },

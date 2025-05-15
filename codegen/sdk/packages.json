@@ -787,12 +787,6 @@
             "brazilName": "AwsSdkKotlinElasticBeanstalk"
         },
         {
-            "sdkId": "Elastic Inference",
-            "namespace": "aws.sdk.kotlin.services.elasticinference",
-            "artifactName": "elasticinference",
-            "brazilName": "AwsSdkKotlinElasticInference"
-        },
-        {
             "sdkId": "Elastic Load Balancing",
             "namespace": "aws.sdk.kotlin.services.elasticloadbalancing",
             "artifactName": "elasticloadbalancing",
@@ -869,6 +863,12 @@
             "namespace": "aws.sdk.kotlin.services.gamelift",
             "artifactName": "gamelift",
             "brazilName": "AwsSdkKotlinGamelift"
+        },
+        {
+            "sdkId": "GameLiftStreams",
+            "namespace": "aws.sdk.kotlin.services.gameliftstreams",
+            "artifactName": "gameliftstreams",
+            "brazilName": "AwsSdkKotlinGameliftstreams"
         },
         {
             "sdkId": "Geo Maps",
@@ -1013,6 +1013,12 @@
             "namespace": "aws.sdk.kotlin.services.iotjobsdataplane",
             "artifactName": "iotjobsdataplane",
             "brazilName": "AwsSdkKotlinIotJobsDataPlane"
+        },
+        {
+            "sdkId": "IoT Managed Integrations",
+            "namespace": "aws.sdk.kotlin.services.iotmanagedintegrations",
+            "artifactName": "iotmanagedintegrations",
+            "brazilName": "AwsSdkKotlinIotManagedIntegrations"
         },
         {
             "sdkId": "IoT Wireless",
@@ -1871,6 +1877,12 @@
             "namespace": "aws.sdk.kotlin.services.ssmcontacts",
             "artifactName": "ssmcontacts",
             "brazilName": "AwsSdkKotlinSsmContacts"
+        },
+        {
+            "sdkId": "SSM GuiConnect",
+            "namespace": "aws.sdk.kotlin.services.ssmguiconnect",
+            "artifactName": "ssmguiconnect",
+            "brazilName": "AwsSdkKotlinSsmGuiconnect"
         },
         {
             "sdkId": "SSM Incidents",

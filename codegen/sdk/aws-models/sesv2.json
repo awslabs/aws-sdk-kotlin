@@ -129,6 +129,164 @@
         "com.amazonaws.sesv2#AmazonResourceName": {
             "type": "string"
         },
+        "com.amazonaws.sesv2#ArchiveArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 20,
+                    "max": 1011
+                },
+                "smithy.api#pattern": "^arn:(aws|aws-[a-z-]+):ses:[a-z]{2}-[a-z-]+-[0-9]:[0-9]{1,20}:mailmanager-archive/a-[a-z0-9]{24,62}$"
+            }
+        },
+        "com.amazonaws.sesv2#ArchivingOptions": {
+            "type": "structure",
+            "members": {
+                "ArchiveArn": {
+                    "target": "com.amazonaws.sesv2#ArchiveArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the MailManager archive where the Amazon SES API v2 will archive sent\n        emails.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Used to associate a configuration set with a MailManager archive.</p>"
+            }
+        },
+        "com.amazonaws.sesv2#Attachment": {
+            "type": "structure",
+            "members": {
+                "RawContent": {
+                    "target": "com.amazonaws.sesv2#RawAttachmentData",
+                    "traits": {
+                        "smithy.api#documentation": "<p> The raw data of the attachment. It needs to be base64-encoded if you are accessing Amazon SES\n            directly through the HTTPS interface. If you are accessing Amazon SES using an Amazon Web Services\n            SDK, the SDK takes care of the base 64-encoding for you.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ContentDisposition": {
+                    "target": "com.amazonaws.sesv2#AttachmentContentDisposition",
+                    "traits": {
+                        "smithy.api#documentation": "<p> A standard descriptor indicating how the attachment should be rendered in the email.\n            Supported values: <code>ATTACHMENT</code> or <code>INLINE</code>.</p>"
+                    }
+                },
+                "FileName": {
+                    "target": "com.amazonaws.sesv2#AttachmentFileName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The file name for the attachment as it will appear in the email.\n            Amazon SES restricts certain file extensions. To ensure attachments are accepted,\n            check the <a href=\"https://docs.aws.amazon.com/ses/latest/dg/mime-types.html\">Unsupported attachment types</a>\n            in the Amazon SES Developer Guide.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ContentDescription": {
+                    "target": "com.amazonaws.sesv2#AttachmentContentDescription",
+                    "traits": {
+                        "smithy.api#documentation": "<p> A brief description of the attachment content.</p>"
+                    }
+                },
+                "ContentId": {
+                    "target": "com.amazonaws.sesv2#AttachmentContentId",
+                    "traits": {
+                        "smithy.api#documentation": "<p> Unique identifier for the attachment, used for referencing attachments with INLINE disposition in HTML content.</p>"
+                    }
+                },
+                "ContentTransferEncoding": {
+                    "target": "com.amazonaws.sesv2#AttachmentContentTransferEncoding",
+                    "traits": {
+                        "smithy.api#documentation": "<p> Specifies how the attachment is encoded.\n            Supported values: <code>BASE64</code>, <code>QUOTED_PRINTABLE</code>, <code>SEVEN_BIT</code>.</p>"
+                    }
+                },
+                "ContentType": {
+                    "target": "com.amazonaws.sesv2#AttachmentContentType",
+                    "traits": {
+                        "smithy.api#documentation": "<p> The MIME type of the attachment.</p>\n         <note>\n            <p>Example: <code>application/pdf</code>, <code>image/jpeg</code>\n            </p>\n         </note>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p> Contains metadata and attachment raw content.</p>"
+            }
+        },
+        "com.amazonaws.sesv2#AttachmentContentDescription": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 1000
+                }
+            }
+        },
+        "com.amazonaws.sesv2#AttachmentContentDisposition": {
+            "type": "enum",
+            "members": {
+                "ATTACHMENT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ATTACHMENT"
+                    }
+                },
+                "INLINE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INLINE"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.sesv2#AttachmentContentId": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 78
+                }
+            }
+        },
+        "com.amazonaws.sesv2#AttachmentContentTransferEncoding": {
+            "type": "enum",
+            "members": {
+                "BASE64": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "BASE64"
+                    }
+                },
+                "QUOTED_PRINTABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "QUOTED_PRINTABLE"
+                    }
+                },
+                "SEVEN_BIT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SEVEN_BIT"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.sesv2#AttachmentContentType": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 78
+                }
+            }
+        },
+        "com.amazonaws.sesv2#AttachmentFileName": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 255
+                }
+            }
+        },
+        "com.amazonaws.sesv2#AttachmentList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.sesv2#Attachment"
+            }
+        },
         "com.amazonaws.sesv2#AttributesData": {
             "type": "string"
         },
@@ -1089,6 +1247,12 @@
                     "target": "com.amazonaws.sesv2#VdmOptions",
                     "traits": {
                         "smithy.api#documentation": "<p>An object that defines the VDM options for emails that you send using the\n            configuration set.</p>"
+                    }
+                },
+                "ArchivingOptions": {
+                    "target": "com.amazonaws.sesv2#ArchivingOptions",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An object that defines the MailManager archiving options for emails that you send\n            using the configuration set.</p>"
                     }
                 }
             },
@@ -3579,7 +3743,7 @@
                 "Simple": {
                     "target": "com.amazonaws.sesv2#Message",
                     "traits": {
-                        "smithy.api#documentation": "<p>The simple email message. The message consists of a subject and a message body.</p>"
+                        "smithy.api#documentation": "<p>The simple email message. The message consists of a subject, message body and attachments list.</p>"
                     }
                 },
                 "Raw": {
@@ -3596,7 +3760,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>An object that defines the entire content of the email, including the message headers\n            and the body content. You can create a simple email message, in which you specify the\n            subject and the text and HTML versions of the message body. You can also create raw\n            messages, in which you specify a complete MIME-formatted message. Raw messages can\n            include attachments and custom headers.</p>"
+                "smithy.api#documentation": "<p>An object that defines the entire content of the email, including the message headers, body content,\n            and attachments. For a simple email message, you specify the subject and provide both text\n            and HTML versions of the message body. You can also add attachments to simple and templated\n            messages. For a raw message, you provide a complete MIME-formatted message, which can\n            include custom headers and attachments.</p>"
             }
         },
         "com.amazonaws.sesv2#EmailInsights": {
@@ -4575,6 +4739,12 @@
                     "target": "com.amazonaws.sesv2#VdmOptions",
                     "traits": {
                         "smithy.api#documentation": "<p>An object that contains information about the VDM preferences for your configuration\n            set.</p>"
+                    }
+                },
+                "ArchivingOptions": {
+                    "target": "com.amazonaws.sesv2#ArchivingOptions",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An object that defines the MailManager archive where sent emails are archived that you send\n            using the configuration set.</p>"
                     }
                 }
             },
@@ -6668,7 +6838,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Lists all of the contact lists available.</p>",
+                "smithy.api#documentation": "<p>Lists all of the contact lists available.</p>\n         <p>If your output includes a \"NextToken\" field with a string value, this indicates there may be additional\n            contacts on the filtered list - regardless of the number of contacts returned.</p>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/v2/email/contact-lists",
@@ -7672,7 +7842,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The <code>ListRecommendations</code> filter type. This can be one of the following:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>TYPE</code> – The recommendation type, with values like <code>DKIM</code>,\n                    <code>SPF</code>, <code>DMARC</code> or <code>BIMI</code>.</p>\n            </li>\n            <li>\n               <p>\n                  <code>IMPACT</code> – The recommendation impact, with values like\n                    <code>HIGH</code> or <code>LOW</code>.</p>\n            </li>\n            <li>\n               <p>\n                  <code>STATUS</code> – The recommendation status, with values like\n                    <code>OPEN</code> or <code>FIXED</code>.</p>\n            </li>\n            <li>\n               <p>\n                  <code>RESOURCE_ARN</code> – The resource affected by the recommendation,\n                    with values like <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p>\n            </li>\n         </ul>"
+                "smithy.api#documentation": "<p>The <code>ListRecommendations</code> filter type. This can be one of the following:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>TYPE</code> – The recommendation type, with values like <code>DKIM</code>,\n                    <code>SPF</code>, <code>DMARC</code>, <code>BIMI</code>, or <code>COMPLAINT</code>.</p>\n            </li>\n            <li>\n               <p>\n                  <code>IMPACT</code> – The recommendation impact, with values like\n                    <code>HIGH</code> or <code>LOW</code>.</p>\n            </li>\n            <li>\n               <p>\n                  <code>STATUS</code> – The recommendation status, with values like\n                    <code>OPEN</code> or <code>FIXED</code>.</p>\n            </li>\n            <li>\n               <p>\n                  <code>RESOURCE_ARN</code> – The resource affected by the recommendation,\n                    with values like <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p>\n            </li>\n         </ul>"
             }
         },
         "com.amazonaws.sesv2#ListRecommendationsRequest": {
@@ -8022,6 +8192,12 @@
                     "target": "com.amazonaws.sesv2#MessageHeaderList",
                     "traits": {
                         "smithy.api#documentation": "<p>The list of message headers that will be added to the email message.</p>"
+                    }
+                },
+                "Attachments": {
+                    "target": "com.amazonaws.sesv2#AttachmentList",
+                    "traits": {
+                        "smithy.api#documentation": "<p> The List of attachments to include in your email. All recipients will receive the same attachments.</p>"
                     }
                 }
             },
@@ -8991,6 +9167,77 @@
             "type": "structure",
             "members": {},
             "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.sesv2#PutConfigurationSetArchivingOptions": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.sesv2#PutConfigurationSetArchivingOptionsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.sesv2#PutConfigurationSetArchivingOptionsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.sesv2#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.sesv2#NotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.sesv2#TooManyRequestsException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Associate the configuration set with a MailManager archive. When you send email using the\n        <code>SendEmail</code> or <code>SendBulkEmail</code> operations the message as it will be given\n        to the receiving SMTP server will be archived, along with the recipient information.</p>",
+                "smithy.api#examples": [
+                    {
+                        "title": "Used to associate an MailManager archive with a ConfigurationSet.",
+                        "documentation": "This example associates an archive arn with a configuration set.",
+                        "input": {
+                            "ConfigurationSetName": "sample-configuration-name",
+                            "ArchiveArn": "arn:aws:ses:us-west-2:123456789012:mailmanager-archive/a-abcdefghijklmnopqrstuvwxyz"
+                        },
+                        "output": {}
+                    }
+                ],
+                "smithy.api#http": {
+                    "method": "PUT",
+                    "uri": "/v2/email/configuration-sets/{ConfigurationSetName}/archiving-options",
+                    "code": 200
+                },
+                "smithy.api#idempotent": {}
+            }
+        },
+        "com.amazonaws.sesv2#PutConfigurationSetArchivingOptionsRequest": {
+            "type": "structure",
+            "members": {
+                "ConfigurationSetName": {
+                    "target": "com.amazonaws.sesv2#ConfigurationSetName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the configuration set to associate with a MailManager archive.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "ArchiveArn": {
+                    "target": "com.amazonaws.sesv2#ArchiveArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the MailManager archive that the Amazon SES API v2 sends email\n            to.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A request to associate a configuration set with a MailManager archive.</p>",
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.sesv2#PutConfigurationSetArchivingOptionsResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#documentation": "<p>An HTTP 200 response if the request succeeds, or an error message if the request\n            fails.</p>",
                 "smithy.api#output": {}
             }
         },
@@ -10033,6 +10280,9 @@
                 }
             }
         },
+        "com.amazonaws.sesv2#RawAttachmentData": {
+            "type": "blob"
+        },
         "com.amazonaws.sesv2#RawMessage": {
             "type": "structure",
             "members": {
@@ -10072,7 +10322,7 @@
                 "Type": {
                     "target": "com.amazonaws.sesv2#RecommendationType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The recommendation type, with values like <code>DKIM</code>,\n            <code>SPF</code>, <code>DMARC</code> or <code>BIMI</code>.</p>"
+                        "smithy.api#documentation": "<p>The recommendation type, with values like <code>DKIM</code>,\n            <code>SPF</code>, <code>DMARC</code>, <code>BIMI</code>, or <code>COMPLAINT</code>.</p>"
                     }
                 },
                 "Description": {
@@ -11063,6 +11313,9 @@
                     "target": "com.amazonaws.sesv2#PutAccountVdmAttributes"
                 },
                 {
+                    "target": "com.amazonaws.sesv2#PutConfigurationSetArchivingOptions"
+                },
+                {
                     "target": "com.amazonaws.sesv2#PutConfigurationSetDeliveryOptions"
                 },
                 {
@@ -11317,7 +11570,7 @@
                                                                 {
                                                                     "conditions": [],
                                                                     "endpoint": {
-                                                                        "url": "https://{EndpointId}.endpoints.email.{PartitionResult#dualStackDnsSuffix}",
+                                                                        "url": "https://{EndpointId}.endpoints.email.global.{PartitionResult#dualStackDnsSuffix}",
                                                                         "properties": {
                                                                             "authSchemes": [
                                                                                 {
@@ -12302,7 +12555,7 @@
                                             }
                                         ]
                                     },
-                                    "url": "https://abc123.456def.endpoints.email.api.aws"
+                                    "url": "https://abc123.456def.endpoints.email.global.api.aws"
                                 }
                             },
                             "params": {
@@ -12807,6 +13060,12 @@
                     "target": "com.amazonaws.sesv2#MessageHeaderList",
                     "traits": {
                         "smithy.api#documentation": "<p>The list of message headers that will be added to the email message.</p>"
+                    }
+                },
+                "Attachments": {
+                    "target": "com.amazonaws.sesv2#AttachmentList",
+                    "traits": {
+                        "smithy.api#documentation": "<p> The List of attachments to include in your email. All recipients will receive the same attachments.</p>"
                     }
                 }
             },
@@ -13692,7 +13951,7 @@
                 "ErrorType": {
                     "target": "com.amazonaws.sesv2#VerificationError",
                     "traits": {
-                        "smithy.api#documentation": "<p>Provides the reason for the failure describing why Amazon SES was not able to successfully\n            verify the identity. Below are the possible values: </p>\n         <ul>\n            <li>\n               <p>\n                  <code>INVALID_VALUE</code> – Amazon SES was able to find the record, but the\n                    value contained within the record was invalid. Ensure you have published the\n                    correct values for the record.</p>\n            </li>\n            <li>\n               <p>\n                  <code>TYPE_NOT_FOUND</code> – The queried hostname exists but does not\n                    have the requested type of DNS record. Ensure that you have published the\n                    correct type of DNS record.</p>\n            </li>\n            <li>\n               <p>\n                  <code>HOST_NOT_FOUND</code> – The queried hostname does not exist or was\n                    not reachable at the time of the request. Ensure that you have published the\n                    required DNS record(s). </p>\n            </li>\n            <li>\n               <p>\n                  <code>SERVICE_ERROR</code> – A temporary issue is preventing Amazon SES from\n                    determining the verification status of the domain.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DNS_SERVER_ERROR</code> – The DNS server encountered an issue and\n                    was unable to complete the request.</p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_ACCESS_DENIED</code> – The verification failed because the user does not\n                    have the required permissions to replicate the DKIM key from the primary region. Ensure you have the\n                    necessary permissions in both primary and replica regions.\n                </p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_PRIMARY_NOT_FOUND</code> – The verification failed because no corresponding\n                    identity was found in the specified primary region. Ensure the identity exists in the primary region\n                    before attempting replication.\n                </p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_PRIMARY_BYO_DKIM_NOT_SUPPORTED</code> – The verification failed because the\n                    identity in the primary region is configured with Bring Your Own DKIM (BYODKIM). DKIM key\n                    replication is only supported for identities using Easy DKIM.\n                </p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_REPLICA_AS_PRIMARY_NOT_SUPPORTED</code> – The verification failed because\n                    the specified primary identity is a replica of another identity, and multi-level replication is not\n                    supported; the primary identity must be a non-replica identity.\n                </p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_PRIMARY_INVALID_REGION</code> – The verification failed due to an invalid\n                    primary region specified. Ensure you provide a valid AWS region where Amazon SES is available and different\n                    from the replica region.\n                </p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Provides the reason for the failure describing why Amazon SES was not able to successfully\n            verify the identity. Below are the possible values: </p>\n         <ul>\n            <li>\n               <p>\n                  <code>INVALID_VALUE</code> – Amazon SES was able to find the record, but the\n                    value contained within the record was invalid. Ensure you have published the\n                    correct values for the record.</p>\n            </li>\n            <li>\n               <p>\n                  <code>TYPE_NOT_FOUND</code> – The queried hostname exists but does not\n                    have the requested type of DNS record. Ensure that you have published the\n                    correct type of DNS record.</p>\n            </li>\n            <li>\n               <p>\n                  <code>HOST_NOT_FOUND</code> – The queried hostname does not exist or was\n                    not reachable at the time of the request. Ensure that you have published the\n                    required DNS record(s). </p>\n            </li>\n            <li>\n               <p>\n                  <code>SERVICE_ERROR</code> – A temporary issue is preventing Amazon SES from\n                    determining the verification status of the domain.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DNS_SERVER_ERROR</code> – The DNS server encountered an issue and\n                    was unable to complete the request.</p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_ACCESS_DENIED</code> – The verification failed because the user does not\n                    have the required permissions to replicate the DKIM key from the primary region. Ensure you have the\n                    necessary permissions in both primary and replica regions.\n                </p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_PRIMARY_NOT_FOUND</code> – The verification failed because no corresponding\n                    identity was found in the specified primary region. Ensure the identity exists in the primary region\n                    before attempting replication.\n                </p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_PRIMARY_BYO_DKIM_NOT_SUPPORTED</code> – The verification failed because the\n                    identity in the primary region is configured with Bring Your Own DKIM (BYODKIM). DKIM key\n                    replication is only supported for identities using Easy DKIM.\n                </p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_REPLICA_AS_PRIMARY_NOT_SUPPORTED</code> – The verification failed because\n                    the specified primary identity is a replica of another identity, and multi-level replication is not\n                    supported; the primary identity must be a non-replica identity.\n                </p>\n            </li>\n            <li>\n               <p>\n                  <code>REPLICATION_PRIMARY_INVALID_REGION</code> – The verification failed due to an invalid\n                    primary region specified. Ensure you provide a valid Amazon Web Services region where Amazon SES is available and different\n                    from the replica region.\n                </p>\n            </li>\n         </ul>"
                     }
                 },
                 "SOARecord": {

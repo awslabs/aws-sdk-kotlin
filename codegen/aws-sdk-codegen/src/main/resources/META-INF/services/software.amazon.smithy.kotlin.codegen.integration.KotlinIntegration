@@ -35,7 +35,6 @@ aws.sdk.kotlin.codegen.customization.machinelearning.MachineLearningEndpointCust
 aws.sdk.kotlin.codegen.customization.route53.TrimResourcePrefix
 aws.sdk.kotlin.codegen.customization.ec2.EC2MakePrimitivesOptional
 aws.sdk.kotlin.codegen.customization.RemoveDefaults
-aws.sdk.kotlin.codegen.customization.s3.UnsupportedSigningAlgorithmIntegration
 aws.sdk.kotlin.codegen.customization.SigV4AsymmetricTraitCustomization
 aws.sdk.kotlin.codegen.customization.cloudfrontkeyvaluestore.BackfillSigV4ACustomization
 aws.sdk.kotlin.codegen.customization.s3.express.SigV4S3ExpressAuthSchemeIntegration
@@ -49,3 +48,4 @@ aws.sdk.kotlin.codegen.smoketests.SmokeTestsDenyListIntegration
 aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestSuccessHttpEngineIntegration
 aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestFailHttpEngineIntegration
 aws.sdk.kotlin.codegen.customization.AwsQueryModeCustomization
+aws.sdk.kotlin.codegen.ModuleDocumentationIntegration

@@ -3035,7 +3035,7 @@
                 "InitQuery": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>One or more SQL statements for the proxy to run when opening each new database connection.\n        Typically used with <code>SET</code> statements to make sure that each connection has identical\n        settings such as time zone and character set. For multiple statements, use semicolons as the separator.\n        You can also include multiple variables in a single <code>SET</code> statement, such as\n        <code>SET x=1, y=2</code>.</p>\n         <p>Default: no initialization query</p>"
+                        "smithy.api#documentation": "<p>Add an initialization query, or modify the current one. You can specify one or more SQL statements for\n            the proxy to run when opening each new database connection. The setting is\n            typically used with <code>SET</code> statements to make sure that each\n            connection has identical settings. Make sure that the query you add is valid. To\n            include multiple variables in a single <code>SET</code> statement, use comma\n            separators.</p>\n         <p>For example: <code>SET variable1=value1, variable2=value2</code>\n         </p>\n         <p>For multiple statements, use semicolons as the separator.</p>\n         <p>Default: no initialization query</p>"
                     }
                 }
             },
@@ -4366,7 +4366,7 @@
                 "EnableCloudwatchLogsExports": {
                     "target": "com.amazonaws.rds#LogTypeList",
                     "traits": {
-                        "smithy.api#documentation": "<p>The list of log types that need to be enabled for exporting to CloudWatch Logs.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>\n         <p>The following values are valid for each DB engine:</p>\n         <ul>\n            <li>\n               <p>Aurora MySQL - <code>audit | error | general | slowquery</code>\n               </p>\n            </li>\n            <li>\n               <p>Aurora PostgreSQL - <code>postgresql</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MySQL - <code>error | general | slowquery</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - <code>postgresql | upgrade</code>\n               </p>\n            </li>\n         </ul>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>"
+                        "smithy.api#documentation": "<p>The list of log types that need to be enabled for exporting to CloudWatch Logs.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>\n         <p>The following values are valid for each DB engine:</p>\n         <ul>\n            <li>\n               <p>Aurora MySQL - <code>audit | error | general | instance | slowquery | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>Aurora PostgreSQL - <code>instance | postgresql | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MySQL - <code>error | general | slowquery | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - <code>postgresql | upgrade | iam-db-auth-error</code>\n               </p>\n            </li>\n         </ul>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>"
                     }
                 },
                 "EngineMode": {
@@ -4462,7 +4462,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether minor engine upgrades are applied automatically to the DB cluster during the maintenance window. \n            By default, minor engine upgrades are applied automatically.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB cluster</p>"
+                        "smithy.api#documentation": "<p>Specifies whether minor engine upgrades are applied automatically to the DB cluster during the maintenance window. \n            By default, minor engine upgrades are applied automatically.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB cluster.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "MonitoringInterval": {
@@ -4480,7 +4480,7 @@
                 "DatabaseInsightsMode": {
                     "target": "com.amazonaws.rds#DatabaseInsightsMode",
                     "traits": {
-                        "smithy.api#documentation": "<p>The mode of Database Insights to enable for the DB cluster.</p>\n         <p>If you set this value to <code>advanced</code>, you must also set the <code>PerformanceInsightsEnabled</code>\n            parameter to <code>true</code> and the <code>PerformanceInsightsRetentionPeriod</code> parameter to 465.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters only</p>"
+                        "smithy.api#documentation": "<p>The mode of Database Insights to enable for the DB cluster.</p>\n         <p>If you set this value to <code>advanced</code>, you must also set the <code>PerformanceInsightsEnabled</code>\n            parameter to <code>true</code> and the <code>PerformanceInsightsRetentionPeriod</code> parameter to 465.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>"
                     }
                 },
                 "EnablePerformanceInsights": {
@@ -5076,7 +5076,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether minor engine upgrades are applied automatically to the DB instance during the maintenance window. \n          By default, minor engine upgrades are applied automatically.</p>\n         <p>If you create an RDS Custom DB instance, you must set <code>AutoMinorVersionUpgrade</code> to \n          <code>false</code>.</p>"
+                        "smithy.api#documentation": "<p>Specifies whether minor engine upgrades are applied automatically to the DB instance during the maintenance window. \n          By default, minor engine upgrades are applied automatically.</p>\n         <p>If you create an RDS Custom DB instance, you must set <code>AutoMinorVersionUpgrade</code> to \n          <code>false</code>.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "LicenseModel": {
@@ -5130,7 +5130,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The storage type to associate with the DB instance.</p>\n         <p>If you specify <code>io1</code>, <code>io2</code>, or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n         <p>This setting doesn't apply to Amazon Aurora DB instances. Storage is managed by the DB cluster.</p>\n         <p>Valid Values: <code>gp2 | gp3 | io1 | io2 | standard</code>\n         </p>\n         <p>Default: <code>io1</code>, if the <code>Iops</code> parameter\n          is specified. Otherwise, <code>gp2</code>.</p>"
+                        "smithy.api#documentation": "<p>The storage type to associate with the DB instance.</p>\n         <p>If you specify <code>io1</code>, <code>io2</code>, or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n         <p>This setting doesn't apply to Amazon Aurora DB instances. Storage is managed by the DB cluster.</p>\n         <p>Valid Values: <code>gp2 | gp3 | io1 | io2 | standard</code>\n         </p>\n         <p>Default: <code>io1</code>, if the <code>Iops</code> parameter is specified. Otherwise,\n                <code>gp3</code>.</p>"
                     }
                 },
                 "TdeCredentialArn": {
@@ -5232,7 +5232,7 @@
                 "DatabaseInsightsMode": {
                     "target": "com.amazonaws.rds#DatabaseInsightsMode",
                     "traits": {
-                        "smithy.api#documentation": "<p>The mode of Database Insights to enable for the DB instance.</p>\n         <p>This setting only applies to Amazon Aurora DB instances.</p>\n         <note>\n            <p>Currently, this value is inherited from the DB cluster and can't be changed.</p>\n         </note>"
+                        "smithy.api#documentation": "<p>The mode of Database Insights to enable for the DB instance.</p>\n         <note>\n            <p>Aurora DB instances inherit this value from the DB cluster, so you can't change this value.</p>\n         </note>"
                     }
                 },
                 "EnablePerformanceInsights": {
@@ -5256,7 +5256,7 @@
                 "EnableCloudwatchLogsExports": {
                     "target": "com.amazonaws.rds#LogTypeList",
                     "traits": {
-                        "smithy.api#documentation": "<p>The list of log types to enable for exporting to CloudWatch Logs. For more information, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">\n            Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>This setting doesn't apply to the following DB instances:</p>\n         <ul>\n            <li>\n               <p>Amazon Aurora (CloudWatch Logs exports are managed by the DB cluster.)</p>\n            </li>\n            <li>\n               <p>RDS Custom</p>\n            </li>\n         </ul>\n         <p>The following values are valid for each DB engine:</p>\n         <ul>\n            <li>\n               <p>RDS for Db2 - <code>diag.log | notify.log</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MariaDB - <code>audit | error | general | slowquery</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for Microsoft SQL Server - <code>agent | error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MySQL - <code>audit | error | general | slowquery</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for Oracle - <code>alert | audit | listener | trace | oemagent</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - <code>postgresql | upgrade</code>\n               </p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The list of log types to enable for exporting to CloudWatch Logs. For more information, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">\n            Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>This setting doesn't apply to the following DB instances:</p>\n         <ul>\n            <li>\n               <p>Amazon Aurora (CloudWatch Logs exports are managed by the DB cluster.)</p>\n            </li>\n            <li>\n               <p>RDS Custom</p>\n            </li>\n         </ul>\n         <p>The following values are valid for each DB engine:</p>\n         <ul>\n            <li>\n               <p>RDS for Db2 - <code>diag.log | notify.log | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MariaDB - <code>audit | error | general | slowquery | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for Microsoft SQL Server - <code>agent | error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MySQL - <code>audit | error | general | slowquery | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for Oracle - <code>alert | audit | listener | trace | oemagent</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - <code>postgresql | upgrade | iam-db-auth-error</code>\n               </p>\n            </li>\n         </ul>"
                     }
                 },
                 "ProcessorFeatures": {
@@ -5304,7 +5304,7 @@
                 "StorageThroughput": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>The storage throughput value for the DB instance.</p>\n         <p>This setting applies only to the <code>gp3</code> storage type.</p>\n         <p>This setting doesn't apply to Amazon Aurora or RDS Custom DB instances.</p>"
+                        "smithy.api#documentation": "<p>The storage throughput value, in mebibyte per second (MiBps), for the DB instance.</p>\n         <p>This setting applies only to the <code>gp3</code> storage type.</p>\n         <p>This setting doesn't apply to Amazon Aurora or RDS Custom DB instances.</p>"
                     }
                 },
                 "ManageMasterUserPassword": {
@@ -5504,7 +5504,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether to automatically apply minor engine upgrades to the\n            read replica during the maintenance window.</p>\n         <p>This setting doesn't apply to RDS Custom DB instances.</p>\n         <p>Default: Inherits the value from the source DB instance.</p>"
+                        "smithy.api#documentation": "<p>Specifies whether to automatically apply minor engine upgrades to the\n            read replica during the maintenance window.</p>\n         <p>This setting doesn't apply to RDS Custom DB instances.</p>\n         <p>Default: Inherits the value from the source DB instance.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "Iops": {
@@ -5549,7 +5549,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The storage type to associate with the read replica.</p>\n         <p>If you specify <code>io1</code>, <code>io2</code>, or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n         <p>Valid Values: <code>gp2 | gp3 | io1 | io2 | standard</code>\n         </p>\n         <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified. Otherwise, <code>gp2</code>.</p>"
+                        "smithy.api#documentation": "<p>The storage type to associate with the read replica.</p>\n         <p>If you specify <code>io1</code>, <code>io2</code>, or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n         <p>Valid Values: <code>gp2 | gp3 | io1 | io2 | standard</code>\n         </p>\n         <p>Default: <code>io1</code> if the <code>Iops</code> parameter is specified. Otherwise,\n                <code>gp3</code>.</p>"
                     }
                 },
                 "CopyTagsToSnapshot": {
@@ -5591,7 +5591,7 @@
                 "DatabaseInsightsMode": {
                     "target": "com.amazonaws.rds#DatabaseInsightsMode",
                     "traits": {
-                        "smithy.api#documentation": "<p>The mode of Database Insights to enable for the read replica.</p>\n         <note>\n            <p>Currently, this setting is not supported.</p>\n         </note>"
+                        "smithy.api#documentation": "<p>The mode of Database Insights to enable for the read replica.</p>\n         <note>\n            <p>This setting isn't supported.</p>\n         </note>"
                     }
                 },
                 "EnablePerformanceInsights": {
@@ -5782,7 +5782,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Creates a new DB parameter group.</p>\n         <p>A DB parameter group is initially created with the default parameters for the\n            database engine used by the DB instance. To provide custom values for any of the\n            parameters, you must modify the group after creating it using\n            <code>ModifyDBParameterGroup</code>. Once you've created a DB parameter group, you need to\n            associate it with your DB instance using <code>ModifyDBInstance</code>. When you associate\n            a new DB parameter group with a running DB instance, you need to reboot the DB\n            instance without failover for the new DB parameter group and associated settings to take effect.</p>\n         <p>This command doesn't apply to RDS Custom.</p>\n         <important>\n            <p>After you create a DB parameter group, you should wait at least 5 minutes\n                before creating your first DB instance that uses that DB parameter group as the default parameter \n                group. This allows Amazon RDS to fully complete the create action before the parameter \n                group is used as the default for a new DB instance. This is especially important for parameters \n                that are critical when creating the default database for a DB instance, such as the character set \n                for the default database defined by the <code>character_set_database</code> parameter. You can use the \n                <i>Parameter Groups</i> option of the <a href=\"https://console.aws.amazon.com/rds/\">Amazon RDS console</a> or the \n                <i>DescribeDBParameters</i> command to verify \n                that your DB parameter group has been created or modified.</p>\n         </important>",
+                "smithy.api#documentation": "<p>Creates a new DB parameter group.</p>\n         <p>A DB parameter group is initially created with the default parameters for the\n            database engine used by the DB instance. To provide custom values for any of the\n            parameters, you must modify the group after creating it using\n            <code>ModifyDBParameterGroup</code>. Once you've created a DB parameter group, you need to\n            associate it with your DB instance using <code>ModifyDBInstance</code>. When you associate\n            a new DB parameter group with a running DB instance, you need to reboot the DB\n            instance without failover for the new DB parameter group and associated settings to take effect.</p>\n         <p>This command doesn't apply to RDS Custom.</p>",
                 "smithy.api#examples": [
                     {
                         "title": "To create a DB parameter group",
@@ -6802,7 +6802,7 @@
                 "DataFilter": {
                     "target": "com.amazonaws.rds#DataFilter",
                     "traits": {
-                        "smithy.api#documentation": "<p>Data filtering options for the integration. For more information, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/zero-etl.filtering.html\">Data filtering for Aurora zero-ETL integrations with Amazon Redshift</a>.\n        </p>\n         <p>Valid for: Integrations with Aurora MySQL source DB clusters only</p>"
+                        "smithy.api#documentation": "<p>Data filtering options for the integration. For more information, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/zero-etl.filtering.html\">Data filtering for Aurora zero-ETL integrations with Amazon Redshift</a>\n            or\n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/zero-etl.filtering.html\">Data filtering for Amazon RDS zero-ETL integrations with Amazon Redshift</a>.\n        </p>"
                     }
                 },
                 "Description": {
@@ -6933,6 +6933,9 @@
                     "target": "com.amazonaws.rds#InvalidDBInstanceStateFault"
                 },
                 {
+                    "target": "com.amazonaws.rds#KMSKeyNotAccessibleFault"
+                },
+                {
                     "target": "com.amazonaws.rds#TenantDatabaseAlreadyExistsFault"
                 },
                 {
@@ -6973,9 +6976,7 @@
                 "MasterUserPassword": {
                     "target": "com.amazonaws.rds#SensitiveString",
                     "traits": {
-                        "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The password for the master user in your tenant database.</p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Must be 8 to 30 characters.</p>\n            </li>\n            <li>\n               <p>Can include any printable ASCII character except forward slash\n                    (<code>/</code>), double quote (<code>\"</code>), at symbol (<code>@</code>),\n                    ampersand (<code>&</code>), or single quote (<code>'</code>).</p>\n            </li>\n         </ul>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The password for the master user in your tenant database.</p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Must be 8 to 30 characters.</p>\n            </li>\n            <li>\n               <p>Can include any printable ASCII character except forward slash\n                    (<code>/</code>), double quote (<code>\"</code>), at symbol (<code>@</code>),\n                    ampersand (<code>&</code>), or single quote (<code>'</code>).</p>\n            </li>\n            <li>\n               <p>Can't be specified when <code>ManageMasterUserPassword</code> is\n                    enabled.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "CharacterSetName": {
@@ -6988,6 +6989,18 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The <code>NCHAR</code> value for the tenant database.</p>"
+                    }
+                },
+                "ManageMasterUserPassword": {
+                    "target": "com.amazonaws.rds#BooleanOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies whether to manage the master user password with Amazon Web Services Secrets Manager.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html\">Password management with Amazon Web Services Secrets Manager</a> \n            in the <i>Amazon RDS User Guide.</i>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Can't manage the master user password with Amazon Web Services Secrets Manager if <code>MasterUserPassword</code> \n                    is specified.</p>\n            </li>\n         </ul>"
+                    }
+                },
+                "MasterUserSecretKmsKeyId": {
+                    "target": "com.amazonaws.rds#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services KMS key identifier to encrypt a secret that is automatically generated and \n            managed in Amazon Web Services Secrets Manager.</p>\n         <p>This setting is valid only if the master user password is managed by RDS in Amazon Web Services Secrets \n            Manager for the DB instance.</p>\n         <p>The Amazon Web Services KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key.\n            To use a KMS key in a different Amazon Web Services account, specify the key ARN or alias ARN.</p>\n         <p>If you don't specify <code>MasterUserSecretKmsKeyId</code>, then the <code>aws/secretsmanager</code> \n            KMS key is used to encrypt the secret. If the secret is in a different Amazon Web Services account, then you can't \n            use the <code>aws/secretsmanager</code> KMS key to encrypt the secret, and you must use a customer \n            managed KMS key.</p>\n         <p>There is a default KMS key for your Amazon Web Services account. Your Amazon Web Services account\n            has a different default KMS key for each Amazon Web Services Region.</p>"
                     }
                 },
                 "Tags": {
@@ -7156,7 +7169,7 @@
                 "AllocatedStorage": {
                     "target": "com.amazonaws.rds#IntegerOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>For all database engines except Amazon Aurora, <code>AllocatedStorage</code> specifies the allocated storage size in gibibytes (GiB). \n          For Aurora, <code>AllocatedStorage</code> always returns 1, because Aurora DB cluster storage size isn't fixed, but instead automatically\n      adjusts as needed.</p>"
+                        "smithy.api#documentation": "<p>\n            <code>AllocatedStorage</code> specifies the allocated storage size in gibibytes (GiB). \n          For Aurora, <code>AllocatedStorage</code> can vary because Aurora DB cluster storage size adjusts as needed.</p>"
                     }
                 },
                 "AvailabilityZones": {
@@ -7372,7 +7385,7 @@
                 "CloneGroupId": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the clone group with which the DB cluster is associated.</p>"
+                        "smithy.api#documentation": "<p>The ID of the clone group with which the DB cluster is associated. For newly created\n            clusters, the ID is typically null. </p>\n         <p>If you clone a DB cluster when the ID is null, the operation populates the ID value\n            for the source cluster and the clone because both clusters become part of the same clone\n            group. Even if you delete the clone cluster, the clone group ID remains for the lifetime\n            of the source cluster to show that it was used in a cloning operation.</p>\n         <p>For PITR, the clone group ID is inherited from the source cluster. For snapshot\n            restore operations, the clone group ID isn't inherited from the source cluster.</p>"
                     }
                 },
                 "ClusterCreateTime": {
@@ -7528,7 +7541,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#Boolean",
                     "traits": {
-                        "smithy.api#documentation": "<p>Indicates whether minor version patches are applied automatically.</p>\n         <p>This setting is for Aurora DB clusters and Multi-AZ DB clusters.</p>"
+                        "smithy.api#documentation": "<p>Indicates whether minor version patches are applied automatically.</p>\n         <p>This setting is for Aurora DB clusters and Multi-AZ DB clusters.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "MonitoringInterval": {
@@ -9188,7 +9201,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#Boolean",
                     "traits": {
-                        "smithy.api#documentation": "<p>Indicates whether minor version patches are applied automatically.</p>"
+                        "smithy.api#documentation": "<p>Indicates whether minor version patches are applied automatically.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "ReadReplicaSourceDBInstanceIdentifier": {
@@ -12311,7 +12324,7 @@
                 "DeleteAutomatedBackups": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether to remove automated backups immediately after the DB\n            cluster is deleted. This parameter isn't case-sensitive. The default is to remove \n            automated backups immediately after the DB cluster is deleted.</p>"
+                        "smithy.api#documentation": "<p>Specifies whether to remove automated backups immediately after the DB\n            cluster is deleted. This parameter isn't case-sensitive. The default is to remove \n            automated backups immediately after the DB cluster is deleted, unless the Amazon Web Services Backup \n            policy specifies a point-in-time restore rule.</p>"
                     }
                 }
             },
@@ -21781,7 +21794,7 @@
                 "CloudwatchLogsExportConfiguration": {
                     "target": "com.amazonaws.rds#CloudwatchLogsExportConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB cluster.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>\n         <p>The following values are valid for each DB engine:</p>\n         <ul>\n            <li>\n               <p>Aurora MySQL - <code>audit | error | general | slowquery</code>\n               </p>\n            </li>\n            <li>\n               <p>Aurora PostgreSQL - <code>postgresql</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MySQL - <code>error | general | slowquery</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - <code>postgresql | upgrade</code>\n               </p>\n            </li>\n         </ul>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">\n                Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>"
+                        "smithy.api#documentation": "<p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB cluster.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>\n         <p>The following values are valid for each DB engine:</p>\n         <ul>\n            <li>\n               <p>Aurora MySQL - <code>audit | error | general | instance | slowquery | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>Aurora PostgreSQL - <code>instance | postgresql | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MySQL - <code>error | general | slowquery | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - <code>postgresql | upgrade | iam-db-auth-error</code>\n               </p>\n            </li>\n         </ul>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">\n                Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>"
                     }
                 },
                 "EngineVersion": {
@@ -21871,7 +21884,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether minor engine upgrades are applied automatically to the DB cluster during the maintenance window. \n            By default, minor engine upgrades are applied automatically.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>"
+                        "smithy.api#documentation": "<p>Specifies whether minor engine upgrades are applied automatically to the DB cluster during the maintenance window. \n            By default, minor engine upgrades are applied automatically.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "MonitoringInterval": {
@@ -21889,7 +21902,7 @@
                 "DatabaseInsightsMode": {
                     "target": "com.amazonaws.rds#DatabaseInsightsMode",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the mode of Database Insights to enable for the DB cluster.</p>\n         <p>If you change the value from <code>standard</code> to <code>advanced</code>, you must set the \n            <code>PerformanceInsightsEnabled</code> parameter to <code>true</code> and the \n            <code>PerformanceInsightsRetentionPeriod</code> parameter to 465.</p>\n         <p>If you change the value from <code>advanced</code> to <code>standard</code>, you must \n            set the <code>PerformanceInsightsEnabled</code> parameter to <code>false</code>.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters only</p>"
+                        "smithy.api#documentation": "<p>Specifies the mode of Database Insights to enable for the DB cluster.</p>\n         <p>If you change the value from <code>standard</code> to <code>advanced</code>, you must set the \n            <code>PerformanceInsightsEnabled</code> parameter to <code>true</code> and the \n            <code>PerformanceInsightsRetentionPeriod</code> parameter to 465.</p>\n         <p>If you change the value from <code>advanced</code> to <code>standard</code>, you must \n            set the <code>PerformanceInsightsEnabled</code> parameter to <code>false</code>.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>"
                     }
                 },
                 "EnablePerformanceInsights": {
@@ -22328,7 +22341,7 @@
                 "MasterUserPassword": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The new password for the master user.</p>\n         <p>Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible. \n        Between the time of the request and the completion of the request,\n        the <code>MasterUserPassword</code> element exists in the\n          <code>PendingModifiedValues</code> element of the operation response.</p>\n         <note>\n            <p>Amazon RDS API operations never return the password, \n              so this operation provides a way to regain access to a primary instance user if the password is lost. \n              This includes restoring privileges that might have been accidentally revoked.</p>\n         </note>\n         <p>This setting doesn't apply to the following DB instances:</p>\n         <ul>\n            <li>\n               <p>Amazon Aurora (The password for the master user is managed by the DB cluster. For\n            more information, see <code>ModifyDBCluster</code>.)</p>\n            </li>\n            <li>\n               <p>RDS Custom</p>\n            </li>\n         </ul>\n         <p>Default: Uses existing setting</p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Can't be specified if <code>ManageMasterUserPassword</code> is turned on.</p>\n            </li>\n            <li>\n               <p>Can include any printable ASCII character except \"/\", \"\"\", or \"@\". For RDS for Oracle, can't include the \"&\" (ampersand) or  the \"'\" (single quotes) character.</p>\n            </li>\n         </ul>\n         <p>Length Constraints:</p>\n         <ul>\n            <li>\n               <p>RDS for Db2 - Must contain from 8 to 255 characters.</p>\n            </li>\n            <li>\n               <p>RDS for MariaDB - Must contain from 8 to 41 characters.</p>\n            </li>\n            <li>\n               <p>RDS for Microsoft SQL Server - Must contain from 8 to 128 characters.</p>\n            </li>\n            <li>\n               <p>RDS for MySQL - Must contain from 8 to 41 characters.</p>\n            </li>\n            <li>\n               <p>RDS for Oracle - Must contain from 8 to 30 characters.</p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - Must contain from 8 to 128 characters.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The new password for the master user.</p>\n         <p>Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible. \n        Between the time of the request and the completion of the request,\n        the <code>MasterUserPassword</code> element exists in the\n          <code>PendingModifiedValues</code> element of the operation response.</p>\n         <note>\n            <p>Amazon RDS API operations never return the password, \n              so this operation provides a way to regain access to a primary instance user if the password is lost. \n              This includes restoring privileges that might have been accidentally revoked.</p>\n         </note>\n         <p>This setting doesn't apply to the following DB instances:</p>\n         <ul>\n            <li>\n               <p>Amazon Aurora</p>\n               <p>The password for the master user is managed by the DB cluster. For more\n                    information, see <code>ModifyDBCluster</code>.</p>\n            </li>\n            <li>\n               <p>RDS Custom</p>\n            </li>\n            <li>\n               <p>RDS for Oracle CDBs in the multi-tenant configuration</p>\n               <p>Specify the master password in <code>ModifyTenantDatabase</code>\n                    instead.</p>\n            </li>\n         </ul>\n         <p>Default: Uses existing setting</p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Can't be specified if <code>ManageMasterUserPassword</code> is turned on.</p>\n            </li>\n            <li>\n               <p>Can include any printable ASCII character except \"/\", \"\"\", or \"@\". For RDS for Oracle, can't include the \"&\" (ampersand) or  the \"'\" (single quotes) character.</p>\n            </li>\n         </ul>\n         <p>Length Constraints:</p>\n         <ul>\n            <li>\n               <p>RDS for Db2 - Must contain from 8 to 255 characters.</p>\n            </li>\n            <li>\n               <p>RDS for MariaDB - Must contain from 8 to 41 characters.</p>\n            </li>\n            <li>\n               <p>RDS for Microsoft SQL Server - Must contain from 8 to 128 characters.</p>\n            </li>\n            <li>\n               <p>RDS for MySQL - Must contain from 8 to 41 characters.</p>\n            </li>\n            <li>\n               <p>RDS for Oracle - Must contain from 8 to 30 characters.</p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - Must contain from 8 to 128 characters.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "DBParameterGroupName": {
@@ -22376,7 +22389,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether minor version upgrades are applied automatically to the DB instance \n          during the maintenance window. An outage occurs when all the following conditions are met:</p>\n         <ul>\n            <li>\n               <p>The automatic upgrade is enabled for the maintenance window.</p>\n            </li>\n            <li>\n               <p>A newer minor version is available.</p>\n            </li>\n            <li>\n               <p>RDS has enabled automatic patching for the engine version.</p>\n            </li>\n         </ul>\n         <p>If any of the preceding conditions isn't met, Amazon RDS applies the change as soon as possible and\n      doesn't cause an outage.</p>\n         <p>For an RDS Custom DB instance, don't enable this setting. Otherwise, the operation returns an error.</p>"
+                        "smithy.api#documentation": "<p>Specifies whether minor version upgrades are applied automatically to the DB instance \n          during the maintenance window. An outage occurs when all the following conditions are met:</p>\n         <ul>\n            <li>\n               <p>The automatic upgrade is enabled for the maintenance window.</p>\n            </li>\n            <li>\n               <p>A newer minor version is available.</p>\n            </li>\n            <li>\n               <p>RDS has enabled automatic patching for the engine version.</p>\n            </li>\n         </ul>\n         <p>If any of the preceding conditions isn't met, Amazon RDS applies the change as soon as possible and\n      doesn't cause an outage.</p>\n         <p>For an RDS Custom DB instance, don't enable this setting. Otherwise, the operation returns an error.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "LicenseModel": {
@@ -22514,7 +22527,7 @@
                 "DatabaseInsightsMode": {
                     "target": "com.amazonaws.rds#DatabaseInsightsMode",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the mode of Database Insights to enable for the DB instance.</p>\n         <p>This setting only applies to Amazon Aurora DB instances.</p>\n         <note>\n            <p>Currently, this value is inherited from the DB cluster and can't be changed.</p>\n         </note>"
+                        "smithy.api#documentation": "<p>Specifies the mode of Database Insights to enable for the DB instance.</p>\n         <note>\n            <p>Aurora DB instances inherit this value from the DB cluster, so you can't change this value.</p>\n         </note>"
                     }
                 },
                 "EnablePerformanceInsights": {
@@ -22538,7 +22551,7 @@
                 "CloudwatchLogsExportConfiguration": {
                     "target": "com.amazonaws.rds#CloudwatchLogsExportConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>The log types to be enabled for export to CloudWatch Logs for a \n            specific DB instance.</p>\n         <p>A change to the <code>CloudwatchLogsExportConfiguration</code> parameter is always applied to the DB instance \n            immediately. Therefore, the <code>ApplyImmediately</code> parameter has no effect.</p>\n         <p>This setting doesn't apply to RDS Custom DB instances.</p>\n         <p>The following values are valid for each DB engine:</p>\n         <ul>\n            <li>\n               <p>Aurora MySQL - <code>audit | error | general | slowquery</code>\n               </p>\n            </li>\n            <li>\n               <p>Aurora PostgreSQL - <code>postgresql</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MySQL - <code>error | general | slowquery</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - <code>postgresql | upgrade</code>\n               </p>\n            </li>\n         </ul>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">\n            Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>"
+                        "smithy.api#documentation": "<p>The log types to be enabled for export to CloudWatch Logs for a \n            specific DB instance.</p>\n         <p>A change to the <code>CloudwatchLogsExportConfiguration</code> parameter is always applied to the DB instance \n            immediately. Therefore, the <code>ApplyImmediately</code> parameter has no effect.</p>\n         <p>This setting doesn't apply to RDS Custom DB instances.</p>\n         <p>The following values are valid for each DB engine:</p>\n         <ul>\n            <li>\n               <p>Aurora MySQL - <code>audit | error | general | slowquery | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>Aurora PostgreSQL - <code>postgresql | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for MySQL - <code>error | general | slowquery | iam-db-auth-error</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL - <code>postgresql | upgrade | iam-db-auth-error</code>\n               </p>\n            </li>\n         </ul>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">\n            Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>"
                     }
                 },
                 "ProcessorFeatures": {
@@ -22616,13 +22629,13 @@
                 "ManageMasterUserPassword": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether to manage the master user password with Amazon Web Services Secrets Manager.</p>\n         <p>If the DB instance doesn't manage the master user password with Amazon Web Services Secrets Manager, you can turn \n            on this management. In this case, you can't specify <code>MasterUserPassword</code>.</p>\n         <p>If the DB instance already manages the master user password with Amazon Web Services Secrets Manager, and you specify that the \n            master user password is not managed with Amazon Web Services Secrets Manager, then you must specify <code>MasterUserPassword</code>. \n            In this case, Amazon RDS deletes the secret and uses the new password for the master user specified by \n            <code>MasterUserPassword</code>.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html\">Password management with Amazon Web Services Secrets Manager</a> \n            in the <i>Amazon RDS User Guide.</i>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Can't manage the master user password with Amazon Web Services Secrets Manager if <code>MasterUserPassword</code> \n                    is specified.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Specifies whether to manage the master user password with Amazon Web Services Secrets Manager.</p>\n         <p>If the DB instance doesn't manage the master user password with Amazon Web Services Secrets Manager, you can turn \n            on this management. In this case, you can't specify <code>MasterUserPassword</code>.</p>\n         <p>If the DB instance already manages the master user password with Amazon Web Services Secrets Manager, and you specify that the \n            master user password is not managed with Amazon Web Services Secrets Manager, then you must specify <code>MasterUserPassword</code>. \n            In this case, Amazon RDS deletes the secret and uses the new password for the master user specified by \n            <code>MasterUserPassword</code>.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html\">Password management with Amazon Web Services Secrets Manager</a> \n            in the <i>Amazon RDS User Guide.</i>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Can't manage the master user password with Amazon Web Services Secrets Manager if <code>MasterUserPassword</code> \n                    is specified.</p>\n            </li>\n            <li>\n               <p>Can't specify for RDS for Oracle CDB instances in the multi-tenant\n                    configuration. Use <code>ModifyTenantDatabase</code> instead.</p>\n            </li>\n            <li>\n               <p>Can't specify the parameters <code>ManageMasterUserPassword</code> and\n                        <code>MultiTenant</code> in the same operation.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "RotateMasterUserPassword": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether to rotate the secret managed by Amazon Web Services Secrets Manager for the \n            master user password.</p>\n         <p>This setting is valid only if the master user password is managed by RDS in Amazon Web Services Secrets \n            Manager for the DB cluster. The secret value contains the updated password.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html\">Password management with Amazon Web Services Secrets Manager</a> \n            in the <i>Amazon RDS User Guide.</i>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>You must apply the change immediately when rotating the master user password.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>Specifies whether to rotate the secret managed by Amazon Web Services Secrets Manager for the \n            master user password.</p>\n         <p>This setting is valid only if the master user password is managed by RDS in Amazon Web Services Secrets \n            Manager for the DB instance. The secret value contains the updated password.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html\">Password management with Amazon Web Services Secrets Manager</a> \n            in the <i>Amazon RDS User Guide.</i>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>You must apply the change immediately when rotating the master user password.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "MasterUserSecretKmsKeyId": {
@@ -22944,7 +22957,7 @@
                 "NewName": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The new name for the modified <code>DBProxyTarget</code>. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.</p>"
+                        "smithy.api#documentation": "<p>The new name for the modified <code>DBProxyTarget</code>. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.</p>\n         <p>You can't rename the <code>default</code> target group.</p>"
                     }
                 }
             },
@@ -23641,7 +23654,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Modifies a zero-ETL integration with Amazon Redshift.</p>\n         <note>\n            <p>Currently, you can only modify integrations that have Aurora MySQL source DB clusters. Integrations with Aurora PostgreSQL and RDS sources currently don't support modifying the integration.</p>\n         </note>",
+                "smithy.api#documentation": "<p>Modifies a zero-ETL integration with Amazon Redshift.</p>",
                 "smithy.api#examples": [
                     {
                         "title": "To modify a zero-ETL integration",
@@ -23685,7 +23698,7 @@
                 "DataFilter": {
                     "target": "com.amazonaws.rds#DataFilter",
                     "traits": {
-                        "smithy.api#documentation": "<p>A new data filter for the integration. For more information, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Zero_ETL_Filtering.html\">Data filtering for Aurora zero-ETL integrations with Amazon Redshift</a>.</p>"
+                        "smithy.api#documentation": "<p>A new data filter for the integration. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Zero_ETL_Filtering.html\">Data filtering\n                for Aurora zero-ETL integrations with Amazon Redshift</a> or <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/zero-etl.filtering.html\">Data\n                filtering for Amazon RDS zero-ETL integrations with Amazon Redshift</a>.</p>"
                     }
                 },
                 "Description": {
@@ -23802,6 +23815,9 @@
                     "target": "com.amazonaws.rds#InvalidDBInstanceStateFault"
                 },
                 {
+                    "target": "com.amazonaws.rds#KMSKeyNotAccessibleFault"
+                },
+                {
                     "target": "com.amazonaws.rds#TenantDatabaseAlreadyExistsFault"
                 },
                 {
@@ -23841,6 +23857,24 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The new name of the tenant database when renaming a tenant database. This parameter\n            isn’t case-sensitive.</p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Can't be the string null or any other reserved word.</p>\n            </li>\n            <li>\n               <p>Can't be longer than 8 characters.</p>\n            </li>\n         </ul>"
+                    }
+                },
+                "ManageMasterUserPassword": {
+                    "target": "com.amazonaws.rds#BooleanOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies whether to manage the master user password with Amazon Web Services Secrets Manager.</p>\n         <p>If the tenant database doesn't manage the master user password with Amazon Web Services Secrets\n            Manager, you can turn on this management. In this case, you can't specify\n                <code>MasterUserPassword</code>.</p>\n         <p>If the tenant database already manages the master user password with Amazon Web Services Secrets\n            Manager, and you specify that the master user password is not managed with Amazon Web Services Secrets\n            Manager, then you must specify <code>MasterUserPassword</code>. In this case, Amazon RDS\n            deletes the secret and uses the new password for the master user specified by\n                <code>MasterUserPassword</code>.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html\">Password management with Amazon Web Services Secrets Manager</a> \n            in the <i>Amazon RDS User Guide.</i>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Can't manage the master user password with Amazon Web Services Secrets Manager if <code>MasterUserPassword</code> \n                    is specified.</p>\n            </li>\n         </ul>"
+                    }
+                },
+                "RotateMasterUserPassword": {
+                    "target": "com.amazonaws.rds#BooleanOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies whether to rotate the secret managed by Amazon Web Services Secrets Manager for the \n            master user password.</p>\n         <p>This setting is valid only if the master user password is managed by RDS in Amazon Web Services Secrets \n            Manager for the DB instance. The secret value contains the updated password.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html\">Password management with Amazon Web Services Secrets Manager</a> \n            in the <i>Amazon RDS User Guide.</i>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>You must apply the change immediately when rotating the master user password.</p>\n            </li>\n         </ul>"
+                    }
+                },
+                "MasterUserSecretKmsKeyId": {
+                    "target": "com.amazonaws.rds#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services KMS key identifier to encrypt a secret that is automatically generated and \n            managed in Amazon Web Services Secrets Manager.</p>\n         <p>This setting is valid only if both of the following conditions are met:</p>\n         <ul>\n            <li>\n               <p>The tenant database doesn't manage the master user password in Amazon Web Services Secrets Manager.</p>\n               <p>If the tenant database already manages the master user password in Amazon Web Services Secrets Manager, \n                    you can't change the KMS key used to encrypt the secret.</p>\n            </li>\n            <li>\n               <p>You're turning on <code>ManageMasterUserPassword</code> to manage the master user password \n                    in Amazon Web Services Secrets Manager.</p>\n               <p>If you're turning on <code>ManageMasterUserPassword</code> and don't specify \n                    <code>MasterUserSecretKmsKeyId</code>, then the <code>aws/secretsmanager</code> \n                    KMS key is used to encrypt the secret. If the secret is in a different Amazon Web Services account, then you can't \n                    use the <code>aws/secretsmanager</code> KMS key to encrypt the secret, and you must use a self-managed \n                    KMS key.</p>\n            </li>\n         </ul>\n         <p>The Amazon Web Services KMS key identifier is any of the following:</p>\n         <ul>\n            <li>\n               <p>Key ARN</p>\n            </li>\n            <li>\n               <p>Key ID</p>\n            </li>\n            <li>\n               <p>Alias ARN</p>\n            </li>\n            <li>\n               <p>Alias name for the KMS key</p>\n            </li>\n         </ul>\n         <p>To use a KMS key in a different Amazon Web Services account, specify the key ARN or alias\n            ARN.</p>\n         <p>A default KMS key exists for your Amazon Web Services account. Your Amazon Web Services account has a different\n            default KMS key for each Amazon Web Services Region.</p>"
                     }
                 }
             },
@@ -27138,7 +27172,7 @@
                 "EnableCloudwatchLogsExports": {
                     "target": "com.amazonaws.rds#LogTypeList",
                     "traits": {
-                        "smithy.api#documentation": "<p>The list of logs that the restored DB cluster is to export to CloudWatch Logs. The values\n            in the list depend on the DB engine being used.</p>\n         <p>\n            <b>Aurora MySQL</b>\n         </p>\n         <p>Possible values are <code>audit</code>, <code>error</code>, <code>general</code>, and <code>slowquery</code>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>"
+                        "smithy.api#documentation": "<p>The list of logs that the restored DB cluster is to export to CloudWatch Logs. The values\n            in the list depend on the DB engine being used.</p>\n         <p>\n            <b>Aurora MySQL</b>\n         </p>\n         <p>Possible values are <code>audit</code>, <code>error</code>, <code>general</code>, <code>instance</code>, <code>slowquery</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>\n            <b>Aurora PostgreSQL</b>\n         </p>\n         <p>Possible value are <code>instance</code>, <code>postgresql</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>"
                     }
                 },
                 "DeletionProtection": {
@@ -27443,7 +27477,7 @@
                 "EnableCloudwatchLogsExports": {
                     "target": "com.amazonaws.rds#LogTypeList",
                     "traits": {
-                        "smithy.api#documentation": "<p>The list of logs that the restored DB cluster is to export to Amazon CloudWatch Logs.\n            The values in the list depend on the DB engine being used.</p>\n         <p>\n            <b>RDS for MySQL</b>\n         </p>\n         <p>Possible values are <code>error</code>, <code>general</code>, and <code>slowquery</code>.</p>\n         <p>\n            <b>RDS for PostgreSQL</b>\n         </p>\n         <p>Possible values are <code>postgresql</code> and <code>upgrade</code>.</p>\n         <p>\n            <b>Aurora MySQL</b>\n         </p>\n         <p>Possible values are <code>audit</code>, <code>error</code>, <code>general</code>, and <code>slowquery</code>.</p>\n         <p>\n            <b>Aurora PostgreSQL</b>\n         </p>\n         <p>Possible value is <code>postgresql</code>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>\n         <p>Valid for: Aurora DB clusters and Multi-AZ DB clusters</p>"
+                        "smithy.api#documentation": "<p>The list of logs that the restored DB cluster is to export to Amazon CloudWatch Logs.\n            The values in the list depend on the DB engine being used.</p>\n         <p>\n            <b>RDS for MySQL</b>\n         </p>\n         <p>Possible values are <code>error</code>, <code>general</code>, <code>slowquery</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>\n            <b>RDS for PostgreSQL</b>\n         </p>\n         <p>Possible values are <code>postgresql</code>, <code>upgrade</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>\n            <b>Aurora MySQL</b>\n         </p>\n         <p>Possible values are <code>audit</code>, <code>error</code>, <code>general</code>, <code>instance</code>, <code>slowquery</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>\n            <b>Aurora PostgreSQL</b>\n         </p>\n         <p>Possible value are <code>instance</code>, <code>postgresql</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>\n         <p>Valid for: Aurora DB clusters and Multi-AZ DB clusters</p>"
                     }
                 },
                 "EngineMode": {
@@ -27651,7 +27685,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point\n            in time before <code>LatestRestorableTime</code> for up to\n                <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the\n            source DB cluster with the same configuration as the original DB cluster, except that\n            the new DB cluster is created with the default DB security group.</p>\n         <note>\n            <p>For Aurora, this operation only restores the DB cluster, not the DB instances for that DB\n                cluster. You must invoke the <code>CreateDBInstance</code> operation to create DB\n                instances for the restored DB cluster, specifying the identifier of the restored DB\n                cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after\n                the <code>RestoreDBClusterToPointInTime</code> operation has completed and the DB\n                cluster is available.</p>\n         </note>\n         <p>For more information on Amazon Aurora DB clusters, see  \n          <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html\">\n              What is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide</i>.</p>\n         <p>For more information on Multi-AZ DB clusters, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/multi-az-db-clusters-concepts.html\"> Multi-AZ DB\n                cluster deployments</a> in the <i>Amazon RDS User\n            Guide.</i>\n         </p>",
+                "smithy.api#documentation": "<p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point\n            in time before <code>LatestRestorableTime</code> for up to\n                <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the\n            source DB cluster with the same configuration as the original DB cluster, except that\n            the new DB cluster is created with the default DB security group. Unless the \n            <code>RestoreType</code> is set to <code>copy-on-write</code>, the restore may occur in a \n            different Availability Zone (AZ) from the original DB cluster. The AZ where RDS restores \n            the DB cluster depends on the AZs in the specified subnet group.</p>\n         <note>\n            <p>For Aurora, this operation only restores the DB cluster, not the DB instances for that DB\n                cluster. You must invoke the <code>CreateDBInstance</code> operation to create DB\n                instances for the restored DB cluster, specifying the identifier of the restored DB\n                cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after\n                the <code>RestoreDBClusterToPointInTime</code> operation has completed and the DB\n                cluster is available.</p>\n         </note>\n         <p>For more information on Amazon Aurora DB clusters, see  \n          <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html\">\n              What is Amazon Aurora?</a> in the <i>Amazon Aurora User Guide</i>.</p>\n         <p>For more information on Multi-AZ DB clusters, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/multi-az-db-clusters-concepts.html\"> Multi-AZ DB\n                cluster deployments</a> in the <i>Amazon RDS User\n            Guide.</i>\n         </p>",
                 "smithy.api#examples": [
                     {
                         "title": "To restore a DB cluster to a specified time",
@@ -27796,7 +27830,7 @@
                 "EnableCloudwatchLogsExports": {
                     "target": "com.amazonaws.rds#LogTypeList",
                     "traits": {
-                        "smithy.api#documentation": "<p>The list of logs that the restored DB cluster is to export to CloudWatch Logs. The values\n            in the list depend on the DB engine being used.</p>\n         <p>\n            <b>RDS for MySQL</b>\n         </p>\n         <p>Possible values are <code>error</code>, <code>general</code>, and <code>slowquery</code>.</p>\n         <p>\n            <b>RDS for PostgreSQL</b>\n         </p>\n         <p>Possible values are <code>postgresql</code> and <code>upgrade</code>.</p>\n         <p>\n            <b>Aurora MySQL</b>\n         </p>\n         <p>Possible values are <code>audit</code>, <code>error</code>, <code>general</code>, and <code>slowquery</code>.</p>\n         <p>\n            <b>Aurora PostgreSQL</b>\n         </p>\n         <p>Possible value is <code>postgresql</code>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>\n         <p>Valid for: Aurora DB clusters and Multi-AZ DB clusters</p>"
+                        "smithy.api#documentation": "<p>The list of logs that the restored DB cluster is to export to CloudWatch Logs. The values\n            in the list depend on the DB engine being used.</p>\n         <p>\n            <b>RDS for MySQL</b>\n         </p>\n         <p>Possible values are <code>error</code>, <code>general</code>, <code>slowquery</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>\n            <b>RDS for PostgreSQL</b>\n         </p>\n         <p>Possible values are <code>postgresql</code>, <code>upgrade</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>\n            <b>Aurora MySQL</b>\n         </p>\n         <p>Possible values are <code>audit</code>, <code>error</code>, <code>general</code>, <code>instance</code>, <code>slowquery</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>\n            <b>Aurora PostgreSQL</b>\n         </p>\n         <p>Possible value are <code>instance</code>, <code>postgresql</code>, and <code>iam-db-auth-error</code>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon RDS, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>For more information about exporting CloudWatch Logs for Amazon Aurora, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch\">Publishing Database Logs to Amazon CloudWatch Logs</a> in the <i>Amazon Aurora User Guide</i>.</p>\n         <p>Valid for: Aurora DB clusters and Multi-AZ DB clusters</p>"
                     }
                 },
                 "DBClusterParameterGroupName": {
@@ -28112,7 +28146,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether to automatically apply minor version upgrades to the DB instance \n          during the maintenance window.</p>\n         <p>If you restore an RDS Custom DB instance, you must disable this parameter.</p>"
+                        "smithy.api#documentation": "<p>Specifies whether to automatically apply minor version upgrades to the DB instance \n          during the maintenance window.</p>\n         <p>If you restore an RDS Custom DB instance, you must disable this parameter.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "LicenseModel": {
@@ -28151,7 +28185,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n         <p>Valid Values: <code>gp2 | gp3 | io1 | io2 | standard</code>\n         </p>\n         <p>If you specify <code>io1</code>, <code>io2</code>, or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n         <p>Default: <code>io1</code> if the <code>Iops</code> parameter\n            is specified, otherwise <code>gp2</code>\n         </p>"
+                        "smithy.api#documentation": "<p>Specifies the storage type to be associated with the DB instance.</p>\n         <p>Valid Values: <code>gp2 | gp3 | io1 | io2 | standard</code>\n         </p>\n         <p>If you specify <code>io1</code>, <code>io2</code>, or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n         <p>Default: <code>io1</code> if the <code>Iops</code> parameter is specified, otherwise\n                <code>gp3</code>\n         </p>"
                     }
                 },
                 "TdeCredentialArn": {
@@ -28308,6 +28342,18 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The life cycle type for this DB instance.</p>\n         <note>\n            <p>By default, this value is set to <code>open-source-rds-extended-support</code>, which enrolls your DB instance into Amazon RDS Extended Support. \n              At the end of standard support, you can avoid charges for Extended Support by setting the value to <code>open-source-rds-extended-support-disabled</code>. In this case,  \n              RDS automatically upgrades your restored DB instance to a higher engine version, if the major engine version is past its end of standard support date.</p>\n         </note>\n         <p>You can use this setting to enroll your DB instance into Amazon RDS Extended Support. With RDS Extended Support, \n        you can run the selected major engine version on your DB instance past the end of standard support for that engine version. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html\">Using Amazon RDS Extended Support</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>This setting applies only to RDS for MySQL and RDS for PostgreSQL. For Amazon Aurora DB instances, the life cycle type is managed by the DB cluster.</p>\n         <p>Valid Values: <code>open-source-rds-extended-support | open-source-rds-extended-support-disabled</code>\n         </p>\n         <p>Default: <code>open-source-rds-extended-support</code>\n         </p>"
+                    }
+                },
+                "ManageMasterUserPassword": {
+                    "target": "com.amazonaws.rds#BooleanOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies whether to manage the master user password with Amazon Web Services Secrets Manager in the\n            restored DB instance.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html\">Password management with Amazon Web Services Secrets Manager</a> \n            in the <i>Amazon RDS User Guide</i>.</p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Applies to RDS for Oracle only.</p>\n            </li>\n         </ul>"
+                    }
+                },
+                "MasterUserSecretKmsKeyId": {
+                    "target": "com.amazonaws.rds#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services KMS key identifier to encrypt a secret that is automatically generated and \n            managed in Amazon Web Services Secrets Manager.</p>\n         <p>This setting is valid only if the master user password is managed by RDS in Amazon Web Services Secrets \n            Manager for the DB instance.</p>\n         <p>The Amazon Web Services KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key.\n            To use a KMS key in a different Amazon Web Services account, specify the key ARN or alias ARN.</p>\n         <p>If you don't specify <code>MasterUserSecretKmsKeyId</code>, then the <code>aws/secretsmanager</code> \n            KMS key is used to encrypt the secret. If the secret is in a different Amazon Web Services account, then you can't \n            use the <code>aws/secretsmanager</code> KMS key to encrypt the secret, and you must use a customer \n            managed KMS key.</p>\n         <p>There is a default KMS key for your Amazon Web Services account. Your Amazon Web Services account\n            has a different default KMS key for each Amazon Web Services Region.</p>"
                     }
                 }
             },
@@ -28518,7 +28564,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether to automatically apply minor engine upgrades  \n            to the DB instance during the maintenance window. By default, minor engine upgrades \n            are not applied automatically.</p>"
+                        "smithy.api#documentation": "<p>Specifies whether to automatically apply minor engine upgrades  \n            to the DB instance during the maintenance window. By default, minor engine upgrades \n            are not applied automatically.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "LicenseModel": {
@@ -28634,7 +28680,7 @@
                 "DatabaseInsightsMode": {
                     "target": "com.amazonaws.rds#DatabaseInsightsMode",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the mode of Database Insights to enable for the DB instance.</p>\n         <p>This setting only applies to Amazon Aurora DB instances.</p>\n         <note>\n            <p>Currently, this value is inherited from the DB cluster and can't be changed.</p>\n         </note>"
+                        "smithy.api#documentation": "<p>Specifies the mode of Database Insights to enable for the DB instance.</p>\n         <note>\n            <p>Aurora DB instances inherit this value from the DB cluster, so you can't change this value.</p>\n         </note>"
                     }
                 },
                 "EnablePerformanceInsights": {
@@ -28990,7 +29036,7 @@
                 "AutoMinorVersionUpgrade": {
                     "target": "com.amazonaws.rds#BooleanOptional",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether minor version upgrades are applied automatically to the \n          DB instance during the maintenance window.</p>\n         <p>This setting doesn't apply to RDS Custom.</p>"
+                        "smithy.api#documentation": "<p>Specifies whether minor version upgrades are applied automatically to the \n          DB instance during the maintenance window.</p>\n         <p>This setting doesn't apply to RDS Custom.</p>\n         <p>For more information about automatic minor version upgrades, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Upgrading.html#USER_UpgradeDBInstance.Upgrading.AutoMinorVersionUpgrades\">Automatically upgrading the minor engine version</a>.</p>"
                     }
                 },
                 "LicenseModel": {
@@ -29035,7 +29081,7 @@
                 "StorageType": {
                     "target": "com.amazonaws.rds#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The storage type to associate with the DB instance.</p>\n         <p>Valid Values: <code>gp2 | gp3 | io1 | io2 | standard</code>\n         </p>\n         <p>Default: <code>io1</code>, if the <code>Iops</code> parameter\n            is specified. Otherwise, <code>gp2</code>.</p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>If you specify <code>io1</code>, <code>io2</code>, or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n            </li>\n         </ul>"
+                        "smithy.api#documentation": "<p>The storage type to associate with the DB instance.</p>\n         <p>Valid Values: <code>gp2 | gp3 | io1 | io2 | standard</code>\n         </p>\n         <p>Default: <code>io1</code>, if the <code>Iops</code> parameter is specified. Otherwise,\n                <code>gp3</code>.</p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>If you specify <code>io1</code>, <code>io2</code>, or <code>gp3</code>, you must also include a value for the\n            <code>Iops</code> parameter.</p>\n            </li>\n         </ul>"
                     }
                 },
                 "TdeCredentialArn": {
@@ -29198,6 +29244,18 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The life cycle type for this DB instance.</p>\n         <note>\n            <p>By default, this value is set to <code>open-source-rds-extended-support</code>, which enrolls your DB instance into Amazon RDS Extended Support. \n              At the end of standard support, you can avoid charges for Extended Support by setting the value to <code>open-source-rds-extended-support-disabled</code>. In this case, \n              RDS automatically upgrades your restored DB instance to a higher engine version, if the major engine version is past its end of standard support date.</p>\n         </note>\n         <p>You can use this setting to enroll your DB instance into Amazon RDS Extended Support. With RDS Extended Support, \n        you can run the selected major engine version on your DB instance past the end of standard support for that engine version. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html\">Using Amazon RDS Extended Support</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>This setting applies only to RDS for MySQL and RDS for PostgreSQL. For Amazon Aurora DB instances, the life cycle type is managed by the DB cluster.</p>\n         <p>Valid Values: <code>open-source-rds-extended-support | open-source-rds-extended-support-disabled</code>\n         </p>\n         <p>Default: <code>open-source-rds-extended-support</code>\n         </p>"
+                    }
+                },
+                "ManageMasterUserPassword": {
+                    "target": "com.amazonaws.rds#BooleanOptional",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies whether to manage the master user password with Amazon Web Services Secrets Manager in the\n            restored DB instance.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-secrets-manager.html\">Password management with Amazon Web Services Secrets Manager</a> \n            in the <i>Amazon RDS User Guide</i>.</p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>Applies to RDS for Oracle only.</p>\n            </li>\n         </ul>"
+                    }
+                },
+                "MasterUserSecretKmsKeyId": {
+                    "target": "com.amazonaws.rds#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services KMS key identifier to encrypt a secret that is automatically generated and \n            managed in Amazon Web Services Secrets Manager.</p>\n         <p>This setting is valid only if the master user password is managed by RDS in Amazon Web Services Secrets \n            Manager for the DB instance.</p>\n         <p>The Amazon Web Services KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key.\n            To use a KMS key in a different Amazon Web Services account, specify the key ARN or alias ARN.</p>\n         <p>If you don't specify <code>MasterUserSecretKmsKeyId</code>, then the <code>aws/secretsmanager</code> \n            KMS key is used to encrypt the secret. If the secret is in a different Amazon Web Services account, then you can't \n            use the <code>aws/secretsmanager</code> KMS key to encrypt the secret, and you must use a customer \n            managed KMS key.</p>\n         <p>There is a default KMS key for your Amazon Web Services account. Your Amazon Web Services account\n            has a different default KMS key for each Amazon Web Services Region.</p>"
                     }
                 }
             },
@@ -30228,7 +30286,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Starts an export of DB snapshot or DB cluster data to Amazon S3. \n            The provided IAM role must have access to the S3 bucket.</p>\n         <p>You can't export snapshot data from Db2 or RDS Custom DB instances.</p>\n         <p>For more information on exporting DB snapshot data, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ExportSnapshot.html\">Exporting DB snapshot \n            data to Amazon S3</a> in the <i>Amazon RDS User Guide</i>\n            or <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-export-snapshot.html\">Exporting DB \n            cluster snapshot data to Amazon S3</a> in the <i>Amazon Aurora User Guide</i>.</p>\n         <p>For more information on exporting DB cluster data, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/export-cluster-data.html\">Exporting DB \n            cluster data to Amazon S3</a> in the <i>Amazon Aurora User Guide</i>.</p>",
+                "smithy.api#documentation": "<p>Starts an export of DB snapshot or DB cluster data to Amazon S3. \n            The provided IAM role must have access to the S3 bucket.</p>\n         <p>You can't export snapshot data from RDS Custom DB instances. For more information, \n            see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RDS_Fea_Regions_DB-eng.Feature.ExportSnapshotToS3.html\">\n                Supported Regions and DB engines for exporting snapshots to S3 in Amazon RDS</a>.</p>\n         <p>For more information on exporting DB snapshot data, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ExportSnapshot.html\">Exporting DB snapshot \n            data to Amazon S3</a> in the <i>Amazon RDS User Guide</i>\n            or <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-export-snapshot.html\">Exporting DB \n            cluster snapshot data to Amazon S3</a> in the <i>Amazon Aurora User Guide</i>.</p>\n         <p>For more information on exporting DB cluster data, see \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/export-cluster-data.html\">Exporting DB \n            cluster data to Amazon S3</a> in the <i>Amazon Aurora User Guide</i>.</p>",
                 "smithy.api#examples": [
                     {
                         "title": "To export a snapshot to Amazon S3",
@@ -30505,7 +30563,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Stops an Amazon RDS DB instance. When you stop a DB instance, Amazon RDS retains the DB instance's metadata, including its endpoint, \n            DB parameter group, and option group membership. Amazon RDS also retains the transaction logs so you can do a point-in-time restore if \n            necessary.</p>\n         <p>For more information, see  \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html\">\n                Stopping an Amazon RDS DB Instance Temporarily</a> in the \n            <i>Amazon RDS User Guide.</i>\n         </p>\n         <note>\n            <p>This command doesn't apply to RDS Custom, Aurora MySQL, and Aurora PostgreSQL.\n            For Aurora clusters, use <code>StopDBCluster</code> instead.</p>\n         </note>",
+                "smithy.api#documentation": "<p>Stops an Amazon RDS DB instance temporarily. When you stop a DB instance, Amazon RDS retains the DB instance's metadata,  \n         including its endpoint, DB parameter group, and option group membership. Amazon RDS also retains\n            the transaction logs so you can do a point-in-time restore if necessary. The instance restarts automatically \n            after 7 days.</p>\n         <p>For more information, see  \n            <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html\">\n                Stopping an Amazon RDS DB Instance Temporarily</a> in the \n            <i>Amazon RDS User Guide.</i>\n         </p>\n         <note>\n            <p>This command doesn't apply to RDS Custom, Aurora MySQL, and Aurora PostgreSQL.\n            For Aurora clusters, use <code>StopDBCluster</code> instead.</p>\n         </note>",
                 "smithy.api#examples": [
                     {
                         "title": "To stop a DB instance",
@@ -31354,6 +31412,9 @@
                         "smithy.api#documentation": "<p>Information about pending changes for a tenant database.</p>"
                     }
                 },
+                "MasterUserSecret": {
+                    "target": "com.amazonaws.rds#MasterUserSecret"
+                },
                 "TagList": {
                     "target": "com.amazonaws.rds#TagList"
                 }
@@ -31609,7 +31670,7 @@
                 "ClientPasswordAuthType": {
                     "target": "com.amazonaws.rds#ClientPasswordAuthType",
                     "traits": {
-                        "smithy.api#documentation": "<p>The type of authentication the proxy uses for connections from clients.</p>"
+                        "smithy.api#documentation": "<p>The type of authentication the proxy uses for connections from clients. The following values are defaults for the corresponding engines:</p>\n         <ul>\n            <li>\n               <p>RDS for MySQL: <code>MYSQL_CACHING_SHA2_PASSWORD</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for SQL Server: <code>SQL_SERVER_AUTHENTICATION</code>\n               </p>\n            </li>\n            <li>\n               <p>RDS for PostgreSQL: <code>POSTGRES_SCRAM_SHA2_256</code>\n               </p>\n            </li>\n         </ul>"
                     }
                 }
             },
@@ -31647,7 +31708,7 @@
                 "IAMAuth": {
                     "target": "com.amazonaws.rds#IAMAuthMode",
                     "traits": {
-                        "smithy.api#documentation": "<p>Whether to require or disallow Amazon Web Services Identity and Access Management (IAM) authentication for connections to the proxy. \n        The <code>ENABLED</code> value is valid only for proxies with RDS for Microsoft SQL Server.</p>"
+                        "smithy.api#documentation": "<p>Whether to require or disallow Amazon Web Services Identity and Access Management (IAM) authentication for connections to the proxy. </p>"
                     }
                 },
                 "ClientPasswordAuthType": {

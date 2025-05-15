@@ -57,7 +57,6 @@ include(":tests:codegen:event-stream")
 include(":tests:codegen:rules-engine")
 include(":tests:e2e-test-util")
 include(":tests:codegen:smoke-tests")
-include(":tests:codegen:smoke-tests:services")
 include(":tests:codegen:checksums")
 
 // generated services
@@ -70,13 +69,6 @@ val String.isBootstrappedService: Boolean
 file("services").listFiles().forEach {
     if (it.isServiceDir) {
         include(":services:${it.name}")
-    }
-}
-
-// generated services by smoke tests test suite
-file("tests/codegen/smoke-tests/services").listFiles().forEach {
-    if (it.isServiceDir) {
-        include(":tests:codegen:smoke-tests:services:${it.name}")
     }
 }
 

@@ -2079,6 +2079,23 @@
                 }
             }
         },
+        "com.amazonaws.glue#AllowFullTableExternalDataAccessEnum": {
+            "type": "enum",
+            "members": {
+                "True": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "True"
+                    }
+                },
+                "False": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "False"
+                    }
+                }
+            }
+        },
         "com.amazonaws.glue#AllowedValue": {
             "type": "structure",
             "members": {
@@ -5159,6 +5176,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>An array of <code>PrincipalPermissions</code> objects. Creates a set of default permissions on the database(s) for principals. Used by Amazon Web Services Lake Formation. Not used in the normal course of Glue operations.</p>"
                     }
+                },
+                "AllowFullTableExternalDataAccess": {
+                    "target": "com.amazonaws.glue#AllowFullTableExternalDataAccessEnum",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n      Allows third-party engines to access data in Amazon S3 locations that are registered with Lake Formation.\n    </p>"
+                    }
                 }
             },
             "traits": {
@@ -5387,6 +5410,12 @@
                     "target": "com.amazonaws.glue#PrincipalPermissionsList",
                     "traits": {
                         "smithy.api#documentation": "<p>An array of <code>PrincipalPermissions</code> objects. Creates a set of default permissions on the database(s) for principals. Used by Amazon Web Services Lake Formation. Typically should be explicitly set as an empty list.</p>"
+                    }
+                },
+                "AllowFullTableExternalDataAccess": {
+                    "target": "com.amazonaws.glue#AllowFullTableExternalDataAccessEnum",
+                    "traits": {
+                        "smithy.api#documentation": "<p>\n      Allows third-party engines to access data in Amazon S3 locations that are registered with Lake Formation.\n    </p>"
                     }
                 }
             },
@@ -7420,6 +7449,12 @@
             "type": "list",
             "member": {
                 "target": "com.amazonaws.glue#Condition"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 500
+                }
             }
         },
         "com.amazonaws.glue#ConfigValueString": {
@@ -8112,6 +8147,27 @@
                 }
             }
         },
+        "com.amazonaws.glue#ConnectionString": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 255
+                }
+            }
+        },
+        "com.amazonaws.glue#ConnectionStringList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.glue#ConnectionString"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 1000
+                }
+            }
+        },
         "com.amazonaws.glue#ConnectionType": {
             "type": "enum",
             "members": {
@@ -8327,7 +8383,7 @@
             "type": "structure",
             "members": {
                 "Connections": {
-                    "target": "com.amazonaws.glue#OrchestrationStringList",
+                    "target": "com.amazonaws.glue#ConnectionStringList",
                     "traits": {
                         "smithy.api#documentation": "<p>A list of connections used by the job.</p>"
                     }
@@ -10320,6 +10376,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Metadata assigned to the resource consisting of a list of key-value pairs.</p>"
                     }
+                },
+                "IntegrationConfig": {
+                    "target": "com.amazonaws.glue#IntegrationConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration settings.</p>"
+                    }
                 }
             },
             "traits": {
@@ -10498,6 +10560,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Selects source tables for the integration using Maxwell filter syntax.</p>"
                     }
+                },
+                "IntegrationConfig": {
+                    "target": "com.amazonaws.glue#IntegrationConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration settings.</p>"
+                    }
                 }
             },
             "traits": {
@@ -10559,7 +10627,7 @@
                 "SourceTableConfig": {
                     "target": "com.amazonaws.glue#SourceTableConfig",
                     "traits": {
-                        "smithy.api#documentation": "<p>A structure for the source table configuration.</p>"
+                        "smithy.api#documentation": "<p>A structure for the source table configuration. See the <code>SourceTableConfig</code> structure to see list of supported source properties.</p>"
                     }
                 },
                 "TargetTableConfig": {
@@ -12176,7 +12244,7 @@
                     }
                 },
                 "Description": {
-                    "target": "com.amazonaws.glue#GenericString",
+                    "target": "com.amazonaws.glue#WorkflowDescriptionString",
                     "traits": {
                         "smithy.api#documentation": "<p>A description of the workflow.</p>"
                     }
@@ -25610,11 +25678,18 @@
                         "smithy.api#documentation": "<p>The number of files removed by the compaction job run.</p>"
                     }
                 },
+                "DpuHours": {
+                    "target": "com.amazonaws.glue#dpuHours",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The number of DPU hours consumed by the job.</p>"
+                    }
+                },
                 "NumberOfDpus": {
                     "target": "com.amazonaws.glue#dpuCounts",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>The number of DPU hours consumed by the job.</p>"
+                        "smithy.api#documentation": "<p>The number of DPUs consumed by the job, rounded up to the nearest whole number.</p>"
                     }
                 },
                 "JobDurationInHour": {
@@ -25680,11 +25755,18 @@
                         "smithy.api#documentation": "<p>The number of orphan files deleted by the orphan file deletion job run.</p>"
                     }
                 },
+                "DpuHours": {
+                    "target": "com.amazonaws.glue#dpuHours",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The number of DPU hours consumed by the job.</p>"
+                    }
+                },
                 "NumberOfDpus": {
                     "target": "com.amazonaws.glue#dpuCounts",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>The number of DPU hours consumed by the job.</p>"
+                        "smithy.api#documentation": "<p>The number of DPUs consumed by the job, rounded up to the nearest whole number.</p>"
                     }
                 },
                 "JobDurationInHour": {
@@ -25749,11 +25831,18 @@
                         "smithy.api#documentation": "<p>The number of manifest lists deleted by the retention job run.</p>"
                     }
                 },
+                "DpuHours": {
+                    "target": "com.amazonaws.glue#dpuHours",
+                    "traits": {
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The number of DPU hours consumed by the job.</p>"
+                    }
+                },
                 "NumberOfDpus": {
                     "target": "com.amazonaws.glue#dpuCounts",
                     "traits": {
                         "smithy.api#default": 0,
-                        "smithy.api#documentation": "<p>The number of DPU hours consumed by the job.</p>"
+                        "smithy.api#documentation": "<p>The number of DPUs consumed by the job, rounded up to the nearest whole number.</p>"
                     }
                 },
                 "JobDurationInHour": {
@@ -25979,6 +26068,12 @@
                         "smithy.api#required": {}
                     }
                 },
+                "IntegrationConfig": {
+                    "target": "com.amazonaws.glue#IntegrationConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Properties associated with the integration.</p>"
+                    }
+                },
                 "Errors": {
                     "target": "com.amazonaws.glue#IntegrationErrorList",
                     "traits": {
@@ -26110,6 +26205,12 @@
                         "smithy.api#required": {}
                     }
                 },
+                "IntegrationConfig": {
+                    "target": "com.amazonaws.glue#IntegrationConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Properties associated with the integration.</p>"
+                    }
+                },
                 "Errors": {
                     "target": "com.amazonaws.glue#IntegrationErrorList",
                     "traits": {
@@ -26134,6 +26235,20 @@
             },
             "value": {
                 "target": "com.amazonaws.glue#IntegrationString"
+            }
+        },
+        "com.amazonaws.glue#IntegrationConfig": {
+            "type": "structure",
+            "members": {
+                "RefreshInterval": {
+                    "target": "com.amazonaws.glue#String128",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the frequency at which CDC (Change Data Capture) pulls or incremental loads should occur. This parameter provides flexibility to align \n      the refresh rate with your specific data update patterns, system load considerations, and performance optimization goals. Time increment can be set from  \n    15 minutes to 8640 minutes (six days). Currently supports creation of <code>RefreshInterval</code> only.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Properties associated with the integration.</p>"
             }
         },
         "com.amazonaws.glue#IntegrationConflictOperationFault": {
@@ -26248,13 +26363,13 @@
                 "FieldName": {
                     "target": "com.amazonaws.glue#String128",
                     "traits": {
-                        "smithy.api#documentation": "<p>The field name used to partition data on the target.</p>"
+                        "smithy.api#documentation": "<p>The field name used to partition data on the target. Avoid using columns that have unique values for each row (for example, `LastModifiedTimestamp`, \n      `SystemModTimeStamp`) as the partition column. These columns are not suitable for partitioning because they create a large number of small partitions, \n      which can lead to performance issues.</p>"
                     }
                 },
                 "FunctionSpec": {
                     "target": "com.amazonaws.glue#String128",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies a function used to partition data on the target.</p>"
+                        "smithy.api#documentation": "<p>Specifies the function used to partition data on the target. The only accepted value for this parameter is `'identity'` (string). \n      The `'identity'` function ensures that the data partitioning on the target follows the same scheme as the source. In other words, the partitioning \n      structure of the source data is preserved in the target destination.</p>"
                     }
                 }
             },
@@ -34946,7 +35061,7 @@
                 "NumberOfDpus": {
                     "target": "com.amazonaws.glue#MessageString",
                     "traits": {
-                        "smithy.api#documentation": "<p>The number of DPU hours consumed by the job.</p>"
+                        "smithy.api#documentation": "<p>The number of DPUs consumed by the job, rounded up to the nearest whole number.</p>"
                     }
                 },
                 "JobDurationInHour": {
@@ -37510,25 +37625,25 @@
                 "Fields": {
                     "target": "com.amazonaws.glue#SourceTableFieldsList",
                     "traits": {
-                        "smithy.api#documentation": "<p>A list of fields used for column-level filtering.</p>"
+                        "smithy.api#documentation": "<p>A list of fields used for column-level filtering. Currently unsupported.</p>"
                     }
                 },
                 "FilterPredicate": {
                     "target": "com.amazonaws.glue#String128",
                     "traits": {
-                        "smithy.api#documentation": "<p>A condition clause used for row-level filtering.</p>"
+                        "smithy.api#documentation": "<p>A condition clause used for row-level filtering. Currently unsupported.</p>"
                     }
                 },
                 "PrimaryKey": {
                     "target": "com.amazonaws.glue#PrimaryKeyList",
                     "traits": {
-                        "smithy.api#documentation": "<p>Unique identifier of a record.</p>"
+                        "smithy.api#documentation": "<p>Provide the primary key set for this table. Currently supported specifically for SAP <code>EntityOf</code> entities upon request. Contact \n      Amazon Web Services Support to make this feature available.</p>"
                     }
                 },
                 "RecordUpdateField": {
                     "target": "com.amazonaws.glue#String128",
                     "traits": {
-                        "smithy.api#documentation": "<p>Incremental pull timestamp-based field.</p>"
+                        "smithy.api#documentation": "<p>Incremental pull timestamp-based field. Currently unsupported.</p>"
                     }
                 }
             },
@@ -44369,7 +44484,7 @@
                     }
                 },
                 "Description": {
-                    "target": "com.amazonaws.glue#GenericString",
+                    "target": "com.amazonaws.glue#WorkflowDescriptionString",
                     "traits": {
                         "smithy.api#documentation": "<p>The description of the workflow.</p>"
                     }
@@ -45124,6 +45239,15 @@
                 "smithy.api#documentation": "<p>A workflow is a collection of multiple dependent Glue \n      jobs and crawlers that are run to complete a complex ETL task. A\n      workflow manages the execution and monitoring of all its jobs and crawlers.</p>"
             }
         },
+        "com.amazonaws.glue#WorkflowDescriptionString": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 120000
+                }
+            }
+        },
         "com.amazonaws.glue#WorkflowGraph": {
             "type": "structure",
             "members": {
@@ -45424,6 +45548,12 @@
             }
         },
         "com.amazonaws.glue#dpuDurationInHour": {
+            "type": "double",
+            "traits": {
+                "smithy.api#default": 0
+            }
+        },
+        "com.amazonaws.glue#dpuHours": {
             "type": "double",
             "traits": {
                 "smithy.api#default": 0

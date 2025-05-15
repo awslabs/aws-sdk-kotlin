@@ -115,10 +115,13 @@
                 "DELETE": {
                     "target": "smithy.api#Unit",
                     "traits": {
-                        "smithy.api#enumValue": "Delete",
-                        "smithy.api#tags": [
-                            "idle"
-                        ]
+                        "smithy.api#enumValue": "Delete"
+                    }
+                },
+                "SCALE_IN": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ScaleIn"
                     }
                 }
             }
@@ -132,6 +135,23 @@
                 "smithy.api#length": {
                     "min": 1,
                     "max": 100
+                }
+            }
+        },
+        "com.amazonaws.costoptimizationhub#AllocationStrategy": {
+            "type": "enum",
+            "members": {
+                "PRIORITIZED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Prioritized"
+                    }
+                },
+                "LOWEST_PRICE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LowestPrice"
+                    }
                 }
             }
         },
@@ -213,7 +233,7 @@
                 "accountScope": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account scope that you want your recommendations for. Amazon Web Services calculates\n      recommendations including the management account and member accounts if the value is set to\n        <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for\n      individual member accounts only.</p>"
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations. Amazon Web Services calculates\n      recommendations including the management account and member accounts if the value is set to\n        <code>PAYER</code>. If the value is <code>LINKED</code>, recommendations are calculated for\n      individual member accounts only.</p>"
                     }
                 },
                 "term": {
@@ -959,13 +979,98 @@
                 "smithy.api#documentation": "<p>The DB instance configuration used for recommendations.</p>"
             }
         },
+        "com.amazonaws.costoptimizationhub#DynamoDbReservedCapacity": {
+            "type": "structure",
+            "members": {
+                "configuration": {
+                    "target": "com.amazonaws.costoptimizationhub#DynamoDbReservedCapacityConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The DynamoDB reserved capacity configuration used for recommendations.</p>"
+                    }
+                },
+                "costCalculation": {
+                    "target": "com.amazonaws.costoptimizationhub#ReservedInstancesCostCalculation"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The DynamoDB reserved capacity recommendation details.</p>",
+                "smithy.api#tags": [
+                    "db_recs"
+                ]
+            }
+        },
+        "com.amazonaws.costoptimizationhub#DynamoDbReservedCapacityConfiguration": {
+            "type": "structure",
+            "members": {
+                "accountScope": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations.</p>"
+                    }
+                },
+                "service": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The service for which you want recommendations.</p>"
+                    }
+                },
+                "term": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The reserved capacity recommendation term in years.</p>"
+                    }
+                },
+                "paymentOption": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The payment option for the commitment.</p>"
+                    }
+                },
+                "reservedInstancesRegion": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
+                    }
+                },
+                "upfrontCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing this reserved capacity costs you upfront.</p>"
+                    }
+                },
+                "monthlyRecurringCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing this reserved capacity costs you on a monthly basis.</p>"
+                    }
+                },
+                "numberOfCapacityUnitsToPurchase": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of reserved capacity units that Amazon Web Services recommends that you\n      purchase.</p>"
+                    }
+                },
+                "capacityUnits": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The capacity unit of the recommended reservation.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The DynamoDB reserved capacity configuration used for recommendations.</p>",
+                "smithy.api#tags": [
+                    "db_recs"
+                ]
+            }
+        },
         "com.amazonaws.costoptimizationhub#EbsVolume": {
             "type": "structure",
             "members": {
                 "configuration": {
                     "target": "com.amazonaws.costoptimizationhub#EbsVolumeConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Elastic Block Store volume configuration used for\n      recommendations.</p>"
+                        "smithy.api#documentation": "<p>The Amazon Elastic Block Store volume configuration used for recommendations.</p>"
                     }
                 },
                 "costCalculation": {
@@ -976,7 +1081,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Describes the Amazon Elastic Block Store volume configuration of the current and\n      recommended resource configuration for a recommendation.</p>"
+                "smithy.api#documentation": "<p>Describes the Amazon Elastic Block Store volume configuration of the current and recommended\n      resource configuration for a recommendation.</p>"
             }
         },
         "com.amazonaws.costoptimizationhub#EbsVolumeConfiguration": {
@@ -1002,7 +1107,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The Amazon Elastic Block Store volume configuration used for\n      recommendations.</p>"
+                "smithy.api#documentation": "<p>The Amazon Elastic Block Store volume configuration used for recommendations.</p>"
             }
         },
         "com.amazonaws.costoptimizationhub#Ec2AutoScalingGroup": {
@@ -1031,12 +1136,47 @@
                 "instance": {
                     "target": "com.amazonaws.costoptimizationhub#InstanceConfiguration",
                     "traits": {
-                        "smithy.api#documentation": "<p>Details about the instance.</p>"
+                        "smithy.api#documentation": "<p>Details about the instance for the EC2 Auto Scaling group with a single instance\n      type.</p>"
+                    }
+                },
+                "mixedInstances": {
+                    "target": "com.amazonaws.costoptimizationhub#MixedInstanceConfigurationList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of instance types for an EC2 Auto Scaling group with mixed instance types.</p>"
+                    }
+                },
+                "type": {
+                    "target": "com.amazonaws.costoptimizationhub#Ec2AutoScalingGroupType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of EC2 Auto Scaling group, showing whether it consists of a single instance type\n      or mixed instance types.</p>"
+                    }
+                },
+                "allocationStrategy": {
+                    "target": "com.amazonaws.costoptimizationhub#AllocationStrategy",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The strategy used for allocating instances, based on a predefined priority order or based\n      on the lowest available price.</p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The EC2 auto scaling group configuration used for recommendations.</p>"
+                "smithy.api#documentation": "<p>The EC2 Auto Scaling group configuration used for recommendations.</p>"
+            }
+        },
+        "com.amazonaws.costoptimizationhub#Ec2AutoScalingGroupType": {
+            "type": "enum",
+            "members": {
+                "SINGLE_INSTANCE_TYPE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SingleInstanceType"
+                    }
+                },
+                "MIXED_INSTANCE_TYPES": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MixedInstanceTypes"
+                    }
+                }
             }
         },
         "com.amazonaws.costoptimizationhub#Ec2Instance": {
@@ -1099,7 +1239,7 @@
                 "accountScope": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account scope that you want your recommendations for.</p>"
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations.</p>"
                     }
                 },
                 "term": {
@@ -1163,19 +1303,13 @@
                 "accountScope": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account scope that you want your recommendations for.</p>"
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations.</p>"
                     }
                 },
                 "service": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The service that you want your recommendations for.</p>"
-                    }
-                },
-                "normalizedUnitsToPurchase": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
+                        "smithy.api#documentation": "<p>The service for which you want recommendations.</p>"
                     }
                 },
                 "term": {
@@ -1188,6 +1322,30 @@
                     "target": "smithy.api#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The payment option for the commitment.</p>"
+                    }
+                },
+                "reservedInstancesRegion": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
+                    }
+                },
+                "upfrontCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
+                    }
+                },
+                "monthlyRecurringCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing these reserved instances costs you on a monthly basis.</p>"
+                    }
+                },
+                "normalizedUnitsToPurchase": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
                     }
                 },
                 "numberOfInstancesToPurchase": {
@@ -1214,12 +1372,6 @@
                         "smithy.api#documentation": "<p>The type of instance that Amazon Web Services recommends.</p>"
                     }
                 },
-                "reservedInstancesRegion": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
-                    }
-                },
                 "currentGeneration": {
                     "target": "smithy.api#String",
                     "traits": {
@@ -1242,18 +1394,6 @@
                     "target": "smithy.api#Boolean",
                     "traits": {
                         "smithy.api#documentation": "<p>Determines whether the recommendation is size flexible.</p>"
-                    }
-                },
-                "upfrontCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
-                    }
-                },
-                "monthlyRecurringCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing reserved instances costs you on a monthly basis.</p>"
                     }
                 }
             },
@@ -1321,19 +1461,13 @@
                 "accountScope": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account scope that you want your recommendations for.</p>"
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations.</p>"
                     }
                 },
                 "service": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The service that you want your recommendations for.</p>"
-                    }
-                },
-                "normalizedUnitsToPurchase": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
+                        "smithy.api#documentation": "<p>The service for which you want recommendations.</p>"
                     }
                 },
                 "term": {
@@ -1346,6 +1480,30 @@
                     "target": "smithy.api#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The payment option for the commitment.</p>"
+                    }
+                },
+                "reservedInstancesRegion": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
+                    }
+                },
+                "upfrontCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
+                    }
+                },
+                "monthlyRecurringCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing these reserved instances costs you on a monthly basis.</p>"
+                    }
+                },
+                "normalizedUnitsToPurchase": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
                     }
                 },
                 "numberOfInstancesToPurchase": {
@@ -1366,12 +1524,6 @@
                         "smithy.api#documentation": "<p>The type of instance that Amazon Web Services recommends.</p>"
                     }
                 },
-                "reservedInstancesRegion": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
-                    }
-                },
                 "currentGeneration": {
                     "target": "smithy.api#String",
                     "traits": {
@@ -1382,18 +1534,6 @@
                     "target": "smithy.api#Boolean",
                     "traits": {
                         "smithy.api#documentation": "<p>Determines whether the recommendation is size flexible.</p>"
-                    }
-                },
-                "upfrontCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
-                    }
-                },
-                "monthlyRecurringCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing reserved instances costs you on a monthly basis.</p>"
                     }
                 }
             },
@@ -1468,7 +1608,7 @@
                 "accountIds": {
                     "target": "com.amazonaws.costoptimizationhub#AccountIdList",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account that the recommendation is for.</p>"
+                        "smithy.api#documentation": "<p>The account to which the recommendation applies.</p>"
                     }
                 },
                 "regions": {
@@ -1641,7 +1781,7 @@
                 "accountId": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account that the recommendation is for.</p>"
+                        "smithy.api#documentation": "<p>The account to which the recommendation applies.</p>"
                     }
                 },
                 "currencyCode": {
@@ -1816,12 +1956,12 @@
                 "type": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>Details about the type.</p>"
+                        "smithy.api#documentation": "<p>The instance type of the configuration.</p>"
                     }
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The Instance configuration used for recommendations.</p>"
+                "smithy.api#documentation": "<p>The instance configuration used for recommendations.</p>"
             }
         },
         "com.amazonaws.costoptimizationhub#InternalServerException": {
@@ -2211,6 +2351,135 @@
                 }
             }
         },
+        "com.amazonaws.costoptimizationhub#MemoryDbReservedInstances": {
+            "type": "structure",
+            "members": {
+                "configuration": {
+                    "target": "com.amazonaws.costoptimizationhub#MemoryDbReservedInstancesConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The MemoryDB reserved instances configuration used for recommendations.</p>"
+                    }
+                },
+                "costCalculation": {
+                    "target": "com.amazonaws.costoptimizationhub#ReservedInstancesCostCalculation"
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The MemoryDB reserved instances recommendation details.</p>\n         <note>\n            <p>MemoryDB reserved instances are referred to as \"MemoryDB reserved nodes\" in\n        customer-facing documentation.</p>\n         </note>",
+                "smithy.api#tags": [
+                    "db_recs"
+                ]
+            }
+        },
+        "com.amazonaws.costoptimizationhub#MemoryDbReservedInstancesConfiguration": {
+            "type": "structure",
+            "members": {
+                "accountScope": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations.</p>"
+                    }
+                },
+                "service": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The service for which you want recommendations.</p>"
+                    }
+                },
+                "term": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The reserved instances recommendation term in years.</p>"
+                    }
+                },
+                "paymentOption": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The payment option for the commitment.</p>"
+                    }
+                },
+                "reservedInstancesRegion": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
+                    }
+                },
+                "upfrontCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing these reserved instances costs you upfront.</p>"
+                    }
+                },
+                "monthlyRecurringCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing these reserved instances costs you on a monthly basis.</p>"
+                    }
+                },
+                "normalizedUnitsToPurchase": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
+                    }
+                },
+                "numberOfInstancesToPurchase": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of instances that Amazon Web Services recommends that you purchase.</p>"
+                    }
+                },
+                "instanceType": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of instance that Amazon Web Services recommends.</p>"
+                    }
+                },
+                "instanceFamily": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The instance family of the recommended reservation.</p>"
+                    }
+                },
+                "sizeFlexEligible": {
+                    "target": "smithy.api#Boolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Determines whether the recommendation is size flexible.</p>"
+                    }
+                },
+                "currentGeneration": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Determines whether the recommendation is for a current generation instance.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The MemoryDB reserved instances configuration used for recommendations.</p>\n         <note>\n            <p>MemoryDB reserved instances are referred to as \"MemoryDB reserved nodes\" in\n        customer-facing documentation.</p>\n         </note>",
+                "smithy.api#tags": [
+                    "db_recs"
+                ]
+            }
+        },
+        "com.amazonaws.costoptimizationhub#MixedInstanceConfiguration": {
+            "type": "structure",
+            "members": {
+                "type": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The instance type of the configuration.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration for the EC2 Auto Scaling group with mixed instance types.</p>"
+            }
+        },
+        "com.amazonaws.costoptimizationhub#MixedInstanceConfigurationList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.costoptimizationhub#MixedInstanceConfiguration"
+            }
+        },
         "com.amazonaws.costoptimizationhub#OpenSearchReservedInstances": {
             "type": "structure",
             "members": {
@@ -2237,19 +2506,13 @@
                 "accountScope": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account scope that you want your recommendations for.</p>"
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations.</p>"
                     }
                 },
                 "service": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The service that you want your recommendations for.</p>"
-                    }
-                },
-                "normalizedUnitsToPurchase": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
+                        "smithy.api#documentation": "<p>The service for which you want recommendations.</p>"
                     }
                 },
                 "term": {
@@ -2264,6 +2527,30 @@
                         "smithy.api#documentation": "<p>The payment option for the commitment.</p>"
                     }
                 },
+                "reservedInstancesRegion": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
+                    }
+                },
+                "upfrontCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
+                    }
+                },
+                "monthlyRecurringCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing these reserved instances costs you on a monthly basis.</p>"
+                    }
+                },
+                "normalizedUnitsToPurchase": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
+                    }
+                },
                 "numberOfInstancesToPurchase": {
                     "target": "smithy.api#String",
                     "traits": {
@@ -2276,12 +2563,6 @@
                         "smithy.api#documentation": "<p>The type of instance that Amazon Web Services recommends.</p>"
                     }
                 },
-                "reservedInstancesRegion": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
-                    }
-                },
                 "currentGeneration": {
                     "target": "smithy.api#String",
                     "traits": {
@@ -2292,18 +2573,6 @@
                     "target": "smithy.api#Boolean",
                     "traits": {
                         "smithy.api#documentation": "<p>Determines whether the recommendation is size flexible.</p>"
-                    }
-                },
-                "upfrontCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
-                    }
-                },
-                "monthlyRecurringCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing reserved instances costs you on a monthly basis.</p>"
                     }
                 }
             },
@@ -2454,19 +2723,13 @@
                 "accountScope": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account scope that you want your recommendations for.</p>"
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations.</p>"
                     }
                 },
                 "service": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The service that you want your recommendations for.</p>"
-                    }
-                },
-                "normalizedUnitsToPurchase": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
+                        "smithy.api#documentation": "<p>The service for which you want recommendations.</p>"
                     }
                 },
                 "term": {
@@ -2479,6 +2742,30 @@
                     "target": "smithy.api#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The payment option for the commitment.</p>"
+                    }
+                },
+                "reservedInstancesRegion": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
+                    }
+                },
+                "upfrontCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
+                    }
+                },
+                "monthlyRecurringCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing this instance costs you on a monthly basis.</p>"
+                    }
+                },
+                "normalizedUnitsToPurchase": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
                     }
                 },
                 "numberOfInstancesToPurchase": {
@@ -2499,12 +2786,6 @@
                         "smithy.api#documentation": "<p>The type of instance that Amazon Web Services recommends.</p>"
                     }
                 },
-                "reservedInstancesRegion": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
-                    }
-                },
                 "sizeFlexEligible": {
                     "target": "smithy.api#Boolean",
                     "traits": {
@@ -2515,18 +2796,6 @@
                     "target": "smithy.api#String",
                     "traits": {
                         "smithy.api#documentation": "<p>Determines whether the recommendation is for a current generation instance.</p>"
-                    }
-                },
-                "upfrontCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
-                    }
-                },
-                "monthlyRecurringCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing this instance costs you on a monthly basis.</p>"
                     }
                 },
                 "licenseModel": {
@@ -2570,7 +2839,7 @@
                 "accountId": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account that the recommendation is for.</p>"
+                        "smithy.api#documentation": "<p>The account to which the recommendation applies.</p>"
                     }
                 },
                 "region": {
@@ -2768,19 +3037,13 @@
                 "accountScope": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account scope that you want your recommendations for.</p>"
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations.</p>"
                     }
                 },
                 "service": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The service that you want your recommendations for.</p>"
-                    }
-                },
-                "normalizedUnitsToPurchase": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
+                        "smithy.api#documentation": "<p>The service for which you want recommendations.</p>"
                     }
                 },
                 "term": {
@@ -2793,6 +3056,30 @@
                     "target": "smithy.api#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The payment option for the commitment.</p>"
+                    }
+                },
+                "reservedInstancesRegion": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
+                    }
+                },
+                "upfrontCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
+                    }
+                },
+                "monthlyRecurringCost": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>How much purchasing these reserved instances costs you on a monthly basis.</p>"
+                    }
+                },
+                "normalizedUnitsToPurchase": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of normalized units that Amazon Web Services recommends that you\n      purchase.</p>"
                     }
                 },
                 "numberOfInstancesToPurchase": {
@@ -2813,12 +3100,6 @@
                         "smithy.api#documentation": "<p>The type of instance that Amazon Web Services recommends.</p>"
                     }
                 },
-                "reservedInstancesRegion": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Web Services Region of the commitment.</p>"
-                    }
-                },
                 "sizeFlexEligible": {
                     "target": "smithy.api#Boolean",
                     "traits": {
@@ -2829,18 +3110,6 @@
                     "target": "smithy.api#String",
                     "traits": {
                         "smithy.api#documentation": "<p>Determines whether the recommendation is for a current generation instance.</p>"
-                    }
-                },
-                "upfrontCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing this instance costs you upfront.</p>"
-                    }
-                },
-                "monthlyRecurringCost": {
-                    "target": "smithy.api#String",
-                    "traits": {
-                        "smithy.api#documentation": "<p>How much purchasing reserved instances costs you on a monthly basis.</p>"
                     }
                 }
             },
@@ -3016,7 +3285,7 @@
                 "sageMakerSavingsPlans": {
                     "target": "com.amazonaws.costoptimizationhub#SageMakerSavingsPlans",
                     "traits": {
-                        "smithy.api#documentation": "<p>The SageMaker Savings Plans recommendation details.</p>"
+                        "smithy.api#documentation": "<p>The SageMaker AI\n      Savings Plans recommendation details.</p>"
                     }
                 },
                 "rdsDbInstance": {
@@ -3029,6 +3298,24 @@
                     "target": "com.amazonaws.costoptimizationhub#RdsDbInstanceStorage",
                     "traits": {
                         "smithy.api#documentation": "<p>The DB instance storage recommendation details.</p>"
+                    }
+                },
+                "dynamoDbReservedCapacity": {
+                    "target": "com.amazonaws.costoptimizationhub#DynamoDbReservedCapacity",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The DynamoDB reserved capacity recommendation\n      details.</p>",
+                        "smithy.api#tags": [
+                            "db_recs"
+                        ]
+                    }
+                },
+                "memoryDbReservedInstances": {
+                    "target": "com.amazonaws.costoptimizationhub#MemoryDbReservedInstances",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The MemoryDB reserved instances recommendation\n      details.</p>",
+                        "smithy.api#tags": [
+                            "db_recs"
+                        ]
                     }
                 }
             },
@@ -3195,6 +3482,24 @@
                     "traits": {
                         "smithy.api#enumValue": "RdsDbInstance"
                     }
+                },
+                "DYNAMO_DB_RESERVED_CAPACITY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DynamoDbReservedCapacity",
+                        "smithy.api#tags": [
+                            "db_recs"
+                        ]
+                    }
+                },
+                "MEMORY_DB_RESERVED_INSTANCES": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MemoryDbReservedInstances",
+                        "smithy.api#tags": [
+                            "db_recs"
+                        ]
+                    }
                 }
             }
         },
@@ -3236,7 +3541,7 @@
                 "accountScope": {
                     "target": "smithy.api#String",
                     "traits": {
-                        "smithy.api#documentation": "<p>The account scope that you want your recommendations for.</p>"
+                        "smithy.api#documentation": "<p>The account scope for which you want recommendations.</p>"
                     }
                 },
                 "term": {

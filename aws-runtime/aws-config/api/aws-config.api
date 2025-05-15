@@ -77,6 +77,8 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/EnvironmentCredential
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/ImdsCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
 	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Laws/sdk/kotlin/runtime/config/imds/InstanceMetadataProvider;Laws/smithy/kotlin/runtime/util/PlatformProvider;)V
+	public synthetic fun <init> (Ljava/lang/String;Laws/sdk/kotlin/runtime/config/imds/InstanceMetadataProvider;Laws/smithy/kotlin/runtime/util/PlatformProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;Laws/smithy/kotlin/runtime/time/Clock;)V
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;Laws/smithy/kotlin/runtime/time/Clock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
@@ -250,12 +252,14 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 	public final fun getAwsAccountId ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsAccountIdEndpointMode ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsAppId ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
+	public final fun getAwsAuthSchemePreference ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsConfigFile ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsContainerAuthorizationToken ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsContainerAuthorizationTokenFile ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsContainerCredentialsFullUri ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsContainerCredentialsRelativeUri ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsDisableRequestCompression ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
+	public final fun getAwsEc2InstanceProfileName ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsEc2MetadataDisabled ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsEc2MetadataServiceEndpoint ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsEc2MetadataServiceEndpointMode ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
@@ -284,6 +288,11 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSettingKt {
 	public static final fun resolveEndpointUrl (Laws/sdk/kotlin/runtime/config/AwsSdkSetting;Laws/smithy/kotlin/runtime/util/PlatformProvider;Ljava/lang/String;Ljava/lang/String;)Laws/smithy/kotlin/runtime/net/url/Url;
 }
 
+public final class aws/sdk/kotlin/runtime/config/auth/ResolveAuthSchemePreferenceKt {
+	public static final fun resolveAuthSchemePreference (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveAuthSchemePreference$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
 public final class aws/sdk/kotlin/runtime/config/checksums/ResolveFlexibleChecksumsConfigKt {
 	public static final fun resolveRequestChecksumCalculation (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun resolveRequestChecksumCalculation$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
@@ -307,6 +316,10 @@ public final class aws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode
 	public static fun values ()[Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
 }
 
+public final class aws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointModeKt {
+	public static final fun toBusinessMetric (Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;)Laws/smithy/kotlin/runtime/businessmetrics/BusinessMetric;
+}
+
 public final class aws/sdk/kotlin/runtime/config/endpoints/ResolversKt {
 	public static final fun resolveAccountId (Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;Laws/smithy/kotlin/runtime/collections/Attributes;)Ljava/lang/String;
 	public static final fun resolveAccountIdEndpointMode (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -321,6 +334,8 @@ public final class aws/sdk/kotlin/runtime/config/endpoints/ResolversKt {
 
 public final class aws/sdk/kotlin/runtime/config/imds/EC2MetadataError : aws/sdk/kotlin/runtime/AwsServiceException {
 	public fun <init> (ILjava/lang/String;)V
+	public fun <init> (Laws/smithy/kotlin/runtime/http/HttpStatusCode;Ljava/lang/String;)V
+	public final fun getStatus ()Laws/smithy/kotlin/runtime/http/HttpStatusCode;
 	public final fun getStatusCode ()I
 }
 
@@ -388,6 +403,13 @@ public final class aws/sdk/kotlin/runtime/config/imds/ImdsClient$Builder {
 
 public final class aws/sdk/kotlin/runtime/config/imds/ImdsClient$Companion {
 	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/config/imds/ImdsClient;
+}
+
+public final class aws/sdk/kotlin/runtime/config/imds/ImdsResolversKt {
+	public static final fun resolveDisableEc2Metadata (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveDisableEc2Metadata$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun resolveEc2InstanceProfileName (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun resolveEc2InstanceProfileName$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class aws/sdk/kotlin/runtime/config/imds/InstanceMetadataProvider : java/io/Closeable {
@@ -483,6 +505,7 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsConfigurationSource 
 
 public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 	public static final fun getAccountIdEndpointMode (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Laws/sdk/kotlin/runtime/config/endpoints/AccountIdEndpointMode;
+	public static final fun getAuthSchemePreference (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getAwsAccessKeyId (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getAwsSecretAccessKey (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getAwsSessionToken (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
@@ -490,6 +513,8 @@ public final class aws/sdk/kotlin/runtime/config/profile/AwsProfileKt {
 	public static synthetic fun getBooleanOrNull$default (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/Boolean;
 	public static final fun getCredentialProcess (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
 	public static final fun getDisableRequestCompression (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/Boolean;
+	public static final fun getEc2InstanceProfileName (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/String;
+	public static final fun getEc2MetadataDisabled (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/Boolean;
 	public static final fun getEndpointUrl (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Laws/smithy/kotlin/runtime/net/url/Url;
 	public static final fun getIgnoreEndpointUrls (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;)Ljava/lang/Boolean;
 	public static final fun getIntOrNull (Laws/sdk/kotlin/runtime/config/profile/ConfigSection;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Integer;

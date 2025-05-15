@@ -11,6 +11,7 @@ import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
 import aws.smithy.kotlin.runtime.client.config.RequestHttpChecksumConfig
 import aws.smithy.kotlin.runtime.client.config.ResponseHttpChecksumConfig
 import aws.smithy.kotlin.runtime.client.config.RetryMode
+import aws.smithy.kotlin.runtime.http.auth.AuthScheme
 import aws.smithy.kotlin.runtime.net.url.Url
 
 /**
@@ -83,14 +84,7 @@ public val AwsProfile.credentialProcess: String?
  */
 @InternalSdkApi
 public val AwsProfile.retryMode: RetryMode?
-    get() = getOrNull("retry_mode")?.run {
-        RetryMode.values().firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException(
-                "retry_mode $this is not supported, should be one of: ${
-                    RetryMode.values().joinToString(", ") { it.name.lowercase() }
-                }",
-            )
-    }
+    get() = getEnumOrNull<RetryMode>("retry_mode")
 
 /**
  * Whether service clients should make requests to the FIPS endpoint variant.
@@ -139,14 +133,7 @@ public val AwsProfile.sdkUserAgentAppId: String?
  */
 @InternalSdkApi
 public val AwsProfile.accountIdEndpointMode: AccountIdEndpointMode?
-    get() = getOrNull("account_id_endpoint_mode")?.run {
-        AccountIdEndpointMode.values().firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException(
-                "account_id_endpoint_mode $this is not supported, should be one of: ${
-                    AccountIdEndpointMode.values().joinToString(", ") { it.name.lowercase() }
-                }",
-            )
-    }
+    get() = getEnumOrNull<AccountIdEndpointMode>("account_id_endpoint_mode")
 
 /**
  * Determines when a request should be compressed or not
@@ -174,30 +161,35 @@ public val AwsProfile.sigV4aSigningRegionSet: String?
  */
 @InternalSdkApi
 public val AwsProfile.requestChecksumCalculation: RequestHttpChecksumConfig?
-    get() = getOrNull("request_checksum_calculation")?.run {
-        RequestHttpChecksumConfig
-            .values()
-            .firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException(
-                "request_checksum_calculation $this is not supported, should be one of: " +
-                    RequestHttpChecksumConfig.values().joinToString(", ") { it.name.lowercase() },
-            )
-    }
+    get() = getEnumOrNull<RequestHttpChecksumConfig>("request_checksum_calculation")
 
 /**
  * Configures response checksum validation
  */
 @InternalSdkApi
 public val AwsProfile.responseChecksumValidation: ResponseHttpChecksumConfig?
-    get() = getOrNull("response_checksum_validation")?.run {
-        ResponseHttpChecksumConfig
-            .values()
-            .firstOrNull { it.name.equals(this, ignoreCase = true) }
-            ?: throw ConfigurationException(
-                "response_checksum_validation $this is not supported, should be one of: " +
-                    ResponseHttpChecksumConfig.values().joinToString(", ") { it.name.lowercase() },
-            )
-    }
+    get() = getEnumOrNull<ResponseHttpChecksumConfig>("response_checksum_validation")
+
+/**
+ * The ordered preference of [AuthScheme] that this client will use
+ */
+@InternalSdkApi
+public val AwsProfile.authSchemePreference: String?
+    get() = getOrNull("auth_scheme_preference")
+
+/**
+ * Specifies a named EC2 instance profile to use which allows bypassing auto-discovery
+ */
+@InternalSdkApi
+public val AwsProfile.ec2InstanceProfileName: String?
+    get() = getOrNull("ec2_instance_profile_name")
+
+/**
+ * The flag which disables the use of IMDS for credentials
+ */
+@InternalSdkApi
+public val AwsProfile.ec2MetadataDisabled: Boolean?
+    get() = getBooleanOrNull("disable_ec2_metadata")
 
 /**
  * Parse a config value as a boolean, ignoring case.
@@ -229,6 +221,25 @@ public fun AwsProfile.getLongOrNull(key: String, subKey: String? = null): Long? 
     getOrNull(key, subKey)?.let {
         it.toLongOrNull() ?: throw ConfigurationException(
             "Failed to parse config property ${buildKeyString(key, subKey)} as a long",
+        )
+    }
+
+/**
+ * Parse a config value as an enum.
+ */
+@InternalSdkApi
+public inline fun <reified T : Enum<T>> AwsProfile.getEnumOrNull(key: String, subKey: String? = null): T? =
+    getOrNull(key, subKey)?.let { value ->
+        enumValues<T>().firstOrNull {
+            it.name.equals(value, ignoreCase = true)
+        } ?: throw ConfigurationException(
+            buildString {
+                append(key)
+                append(" '")
+                append(value)
+                append("' is not supported, should be one of: ")
+                enumValues<T>().joinTo(this) { it.name.lowercase() }
+            },
         )
     }
 
