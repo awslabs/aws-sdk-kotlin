@@ -87,6 +87,7 @@ val lintPaths = listOf(
     "!**/generated/ksp/**",
     "!**/kspCaches/**",
     "!**/smithyprojections/**",
+    "!**/build/**",
 )
 
 configureLinting(lintPaths)
