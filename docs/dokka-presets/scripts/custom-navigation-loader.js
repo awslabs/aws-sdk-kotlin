@@ -55,7 +55,6 @@ function loadNavigation() {
 }
 
 navigationPageText = loadNavigation()
-// navigationPageText = fetch(pathToRoot + extractModuleName() + "/navigation.html").then(response => response.text())
 
 displayNavigationFromPage = () => {
     navigationPageText.then(data => {
