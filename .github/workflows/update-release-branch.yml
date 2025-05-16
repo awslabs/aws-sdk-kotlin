@@ -29,6 +29,8 @@ env:
 
 jobs:
   update-release:
+    # Mirror repo doesn't have a release branch
+    if: github.repository == 'awslabs/aws-sdk-kotlin'
     runs-on: ubuntu-latest
     steps:
       - name: Set start timestamp
