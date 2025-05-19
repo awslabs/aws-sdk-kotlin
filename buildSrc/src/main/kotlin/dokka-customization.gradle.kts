@@ -31,9 +31,8 @@ tasks.register("trimNavigations") {
             val sideMenuParts = doc.select("div.sideMenu > div.sideMenuPart")
 
             sideMenuParts.forEach { submenu ->
-                val submenuId = submenu.id()
                 // If this is not the current module's submenu, remove all its nested content
-                if (submenuId != "$moduleName-nav-submenu") {
+                if (submenu.id() != "$moduleName-nav-submenu") {
                     val overviewDiv = submenu.select("> div.overview").first()
                     overviewDiv?.select("span.navButton")?.remove()
                     submenu.children().remove()
