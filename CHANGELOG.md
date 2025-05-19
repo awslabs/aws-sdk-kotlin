@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.87] - 05/19/2025
+
+### Features
+* (**dsql**) CreateMultiRegionCluster and DeleteMultiRegionCluster APIs removed
+* (**ec2**) This release includes new APIs for System Integrity Protection (SIP) configuration and automated root volume ownership delegation for EC2 Mac instances.
+* (**mediapackagev2**) This release adds support for DVB-DASH, EBU-TT-D subtitle format, and non-compacted manifests for DASH in MediaPackage v2 Origin Endpoints.
+
 ## [1.4.86] - 05/16/2025
 
 ### Features
