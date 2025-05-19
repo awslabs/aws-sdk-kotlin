@@ -1,3 +1,5 @@
+// Custom navigation loader for AWS SDK for Kotlin documentation.
+
 // Extracts the module name from a given URL href
 function extractModuleName(href) {
     try{
@@ -56,6 +58,9 @@ function loadNavigation() {
 
 navigationPageText = loadNavigation()
 
+// =================================================================
+// Everything below this is copied from Dokka's navigation-loader.js
+// =================================================================
 displayNavigationFromPage = () => {
     navigationPageText.then(data => {
         document.getElementById("sideMenu").innerHTML = data;
