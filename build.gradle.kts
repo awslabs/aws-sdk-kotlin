@@ -5,7 +5,6 @@
 import aws.sdk.kotlin.gradle.dsl.configureLinting
 import aws.sdk.kotlin.gradle.dsl.configureNexus
 import aws.sdk.kotlin.gradle.util.typedProp
-import org.jsoup.Jsoup
 import java.net.URL
 
 buildscript {
@@ -26,10 +25,6 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.aws.kotlin.repo.tools.artifactsizemetrics)
 }
-
-//subprojects {
-//    apply(from = "${rootProject.file("buildSrc/src/main/kotlin/dokka-customization.gradle.kts")}")
-//}
 
 artifactSizeMetrics {
     artifactPrefixes = setOf(":services", ":aws-runtime")
