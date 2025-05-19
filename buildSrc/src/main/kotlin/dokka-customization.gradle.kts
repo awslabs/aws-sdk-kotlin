@@ -15,7 +15,6 @@ tasks.register("trimNavigations") {
         dokkaOutputDir.listFiles { file ->
             file.isDirectory && file.resolve("navigation.html").exists()
         }?.forEach { moduleDir ->
-            println("trimming navigation for module ${moduleDir.name}")
             val moduleName = moduleDir.name
 
             val navFile = File(moduleDir, "navigation.html")
