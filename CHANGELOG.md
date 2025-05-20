@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.88] - 05/20/2025
+
+### Features
+* (**datasync**) Remove Discovery APIs from the DataSync service
+* (**ec2**) This release expands the ModifyInstanceMaintenanceOptions API to enable or disable instance migration during customer-initiated reboots for EC2 Scheduled Reboot Events.
+* (**glue**) Enhanced AWS Glue ListConnectionTypes API Model with additional metadata fields.
+* (**inspector2**) This release adds GetClustersForImage API and filter updates as part of the mapping of container images to running containers feature.
+* (**oam**) Add IncludeTags field to GetLink, GetSink and UpdateLink API
+* (**rds**) This release introduces the new DescribeDBMajorEngineVersions API for describing the properties of specific major versions of database engines.
+
 ## [1.4.87] - 05/19/2025
 
 ### Features
