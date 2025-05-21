@@ -125,4 +125,24 @@ class GetItemTest : DdbLocalTest() {
         val tableCapacity = assertNotNull(cc.table)
         assertEquals(0.5, tableCapacity.capacityUnits)
     }
+
+    @Test
+    fun testPkGetItemByScalarKey() = runTest {
+        val table = mapper().getTable(PK_TABLE_NAME, pkSchema)
+
+        val item = assertNotNull(table.getItem(1))
+        assertEquals("foo", item.value)
+
+        assertNull(table.getItem(2))
+    }
+
+    @Test
+    fun testCkGetItemByScalarKeys() = runTest {
+        val table = mapper().getTable(CK_TABLE_NAME, ckSchema)
+
+        val item = assertNotNull(table.getItem("abcd", 42))
+        assertEquals("foo", item.value)
+
+        assertNull(table.getItem("abcd", 43))
+    }
 }

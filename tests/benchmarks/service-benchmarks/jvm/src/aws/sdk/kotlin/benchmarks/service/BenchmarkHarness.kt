@@ -9,7 +9,6 @@ import aws.sdk.kotlin.benchmarks.service.telemetry.MetricSummary
 import aws.smithy.kotlin.runtime.client.SdkClient
 import aws.smithy.kotlin.runtime.io.use
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.TimeSource
 
 val DEFAULT_WARMUP_TIME = 5.seconds
 val DEFAULT_ITERATION_TIME = 15.seconds
@@ -28,9 +27,18 @@ private val benchmarks = setOf(
     it as ServiceBenchmark<SdkClient>
 }
 
-suspend fun main() {
-    val harness = BenchmarkHarness()
-    harness.execute()
+suspend fun main(args: Array<String>) {
+    // FIXME: Unify service and protocol benchmark interfaces into a common base module
+    // to support generic parameterized benchmarks and reduce duplication
+    val useProtocolBenchmark = "protocol" in args
+
+    if (useProtocolBenchmark) {
+        val harness = ProtocolBenchmarkHarness()
+        harness.execute()
+    } else {
+        val harness = BenchmarkHarness()
+        harness.execute()
+    }
 }
 
 class BenchmarkHarness {
@@ -66,14 +74,14 @@ class BenchmarkHarness {
 
         try {
             println("    Warming up for ${operation.warmupMode.explanation}...")
-            forAtLeast(operation.warmupMode) {
+            operation.warmupMode.forAtLeast {
                 operation.transact(client)
             }
 
             Common.metricAggregator.clear()
 
             println("    Measuring for ${operation.iterationMode.explanation}...")
-            forAtLeast(operation.iterationMode) {
+            operation.iterationMode.forAtLeast {
                 operation.transact(client)
             }
 
@@ -89,31 +97,4 @@ class BenchmarkHarness {
         val table = ResultsTable.from(summaries)
         println(table)
     }
-}
-
-private inline fun forAtLeast(runMode: RunMode, block: () -> Unit) {
-    val start = TimeSource.Monotonic.markNow()
-
-    when (runMode) {
-        is RunMode.Time -> {
-            var cnt = 0
-            while (start.elapsedNow() < runMode.time) {
-                block()
-                cnt++
-            }
-            println("      (completed $cnt iterations)")
-        }
-
-        is RunMode.Iterations -> {
-            repeat(runMode.iterations) {
-                block()
-            }
-            println("      (took ${start.elapsedNow()})")
-        }
-    }
-}
-
-private val RunMode.explanation get() = when (this) {
-    is RunMode.Iterations -> "$iterations iterations"
-    is RunMode.Time -> time.toString()
 }

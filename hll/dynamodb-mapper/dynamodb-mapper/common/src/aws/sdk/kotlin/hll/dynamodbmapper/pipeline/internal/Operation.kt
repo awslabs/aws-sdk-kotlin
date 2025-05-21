@@ -5,20 +5,33 @@
 package aws.sdk.kotlin.hll.dynamodbmapper.pipeline.internal
 
 import aws.sdk.kotlin.hll.dynamodbmapper.items.ItemSchema
-import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.*
+import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.Interceptor
+import aws.sdk.kotlin.hll.dynamodbmapper.pipeline.InterceptorAny
 
-internal class Operation<T, HReq, LReq, LRes, HRes>(
-    private val initialize: (HReq) -> HReqContextImpl<T, HReq>,
-    private val serialize: (HReq, ItemSchema<T>) -> LReq,
-    private val lowLevelInvoke: suspend (LReq) -> LRes,
-    private val deserialize: (LRes, ItemSchema<T>) -> HRes,
-    interceptors: Collection<InterceptorAny>,
+internal data class Operation<T, HReq, LReq, LRes, HRes>(
+    val initialize: (HReq) -> HReqContextImpl<T, HReq>,
+    val serialize: (HReq, ItemSchema<T>) -> LReq,
+    val lowLevelInvoke: suspend (LReq) -> LRes,
+    val deserialize: (LRes, ItemSchema<T>) -> HRes,
+    val interceptors: List<Interceptor<T, HReq, LReq, LRes, HRes>>,
 ) {
-    private val interceptors = interceptors.map {
-        // Will cause runtime ClassCastExceptions during interceptor invocation if the types don't match. Is that ok?
-        @Suppress("UNCHECKED_CAST")
-        it as Interceptor<T, HReq, LReq, LRes, HRes>
-    }
+    constructor(
+        initialize: (HReq) -> HReqContextImpl<T, HReq>,
+        serialize: (HReq, ItemSchema<T>) -> LReq,
+        lowLevelInvoke: suspend (LReq) -> LRes,
+        deserialize: (LRes, ItemSchema<T>) -> HRes,
+        interceptors: Collection<InterceptorAny>,
+    ) : this(
+        initialize,
+        serialize,
+        lowLevelInvoke,
+        deserialize,
+        interceptors.map {
+            // Will cause runtime ClassCastExceptions during interceptor invocation if the types don't match. Is that ok?
+            @Suppress("UNCHECKED_CAST")
+            it as Interceptor<T, HReq, LReq, LRes, HRes>
+        },
+    )
 
     suspend fun execute(hReq: HReq): HRes {
         val hReqContext = doInitialize(hReq)

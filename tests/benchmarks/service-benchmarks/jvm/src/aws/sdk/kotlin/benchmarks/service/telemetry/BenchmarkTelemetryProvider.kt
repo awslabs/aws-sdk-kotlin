@@ -17,6 +17,8 @@ private val capturedMetrics = mapOf(
     // "smithy.client.call.serialization_duration" to "Serlz",
     // "smithy.client.call.deserialization_duration" to "Deserlz",
     // "smithy.client.call.resolve_endpoint_duration" to "EPR",
+    // "smithy.client.call.request_payload_size" to "ReqSize",
+    // "smithy.client.call.response_payload_size" to "RespSize",
 )
 
 @ExperimentalApi
@@ -38,7 +40,10 @@ class BenchmarkTelemetryProvider(private val metricAggregator: MetricAggregator)
                     newUnit = "ms"
                     transform = { it * 1000 }
                 }
-
+                "bytes" -> {
+                    newUnit = "bytes"
+                    transform = { it }
+                }
                 null -> {
                     newUnit = null
                     transform = { it }

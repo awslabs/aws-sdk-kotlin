@@ -7,6 +7,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <@page_metadata.display/>
+    <#-- AWS Analytics tracking script - Implements site-wide analytics and tracking functionality -->
+    <script src="https://a0.awsstatic.com/s_code/js/3.0/awshome_s_code.js"></script>
     <@template_cmd name="pathToRoot"><script>var pathToRoot = "${pathToRoot}";</script></@template_cmd>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <#-- This script doesn't need to be there but it is nice to have
@@ -23,6 +25,16 @@
                 document.getElementsByTagName("html")[0].classList.add("theme-dark")
             }
         }
+    </script>
+    <#-- Scripts for onboarding AWS Shortbread - Manages cookie consent banners and user preferences to help ensure
+    compliance with privacy regulations like GDPR -->
+    <script>var existingShortbreadEl = document.getElementById("awsccc-sb-ux-c");
+    existingShortbreadEl && existingShortbreadEl.remove();
+    </script>
+    <script src="https://prod.assets.shortbread.aws.dev/shortbread.js"></script>
+    <link href="https://prod.assets.shortbread.aws.dev/shortbread.css" rel="stylesheet">
+    <script>const shortbread = AWSCShortbread();
+    shortbread.checkForCookieConsent();
     </script>
     <#-- Resources (scripts, stylesheets) are handled by Dokka.
     Use customStyleSheets and customAssets to change them. -->

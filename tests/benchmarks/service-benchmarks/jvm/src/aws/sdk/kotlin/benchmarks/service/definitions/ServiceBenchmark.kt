@@ -7,7 +7,6 @@ package aws.sdk.kotlin.benchmarks.service.definitions
 import aws.sdk.kotlin.benchmarks.service.DEFAULT_ITERATION_TIME
 import aws.sdk.kotlin.benchmarks.service.DEFAULT_WARMUP_TIME
 import aws.smithy.kotlin.runtime.client.SdkClient
-import kotlin.time.Duration
 
 /**
  * Defines the harness for conducting a benchmark of a service client.
@@ -89,23 +88,6 @@ interface OperationBenchmark<C : SdkClient> {
      * @param client The service client to use.
      */
     suspend fun tearDown(client: C) { }
-}
-
-/**
- * Identifies the mode in which to run a phase of benchmark execution.
- */
-sealed interface RunMode {
-    /**
-     * Run for a specific number of iterations.
-     * @param iterations The number of iterations to run.
-     */
-    data class Iterations(val iterations: Int) : RunMode
-
-    /**
-     * Run for a specific amount of time.
-     * @param time The amount of time to run.
-     */
-    data class Time(val time: Duration) : RunMode
 }
 
 /**

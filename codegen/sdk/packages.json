@@ -1879,6 +1879,12 @@
             "brazilName": "AwsSdkKotlinSsmContacts"
         },
         {
+            "sdkId": "SSM GuiConnect",
+            "namespace": "aws.sdk.kotlin.services.ssmguiconnect",
+            "artifactName": "ssmguiconnect",
+            "brazilName": "AwsSdkKotlinSsmGuiconnect"
+        },
+        {
             "sdkId": "SSM Incidents",
             "namespace": "aws.sdk.kotlin.services.ssmincidents",
             "artifactName": "ssmincidents",

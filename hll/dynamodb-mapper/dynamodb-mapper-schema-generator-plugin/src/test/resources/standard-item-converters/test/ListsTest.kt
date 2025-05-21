@@ -31,6 +31,9 @@ public class ListsTest {
             listUShort = listOf(UShort.MIN_VALUE, UShort.MAX_VALUE),
             listULong = listOf(ULong.MIN_VALUE, ULong.MAX_VALUE),
             listEnum = listOf(EnumAnimals.CAT, EnumAnimals.DOG, EnumAnimals.SHEEP),
+            nullableList = null,
+            listNullableElement = listOf("foo", null, "baz"),
+            nullableListNullableElement = null,
         )
 
         val item = ListsConverter.convertTo(lists)

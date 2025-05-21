@@ -5,6 +5,10 @@ on:
   release:
     types: [ published ]
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   update-canary:
     runs-on: ubuntu-latest
