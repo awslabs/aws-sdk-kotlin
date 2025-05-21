@@ -211,6 +211,17 @@ The `.api` files can be updated by running `./gradlew apiDump`.
 
 The binary compatibility validator can also be run manually using `./gradlew apiCheck`.
 
+#### Release readiness
+
+This checks for cross repo changes by looking at matching branch names across repos.
+It verifies that downstream changes are ready to be released. If your change spans
+multiple repos (aws-sdk-kotlin, smithy-kotlin, aws-crt-kotlin), the upstream 
+changes must be merged and released first. For release assistance ask the team 
+to run a release for you.
+
+If this check is failing, and you have cross repo changes that do not rely on 
+each other, you can add the `ready-for-release` label to your PR to override it.
+
 ## Finding contributions to work on
 Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels ((enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any ['help wanted'](https://github.com/aws-samples/aws-sdk-kotlin/labels/help%20wanted) issues is a great place to start. 
 

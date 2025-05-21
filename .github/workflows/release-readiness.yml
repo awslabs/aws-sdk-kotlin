@@ -9,6 +9,7 @@ on:
 
 jobs:
   release-readiness:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ready-for-release') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout SDK
