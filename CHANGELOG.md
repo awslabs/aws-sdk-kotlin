@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.89] - 05/21/2025
+
+### Features
+* (**bedrockagentruntime**) Amazon Bedrock introduces asynchronous flows (in preview), which let you run flows for longer durations and yield control so that your application can perform other tasks and you don't have to actively monitor the flow's progress.
+* (**cloudwatch**) Adds support for setting up Contributor Insight rules on logs transformed via Logs Transformation feature.
+* (**ec2**) Release of Dualstack and Ipv6-only EC2 Public DNS hostnames
+* (**partnercentralselling**) Modified validation to allow expectedCustomerSpend array with zero elements in Partner Opportunity operations.
+
+### Documentation
+* (**applicationautoscaling**) Doc only update that addresses a customer reported issue.
+
+### Miscellaneous
+* Removing private networks service due to deprecation
+
 ## [1.4.88] - 05/20/2025
 
 ### Features
