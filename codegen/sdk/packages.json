@@ -1639,12 +1639,6 @@
             "brazilName": "AwsSdkKotlinPricing"
         },
         {
-            "sdkId": "PrivateNetworks",
-            "namespace": "aws.sdk.kotlin.services.privatenetworks",
-            "artifactName": "privatenetworks",
-            "brazilName": "AwsSdkKotlinPrivatenetworks"
-        },
-        {
             "sdkId": "Proton",
             "namespace": "aws.sdk.kotlin.services.proton",
             "artifactName": "proton",
