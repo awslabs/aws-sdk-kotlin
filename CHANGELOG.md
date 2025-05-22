@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.90] - 05/22/2025
+
+### Features
+* (**amp**) Add QueryLoggingConfiguration APIs for Amazon Managed Prometheus
+* (**auditmanager**) With this release, the AssessmentControl description field has been deprecated, as of May 19, 2025. Additionally, the UpdateAssessment API can now return a ServiceQuotaExceededException when applicable service quotas are exceeded.
+* (**dsql**) Features: support for customer managed encryption keys
+* (**glue**) This release supports additional ConversionSpec parameter as part of IntegrationPartition Structure in CreateIntegrationTableProperty API. This parameter is referred to apply appropriate column transformation for columns that are used for timestamp based partitioning
+
 ## [1.4.89] - 05/21/2025
 
 ### Features
