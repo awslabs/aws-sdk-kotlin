@@ -14,6 +14,7 @@ buildscript {
         classpath(libs.kotlinx.atomicfu.plugin)
         // Add our custom gradle build logic to buildscript classpath
         classpath(libs.aws.kotlin.repo.tools.build.support)
+        classpath(libs.jsoup)
     }
 }
 
@@ -39,6 +40,8 @@ val testJavaVersion = typedProp<String>("test.java.version")?.let {
 }
 
 allprojects {
+    apply(from = "${rootProject.file("buildSrc/src/main/kotlin/dokka-customization.gradle.kts")}")
+
     tasks.withType<org.jetbrains.dokka.gradle.AbstractDokkaTask>().configureEach {
         val sdkVersion: String by project
         moduleVersion.set(sdkVersion)
@@ -54,7 +57,8 @@ allprojects {
                     "customAssets": [
                         "${rootProject.file("docs/dokka-presets/assets/logo-icon.svg")}",
                         "${rootProject.file("docs/dokka-presets/assets/aws_logo_white_59x35.png")}",
-                        "${rootProject.file("docs/dokka-presets/scripts/accessibility.js")}"
+                        "${rootProject.file("docs/dokka-presets/scripts/accessibility.js")}",
+                        "${rootProject.file("docs/dokka-presets/scripts/custom-navigation-loader.js")}"
                     ],
                     "footerMessage": "© $year, Amazon Web Services, Inc. or its affiliates. All rights reserved.",
                     "separateInheritedMembers" : true,
@@ -135,6 +139,8 @@ project.afterEvaluate {
             // NOTE: these get concatenated
             rootProject.file("docs/dokka-presets/README.md"),
         )
+
+        finalizedBy("trimNavigations", "applyCustomNavigationLoader")
     }
 }
 
