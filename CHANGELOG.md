@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.91] - 05/23/2025
+
+### Features
+* (**ec2**) This release adds support for the C7i-flex, M7i-flex, I7i, I7ie, I8g, P6-b200, Trn2, C8gd, M8gd and R8gd instances
+* (**securityir**) Update PrincipalId pattern documentation to reflect what user should receive back from the API call
+
 ## [1.4.90] - 05/22/2025
 
 ### Features
