@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.93] - 05/28/2025
+
+### Features
+* (**costoptimizationhub**) This release allows customers to modify their preferred commitment term and payment options.
+* (**ec2**) Enable the option to automatically delete underlying Amazon EBS snapshots when deregistering Amazon Machine Images (AMIs)
+* (**eventbridge**) Allow for more than 2 characters for location codes in EventBridge ARNs
+* (**networkfirewall**) You can now use VPC endpoint associations to create multiple firewall endpoints for a single firewall.
+* (**synthetics**) Add support to change ephemeral storage. Add a new field "TestResult" under CanaryRunStatus.
+
 ## [1.4.92] - 05/27/2025
 
 ### Features
