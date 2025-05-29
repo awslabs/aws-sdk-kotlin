@@ -1,0 +1,68 @@
+name: Release readiness (snapshot dependency)
+description: >
+  Makes sure that we aren't relying on SNAPSHOT/dev versions of smithy-kotlin before merging
+  otherwise we could forget because the rest of CI is masking it.
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  release-readiness:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ready-for-release') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout SDK
+        uses: actions/checkout@v4
+        with:
+          path: 'aws-sdk-kotlin'
+
+      - name: Configure Gradle
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
+        with:
+          working-directory: ./aws-sdk-kotlin
+
+      - name: Build SDK
+        working-directory: ./aws-sdk-kotlin
+        run: ./gradlew test jvmTest
+
+      - name: Build SDK client
+        working-directory: ./aws-sdk-kotlin
+        run: |
+          ./gradlew -Paws.kotlin.native=false -Paws.services=s3 bootstrap
+          ./gradlew -Paws.kotlin.native=false build
+
+      - name: Checkout smithy-kotlin
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/checkout-head@main
+        with:
+          path: 'smithy-kotlin'
+          repository: 'smithy-lang/smithy-kotlin'
+
+      - name: Check for smithy-kotlin unreleased changes
+        run: |
+          echo "aws-sdk-kotlin branch: $GITHUB_HEAD_REF"
+          
+          cd smithy-kotlin
+          SMITHY_KOTLIN_BRANCH=$(git branch --show-current)
+          echo "smithy-kotlin branch: $SMITHY_KOTLIN_BRANCH"
+          
+          if [ "$GITHUB_HEAD_REF" == "$SMITHY_KOTLIN_BRANCH" ]; then
+            cd ../aws-sdk-kotlin
+            git fetch origin
+
+            DIFF=$(git diff origin/main -- gradle/libs.versions.toml | grep '^[-+][^-+]'; exit 0)
+            SMITHY_KOTLIN_VERSION_BUMP=$(echo "$DIFF" | grep "smithy-kotlin-runtime-version =\|smithy-kotlin-codegen-version ="; exit 0)
+
+            if [ -z "$SMITHY_KOTLIN_VERSION_BUMP" ]; then
+              echo "::error::Matching smithy-kotlin and aws-sdk-kotlin branches but no smithy-kotlin version bump"
+              exit 1
+            else
+              echo "Matching smithy-kotlin and aws-sdk-kotlin branches with smithy-kotlin version bump detected"
+            fi
+          fi
+
+      - name: Emit error message
+        if: ${{ failure() }}
+        run: |
+          echo "::error::Did you forget to release smithy-kotlin and bump the dependency version?"
+          exit 1

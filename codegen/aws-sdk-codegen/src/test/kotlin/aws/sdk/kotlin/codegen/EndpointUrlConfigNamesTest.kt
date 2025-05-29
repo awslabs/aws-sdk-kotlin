@@ -1179,11 +1179,6 @@ private const val TEST_SUITE_JSON = """
     "service_envvar_name": "AWS_ENDPOINT_URL_PRICING"
   },
   {
-    "service_id": "PrivateNetworks",
-    "services_section_name": "privatenetworks",
-    "service_envvar_name": "AWS_ENDPOINT_URL_PRIVATENETWORKS"
-  },
-  {
     "service_id": "Proton",
     "services_section_name": "proton",
     "service_envvar_name": "AWS_ENDPOINT_URL_PROTON"
@@ -1865,7 +1860,6 @@ private const val JAVA_CLIENT_NAMES_JSON = """
   "MemoryDB": "MemoryDbClient",
   "Payment Cryptography": "PaymentCryptographyClient",
   "Cognito Identity": "CognitoIdentityClient",
-  "PrivateNetworks": "PrivateNetworksClient",
   "SMS": "SmsClient",
   "OSIS": "OsisClient",
   "Proton": "ProtonClient",

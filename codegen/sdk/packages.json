@@ -1639,12 +1639,6 @@
             "brazilName": "AwsSdkKotlinPricing"
         },
         {
-            "sdkId": "PrivateNetworks",
-            "namespace": "aws.sdk.kotlin.services.privatenetworks",
-            "artifactName": "privatenetworks",
-            "brazilName": "AwsSdkKotlinPrivatenetworks"
-        },
-        {
             "sdkId": "Proton",
             "namespace": "aws.sdk.kotlin.services.proton",
             "artifactName": "proton",
@@ -1877,6 +1871,12 @@
             "namespace": "aws.sdk.kotlin.services.ssmcontacts",
             "artifactName": "ssmcontacts",
             "brazilName": "AwsSdkKotlinSsmContacts"
+        },
+        {
+            "sdkId": "SSM GuiConnect",
+            "namespace": "aws.sdk.kotlin.services.ssmguiconnect",
+            "artifactName": "ssmguiconnect",
+            "brazilName": "AwsSdkKotlinSsmGuiconnect"
         },
         {
             "sdkId": "SSM Incidents",

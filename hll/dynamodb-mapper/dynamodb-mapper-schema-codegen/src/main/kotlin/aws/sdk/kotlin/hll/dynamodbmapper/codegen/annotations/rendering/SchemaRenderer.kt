@@ -175,6 +175,12 @@ internal class SchemaRenderer(
         val type = Type.from(ksType)
 
         when {
+            type.nullable -> {
+                writeInline("#T(", MapperTypes.Values.NullableConverter)
+                renderValueConverter(ksType.makeNotNullable())
+                writeInline(")")
+            }
+
             ksType.isEnum -> writeInline("#T()", MapperTypes.Values.Scalars.enumConverter(type))
 
             // FIXME Handle multi-module codegen rather than assuming nested classes will be in the same [ctx.pkg]
@@ -200,12 +206,6 @@ internal class SchemaRenderer(
             }
 
             type.isGenericFor(Types.Kotlin.Collections.Set) -> writeInline("#T", ksType.singleArgument().setValueConverter)
-
-            type.nullable -> {
-                writeInline("#T(", MapperTypes.Values.NullableConverter)
-                renderValueConverter(ksType.makeNotNullable())
-                writeInline(")")
-            }
 
             else -> writeInline(
                 "#T",

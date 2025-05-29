@@ -9,6 +9,7 @@ import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 plugins {
     alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 description = "Support for AWS configuration"
@@ -53,6 +54,7 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.test)
                 implementation(libs.smithy.kotlin.http.test)
                 implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotest.framework.datatest)
             }
         }
         jvmTest {
