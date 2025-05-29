@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.4.94] - 05/29/2025
+
+### Features
+* (**amplify**) Add support for customizable build instance sizes. CreateApp and UpdateApp operations now accept a new JobConfig parameter composed of BuildComputeType.
+* (**autoscaling**) Add support for "apple" CpuManufacturer in ABIS
+* (**bcmpricingcalculator**) Add AFTER_DISCOUNTS_AND_COMMITMENTS to Workload Estimate Rate Type. Set ListWorkLoadEstimateUsage maxResults range to minimum of 0 and maximum of 300.
+* (**cloudtrail**) CloudTrail Feature Release: Support for Enriched Events with Configurable Context for Event Data Store
+* (**connect**) Amazon Connect Service Feature: Email Recipient Limit Increase
+* (**dataexchange**) This release adds Tag support for Event Action resource, through which customers can create event actions with Tags and retrieve event actions with Tags.
+* (**datasync**) AgentArns field is made optional for Object Storage and Azure Blob location create requests. Location credentials are now managed via Secrets Manager, and may be encrypted with service managed or customer managed keys. Authentication is now optional for Azure Blob locations.
+* (**fsx**) FSx API changes to support the public launch of new Intelligent Tiering storage class on Amazon FSx for Lustre
+* (**ivsrealtime**) IVS Real-Time now offers customers the participant replication that allow customers to copy a participant from one stage to another.
+* (**mwaa**) Amazon MWAA now lets you choose a worker replacement strategy when updating an environment. This release adds two worker replacement strategies: FORCED (default), which stops workers immediately, and GRACEFUL, which allows workers to finish current tasks before shutting down.
+* (**s3**) Adding checksum support for S3 PutBucketOwnershipControls API.
+* (**sagemaker**) Add maintenance status field to DescribeMlflowTrackingServer API response
+
 ## [1.4.93] - 05/28/2025
 
 ### Features
