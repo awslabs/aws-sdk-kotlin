@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.95] - 05/30/2025
+
+### Features
+* (**emrserverless**) This release adds the capability for users to specify an optional Execution IAM policy in the StartJobRun action. The resulting permissions assumed by the job run is the intersection of the permissions in the Execution Role and the specified Execution IAM Policy.
+* (**sagemaker**) Release new parameter CapacityReservationConfig in ProductionVariant
+
 ## [1.4.94] - 05/29/2025
 
 ### Features
