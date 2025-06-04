@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.98] - 06/04/2025
+
+### Features
+* (**evs**) Amazon Elastic VMware Service (Amazon EVS) allows you to run VMware Cloud Foundation (VCF) directly within your Amazon VPC including simplified self-managed migration experience with guided workflow in AWS console or via AWS CLI, get full access to their VCF deployment and VCF license portability.
+* (**invoicing**) Added new Invoicing ListInvoiceSummaries API Operation
+* (**mediaconnect**) This release updates the DescribeFlow API to show peer IP addresses. You can now identify the peer IP addresses of devices connected to your sources and outputs. This helps you to verify and troubleshoot your flow's active connections.
+* (**mediaconvert**) This release includes support for embedding and signing C2PA content credentials in MP4 outputs.
+* (**networkfirewall**) You can now monitor flow and alert log metrics from the Network Firewall console.
+* (**sagemaker**) Added support for p6-b200 instance type in SageMaker Training Jobs and Training Plans.
+* (**transcribe**) AWS Healthscribe now supports new templates for the clinical note summary: BIRP, SIRP, DAP, BEHAVIORAL_SOAP, and PHYSICAL_SOAP
+* (**transcribestreaming**) AWS Healthscribe now supports new templates for the clinical note summary: BIRP, SIRP, DAP, BEHAVIORAL_SOAP, and PHYSICAL_SOAP
+
+### Documentation
+* (**amplify**) Update documentation for cacheConfig in CreateApp API
+
 ## [1.4.97] - 06/03/2025
 
 ### Features

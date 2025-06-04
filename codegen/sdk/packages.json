@@ -2281,6 +2281,12 @@
             "brazilName": "AwsSdkKotlinDrs"
         },
         {
+            "sdkId": "evs",
+            "namespace": "aws.sdk.kotlin.services.evs",
+            "artifactName": "evs",
+            "brazilName": "AwsSdkKotlinEvs"
+        },
+        {
             "sdkId": "finspace",
             "namespace": "aws.sdk.kotlin.services.finspace",
             "artifactName": "finspace",
