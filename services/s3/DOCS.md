@@ -1,12 +1,9 @@
 # Module s3
 
-Amazon Simple Storage Service
-
 ## Binary Data
 
-Binary data (streams) are represented as an [aws.smithy.kotlin.runtime.content.ByteStream].
-
-To supply a `ByteStream` there are several convenience functions including:
+Binary data (streams) are represented as a [`ByteStream`][aws.smithy.kotlin.runtime.content.ByteStream]. To supply a
+`ByteStream` there are several convenience functions including:
 
 ```kt
 val req = PutObjectRequest {
@@ -30,15 +27,12 @@ s3.getObject(req) { resp -> {
 }
 ```
 
-See [aws.sdk.kotlin.services.s3.model.GetObjectResponse]
+See [`GetObjectResponse`][aws.sdk.kotlin.services.s3.model.GetObjectResponse] for more details.
 
 ## Streaming Responses
 
-Streaming responses are scoped to a `block`. Instead of returning the response directly, you must pass a lambda which is given access to the response (and the underlying stream).
-The result of the call is whatever the lambda returns.
-
-
-See [aws.sdk.kotlin.services.s3.S3Client.getObject]
+Streaming responses are scoped to a `block`. Instead of returning the response directly, you must pass a lambda which is
+given access to the response (and the underlying stream). The result of the call is whatever the lambda returns.
 
 ```kt
 val s3 = S3Client { ... }
@@ -57,5 +51,6 @@ val contentSize = s3.getObject(req) { resp ->
 println("wrote $contentSize bytes to $path")
 ```
 
-
 This scoped response simplifies lifetime management for both the caller and the runtime.
+
+See [`getObject`][aws.sdk.kotlin.services.s3.S3Client.getObject] for more details.

@@ -181,7 +181,7 @@ val stageSdks = tasks.register("stageSdks") {
                 into(it.destinationDir)
             }
             copy {
-                from("$projectionOutputDir/API.md")
+                from("$projectionOutputDir/OVERVIEW.md")
                 into(it.destinationDir)
             }
         }

@@ -1639,12 +1639,6 @@
             "brazilName": "AwsSdkKotlinPricing"
         },
         {
-            "sdkId": "PrivateNetworks",
-            "namespace": "aws.sdk.kotlin.services.privatenetworks",
-            "artifactName": "privatenetworks",
-            "brazilName": "AwsSdkKotlinPrivatenetworks"
-        },
-        {
             "sdkId": "Proton",
             "namespace": "aws.sdk.kotlin.services.proton",
             "artifactName": "proton",
@@ -2285,6 +2279,12 @@
             "namespace": "aws.sdk.kotlin.services.drs",
             "artifactName": "drs",
             "brazilName": "AwsSdkKotlinDrs"
+        },
+        {
+            "sdkId": "evs",
+            "namespace": "aws.sdk.kotlin.services.evs",
+            "artifactName": "evs",
+            "brazilName": "AwsSdkKotlinEvs"
         },
         {
             "sdkId": "finspace",
