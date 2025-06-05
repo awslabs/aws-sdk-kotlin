@@ -14,7 +14,6 @@ buildscript {
         classpath(libs.kotlinx.atomicfu.plugin)
         // Add our custom gradle build logic to buildscript classpath
         classpath(libs.aws.kotlin.repo.tools.build.support)
-        classpath(libs.jsoup)
     }
 }
 
