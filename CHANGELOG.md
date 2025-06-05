@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.99] - 06/05/2025
+
+### Features
+* (**bcmpricingcalculator**) Updating the minimum for List APIs to be 1 (instead of 0)
+* (**cloudformation**) Add new warning type 'EXCLUDED_PROPERTIES'
+* (**kms**) AWS KMS announces the support for on-demand rotation of symmetric-encryption KMS keys with imported key material (EXTERNAL origin).
+* (**wafv2**) AWS WAF adds support for ASN-based traffic filtering and support for ASN-based rate limiting.
+
 ## [1.4.98] - 06/04/2025
 
 ### Features
