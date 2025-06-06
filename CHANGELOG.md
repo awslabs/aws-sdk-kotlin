@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.100] - 06/06/2025
+
+### Features
+* (**bedrockagentruntime**) This release introduces the `PromptCreationConfigurations` input parameter, which includes fields to control prompt population for `InvokeAgent` or `InvokeInlineAgent` requests.
+* (**kms**) Remove unpopulated KeyMaterialId from Encrypt Response
+* (**rds**) Include Global Cluster Identifier in DBCluster if the DBCluster is a Global Cluster Member.
+* (**rekognition**) Adds support for defining an ordered preference list of different Rekognition Face Liveness challenge types when calling CreateFaceLivenessSession.
+* (**route53**) Amazon Route 53 now supports the Asia Pacific (Taipei) Region (ap-east-2) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region.
+* (**s3tables**) S3 Tables now supports getting details about a table via its table ARN.
+
 ## [1.4.99] - 06/05/2025
 
 ### Features
