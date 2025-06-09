@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.101] - 06/09/2025
+
+### Features
+* (**appsync**) Deprecate `atRestEncryptionEnabled` and `transitEncryptionEnabled` attributes in `CreateApiCache` action. Encryption is always enabled for new caches.
+* (**costexplorer**) Support dual-stack endpoints for ce api
+* (**customerprofiles**) This release introduces capability of Profile Explorer, using correct ingestion timestamp & using historical data for computing calculated attributes, and new standard objects for T&H as part of Amazon Connect Customer Profiles service.
+* (**ec2**) Release to support Elastic VMware Service (Amazon EVS) Subnet and Amazon EVS Network Interface Types.
+* (**efs**) Added support for Internet Protocol Version 6 (IPv6) on EFS Service APIs and mount targets.
+* (**marketplacecatalog**) The ListEntities API now supports the EntityID, LastModifiedDate, ProductTitle, and Visibility filters for machine learning products. You can also sort using all of those filters.
+* (**workspacesthinclient**) Add ConflictException to UpdateEnvironment API
+* Optimize Kotlin API Reference documentation navigation sidebar
+
 ## [1.4.100] - 06/06/2025
 
 ### Features
