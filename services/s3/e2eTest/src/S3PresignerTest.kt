@@ -5,8 +5,10 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.model.DeleteObjectRequest
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
+import aws.sdk.kotlin.services.s3.presigners.presignDeleteObject
 import aws.sdk.kotlin.services.s3.presigners.presignGetObject
 import aws.sdk.kotlin.services.s3.presigners.presignPutObject
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
@@ -50,6 +52,7 @@ class S3PresignerTest {
         withAllEngines { engine ->
             val httpClient = SdkHttpClient(engine)
 
+            // PUT
             val unsignedPutRequest = PutObjectRequest {
                 bucket = testBucket
                 key = keyName
@@ -58,6 +61,7 @@ class S3PresignerTest {
 
             S3TestUtils.responseCodeFromPut(presignedPutRequest, contents)
 
+            // GET
             val unsignedGetRequest = GetObjectRequest {
                 bucket = testBucket
                 key = keyName
@@ -69,6 +73,17 @@ class S3PresignerTest {
             call.complete()
             assertEquals(200, call.response.status.value)
             assertEquals(contents, body)
+
+            // DELETE
+            val unsignedDeleteRequest = DeleteObjectRequest {
+                bucket = testBucket
+                key = keyName
+            }
+            val presignedDeleteObject = client.presignDeleteObject(unsignedDeleteRequest, 60.seconds)
+
+            val deleteCall = httpClient.call(presignedDeleteObject)
+            deleteCall.complete()
+            assertEquals(204, deleteCall.response.status.value)
         }
     }
 
