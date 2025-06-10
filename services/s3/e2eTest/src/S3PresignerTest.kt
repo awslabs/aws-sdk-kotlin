@@ -5,8 +5,10 @@
 package aws.sdk.kotlin.e2etest
 
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.services.s3.model.DeleteObjectRequest
 import aws.sdk.kotlin.services.s3.model.GetObjectRequest
 import aws.sdk.kotlin.services.s3.model.PutObjectRequest
+import aws.sdk.kotlin.services.s3.presigners.presignDeleteObject
 import aws.sdk.kotlin.services.s3.presigners.presignGetObject
 import aws.sdk.kotlin.services.s3.presigners.presignPutObject
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
@@ -79,9 +81,9 @@ class S3PresignerTest {
             }
             val presignedDeleteObject = client.presignDeleteObject(unsignedDeleteRequest, 60.seconds)
 
-            val call = httpClient.call(presignedDeleteObject)
-            call.complete()
-            assertEquals(204, call.response.status.value)
+            val deleteCall = httpClient.call(presignedDeleteObject)
+            deleteCall.complete()
+            assertEquals(204, deleteCall.response.status.value)
         }
     }
 
