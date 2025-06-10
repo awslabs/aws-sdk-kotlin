@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.102] - 06/10/2025
+
+### Features
+* [#1609](https://github.com/awslabs/aws-sdk-kotlin/issues/1609) (**s3**) Add support for presigning DeleteObject requests
+
+### Documentation
+* (**gameliftstreams**) Documentation updates for Amazon GameLift Streams to address formatting errors, correct resource ID examples, and update links to other guides
+
 ## [1.4.101] - 06/09/2025
 
 ### Features

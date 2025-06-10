@@ -1,9 +1,0 @@
-{
-    "id": "6632426a-83de-4ceb-8aef-0d27b01b070b",
-    "type": "feature",
-    "description": "Add support for presigning DeleteObject requests",
-    "issues": [
-        "https://github.com/awslabs/aws-sdk-kotlin/issues/1609"
-    ],
-    "module": "s3"
-}
