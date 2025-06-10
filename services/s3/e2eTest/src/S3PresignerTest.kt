@@ -50,6 +50,7 @@ class S3PresignerTest {
         withAllEngines { engine ->
             val httpClient = SdkHttpClient(engine)
 
+            // PUT
             val unsignedPutRequest = PutObjectRequest {
                 bucket = testBucket
                 key = keyName
@@ -58,6 +59,7 @@ class S3PresignerTest {
 
             S3TestUtils.responseCodeFromPut(presignedPutRequest, contents)
 
+            // GET
             val unsignedGetRequest = GetObjectRequest {
                 bucket = testBucket
                 key = keyName
@@ -69,6 +71,17 @@ class S3PresignerTest {
             call.complete()
             assertEquals(200, call.response.status.value)
             assertEquals(contents, body)
+
+            // DELETE
+            val unsignedDeleteRequest = DeleteObjectRequest {
+                bucket = testBucket
+                key = keyName
+            }
+            val presignedDeleteObject = client.presignDeleteObject(unsignedDeleteRequest, 60.seconds)
+
+            val call = httpClient.call(presignedDeleteObject)
+            call.complete()
+            assertEquals(204, call.response.status.value)
         }
     }
 
