@@ -100,7 +100,15 @@ tasks.register("trimNavigations") {
                 // Trim side menus
                 doc.select("div.sideMenu > div.toc--part")
                     .filterNot { it.id().startsWith("$moduleName-nav-submenu") }
-                    .forEach { it.remove() }
+                    .forEach { moduleMenu ->
+                        val moduleRow = moduleMenu.select("div.toc--row").first()!!
+                        val toggleButton = moduleRow.select("button.toc--button").single()
+                        toggleButton.remove()
+
+                        moduleMenu.children().filterNot { it == moduleRow }.forEach {
+                            it.remove()
+                        }
+                    }
 
                 // Update navigation.html
                 val trimmedSideMenuParts = doc.select("div.sideMenu > div.toc--part")
