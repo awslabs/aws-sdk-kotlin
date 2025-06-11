@@ -105,9 +105,9 @@ tasks.register("trimNavigations") {
                         val toggleButton = moduleRow.select("button.toc--button").single()
                         toggleButton.remove()
 
-                        moduleMenu.children().filterNot { it == moduleRow }.forEach {
-                            it.remove()
-                        }
+                        moduleMenu.children()
+                            .filterNot { it == moduleRow }
+                            .forEach { it.remove() }
                     }
 
                 // Update navigation.html
