@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.103] - 06/11/2025
+
+### Features
+* (**controlcatalog**) Introduced ListControlMappings API that retrieves control mappings. Added control aliases and governed resources fields in GetControl and ListControls APIs. New filtering capability in ListControls API, with implementation identifiers and implementation types.
+* (**eks**) Release for EKS Pod Identity Cross Account feature and disableSessionTags flag.
+* (**lexmodelsv2**) Add support for the Assisted NLU feature to improve bot performance
+* (**networkmanager**) Add support for public DNS hostname resolution to private IP addresses across Cloud WAN-managed VPCs. Add support for security group referencing across Cloud WAN-managed VPCs.
+* (**wafv2**) WAF now provides two DDoS protection options: resource-level monitoring for Application Load Balancers and the AWSManagedRulesAntiDDoSRuleSet managed rule group for CloudFront distributions.
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation for Amazon RDS for Db2 cross-Region replicas in standby mode.
+
 ## [1.4.102] - 06/10/2025
 
 ### Features
