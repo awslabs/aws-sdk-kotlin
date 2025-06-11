@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import aws.smithy.kotlin.runtime.text.ensureSuffix
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 description = "Plugin used to generate DynamoDbMapper schemas from user classes"
