@@ -1,9 +1,12 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 /*
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
+
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.text.ensureSuffix
+
 description = "Plugin used to generate DynamoDbMapper schemas from user classes"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: DynamoDbMapper :: Schema Generator Plugin"
 extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.plugins"
@@ -88,8 +91,7 @@ tasks.test {
 // FIXME Commonize the following functions into the aws-kotlin-repo-tools build-support
 val sdkVersion: String by project
 
-private fun String.ensureSuffix(suffix: String): String = if (endsWith(suffix)) this else plus(suffix)
-
+@OptIn(InternalApi::class)
 val hllPreviewVersion = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-beta-SNAPSHOT
     sdkVersion
         .removeSuffix("-SNAPSHOT")

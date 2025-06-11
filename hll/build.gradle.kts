@@ -5,6 +5,8 @@
 
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
 import aws.sdk.kotlin.gradle.kmp.*
+import aws.smithy.kotlin.runtime.InternalApi
+import aws.smithy.kotlin.runtime.text.ensureSuffix
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 description = "High-level libraries for the AWS SDK for Kotlin"
@@ -32,8 +34,7 @@ val optinAnnotations = listOf(
     "kotlin.RequiresOptIn",
 )
 
-private fun String.ensureSuffix(suffix: String): String = if (endsWith(suffix)) this else plus(suffix)
-
+@OptIn(InternalApi::class)
 val hllPreviewVersion = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-beta-SNAPSHOT
     sdkVersion
         .removeSuffix("-SNAPSHOT")
