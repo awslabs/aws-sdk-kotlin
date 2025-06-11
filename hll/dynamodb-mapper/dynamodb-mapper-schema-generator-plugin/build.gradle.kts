@@ -91,7 +91,8 @@ tasks.test {
 // FIXME Commonize the following functions into the aws-kotlin-repo-tools build-support
 val sdkVersion: String by project
 
-@OptIn(InternalApi::class)
+private fun String.ensureSuffix(suffix: String): String = if (endsWith(suffix)) this else plus(suffix)
+
 val hllPreviewVersion = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-beta-SNAPSHOT
     sdkVersion
         .removeSuffix("-SNAPSHOT")
