@@ -112,4 +112,3 @@ tasks.register("trimNavigations") {
 tasks.dokkaGenerate {
     finalizedBy("trimNavigations")
 }
-
