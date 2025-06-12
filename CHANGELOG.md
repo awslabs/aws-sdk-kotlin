@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.104] - 06/12/2025
+
+### Features
+* (**connectcampaignsv2**) Added PutInstanceCommunicationLimits and GetInstanceCommunicationLimits APIs
+* (**emrserverless**) This release adds support for retrieval of the optional executionIamPolicy field in the GetJobRun API response.
+* (**iotfleetwise**) Add new status READY_FOR_CHECKIN used for vehicle synchronisation
+* (**kms**) AWS KMS announces the support of ML-DSA key pairs that creates post-quantum safe digital signatures.
+* (**pcs**) Fixed regex patterns for ARN fields.
+
+### Documentation
+* (**apigateway**) Documentation updates for Amazon API Gateway
+* (**apigatewayv2**) Documentation updates for Amazon API Gateway
+* (**ecs**) This Amazon ECS  release supports updating the capacityProviderStrategy parameter in update-service.
+
 ## [1.4.103] - 06/11/2025
 
 ### Features
