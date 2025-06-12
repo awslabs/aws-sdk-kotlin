@@ -98,9 +98,9 @@ tasks.register("trimNavigations") {
                 val doc = Jsoup.parse(navigation)
 
                 // Fix navigation links
-                doc.select("a[href^='../']").forEach { anchor ->
+                doc.select("a[href^='../../../../']").forEach { anchor ->
                     val originalHref = anchor.attr("href")
-                    val trimmedHref = originalHref.replace("../", "")
+                    val trimmedHref = originalHref.replace("../../../../", "")
                     anchor.attr("href", trimmedHref)
                 }
 
