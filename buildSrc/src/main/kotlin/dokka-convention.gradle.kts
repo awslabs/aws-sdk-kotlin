@@ -76,7 +76,7 @@ dependencies {
     dokkaPlugin(project(":dokka-aws"))
 }
 
-tasks.register("trimNavigations") {
+tasks.register("trimNavigationFiles") {
     description = "Trims navigation.html files to remove unrelated projects' side menus"
     group = "documentation"
 
@@ -125,5 +125,5 @@ tasks.register("trimNavigations") {
 }
 
 tasks.dokkaGenerate {
-    finalizedBy("trimNavigations")
+    finalizedBy("trimNavigationFiles")
 }
