@@ -97,6 +97,13 @@ tasks.register("trimNavigations") {
                 val navigation = moduleDir.resolve("navigation.html").toFile()
                 val doc = Jsoup.parse(navigation)
 
+                // Fix navigation links
+                doc.select("a[href^='../']").forEach { anchor ->
+                    val originalHref = anchor.attr("href")
+                    val trimmedHref = originalHref.replace("../", "")
+                    anchor.attr("href", trimmedHref)
+                }
+
                 // Trim side menus
                 doc.select("div.sideMenu > div.toc--part")
                     .filterNot { it.id().startsWith("$moduleName-nav-submenu") }
