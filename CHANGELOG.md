@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.105] - 06/16/2025
+
+### Features
+* (**bedrock**) This release of the SDK has the API and documentation for the createcustommodel API. This feature lets you copy a Amazon SageMaker trained Amazon Nova model into Amazon Bedrock for inference.
+* (**ecr**) The `DescribeImageScanning` API now includes `lastInUseAt` and `InUseCount` fields that can be used to prioritize vulnerability remediation for images that are actively being used.
+* (**networkfirewall**) You can now create firewalls using a Transit Gateway instead of a VPC, resulting in a TGW attachment.
+* (**sagemaker**) This release 1) adds a new S3DataType Converse for SageMaker training 2)adds C8g R7gd M8g C6in P6 P6e instance type for SageMaker endpoint 3) adds m7i, r7i, c7i instance type for SageMaker Training and Processing.
+
 ## [1.4.104] - 06/12/2025
 
 ### Features
