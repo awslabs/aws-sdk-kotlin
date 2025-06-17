@@ -4,7 +4,7 @@
  */
 package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.rendering
 
-import aws.sdk.kotlin.hll.codegen.core.*
+import aws.sdk.kotlin.hll.codegen.core.ImportDirective
 import aws.sdk.kotlin.hll.codegen.model.Member
 import aws.sdk.kotlin.hll.codegen.model.Operation
 import aws.sdk.kotlin.hll.codegen.model.Structure
@@ -106,9 +106,10 @@ internal class OperationRenderer(
         requestMembers(MemberCodegenBehavior.PassThrough) { write("#L = this@convert.#L", name, highLevel.name) }
         requestMembers(MemberCodegenBehavior.MapKeys) {
             write(
-                "this@convert.#L?.let { #L = schema.converter.convertTo(it, schema.keyAttributeNames) }",
+                "this@convert.#L?.let { #L = schema.converter.convertTo(it, schema.keyAttributeNames).#T(schema.keyAttributeNames) }",
                 highLevel.name,
                 name,
+                MapperTypes.Model.intersectKeys,
             )
         }
         requestMembers(MemberCodegenBehavior.MapAll) {

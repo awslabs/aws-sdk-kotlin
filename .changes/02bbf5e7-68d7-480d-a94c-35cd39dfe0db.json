@@ -1,0 +1,8 @@
+{
+    "id": "02bbf5e7-68d7-480d-a94c-35cd39dfe0db",
+    "type": "bugfix",
+    "description": "Correctly convert key fields during paginated `Scan` and `Query` operations",
+    "issues": [
+        "awslabs/aws-sdk-kotlin#1596"
+    ]
+}

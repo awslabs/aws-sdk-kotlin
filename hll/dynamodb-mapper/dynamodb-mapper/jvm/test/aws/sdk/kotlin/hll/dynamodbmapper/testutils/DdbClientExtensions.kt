@@ -88,17 +88,17 @@ suspend fun DynamoDbClient.getItem(tableName: String, vararg keys: Pair<String, 
  * @param items A collection of maps of strings to values to be mapped and persisted to the table
  */
 suspend fun DynamoDbClient.putItems(tableName: String, items: List<Item>) {
-    val writeRequests = items.map { item ->
-        WriteRequest {
-            putRequest {
-                this.item = item
+    val batches = items
+        .map { item ->
+            WriteRequest {
+                putRequest { this.item = item }
             }
         }
-    }
+        .chunked(25) // Max batchWriteItem page size
 
-    if (writeRequests.isNotEmpty()) {
+    batches.forEach { batch ->
         batchWriteItem {
-            requestItems = mapOf(tableName to writeRequests)
+            requestItems = mapOf(tableName to batch)
         }
     }
 }

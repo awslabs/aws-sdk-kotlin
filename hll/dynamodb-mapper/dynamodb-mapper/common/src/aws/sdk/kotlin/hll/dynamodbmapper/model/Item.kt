@@ -8,7 +8,6 @@ import aws.sdk.kotlin.hll.dynamodbmapper.model.internal.ItemImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.util.dynamicAttr
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import aws.smithy.kotlin.runtime.ExperimentalApi
-import kotlin.jvm.JvmName
 
 /**
  * An immutable representation of a low-level item in a DynamoDB table. Items consist of attributes, each of which have
@@ -59,3 +58,9 @@ public fun itemOf(vararg pairs: Pair<String, AttributeValue>): Item = mapOf(*pai
  */
 @JvmName("itemOfPairStringAny")
 internal fun itemOf(vararg pairs: Pair<String, Any?>): Item = mapOf(*pairs).toItem()
+
+/**
+ * Truncate this item to include only the specified key attributes, removing any non-key attributes
+ * @param keys The collection of key names which should be preserved
+ */
+internal fun Item.intersectKeys(keys: Collection<String>): Item = filterKeys { keys.contains(it) }.toItem()
