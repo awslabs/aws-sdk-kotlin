@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.4.106] - 06/17/2025
+
+### Features
+* (**accessanalyzer**) We are launching a new analyzer type, internal access analyzer. The new analyzer will generate internal access findings, which help customers understand who within their AWS organization or AWS Account has access to their critical AWS resources.
+* (**acm**) Adds support for Exportable Public Certificates
+* (**backup**) AWS Backup is adding support for integration of its logically air-gapped vaults with the AWS Organizations Multi-party approval capability.
+* (**databasemigrationservice**) Add "Virtual" field to Data Provider as well as "S3Path" and "S3AccessRoleArn" fields to DataProvider settings
+* (**guardduty**) Adding support for extended threat detection for EKS Audit Logs and EKS Runtime Monitoring.
+* (**inspector2**) Add Code Repository Scanning as part of AWS InspectorV2
+* (**mpa**) This release enables customers to create Multi-party approval teams and approval requests to protect supported operations.
+* (**networkfirewall**) Release of Active Threat Defense in Network Firewall
+* (**organizations**) Add support for policy operations on the SECURITYHUB_POLICY policy type.
+* (**securityhub**) Adds operations, structures, and exceptions required for public preview release of Security Hub V2.
+* (**sts**) The AWS Security Token Service APIs AssumeRoleWithSAML and AssumeRoleWithWebIdentity can now be invoked without pre-configured AWS credentials in the SDK configuration.
+* (**wafv2**) AWS WAF can now suggest protection packs for you based on the application information you provide when you create a webACL.
+
+### Documentation
+* (**bedrock**) This release of the SDK has the API and documentation for the createcustommodel API. This feature lets you copy a trained model into Amazon Bedrock for inference.
+
 ## [1.4.105] - 06/16/2025
 
 ### Features
