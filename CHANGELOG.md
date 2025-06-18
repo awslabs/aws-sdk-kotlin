@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.107] - 06/18/2025
+
+### Features
+* (**aiops**) This is the initial SDK release for Amazon AI Operations (AIOps). AIOps is a generative AI-powered assistant that helps you respond to incidents in your system by scanning your system's telemetry and quickly surface suggestions that might be related to your issue.
+* (**autoscaling**) Add IncludeInstances parameter to DescribeAutoScalingGroups API
+* (**cloudwatchlogs**) Added CloudWatch Logs Transformer support for converting CloudTrail, VPC Flow, EKS Audit, AWS WAF and Route53 Resolver logs to OCSF v1.1 format.
+* (**s3**) Added support for renaming objects within the same bucket using the new RenameObject API.
+* (**sagemaker**) Add support for p6-b200 instance type for SageMaker Hyperpod
+
+### Fixes
+* [#1596](https://github.com/awslabs/aws-sdk-kotlin/issues/1596) Correctly convert key fields during paginated `Scan` and `Query` operations
+
 ## [1.4.106] - 06/17/2025
 
 ### Features

@@ -13,6 +13,12 @@
             "brazilName": "AwsSdkKotlinAcmPca"
         },
         {
+            "sdkId": "AIOps",
+            "namespace": "aws.sdk.kotlin.services.aiops",
+            "artifactName": "aiops",
+            "brazilName": "AwsSdkKotlinAiops"
+        },
+        {
             "sdkId": "API Gateway",
             "namespace": "aws.sdk.kotlin.services.apigateway",
             "artifactName": "apigateway",
