@@ -8,6 +8,7 @@ import aws.sdk.kotlin.hll.dynamodbmapper.model.internal.ItemImpl
 import aws.sdk.kotlin.hll.dynamodbmapper.util.dynamicAttr
 import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import aws.smithy.kotlin.runtime.ExperimentalApi
+import kotlin.jvm.JvmName
 
 /**
  * An immutable representation of a low-level item in a DynamoDB table. Items consist of attributes, each of which have
