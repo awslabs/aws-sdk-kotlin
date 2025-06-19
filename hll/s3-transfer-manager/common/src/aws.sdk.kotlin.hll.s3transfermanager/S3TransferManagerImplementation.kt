@@ -1,19 +1,18 @@
 package aws.sdk.kotlin.hll.s3transfermanager
 
 import aws.sdk.kotlin.services.s3.S3Client
+import aws.sdk.kotlin.hll.s3transfermanager.model.*
+import aws.sdk.kotlin.hll.s3transfermanager.model.uploaddir.DownloadType
+import aws.sdk.kotlin.hll.s3transfermanager.model.uploaddir.UploadDirectoryRequest
+import aws.sdk.kotlin.hll.s3transfermanager.model.uploaddir.UploadDirectoryResponse
 import aws.sdk.kotlin.services.s3.model.ChecksumAlgorithm
 import aws.smithy.kotlin.runtime.http.engine.crt.CrtHttpEngine
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
-
-public fun S3TransferManager(
-    config: S3TransferManager.Config.Builder.() -> Unit = { },
-): S3TransferManager = S3TransferManagerImplementation(S3TransferManager.Config(config))
 
 internal data class S3TransferManagerImplementation(
     override val config: S3TransferManager.Config,
 ) : S3TransferManager {
     override fun uploadFile(input: UploadFileRequest): UploadFileResponse {
-        // TODO: How would this change the config on the fly ?
         TODO("Not yet implemented")
     }
 

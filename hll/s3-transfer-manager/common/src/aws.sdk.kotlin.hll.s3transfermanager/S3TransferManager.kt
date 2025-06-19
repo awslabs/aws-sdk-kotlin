@@ -1,10 +1,18 @@
 
 package aws.sdk.kotlin.hll.s3transfermanager
 
+import aws.sdk.kotlin.hll.s3transfermanager.model.*
+import aws.sdk.kotlin.hll.s3transfermanager.model.uploaddir.DownloadType
+import aws.sdk.kotlin.hll.s3transfermanager.model.uploaddir.UploadDirectoryRequest
+import aws.sdk.kotlin.hll.s3transfermanager.model.uploaddir.UploadDirectoryResponse
 import aws.sdk.kotlin.services.s3.S3Client
 import aws.sdk.kotlin.services.s3.model.ChecksumAlgorithm
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.io.Closeable
+
+public fun S3TransferManager(
+    config: S3TransferManager.Config.Builder.() -> Unit = { },
+): S3TransferManager = S3TransferManagerImplementation(S3TransferManager.Config(config))
 
 // TODO: Experimental API ?
 public interface S3TransferManager: Closeable {
@@ -54,23 +62,3 @@ public interface S3TransferManager: Closeable {
         config.client.close()
     }
 }
-
-public enum class DownloadType {
-    PART,
-    RANGE,
-}
-
-public interface UploadFileRequest
-public interface UploadFileResponse
-
-public interface DownloadFileRequest
-public interface DownloadFileResponse
-
-public interface UploadDirectoryRequest
-public interface UploadDirectoryResponse
-
-public interface DownloadDirectoryRequest
-public interface DownloadDirectoryResponse
-
-public interface TrackTransferRequest
-public interface TrackTransferResponse

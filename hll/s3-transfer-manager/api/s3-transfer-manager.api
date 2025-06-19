@@ -1,0 +1,178 @@
+public abstract interface class aws/sdk/kotlin/hll/s3transfermanager/S3TransferManager : java/io/Closeable {
+	public static final field Companion Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Companion;
+	public abstract fun close ()V
+	public abstract fun downloadDirectory (Laws/sdk/kotlin/hll/s3transfermanager/model/DownloadDirectoryRequest;)Laws/sdk/kotlin/hll/s3transfermanager/model/DownloadDirectoryResponse;
+	public abstract fun downloadFile (Laws/sdk/kotlin/hll/s3transfermanager/model/DownloadFileRequest;)Laws/sdk/kotlin/hll/s3transfermanager/model/DownloadFileResponse;
+	public abstract fun getConfig ()Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config;
+	public abstract fun trackTransfer (Laws/sdk/kotlin/hll/s3transfermanager/model/TrackTransferRequest;)Laws/sdk/kotlin/hll/s3transfermanager/model/TrackTransferResponse;
+	public abstract fun uploadDirectory (Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryRequest;)Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryResponse;
+	public abstract fun uploadFile (Laws/sdk/kotlin/hll/s3transfermanager/model/UploadFileRequest;)Laws/sdk/kotlin/hll/s3transfermanager/model/UploadFileResponse;
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Companion {
+	public final fun Config (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config;
+	public static synthetic fun Config$default (Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Companion;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config {
+	public static final field Companion Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config$Companion;
+	public abstract fun getChecksumAlgorithm ()Laws/sdk/kotlin/services/s3/model/ChecksumAlgorithm;
+	public abstract fun getChecksumValidationEnabled ()Z
+	public abstract fun getClient ()Laws/sdk/kotlin/services/s3/S3Client;
+	public abstract fun getInterceptors ()Ljava/util/List;
+	public abstract fun getMultipartDownloadType ()Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DownloadType;
+	public abstract fun getMultipartUploadThresholdBytes ()J
+	public abstract fun getTargetPartSizeBytes ()J
+	public abstract fun toBuilder ()Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config$Builder;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config$Builder {
+	public abstract fun build ()Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config;
+	public abstract fun getChecksumAlgorithm ()Laws/sdk/kotlin/services/s3/model/ChecksumAlgorithm;
+	public abstract fun getChecksumValidationEnabled ()Z
+	public abstract fun getClient ()Laws/sdk/kotlin/services/s3/S3Client;
+	public abstract fun getInterceptors ()Ljava/util/List;
+	public abstract fun getMultipartDownloadType ()Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DownloadType;
+	public abstract fun getMultipartUploadThresholdBytes ()J
+	public abstract fun getTargetPartSizeBytes ()J
+	public abstract fun setChecksumAlgorithm (Laws/sdk/kotlin/services/s3/model/ChecksumAlgorithm;)V
+	public abstract fun setChecksumValidationEnabled (Z)V
+	public abstract fun setClient (Laws/sdk/kotlin/services/s3/S3Client;)V
+	public abstract fun setInterceptors (Ljava/util/List;)V
+	public abstract fun setMultipartDownloadType (Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DownloadType;)V
+	public abstract fun setMultipartUploadThresholdBytes (J)V
+	public abstract fun setTargetPartSizeBytes (J)V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config$Companion {
+	public final fun Builder ()Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$Config$Builder;
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/S3TransferManager$DefaultImpls {
+	public static fun close (Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager;)V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/S3TransferManagerKt {
+	public static final fun S3TransferManager (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager;
+	public static synthetic fun S3TransferManager$default (Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Laws/sdk/kotlin/hll/s3transfermanager/S3TransferManager;
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/DownloadDirectoryRequest {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/DownloadDirectoryResponse {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/DownloadFileRequest {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/DownloadFileResponse {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/ParameterRequiredException : java/lang/Exception {
+	public fun <init> (Ljava/lang/String;)V
+	public fun getMessage ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/TrackTransferRequest {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/TrackTransferResponse {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/UploadFileRequest {
+	public fun <init> ()V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/UploadFileResponse {
+	public fun <init> ()V
+}
+
+public abstract class aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DefaultFailureCallback : java/lang/Enum, aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/FailureCallback {
+	public static final field CANCEL Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DefaultFailureCallback;
+	public static final field IGNORE Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DefaultFailureCallback;
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DefaultFailureCallback;
+	public static fun values ()[Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DefaultFailureCallback;
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DownloadType : java/lang/Enum {
+	public static final field PART Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DownloadType;
+	public static final field RANGE Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DownloadType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DownloadType;
+	public static fun values ()[Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/DownloadType;
+}
+
+public abstract interface class aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/FailureCallback {
+	public abstract fun onFailure (Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryRequest;Laws/sdk/kotlin/hll/s3transfermanager/model/UploadFileRequest;Ljava/lang/Exception;)V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryRequest {
+	public static final field Companion Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryRequest$Companion;
+	public synthetic fun <init> (Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryRequest$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getBucket ()Ljava/lang/String;
+	public final fun getFailurePolicy ()Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/FailureCallback;
+	public final fun getFilter ()Lkotlin/jvm/functions/Function1;
+	public final fun getFollowSymbolicLinks ()Z
+	public final fun getPutObjectRequestCallBack ()Lkotlin/jvm/functions/Function1;
+	public final fun getRecursive ()Z
+	public final fun getS3Delimiter ()Ljava/lang/String;
+	public final fun getS3Prefix ()Ljava/lang/String;
+	public final fun getSource ()Ljava/lang/String;
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryRequest$Builder {
+	public fun <init> ()V
+	public final fun build ()Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryRequest;
+	public final fun getBucket ()Ljava/lang/String;
+	public final fun getFailurePolicy ()Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/FailureCallback;
+	public final fun getFilter ()Lkotlin/jvm/functions/Function1;
+	public final fun getFollowSymbolicLinks ()Ljava/lang/Boolean;
+	public final fun getPutObjectRequestCallback ()Lkotlin/jvm/functions/Function1;
+	public final fun getRecursive ()Ljava/lang/Boolean;
+	public final fun getS3Delimiter ()Ljava/lang/String;
+	public final fun getS3Prefix ()Ljava/lang/String;
+	public final fun getSource ()Ljava/lang/String;
+	public final fun setBucket (Ljava/lang/String;)V
+	public final fun setFailurePolicy (Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/FailureCallback;)V
+	public final fun setFilter (Lkotlin/jvm/functions/Function1;)V
+	public final fun setFollowSymbolicLinks (Ljava/lang/Boolean;)V
+	public final fun setPutObjectRequestCallback (Lkotlin/jvm/functions/Function1;)V
+	public final fun setRecursive (Ljava/lang/Boolean;)V
+	public final fun setS3Delimiter (Ljava/lang/String;)V
+	public final fun setS3Prefix (Ljava/lang/String;)V
+	public final fun setSource (Ljava/lang/String;)V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryRequest$Companion {
+	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryRequest;
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryResponse {
+	public static final field Companion Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryResponse$Companion;
+	public synthetic fun <init> (Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryResponse$Builder;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getObjectsFailed ()J
+	public final fun getObjectsUploaded ()J
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryResponse$Builder {
+	public fun <init> ()V
+	public final fun build ()Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryResponse;
+	public final fun getObjectsFailed ()Ljava/lang/Long;
+	public final fun getObjectsUploaded ()Ljava/lang/Long;
+	public final fun setObjectsFailed (Ljava/lang/Long;)V
+	public final fun setObjectsUploaded (Ljava/lang/Long;)V
+}
+
+public final class aws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryResponse$Companion {
+	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/hll/s3transfermanager/model/uploaddir/UploadDirectoryResponse;
+}
+
