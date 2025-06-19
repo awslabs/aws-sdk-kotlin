@@ -3,17 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import aws.sdk.kotlin.gradle.codegen.*
 import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
 import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
+import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
 import aws.sdk.kotlin.gradle.sdk.*
 import aws.sdk.kotlin.gradle.sdk.tasks.UpdatePackageManifest
 import aws.sdk.kotlin.gradle.util.typedProp
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
-import kotlin.streams.toList
 
 plugins {
     kotlin("jvm")
