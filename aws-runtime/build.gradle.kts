@@ -63,11 +63,15 @@ subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_1_8)
+            freeCompilerArgs.add("-Xjdk-release=1.8")
             freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
+
+    // FIXME Do we need a separate `KotlinNativeCompile` configuration, is configuring KotlinCompile not enough?
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
         compilerOptions {
+            freeCompilerArgs.add("-Xjdk-release=1.8")
             freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
