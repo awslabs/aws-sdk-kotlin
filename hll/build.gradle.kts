@@ -110,5 +110,5 @@ apiValidation {
 
 // Configure Dokka for dynamodb-mapper
 dependencies {
-    dokka(project("dynamodb-mapper"))
+    dokka(project(":hll:dynamodb-mapper"))
 }

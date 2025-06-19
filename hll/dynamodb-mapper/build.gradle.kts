@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    dokka(project("dynamodb-mapper"))
-    dokka(project("dynamodb-mapper-annotations"))
+    dokka(project(":hll:dynamodb-mapper:dynamodb-mapper"))
+    dokka(project(":hll:dynamodb-mapper:dynamodb-mapper-annotations"))
 }
