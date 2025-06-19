@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.108] - 06/19/2025
+
+### Features
+* (**bedrock**) This release of the SDK has the API and documentation for the createcustommodel API. This feature lets you copy a trained model into Amazon Bedrock for inference.
+* (**emrserverless**) This release adds the capability to enable IAM IdentityCenter Trusted Identity Propagation for users running Interactive Sessions on EMR Serverless Applications.
+* (**lambda**) Support Schema Registry feature for Kafka Event Source Mapping. Customers can now configure a Schema Registry to enable schema validation and filtering for Avro, Protobuf, and JSON-formatted events in Lambda for Kafka Event Source.
+* (**paymentcryptography**) Additional support for managing HMAC keys that adheres to changes documented in X9.143-2021 and provides better interoperability for key import/export
+* (**paymentcryptographydata**) Additional support for managing HMAC keys that adheres to changes documented in X9.143-2021 and provides better interoperability for key import/export
+* (**sagemaker**) This release introduces alternative support for utilizing CFN templates from S3 for SageMaker Projects.
+
+### Miscellaneous
+* Upgrade to Dokka 2.0.0
+
 ## [1.4.107] - 06/18/2025
 
 ### Features
