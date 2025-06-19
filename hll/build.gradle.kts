@@ -108,10 +108,7 @@ apiValidation {
     ).filter { it in availableSubprojects } // Some projects may not be in the build depending on bootstrapping
 }
 
-// Configure Dokka for subprojects
+// Configure Dokka for dynamodb-mapper
 dependencies {
-    subprojects.forEach {
-        it.plugins.apply("dokka-convention") // Apply the Dokka conventions plugin to the subproject
-        dokka(project(it.path)) // Aggregate the subproject's generated documentation
-    }
+    dokka(project("dynamodb-mapper"))
 }

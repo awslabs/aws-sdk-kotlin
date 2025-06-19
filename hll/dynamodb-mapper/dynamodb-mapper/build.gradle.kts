@@ -26,6 +26,7 @@ buildscript {
 
 plugins {
     alias(libs.plugins.ksp)
+    `dokka-convention`
 }
 
 kotlin {
@@ -183,4 +184,8 @@ tasks.withType<Test> {
     doLast {
         startDdbLocal.stop()
     }
+}
+
+dokka {
+    modulePath = "dynamodb-mapper"
 }
