@@ -7,10 +7,6 @@ description = "DynamoDbMapper annotations"
 extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: DynamoDbMapper :: Annotations"
 extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.annotations"
 
-plugins {
-    `dokka-convention`
-}
-
 dokka {
     modulePath = "dynamodb-mapper-annotations"
 }
