@@ -185,7 +185,3 @@ tasks.withType<Test> {
         startDdbLocal.stop()
     }
 }
-
-dokka {
-    modulePath = "dynamodb-mapper"
-}

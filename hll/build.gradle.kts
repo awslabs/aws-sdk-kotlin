@@ -117,4 +117,18 @@ dependencies {
             dokka(project(it.path)) // Aggregate the subproject's generated documentation
         }
     }
+
+    // Preserve Dokka v1 module paths
+    // https://kotlinlang.org/docs/dokka-migration.html#revert-to-the-dgp-v1-directory-behavior
+    subprojects {
+        val subProjectName = this@subprojects.name
+
+        if (subProjectName in projectsToIgnore) {
+            return@subprojects
+        }
+
+        dokka {
+            modulePath = subProjectName
+        }
+    }
 }

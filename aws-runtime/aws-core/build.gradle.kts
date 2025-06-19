@@ -27,7 +27,3 @@ kotlin {
         }
     }
 }
-
-dokka {
-    modulePath = "aws-core"
-}
