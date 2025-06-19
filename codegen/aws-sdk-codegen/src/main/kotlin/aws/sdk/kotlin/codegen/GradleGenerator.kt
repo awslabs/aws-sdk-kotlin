@@ -77,6 +77,12 @@ class GradleGenerator : KotlinIntegration {
                 }
             }
 
+        writer.write("")
+        writer.withBlock("dokka {", "}") {
+            val serviceModuleName = ctx.settings.pkg.name.split(".").last()
+            write("modulePath = #S", serviceModuleName)
+        }
+
         val contents = writer.toString()
         delegator.fileManifest.writeFile("build.gradle.kts", contents)
     }
