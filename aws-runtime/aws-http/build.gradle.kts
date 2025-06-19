@@ -32,3 +32,7 @@ kotlin {
         }
     }
 }
+
+dokka {
+    modulePath = "aws-http"
+}

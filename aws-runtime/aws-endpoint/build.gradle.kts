@@ -24,3 +24,7 @@ kotlin {
         }
     }
 }
+
+dokka {
+    modulePath = "aws-endpoint"
+}

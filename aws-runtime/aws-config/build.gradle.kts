@@ -253,4 +253,6 @@ dokka {
             suppress.set(true)
         }
     }
+
+    modulePath = "aws-config"
 }
