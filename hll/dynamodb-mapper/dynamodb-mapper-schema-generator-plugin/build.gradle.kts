@@ -213,3 +213,7 @@ tasks.withType<Test> {
     dependsOn(":hll:hll-mapping-core:publishToMavenLocal")
     dependsOn(":services:dynamodb:publishToMavenLocal")
 }
+
+dokka {
+    modulePath = "dynamodb-mapper-schema-generator-plugin"
+}
