@@ -1,20 +1,31 @@
 // Custom navigation loader for AWS SDK for Kotlin documentation.
 
-// Extracts the module name from a given URL href
-function extractModuleName(href) {
-    try{
+/**
+ * Extracts the module name from a given URL href. For example:
+ * https://sdk.amazonaws.com/kotlin/api/latest/index.html -> index.html
+ * https://sdk.amazonaws.com/kotlin/api/latest/s3/index.html -> s3
+ * https://sdk.amazonaws.com/kotlin/api/latest/s3/aws.sdk.kotlin.services.s3/index.html -> s3
+ */
+function extractModulePath(href) {
+    try {
         const url = new URL(href, window.location.origin);
-        const pathname = url.pathname;
-        const pathSegments = pathname.split('/').filter(Boolean);
+        const pathSegments = url.pathname.split('/').filter(Boolean);
 
-        // For local hosting
-        if (url.hostname === 'localhost') {
-            return pathSegments.length >= 1 ? pathSegments[0] : null;
+        var moduleIndex = -1;
+
+        for (let i = 1; i < pathSegments.length; i++) {
+            if (pathSegments[i].includes('.')) {
+                moduleIndex = i-1;
+                break;
+            }
         }
 
-        return pathSegments.length >= 4 ? pathSegments[3] : null;
-    }
-    catch (error) {
+        if (moduleIndex === -1) {
+            return "index.html";
+        } else {
+            return pathSegments.slice(0, moduleIndex + 1).join("/");
+        }
+    } catch (error) {
         return null;
     }
 }
@@ -35,17 +46,15 @@ function hideSidebar() {
 }
 
 function loadNavigation() {
-    const moduleName = extractModuleName(window.location.href);
+    const modulePath = extractModulePath(window.location.href);
 
     // Hide sidebar for root index page
-    if (moduleName === "index.html") {
+    if (modulePath === "index.html") {
         hideSidebar()
         return Promise.resolve('');
     }
 
-    const navigationPath = moduleName
-        ? `${pathToRoot}${moduleName}/navigation.html`
-        : `${pathToRoot}navigation.html`;
+    const navigationPath = modulePath ? `/${modulePath}/navigation.html` : `${pathToRoot}navigation.html`;
 
     return fetch(navigationPath)
         .then(response => response.text())
@@ -58,95 +67,245 @@ function loadNavigation() {
 
 navigationPageText = loadNavigation()
 
-// =================================================================
-// Everything below this is copied from Dokka's navigation-loader.js
-// =================================================================
-displayNavigationFromPage = () => {
-    navigationPageText.then(data => {
-        document.getElementById("sideMenu").innerHTML = data;
-    }).then(() => {
-        document.querySelectorAll(".overview > a").forEach(link => {
-            link.setAttribute("href", pathToRoot + link.getAttribute("href"));
-        })
-    }).then(() => {
-        document.querySelectorAll(".sideMenuPart").forEach(nav => {
-            if (!nav.classList.contains("hidden"))
-                nav.classList.add("hidden")
-        })
-    }).then(() => {
-        revealNavigationForCurrentPage()
-    }).then(() => {
-        scrollNavigationToSelectedElement()
-    })
-    document.querySelectorAll('.footer a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-}
+/**
+ * This is copied from Dokka's navigation-loader.js
+ * https://github.com/Kotlin/dokka/blob/65b51bc0bc0496141f741bb9a61efcb4f3cc4633/dokka-subprojects/plugin-base/src/main/resources/dokka/scripts/navigation-loader.js
+ * with a slight edit made to use `navigationPageText` instead of reading from `navigation.html`
+ */
+const TOC_STATE_KEY_PREFIX = 'TOC_STATE::';
+const TOC_CONTAINER_ID = 'sideMenu';
+const TOC_SCROLL_CONTAINER_ID = 'leftColumn';
+const TOC_PART_CLASS = 'toc--part';
+const TOC_PART_HIDDEN_CLASS = 'toc--part_hidden';
+const TOC_LINK_CLASS = 'toc--link';
+const TOC_SKIP_LINK_CLASS = 'toc--skip-link';
 
-revealNavigationForCurrentPage = () => {
-    let pageId = document.getElementById("content").attributes["pageIds"].value.toString();
-    let parts = document.querySelectorAll(".sideMenuPart");
-    let found = 0;
-    do {
-        parts.forEach(part => {
-            if (part.attributes['pageId'].value.indexOf(pageId) !== -1 && found === 0) {
-                found = 1;
-                if (part.classList.contains("hidden")) {
-                    part.classList.remove("hidden");
-                    part.setAttribute('data-active', "");
+(function () {
+    function displayToc() {
+        navigationPageText
+            .then((tocHTML) => {
+                renderToc(tocHTML);
+                updateTocLinks();
+                collapseTocParts();
+                expandTocPathToCurrentPage();
+                restoreTocExpandedState();
+                restoreTocScrollTop();
+            });
+    }
+
+    function renderToc(tocHTML) {
+        const containerElement = document.getElementById(TOC_CONTAINER_ID);
+        if (containerElement) {
+            containerElement.innerHTML = tocHTML;
+        }
+    }
+
+    function updateTocLinks() {
+        document.querySelectorAll(`.${TOC_LINK_CLASS}`).forEach((tocLink) => {
+            tocLink.setAttribute('href', `${pathToRoot}${tocLink.getAttribute('href')}`);
+            tocLink.addEventListener('keydown', preventScrollBySpaceKey);
+        });
+        document.querySelectorAll(`.${TOC_SKIP_LINK_CLASS}`).forEach((skipLink) => {
+            skipLink.setAttribute('href', `#main`);
+            skipLink.addEventListener('keydown', preventScrollBySpaceKey);
+        })
+    }
+
+    function collapseTocParts() {
+        document.querySelectorAll(`.${TOC_PART_CLASS}`).forEach((tocPart) => {
+            if (!tocPart.classList.contains(TOC_PART_HIDDEN_CLASS)) {
+                tocPart.classList.add(TOC_PART_HIDDEN_CLASS);
+                const tocToggleButton = tocPart.querySelector('button');
+                if (tocToggleButton) {
+                    tocToggleButton.setAttribute("aria-expanded", "false");
                 }
-                revealParents(part)
             }
         });
-        pageId = pageId.substring(0, pageId.lastIndexOf("/"))
-    } while (pageId.indexOf("/") !== -1 && found === 0)
-};
-revealParents = (part) => {
-    if (part.classList.contains("sideMenuPart")) {
-        if (part.classList.contains("hidden"))
-            part.classList.remove("hidden");
-        revealParents(part.parentNode)
-    }
-};
-
-scrollNavigationToSelectedElement = () => {
-    let selectedElement = document.querySelector('div.sideMenuPart[data-active]')
-    if (selectedElement == null) { // nothing selected, probably just the main page opened
-        return
     }
 
-    let hasIcon = selectedElement.querySelectorAll(":scope > div.overview span.nav-icon").length > 0
+    const expandTocPathToCurrentPage = () => {
+        const tocParts = [...document.querySelectorAll(`.${TOC_PART_CLASS}`)];
+        const currentPageId = document.getElementById('content')?.getAttribute('pageIds');
+        if (!currentPageId) {
+            return;
+        }
 
-    // for instance enums also have children and are expandable, but are not package/module elements
-    let isPackageElement = selectedElement.children.length > 1 && !hasIcon
-    if (isPackageElement) {
-        // if package is selected or linked, it makes sense to align it to top
-        // so that you can see all the members it contains
-        selectedElement.scrollIntoView(true)
-    } else {
-        // if a member within a package is linked, it makes sense to center it since it,
-        // this should make it easier to look at surrounding members
-        selectedElement.scrollIntoView({
-            behavior: 'auto',
-            block: 'center',
-            inline: 'center'
+        let isPartFound = false;
+        let currentPageIdPrefix = currentPageId;
+        while (!isPartFound && currentPageIdPrefix !== '') {
+            tocParts.forEach((part) => {
+                const partId = part.getAttribute('pageId');
+                if (!isPartFound && partId?.includes(currentPageIdPrefix)) {
+                    isPartFound = true;
+                    expandTocPart(part);
+                    expandTocPathToParent(part);
+                    part.dataset.active = 'true';
+                }
+            });
+            currentPageIdPrefix = currentPageIdPrefix.substring(0, currentPageIdPrefix.lastIndexOf('/'));
+        }
+    };
+
+    const expandTocPathToParent = (part) => {
+        if (part.classList.contains(TOC_PART_CLASS)) {
+            expandTocPart(part);
+            expandTocPathToParent(part.parentNode);
+        }
+    };
+
+    const expandTocPart = (tocPart) => {
+        if (tocPart.classList.contains(TOC_PART_HIDDEN_CLASS)) {
+            tocPart.classList.remove(TOC_PART_HIDDEN_CLASS);
+            const tocToggleButton = tocPart.querySelector('button');
+            if (tocToggleButton) {
+                tocToggleButton.setAttribute("aria-expanded", "true");
+            }
+            const tocPartId = tocPart.getAttribute('id');
+            safeSessionStorage.setItem(`${TOC_STATE_KEY_PREFIX}${tocPartId}`, 'true');
+        }
+    };
+
+    /**
+     * Restores the state of the navigation tree from the local storage.
+     * LocalStorage keys are in the format of `TOC_STATE::${id}` where `id` is the id of the part
+     */
+    const restoreTocExpandedState = () => {
+        const allLocalStorageKeys = safeSessionStorage.getKeys();
+        const tocStateKeys = allLocalStorageKeys.filter((key) => key.startsWith(TOC_STATE_KEY_PREFIX));
+        tocStateKeys.forEach((key) => {
+            const isExpandedTOCPart = safeSessionStorage.getItem(key) === 'true';
+            const tocPartId = key.substring(TOC_STATE_KEY_PREFIX.length);
+            const tocPart = document.querySelector(`.toc--part[id="${tocPartId}"]`);
+            if (tocPart !== null && isExpandedTOCPart) {
+                tocPart.classList.remove(TOC_PART_HIDDEN_CLASS);
+                const tocToggleButton = tocPart.querySelector('button');
+                if (tocToggleButton) {
+                    tocToggleButton.setAttribute("aria-expanded", "true");
+                }
+            }
+        });
+    };
+
+    function saveTocScrollTop() {
+        const container = document.getElementById(TOC_SCROLL_CONTAINER_ID);
+        if (container) {
+            const currentScrollTop = container.scrollTop;
+            safeSessionStorage.setItem(`${TOC_STATE_KEY_PREFIX}SCROLL_TOP`, `${currentScrollTop}`);
+        }
+    }
+
+    function restoreTocScrollTop() {
+        const container = document.getElementById(TOC_SCROLL_CONTAINER_ID);
+        if (container) {
+            const storedScrollTop = safeSessionStorage.getItem(`${TOC_STATE_KEY_PREFIX}SCROLL_TOP`);
+            if (storedScrollTop) {
+                container.scrollTop = Number(storedScrollTop);
+            }
+        }
+    }
+
+    function initTocScrollListener() {
+        const container = document.getElementById(TOC_SCROLL_CONTAINER_ID);
+        if (container) {
+            container.addEventListener('scroll', saveTocScrollTop);
+        }
+    }
+
+    function preventScrollBySpaceKey(event) {
+        if (event.key === ' ') {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }
+
+    function resetTocState() {
+        const tocKeys = safeSessionStorage.getKeys();
+        tocKeys.forEach((key) => {
+            if (key.startsWith(TOC_STATE_KEY_PREFIX)) {
+                safeSessionStorage.removeItem(key);
+            }
+        });
+    }
+
+    function initLogoClickListener() {
+        const logo = document.querySelector('.library-name--link');
+        if (logo) {
+            logo.addEventListener('click', resetTocState);
+        }
+    }
+
+    /*
+      This is a work-around for safari being IE of our times.
+      It doesn't fire a DOMContentLoaded, presumably because eventListener is added after it wants to do it
+  */
+    if (document.readyState === 'loading') {
+        window.addEventListener('DOMContentLoaded', () => {
+            displayToc();
+            initTocScrollListener();
+            initLogoClickListener();
         })
+    } else {
+        displayToc();
+        initTocScrollListener();
+        initLogoClickListener();
     }
+})();
+
+
+function handleTocButtonClick(event, navId) {
+    const tocPart = document.getElementById(navId);
+    if (!tocPart) {
+        return;
+    }
+    tocPart.classList.toggle(TOC_PART_HIDDEN_CLASS);
+    const isExpandedTOCPart = !tocPart.classList.contains(TOC_PART_HIDDEN_CLASS);
+    const button = tocPart.querySelector('button');
+    button?.setAttribute("aria-expanded", `${isExpandedTOCPart}`);
+    safeSessionStorage.setItem(`${TOC_STATE_KEY_PREFIX}${navId}`, `${isExpandedTOCPart}`);
 }
 
-/*
-    This is a work-around for safari being IE of our times.
-    It doesn't fire a DOMContentLoaded, presumabely because eventListener is added after it wants to do it
-*/
-if (document.readyState == 'loading') {
-    window.addEventListener('DOMContentLoaded', () => {
-        displayNavigationFromPage()
-    })
-} else {
-    displayNavigationFromPage()
-}
+/**
+ * This is an unedited snippet of Dokka's safe-local-storage-blocking.js, pulling in `safeSessionStorage`
+ * https://github.com/Kotlin/dokka/blob/83b0f8ad9ad920df0d842caa9c43d69e6e2c44f6/dokka-subprojects/plugin-base/src/main/resources/dokka/scripts/safe-local-storage_blocking.js
+ */
+/** When Dokka is viewed via iframe, session storage could be inaccessible (see https://github.com/Kotlin/dokka/issues/3323)
+ * This is a wrapper around session storage to prevent errors in such cases
+ * */
+const safeSessionStorage = (() => {
+    let isSessionStorageAvailable = false;
+    try {
+        const testKey = '__testSessionStorageKey__';
+        sessionStorage.setItem(testKey, testKey);
+        sessionStorage.removeItem(testKey);
+        isSessionStorageAvailable = true;
+    } catch (e) {
+        console.error('Session storage is not available', e);
+    }
+
+    return {
+        getItem: (key) => {
+            if (!isSessionStorageAvailable) {
+                return null;
+            }
+            return sessionStorage.getItem(key);
+        },
+        setItem: (key, value) => {
+            if (!isSessionStorageAvailable) {
+                return;
+            }
+            sessionStorage.setItem(key, value);
+        },
+        removeItem: (key) => {
+            if (!isSessionStorageAvailable) {
+                return;
+            }
+            sessionStorage.removeItem(key);
+        },
+        getKeys: () => {
+            if (!isSessionStorageAvailable) {
+                return [];
+            }
+            return Object.keys(sessionStorage);
+        },
+    };
+})();
