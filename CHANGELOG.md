@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.109] - 06/20/2025
+
+### Features
+* (**bedrock**) Add support for tiers in Content Filters and Denied Topics for Amazon Bedrock Guardrails.
+* (**ecs**) Add ECS support for Windows Server 2025
+* (**geoplaces**) Geocode, ReverseGeocode, and GetPlace APIs added Intersections and SecondaryAddresses. To use, add to the AdditionalFeatures list in your request. This provides info about nearby intersections and secondary addresses that are associated with a main address. Also added MainAddress and ParsedQuery.
+* (**glue**) AWS Glue Data Quality now provides aggregated metrics in evaluation results when publishAggregatedMetrics with row-level results are enabled. These metrics include summary statistics showing total counts of processed, passed, and failed rows and rules in a single view.
+* (**mediaconvert**) This release adds a new SPECIFIED_OPTIMAL option for handling DDS when using DVB-Sub with high resolution video.
+
 ## [1.4.108] - 06/19/2025
 
 ### Features
