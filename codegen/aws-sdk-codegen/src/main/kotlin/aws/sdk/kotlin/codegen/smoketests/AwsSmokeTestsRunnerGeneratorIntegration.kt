@@ -42,7 +42,7 @@ private object AwsSmokeTestsRunnerGenerator {
         SectionWriterBinding(SmokeTestSectionIds.AdditionalEnvironmentVariables) { writer, previous ->
             writer.write("#L", previous)
             writer.write(
-                "private val regionOverride = #T.System.getenv(#S)",
+                "private val smokeTestRegionOverride = #T.System.getenv(#S)",
                 RuntimeTypes.Core.Utils.PlatformProvider,
                 AWS_REGION,
             )
@@ -110,7 +110,7 @@ private object AwsSmokeTestsRunnerGenerator {
                     }
                 }
                 "region" -> {
-                    writer.write("regionOverride ?: #L", value)
+                    writer.write("smokeTestRegionOverride ?: #L", value)
                 }
                 else -> writer.write("#L", value)
             }
@@ -123,7 +123,7 @@ private object AwsSmokeTestsRunnerGenerator {
     val defaultClientConfig =
         SectionWriterBinding(SmokeTestSectionIds.DefaultClientConfig) { writer, previous ->
             writer.write("#L", previous)
-            writer.write("region = regionOverride")
+            writer.write("region = smokeTestRegionOverride")
         }
 
     /**
