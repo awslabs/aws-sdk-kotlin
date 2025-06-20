@@ -60,6 +60,7 @@ val generateSdkRuntimeVersion by tasks.registering {
 tasks.withType<KotlinCompile> {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_17)
+        freeCompilerArgs.add("-Xjdk-release=17")
     }
     dependsOn(generateSdkRuntimeVersion)
 }
