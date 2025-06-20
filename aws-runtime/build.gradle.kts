@@ -67,7 +67,6 @@ subprojects {
             freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
-
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
         compilerOptions {
             freeCompilerArgs.add("-Xexpect-actual-classes")
