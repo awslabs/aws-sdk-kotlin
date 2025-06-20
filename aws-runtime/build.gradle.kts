@@ -68,7 +68,6 @@ subprojects {
         }
     }
 
-    // FIXME Do we need a separate `KotlinNativeCompile` configuration, is configuring KotlinCompile not enough?
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
         compilerOptions {
             freeCompilerArgs.add("-Xexpect-actual-classes")
