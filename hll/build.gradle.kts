@@ -92,7 +92,6 @@ subprojects {
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
         compilerOptions {
-            freeCompilerArgs.add("-Xjdk-release=1.8")
             freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
