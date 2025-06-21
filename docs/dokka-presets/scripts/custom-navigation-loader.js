@@ -11,7 +11,7 @@ function extractModulePath(href) {
     try {
         const segments = new URL(href, window.location.origin)
             .pathname
-            .split('/')       // break the path
+            .split('/')
             .filter(Boolean); // drop empty parts
 
         // the URL pattern is always ".../kotlin/api/<version>/..."
