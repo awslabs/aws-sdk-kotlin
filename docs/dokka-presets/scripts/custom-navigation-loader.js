@@ -15,12 +15,12 @@ function extractModulePath(href) {
             .filter(Boolean); // drop empty parts
 
         // the URL pattern is always ".../kotlin/api/<version>/..."
-        const apiPos = segments.indexOf('api');
-        if (apiPos === -1) return null;
+        const apiIndex = segments.indexOf('api');
+        if (apiIndex === -1) return null;
 
         // segment after "api" is the version ("latest", "1.4.109", etc.)
         // segment after _that_ is the module name (or "index.html" if we're at the root)
-        return segments[apiPos + 2] ?? 'index.html';
+        return segments[apiIndex + 2] ?? 'index.html';
     } catch {
         return null;
     }
