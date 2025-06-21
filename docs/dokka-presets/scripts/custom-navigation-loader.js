@@ -14,7 +14,7 @@ function extractModulePath(href) {
             .split('/')
             .filter(Boolean); // drop empty parts
 
-        // the URL pattern is always ".../kotlin/api/<version>/..."
+        // the URL pattern is always ".../kotlin/api/<version>/..." in production
         const apiIndex = segments.indexOf('api');
 
         if (apiIndex !== -1) {
