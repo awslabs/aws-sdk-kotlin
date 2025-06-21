@@ -97,11 +97,11 @@ tasks.register("trimNavigationFiles") {
                 val navigation = moduleDir.resolve("navigation.html").toFile()
                 val doc = Jsoup.parse(navigation)
 
-                // Fix navigation links
-                doc.select("a[href^='../../../../']").forEach { anchor ->
+                // Remove a single parent directory from all navigation links
+                doc.select("a[href^=../]").forEach { anchor ->
                     val originalHref = anchor.attr("href")
-                    val trimmedHref = originalHref.replace("../../../../", "")
-                    anchor.attr("href", trimmedHref)
+                    val updatedHref = originalHref.removePrefix("../")
+                    anchor.attr("href", updatedHref)
                 }
 
                 // Trim side menus
