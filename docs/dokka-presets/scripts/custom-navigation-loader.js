@@ -5,27 +5,23 @@
  * https://sdk.amazonaws.com/kotlin/api/latest/index.html -> index.html
  * https://sdk.amazonaws.com/kotlin/api/latest/s3/index.html -> s3
  * https://sdk.amazonaws.com/kotlin/api/latest/s3/aws.sdk.kotlin.services.s3/index.html -> s3
+ * https://sdk.amazonaws.com/kotlin/api/1.4.109/s3/index.html -> s3
  */
 function extractModulePath(href) {
     try {
-        const url = new URL(href, window.location.origin);
-        const pathSegments = url.pathname.split('/').filter(Boolean);
+        const segments = new URL(href, window.location.origin)
+            .pathname
+            .split('/')       // break the path
+            .filter(Boolean); // drop empty parts
 
-        var moduleIndex = -1;
+        // the URL pattern is always ".../kotlin/api/<version>/..."
+        const apiPos = segments.indexOf('api');
+        if (apiPos === -1) return null;
 
-        for (let i = 1; i < pathSegments.length; i++) {
-            if (pathSegments[i].includes('.')) {
-                moduleIndex = i-1;
-                break;
-            }
-        }
-
-        if (moduleIndex === -1) {
-            return "index.html";
-        } else {
-            return pathSegments.slice(0, moduleIndex + 1).join("/");
-        }
-    } catch (error) {
+        // segment after "api" is the version ("latest", "1.4.109", etc.)
+        // segment after _that_ is the module name (or "index.html" if we're at the root)
+        return segments[apiPos + 2] ?? 'index.html';
+    } catch {
         return null;
     }
 }
