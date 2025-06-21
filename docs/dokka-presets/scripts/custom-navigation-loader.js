@@ -16,11 +16,15 @@ function extractModulePath(href) {
 
         // the URL pattern is always ".../kotlin/api/<version>/..."
         const apiIndex = segments.indexOf('api');
-        if (apiIndex === -1) return null;
 
-        // segment after "api" is the version ("latest", "1.4.109", etc.)
-        // segment after _that_ is the module name (or "index.html" if we're at the root)
-        return segments[apiIndex + 2] ?? 'index.html';
+        if (apiIndex !== -1) {
+            // segment after "api" is the version ("latest", "1.4.109", etc.)
+            // segment after _that_ is the module name (or "index.html" if we're at the root)
+            return segments[apiIndex + 2] ?? 'index.html';
+        }
+
+        // locally-hosted docs don't have /kotlin/api segment
+        return segments[0] ?? 'index.html';
     } catch {
         return null;
     }
