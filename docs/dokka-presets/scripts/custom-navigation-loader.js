@@ -54,7 +54,7 @@ function loadNavigation() {
         return Promise.resolve('');
     }
 
-    const navigationPath = modulePath ? `/${modulePath}/navigation.html` : `${pathToRoot}navigation.html`;
+    const navigationPath = modulePath ? `${pathToRoot}${modulePath}/navigation.html` : `${pathToRoot}navigation.html`;
 
     return fetch(navigationPath)
         .then(response => response.text())
