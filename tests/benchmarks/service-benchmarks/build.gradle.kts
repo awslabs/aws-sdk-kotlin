@@ -5,7 +5,7 @@
 import aws.sdk.kotlin.gradle.dsl.skipPublishing
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
     alias(libs.plugins.aws.kotlin.repo.tools.kmp)
     application
 }

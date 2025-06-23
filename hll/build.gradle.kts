@@ -97,22 +97,39 @@ subprojects {
     }
 }
 
-apiValidation {
-    val availableSubprojects = subprojects.map { it.name }.toSet()
+// Projects to ignore for API validation and documentation generation
+val projectsToIgnore = listOf(
+    "hll-codegen",
+    "dynamodb-mapper-codegen",
+    "dynamodb-mapper-ops-codegen",
+    "dynamodb-mapper-schema-codegen",
+    "dynamodb-mapper-schema-generator-plugin-test",
+).filter { it in subprojects.map { it.name }.toSet() } // Some projects may not be in the build depending on bootstrapping
 
-    ignoredProjects += listOf(
-        "hll-codegen",
-        "dynamodb-mapper-codegen",
-        "dynamodb-mapper-ops-codegen",
-        "dynamodb-mapper-schema-codegen",
-        "dynamodb-mapper-schema-generator-plugin-test",
-    ).filter { it in availableSubprojects } // Some projects may not be in the build depending on bootstrapping
+apiValidation {
+    ignoredProjects += projectsToIgnore
 }
 
 // Configure Dokka for subprojects
 dependencies {
     subprojects.forEach {
-        it.plugins.apply("dokka-convention") // Apply the Dokka conventions plugin to the subproject
-        dokka(project(it.path)) // Aggregate the subproject's generated documentation
+        if (it.name !in projectsToIgnore) {
+            it.plugins.apply("dokka-convention") // Apply the Dokka conventions plugin to the subproject
+            dokka(project(it.path)) // Aggregate the subproject's generated documentation
+        }
+    }
+
+    // Preserve Dokka v1 module paths
+    // https://kotlinlang.org/docs/dokka-migration.html#revert-to-the-dgp-v1-directory-behavior
+    subprojects {
+        val subProjectName = this@subprojects.name
+
+        if (subProjectName in projectsToIgnore) {
+            return@subprojects
+        }
+
+        dokka {
+            modulePath = subProjectName
+        }
     }
 }

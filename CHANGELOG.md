@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.4.110] - 06/21/2025
+
+## [1.4.109] - 06/20/2025
+
+### Features
+* (**bedrock**) Add support for tiers in Content Filters and Denied Topics for Amazon Bedrock Guardrails.
+* (**ecs**) Add ECS support for Windows Server 2025
+* (**geoplaces**) Geocode, ReverseGeocode, and GetPlace APIs added Intersections and SecondaryAddresses. To use, add to the AdditionalFeatures list in your request. This provides info about nearby intersections and secondary addresses that are associated with a main address. Also added MainAddress and ParsedQuery.
+* (**glue**) AWS Glue Data Quality now provides aggregated metrics in evaluation results when publishAggregatedMetrics with row-level results are enabled. These metrics include summary statistics showing total counts of processed, passed, and failed rows and rules in a single view.
+* (**mediaconvert**) This release adds a new SPECIFIED_OPTIMAL option for handling DDS when using DVB-Sub with high resolution video.
+
+## [1.4.108] - 06/19/2025
+
+### Features
+* (**bedrock**) This release of the SDK has the API and documentation for the createcustommodel API. This feature lets you copy a trained model into Amazon Bedrock for inference.
+* (**emrserverless**) This release adds the capability to enable IAM IdentityCenter Trusted Identity Propagation for users running Interactive Sessions on EMR Serverless Applications.
+* (**lambda**) Support Schema Registry feature for Kafka Event Source Mapping. Customers can now configure a Schema Registry to enable schema validation and filtering for Avro, Protobuf, and JSON-formatted events in Lambda for Kafka Event Source.
+* (**paymentcryptography**) Additional support for managing HMAC keys that adheres to changes documented in X9.143-2021 and provides better interoperability for key import/export
+* (**paymentcryptographydata**) Additional support for managing HMAC keys that adheres to changes documented in X9.143-2021 and provides better interoperability for key import/export
+* (**sagemaker**) This release introduces alternative support for utilizing CFN templates from S3 for SageMaker Projects.
+
+### Miscellaneous
+* Upgrade to Dokka 2.0.0
+
 ## [1.4.107] - 06/18/2025
 
 ### Features

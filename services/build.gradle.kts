@@ -153,4 +153,12 @@ dependencies {
         it.plugins.apply("dokka-convention") // Apply the Dokka conventions plugin to the subproject
         dokka(project(it.path)) // Aggregate the subproject's generated documentation
     }
+
+    // Preserve Dokka v1 module paths
+    // https://kotlinlang.org/docs/dokka-migration.html#revert-to-the-dgp-v1-directory-behavior
+    subprojects {
+        dokka {
+            modulePath = this@subprojects.name
+        }
+    }
 }
