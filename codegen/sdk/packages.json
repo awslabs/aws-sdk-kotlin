@@ -2239,6 +2239,12 @@
             "brazilName": "AwsSdkKotlinWorkspacesWeb"
         },
         {
+            "sdkId": "Workspaces Instances",
+            "namespace": "aws.sdk.kotlin.services.workspacesinstances",
+            "artifactName": "workspacesinstances",
+            "brazilName": "AwsSdkKotlinWorkspacesInstances"
+        },
+        {
             "sdkId": "XRay",
             "namespace": "aws.sdk.kotlin.services.xray",
             "artifactName": "xray",
