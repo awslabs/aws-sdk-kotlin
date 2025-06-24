@@ -23,6 +23,7 @@ import aws.smithy.kotlin.runtime.util.asyncLazy
 import kotlin.coroutines.coroutineContext
 
 private const val CODE_ASSUME_ROLE_UNAUTHORIZED_ACCESS: String = "AssumeRoleUnauthorizedAccess"
+private const val MAX_ATTEMPTS = 10
 private const val PROVIDER_NAME = "IMDSv2"
 
 /**
@@ -105,9 +106,13 @@ public class ImdsCredentialsProvider(
 
     override suspend fun resolve(attributes: Attributes): Credentials = sfg.singleFlight(::resolveSingleFlight)
 
-    private suspend fun resolveSingleFlight(): Credentials {
+    private suspend fun resolveSingleFlight(attempts: Int = 0): Credentials {
         if (providerDisabled.get()) {
             throw CredentialsNotLoadedException("AWS EC2 metadata is explicitly disabled; credentials not loaded")
+        }
+
+        if (attempts >= MAX_ATTEMPTS) {
+            throw CredentialsNotLoadedException("Failed to retrieve profile credentials after $attempts attempts")
         }
 
         val profileName = instanceProfileName.get() ?: resolvedProfileName ?: try {
@@ -122,7 +127,7 @@ public class ImdsCredentialsProvider(
                 apiVersion == null && ex.status == HttpStatusCode.NotFound -> {
                     // Tried EXTENDED and that didn't work; fallback to LEGACY
                     apiVersion = ApiVersion.LEGACY
-                    return resolveSingleFlight()
+                    return resolveSingleFlight(attempts) // one-time condition, do not increase `attempts`
                 }
 
                 ex.status == HttpStatusCode.NotFound -> {
@@ -148,13 +153,13 @@ public class ImdsCredentialsProvider(
                 apiVersion == null && ex.status == HttpStatusCode.NotFound -> {
                     // Tried EXTENDED and that didn't work; fallback to LEGACY
                     apiVersion = ApiVersion.LEGACY
-                    return resolveSingleFlight()
+                    return resolveSingleFlight() // one-time condition, do not increase `attempts`
                 }
 
                 instanceProfileName.get() == null && ex.status == HttpStatusCode.NotFound -> {
                     // A previously-resolved profile is now invalid; forget the resolved name and re-resolve
                     resolvedProfileName = null
-                    return resolveSingleFlight()
+                    return resolveSingleFlight(attempts + 1) // potentially infinite recursion, increase `attempts`
                 }
 
                 else -> return usePreviousCredentials()

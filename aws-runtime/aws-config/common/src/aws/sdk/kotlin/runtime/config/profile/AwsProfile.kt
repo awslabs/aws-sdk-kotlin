@@ -189,7 +189,7 @@ public val AwsProfile.ec2InstanceProfileName: String?
  */
 @InternalSdkApi
 public val AwsProfile.ec2MetadataDisabled: Boolean?
-    get() = getBooleanOrNull("disable_ec2_metadata")
+    get() = getBooleanOrNull("ec2_metadata_disabled")
 
 /**
  * Parse a config value as a boolean, ignoring case.

@@ -653,6 +653,149 @@ val imdsCredentialsTestSpec = """
             "result": "invalid profile"
           }
         ]
+      },
+      {
+        "summary": "Test IMDS credentials provider when profile never stabilizes returns no credentials",
+        "config": {
+          "ec2InstanceProfileName": null
+        },
+        "expectations": [
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended",
+            "response": {
+              "status": 200,
+              "body": "my-profile-0013"
+            }
+          },
+          {
+            "get": "/latest/meta-data/iam/security-credentials-extended/my-profile-0013",
+            "response": {
+              "status": 404
+            }
+          }
+        ],
+        "outcomes": [
+          {
+            "result": "no credentials"
+          }
+        ]
       }
     ]
 """.trimIndent()

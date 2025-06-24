@@ -6,6 +6,9 @@
 package aws.sdk.kotlin.runtime.config
 
 import aws.sdk.kotlin.runtime.InternalSdkApi
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsAccessKeyId
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsContainerCredentialsRelativeUri
+import aws.sdk.kotlin.runtime.config.AwsSdkSetting.AwsSecretAccessKey
 import aws.sdk.kotlin.runtime.config.endpoints.AccountIdEndpointMode
 import aws.sdk.kotlin.runtime.http.AWS_APP_ID_ENV
 import aws.sdk.kotlin.runtime.http.AWS_APP_ID_PROP
@@ -88,7 +91,7 @@ public object AwsSdkSetting {
      * Whether to load information such as credentials, regions from EC2 Metadata instance service.
      */
     public val AwsEc2MetadataDisabled: EnvironmentSetting<Boolean> =
-        boolEnvSetting("aws.disableEc2Metadata", "AWS_EC2_METADATA_DISABLED").orElse(false)
+        boolEnvSetting("aws.ec2MetadataDisabled", "AWS_EC2_METADATA_DISABLED").orElse(false)
 
     /**
      * The EC2 instance metadata service endpoint.
