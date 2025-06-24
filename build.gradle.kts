@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.configureLinting
-import aws.sdk.kotlin.gradle.dsl.configureNexus
+import aws.sdk.kotlin.gradle.dsl.configureJReleaser
 import aws.sdk.kotlin.gradle.util.typedProp
+import org.jreleaser.model.Active
 
 buildscript {
     // NOTE: buildscript classpath for the root project is the parent classloader for the subprojects, we
@@ -22,6 +23,7 @@ plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId) apply false
     id(libs.plugins.kotlin.jvm.get().pluginId) apply false
     alias(libs.plugins.aws.kotlin.repo.tools.artifactsizemetrics)
+    id("org.jreleaser") version "1.17.0"
 }
 
 artifactSizeMetrics {
@@ -77,8 +79,36 @@ dependencies {
     dokka(project(":hll"))
 }
 
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            force("com.fasterxml.jackson.core:jackson-core:2.19.1")
+        }
+    }
+}
+
 // Publishing
-configureNexus()
+jreleaser {
+    project {
+        version = "0.0.1"
+    }
+    signing {
+        active = Active.ALWAYS
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                create("maven-central") {
+                    active = Active.ALWAYS
+                    url = "https://central.sonatype.com/api/v1/publisher" // TODO: Use `gr jreleaserDeploy`
+//                        sign = true // TODO: Remove me if unnecessary
+                    stagingRepository(rootProject.layout.buildDirectory.dir("m2").get().toString())
+                }
+            }
+        }
+    }
+}
 
 // Code Style
 val lintPaths = listOf(
