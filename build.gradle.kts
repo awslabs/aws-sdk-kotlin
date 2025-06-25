@@ -82,11 +82,22 @@ dependencies {
 allprojects {
     configurations.all {
         resolutionStrategy {
-            force("com.fasterxml.jackson.core:jackson-core:2.19.1")
+            force("com.fasterxml.jackson.core:jackson-core:2.15.3")
+            force("com.fasterxml.jackson.core:jackson-databind:2.15.3")
+            force("com.fasterxml.jackson.core:jackson-annotations:2.15.3")
         }
     }
 }
 
+allprojects {
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group.contains("com.fasterxml.jackson")) {
+                useVersion("2.15.3")
+            }
+        }
+    }
+}
 // Publishing
 jreleaser {
     project {
