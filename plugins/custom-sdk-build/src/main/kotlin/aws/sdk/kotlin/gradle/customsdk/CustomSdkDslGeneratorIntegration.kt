@@ -37,13 +37,14 @@ class CustomSdkDslGeneratorIntegration : KotlinIntegration {
         val serviceMetadata = discoverServiceMetadata(ctx)
         val namespace = "aws.sdk.kotlin.gradle.customsdk.dsl"
         
+        // Generate service configurations
         delegator.useFileWriter("ServiceConfigurations.kt", namespace) { writer ->
-            writer.write("package $namespace\n\n")
-            writer.write("data class OperationConstant(val shapeId: String)\n\n")
-            
-            serviceMetadata.forEach { service ->
-                generateServiceConfigurationClass(writer, service)
-            }
+            DslCodeGenerator.generateServiceConfigurations(writer, serviceMetadata)
+        }
+        
+        // Generate main DSL extension
+        delegator.useFileWriter("CustomSdkBuildExtension.kt", namespace) { writer ->
+            MainDslGenerator.generateMainDslExtension(writer, serviceMetadata)
         }
     }
     
@@ -52,44 +53,7 @@ class CustomSdkDslGeneratorIntegration : KotlinIntegration {
         val namespace = "aws.sdk.kotlin.gradle.customsdk.dsl"
         
         delegator.useFileWriter("OperationConstants.kt", namespace) { writer ->
-            writer.write("package $namespace\n\n")
-            
-            serviceMetadata.forEach { service ->
-                generateOperationConstants(writer, service)
-            }
+            DslCodeGenerator.generateOperationConstants(writer, serviceMetadata)
         }
-    }
-    
-    private fun generateServiceConfigurationClass(
-        writer: software.amazon.smithy.kotlin.codegen.core.KotlinWriter, 
-        service: ServiceMetadata
-    ) {
-        val className = "${service.serviceName.replaceFirstChar { it.uppercase() }}ServiceConfiguration"
-        
-        writer.write("""
-            class $className {
-                internal val selectedOperations = mutableListOf<OperationConstant>()
-                
-                fun operations(vararg operations: ${service.serviceName.replaceFirstChar { it.uppercase() }}Operation) {
-                    selectedOperations.addAll(operations)
-                }
-            }
-            
-        """.trimIndent())
-    }
-    
-    private fun generateOperationConstants(
-        writer: software.amazon.smithy.kotlin.codegen.core.KotlinWriter, 
-        service: ServiceMetadata
-    ) {
-        val objectName = "${service.serviceName.replaceFirstChar { it.uppercase() }}Operation"
-        
-        writer.write("object $objectName {\n")
-        
-        service.operations.forEach { operation ->
-            writer.write("    val ${operation.name} = OperationConstant(\"${operation.shapeId}\")\n")
-        }
-        
-        writer.write("}\n\n")
     }
 }
