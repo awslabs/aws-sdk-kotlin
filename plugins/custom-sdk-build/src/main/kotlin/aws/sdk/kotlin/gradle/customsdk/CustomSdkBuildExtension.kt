@@ -93,7 +93,11 @@ open class CustomSdkBuildExtension(private val project: Project) {
         
         return if (generateTask != null) {
             // Return the generated source directory as a file collection
-            project.files(generateTask.outputDirectory.map { it.dir("src/main/kotlin") })
+            // This will be compiled alongside user code via source set integration
+            project.files(generateTask.outputDirectory.map { it.dir("src/main/kotlin") }).apply {
+                // Ensure the generation task runs when this file collection is resolved
+                builtBy(generateTask)
+            }
         } else {
             // Return empty file collection if task not found (e.g., during testing)
             project.files()

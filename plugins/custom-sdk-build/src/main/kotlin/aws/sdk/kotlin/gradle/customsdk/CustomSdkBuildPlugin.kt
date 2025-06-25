@@ -122,8 +122,16 @@ class CustomSdkBuildPlugin : Plugin<Project> {
      * Configure source sets to include generated code.
      */
     private fun configureSourceSets(project: Project, generateTask: TaskProvider<GenerateCustomSdkTask>) {
-        // This will be implemented in the next prompt
-        project.logger.info("Source set configuration will be implemented in the next step")
+        // Use the SourceSetIntegration utility to configure source sets
+        SourceSetIntegration.configureSourceSets(project, generateTask)
+        
+        // Configure IDE integration
+        SourceSetIntegration.configureIdeIntegration(project, generateTask)
+        
+        // Configure incremental build support
+        SourceSetIntegration.configureIncrementalBuild(project, generateTask)
+        
+        project.logger.info("Source set configuration completed for custom SDK build")
     }
     
     /**
