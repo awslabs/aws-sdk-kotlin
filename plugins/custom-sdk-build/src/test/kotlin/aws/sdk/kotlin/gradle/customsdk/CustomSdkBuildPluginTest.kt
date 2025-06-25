@@ -18,4 +18,31 @@ class CustomSdkBuildPluginTest {
         // Verify plugin was applied successfully
         assertNotNull(project.plugins.findPlugin(CustomSdkBuildPlugin::class.java))
     }
+    
+    @Test
+    fun `plugin registers extension`() {
+        val project = ProjectBuilder.builder().build()
+        project.plugins.apply("aws.sdk.kotlin.custom-sdk-build")
+        
+        // Verify extension was registered
+        val extension = project.extensions.findByType(CustomSdkBuildExtension::class.java)
+        assertNotNull(extension)
+    }
+    
+    @Test
+    fun `extension can be configured`() {
+        val project = ProjectBuilder.builder().build()
+        project.plugins.apply("aws.sdk.kotlin.custom-sdk-build")
+        
+        val extension = project.extensions.getByType(CustomSdkBuildExtension::class.java)
+        
+        // Configure the extension
+        extension.s3 {
+            operations(S3Operation.GetObject, S3Operation.PutObject)
+        }
+        
+        // Verify configuration
+        val selectedOperations = extension.getSelectedOperations()
+        assertNotNull(selectedOperations["s3"])
+    }
 }
