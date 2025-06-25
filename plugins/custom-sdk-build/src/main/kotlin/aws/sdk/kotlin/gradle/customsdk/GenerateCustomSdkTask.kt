@@ -12,6 +12,7 @@ import org.gradle.api.tasks.*
 import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
 import java.io.File
+import java.io.IOException
 
 /**
  * Task that generates custom SDK code using Smithy projections and transforms.
@@ -98,49 +99,54 @@ abstract class GenerateCustomSdkTask : DefaultTask() {
     
     @TaskAction
     fun generate(inputChanges: InputChanges) {
-        val operations = selectedOperations.get()
-        val allOperationShapeIds = operations.values.flatten()
-        
-        logger.info("Generating custom SDK with ${allOperationShapeIds.size} operations across ${operations.size} services")
-        logger.info("Incremental: ${inputChanges.isIncremental}")
-        
-        if (allOperationShapeIds.isEmpty()) {
-            throw IllegalStateException("No operations selected for custom SDK generation")
-        }
-        
-        // Log input changes for debugging
-        if (inputChanges.isIncremental) {
-            inputChanges.getFileChanges(modelsDirectory).forEach { change ->
-                logger.info("Model file ${change.changeType}: ${change.file.name}")
+        try {
+            val operations = selectedOperations.get()
+            val allOperationShapeIds = operations.values.flatten()
+            
+            logger.info("Generating custom SDK with ${allOperationShapeIds.size} operations across ${operations.size} services")
+            logger.info("Incremental: ${inputChanges.isIncremental}")
+            
+            if (allOperationShapeIds.isEmpty()) {
+                throw IllegalStateException("No operations selected for custom SDK generation")
             }
-        }
-        
-        // Clean output directory if not incremental or if configuration changed
-        val outputDir = outputDirectory.get().asFile
-        if (!inputChanges.isIncremental || hasConfigurationChanged()) {
-            logger.info("Performing full regeneration")
-            if (outputDir.exists()) {
-                outputDir.deleteRecursively()
+            
+            // Log input changes for debugging
+            if (inputChanges.isIncremental) {
+                inputChanges.getFileChanges(modelsDirectory).forEach { change ->
+                    logger.info("Model file ${change.changeType}: ${change.file.name}")
+                }
             }
+            
+            // Clean output directory if not incremental or if configuration changed
+            val outputDir = outputDirectory.get().asFile
+            if (!inputChanges.isIncremental || hasConfigurationChanged()) {
+                logger.info("Performing full regeneration")
+                if (outputDir.exists()) {
+                    outputDir.deleteRecursively()
+                }
+            }
+            outputDir.mkdirs()
+            
+            // Create Smithy projection configuration
+            val projectionConfig = createSmithyProjection(allOperationShapeIds)
+            
+            // Write projection configuration to file
+            val projectionFile = File(outputDir, "smithy-build.json")
+            projectionFile.writeText(projectionConfig)
+            
+            logger.info("Created Smithy projection configuration at: ${projectionFile.absolutePath}")
+            
+            // Execute smithy-build to generate the custom SDK
+            executeSmithyBuild(projectionFile, outputDir, inputChanges.isIncremental)
+            
+            // Write cache metadata for next run
+            writeCacheMetadata(outputDir)
+            
+            logger.info("Custom SDK generation completed successfully")
+            
+        } catch (e: Exception) {
+            handleGenerationError(e)
         }
-        outputDir.mkdirs()
-        
-        // Create Smithy projection configuration
-        val projectionConfig = createSmithyProjection(allOperationShapeIds)
-        
-        // Write projection configuration to file
-        val projectionFile = File(outputDir, "smithy-build.json")
-        projectionFile.writeText(projectionConfig)
-        
-        logger.info("Created Smithy projection configuration at: ${projectionFile.absolutePath}")
-        
-        // Execute smithy-build to generate the custom SDK
-        executeSmithyBuild(projectionFile, outputDir, inputChanges.isIncremental)
-        
-        // Write cache metadata for next run
-        writeCacheMetadata(outputDir)
-        
-        logger.info("Custom SDK generation completed successfully")
     }
     
     /**
@@ -233,6 +239,43 @@ abstract class GenerateCustomSdkTask : DefaultTask() {
     }
     
     /**
+     * Handle generation errors with detailed diagnostics.
+     */
+    private fun handleGenerationError(error: Exception): Nothing {
+        when (error) {
+            is IOException -> {
+                if (error.message?.contains("model") == true) {
+                    ErrorHandling.handleModelLoadingError(
+                        modelsDirectory.get().asFile, 
+                        error, 
+                        logger
+                    )
+                } else {
+                    ErrorHandling.handleCodeGenerationError(
+                        outputDirectory.get().asFile, 
+                        error, 
+                        logger
+                    )
+                }
+            }
+            is IllegalStateException -> {
+                if (error.message?.contains("operation") == true) {
+                    // This is likely a validation error that should have been caught earlier
+                    logger.error("Configuration validation error: ${error.message}")
+                    logger.error("This error should have been caught during configuration validation")
+                    ErrorHandling.suggestRecoveryActions(error, logger)
+                    throw error
+                } else {
+                    ErrorHandling.handleTaskExecutionError(name, error, logger)
+                }
+            }
+            else -> {
+                ErrorHandling.handleTaskExecutionError(name, error, logger)
+            }
+        }
+    }
+    
+    /**
      * Execute smithy-build to generate the custom SDK.
      * Optimized for incremental builds and performance.
      */
@@ -245,9 +288,11 @@ abstract class GenerateCustomSdkTask : DefaultTask() {
             // In a real implementation, this would execute the actual Smithy build process
             createOptimizedGeneratedFiles(outputDir, isIncremental)
             
+        } catch (e: IOException) {
+            ErrorHandling.handleSmithyBuildError(projectionFile, e, logger)
         } catch (e: Exception) {
-            logger.error("Failed to execute smithy-build", e)
-            throw TaskExecutionException(this, e)
+            logger.error("Unexpected error during Smithy build execution", e)
+            ErrorHandling.handleSmithyBuildError(projectionFile, e, logger)
         }
     }
     

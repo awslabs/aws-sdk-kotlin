@@ -64,6 +64,9 @@ class CustomSdkBuildPlugin : Plugin<Project> {
             // Validate the extension configuration
             extension.validate()
             
+            // Perform comprehensive validation
+            validateConfiguration(project, extension)
+            
             // Log the selected operations for debugging
             val selectedOperations = extension.getSelectedOperations()
             project.logger.info("Custom SDK configuration:")
@@ -151,6 +154,33 @@ class CustomSdkBuildPlugin : Plugin<Project> {
         BuildCacheOptimization.configureMemoryOptimization(project, generateTask)
         
         project.logger.info("Build optimizations configured for custom SDK generation")
+    }
+    
+    /**
+     * Validate the plugin configuration comprehensively.
+     */
+    private fun validateConfiguration(project: Project, extension: CustomSdkBuildExtension) {
+        try {
+            val selectedOperations = extension.getSelectedOperations()
+            val packageName = "aws.sdk.kotlin.services.custom" // Default package name
+            val packageVersion = project.version.toString()
+            
+            val validationResult = ValidationEngine.validateConfiguration(
+                project, selectedOperations, packageName, packageVersion
+            )
+            
+            // Log validation results
+            ValidationEngine.logValidationResults(project.logger, validationResult)
+            
+            // Throw exception if validation failed
+            if (!validationResult.isValid) {
+                ValidationEngine.throwValidationException(validationResult)
+            }
+            
+        } catch (e: Exception) {
+            ErrorHandling.suggestRecoveryActions(e, project.logger)
+            throw e
+        }
     }
     
     /**

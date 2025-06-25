@@ -72,14 +72,44 @@ open class CustomSdkBuildExtension(private val project: Project) {
      * Throws an exception if the configuration is invalid.
      */
     internal fun validate() {
-        if (serviceConfigurations.isEmpty()) {
-            throw IllegalStateException("No services configured. Please configure at least one service.")
-        }
-        
-        serviceConfigurations.forEach { (serviceName, config) ->
-            if (config.selectedOperations.isEmpty()) {
-                throw IllegalStateException("No operations selected for service '$serviceName'. Please select at least one operation.")
+        try {
+            if (serviceConfigurations.isEmpty()) {
+                throw IllegalStateException(
+                    "No services configured for custom SDK generation. " +
+                    "Add at least one service configuration using the DSL:\n" +
+                    "awsCustomSdkBuild {\n" +
+                    "    s3 {\n" +
+                    "        operations(S3Operation.GetObject, S3Operation.PutObject)\n" +
+                    "    }\n" +
+                    "}"
+                )
             }
+            
+            serviceConfigurations.forEach { (serviceName, config) ->
+                if (config.selectedOperations.isEmpty()) {
+                    throw IllegalStateException(
+                        "No operations selected for service '$serviceName'. " +
+                        "Add operations to your service configuration:\n" +
+                        "$serviceName {\n" +
+                        "    operations(/* operation constants */)\n" +
+                        "}"
+                    )
+                }
+                
+                // Check for duplicate operations
+                val duplicates = config.selectedOperations.groupingBy { it.shapeId }.eachCount().filter { it.value > 1 }
+                if (duplicates.isNotEmpty()) {
+                    project.logger.warn("Service '$serviceName' has duplicate operations: ${duplicates.keys}")
+                }
+            }
+            
+            val totalOperations = serviceConfigurations.values.sumOf { it.selectedOperations.size }
+            project.logger.info("Extension validation passed: $totalOperations operations across ${serviceConfigurations.size} services")
+            
+        } catch (e: Exception) {
+            project.logger.error("Extension validation failed: ${e.message}")
+            ErrorHandling.suggestRecoveryActions(e, project.logger)
+            throw e
         }
     }
     
