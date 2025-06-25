@@ -42,6 +42,9 @@ class CustomSdkBuildPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.logger.info("Applying AWS SDK Kotlin Custom SDK Build plugin to project ${project.name}")
         
+        // Check version compatibility
+        VersionCompatibility.checkCompatibility(project, project.logger)
+        
         // Register the extension
         val extension = project.extensions.create(
             "awsCustomSdkBuild", 
