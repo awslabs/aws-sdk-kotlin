@@ -80,6 +80,9 @@ class CustomSdkBuildPlugin : Plugin<Project> {
             // Configure source sets and dependencies
             configureSourceSets(project, generateTask)
             
+            // Configure build cache and performance optimizations
+            configureBuildOptimizations(project, generateTask)
+            
         } catch (e: Exception) {
             project.logger.error("Failed to configure Custom SDK Build plugin: ${e.message}")
             throw e
@@ -132,6 +135,22 @@ class CustomSdkBuildPlugin : Plugin<Project> {
         SourceSetIntegration.configureIncrementalBuild(project, generateTask)
         
         project.logger.info("Source set configuration completed for custom SDK build")
+    }
+    
+    /**
+     * Configure build cache and performance optimizations.
+     */
+    private fun configureBuildOptimizations(project: Project, generateTask: TaskProvider<GenerateCustomSdkTask>) {
+        // Configure build cache optimization
+        BuildCacheOptimization.configureBuildCache(project, generateTask)
+        
+        // Configure performance monitoring
+        BuildCacheOptimization.configurePerformanceMonitoring(project, generateTask)
+        
+        // Configure memory optimization
+        BuildCacheOptimization.configureMemoryOptimization(project, generateTask)
+        
+        project.logger.info("Build optimizations configured for custom SDK generation")
     }
     
     /**
