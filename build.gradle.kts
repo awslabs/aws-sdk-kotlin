@@ -81,16 +81,6 @@ dependencies {
 
 allprojects {
     configurations.all {
-        resolutionStrategy {
-            force("com.fasterxml.jackson.core:jackson-core:2.15.3")
-            force("com.fasterxml.jackson.core:jackson-databind:2.15.3")
-            force("com.fasterxml.jackson.core:jackson-annotations:2.15.3")
-        }
-    }
-}
-
-allprojects {
-    configurations.all {
         resolutionStrategy.eachDependency {
             if (requested.group.contains("com.fasterxml.jackson")) {
                 useVersion("2.15.3")
@@ -98,7 +88,8 @@ allprojects {
         }
     }
 }
-// Publishing
+
+// TODO: Use `gr jreleaserDeploy`
 jreleaser {
     project {
         version = "0.0.1"
@@ -112,8 +103,7 @@ jreleaser {
             mavenCentral {
                 create("maven-central") {
                     active = Active.ALWAYS
-                    url = "https://central.sonatype.com/api/v1/publisher" // TODO: Use `gr jreleaserDeploy`
-//                        sign = true // TODO: Remove me if unnecessary
+                    url = "https://central.sonatype.com/api/v1/publisher"
                     stagingRepository(rootProject.layout.buildDirectory.dir("m2").get().toString())
                 }
             }
