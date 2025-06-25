@@ -88,8 +88,16 @@ open class CustomSdkBuildExtension(private val project: Project) {
      * This returns a FileCollection that can be used in the dependencies block.
      */
     internal fun createDependencyNotation(): FileCollection {
-        // This will be implemented to return the generated SDK files
-        return project.files() // Placeholder for now
+        // Find the generation task
+        val generateTask = project.tasks.findByName("generateCustomSdk") as? GenerateCustomSdkTask
+        
+        return if (generateTask != null) {
+            // Return the generated source directory as a file collection
+            project.files(generateTask.outputDirectory.map { it.dir("src/main/kotlin") })
+        } else {
+            // Return empty file collection if task not found (e.g., during testing)
+            project.files()
+        }
     }
 }
 

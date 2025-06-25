@@ -85,10 +85,19 @@ class CustomSdkBuildExtensionTest {
     }
     
     @Test
-    fun `dependency notation can be created`() {
+    fun `dependency notation can be created with plugin applied`() {
         val project = ProjectBuilder.builder().build()
-        val extension = CustomSdkBuildExtension(project)
+        project.plugins.apply("aws.sdk.kotlin.custom-sdk-build")
         
+        val extension = project.extensions.getByType(CustomSdkBuildExtension::class.java)
+        
+        // Configure the extension with at least one service
+        extension.s3 {
+            operations(S3Operation.GetObject)
+        }
+        
+        // The dependency notation should be creatable after plugin configuration
+        // Note: In a real scenario, this would be called after project evaluation
         val dependencyNotation = extension.createDependencyNotation()
         assertNotNull(dependencyNotation)
     }
