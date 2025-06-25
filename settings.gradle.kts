@@ -59,6 +59,9 @@ include(":tests:e2e-test-util")
 include(":tests:codegen:smoke-tests")
 include(":tests:codegen:checksums")
 
+// plugins
+include(":plugins:custom-sdk-build")
+
 // generated services
 val File.isServiceDir: Boolean
     get() = isDirectory && toPath().resolve("build.gradle.kts").toFile().exists()
