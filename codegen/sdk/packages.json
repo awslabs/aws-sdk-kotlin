@@ -1111,6 +1111,12 @@
             "brazilName": "AwsSdkKotlinKeyspaces"
         },
         {
+            "sdkId": "KeyspacesStreams",
+            "namespace": "aws.sdk.kotlin.services.keyspacesstreams",
+            "artifactName": "keyspacesstreams",
+            "brazilName": "AwsSdkKotlinKeyspacesstreams"
+        },
+        {
             "sdkId": "Kinesis",
             "namespace": "aws.sdk.kotlin.services.kinesis",
             "artifactName": "kinesis",

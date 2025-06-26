@@ -1,8 +1,0 @@
-{
-    "id": "28e51fe7-a4d8-4c99-a257-886ad89b7d02",
-    "type": "bugfix",
-    "description": "improve retry policies for ECS and IMDS credentials to handle common network errors",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1626"
-    ]
-}

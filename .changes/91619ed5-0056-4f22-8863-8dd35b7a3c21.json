@@ -1,8 +1,0 @@
-{
-    "id": "91619ed5-0056-4f22-8863-8dd35b7a3c21",
-    "type": "bugfix",
-    "description": "Enable building this project on JDK21 by setting -Xjdk-release flag",
-    "issues": [
-        "https://github.com/smithy-lang/smithy-kotlin/issues/1295"
-    ]
-}

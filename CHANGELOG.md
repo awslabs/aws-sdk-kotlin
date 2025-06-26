@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.4.114] - 06/26/2025
+
+### Features
+* (**deadline**) Added fields to track cumulative task retry attempts for steps and jobs
+* (**ec2**) This release adds support for OdbNetworkArn as a target in VPC Route Tables
+* (**iotmanagedintegrations**) Adding managed integrations APIs for IoT Device Management to onboard and control devices across different manufacturers, connectivity protocols and third party vendor clouds. APIs include managed thing operations, provisioning profile management, and cloud connector operations.
+* (**keyspaces**) This release provides change data capture (CDC) streams support through updates to the Amazon Keyspaces API.
+* (**keyspacesstreams**) This release adds change data capture (CDC) streams support through the new Amazon Keyspaces Streams API.
+* (**qbusiness**) Added support for App level authentication for QBusiness DataAccessor using AWS IAM Identity center Trusted Token issuer
+* (**workspaces**) Updated modifyStreamingProperties to support PrivateLink VPC endpoints for directories
+
+### Fixes
+* [#1626](https://github.com/awslabs/aws-sdk-kotlin/issues/1626) improve retry policies for ECS and IMDS credentials to handle common network errors
+* [#1295](https://github.com/smithy-lang/smithy-kotlin/issues/1295) Enable building this project on JDK21 by setting -Xjdk-release flag
+
+### Documentation
+* (**kms**) This release updates AWS CLI examples for KMS APIs.
+
 ## [1.4.113] - 06/25/2025
 
 ### Features
