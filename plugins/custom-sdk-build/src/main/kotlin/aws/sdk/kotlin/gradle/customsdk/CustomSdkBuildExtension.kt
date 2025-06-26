@@ -34,12 +34,12 @@ open class CustomSdkBuildExtension(private val project: Project) {
      * Example:
      * ```
      * dynamodb {
-     *     operations(DynamodbOperation.GetItem, DynamodbOperation.PutItem)
+     *     operations(DynamoDbOperation.GetItem, DynamoDbOperation.PutItem)
      * }
      * ```
      */
-    fun dynamodb(configure: DynamodbServiceConfiguration.() -> Unit) {
-        val config = DynamodbServiceConfiguration().apply(configure)
+    fun dynamodb(configure: DynamoDbServiceConfiguration.() -> Unit) {
+        val config = DynamoDbServiceConfiguration().apply(configure)
         serviceConfigurations["dynamodb"] = config
     }
     
@@ -63,7 +63,7 @@ open class CustomSdkBuildExtension(private val project: Project) {
      */
     internal fun getSelectedOperations(): Map<String, List<String>> {
         return serviceConfigurations.mapValues { (_, config) -> 
-            config.selectedOperations.map { it.shapeId }
+            config.getSelectedOperations()
         }
     }
     
@@ -97,13 +97,14 @@ open class CustomSdkBuildExtension(private val project: Project) {
                 }
                 
                 // Check for duplicate operations
-                val duplicates = config.selectedOperations.groupingBy { it.shapeId }.eachCount().filter { it.value > 1 }
+                val operationIds = config.getSelectedOperations()
+                val duplicates = operationIds.groupingBy { it }.eachCount().filter { it.value > 1 }
                 if (duplicates.isNotEmpty()) {
                     project.logger.warn("Service '$serviceName' has duplicate operations: ${duplicates.keys}")
                 }
             }
             
-            val totalOperations = serviceConfigurations.values.sumOf { it.selectedOperations.size }
+            val totalOperations = serviceConfigurations.values.sumOf { it.getSelectedOperations().size }
             project.logger.info("Extension validation passed: $totalOperations operations across ${serviceConfigurations.size} services")
             
         } catch (e: Exception) {
@@ -133,78 +134,4 @@ open class CustomSdkBuildExtension(private val project: Project) {
             project.files()
         }
     }
-}
-
-/**
- * Base class for service configurations.
- */
-abstract class ServiceConfiguration {
-    internal val selectedOperations = mutableListOf<OperationConstant>()
-}
-
-/**
- * Configuration for Amazon S3 operations.
- */
-class S3ServiceConfiguration : ServiceConfiguration() {
-    fun operations(vararg operations: S3Operation) {
-        selectedOperations.addAll(operations.map { it.constant })
-    }
-}
-
-/**
- * Configuration for Amazon DynamoDB operations.
- */
-class DynamodbServiceConfiguration : ServiceConfiguration() {
-    fun operations(vararg operations: DynamodbOperation) {
-        selectedOperations.addAll(operations.map { it.constant })
-    }
-}
-
-/**
- * Configuration for AWS Lambda operations.
- */
-class LambdaServiceConfiguration : ServiceConfiguration() {
-    fun operations(vararg operations: LambdaOperation) {
-        selectedOperations.addAll(operations.map { it.constant })
-    }
-}
-
-/**
- * Represents an operation constant with its Smithy shape ID.
- */
-data class OperationConstant(val shapeId: String) {
-    override fun toString(): String = shapeId
-}
-
-/**
- * Sample operation constants for Amazon S3.
- */
-enum class S3Operation(val constant: OperationConstant) {
-    GetObject(OperationConstant("com.amazonaws.s3#GetObject")),
-    PutObject(OperationConstant("com.amazonaws.s3#PutObject")),
-    DeleteObject(OperationConstant("com.amazonaws.s3#DeleteObject")),
-    ListObjects(OperationConstant("com.amazonaws.s3#ListObjects")),
-    CreateBucket(OperationConstant("com.amazonaws.s3#CreateBucket"))
-}
-
-/**
- * Sample operation constants for Amazon DynamoDB.
- */
-enum class DynamodbOperation(val constant: OperationConstant) {
-    GetItem(OperationConstant("com.amazonaws.dynamodb#GetItem")),
-    PutItem(OperationConstant("com.amazonaws.dynamodb#PutItem")),
-    DeleteItem(OperationConstant("com.amazonaws.dynamodb#DeleteItem")),
-    Query(OperationConstant("com.amazonaws.dynamodb#Query")),
-    Scan(OperationConstant("com.amazonaws.dynamodb#Scan"))
-}
-
-/**
- * Sample operation constants for AWS Lambda.
- */
-enum class LambdaOperation(val constant: OperationConstant) {
-    Invoke(OperationConstant("com.amazonaws.lambda#Invoke")),
-    CreateFunction(OperationConstant("com.amazonaws.lambda#CreateFunction")),
-    DeleteFunction(OperationConstant("com.amazonaws.lambda#DeleteFunction")),
-    ListFunctions(OperationConstant("com.amazonaws.lambda#ListFunctions")),
-    UpdateFunctionCode(OperationConstant("com.amazonaws.lambda#UpdateFunctionCode"))
 }

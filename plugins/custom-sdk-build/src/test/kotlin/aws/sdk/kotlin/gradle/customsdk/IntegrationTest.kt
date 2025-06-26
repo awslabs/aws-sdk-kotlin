@@ -42,7 +42,7 @@ class IntegrationTest {
             operations(S3Operation.GetObject, S3Operation.PutObject)
         }
         extension.dynamodb {
-            operations(DynamodbOperation.GetItem, DynamodbOperation.PutItem)
+            operations(DynamoDbOperation.GetItem, DynamoDbOperation.PutItem)
         }
         
         // Validate configuration

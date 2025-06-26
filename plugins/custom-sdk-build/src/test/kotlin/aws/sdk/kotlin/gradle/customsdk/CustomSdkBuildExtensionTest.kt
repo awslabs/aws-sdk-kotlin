@@ -38,7 +38,7 @@ class CustomSdkBuildExtensionTest {
         }
         
         extension.dynamodb {
-            operations(DynamodbOperation.GetItem, DynamodbOperation.PutItem)
+            operations(DynamoDbOperation.GetItem, DynamoDbOperation.PutItem)
         }
         
         val selectedOperations = extension.getSelectedOperations()

@@ -56,7 +56,7 @@ class CustomSdkBuildPluginTest {
         
         // Configure the extension
         extension.dynamodb {
-            operations(DynamodbOperation.GetItem)
+            operations(DynamoDbOperation.GetItem)
         }
         
         // Verify plugin applied successfully

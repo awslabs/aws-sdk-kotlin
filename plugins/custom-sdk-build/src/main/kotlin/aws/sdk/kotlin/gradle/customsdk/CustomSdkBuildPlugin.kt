@@ -52,9 +52,12 @@ class CustomSdkBuildPlugin : Plugin<Project> {
             project
         )
         
+        // Register the generation task immediately (not in afterEvaluate)
+        val generateTask = project.tasks.register("generateCustomSdk", GenerateCustomSdkTask::class.java)
+        
         // Configure the plugin after project evaluation
         project.afterEvaluate {
-            configurePlugin(project, extension)
+            configurePlugin(project, extension, generateTask)
         }
     }
     
@@ -62,7 +65,11 @@ class CustomSdkBuildPlugin : Plugin<Project> {
      * Configure the plugin after the project has been evaluated.
      * This is where we set up tasks and dependencies based on the user's configuration.
      */
-    private fun configurePlugin(project: Project, extension: CustomSdkBuildExtension) {
+    private fun configurePlugin(
+        project: Project, 
+        extension: CustomSdkBuildExtension,
+        generateTask: TaskProvider<GenerateCustomSdkTask>
+    ) {
         try {
             // Validate the extension configuration
             extension.validate()
@@ -80,8 +87,8 @@ class CustomSdkBuildPlugin : Plugin<Project> {
                 }
             }
             
-            // Register the generation task
-            val generateTask = registerGenerationTask(project, extension)
+            // Configure the generation task
+            configureGenerationTask(project, extension, generateTask)
             
             // Configure source sets and dependencies
             configureSourceSets(project, generateTask)
@@ -96,12 +103,13 @@ class CustomSdkBuildPlugin : Plugin<Project> {
     }
     
     /**
-     * Register the custom SDK generation task.
+     * Configure the custom SDK generation task.
      */
-    private fun registerGenerationTask(
+    private fun configureGenerationTask(
         project: Project, 
-        extension: CustomSdkBuildExtension
-    ): TaskProvider<GenerateCustomSdkTask> {
+        extension: CustomSdkBuildExtension,
+        generateTask: TaskProvider<GenerateCustomSdkTask>
+    ) {
         // Create a separate task for preparing models
         val prepareModelsTask = project.tasks.register("prepareModels")
         prepareModelsTask.configure {
@@ -113,9 +121,6 @@ class CustomSdkBuildPlugin : Plugin<Project> {
         }
         
         // Register the main generation task
-        val generateTask = project.tasks.register("generateCustomSdk", GenerateCustomSdkTask::class.java)
-        
-        // Configure the task
         generateTask.configure {
             selectedOperations.set(extension.getSelectedOperations())
             packageName.set("aws.sdk.kotlin.services.custom")
@@ -123,8 +128,6 @@ class CustomSdkBuildPlugin : Plugin<Project> {
             modelsDirectory.set(project.layout.buildDirectory.dir("models"))
             dependsOn(prepareModelsTask)
         }
-        
-        return generateTask
     }
     
     /**

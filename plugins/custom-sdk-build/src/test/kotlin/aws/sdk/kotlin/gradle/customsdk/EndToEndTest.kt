@@ -30,7 +30,7 @@ class EndToEndTest {
             operations(S3Operation.GetObject, S3Operation.PutObject)
         }
         extension.dynamodb {
-            operations(DynamodbOperation.GetItem, DynamodbOperation.PutItem)
+            operations(DynamoDbOperation.GetItem, DynamoDbOperation.PutItem)
         }
         
         // Validate the configuration
@@ -223,7 +223,7 @@ class EndToEndTest {
             operations(S3Operation.GetObject, S3Operation.PutObject, S3Operation.DeleteObject)
         }
         extension.dynamodb {
-            operations(DynamodbOperation.GetItem, DynamodbOperation.PutItem)
+            operations(DynamoDbOperation.GetItem, DynamoDbOperation.PutItem)
         }
         extension.lambda {
             operations(LambdaOperation.Invoke)
