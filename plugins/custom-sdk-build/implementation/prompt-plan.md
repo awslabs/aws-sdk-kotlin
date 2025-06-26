@@ -1,17 +1,17 @@
 # Implementation Prompt Plan
 
 ## Checklist
-- [ ] Prompt 1: Set up plugin project structure and basic Gradle plugin
-- [ ] Prompt 2: Create KotlinIntegration for DSL generation
-- [ ] Prompt 3: Implement service discovery and operation extraction
-- [ ] Prompt 4: Generate service configuration classes and operation constants
-- [ ] Prompt 5: Create plugin core and DSL extension
-- [ ] Prompt 6: Implement custom SDK generation task
-- [ ] Prompt 7: Add source set integration and task dependencies
-- [ ] Prompt 8: Implement build cache support and incremental builds
-- [ ] Prompt 9: Add comprehensive error handling and validation
-- [ ] Prompt 10: Create integration tests and end-to-end validation
-- [ ] Prompt 11: Add plugin registration and SPI configuration
+- [x] Prompt 1: Set up plugin project structure and basic Gradle plugin
+- [x] Prompt 2: Create KotlinIntegration for DSL generation
+- [x] Prompt 3: Implement service discovery and operation extraction
+- [x] Prompt 4: Generate service configuration classes and operation constants
+- [x] Prompt 5: Create plugin core and DSL extension
+- [x] Prompt 6: Implement custom SDK generation task
+- [x] Prompt 7: Add source set integration and task dependencies
+- [x] Prompt 8: Implement build cache support and incremental builds
+- [x] Prompt 9: Add comprehensive error handling and validation
+- [x] Prompt 10: Create integration tests and end-to-end validation
+- [x] Prompt 11: Add plugin registration and SPI configuration
 - [ ] Prompt 12: Wire everything together and create final integration
 
 ## Git Checkpointing Instructions
