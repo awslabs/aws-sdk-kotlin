@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.115] - 06/27/2025
+
+### Features
+* (**connect**) This release adds the following value to an InitiateAs enum: COMPLETED
+* (**glue**) AWS Glue now supports schema, partition and sort management of Apache Iceberg tables using Glue SDK
+* (**guardduty**) Update JSON target for Kubernetes workload resource type.
+* (**qconnect**) Adding UnauthorizedException to public SDK
+* (**rds**) StartDBCluster and StopDBCluster can now throw InvalidDBShardGroupStateFault.
+* (**sesv2**) Added support for new SES regions
+
+### Documentation
+* (**configservice**) Added important considerations to the PutConformancePack and PutOrganizationConformancPack APIs.
+
 ## [1.4.114] - 06/26/2025
 
 ### Features
