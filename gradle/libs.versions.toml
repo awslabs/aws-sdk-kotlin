@@ -4,11 +4,7 @@ ksp-version = "2.1.0-1.0.29" # Keep in sync with kotlin-version
 
 dokka-version = "1.9.10"
 
-<<<<<<< Updated upstream
-aws-kotlin-repo-tools-version = "0.4.25"
-=======
 aws-kotlin-repo-tools-version = "0.4.28"
->>>>>>> Stashed changes
 
 # libs
 coroutines-version = "1.9.0"
