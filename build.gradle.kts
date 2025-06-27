@@ -78,7 +78,10 @@ dependencies {
 }
 
 // Publishing
-configureNexus()
+configureNexus(
+    nexusUrl = "https://aws.oss.sonatype.org/service/local/",
+    snapshotRepositoryUrl = "https://aws.oss.sonatype.org/content/repositories/snapshots/",
+)
 
 // Code Style
 val lintPaths = listOf(
