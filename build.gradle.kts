@@ -23,7 +23,7 @@ plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId) apply false
     id(libs.plugins.kotlin.jvm.get().pluginId) apply false
     alias(libs.plugins.aws.kotlin.repo.tools.artifactsizemetrics)
-    id("org.jreleaser") version "1.17.0"
+    id("org.jreleaser") version "1.18.0"
 }
 
 artifactSizeMetrics {
@@ -80,6 +80,10 @@ dependencies {
 }
 
 allprojects {
+//    throw Exception(configurations.toString())
+//    configurations.forEach {
+//        println(it.name)
+//    }
     configurations.all {
         resolutionStrategy.eachDependency {
             if (requested.group.contains("com.fasterxml.jackson")) {
@@ -88,6 +92,7 @@ allprojects {
         }
     }
 }
+
 
 // TODO: Use `gr jreleaserDeploy`
 jreleaser {

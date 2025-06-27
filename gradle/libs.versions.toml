@@ -4,7 +4,7 @@ ksp-version = "2.1.0-1.0.29" # Keep in sync with kotlin-version
 
 dokka-version = "2.0.0"
 
-aws-kotlin-repo-tools-version = "0.4.27"
+aws-kotlin-repo-tools-version = "0.0.1"
 
 # libs
 coroutines-version = "1.9.0"
