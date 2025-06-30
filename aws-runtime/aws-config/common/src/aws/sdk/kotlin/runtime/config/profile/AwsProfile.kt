@@ -186,20 +186,6 @@ public val AwsProfile.authSchemePreference: String?
     get() = getOrNull("auth_scheme_preference")
 
 /**
- * Specifies a named EC2 instance profile to use which allows bypassing auto-discovery
- */
-@InternalSdkApi
-public val AwsProfile.ec2InstanceProfileName: String?
-    get() = getOrNull("ec2_instance_profile_name")
-
-/**
- * The flag which disables the use of IMDS for credentials
- */
-@InternalSdkApi
-public val AwsProfile.ec2MetadataDisabled: Boolean?
-    get() = getBooleanOrNull("disable_ec2_metadata")
-
-/**
  * Parse a config value as a boolean, ignoring case.
  */
 @InternalSdkApi
