@@ -114,10 +114,10 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
                 override suspend fun deserialize(context: ExecutionContext, call: HttpCall): String {
                     val response = call.response
                     if (response.status.isSuccess()) {
-                        val payload = response.body.readAll() ?: throw EC2MetadataError(response.status, "no metadata payload")
+                        val payload = response.body.readAll() ?: throw EC2MetadataError(response.status.value, "no metadata payload")
                         return payload.decodeToString()
                     } else {
-                        throw EC2MetadataError(response.status, "error retrieving instance metadata: ${response.status.description}")
+                        throw EC2MetadataError(response.status.value, "error retrieving instance metadata: ${response.status.description}")
                     }
                 }
             }
