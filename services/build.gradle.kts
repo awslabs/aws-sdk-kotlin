@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 
 plugins {
     `maven-publish`
-    alias(libs.plugins.dokka)
+    `dokka-convention`
     alias(libs.plugins.aws.kotlin.repo.tools.kmp) apply false
 }
 
@@ -31,7 +31,6 @@ subprojects {
 
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
-        plugin("org.jetbrains.dokka")
         plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
 
@@ -76,12 +75,6 @@ subprojects {
                             implementation(project(":tests:e2e-test-util"))
                             implementation(libraries.slf4j.simple)
                         }
-                    }
-
-                    kotlinOptions {
-                        // Enable coroutine runTests in 1.6.10
-                        // NOTE: may be removed after coroutines-test runTests becomes stable
-                        freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
                     }
 
                     tasks.register<Test>("e2eTest") {
@@ -134,14 +127,11 @@ subprojects {
         }
     }
 
-    dependencies {
-        dokkaPlugin(project(":dokka-aws"))
-    }
-
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
             allWarningsAsErrors.set(false) // FIXME Tons of errors occur in generated code
             jvmTarget.set(JvmTarget.JVM_1_8) // fixes outgoing variant metadata: https://github.com/smithy-lang/smithy-kotlin/issues/258
+            freeCompilerArgs.add("-Xjdk-release=1.8")
         }
     }
 
@@ -153,6 +143,22 @@ subprojects {
                 val sdkId = project.typedProp<String>("aws.sdk.id") ?: error("service build `${project.name}` is missing `aws.sdk.id` property required for publishing")
                 pom.properties.put("aws.sdk.id", sdkId)
             }
+        }
+    }
+}
+
+// Configure Dokka for subprojects
+dependencies {
+    subprojects.forEach {
+        it.plugins.apply("dokka-convention") // Apply the Dokka conventions plugin to the subproject
+        dokka(project(it.path)) // Aggregate the subproject's generated documentation
+    }
+
+    // Preserve Dokka v1 module paths
+    // https://kotlinlang.org/docs/dokka-migration.html#revert-to-the-dgp-v1-directory-behavior
+    subprojects {
+        dokka {
+            modulePath = this@subprojects.name
         }
     }
 }

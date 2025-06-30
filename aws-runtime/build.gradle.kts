@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 description = "AWS client runtime support for generated service clients"
 
 plugins {
-    alias(libs.plugins.dokka)
+    `dokka-convention`
     alias(libs.plugins.kotlinx.binary.compatibility.validator)
     alias(libs.plugins.aws.kotlin.repo.tools.kmp) apply false
     jacoco
@@ -28,7 +28,6 @@ subprojects {
 
     apply {
         plugin("org.jetbrains.kotlin.multiplatform")
-        plugin("org.jetbrains.dokka")
         plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
 
@@ -61,19 +60,32 @@ subprojects {
         listOf("kotlin.RequiresOptIn").forEach { languageSettings.optIn(it) }
     }
 
-    dependencies {
-        dokkaPlugin(project(":dokka-aws"))
-    }
-
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_1_8)
+            freeCompilerArgs.add("-Xjdk-release=1.8")
             freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
         compilerOptions {
             freeCompilerArgs.add("-Xexpect-actual-classes")
+        }
+    }
+}
+
+// Configure Dokka for subprojects
+dependencies {
+    subprojects.forEach {
+        it.plugins.apply("dokka-convention") // Apply the Dokka conventions plugin to the subproject
+        dokka(project(it.path)) // Aggregate the subprojects' generated documentation
+    }
+
+    // Preserve Dokka v1 module paths
+    // https://kotlinlang.org/docs/dokka-migration.html#revert-to-the-dgp-v1-directory-behavior
+    subprojects {
+        dokka {
+            modulePath = this@subprojects.name
         }
     }
 }

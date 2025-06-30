@@ -56,7 +56,6 @@ class SchemaGeneratorPluginTest {
             .create()
             .withProjectDir(testProjectDir)
             .withPluginClasspath()
-            .withGradleVersion("8.5") // TODO parameterize
             .forwardOutput()
             .withArguments("--info", "build")
     }

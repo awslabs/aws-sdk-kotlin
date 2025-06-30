@@ -1,0 +1,80 @@
+# After every GitHub release, verify that the Maven artifacts are available, then kick off
+# a canary deployment with the latest version of the SDK.
+name: Update Canary
+on:
+  release:
+    types: [ published ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  update-canary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.CI_AWS_ROLE_ARN }}
+          aws-region: us-west-2
+
+
+      - name: Verify artifact is available on Maven
+        shell: bash
+        # Maven can take up to 2 hours after the release has succeeded to publish our artifacts
+        # FIXME Track execution duration over time and see if this can be shortened
+        timeout-minutes: 120
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION="${TAG#v}"
+          MAVEN_URL="https://repo.maven.apache.org/maven2/aws/sdk/kotlin/s3/${VERSION}/"
+          
+          echo "Checking for an artifact at $MAVEN_URL"
+          
+          while true; do
+            STATUS=$(curl -i -s -o /dev/null -w "%{http_code}" "$MAVEN_URL")
+            echo "Status: $STATUS"
+
+            if [[ "$STATUS" == "200" ]]; then
+              echo "Artifact is available at $MAVEN_URL"
+              exit 0
+            fi
+
+            sleep 30
+          done
+
+      - name: Update canary
+        shell: bash
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+
+          TAG="${{ github.event.release.tag_name }}"
+          EXECUTION_NAME="update-canary-${TAG}"
+          STATE_MACHINE_ARN="arn:aws:states:us-west-2:${{ secrets.CI_USER }}:stateMachine:DeployLatestSdkVersion"
+
+          echo "Starting step function: $EXECUTION_NAME"
+            EXECUTION_ARN=$(aws stepfunctions start-execution \
+            --state-machine-arn "$STATE_MACHINE_ARN" \
+            --name "$EXECUTION_NAME" \
+            --input '{}' \
+            --query 'executionArn' \
+            --output text)
+          
+          echo "Waiting for step function to complete..."
+                
+          while true; do
+            STATUS=$(aws stepfunctions describe-execution --execution-arn "$EXECUTION_ARN" --query 'status' --output text)
+            echo "Status: $STATUS"
+            
+            if [[ "$STATUS" == "SUCCEEDED" ]]; then
+              echo "Step Function completed successfully"
+              exit 0
+            elif [[ "$STATUS" == "FAILED" || "$STATUS" == "TIMED_OUT" || "$STATUS" == "ABORTED" ]]; then
+              echo "Step Function failed with status: $STATUS"
+              exit 1
+            fi
+
+            sleep 10
+          done

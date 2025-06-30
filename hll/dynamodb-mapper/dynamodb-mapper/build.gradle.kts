@@ -26,6 +26,7 @@ buildscript {
 
 plugins {
     alias(libs.plugins.ksp)
+    `dokka-convention`
 }
 
 kotlin {

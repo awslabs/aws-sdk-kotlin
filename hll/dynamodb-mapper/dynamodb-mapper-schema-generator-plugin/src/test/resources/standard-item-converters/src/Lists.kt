@@ -32,6 +32,9 @@ public data class Lists(
     var listUShort: List<UShort>,
     var listULong: List<ULong>,
     var listEnum: List<EnumAnimals>,
+    var nullableList: List<String>?,
+    var listNullableElement: List<String?>,
+    var nullableListNullableElement: List<String?>?,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -56,6 +59,9 @@ public data class Lists(
         if (listUShort != other.listUShort) return false
         if (listULong != other.listULong) return false
         if (listEnum != other.listEnum) return false
+        if (nullableList != other.nullableList) return false
+        if (listNullableElement != other.listNullableElement) return false
+        if (nullableListNullableElement != other.nullableListNullableElement) return false
 
         return true
     }
