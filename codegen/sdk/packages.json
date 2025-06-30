@@ -13,6 +13,12 @@
             "brazilName": "AwsSdkKotlinAcmPca"
         },
         {
+            "sdkId": "AIOps",
+            "namespace": "aws.sdk.kotlin.services.aiops",
+            "artifactName": "aiops",
+            "brazilName": "AwsSdkKotlinAiops"
+        },
+        {
             "sdkId": "API Gateway",
             "namespace": "aws.sdk.kotlin.services.apigateway",
             "artifactName": "apigateway",
@@ -1105,6 +1111,12 @@
             "brazilName": "AwsSdkKotlinKeyspaces"
         },
         {
+            "sdkId": "KeyspacesStreams",
+            "namespace": "aws.sdk.kotlin.services.keyspacesstreams",
+            "artifactName": "keyspacesstreams",
+            "brazilName": "AwsSdkKotlinKeyspacesstreams"
+        },
+        {
             "sdkId": "Kinesis",
             "namespace": "aws.sdk.kotlin.services.kinesis",
             "artifactName": "kinesis",
@@ -1241,6 +1253,12 @@
             "namespace": "aws.sdk.kotlin.services.lookoutvision",
             "artifactName": "lookoutvision",
             "brazilName": "AwsSdkKotlinLookoutvision"
+        },
+        {
+            "sdkId": "MPA",
+            "namespace": "aws.sdk.kotlin.services.mpa",
+            "artifactName": "mpa",
+            "brazilName": "AwsSdkKotlinMpa"
         },
         {
             "sdkId": "MTurk",
@@ -1639,12 +1657,6 @@
             "brazilName": "AwsSdkKotlinPricing"
         },
         {
-            "sdkId": "PrivateNetworks",
-            "namespace": "aws.sdk.kotlin.services.privatenetworks",
-            "artifactName": "privatenetworks",
-            "brazilName": "AwsSdkKotlinPrivatenetworks"
-        },
-        {
             "sdkId": "Proton",
             "namespace": "aws.sdk.kotlin.services.proton",
             "artifactName": "proton",
@@ -1877,6 +1889,12 @@
             "namespace": "aws.sdk.kotlin.services.ssmcontacts",
             "artifactName": "ssmcontacts",
             "brazilName": "AwsSdkKotlinSsmContacts"
+        },
+        {
+            "sdkId": "SSM GuiConnect",
+            "namespace": "aws.sdk.kotlin.services.ssmguiconnect",
+            "artifactName": "ssmguiconnect",
+            "brazilName": "AwsSdkKotlinSsmGuiconnect"
         },
         {
             "sdkId": "SSM Incidents",
@@ -2227,6 +2245,12 @@
             "brazilName": "AwsSdkKotlinWorkspacesWeb"
         },
         {
+            "sdkId": "Workspaces Instances",
+            "namespace": "aws.sdk.kotlin.services.workspacesinstances",
+            "artifactName": "workspacesinstances",
+            "brazilName": "AwsSdkKotlinWorkspacesInstances"
+        },
+        {
             "sdkId": "XRay",
             "namespace": "aws.sdk.kotlin.services.xray",
             "artifactName": "xray",
@@ -2279,6 +2303,12 @@
             "namespace": "aws.sdk.kotlin.services.drs",
             "artifactName": "drs",
             "brazilName": "AwsSdkKotlinDrs"
+        },
+        {
+            "sdkId": "evs",
+            "namespace": "aws.sdk.kotlin.services.evs",
+            "artifactName": "evs",
+            "brazilName": "AwsSdkKotlinEvs"
         },
         {
             "sdkId": "finspace",

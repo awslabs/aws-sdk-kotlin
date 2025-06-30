@@ -25,9 +25,6 @@ import aws.smithy.kotlin.runtime.io.closeIfCloseable
 import aws.smithy.kotlin.runtime.net.*
 import aws.smithy.kotlin.runtime.net.url.Url
 import aws.smithy.kotlin.runtime.operation.ExecutionContext
-import aws.smithy.kotlin.runtime.retries.policy.RetryDirective
-import aws.smithy.kotlin.runtime.retries.policy.RetryErrorType
-import aws.smithy.kotlin.runtime.retries.policy.RetryPolicy
 import aws.smithy.kotlin.runtime.serde.json.JsonDeserializer
 import aws.smithy.kotlin.runtime.telemetry.logging.logger
 import aws.smithy.kotlin.runtime.time.TimestampFormat
@@ -96,8 +93,6 @@ public class EcsCredentialsProvider(
             serviceName = "EcsContainerMetadata"
             execution.endpointResolver = EndpointResolver { Endpoint(url) }
         }
-
-        op.execution.retryPolicy = EcsCredentialsRetryPolicy()
 
         logger.debug { "retrieving container credentials" }
         val client = SdkHttpClient(httpClient)
@@ -257,22 +252,6 @@ private class EcsCredentialsSerializer(
             builder.header("Authorization", authToken)
         }
         return builder
-    }
-}
-
-internal class EcsCredentialsRetryPolicy : RetryPolicy<Any?> {
-    override fun evaluate(result: Result<Any?>): RetryDirective = when {
-        result.isSuccess -> RetryDirective.TerminateAndSucceed
-        else -> evaluate(result.exceptionOrNull()!!)
-    }
-
-    private fun evaluate(throwable: Throwable): RetryDirective = when (throwable) {
-        is CredentialsProviderException -> when {
-            throwable.sdkErrorMetadata.isThrottling -> RetryDirective.RetryError(RetryErrorType.Throttling)
-            throwable.sdkErrorMetadata.isRetryable -> RetryDirective.RetryError(RetryErrorType.ServerSide)
-            else -> RetryDirective.TerminateAndFail
-        }
-        else -> RetryDirective.TerminateAndFail
     }
 }
 

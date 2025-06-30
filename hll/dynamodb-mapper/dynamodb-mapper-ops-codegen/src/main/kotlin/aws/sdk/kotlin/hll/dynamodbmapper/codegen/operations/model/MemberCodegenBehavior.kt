@@ -7,8 +7,10 @@ package aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model
 import aws.sdk.kotlin.hll.codegen.model.*
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperPkg
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.model.MapperTypes
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ExpressionArgumentsType.*
-import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ExpressionLiteralType.*
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ExpressionArgumentsType.AttributeNames
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ExpressionArgumentsType.AttributeValues
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ExpressionLiteralType.Filter
+import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.ExpressionLiteralType.KeyCondition
 import aws.sdk.kotlin.hll.dynamodbmapper.codegen.operations.model.MemberCodegenBehavior.*
 
 /**
@@ -156,6 +158,6 @@ private val rules = listOf(
 
     // Mappable members
     Rule(".*".toRegex(), Types.Kotlin.list(MapperTypes.AttributeMap), ListMapAll),
-    Rule("key", MapperTypes.AttributeMap, MapKeys),
+    Rule("key|lastEvaluatedKey|exclusiveStartKey".toRegex(), MapperTypes.AttributeMap, MapKeys),
     Rule(".*".toRegex(), MapperTypes.AttributeMap, MapAll),
 )

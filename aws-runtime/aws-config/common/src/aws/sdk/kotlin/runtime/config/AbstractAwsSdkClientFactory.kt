@@ -5,6 +5,7 @@
 
 package aws.sdk.kotlin.runtime.config
 
+import aws.sdk.kotlin.runtime.config.auth.resolveAuthSchemePreference
 import aws.sdk.kotlin.runtime.config.checksums.resolveRequestChecksumCalculation
 import aws.sdk.kotlin.runtime.config.checksums.resolveResponseChecksumValidation
 import aws.sdk.kotlin.runtime.config.compression.resolveDisableRequestCompression
@@ -20,11 +21,15 @@ import aws.sdk.kotlin.runtime.region.resolveRegion
 import aws.sdk.kotlin.runtime.region.resolveSigV4aSigningRegionSet
 import aws.smithy.kotlin.runtime.ExperimentalApi
 import aws.smithy.kotlin.runtime.auth.awscredentials.SigV4aClientConfig
-import aws.smithy.kotlin.runtime.client.*
+import aws.smithy.kotlin.runtime.client.AbstractSdkClientFactory
+import aws.smithy.kotlin.runtime.client.RetryStrategyClientConfig
+import aws.smithy.kotlin.runtime.client.SdkClient
+import aws.smithy.kotlin.runtime.client.SdkClientConfig
 import aws.smithy.kotlin.runtime.client.config.ClientSettings
 import aws.smithy.kotlin.runtime.client.config.CompressionClientConfig
 import aws.smithy.kotlin.runtime.client.config.HttpChecksumConfig
 import aws.smithy.kotlin.runtime.config.resolve
+import aws.smithy.kotlin.runtime.http.auth.HttpAuthConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryConfig
 import aws.smithy.kotlin.runtime.telemetry.TelemetryProvider
 import aws.smithy.kotlin.runtime.telemetry.trace.withSpan
@@ -102,6 +107,10 @@ public abstract class AbstractAwsSdkClientFactory<
 
                 config.responseChecksumValidation =
                     config.responseChecksumValidation ?: resolveResponseChecksumValidation(platform, profile)
+            }
+
+            if (config is HttpAuthConfig.Builder) {
+                config.authSchemePreference = config.authSchemePreference ?: resolveAuthSchemePreference(platform, profile)
             }
 
             finalizeConfig(builder)

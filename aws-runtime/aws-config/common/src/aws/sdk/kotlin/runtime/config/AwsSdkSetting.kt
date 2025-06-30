@@ -105,6 +105,14 @@ public object AwsSdkSetting {
     public val AwsEc2MetadataServiceEndpointMode: EnvironmentSetting<String> =
         strEnvSetting("aws.ec2MetadataServiceEndpointMode", "AWS_EC2_METADATA_SERVICE_ENDPOINT_MODE")
 
+    /**
+     * The name of the EC2
+     * [instance profile](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html)
+     * to use for resolving credentials on an EC2 instance. Specifying this name disables profile name discovery.
+     */
+    public val AwsEc2InstanceProfileName: EnvironmentSetting<String> =
+        strEnvSetting("aws.ec2InstanceProfileName", "AWS_EC2_INSTANCE_PROFILE_NAME")
+
     // TODO Currently env/system properties around role ARN, role session name, etc are restricted to the STS web
     //  identity provider. They should be applied more broadly but this needs fleshed out across AWS SDKs before we can
     //  do so.
@@ -231,6 +239,11 @@ public object AwsSdkSetting {
      */
     public val AwsResponseChecksumValidation: EnvironmentSetting<ResponseHttpChecksumConfig> =
         enumEnvSetting<ResponseHttpChecksumConfig>("aws.responseChecksumValidation", "AWS_RESPONSE_CHECKSUM_VALIDATION")
+
+    /**
+     * Configures an ordered preference of auth schemes
+     */
+    public val AwsAuthSchemePreference: EnvironmentSetting<String> = strEnvSetting("aws.authSchemePreference", "AWS_AUTH_SCHEME_PREFERENCE")
 }
 
 /**

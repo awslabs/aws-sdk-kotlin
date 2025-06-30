@@ -1,11 +1,11 @@
 package aws.sdk.kotlin.codegen
 
+import software.amazon.smithy.build.MockManifest
 import software.amazon.smithy.kotlin.codegen.test.newTestContext
-import software.amazon.smithy.kotlin.codegen.test.shouldContainOnlyOnceWithDiff
-import software.amazon.smithy.kotlin.codegen.test.toGenerationContext
+import software.amazon.smithy.kotlin.codegen.test.toCodegenContext
 import software.amazon.smithy.kotlin.codegen.test.toSmithyModel
 import kotlin.test.Test
-import kotlin.test.assertFalse
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 private val model = """
@@ -28,40 +28,21 @@ val ctx = model.newTestContext("Test")
 class ModuleDocumentationIntegrationTest {
     @Test
     fun integrationIsAppliedCorrectly() {
-        assertFalse(
-            ModuleDocumentationIntegration().enabledForService(model, ctx.generationCtx.settings),
-        )
-        assertTrue(
-            ModuleDocumentationIntegration(
-                codeExamples = mapOf("Test" to "https://example.com"),
-            ).enabledForService(model, ctx.generationCtx.settings),
-        )
+        val integration = ModuleDocumentationIntegration()
+        assertTrue(integration.enabledForService(model, ctx.generationCtx.settings))
+
+        integration.writeAdditionalFiles(ctx.toCodegenContext(), ctx.generationCtx.delegator)
+        ctx.generationCtx.delegator.flushWriters()
+        val testManifest = ctx.generationCtx.delegator.fileManifest as MockManifest
+
+        val actual = testManifest.expectFileString("OVERVIEW.md")
+        val expected = """
+            # Module test
+
+            This module contains the Kotlin SDK client for **Test Service**.
+            
+        """.trimIndent()
+
+        assertEquals(expected, actual)
     }
-
-    @Test
-    fun rendersBoilerplate() =
-        ModuleDocumentationIntegration(
-            codeExamples = mapOf("Test" to "https://example.com"),
-        )
-            .generateModuleDocumentation(ctx.toGenerationContext())
-            .shouldContainOnlyOnceWithDiff(
-                """
-                    # Module test
-                    
-                    Test Service
-                """.trimIndent(),
-            )
-
-    @Test
-    fun rendersCodeExampleDocs() =
-        ModuleDocumentationIntegration(
-            codeExamples = mapOf("Test" to "https://example.com"),
-        )
-            .generateModuleDocumentation(ctx.toGenerationContext())
-            .shouldContainOnlyOnceWithDiff(
-                """
-                    ## Code Examples
-                    Explore code examples for Test Service in the <a href="https://example.com">AWS code example library</a>
-                """.trimIndent(),
-            )
 }

@@ -28,6 +28,7 @@ public class SetsTest {
             setUInt = setOf(100u, 200u, 300u),
             setULong = setOf(1000uL, 2000uL, 3000uL),
             setUShort = setOf(1000u.toUShort(), 2000u.toUShort(), 3000u.toUShort()),
+            nullableSet = null,
         )
 
         val item = SetsConverter.convertTo(sets)
