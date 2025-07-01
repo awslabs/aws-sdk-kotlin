@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.configureLinting
-//import aws.sdk.kotlin.gradle.dsl.configureJReleaser
+import aws.sdk.kotlin.gradle.dsl.configureJReleaser
 import aws.sdk.kotlin.gradle.util.typedProp
-import org.jreleaser.model.Active
 
 buildscript {
     // NOTE: buildscript classpath for the root project is the parent classloader for the subprojects, we
@@ -14,6 +13,12 @@ buildscript {
         classpath(libs.kotlinx.atomicfu.plugin)
         // Add our custom gradle build logic to buildscript classpath
         classpath(libs.aws.kotlin.repo.tools.build.support)
+        /*
+        Enforce jackson to a version supported both by dokka and jreleaser:
+        https://github.com/Kotlin/dokka/issues/3472#issuecomment-1929712374
+        https://github.com/Kotlin/dokka/issues/3194#issuecomment-1929382630
+        */
+        classpath(enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.15.3"))
     }
 }
 
@@ -23,7 +28,6 @@ plugins {
     id(libs.plugins.kotlin.multiplatform.get().pluginId) apply false
     id(libs.plugins.kotlin.jvm.get().pluginId) apply false
     alias(libs.plugins.aws.kotlin.repo.tools.artifactsizemetrics)
-    id("org.jreleaser") version "1.18.0"
 }
 
 artifactSizeMetrics {
@@ -79,42 +83,8 @@ dependencies {
     dokka(project(":hll"))
 }
 
-allprojects {
-//    throw Exception(configurations.toString())
-//    configurations.forEach {
-//        println(it.name)
-//    }
-    configurations.all {
-        resolutionStrategy.eachDependency {
-            if (requested.group.contains("com.fasterxml.jackson")) {
-                useVersion("2.15.3")
-            }
-        }
-    }
-}
-
-
-// TODO: Use `gr jreleaserDeploy`
-jreleaser {
-    project {
-        version = "0.0.1"
-    }
-    signing {
-        active = Active.ALWAYS
-        armored = true
-    }
-    deploy {
-        maven {
-            mavenCentral {
-                create("maven-central") {
-                    active = Active.ALWAYS
-                    url = "https://central.sonatype.com/api/v1/publisher"
-                    stagingRepository(rootProject.layout.buildDirectory.dir("m2").get().toString())
-                }
-            }
-        }
-    }
-}
+// Publishing
+configureJReleaser()
 
 // Code Style
 val lintPaths = listOf(
