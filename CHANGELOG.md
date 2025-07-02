@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.118] - 07/02/2025
+
+### Features
+* (**connectcases**) This release adds DeleteCase and DeleteRelatedItem APIs, which enable deleting cases and comments, undoing contact association, and removing service level agreements (SLAs) from cases. Contact center admins can use these APIs to delete cases when requested by customers and correct agent errors.
+* (**ec2**) AWS Site-to-Site VPN now supports IPv6 addresses on outer tunnel IPs, making it easier for customers to build or transition to IPv6-only networks.
+* (**s3**) Added support for directory bucket creation with tags and bucket ARN retrieval in CreateBucket, ListDirectoryBuckets, and HeadBucket operations
+* (**s3control**) Added TagResource, UntagResource, and ListTagsForResource support for directory bucket
+
 ## [1.4.117] - 07/01/2025
 
 ### Features
