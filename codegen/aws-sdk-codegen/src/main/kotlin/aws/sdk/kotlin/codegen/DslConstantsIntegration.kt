@@ -33,15 +33,16 @@ class DslConstantsIntegration : KotlinIntegration {
     companion object {
         const val INTEGRATION_NAME = "dsl-constants"
         private const val DSL_CONSTANTS_OUTPUT_DIR = "aws-custom-sdk-build-plugin/src/main/resources/dsl-constants"
+        private const val ENV_VAR_NAME = "AWS_SDK_KOTLIN_GENERATE_DSL_CONSTANTS"
     }
     
     override val order: Byte = 127 // Run last to ensure all other processing is complete
     
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
-        // Only generate constants if the DSL_CONSTANTS_GENERATION environment variable is set
+        // Only generate constants if the environment variable is set to "true"
         // This allows us to control when constants are generated during the build process
-        return System.getenv("DSL_CONSTANTS_GENERATION") == "true" ||
-               System.getProperty("aws.dsl.constants.generation") == "true"
+        return System.getenv(ENV_VAR_NAME) == "true" ||
+               System.getProperty("aws.sdk.kotlin.generate.dsl.constants") == "true"
     }
     
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
