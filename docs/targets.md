@@ -32,7 +32,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
         isCoreLibraryDesugaringEnabled = true
     }
-    kotlinOptions {
+    compilerOptions {
         jvmTarget = "1.8"
     }
 }

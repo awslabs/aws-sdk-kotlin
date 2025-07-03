@@ -3,6 +3,10 @@
     "metadata": {
         "suppressions": [
             {
+                "id": "QueryErrorCode",
+                "namespace": "*"
+            },
+            {
                 "id": "HttpMethodSemantics",
                 "namespace": "*"
             },

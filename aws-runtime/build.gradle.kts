@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
-import aws.sdk.kotlin.gradle.kmp.*
+import aws.sdk.kotlin.gradle.kmp.kotlin
+import aws.sdk.kotlin.gradle.kmp.needsKmpConfigured
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 description = "AWS client runtime support for generated service clients"
@@ -65,6 +66,7 @@ subprojects {
             jvmTarget.set(JvmTarget.JVM_1_8)
             freeCompilerArgs.add("-Xjdk-release=1.8")
             freeCompilerArgs.add("-Xexpect-actual-classes")
+            freeCompilerArgs.add("-jvm-default=no-compatibility") // https://youtrack.jetbrains.com/issue/KT-77376
         }
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
