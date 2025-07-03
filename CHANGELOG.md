@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.119] - 07/03/2025
+
+### Features
+* (**customerprofiles**) This release introduces capability of create Segments via importing a CSV file directly. This consumes the CSV file and creates/updates corresponding profiles for the particular domain.
+* (**deadline**) Added fields for output manifest reporting and task chunking parameters
+* (**ec2**) This release adds GroupOwnerId as a response member to the DescribeSecurityGroupVpcAssociations API and also adds waiters for SecurityGroupVpcAssociations (SecurityGroupVpcAssociationAssociated and SecurityGroupVpcAssociationDisassociated).
+* (**mediapackagev2**) This release adds support for Microsoft Smooth Streaming (MSS) and allows users to exclude DRM segment Metadata in MediaPackage v2 Origin Endpoints
+* (**route53**) Amazon Route 53 now supports the iso-e regions for private DNS Amazon VPCs and cloudwatch healthchecks.
+* (**sagemaker**) Changes include new StartSession API for SageMaker Studio spaces and CreateHubContentPresignedUrls API for SageMaker JumpStart.
+
 ## [1.4.118] - 07/02/2025
 
 ### Features
