@@ -12,6 +12,7 @@ import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
 import software.amazon.smithy.kotlin.codegen.core.withBlock
 import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.model.expectShape
+import software.amazon.smithy.kotlin.codegen.utils.toPascalCase
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.knowledge.TopDownIndex
 import software.amazon.smithy.model.shapes.OperationShape
@@ -47,7 +48,7 @@ class DslConstantsIntegration : KotlinIntegration {
     
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val service = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
-        val serviceName = service.id.name.lowercase()
+        val serviceName = getServiceName(ctx.settings.sdkId)
         
         // Get all operations for this service
         val operations = TopDownIndex
@@ -64,6 +65,22 @@ class DslConstantsIntegration : KotlinIntegration {
     }
     
     /**
+     * Generate the service name using the same logic as service client generation.
+     * This ensures consistency between client names (e.g., "LambdaClient") and 
+     * constants names (e.g., "LambdaOperations").
+     */
+    private fun getServiceName(sdkId: String): String {
+        return sdkId.sanitizeClientName().toPascalCase()
+    }
+    
+    /**
+     * Sanitize the service name by removing common suffixes, following the same
+     * logic as the service client naming in KotlinSymbolProvider.
+     */
+    private fun String.sanitizeClientName(): String =
+        replace(Regex("(API|Client|Service)$", setOf(RegexOption.IGNORE_CASE)), "")
+    
+    /**
      * Generate operation constants for a specific service
      */
     private fun generateOperationConstants(
@@ -72,7 +89,7 @@ class DslConstantsIntegration : KotlinIntegration {
         serviceName: String,
         operations: List<OperationShape>
     ) {
-        val className = "${serviceName.replaceFirstChar { it.uppercase() }}Operations"
+        val className = "${serviceName}Operations"
         val fileName = "$className.kt"
         
         // Generate the file content
