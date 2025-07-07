@@ -89,7 +89,6 @@ subprojects {
             jvmTarget.set(JvmTarget.JVM_1_8)
             freeCompilerArgs.add("-Xjdk-release=1.8")
             freeCompilerArgs.add("-Xexpect-actual-classes")
-            freeCompilerArgs.add("-jvm-default=no-compatibility") // https://youtrack.jetbrains.com/issue/KT-77376
         }
     }
 
