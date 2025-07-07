@@ -1,14 +1,45 @@
 # AWS Custom SDK Build Plugin
 
-A Gradle plugin for generating lightweight AWS service clients with only selected operations, providing type-safe operation constants and intelligent validation.
+A Gradle plugin for generating lightweight AWS service clients with only selected operations, providing type-safe operation constants and intelligent validation with real Smithy build integration.
 
 ## Features
 
+- **Real Smithy Build Integration**: Leverages actual Smithy build process for authentic client generation
+- **Multi-Tier Build Strategy**: Gradle plugin integration → Smithy CLI → graceful fallback
 - **Type-Safe Operation Selection**: Use generated constants instead of error-prone string literals
 - **Intelligent Validation**: Automatic validation of operation names against AWS service definitions
 - **Flexible DSL**: Support for both type-safe constants and string literals (backward compatibility)
 - **Advanced Selection**: Pattern matching, bulk selection, and filtering capabilities
 - **Comprehensive Validation**: Detailed validation reports with suggestions for invalid operations
+- **Robust Error Handling**: Graceful degradation when Smithy models or CLI are unavailable
+
+## Architecture
+
+### Real Smithy Build Integration
+
+The plugin implements a sophisticated multi-tier approach to client generation:
+
+1. **Primary**: Gradle Smithy Build Plugin Integration
+   - Uses AWS Kotlin repo tools when available
+   - Leverages existing AWS SDK build infrastructure
+   
+2. **Secondary**: Direct Smithy CLI Execution
+   - Executes Smithy CLI with generated `smithy-build.json`
+   - Automatic JAR discovery across multiple locations
+   - Configurable build parameters and output paths
+   
+3. **Fallback**: Development/Testing Mode
+   - Generates placeholder clients for development
+   - Maintains plugin functionality in all environments
+   - Comprehensive logging for troubleshooting
+
+### Smithy Build Configuration
+
+The plugin generates authentic `smithy-build.json` configurations that:
+- Use `awsSmithyKotlinIncludeOperations` transformer for operation filtering
+- Apply `awsSmithyKotlinRemoveDeprecatedShapes` for cleanup
+- Configure `kotlin-codegen` plugin with proper service shapes and packages
+- Support all AWS service protocols (JSON, XML, Query, REST)
 
 ## Quick Start
 
@@ -165,6 +196,70 @@ awsCustomSdk {
 | `strictValidation` | Boolean | `true` | Enable strict validation of operation names |
 
 ## Validation and Error Handling
+
+## Real Smithy Build Integration
+
+### Requirements
+
+For real client generation (not just placeholders), ensure:
+
+1. **Smithy Models**: AWS service models available in one of:
+   - `{project.rootDir}/codegen/sdk/aws-models/{service}.json` (AWS SDK structure)
+   - `{project.dir}/models/{service}.json` (local models)
+   - `{project.rootDir}/models/{service}.json` (project root models)
+
+2. **Smithy CLI**: Available through:
+   - Project dependencies (recommended)
+   - Gradle cache (automatic discovery)
+   - Runtime classpath
+
+### Adding Smithy CLI Dependency
+
+```kotlin
+dependencies {
+    implementation("software.amazon.smithy:smithy-cli:1.60.2")
+}
+```
+
+### Build Process
+
+The plugin follows this execution flow:
+
+1. **Configuration Generation**: Creates `smithy-build.json` with:
+   - Service projections for each configured service
+   - Operation filtering using `awsSmithyKotlinIncludeOperations`
+   - Kotlin codegen plugin configuration
+   - Proper package and service shape mapping
+
+2. **Build Execution**: Attempts in order:
+   - Gradle Smithy build plugin (if available)
+   - Direct Smithy CLI execution
+   - Fallback to placeholder generation
+
+3. **Output Processing**: Generates:
+   - Service clients with only selected operations
+   - Usage examples and documentation
+   - Dependency configuration
+   - README with implementation details
+
+### Troubleshooting
+
+Enable debug logging to see the build process:
+
+```kotlin
+awsCustomSdk {
+    // Plugin will log detailed information about:
+    // - Model discovery attempts
+    // - Smithy CLI location
+    // - Build execution steps
+    // - Fallback reasons
+}
+```
+
+Common issues:
+- **"Service model not found"**: Add models to expected locations
+- **"Smithy CLI JAR not found"**: Add Smithy CLI dependency
+- **"Real Smithy build failed"**: Check logs for specific errors
 
 ### Automatic Validation
 
