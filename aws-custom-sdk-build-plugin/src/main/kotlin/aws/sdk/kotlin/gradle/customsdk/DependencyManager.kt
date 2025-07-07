@@ -17,36 +17,60 @@ import org.gradle.api.artifacts.Configuration
 class DependencyManager(private val project: Project) {
     
     companion object {
+        // Core AWS SDK dependencies that are always needed
+        private val CORE_DEPENDENCIES = listOf(
+            "aws.sdk.kotlin:aws-core",
+            "aws.sdk.kotlin:aws-config", 
+            "aws.sdk.kotlin:aws-http",
+            "aws.sdk.kotlin:aws-endpoint",
+            "software.amazon.smithy.kotlin:http-client-engine-default",
+            "software.amazon.smithy.kotlin:runtime-core"
+        )
+        
         // Protocol to dependency mapping
         private val PROTOCOL_DEPENDENCIES = mapOf(
             "json" to listOf(
-                "aws.sdk.kotlin:aws-json",
-                "software.amazon.smithy.kotlin:http-client-engine-default"
+                "software.amazon.smithy.kotlin:serde-json"
             ),
             "xml" to listOf(
-                "aws.sdk.kotlin:aws-xml", 
-                "software.amazon.smithy.kotlin:http-client-engine-default"
+                "software.amazon.smithy.kotlin:serde-xml"
             ),
             "query" to listOf(
-                "aws.sdk.kotlin:aws-query",
-                "software.amazon.smithy.kotlin:http-client-engine-default"
+                "software.amazon.smithy.kotlin:serde-form-url"
             ),
             "rest" to listOf(
-                "aws.sdk.kotlin:aws-core",
-                "software.amazon.smithy.kotlin:http-client-engine-default"
+                "software.amazon.smithy.kotlin:http"
+            ),
+            "cbor" to listOf(
+                "software.amazon.smithy.kotlin:serde-cbor"
             )
         )
         
-        // Service to protocol mapping (will be populated from service models in later prompts)
+        // Service to protocol mapping based on AWS service protocols
         private val SERVICE_PROTOCOLS = mapOf(
-            "s3" to "rest",
-            "dynamodb" to "json",
-            "ec2" to "query",
-            "lambda" to "json",
-            "sns" to "query",
-            "sqs" to "query"
-            // TODO: Complete mapping will be loaded from service models
+            "s3" to setOf("rest", "xml"),
+            "dynamodb" to setOf("json"),
+            "ec2" to setOf("query"),
+            "lambda" to setOf("json"),
+            "sns" to setOf("query"),
+            "sqs" to setOf("query"),
+            "iam" to setOf("query"),
+            "cloudformation" to setOf("query"),
+            "rds" to setOf("query"),
+            "apigateway" to setOf("rest", "json"),
+            "cloudwatch" to setOf("query"),
+            "sts" to setOf("query"),
+            "secretsmanager" to setOf("json"),
+            "ssm" to setOf("json"),
+            "kinesis" to setOf("json"),
+            "firehose" to setOf("json"),
+            "cognito-identity" to setOf("json"),
+            "cognito-idp" to setOf("json")
         )
+        
+        // AWS SDK version - should match the parent project
+        private const val AWS_SDK_VERSION = "1.4.119-SNAPSHOT"
+        private const val SMITHY_KOTLIN_VERSION = "0.34.21"
     }
     
     /**
@@ -55,65 +79,123 @@ class DependencyManager(private val project: Project) {
     fun configureDependencies(selectedServices: Map<String, Set<String>>) {
         project.logger.info("Configuring dependencies for ${selectedServices.size} services...")
         
+        // Get or create the implementation configuration
+        val implementationConfig = project.configurations.findByName("implementation")
+            ?: project.configurations.create("implementation")
+        
+        // Add core dependencies
+        addCoreDependencies(implementationConfig)
+        
+        // Add protocol-specific dependencies based on selected services
         val requiredProtocols = determineRequiredProtocols(selectedServices.keys)
-        val dependencies = resolveDependencies(requiredProtocols)
+        addProtocolDependencies(implementationConfig, requiredProtocols)
         
-        addDependenciesToProject(dependencies)
+        // Add service-specific dependencies if needed
+        addServiceSpecificDependencies(implementationConfig, selectedServices.keys)
         
-        project.logger.info("Added ${dependencies.size} dependencies for protocols: ${requiredProtocols.joinToString(", ")}")
+        project.logger.info("Dependencies configured successfully")
     }
     
     /**
-     * Determine which protocols are needed based on selected services
+     * Add core AWS SDK dependencies that are always required
+     */
+    private fun addCoreDependencies(config: Configuration) {
+        project.logger.info("Adding core AWS SDK dependencies...")
+        
+        CORE_DEPENDENCIES.forEach { dependency ->
+            val dependencyNotation = if (dependency.startsWith("aws.sdk.kotlin:")) {
+                "$dependency:$AWS_SDK_VERSION"
+            } else {
+                "$dependency:$SMITHY_KOTLIN_VERSION"
+            }
+            
+            project.dependencies.add(config.name, dependencyNotation)
+            project.logger.debug("Added core dependency: $dependencyNotation")
+        }
+    }
+    
+    /**
+     * Determine which protocols are required based on the selected services
      */
     private fun determineRequiredProtocols(serviceNames: Set<String>): Set<String> {
-        val protocols = mutableSetOf<String>()
+        val requiredProtocols = mutableSetOf<String>()
         
         serviceNames.forEach { serviceName ->
-            val protocol = SERVICE_PROTOCOLS[serviceName]
-            if (protocol != null) {
-                protocols.add(protocol)
+            val protocols = SERVICE_PROTOCOLS[serviceName.lowercase()]
+            if (protocols != null) {
+                requiredProtocols.addAll(protocols)
+                project.logger.debug("Service $serviceName requires protocols: ${protocols.joinToString(", ")}")
             } else {
-                project.logger.warn("Unknown protocol for service: $serviceName, defaulting to 'rest'")
-                protocols.add("rest")
+                // Default to JSON and REST for unknown services
+                requiredProtocols.addAll(setOf("json", "rest"))
+                project.logger.warn("Unknown service $serviceName, using default protocols: json, rest")
             }
         }
         
-        return protocols
+        project.logger.info("Required protocols: ${requiredProtocols.joinToString(", ")}")
+        return requiredProtocols
     }
     
     /**
-     * Resolve dependencies for the required protocols
+     * Add protocol-specific dependencies
      */
-    private fun resolveDependencies(protocols: Set<String>): Set<String> {
-        val dependencies = mutableSetOf<String>()
+    private fun addProtocolDependencies(config: Configuration, requiredProtocols: Set<String>) {
+        project.logger.info("Adding protocol-specific dependencies...")
         
-        protocols.forEach { protocol ->
-            val protocolDeps = PROTOCOL_DEPENDENCIES[protocol]
-            if (protocolDeps != null) {
-                dependencies.addAll(protocolDeps)
+        requiredProtocols.forEach { protocol ->
+            val dependencies = PROTOCOL_DEPENDENCIES[protocol]
+            if (dependencies != null) {
+                dependencies.forEach { dependency ->
+                    val dependencyNotation = "$dependency:$SMITHY_KOTLIN_VERSION"
+                    project.dependencies.add(config.name, dependencyNotation)
+                    project.logger.debug("Added protocol dependency for $protocol: $dependencyNotation")
+                }
             }
         }
-        
-        // Always add core AWS runtime dependencies
-        dependencies.addAll(listOf(
-            "aws.sdk.kotlin:aws-core",
-            "aws.sdk.kotlin:aws-config",
-            "software.amazon.smithy.kotlin:smithy-client"
-        ))
-        
-        return dependencies
     }
     
     /**
-     * Add dependencies to the project configuration
+     * Add service-specific dependencies if needed
      */
-    private fun addDependenciesToProject(dependencies: Set<String>) {
-        val implementation = project.configurations.getByName("implementation")
+    private fun addServiceSpecificDependencies(config: Configuration, serviceNames: Set<String>) {
+        project.logger.info("Checking for service-specific dependencies...")
         
-        dependencies.forEach { dependency ->
-            project.logger.debug("Adding dependency: $dependency")
-            project.dependencies.add("implementation", dependency)
+        serviceNames.forEach { serviceName ->
+            when (serviceName.lowercase()) {
+                "s3" -> {
+                    // S3 might need additional dependencies for multipart uploads, etc.
+                    project.logger.debug("S3 service detected - using standard dependencies")
+                }
+                "dynamodb" -> {
+                    // DynamoDB might need additional dependencies for enhanced client features
+                    project.logger.debug("DynamoDB service detected - using standard dependencies")
+                }
+                "lambda" -> {
+                    // Lambda might need additional dependencies for async invocation
+                    project.logger.debug("Lambda service detected - using standard dependencies")
+                }
+                else -> {
+                    project.logger.debug("Service $serviceName - using standard dependencies")
+                }
+            }
         }
+    }
+    
+    /**
+     * Get a summary of configured dependencies
+     */
+    fun getDependencySummary(selectedServices: Map<String, Set<String>>): String {
+        val summary = StringBuilder()
+        summary.append("Dependency Configuration Summary:\n")
+        summary.append("- Core Dependencies: ${CORE_DEPENDENCIES.size}\n")
+        
+        val requiredProtocols = determineRequiredProtocols(selectedServices.keys)
+        val protocolDependencies = requiredProtocols.flatMap { protocol ->
+            PROTOCOL_DEPENDENCIES[protocol] ?: emptyList()
+        }
+        summary.append("- Protocol Dependencies: ${protocolDependencies.size} (${requiredProtocols.joinToString(", ")})\n")
+        summary.append("- Services: ${selectedServices.keys.joinToString(", ")}\n")
+        
+        return summary.toString()
     }
 }

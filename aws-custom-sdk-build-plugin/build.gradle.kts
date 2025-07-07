@@ -25,6 +25,9 @@ dependencies {
     // Kotlin reflection for constants registry
     implementation(kotlin("reflect", version = "2.1.0"))
     
+    // JSON processing for Smithy build configuration
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
+    
     // Smithy dependencies for model processing - use versions matching parent project
     implementation("software.amazon.smithy:smithy-model:1.60.2")
     implementation("software.amazon.smithy:smithy-aws-traits:1.60.2")
