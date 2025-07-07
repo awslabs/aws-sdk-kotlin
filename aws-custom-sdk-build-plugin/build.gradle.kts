@@ -33,6 +33,9 @@ dependencies {
     implementation("software.amazon.smithy:smithy-aws-traits:1.60.2")
     implementation("software.amazon.smithy:smithy-protocol-traits:1.60.2")
     
+    // Smithy CLI for real build execution
+    implementation("software.amazon.smithy:smithy-cli:1.60.2")
+    
     // Smithy Kotlin codegen dependencies - use versions matching parent project
     implementation("software.amazon.smithy.kotlin:smithy-kotlin-codegen:0.34.21")
     
