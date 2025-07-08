@@ -14,8 +14,10 @@ class EnvironmentTokenCustomizationTest {
         namespace com.test
         use aws.auth#sigv4
         use aws.api#service
-
+        use smithy.api#httpBearerAuth
+        
         @sigv4(name: "bedrock")
+        @httpBearerAuth
         @service(sdkId: "Bedrock")
         service Bedrock {
             version: "1.0.0"
@@ -26,8 +28,10 @@ class EnvironmentTokenCustomizationTest {
         namespace com.test
         use aws.auth#sigv4
         use aws.api#service
-
+        use smithy.api#httpBearerAuth
+        
         @sigv4(name: "s3")
+        @httpBearerAuth
         @service(sdkId: "S3")
         service S3 {
             version: "1.0.0"
@@ -37,9 +41,23 @@ class EnvironmentTokenCustomizationTest {
     private val noSigV4Model = """
         namespace com.test
         use aws.api#service
-
+        use smithy.api#httpBearerAuth
+        
         @service(sdkId: "NoSigV4")
+        @httpBearerAuth
         service NoSigV4 {
+            version: "1.0.0"
+        }
+    """.trimIndent().toSmithyModel()
+
+    private val noBearerAuthModel = """
+        namespace com.test
+        use aws.auth#sigv4
+        use aws.api#service
+
+        @sigv4(name: "bedrock")
+        @service(sdkId: "BedrockNoBearerAuth")
+        service BedrockNoBearerAuth {
             version: "1.0.0"
         }
     """.trimIndent().toSmithyModel()
@@ -65,6 +83,14 @@ class EnvironmentTokenCustomizationTest {
         assertFalse {
             EnvironmentTokenCustomization()
                 .enabledForService(noSigV4Model, noSigV4Model.defaultSettings())
+        }
+    }
+
+    @Test
+    fun `test customization not enabled for model without bearer auth trait`() {
+        assertFalse {
+            EnvironmentTokenCustomization()
+                .enabledForService(noBearerAuthModel, noBearerAuthModel.defaultSettings())
         }
     }
 }

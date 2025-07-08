@@ -16,6 +16,7 @@ import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion
 import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
+import software.amazon.smithy.model.traits.HttpBearerAuthTrait
 
 /**
  * Customization that support sourcing Bearer tokens from an environment variable
@@ -34,6 +35,10 @@ class EnvironmentTokenCustomization : KotlinIntegration {
         if (!AwsSignatureVersion4.isSupportedAuthentication(model, serviceShape)) {
             return false
         }
+        if (!serviceShape.getTrait(HttpBearerAuthTrait::class.java).isPresent) {
+            return false
+        }
+
         val signingServiceName = AwsSignatureVersion4.signingServiceName(serviceShape)
 
         return signingServiceName in supportedSigningServiceNames
@@ -178,10 +183,10 @@ class EnvironmentTokenCustomization : KotlinIntegration {
             .name
             .removeSuffix("Client")
 
-        val authSchemePreference = buildSymbol {
+        val environmentTokenConfig = buildSymbol {
             name = "finalize${serviceName}EnvironmentTokenConfig"
             namespace = "aws.sdk.kotlin.services.${serviceName.lowercase()}.auth"
         }
-        writer.write("#T(builder)", authSchemePreference)
+        writer.write("#T(builder)", environmentTokenConfig)
     }
 }
