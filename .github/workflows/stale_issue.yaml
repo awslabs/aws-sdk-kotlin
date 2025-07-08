@@ -5,6 +5,8 @@ on:
   schedule:
   - cron: "0 0/3 * * *"
 
+permissions: { }
+
 jobs:
   cleanup:
     name: Stale issue job

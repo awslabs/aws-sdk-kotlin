@@ -2,6 +2,7 @@ name: Closed Issue Message
 on:
     issues:
        types: [closed]
+permissions: { }
 jobs:
     auto_comment:
         runs-on: ubuntu-latest
