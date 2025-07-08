@@ -6,22 +6,16 @@ package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
-import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
-import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.kotlin.codegen.core.CodegenContext
-import software.amazon.smithy.kotlin.codegen.core.KotlinDelegator
-import software.amazon.smithy.kotlin.codegen.core.KotlinWriter
-import software.amazon.smithy.kotlin.codegen.core.RuntimeTypes
-import software.amazon.smithy.kotlin.codegen.core.closeAndOpenBlock
-import software.amazon.smithy.kotlin.codegen.core.getContextValue
+import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
+import software.amazon.smithy.kotlin.codegen.integration.KotlinIntegration
 import software.amazon.smithy.kotlin.codegen.integration.SectionWriterBinding
 import software.amazon.smithy.kotlin.codegen.model.buildSymbol
 import software.amazon.smithy.kotlin.codegen.model.expectShape
-import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
 import software.amazon.smithy.kotlin.codegen.model.knowledge.AwsSignatureVersion4
-import kotlin.text.removeSuffix
+import software.amazon.smithy.kotlin.codegen.rendering.ServiceClientGenerator
+import software.amazon.smithy.model.Model
+import software.amazon.smithy.model.shapes.ServiceShape
 
 /**
  * Customization that support sourcing Bearer tokens from an environment variable
@@ -47,12 +41,12 @@ class EnvironmentTokenCustomization : KotlinIntegration {
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val serviceShape = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
-        val serviceName =  ctx.symbolProvider.toSymbol(serviceShape).name.removeSuffix("Client")
+        val serviceName = ctx.symbolProvider.toSymbol(serviceShape).name.removeSuffix("Client")
         val packageName = ctx.settings.pkg.name
 
         delegator.useFileWriter(
             "Finalize${serviceName}EnvironmentTokenConfig.kt",
-            "${packageName}.auth"
+            "$packageName.auth",
         ) { writer ->
             renderEnvironmentTokenConfig(
                 writer,
@@ -75,11 +69,11 @@ class EnvironmentTokenCustomization : KotlinIntegration {
         writer.apply {
             openBlock(
                 "internal fun finalize#LEnvironmentTokenConfig(",
-                serviceName
+                serviceName,
             )
             write(
                 "builder: #T.Builder,",
-                serviceSymbol
+                serviceSymbol,
             )
             write(
                 "provider: #T = #T.System",
@@ -92,7 +86,7 @@ class EnvironmentTokenCustomization : KotlinIntegration {
             // The customization do nothing if environment variable is not set
             openBlock(
                 "if (provider.getenv(#S) != null) {",
-                envVarName
+                envVarName,
             )
 
             // Configure auth scheme preference if customer hasn't specify one
@@ -119,7 +113,7 @@ class EnvironmentTokenCustomization : KotlinIntegration {
 
             write(
                 "builder.config.bearerTokenProvider = " +
-                        "builder.config.bearerTokenProvider ?: configureEnvironmentTokenProvider(provider)",
+                    "builder.config.bearerTokenProvider ?: configureEnvironmentTokenProvider(provider)",
             )
 
             closeBlock("}")
@@ -142,14 +136,14 @@ class EnvironmentTokenCustomization : KotlinIntegration {
             openBlock(
                 "override suspend fun resolve(attributes: #T): #T {",
                 RuntimeTypes.Core.Collections.Attributes,
-                RuntimeTypes.Auth.HttpAuth.BearerToken
+                RuntimeTypes.Auth.HttpAuth.BearerToken,
             )
 
             // Check environment variable on each resolve call
             write(
                 "val bearerToken = provider.getenv(#S) ?: error(#S)",
                 envVarName,
-                "$envVarName environment variable is not set"
+                "$envVarName environment variable is not set",
             )
 
             openBlock("return object : BearerToken {")
@@ -157,11 +151,11 @@ class EnvironmentTokenCustomization : KotlinIntegration {
             write("override val token: String = bearerToken")
             write(
                 "override val attributes: Attributes = #T()",
-                RuntimeTypes.Core.Collections.emptyAttributes
+                RuntimeTypes.Core.Collections.emptyAttributes,
             )
             write(
                 "override val expiration: #T? = null",
-                RuntimeTypes.Core.Instant
+                RuntimeTypes.Core.Instant,
             )
 
             closeBlock("}")

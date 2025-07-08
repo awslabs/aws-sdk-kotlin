@@ -121,12 +121,10 @@ class BedrockEnvironmentTokenTest {
         val client = BedrockClient.fromEnvironment {
             region = "us-west-2"
             bearerTokenProvider = object : BearerTokenProvider {
-                override suspend fun resolve(attributes: Attributes): BearerToken {
-                    return object : BearerToken {
-                        override val token: String = "different-bedrock-token"
-                        override val attributes: Attributes = emptyAttributes()
-                        override val expiration: Instant? = null
-                    }
+                override suspend fun resolve(attributes: Attributes): BearerToken = object : BearerToken {
+                    override val token: String = "different-bedrock-token"
+                    override val attributes: Attributes = emptyAttributes()
+                    override val expiration: Instant? = null
                 }
             }
         }
