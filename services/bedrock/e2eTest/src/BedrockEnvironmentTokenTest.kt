@@ -60,15 +60,15 @@ class BedrockEnvironmentTokenTest {
             authSchemePreference = listOf(AuthSchemeId.AwsSigV4)
         }
 
-        var expectedAuthSchemePreference = listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4)
+        val expectedAuthSchemePreference = listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4)
         assertEquals(expectedAuthSchemePreference, client.config.authSchemePreference)
+        client.close()
 
         client = BedrockClient.fromEnvironment {
             region = "us-west-2"
             authSchemePreference = listOf(AuthSchemeId.AwsSigV4, AuthSchemeId.HttpBearer)
         }
 
-        expectedAuthSchemePreference = listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4)
         assertEquals(expectedAuthSchemePreference, client.config.authSchemePreference)
 
         client.close()
@@ -134,5 +134,7 @@ class BedrockEnvironmentTokenTest {
         val token = client.config.bearerTokenProvider.resolve()
         assertNotNull(token)
         assertEquals("different-bedrock-token", token.token)
+
+        client.close()
     }
 }

@@ -1,5 +1,5 @@
 {
     "id": "b6b48ccb-8aa8-40be-bc5a-f5d184e8631e",
     "type": "feature",
-    "description": "Added support for bearer token authentication via environment variable"
+    "description": "Add support for Bearer authentication using a token set in an environment variable for Bedrock services"
 }

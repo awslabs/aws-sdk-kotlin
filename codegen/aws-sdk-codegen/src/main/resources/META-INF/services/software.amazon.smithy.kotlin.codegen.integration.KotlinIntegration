@@ -49,4 +49,4 @@ aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestSuccessHttpEngineIntegration
 aws.sdk.kotlin.codegen.smoketests.testing.SmokeTestFailHttpEngineIntegration
 aws.sdk.kotlin.codegen.customization.AwsQueryModeCustomization
 aws.sdk.kotlin.codegen.ModuleDocumentationIntegration
-aws.sdk.kotlin.codegen.customization.EnvironmentTokenCustomization
+aws.sdk.kotlin.codegen.customization.EnvironmentBearerTokenCustomization
