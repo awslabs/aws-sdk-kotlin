@@ -45,7 +45,7 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val serviceShape = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
-        val serviceName = ctx.symbolProvider.toSymbol(serviceShape).name.removeSuffix("Client")
+        val serviceName = clientName(ctx.settings.sdkId)
         val packageName = ctx.settings.pkg.name
 
         delegator.useFileWriter(

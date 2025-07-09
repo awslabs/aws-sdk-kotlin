@@ -24,6 +24,20 @@ class EnvironmentBearerTokenCustomizationTest {
         }
     """.trimIndent().toSmithyModel()
 
+    private val bedrockRuntimeModel = """
+        namespace com.test
+        use aws.auth#sigv4
+        use aws.api#service
+        use smithy.api#httpBearerAuth
+        
+        @sigv4(name: "bedrock")
+        @httpBearerAuth
+        @service(sdkId: "Bedrock Runtime")
+        service BedrockRuntime {
+            version: "1.0.0"
+        }
+    """.trimIndent().toSmithyModel()
+
     private val nonBedrockModel = """
         namespace com.test
         use aws.auth#sigv4
@@ -67,6 +81,13 @@ class EnvironmentBearerTokenCustomizationTest {
         assertTrue {
             EnvironmentBearerTokenCustomization()
                 .enabledForService(bedrockModel, bedrockModel.defaultSettings())
+        }
+    }
+
+    fun `test customization enabled for bedrock sigv4 signing name with different sdkId`() {
+        assertTrue {
+            EnvironmentBearerTokenCustomization()
+                .enabledForService(bedrockRuntimeModel, bedrockRuntimeModel.defaultSettings())
         }
     }
 
