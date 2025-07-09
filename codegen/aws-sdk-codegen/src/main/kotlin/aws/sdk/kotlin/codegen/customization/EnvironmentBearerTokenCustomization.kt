@@ -56,7 +56,7 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
                 writer,
                 ctx,
                 serviceShape,
-                serviceName
+                serviceName,
             )
         }
     }

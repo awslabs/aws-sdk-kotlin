@@ -9,7 +9,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class EnvironmentTokenCustomizationTest {
+class EnvironmentBearerTokenCustomizationTest {
     private val bedrockModel = """
         namespace com.test
         use aws.auth#sigv4
@@ -65,7 +65,7 @@ class EnvironmentTokenCustomizationTest {
     @Test
     fun `test customization enabled for bedrock sigv4 signing name`() {
         assertTrue {
-            EnvironmentTokenCustomization()
+            EnvironmentBearerTokenCustomization()
                 .enabledForService(bedrockModel, bedrockModel.defaultSettings())
         }
     }
@@ -73,7 +73,7 @@ class EnvironmentTokenCustomizationTest {
     @Test
     fun `test customization not enabled for non-bedrock sigv4 signing name`() {
         assertFalse {
-            EnvironmentTokenCustomization()
+            EnvironmentBearerTokenCustomization()
                 .enabledForService(nonBedrockModel, nonBedrockModel.defaultSettings())
         }
     }
@@ -81,7 +81,7 @@ class EnvironmentTokenCustomizationTest {
     @Test
     fun `test customization not enabled for model without sigv4 trait`() {
         assertFalse {
-            EnvironmentTokenCustomization()
+            EnvironmentBearerTokenCustomization()
                 .enabledForService(noSigV4Model, noSigV4Model.defaultSettings())
         }
     }
@@ -89,7 +89,7 @@ class EnvironmentTokenCustomizationTest {
     @Test
     fun `test customization not enabled for model without bearer auth trait`() {
         assertFalse {
-            EnvironmentTokenCustomization()
+            EnvironmentBearerTokenCustomization()
                 .enabledForService(noBearerAuthModel, noBearerAuthModel.defaultSettings())
         }
     }

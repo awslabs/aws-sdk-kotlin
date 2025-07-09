@@ -29,7 +29,7 @@ import kotlin.test.assertEquals
 
 // Environment variable AWS_BEARER_TOKEN_BEDROCK is configured with the value "bedrock-token" for this test suite.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class BedrockEnvironmentTokenTest {
+class BedrockEnvironmentBearerTokenTest {
     private fun mockHttpClient(handler: (HttpRequest) -> HttpResponse): HttpClientEngine {
         return object : HttpClientEngineBase("test engine") {
             override val config: HttpClientEngineConfig = HttpClientEngineConfig.Default
