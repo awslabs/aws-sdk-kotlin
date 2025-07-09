@@ -136,9 +136,7 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
         )
 
     private val finalizeEnvironmentBearerTokenConfigWriter = AppendingSectionWriter { writer ->
-        val serviceName = writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.ServiceSymbol)
-            .name
-            .removeSuffix("Client")
+        val serviceName = clientName(writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.SdkId))
 
         val environmentBearerTokenConfig = buildSymbol {
             name = "finalize${serviceName}EnvironmentBearerTokenConfig"
