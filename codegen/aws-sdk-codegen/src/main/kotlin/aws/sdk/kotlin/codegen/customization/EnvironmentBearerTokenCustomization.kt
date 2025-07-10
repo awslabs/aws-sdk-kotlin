@@ -71,59 +71,30 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
         val signingServiceName = AwsSignatureVersion4.signingServiceName(serviceShape)
         // Transform signing name to environment variable name
         val envVarName = "AWS_BEARER_TOKEN_" + signingServiceName.replace("""[-\s]""".toRegex(), "_").uppercase()
+        val authSchemeId = RuntimeTypes.Auth.Identity.AuthSchemeId
 
-        writer.apply {
-            withBlock(
-                "internal fun finalize#LEnvironmentBearerTokenConfig(",
-                ")",
-                serviceName,
-            ) {
-                write(
-                    "builder: #T.Builder,",
-                    serviceSymbol,
-                )
-                write(
-                    "provider: #1T = #1T.System",
-                    RuntimeTypes.Core.Utils.PlatformProvider,
-                )
+        writer.withBlock(
+            "internal fun finalize#1LEnvironmentBearerTokenConfig(builder: #2T.Builder, provider: #3T = #3T.System) {",
+            "}",
+            serviceName,
+            serviceSymbol,
+            RuntimeTypes.Core.Utils.PlatformProvider,
+        ) {
+            write("if (provider.getenv(#S) == null) { return }", envVarName)
+
+            write("builder.config.authSchemePreference = builder.config.authSchemePreference ?: listOf(#T.HttpBearer)", authSchemeId)
+
+            withBlock("val filteredSchemes = builder.config.authSchemePreference?.filterNot {", "} ?: emptyList()") {
+                write("it == #T.HttpBearer", authSchemeId)
             }
-            withBlock("{", "}") {
-                // The customization do nothing if environment variable is not set
-                withBlock(
-                    "if (provider.getenv(#S) != null) {",
-                    "}",
-                    envVarName,
-                ) {
-                    // Configure auth scheme preference if customer hasn't specify one
-                    write(
-                        "builder.config.authSchemePreference = builder.config.authSchemePreference ?: listOf(#T.HttpBearer)",
-                        RuntimeTypes.Auth.Identity.AuthSchemeId,
-                    )
 
-                    // Promote HttpBearer to first position in auth scheme preference list
-                    withBlock(
-                        "val filteredSchemes = builder.config.authSchemePreference?.filterNot {",
-                        " }?: emptyList()",
-                    ) {
-                        write(
-                            "it == #T.HttpBearer",
-                            RuntimeTypes.Auth.Identity.AuthSchemeId,
-                        )
-                    }
+            write("builder.config.authSchemePreference = listOf(#1T.HttpBearer) + filteredSchemes", authSchemeId)
 
-                    write(
-                        "builder.config.authSchemePreference = listOf(#1T.HttpBearer) + filteredSchemes",
-                        RuntimeTypes.Auth.Identity.AuthSchemeId,
-                    )
-
-                    write(
-                        "builder.config.bearerTokenProvider = " +
-                            "builder.config.bearerTokenProvider ?: #T(#S, provider)",
-                        RuntimeTypes.Auth.HttpAuth.EnvironmentBearerTokenProvider,
-                        envVarName,
-                    )
-                }
-            }
+            write(
+                "builder.config.bearerTokenProvider = builder.config.bearerTokenProvider ?: #T(#S, provider)",
+                RuntimeTypes.Auth.HttpAuth.EnvironmentBearerTokenProvider,
+                envVarName,
+            )
         }
     }
 
