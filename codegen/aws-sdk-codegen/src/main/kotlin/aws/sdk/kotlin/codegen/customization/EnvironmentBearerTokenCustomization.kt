@@ -80,10 +80,13 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
             serviceSymbol,
             RuntimeTypes.Core.Utils.PlatformProvider,
         ) {
+            // The customization do nothing if environment variable is not set
             write("if (provider.getenv(#S) == null) { return }", envVarName)
 
+            // Configure auth scheme preference if customer hasn't specify one
             write("builder.config.authSchemePreference = builder.config.authSchemePreference ?: listOf(#T.HttpBearer)", authSchemeId)
 
+            // Promote HttpBearer to first position in auth scheme preference list
             withBlock("val filteredSchemes = builder.config.authSchemePreference?.filterNot {", "} ?: emptyList()") {
                 write("it == #T.HttpBearer", authSchemeId)
             }
