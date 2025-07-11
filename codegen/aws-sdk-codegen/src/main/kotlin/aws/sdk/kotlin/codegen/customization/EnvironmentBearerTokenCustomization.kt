@@ -4,7 +4,9 @@
  */
 package aws.sdk.kotlin.codegen.customization
 
+import aws.sdk.kotlin.codegen.SdkIdTransform
 import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
+import aws.sdk.kotlin.codegen.withTransform
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
 import software.amazon.smithy.kotlin.codegen.integration.AppendingSectionWriter
@@ -45,18 +47,16 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
 
     override fun writeAdditionalFiles(ctx: CodegenContext, delegator: KotlinDelegator) {
         val serviceShape = ctx.model.expectShape<ServiceShape>(ctx.settings.service)
-        val serviceName = clientName(ctx.settings.sdkId)
         val packageName = ctx.settings.pkg.name
 
         delegator.useFileWriter(
-            "Finalize${serviceName}EnvironmentBearerTokenConfig.kt",
+            "FinalizeBearerTokenConfig.kt",
             "$packageName.auth",
         ) { writer ->
             renderEnvironmentBearerTokenConfig(
                 writer,
                 ctx,
                 serviceShape,
-                serviceName,
             )
         }
     }
@@ -65,18 +65,17 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
         writer: KotlinWriter,
         ctx: CodegenContext,
         serviceShape: ServiceShape,
-        serviceName: String,
     ) {
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
         val signingServiceName = AwsSignatureVersion4.signingServiceName(serviceShape)
         // Transform signing name to environment variable name
-        val envVarName = "AWS_BEARER_TOKEN_" + signingServiceName.replace("""[-\s]""".toRegex(), "_").uppercase()
+        val envVarSuffix = signingServiceName.withTransform(SdkIdTransform.UpperSnakeCase)
+        val envVarName = "AWS_BEARER_TOKEN_$envVarSuffix"
         val authSchemeId = RuntimeTypes.Auth.Identity.AuthSchemeId
 
         writer.withBlock(
-            "internal fun finalize#1LEnvironmentBearerTokenConfig(builder: #2T.Builder, provider: #3T = #3T.System) {",
+            "internal fun finalizeBearerTokenConfig(builder: #1T.Builder, provider: #2T = #2T.System) {",
             "}",
-            serviceName,
             serviceSymbol,
             RuntimeTypes.Core.Utils.PlatformProvider,
         ) {
@@ -113,7 +112,7 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
         val serviceName = clientName(writer.getContextValue(ServiceClientGenerator.Sections.CompanionObject.SdkId))
 
         val environmentBearerTokenConfig = buildSymbol {
-            name = "finalize${serviceName}EnvironmentBearerTokenConfig"
+            name = "finalizeBearerTokenConfig"
             namespace = "aws.sdk.kotlin.services.${serviceName.lowercase()}.auth"
         }
 

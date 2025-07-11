@@ -23,12 +23,10 @@ import aws.smithy.kotlin.runtime.operation.ExecutionContext
 import aws.smithy.kotlin.runtime.time.Instant
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.TestInstance
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 // Environment variable AWS_BEARER_TOKEN_BEDROCK is configured with the value "bedrock-token" for this test suite.
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BedrockEnvironmentBearerTokenTest {
     private fun mockHttpClient(handler: (HttpRequest) -> HttpResponse): HttpClientEngine {
         return object : HttpClientEngineBase("test engine") {
@@ -43,57 +41,51 @@ class BedrockEnvironmentBearerTokenTest {
 
     @Test
     fun testAuthSchemePreferenceConfigured(): Unit = runBlocking {
-        val client = BedrockClient.fromEnvironment {
+        BedrockClient.fromEnvironment {
             region = "us-west-2"
+        }.use { client ->
+            val expectedAuthSchemePreference = listOf(AuthSchemeId.HttpBearer)
+            assertEquals(expectedAuthSchemePreference, client.config.authSchemePreference)
         }
-
-        val expectedAuthSchemePreference = listOf(AuthSchemeId.HttpBearer)
-        assertEquals(expectedAuthSchemePreference, client.config.authSchemePreference)
-
-        client.close()
     }
 
     @Test
     fun testBearerAuthSchemePromotedToFirst(): Unit = runBlocking {
-        var client = BedrockClient.fromEnvironment {
+        BedrockClient.fromEnvironment {
             region = "us-west-2"
             authSchemePreference = listOf(AuthSchemeId.AwsSigV4)
+        }.use { client ->
+            val expectedAuthSchemePreference = listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4)
+            assertEquals(expectedAuthSchemePreference, client.config.authSchemePreference)
         }
 
-        val expectedAuthSchemePreference = listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4)
-        assertEquals(expectedAuthSchemePreference, client.config.authSchemePreference)
-        client.close()
-
-        client = BedrockClient.fromEnvironment {
+        BedrockClient.fromEnvironment {
             region = "us-west-2"
             authSchemePreference = listOf(AuthSchemeId.AwsSigV4, AuthSchemeId.HttpBearer)
+        }.use { client ->
+            val expectedAuthSchemePreference = listOf(AuthSchemeId.HttpBearer, AuthSchemeId.AwsSigV4)
+            assertEquals(expectedAuthSchemePreference, client.config.authSchemePreference)
         }
-
-        assertEquals(expectedAuthSchemePreference, client.config.authSchemePreference)
-
-        client.close()
     }
 
     @Test
     fun testBearerTokenProviderConfigured(): Unit = runBlocking {
-        val client = BedrockClient.fromEnvironment {
+        BedrockClient.fromEnvironment {
             region = "us-west-2"
+        }.use { client ->
+            assertNotNull(client.config.bearerTokenProvider)
+
+            val token = client.config.bearerTokenProvider.resolve()
+            assertNotNull(token)
+            assertEquals("bedrock-token", token.token)
         }
-
-        assertNotNull(client.config.bearerTokenProvider)
-
-        val token = client.config.bearerTokenProvider.resolve()
-        assertNotNull(token)
-        assertEquals("bedrock-token", token.token)
-
-        client.close()
     }
 
     @Test
     fun testBearerTokenProviderFunctionality(): Unit = runBlocking {
         var capturedAuthHeader: String? = null
 
-        val client = BedrockClient.fromEnvironment {
+        BedrockClient.fromEnvironment {
             region = "us-west-2"
             httpClient = mockHttpClient { request ->
                 // Capture the Authorization header
@@ -105,15 +97,15 @@ class BedrockEnvironmentBearerTokenTest {
                     body = HttpBody.Empty,
                 )
             }
+        }.use { client ->
+            // Make an api call to capture Authorization header
+            client.listFoundationModels()
+
+            assertNotNull(capturedAuthHeader)
+            assertEquals("Bearer bedrock-token", capturedAuthHeader)
+
+            client.close()
         }
-
-        // Make an api call to capture Authorization header
-        client.listFoundationModels()
-
-        assertNotNull(capturedAuthHeader)
-        assertEquals("Bearer bedrock-token", capturedAuthHeader)
-
-        client.close()
     }
 
     @Test
@@ -127,14 +119,12 @@ class BedrockEnvironmentBearerTokenTest {
                     override val expiration: Instant? = null
                 }
             }
+        }.use { client ->
+            assertNotNull(client.config.bearerTokenProvider)
+
+            val token = client.config.bearerTokenProvider.resolve()
+            assertNotNull(token)
+            assertEquals("different-bedrock-token", token.token)
         }
-
-        assertNotNull(client.config.bearerTokenProvider)
-
-        val token = client.config.bearerTokenProvider.resolve()
-        assertNotNull(token)
-        assertEquals("different-bedrock-token", token.token)
-
-        client.close()
     }
 }
