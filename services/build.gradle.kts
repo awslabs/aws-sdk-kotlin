@@ -101,10 +101,6 @@ subprojects {
                             }
                         }
 
-                        if (project.name == "bedrock") {
-                            environment("AWS_BEARER_TOKEN_BEDROCK", "bedrock-token")
-                        }
-
                         // Run the tests with the classpath containing the compile dependencies (including 'main'),
                         // runtime dependencies, and the outputs of this compilation:
                         classpath = compileDependencyFiles + runtimeDependencyFiles + output.allOutputs
