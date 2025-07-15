@@ -1843,6 +1843,12 @@
             "brazilName": "AwsSdkKotlinS3tables"
         },
         {
+            "sdkId": "S3Vectors",
+            "namespace": "aws.sdk.kotlin.services.s3vectors",
+            "artifactName": "s3vectors",
+            "brazilName": "AwsSdkKotlinS3vectors"
+        },
+        {
             "sdkId": "SES",
             "namespace": "aws.sdk.kotlin.services.ses",
             "artifactName": "ses",
