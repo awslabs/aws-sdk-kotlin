@@ -16,7 +16,6 @@ import org.gradle.api.Project
  * operation constants for configuration.
  */
 class AwsCustomSdkBuildPlugin : Plugin<Project> {
-    
     companion object {
         const val EXTENSION_NAME = "awsCustomSdk"
         const val GENERATE_CLIENTS_TASK_NAME = "generateAwsCustomClients"
@@ -24,11 +23,7 @@ class AwsCustomSdkBuildPlugin : Plugin<Project> {
     
     override fun apply(project: Project) {
         // Create the extension for DSL configuration
-        val extension = project.extensions.create(
-            EXTENSION_NAME,
-            AwsCustomSdkBuildExtension::class.java,
-            project
-        )
+        val extension = project.extensions.create(EXTENSION_NAME, AwsCustomSdkBuildExtension::class.java, project)
         
         // Register the main task for generating custom clients
         project.tasks.register(GENERATE_CLIENTS_TASK_NAME, GenerateCustomClientsTask::class.java)

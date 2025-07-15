@@ -68,7 +68,7 @@ class AwsCustomSdkBuildPluginTest {
         
         // Verify default values
         assertTrue(extension.region.get() == "us-east-1")
-        assertTrue(extension.packageName.get() == "aws.sdk.kotlin.custom")
+        assertTrue(extension.packageNamePrefix.get() == "aws.sdk.kotlin.custom")
         assertTrue(extension.outputDirectory.get().contains("build/generated/aws-custom-sdk"))
     }
 }

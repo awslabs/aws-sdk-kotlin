@@ -31,7 +31,7 @@ class AwsCustomSdkBuildExtensionTest {
     fun `should have default values`() {
         assertEquals("us-east-1", extension.region.get())
         assertEquals("${project.buildDir}/generated/aws-custom-sdk", extension.outputDirectory.get())
-        assertEquals("aws.sdk.kotlin.custom", extension.packageName.get())
+        assertEquals("aws.sdk.kotlin.custom", extension.packageNamePrefix.get())
         assertTrue(extension.strictValidation.get())
     }
     

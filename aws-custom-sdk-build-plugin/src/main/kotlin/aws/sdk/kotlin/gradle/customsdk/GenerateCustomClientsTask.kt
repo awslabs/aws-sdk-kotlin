@@ -28,7 +28,7 @@ abstract class GenerateCustomClientsTask : DefaultTask() {
     
     @get:Input
     val packageName: String
-        get() = getExtension().packageName.get()
+        get() = getExtension().packageNamePrefix.get()
     
     @get:Input
     val region: String
@@ -110,7 +110,7 @@ abstract class GenerateCustomClientsTask : DefaultTask() {
      */
     private fun logValidationSummary(extension: AwsCustomSdkBuildExtension) {
         logger.info("=== AWS Custom SDK Configuration Summary ===")
-        logger.info("Package Name: ${extension.packageName.get()}")
+        logger.info("Package Name: ${extension.packageNamePrefix.get()}")
         logger.info("Region: ${extension.region.get()}")
         logger.info("Output Directory: ${extension.outputDirectory.get()}")
         logger.info("Strict Validation: ${extension.strictValidation.get()}")
@@ -194,7 +194,7 @@ abstract class GenerateCustomClientsTask : DefaultTask() {
         examplesDir.mkdirs()
         
         val selectedServices = extension.getSelectedServices()
-        val packageName = extension.packageName.get()
+        val packageName = extension.packageNamePrefix.get()
         val region = extension.region.get()
         
         // Generate a comprehensive usage example

@@ -4,12 +4,7 @@
  */
 package aws.sdk.kotlin.gradle.sdk
 
-import software.amazon.smithy.aws.traits.protocols.AwsJson1_0Trait
-import software.amazon.smithy.aws.traits.protocols.AwsJson1_1Trait
-import software.amazon.smithy.aws.traits.protocols.AwsQueryTrait
-import software.amazon.smithy.aws.traits.protocols.Ec2QueryTrait
-import software.amazon.smithy.aws.traits.protocols.RestJson1Trait
-import software.amazon.smithy.aws.traits.protocols.RestXmlTrait
+import software.amazon.smithy.aws.traits.protocols.*
 import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.protocol.traits.Rpcv2CborTrait
 
@@ -21,6 +16,12 @@ public val REMOVE_DEPRECATED_SHAPES_TRANSFORM: String = """
         "args": {
             "until": "$DEPRECATED_SHAPES_CUTOFF_DATE"
         }
+    }
+""".trimIndent()
+
+val ADD_CUSTOM_SDK_BUILD_DSL_TRANSFORM: String = """
+    {
+        "name": "addCustomSdkBuildDsl"
     }
 """.trimIndent()
 

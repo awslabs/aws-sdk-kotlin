@@ -3,17 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import aws.sdk.kotlin.gradle.codegen.*
 import aws.sdk.kotlin.gradle.codegen.dsl.SmithyProjection
 import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 import aws.sdk.kotlin.gradle.codegen.dsl.smithyKotlinPlugin
+import aws.sdk.kotlin.gradle.codegen.smithyKotlinProjectionPath
 import aws.sdk.kotlin.gradle.sdk.*
 import aws.sdk.kotlin.gradle.sdk.tasks.UpdatePackageManifest
 import aws.sdk.kotlin.gradle.util.typedProp
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.ServiceShape
 import java.nio.file.Paths
-import kotlin.streams.toList
 
 plugins {
     kotlin("jvm")
@@ -40,7 +39,9 @@ fun awsServiceProjections(): Provider<List<SmithyProjection>> {
                     importPaths.add(service.modelExtrasDir)
                 }
                 imports = importPaths
-                transforms = (transformsForService(service) ?: emptyList()) + REMOVE_DEPRECATED_SHAPES_TRANSFORM
+                transforms = transformsForService(service).orEmpty() +
+                        REMOVE_DEPRECATED_SHAPES_TRANSFORM +
+                        ADD_CUSTOM_SDK_BUILD_DSL_TRANSFORM
 
                 val packageSettings = PackageSettings.fromFile(service.sdkId, file(service.packageSettings))
 
@@ -169,11 +170,14 @@ val stageSdks = tasks.register("stageSdks") {
     doLast {
         val discoveredServices = servicesProvider.get()
         logger.lifecycle("discoveredServices = ${discoveredServices.joinToString { it.sdkId }}")
+
+        val pluginDestinationDir = rootProject.file("aws-custom-sdk-build-plugin/generated-src/").absolutePath
         discoveredServices.forEach {
             val projectionOutputDir = smithyBuild.smithyKotlinProjectionPath(it.projectionName).get()
             logger.info("copying $projectionOutputDir to ${it.destinationDir}")
             copy {
                 from("$projectionOutputDir/src")
+                exclude("**/gradle/**") // Don't copy the aws-custom-sdk-build-plugin DSL constants
                 into("${it.destinationDir}/generated-src")
             }
             copy {
@@ -183,6 +187,12 @@ val stageSdks = tasks.register("stageSdks") {
             copy {
                 from("$projectionOutputDir/OVERVIEW.md")
                 into(it.destinationDir)
+            }
+            copy {
+                from("$projectionOutputDir/src")
+                include("**/gradle/**")
+                into(pluginDestinationDir)
+                includeEmptyDirs = false
             }
         }
     }

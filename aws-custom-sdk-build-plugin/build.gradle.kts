@@ -21,10 +21,7 @@ repositories {
 dependencies {
     // Gradle API - use explicit Kotlin version matching parent project
     implementation(kotlin("gradle-plugin", version = "2.1.0"))
-    
-    // Kotlin reflection for constants registry
-    implementation(kotlin("reflect", version = "2.1.0"))
-    
+
     // JSON processing for Smithy build configuration
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.2")
     
@@ -32,7 +29,9 @@ dependencies {
     implementation("software.amazon.smithy:smithy-model:1.60.2")
     implementation("software.amazon.smithy:smithy-aws-traits:1.60.2")
     implementation("software.amazon.smithy:smithy-protocol-traits:1.60.2")
-    
+
+    implementation(libs.plugins.aws.kotlin.repo.tools.smithybuild)
+
     // Smithy CLI for real build execution
     implementation("software.amazon.smithy:smithy-cli:1.60.2")
     
@@ -43,6 +42,14 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.5")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:2.1.0")
     testImplementation("io.mockk:mockk:1.13.13")
+}
+
+kotlin {
+    sourceSets {
+        main {
+            kotlin.srcDir("generated-src/main/kotlin")
+        }
+    }
 }
 
 gradlePlugin {

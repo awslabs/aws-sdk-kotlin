@@ -14,12 +14,11 @@ __pycache__/
 local.properties
 
 # ignore generated files
-services/*/generated-src
+**/generated-src
 services/*/build.gradle.kts
 services/*/API.md
 services/*/OVERVIEW.md
 .kotest/
 .kotlin/
 *.klib
-tests/codegen/smoke-tests/services/*/generated-src
 tests/codegen/smoke-tests/services/*/build.gradle.kts

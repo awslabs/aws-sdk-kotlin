@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class GenerateCustomClientsTaskTest {
@@ -100,7 +99,7 @@ class GenerateCustomClientsTaskTest {
         }
         
         extension.outputDirectory.set(File(tempDir, "generated").absolutePath)
-        extension.packageName.set("com.example.aws.custom")
+        extension.packageNamePrefix.set("com.example.aws.custom")
         extension.region.set("us-west-2")
         
         // Execute the task
@@ -173,7 +172,7 @@ class GenerateCustomClientsTaskTest {
         }
         
         extension.outputDirectory.set(File(tempDir, "generated").absolutePath)
-        extension.packageName.set("com.test.custom.sdk")
+        extension.packageNamePrefix.set("com.test.custom.sdk")
         extension.region.set("eu-west-1")
         
         // Execute the task

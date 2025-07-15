@@ -15,7 +15,6 @@ import org.gradle.api.artifacts.Configuration
  * protocol-specific dependencies (JSON, XML, etc.) to the project configuration.
  */
 class DependencyManager(private val project: Project) {
-    
     companion object {
         // Core AWS SDK dependencies that are always needed
         private val CORE_DEPENDENCIES = listOf(

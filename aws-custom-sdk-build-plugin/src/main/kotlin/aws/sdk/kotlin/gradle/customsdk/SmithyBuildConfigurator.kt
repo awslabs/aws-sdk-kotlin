@@ -187,7 +187,7 @@ class SmithyBuildConfigurator(
         
         // Package configuration
         val packageConfig = objectMapper.createObjectNode()
-        val basePackage = extension.packageName.get()
+        val basePackage = extension.packageNamePrefix.get()
         packageConfig.put("name", "$basePackage.services.$serviceName")
         packageConfig.put("version", "1.0.0-CUSTOM")
         packageConfig.put("description", "Custom AWS SDK for Kotlin client for ${serviceName.uppercase()}")
@@ -441,7 +441,7 @@ class SmithyBuildConfigurator(
             srcDir.mkdirs()
             
             // Create a placeholder client file
-            val packagePath = extension.packageName.get().replace(".", "/")
+            val packagePath = extension.packageNamePrefix.get().replace(".", "/")
             val clientPackageDir = File(srcDir, "$packagePath/services/$serviceName")
             clientPackageDir.mkdirs()
             
@@ -457,7 +457,7 @@ class SmithyBuildConfigurator(
      */
     private fun generatePlaceholderClient(serviceName: String): String {
         val className = "${serviceName.replaceFirstChar { it.uppercase() }}Client"
-        val packageName = "${extension.packageName.get()}.services.$serviceName"
+        val packageName = "${extension.packageNamePrefix.get()}.services.$serviceName"
         
         return """
             /*
