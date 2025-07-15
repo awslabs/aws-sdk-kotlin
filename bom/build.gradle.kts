@@ -116,12 +116,9 @@ publishing {
             from(components["versionCatalog"])
 
             /*
-            Creates a dummy JAR for version catalog publishing
-            The `version-catalog` plugin doesn't generate one because it isn't needed but JReleaser requires a jar to be present in the version catalog component
+            Creates a placeholder JAR for version catalog publishing
+            The `version-catalog` plugin doesn't generate one because it isn't needed but JReleaser requires a jar
             https://docs.gradle.org/current/userguide/version_catalogs.html#sec:version-catalog-plugin
-
-            Consuming published version catalogs with the dummy JAR still work
-            https://docs.gradle.org/current/userguide/version_catalogs.html#sec:importing-published-catalog
             */
             artifact(tasks["versionCatalogJar"])
         }
