@@ -26,6 +26,15 @@
                 "smithy.api#pattern": "^[0-9]{12}$"
             }
         },
+        "com.amazonaws.bedrock#AcknowledgementFormDataBody": {
+            "type": "blob",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 10,
+                    "max": 16384
+                }
+            }
+        },
         "com.amazonaws.bedrock#AdditionalModelRequestFields": {
             "type": "map",
             "key": {
@@ -47,10 +56,74 @@
         "com.amazonaws.bedrock#AdditionalModelRequestFieldsValue": {
             "type": "document"
         },
+        "com.amazonaws.bedrock#AgreementAvailability": {
+            "type": "structure",
+            "members": {
+                "status": {
+                    "target": "com.amazonaws.bedrock#AgreementStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Status of the agreement.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "errorMessage": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Error message.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Information about the agreement availability</p>"
+            }
+        },
+        "com.amazonaws.bedrock#AgreementStatus": {
+            "type": "enum",
+            "members": {
+                "AVAILABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AVAILABLE"
+                    }
+                },
+                "PENDING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PENDING"
+                    }
+                },
+                "NOT_AVAILABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NOT_AVAILABLE"
+                    }
+                },
+                "ERROR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ERROR"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.bedrock#AllowlistResource": {
+            "type": "resource",
+            "operations": [
+                {
+                    "target": "com.amazonaws.bedrock#GetUseCaseForModelAccess"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#PutUseCaseForModelAccess"
+                }
+            ]
+        },
         "com.amazonaws.bedrock#AmazonBedrockControlPlaneService": {
             "type": "service",
             "version": "2023-04-20",
             "resources": [
+                {
+                    "target": "com.amazonaws.bedrock#AllowlistResource"
+                },
                 {
                     "target": "com.amazonaws.bedrock#BedrockMarketplaceResource"
                 },
@@ -106,7 +179,12 @@
                     "name": "bedrock"
                 },
                 "aws.protocols#restJson1": {},
+                "smithy.api#auth": [
+                    "aws.auth#sigv4",
+                    "smithy.api#httpBearerAuth"
+                ],
                 "smithy.api#documentation": "<p>Describes the API operations for creating, managing, fine-turning, and evaluating Amazon Bedrock models.</p>",
+                "smithy.api#httpBearerAuth": {},
                 "smithy.api#title": "Amazon Bedrock",
                 "smithy.rules#endpointRuleSet": {
                     "version": "1.0",
@@ -799,6 +877,52 @@
                 }
             }
         },
+        "com.amazonaws.bedrock#AttributeType": {
+            "type": "enum",
+            "members": {
+                "STRING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "STRING"
+                    }
+                },
+                "NUMBER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NUMBER"
+                    }
+                },
+                "BOOLEAN": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "BOOLEAN"
+                    }
+                },
+                "STRING_LIST": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "STRING_LIST"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.bedrock#AuthorizationStatus": {
+            "type": "enum",
+            "members": {
+                "AUTHORIZED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AUTHORIZED"
+                    }
+                },
+                "NOT_AUTHORIZED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NOT_AUTHORIZED"
+                    }
+                }
+            }
+        },
         "com.amazonaws.bedrock#AutomatedEvaluationConfig": {
             "type": "structure",
             "members": {
@@ -1123,6 +1247,16 @@
                     "max": 140
                 },
                 "smithy.api#pattern": "^[a-z0-9-]{1,63}[.]{1}[a-z0-9-]{1,63}([a-z0-9-]{1,63}[.]){0,2}[a-z0-9-]{1,63}([:][a-z0-9-]{1,63}){0,2}(/[a-z0-9]{12}|)$"
+            }
+        },
+        "com.amazonaws.bedrock#BedrockRerankingModelArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 2048
+                },
+                "smithy.api#pattern": "^(arn:aws(-[^:]+)?:bedrock:[a-z0-9-]{1,20}::foundation-model/(.*))?$"
             }
         },
         "com.amazonaws.bedrock#BrandedName": {
@@ -1503,6 +1637,80 @@
                     "target": "com.amazonaws.bedrock#EvaluationJobArn",
                     "traits": {
                         "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the evaluation job.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.bedrock#CreateFoundationModelAgreement": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.bedrock#CreateFoundationModelAgreementRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.bedrock#CreateFoundationModelAgreementResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.bedrock#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Request a model access agreement for the specified model.</p>",
+                "smithy.api#http": {
+                    "code": 202,
+                    "method": "POST",
+                    "uri": "/create-foundation-model-agreement"
+                }
+            }
+        },
+        "com.amazonaws.bedrock#CreateFoundationModelAgreementRequest": {
+            "type": "structure",
+            "members": {
+                "offerToken": {
+                    "target": "com.amazonaws.bedrock#OfferToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An offer token encapsulates the information for an offer.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "modelId": {
+                    "target": "com.amazonaws.bedrock#BedrockModelId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Model Id of the model for the access request.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.bedrock#CreateFoundationModelAgreementResponse": {
+            "type": "structure",
+            "members": {
+                "modelId": {
+                    "target": "com.amazonaws.bedrock#BedrockModelId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Model Id of the model for the access request.</p>",
                         "smithy.api#required": {}
                     }
                 }
@@ -3039,6 +3247,65 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.bedrock#DeleteFoundationModelAgreement": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.bedrock#DeleteFoundationModelAgreementRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.bedrock#DeleteFoundationModelAgreementResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.bedrock#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ConflictException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Delete the model access agreement for the specified model.</p>",
+                "smithy.api#http": {
+                    "code": 202,
+                    "method": "POST",
+                    "uri": "/delete-foundation-model-agreement"
+                }
+            }
+        },
+        "com.amazonaws.bedrock#DeleteFoundationModelAgreementRequest": {
+            "type": "structure",
+            "members": {
+                "modelId": {
+                    "target": "com.amazonaws.bedrock#BedrockModelId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Model Id of the model access to delete.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.bedrock#DeleteFoundationModelAgreementResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.bedrock#DeleteGuardrail": {
             "type": "operation",
             "input": {
@@ -3509,6 +3776,38 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.bedrock#DimensionalPriceRate": {
+            "type": "structure",
+            "members": {
+                "dimension": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Dimension for the price rate.</p>"
+                    }
+                },
+                "price": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Single-dimensional rate information.</p>"
+                    }
+                },
+                "description": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Description of the price rate.</p>"
+                    }
+                },
+                "unit": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Unit associated with the price.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Dimensional price rate.</p>"
+            }
+        },
         "com.amazonaws.bedrock#DistillationConfig": {
             "type": "structure",
             "members": {
@@ -3544,6 +3843,23 @@
                 "smithy.api#length": {
                     "min": 1,
                     "max": 30
+                }
+            }
+        },
+        "com.amazonaws.bedrock#EntitlementAvailability": {
+            "type": "enum",
+            "members": {
+                "AVAILABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AVAILABLE"
+                    }
+                },
+                "NOT_AVAILABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NOT_AVAILABLE"
+                    }
                 }
             }
         },
@@ -4470,6 +4786,38 @@
                 "smithy.api#documentation": "<p>The configuration of the external source wrapper object in the <code>retrieveAndGenerate</code> function.</p>"
             }
         },
+        "com.amazonaws.bedrock#FieldForReranking": {
+            "type": "structure",
+            "members": {
+                "fieldName": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the metadata field to be used during the reranking process.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 2000
+                        },
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies a field to be used during the reranking process in a Knowledge Base vector search. This structure identifies metadata fields that should be considered when reordering search results to improve relevance.</p>"
+            }
+        },
+        "com.amazonaws.bedrock#FieldsForReranking": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.bedrock#FieldForReranking"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 100
+                },
+                "smithy.api#sensitive": {}
+            }
+        },
         "com.amazonaws.bedrock#FilterAttribute": {
             "type": "structure",
             "members": {
@@ -5104,6 +5452,100 @@
                     "uri": "/foundation-models/{modelIdentifier}"
                 },
                 "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.bedrock#GetFoundationModelAvailability": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.bedrock#GetFoundationModelAvailabilityRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.bedrock#GetFoundationModelAvailabilityResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.bedrock#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get information about the Foundation model availability.</p>",
+                "smithy.api#http": {
+                    "code": 200,
+                    "method": "GET",
+                    "uri": "/foundation-model-availability/{modelId}"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.bedrock#GetFoundationModelAvailabilityRequest": {
+            "type": "structure",
+            "members": {
+                "modelId": {
+                    "target": "com.amazonaws.bedrock#BedrockModelId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The model Id of the foundation model.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.bedrock#GetFoundationModelAvailabilityResponse": {
+            "type": "structure",
+            "members": {
+                "modelId": {
+                    "target": "com.amazonaws.bedrock#BedrockModelId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The model Id of the foundation model.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "agreementAvailability": {
+                    "target": "com.amazonaws.bedrock#AgreementAvailability",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Agreement availability. </p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "authorizationStatus": {
+                    "target": "com.amazonaws.bedrock#AuthorizationStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Authorization status.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "entitlementAvailability": {
+                    "target": "com.amazonaws.bedrock#EntitlementAvailability",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Entitlement availability. </p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "regionAvailability": {
+                    "target": "com.amazonaws.bedrock#RegionAvailability",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Region availability. </p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.bedrock#GetFoundationModelRequest": {
@@ -6573,6 +7015,60 @@
                     "target": "com.amazonaws.bedrock#Timestamp",
                     "traits": {
                         "smithy.api#documentation": "<p>The timestamp for when the commitment term for the Provisioned Throughput expires.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.bedrock#GetUseCaseForModelAccess": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.bedrock#GetUseCaseForModelAccessRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.bedrock#GetUseCaseForModelAccessResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.bedrock#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get usecase for model access.</p>",
+                "smithy.api#http": {
+                    "code": 200,
+                    "method": "GET",
+                    "uri": "/use-case-for-model-access"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.bedrock#GetUseCaseForModelAccessRequest": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.bedrock#GetUseCaseForModelAccessResponse": {
+            "type": "structure",
+            "members": {
+                "formData": {
+                    "target": "com.amazonaws.bedrock#AcknowledgementFormDataBody",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Get customer profile Response.</p>",
+                        "smithy.api#required": {}
                     }
                 }
             },
@@ -8709,6 +9205,28 @@
                 "smithy.api#sensitive": {}
             }
         },
+        "com.amazonaws.bedrock#ImplicitFilterConfiguration": {
+            "type": "structure",
+            "members": {
+                "metadataAttributes": {
+                    "target": "com.amazonaws.bedrock#MetadataAttributeSchemaList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of metadata attribute schemas that define the structure and properties of metadata fields used for implicit filtering. Each attribute defines a key, type, and optional description.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "modelArn": {
+                    "target": "com.amazonaws.bedrock#BedrockModelArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the foundation model used for implicit filtering. This model processes the query to extract relevant filtering criteria.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Configuration for implicit filtering in Knowledge Base vector searches. Implicit filtering allows you to automatically filter search results based on metadata attributes without requiring explicit filter expressions in each query.</p>"
+            }
+        },
         "com.amazonaws.bedrock#ImportedModelArn": {
             "type": "string",
             "traits": {
@@ -9313,10 +9831,36 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Specifies the filters to use on the metadata fields in the knowledge base data sources before returning results.</p>"
                     }
+                },
+                "implicitFilterConfiguration": {
+                    "target": "com.amazonaws.bedrock#ImplicitFilterConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Configuration for implicit filtering in Knowledge Base vector searches. This allows the system to automatically apply filters based on the query context without requiring explicit filter expressions.</p>"
+                    }
+                },
+                "rerankingConfiguration": {
+                    "target": "com.amazonaws.bedrock#VectorSearchRerankingConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Configuration for reranking search results in Knowledge Base vector searches. Reranking improves search relevance by reordering initial vector search results using more sophisticated relevance models.</p>"
+                    }
                 }
             },
             "traits": {
                 "smithy.api#documentation": "<p>The configuration details for returning the results from the knowledge base vector search.</p>"
+            }
+        },
+        "com.amazonaws.bedrock#LegalTerm": {
+            "type": "structure",
+            "members": {
+                "url": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>URL to the legal term document.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The legal term of the agreement.</p>"
             }
         },
         "com.amazonaws.bedrock#ListCustomModels": {
@@ -9584,6 +10128,86 @@
                     "target": "com.amazonaws.bedrock#EvaluationSummaries",
                     "traits": {
                         "smithy.api#documentation": "<p>A list of summaries of the evaluation jobs.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.bedrock#ListFoundationModelAgreementOffers": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.bedrock#ListFoundationModelAgreementOffersRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.bedrock#ListFoundationModelAgreementOffersResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.bedrock#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Get the offers associated with the specified model.</p>",
+                "smithy.api#http": {
+                    "code": 200,
+                    "method": "GET",
+                    "uri": "/list-foundation-model-agreement-offers/{modelId}"
+                },
+                "smithy.api#readonly": {}
+            }
+        },
+        "com.amazonaws.bedrock#ListFoundationModelAgreementOffersRequest": {
+            "type": "structure",
+            "members": {
+                "modelId": {
+                    "target": "com.amazonaws.bedrock#BedrockModelId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Model Id of the foundation model.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "offerType": {
+                    "target": "com.amazonaws.bedrock#OfferType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Type of offer associated with the model.</p>",
+                        "smithy.api#httpQuery": "offerType"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.bedrock#ListFoundationModelAgreementOffersResponse": {
+            "type": "structure",
+            "members": {
+                "modelId": {
+                    "target": "com.amazonaws.bedrock#BedrockModelId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Model Id of the foundation model.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "offers": {
+                    "target": "com.amazonaws.bedrock#Offers",
+                    "traits": {
+                        "smithy.api#documentation": "<p>List of the offers associated with the specified model.</p>",
+                        "smithy.api#required": {}
                     }
                 }
             },
@@ -11062,6 +11686,79 @@
                 "smithy.api#sensitive": {}
             }
         },
+        "com.amazonaws.bedrock#MetadataAttributeSchema": {
+            "type": "structure",
+            "members": {
+                "key": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier for the metadata attribute. This key is used to reference the attribute in filter expressions and reranking configurations.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 256
+                        },
+                        "smithy.api#pattern": "^[\\s\\S]+$",
+                        "smithy.api#required": {}
+                    }
+                },
+                "type": {
+                    "target": "com.amazonaws.bedrock#AttributeType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The data type of the metadata attribute. The type determines how the attribute can be used in filter expressions and reranking.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "description": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An optional description of the metadata attribute that provides additional context about its purpose and usage.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 1024
+                        },
+                        "smithy.api#pattern": "^[\\s\\S]+$",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Defines the schema for a metadata attribute used in Knowledge Base vector searches. Metadata attributes provide additional context for documents and can be used for filtering and reranking search results.</p>",
+                "smithy.api#sensitive": {}
+            }
+        },
+        "com.amazonaws.bedrock#MetadataAttributeSchemaList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.bedrock#MetadataAttributeSchema"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 25
+                }
+            }
+        },
+        "com.amazonaws.bedrock#MetadataConfigurationForReranking": {
+            "type": "structure",
+            "members": {
+                "selectionMode": {
+                    "target": "com.amazonaws.bedrock#RerankingMetadataSelectionMode",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The mode for selecting which metadata fields to include in the reranking process. Valid values are ALL (use all available metadata fields) or SELECTIVE (use only specified fields).</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "selectiveModeConfiguration": {
+                    "target": "com.amazonaws.bedrock#RerankingMetadataSelectiveModeConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Configuration for selective mode, which allows you to explicitly include or exclude specific metadata fields during reranking. This is only used when selectionMode is set to SELECTIVE.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Configuration for how metadata should be used during the reranking process in Knowledge Base vector searches. This determines which metadata fields are included or excluded when reordering search results.</p>"
+            }
+        },
         "com.amazonaws.bedrock#MetricFloat": {
             "type": "float"
         },
@@ -11971,6 +12668,63 @@
                 "smithy.api#pattern": "^[\\s\\S]*$"
             }
         },
+        "com.amazonaws.bedrock#Offer": {
+            "type": "structure",
+            "members": {
+                "offerId": {
+                    "target": "com.amazonaws.bedrock#OfferId",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Offer Id for a model offer.</p>"
+                    }
+                },
+                "offerToken": {
+                    "target": "com.amazonaws.bedrock#OfferToken",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Offer token.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "termDetails": {
+                    "target": "com.amazonaws.bedrock#TermDetails",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Details about the terms of the offer.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>An offer dictates usage terms for the model.</p>"
+            }
+        },
+        "com.amazonaws.bedrock#OfferId": {
+            "type": "string"
+        },
+        "com.amazonaws.bedrock#OfferToken": {
+            "type": "string"
+        },
+        "com.amazonaws.bedrock#OfferType": {
+            "type": "enum",
+            "members": {
+                "ALL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ALL"
+                    }
+                },
+                "PUBLIC": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PUBLIC"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.bedrock#Offers": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.bedrock#Offer"
+            }
+        },
         "com.amazonaws.bedrock#OrchestrationConfiguration": {
             "type": "structure",
             "members": {
@@ -12048,6 +12802,21 @@
                 "smithy.api#range": {
                     "min": 1
                 }
+            }
+        },
+        "com.amazonaws.bedrock#PricingTerm": {
+            "type": "structure",
+            "members": {
+                "rateCard": {
+                    "target": "com.amazonaws.bedrock#RateCard",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes a usage price for each dimension.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Describes the usage-based pricing term.</p>"
             }
         },
         "com.amazonaws.bedrock#PromptRouterArn": {
@@ -12483,6 +13252,59 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.bedrock#PutUseCaseForModelAccess": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.bedrock#PutUseCaseForModelAccessRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.bedrock#PutUseCaseForModelAccessResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.bedrock#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ThrottlingException"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ValidationException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Put usecase for model access.</p>",
+                "smithy.api#http": {
+                    "code": 201,
+                    "method": "POST",
+                    "uri": "/use-case-for-model-access"
+                }
+            }
+        },
+        "com.amazonaws.bedrock#PutUseCaseForModelAccessRequest": {
+            "type": "structure",
+            "members": {
+                "formData": {
+                    "target": "com.amazonaws.bedrock#AcknowledgementFormDataBody",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Put customer profile Request.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.bedrock#PutUseCaseForModelAccessResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.bedrock#QueryTransformationConfiguration": {
             "type": "structure",
             "members": {
@@ -12559,6 +13381,12 @@
                 }
             }
         },
+        "com.amazonaws.bedrock#RateCard": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.bedrock#DimensionalPriceRate"
+            }
+        },
         "com.amazonaws.bedrock#RatingScale": {
             "type": "list",
             "member": {
@@ -12624,6 +13452,23 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>Defines the value for one rating in a custom metric rating scale.</p>"
+            }
+        },
+        "com.amazonaws.bedrock#RegionAvailability": {
+            "type": "enum",
+            "members": {
+                "AVAILABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AVAILABLE"
+                    }
+                },
+                "NOT_AVAILABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NOT_AVAILABLE"
+                    }
+                }
             }
         },
         "com.amazonaws.bedrock#RegisterMarketplaceModelEndpoint": {
@@ -12793,6 +13638,43 @@
                     "max": 1
                 },
                 "smithy.api#sensitive": {}
+            }
+        },
+        "com.amazonaws.bedrock#RerankingMetadataSelectionMode": {
+            "type": "enum",
+            "members": {
+                "SELECTIVE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SELECTIVE"
+                    }
+                },
+                "ALL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ALL"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.bedrock#RerankingMetadataSelectiveModeConfiguration": {
+            "type": "union",
+            "members": {
+                "fieldsToInclude": {
+                    "target": "com.amazonaws.bedrock#FieldsForReranking",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of metadata field names to explicitly include in the reranking process. Only these fields will be considered when reordering search results. This parameter cannot be used together with fieldsToExclude.</p>"
+                    }
+                },
+                "fieldsToExclude": {
+                    "target": "com.amazonaws.bedrock#FieldsForReranking",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of metadata field names to explicitly exclude from the reranking process. All metadata fields except these will be considered when reordering search results. This parameter cannot be used together with fieldsToInclude.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Configuration for selectively including or excluding metadata fields during the reranking process. This allows you to control which metadata attributes are considered when reordering search results.</p>"
             }
         },
         "com.amazonaws.bedrock#ResourceNotFoundException": {
@@ -13483,7 +14365,35 @@
             }
         },
         "com.amazonaws.bedrock#SubscriptionResource": {
-            "type": "resource"
+            "type": "resource",
+            "operations": [
+                {
+                    "target": "com.amazonaws.bedrock#CreateFoundationModelAgreement"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#DeleteFoundationModelAgreement"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#GetFoundationModelAvailability"
+                },
+                {
+                    "target": "com.amazonaws.bedrock#ListFoundationModelAgreementOffers"
+                }
+            ]
+        },
+        "com.amazonaws.bedrock#SupportTerm": {
+            "type": "structure",
+            "members": {
+                "refundPolicyDescription": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes the refund policy.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Describes a support term.</p>"
+            }
         },
         "com.amazonaws.bedrock#Tag": {
             "type": "structure",
@@ -13675,6 +14585,40 @@
                     "min": 0,
                     "max": 1
                 }
+            }
+        },
+        "com.amazonaws.bedrock#TermDetails": {
+            "type": "structure",
+            "members": {
+                "usageBasedPricingTerm": {
+                    "target": "com.amazonaws.bedrock#PricingTerm",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                },
+                "legalTerm": {
+                    "target": "com.amazonaws.bedrock#LegalTerm",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes the legal terms.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "supportTerm": {
+                    "target": "com.amazonaws.bedrock#SupportTerm",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes the support terms.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "validityTerm": {
+                    "target": "com.amazonaws.bedrock#ValidityTerm",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes the validity terms.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Describes the usage terms of an offer.</p>"
             }
         },
         "com.amazonaws.bedrock#TextInferenceConfig": {
@@ -14326,6 +15270,104 @@
             "traits": {
                 "smithy.api#length": {
                     "max": 10
+                }
+            }
+        },
+        "com.amazonaws.bedrock#ValidityTerm": {
+            "type": "structure",
+            "members": {
+                "agreementDuration": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes the agreement duration.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Describes the validity terms.</p>"
+            }
+        },
+        "com.amazonaws.bedrock#VectorSearchBedrockRerankingConfiguration": {
+            "type": "structure",
+            "members": {
+                "modelConfiguration": {
+                    "target": "com.amazonaws.bedrock#VectorSearchBedrockRerankingModelConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Configuration for the Amazon Bedrock foundation model used for reranking. This includes the model ARN and any additional request fields required by the model.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "numberOfRerankedResults": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of results to rerank. This limits how many of the initial vector search results will be processed by the reranking model. A smaller number improves performance but may exclude potentially relevant results.</p>",
+                        "smithy.api#range": {
+                            "min": 1,
+                            "max": 100
+                        }
+                    }
+                },
+                "metadataConfiguration": {
+                    "target": "com.amazonaws.bedrock#MetadataConfigurationForReranking",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Configuration for how document metadata should be used during the reranking process. This determines which metadata fields are included when reordering search results.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Configuration for using Amazon Bedrock foundation models to rerank Knowledge Base vector search results. This enables more sophisticated relevance ranking using large language models.</p>"
+            }
+        },
+        "com.amazonaws.bedrock#VectorSearchBedrockRerankingModelConfiguration": {
+            "type": "structure",
+            "members": {
+                "modelArn": {
+                    "target": "com.amazonaws.bedrock#BedrockRerankingModelArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the foundation model to use for reranking. This model processes the query and search results to determine a more relevant ordering.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "additionalModelRequestFields": {
+                    "target": "com.amazonaws.bedrock#AdditionalModelRequestFields",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of additional fields to include in the model request during reranking. These fields provide extra context or configuration options specific to the selected foundation model.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Configuration for the Amazon Bedrock foundation model used for reranking vector search results. This specifies which model to use and any additional parameters required by the model.</p>"
+            }
+        },
+        "com.amazonaws.bedrock#VectorSearchRerankingConfiguration": {
+            "type": "structure",
+            "members": {
+                "type": {
+                    "target": "com.amazonaws.bedrock#VectorSearchRerankingConfigurationType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of reranking to apply to vector search results. Currently, the only supported value is BEDROCK, which uses Amazon Bedrock foundation models for reranking.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "bedrockRerankingConfiguration": {
+                    "target": "com.amazonaws.bedrock#VectorSearchBedrockRerankingConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Configuration for using Amazon Bedrock foundation models to rerank search results. This is required when the reranking type is set to BEDROCK.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Configuration for reranking vector search results to improve relevance. Reranking applies additional relevance models to reorder the initial vector search results based on more sophisticated criteria.</p>"
+            }
+        },
+        "com.amazonaws.bedrock#VectorSearchRerankingConfigurationType": {
+            "type": "enum",
+            "members": {
+                "BEDROCK_RERANKING_MODEL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "BEDROCK_RERANKING_MODEL"
+                    }
                 }
             }
         },
