@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.122] - 07/16/2025
+
+### Features
+* (**ecs**) This release removes hookDetails for the Amazon ECS native blue/green deployments.
+
 ## [1.4.121] - 07/15/2025
 
 ### Features
