@@ -35,6 +35,9 @@ public class MapsTest {
                 ),
             ),
             mapEnum = mapOf("pet1" to EnumAnimals.CAT, "pet2" to EnumAnimals.DOG, "pet3" to EnumAnimals.SHEEP),
+            nullableMap = null,
+            mapNullableValue = mapOf("key1" to "value1", "key2" to null),
+            nullableMapNullableValue = null,
         )
 
         val item = MapsConverter.convertTo(maps)

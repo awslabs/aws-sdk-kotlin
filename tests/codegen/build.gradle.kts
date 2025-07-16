@@ -2,7 +2,7 @@ import aws.sdk.kotlin.gradle.codegen.dsl.generateSmithyProjections
 
 plugins {
     alias(libs.plugins.aws.kotlin.repo.tools.smithybuild)
-    alias(libs.plugins.kotlin.jvm)
+    id(libs.plugins.kotlin.jvm.get().pluginId)
 }
 
 val libraries = libs
@@ -32,7 +32,7 @@ subprojects {
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         dependsOn(tasks.generateSmithyProjections)
-        kotlinOptions.allWarningsAsErrors = false
+        compilerOptions.allWarningsAsErrors = false
     }
 
     tasks.generateSmithyProjections {

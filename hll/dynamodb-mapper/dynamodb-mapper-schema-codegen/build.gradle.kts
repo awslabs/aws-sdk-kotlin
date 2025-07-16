@@ -8,7 +8,7 @@ extra["displayName"] = "AWS :: SDK :: Kotlin :: HLL :: DynamoDbMapper :: Codegen
 extra["moduleName"] = "aws.sdk.kotlin.hll.dynamodbmapper.codegen.schema"
 
 plugins {
-    alias(libs.plugins.kotlin.jvm)
+    id(libs.plugins.kotlin.jvm.get().pluginId)
     `maven-publish`
 }
 

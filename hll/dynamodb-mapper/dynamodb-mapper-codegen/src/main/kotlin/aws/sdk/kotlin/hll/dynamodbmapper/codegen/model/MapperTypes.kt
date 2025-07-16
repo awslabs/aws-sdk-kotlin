@@ -62,6 +62,7 @@ public object MapperTypes {
     }
 
     public object Model {
+        public val intersectKeys: TypeRef = TypeRef(MapperPkg.Hl.Model, "intersectKeys")
         public fun tablePartitionKey(objectType: TypeRef, pkType: TypeRef): TypeRef = TypeRef(
             MapperPkg.Hl.Model,
             "Table.PartitionKey",

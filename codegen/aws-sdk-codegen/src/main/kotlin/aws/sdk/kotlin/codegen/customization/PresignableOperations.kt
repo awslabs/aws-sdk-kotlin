@@ -18,6 +18,7 @@ internal val DEFAULT_PRESIGNABLE_OPERATIONS: Map<String, Set<String>> = mapOf(
         "com.amazonaws.s3#GetObject",
         "com.amazonaws.s3#PutObject",
         "com.amazonaws.s3#UploadPart",
+        "com.amazonaws.s3#DeleteObject",
     ),
     "com.amazonaws.sts#AWSSecurityTokenServiceV20110615" to setOf(
         "com.amazonaws.sts#GetCallerIdentity",

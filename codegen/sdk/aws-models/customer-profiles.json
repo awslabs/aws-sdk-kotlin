@@ -596,7 +596,7 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 1,
-                    "max": 2
+                    "max": 50
                 }
             }
         },
@@ -1134,6 +1134,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The value of the calculated attribute.</p>"
                     }
+                },
+                "LastObjectTimestamp": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of the newest object included in the calculated attribute\n         calculation.</p>"
+                    }
                 }
             },
             "traits": {
@@ -1490,6 +1496,12 @@
                         "smithy.api#required": {}
                     }
                 },
+                "UseHistoricalData": {
+                    "target": "com.amazonaws.customerprofiles#optionalBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Whether historical data ingested before the Calculated Attribute was created should be\n         included in calculations.</p>"
+                    }
+                },
                 "Tags": {
                     "target": "com.amazonaws.customerprofiles#TagMap",
                     "traits": {
@@ -1558,6 +1570,24 @@
                         "smithy.api#documentation": "<p>The timestamp of when the calculated attribute definition was most recently\n         edited.</p>"
                     }
                 },
+                "UseHistoricalData": {
+                    "target": "com.amazonaws.customerprofiles#optionalBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Whether historical data ingested before the Calculated Attribute was created should be\n         included in calculations.</p>"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.customerprofiles#ReadinessStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Status of the Calculated Attribute creation (whether all historical data has been\n         indexed.)</p>"
+                    }
+                },
+                "Readiness": {
+                    "target": "com.amazonaws.customerprofiles#Readiness",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Information indicating if the Calculated Attribute is ready for use by confirming all\n         historical data has been processed and reflected.</p>"
+                    }
+                },
                 "Tags": {
                     "target": "com.amazonaws.customerprofiles#TagMap",
                     "traits": {
@@ -1601,6 +1631,181 @@
                     "uri": "/domains/{DomainName}",
                     "code": 200
                 }
+            }
+        },
+        "com.amazonaws.customerprofiles#CreateDomainLayout": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#CreateDomainLayoutRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#CreateDomainLayoutResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Creates the layout to view data for a specific domain. This API can only be invoked from\n         the Amazon Connect admin website.</p>",
+                "smithy.api#http": {
+                    "method": "POST",
+                    "uri": "/domains/{DomainName}/layouts/{LayoutDefinitionName}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#CreateDomainLayoutRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LayoutDefinitionName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the layout.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "Description": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveText",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The description of the layout</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "DisplayName": {
+                    "target": "com.amazonaws.customerprofiles#displayName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The display name of the layout</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "IsDefault": {
+                    "target": "com.amazonaws.customerprofiles#boolean",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>If set to true for a layout, this layout will be used by default to view data. If set to\n         false, then the layout will not be used by default, but it can be used to view data by\n         explicitly selecting it in the console.</p>"
+                    }
+                },
+                "LayoutType": {
+                    "target": "com.amazonaws.customerprofiles#LayoutType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of layout that can be used to view data under a Customer Profiles domain.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Layout": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveString1To2000000",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A customizable layout that can be used to view data under a Customer Profiles domain.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Tags": {
+                    "target": "com.amazonaws.customerprofiles#TagMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#CreateDomainLayoutResponse": {
+            "type": "structure",
+            "members": {
+                "LayoutDefinitionName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the layout.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Description": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveText",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The description of the layout</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "DisplayName": {
+                    "target": "com.amazonaws.customerprofiles#displayName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The display name of the layout</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "IsDefault": {
+                    "target": "com.amazonaws.customerprofiles#boolean",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>If set to true for a layout, this layout will be used by default to view data. If set to\n         false, then the layout will not be used by default, but it can be used to view data by\n         explicitly selecting it in the console.</p>"
+                    }
+                },
+                "LayoutType": {
+                    "target": "com.amazonaws.customerprofiles#LayoutType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of layout that can be used to view data under customer profiles domain.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Layout": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveString1To2000000",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A customizable layout that can be used to view data under Customer Profiles\n         domain.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Version": {
+                    "target": "com.amazonaws.customerprofiles#string1To255",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The version used to create layout.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Tags": {
+                    "target": "com.amazonaws.customerprofiles#TagMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource.</p>"
+                    }
+                },
+                "CreatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the layout was created.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "LastUpdatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the layout was most recently updated.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.customerprofiles#CreateDomainRequest": {
@@ -2126,7 +2331,7 @@
                 "AccountNumber": {
                     "target": "com.amazonaws.customerprofiles#sensitiveString1To255",
                     "traits": {
-                        "smithy.api#documentation": "<p>An account number that you have given to the customer.</p>"
+                        "smithy.api#documentation": "<p>An account number that you have assigned to the customer.</p>"
                     }
                 },
                 "AdditionalInformation": {
@@ -2600,6 +2805,99 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.customerprofiles#CreateUploadJob": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#CreateUploadJobRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#CreateUploadJobResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Creates an Upload job to ingest data for segment imports. The metadata is created for\n         the job with the provided field mapping and unique key. </p>",
+                "smithy.api#http": {
+                    "method": "POST",
+                    "uri": "/domains/{DomainName}/upload-jobs",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#CreateUploadJobRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain. Domain should be exists for the upload job to be created.\n      </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "DisplayName": {
+                    "target": "com.amazonaws.customerprofiles#string1To255",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the upload job. Could be a file name to identify the upload\n         job.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Fields": {
+                    "target": "com.amazonaws.customerprofiles#FieldMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The mapping between CSV Columns and Profile Object attributes. A map of the name and\n         ObjectType field.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "UniqueKey": {
+                    "target": "com.amazonaws.customerprofiles#text",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique key columns for de-duping the profiles used to map data to the profile.\n      </p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "DataExpiry": {
+                    "target": "com.amazonaws.customerprofiles#expirationDaysInteger",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The expiry duration for the profiles ingested with the job. If not provided, the system\n         default of 2 weeks is used. </p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#CreateUploadJobResponse": {
+            "type": "structure",
+            "members": {
+                "JobId": {
+                    "target": "com.amazonaws.customerprofiles#uuid",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier for the created upload job. </p>",
+                        "smithy.api#jsonName": "JobId",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.customerprofiles#CustomAttributes": {
             "type": "map",
             "key": {
@@ -2629,6 +2927,9 @@
                     "target": "com.amazonaws.customerprofiles#CreateDomain"
                 },
                 {
+                    "target": "com.amazonaws.customerprofiles#CreateDomainLayout"
+                },
+                {
                     "target": "com.amazonaws.customerprofiles#CreateEventStream"
                 },
                 {
@@ -2650,10 +2951,16 @@
                     "target": "com.amazonaws.customerprofiles#CreateSegmentSnapshot"
                 },
                 {
+                    "target": "com.amazonaws.customerprofiles#CreateUploadJob"
+                },
+                {
                     "target": "com.amazonaws.customerprofiles#DeleteCalculatedAttributeDefinition"
                 },
                 {
                     "target": "com.amazonaws.customerprofiles#DeleteDomain"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#DeleteDomainLayout"
                 },
                 {
                     "target": "com.amazonaws.customerprofiles#DeleteEventStream"
@@ -2698,6 +3005,9 @@
                     "target": "com.amazonaws.customerprofiles#GetDomain"
                 },
                 {
+                    "target": "com.amazonaws.customerprofiles#GetDomainLayout"
+                },
+                {
                     "target": "com.amazonaws.customerprofiles#GetEventStream"
                 },
                 {
@@ -2734,6 +3044,12 @@
                     "target": "com.amazonaws.customerprofiles#GetSimilarProfiles"
                 },
                 {
+                    "target": "com.amazonaws.customerprofiles#GetUploadJob"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#GetUploadJobPath"
+                },
+                {
                     "target": "com.amazonaws.customerprofiles#GetWorkflow"
                 },
                 {
@@ -2747,6 +3063,9 @@
                 },
                 {
                     "target": "com.amazonaws.customerprofiles#ListCalculatedAttributesForProfile"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ListDomainLayouts"
                 },
                 {
                     "target": "com.amazonaws.customerprofiles#ListDomains"
@@ -2788,6 +3107,9 @@
                     "target": "com.amazonaws.customerprofiles#ListTagsForResource"
                 },
                 {
+                    "target": "com.amazonaws.customerprofiles#ListUploadJobs"
+                },
+                {
                     "target": "com.amazonaws.customerprofiles#ListWorkflows"
                 },
                 {
@@ -2806,6 +3128,12 @@
                     "target": "com.amazonaws.customerprofiles#SearchProfiles"
                 },
                 {
+                    "target": "com.amazonaws.customerprofiles#StartUploadJob"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#StopUploadJob"
+                },
+                {
                     "target": "com.amazonaws.customerprofiles#TagResource"
                 },
                 {
@@ -2816,6 +3144,9 @@
                 },
                 {
                     "target": "com.amazonaws.customerprofiles#UpdateDomain"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#UpdateDomainLayout"
                 },
                 {
                     "target": "com.amazonaws.customerprofiles#UpdateEventTrigger"
@@ -3808,6 +4139,79 @@
                 }
             }
         },
+        "com.amazonaws.customerprofiles#DeleteDomainLayout": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#DeleteDomainLayoutRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#DeleteDomainLayoutResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Deletes the layout used to view data for a specific domain. This API can only be invoked\n         from the Amazon Connect admin website.</p>",
+                "smithy.api#http": {
+                    "method": "DELETE",
+                    "uri": "/domains/{DomainName}/layouts/{LayoutDefinitionName}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#DeleteDomainLayoutRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LayoutDefinitionName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the layout.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#DeleteDomainLayoutResponse": {
+            "type": "structure",
+            "members": {
+                "Message": {
+                    "target": "com.amazonaws.customerprofiles#message",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A message that indicates the delete request is done.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.customerprofiles#DeleteDomainRequest": {
             "type": "structure",
             "members": {
@@ -4741,11 +5145,7 @@
         "com.amazonaws.customerprofiles#End": {
             "type": "integer",
             "traits": {
-                "smithy.api#default": 0,
-                "smithy.api#range": {
-                    "min": 0,
-                    "max": 366
-                }
+                "smithy.api#default": 0
             }
         },
         "com.amazonaws.customerprofiles#EstimateStatus": {
@@ -4967,7 +5367,7 @@
                 "EventExpiration": {
                     "target": "com.amazonaws.customerprofiles#optionalLong",
                     "traits": {
-                        "smithy.api#documentation": "<p>In milliseconds. Specifies that an event will only trigger the destination if it is processed within a certain latency period.</p>"
+                        "smithy.api#documentation": "<p>In milliseconds. Specifies that an event will only trigger the destination if it is\n         processed within a certain latency period.</p>"
                     }
                 },
                 "Periods": {
@@ -4978,7 +5378,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>Defines limits controlling whether an event triggers the destination, based on ingestion latency and the number of invocations per profile over specific time periods.</p>"
+                "smithy.api#documentation": "<p>Defines limits controlling whether an event triggers the destination, based on ingestion\n         latency and the number of invocations per profile over specific time periods.</p>"
             }
         },
         "com.amazonaws.customerprofiles#EventTriggerLogicalOperator": {
@@ -5189,7 +5589,7 @@
         "com.amazonaws.customerprofiles#FieldMap": {
             "type": "map",
             "key": {
-                "target": "com.amazonaws.customerprofiles#name"
+                "target": "com.amazonaws.customerprofiles#fieldName"
             },
             "value": {
                 "target": "com.amazonaws.customerprofiles#ObjectTypeField"
@@ -5864,6 +6264,24 @@
                         "smithy.api#documentation": "<p>Mathematical expression and a list of attribute items specified in that\n         expression.</p>"
                     }
                 },
+                "UseHistoricalData": {
+                    "target": "com.amazonaws.customerprofiles#optionalBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Whether historical data ingested before the Calculated Attribute was created should be\n         included in calculations.</p>"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.customerprofiles#ReadinessStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Status of the Calculated Attribute creation (whether all historical data has been\n         indexed).</p>"
+                    }
+                },
+                "Readiness": {
+                    "target": "com.amazonaws.customerprofiles#Readiness",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Information indicating if the Calculated Attribute is ready for use by confirming all\n         historical data has been processed and reflected.</p>"
+                    }
+                },
                 "Tags": {
                     "target": "com.amazonaws.customerprofiles#TagMap",
                     "traits": {
@@ -5967,6 +6385,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The value of the calculated attribute.</p>"
                     }
+                },
+                "LastObjectTimestamp": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of the newest object included in the calculated attribute\n         calculation.</p>"
+                    }
                 }
             },
             "traits": {
@@ -6005,6 +6429,141 @@
                     "uri": "/domains/{DomainName}",
                     "code": 200
                 }
+            }
+        },
+        "com.amazonaws.customerprofiles#GetDomainLayout": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#GetDomainLayoutRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#GetDomainLayoutResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Gets the layout to view data for a specific domain. This API can only be invoked from\n         the Amazon Connect admin website.</p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/domains/{DomainName}/layouts/{LayoutDefinitionName}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#GetDomainLayoutRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LayoutDefinitionName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the layout.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#GetDomainLayoutResponse": {
+            "type": "structure",
+            "members": {
+                "LayoutDefinitionName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the layout.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Description": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveText",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The description of the layout</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "DisplayName": {
+                    "target": "com.amazonaws.customerprofiles#displayName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The display name of the layout</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "IsDefault": {
+                    "target": "com.amazonaws.customerprofiles#boolean",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>If set to true for a layout, this layout will be used by default to view data. If set to\n         false, then the layout will not be used by default, but it can be used to view data by\n         explicitly selecting it in the console.</p>"
+                    }
+                },
+                "LayoutType": {
+                    "target": "com.amazonaws.customerprofiles#LayoutType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of layout that can be used to view data under a Customer Profiles domain.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Layout": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveString1To2000000",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A customizable layout that can be used to view data under a Customer Profiles domain.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Version": {
+                    "target": "com.amazonaws.customerprofiles#string1To255",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The version used to create layout.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "CreatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the layout was created.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "LastUpdatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the layout was most recently updated.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Tags": {
+                    "target": "com.amazonaws.customerprofiles#TagMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.customerprofiles#GetDomainRequest": {
@@ -6301,7 +6860,7 @@
                 "EventTriggerLimits": {
                     "target": "com.amazonaws.customerprofiles#EventTriggerLimits",
                     "traits": {
-                        "smithy.api#documentation": "<p>Defines limits controlling whether an event triggers the destination, based on ingestion latency and the number of invocations per profile over specific time periods.</p>"
+                        "smithy.api#documentation": "<p>Defines limits controlling whether an event triggers the destination, based on ingestion\n         latency and the number of invocations per profile over specific time periods.</p>"
                     }
                 },
                 "CreatedAt": {
@@ -7520,6 +8079,230 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.customerprofiles#GetUploadJob": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#GetUploadJobRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#GetUploadJobResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>This API retrieves the details of a specific upload job. </p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/domains/{DomainName}/upload-jobs/{JobId}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#GetUploadJobPath": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#GetUploadJobPathRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#GetUploadJobPathResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>This API retrieves the pre-signed URL and client token for uploading the file associated\n         with the upload job. </p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/domains/{DomainName}/upload-jobs/{JobId}/path",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#GetUploadJobPathRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain containing the upload job. </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "JobId": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the upload job to retrieve the upload path for. This is\n         generated from the CreateUploadJob API. </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#GetUploadJobPathResponse": {
+            "type": "structure",
+            "members": {
+                "Url": {
+                    "target": "com.amazonaws.customerprofiles#stringTo2048",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The pre-signed S3 URL for uploading the CSV file associated with the upload job. </p>",
+                        "smithy.api#jsonName": "Url",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ClientToken": {
+                    "target": "com.amazonaws.customerprofiles#text",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The plaintext data key used to encrypt the upload file. </p>\n         <p>To persist to the pre-signed url, use the client token and MD5 client token as header.\n         The required headers are as follows: </p>\n         <ul>\n            <li>\n               <p>x-amz-server-side-encryption-customer-key: Client Token </p>\n            </li>\n            <li>\n               <p>x-amz-server-side-encryption-customer-key-MD5: MD5 Client Token </p>\n            </li>\n            <li>\n               <p>x-amz-server-side-encryption-customer-algorithm: AES256 </p>\n            </li>\n         </ul>",
+                        "smithy.api#jsonName": "ClientToken"
+                    }
+                },
+                "ValidUntil": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The expiry timestamp for the pre-signed URL, after which the URL will no longer be\n         valid. </p>",
+                        "smithy.api#jsonName": "ValidUntil"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#GetUploadJobRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain containing the upload job. </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "JobId": {
+                    "target": "com.amazonaws.customerprofiles#uuid",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the upload job to retrieve. </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#GetUploadJobResponse": {
+            "type": "structure",
+            "members": {
+                "JobId": {
+                    "target": "com.amazonaws.customerprofiles#uuid",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the upload job. </p>",
+                        "smithy.api#jsonName": "JobId"
+                    }
+                },
+                "DisplayName": {
+                    "target": "com.amazonaws.customerprofiles#string1To255",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the upload job. Could be a file name to identify the upload job.\n      </p>",
+                        "smithy.api#jsonName": "DisplayName"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.customerprofiles#UploadJobStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The status describing the status for the upload job. The following are Valid Values: </p>\n         <ul>\n            <li>\n               <p>\n                  <b>CREATED</b>: The upload job has been created, but has\n               not started processing yet. </p>\n            </li>\n            <li>\n               <p>\n                  <b>IN_PROGRESS</b>: The upload job is currently in\n               progress, ingesting and processing the profile data. </p>\n            </li>\n            <li>\n               <p>\n                  <b>PARTIALLY_SUCCEEDED</b>: The upload job has\n               successfully completed the ingestion and processing of all profile data. </p>\n            </li>\n            <li>\n               <p>\n                  <b>SUCCEEDED</b>: The upload job has successfully\n               completed the ingestion and processing of all profile data. </p>\n            </li>\n            <li>\n               <p>\n                  <b>FAILED</b>: The upload job has failed to complete.\n            </p>\n            </li>\n            <li>\n               <p>\n                  <b>STOPPED</b>: The upload job has been manually stopped\n               or terminated before completion. </p>\n            </li>\n         </ul>",
+                        "smithy.api#jsonName": "Status"
+                    }
+                },
+                "StatusReason": {
+                    "target": "com.amazonaws.customerprofiles#StatusReason",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The reason for the current status of the upload job. Possible reasons: </p>\n         <ul>\n            <li>\n               <p>\n                  <b>VALIDATION_FAILURE</b>: The upload job has\n               encountered an error or issue and was unable to complete the profile data ingestion.\n            </p>\n            </li>\n            <li>\n               <p>\n                  <b>INTERNAL_FAILURE</b>: Failure caused from service\n               side </p>\n            </li>\n         </ul>",
+                        "smithy.api#jsonName": "StatusReason"
+                    }
+                },
+                "CreatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp when the upload job was created. </p>",
+                        "smithy.api#jsonName": "CreatedAt"
+                    }
+                },
+                "CompletedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp when the upload job was completed. </p>",
+                        "smithy.api#jsonName": "CompletedAt"
+                    }
+                },
+                "Fields": {
+                    "target": "com.amazonaws.customerprofiles#FieldMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The mapping between CSV Columns and Profile Object attributes for the upload job.\n      </p>",
+                        "smithy.api#jsonName": "Fields"
+                    }
+                },
+                "UniqueKey": {
+                    "target": "com.amazonaws.customerprofiles#text",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique key columns used for de-duping the keys in the upload job. </p>",
+                        "smithy.api#jsonName": "UniqueKey"
+                    }
+                },
+                "ResultsSummary": {
+                    "target": "com.amazonaws.customerprofiles#ResultsSummary",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The summary of results for the upload job, including the number of updated, created, and\n         failed records. </p>",
+                        "smithy.api#jsonName": "ResultsSummary"
+                    }
+                },
+                "DataExpiry": {
+                    "target": "com.amazonaws.customerprofiles#expirationDaysInteger",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The expiry duration for the profiles ingested with the upload job. </p>",
+                        "smithy.api#jsonName": "DataExpiry"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.customerprofiles#GetWorkflow": {
             "type": "operation",
             "input": {
@@ -8120,6 +8903,86 @@
                 "smithy.api#pattern": "^arn:aws:kms:.*:[0-9]+:"
             }
         },
+        "com.amazonaws.customerprofiles#LayoutItem": {
+            "type": "structure",
+            "members": {
+                "LayoutDefinitionName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the layout.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Description": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveText",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The description of the layout</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "DisplayName": {
+                    "target": "com.amazonaws.customerprofiles#displayName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The display name of the layout</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "IsDefault": {
+                    "target": "com.amazonaws.customerprofiles#boolean",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>If set to true for a layout, this layout will be used by default to view data. If set to\n         false, then layout will not be used by default but it can be used to view data by explicit\n         selection on UI.</p>"
+                    }
+                },
+                "LayoutType": {
+                    "target": "com.amazonaws.customerprofiles#LayoutType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of layout that can be used to view data under customer profiles domain.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Tags": {
+                    "target": "com.amazonaws.customerprofiles#TagMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource.</p>"
+                    }
+                },
+                "CreatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the layout was created.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "LastUpdatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the layout was most recently updated.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The layout object that contains LayoutDefinitionName, Description, DisplayName,\n         IsDefault, LayoutType, Tags, CreatedAt, LastUpdatedAt </p>"
+            }
+        },
+        "com.amazonaws.customerprofiles#LayoutList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.customerprofiles#LayoutItem"
+            }
+        },
+        "com.amazonaws.customerprofiles#LayoutType": {
+            "type": "enum",
+            "members": {
+                "PROFILE_EXPLORER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PROFILE_EXPLORER"
+                    }
+                }
+            }
+        },
         "com.amazonaws.customerprofiles#ListAccountIntegrations": {
             "type": "operation",
             "input": {
@@ -8243,6 +9106,18 @@
                         "smithy.api#documentation": "<p>The timestamp of when the calculated attribute definition was most recently\n         edited.</p>"
                     }
                 },
+                "UseHistoricalData": {
+                    "target": "com.amazonaws.customerprofiles#optionalBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Whether historical data ingested before the Calculated Attribute was created should be\n         included in calculations.</p>"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.customerprofiles#ReadinessStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Status of the Calculated Attribute creation (whether all historical data has been\n         indexed.)</p>"
+                    }
+                },
                 "Tags": {
                     "target": "com.amazonaws.customerprofiles#TagMap",
                     "traits": {
@@ -8363,6 +9238,12 @@
                     "target": "com.amazonaws.customerprofiles#string1To255",
                     "traits": {
                         "smithy.api#documentation": "<p>The value of the calculated attribute.</p>"
+                    }
+                },
+                "LastObjectTimestamp": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of the newest object included in the calculated attribute\n         calculation.</p>"
                     }
                 }
             },
@@ -8495,6 +9376,96 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>An object in a list that represents a domain.</p>"
+            }
+        },
+        "com.amazonaws.customerprofiles#ListDomainLayouts": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#ListDomainLayoutsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#ListDomainLayoutsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Lists the existing layouts that can be used to view data for a specific domain. This API\n         can only be invoked from the Amazon Connect admin website.</p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/domains/{DomainName}/layouts",
+                    "code": 200
+                },
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "items": "Items",
+                    "pageSize": "MaxResults"
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#ListDomainLayoutsRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.customerprofiles#token",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Identifies the next page of results to return.</p>",
+                        "smithy.api#httpQuery": "next-token"
+                    }
+                },
+                "MaxResults": {
+                    "target": "com.amazonaws.customerprofiles#maxSize100",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of objects returned per page.</p>",
+                        "smithy.api#httpQuery": "max-results"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#ListDomainLayoutsResponse": {
+            "type": "structure",
+            "members": {
+                "Items": {
+                    "target": "com.amazonaws.customerprofiles#LayoutList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Contains summary information about an EventStream.</p>"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.customerprofiles#token",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Identifies the next page of results to return.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.customerprofiles#ListDomains": {
@@ -9774,6 +10745,98 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.customerprofiles#ListUploadJobs": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#ListUploadJobsRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#ListUploadJobsResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>This API retrieves a list of upload jobs for the specified domain. </p>",
+                "smithy.api#http": {
+                    "method": "GET",
+                    "uri": "/domains/{DomainName}/upload-jobs",
+                    "code": 200
+                },
+                "smithy.api#paginated": {
+                    "inputToken": "NextToken",
+                    "outputToken": "NextToken",
+                    "items": "Items",
+                    "pageSize": "MaxResults"
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#ListUploadJobsRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain to list upload jobs for. </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "MaxResults": {
+                    "target": "com.amazonaws.customerprofiles#MaxSize500",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The maximum number of upload jobs to return per page. </p>",
+                        "smithy.api#httpQuery": "max-results"
+                    }
+                },
+                "NextToken": {
+                    "target": "com.amazonaws.customerprofiles#token",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The pagination token from the previous call to retrieve the next page of results.\n      </p>",
+                        "smithy.api#httpQuery": "next-token"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#ListUploadJobsResponse": {
+            "type": "structure",
+            "members": {
+                "NextToken": {
+                    "target": "com.amazonaws.customerprofiles#token",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The pagination token to use to retrieve the next page of results. </p>",
+                        "smithy.api#jsonName": "NextToken"
+                    }
+                },
+                "Items": {
+                    "target": "com.amazonaws.customerprofiles#UploadJobsList",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The list of upload jobs for the specified domain. </p>",
+                        "smithy.api#jsonName": "Items"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
+            }
+        },
         "com.amazonaws.customerprofiles#ListWorkflows": {
             "type": "operation",
             "input": {
@@ -10380,7 +11443,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>The criteria that a specific object attribute must meet to trigger the destination.</p>"
+                "smithy.api#documentation": "<p>The criteria that a specific object attribute must meet to trigger the\n         destination.</p>"
             }
         },
         "com.amazonaws.customerprofiles#ObjectAttributes": {
@@ -10399,8 +11462,7 @@
             "type": "integer",
             "traits": {
                 "smithy.api#range": {
-                    "min": 1,
-                    "max": 100
+                    "min": 1
                 }
             }
         },
@@ -10672,7 +11734,7 @@
                     "target": "com.amazonaws.customerprofiles#boolean",
                     "traits": {
                         "smithy.api#default": false,
-                        "smithy.api#documentation": "<p>If set to true, there is no limit on the number of destination invocations per profile. The default is false.</p>"
+                        "smithy.api#documentation": "<p>If set to true, there is no limit on the number of destination invocations per profile.\n         The default is false.</p>"
                     }
                 }
             },
@@ -10745,7 +11807,7 @@
                 "AccountNumber": {
                     "target": "com.amazonaws.customerprofiles#sensitiveString1To255",
                     "traits": {
-                        "smithy.api#documentation": "<p>An account number that you have given to the customer.</p>"
+                        "smithy.api#documentation": "<p>An account number that you have assigned to the customer.</p>"
                     }
                 },
                 "AdditionalInformation": {
@@ -11752,15 +12814,35 @@
                 "Value": {
                     "target": "com.amazonaws.customerprofiles#Value",
                     "traits": {
-                        "smithy.api#documentation": "<p>The amount of time of the specified unit.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#addedDefault": {},
+                        "smithy.api#default": 0,
+                        "smithy.api#documentation": "<p>The amount of time of the specified unit.</p>"
                     }
                 },
                 "Unit": {
                     "target": "com.amazonaws.customerprofiles#Unit",
                     "traits": {
-                        "smithy.api#documentation": "<p>The unit of time.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#addedDefault": {},
+                        "smithy.api#default": "DAYS",
+                        "smithy.api#documentation": "<p>The unit of time.</p>"
+                    }
+                },
+                "ValueRange": {
+                    "target": "com.amazonaws.customerprofiles#ValueRange",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A structure letting customers specify a relative time window over which over which data\n         is included in the Calculated Attribute. Use positive numbers to indicate that the endpoint\n         is in the past, and negative numbers to indicate it is in the future. ValueRange overrides\n         Value.</p>"
+                    }
+                },
+                "TimestampSource": {
+                    "target": "com.amazonaws.customerprofiles#string1To255",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An expression specifying the field in your JSON object from which the date should be\n         parsed. The expression should follow the structure of \\\"{ObjectTypeName.<Location of\n         timestamp field in JSON pointer format>}\\\". E.g. if your object type is MyType and source\n         JSON is {\"generatedAt\": {\"timestamp\": \"1737587945945\"}}, then TimestampSource should be\n         \"{MyType.generatedAt.timestamp}\".</p>"
+                    }
+                },
+                "TimestampFormat": {
+                    "target": "com.amazonaws.customerprofiles#string1To255",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The format the timestamp field in your JSON object is specified. This value should be\n         one of EPOCHMILLI (for Unix epoch timestamps with second/millisecond level precision) or\n         ISO_8601 (following ISO_8601 format with second/millisecond level precision, with an\n         optional offset of Z or in the format HH:MM or HHMM.). E.g. if your object type is MyType\n         and source JSON is {\"generatedAt\": {\"timestamp\": \"2001-07-04T12:08:56.235-0700\"}}, then\n         TimestampFormat should be \"ISO_8601\".</p>"
                     }
                 }
             },
@@ -11809,6 +12891,55 @@
                 }
             }
         },
+        "com.amazonaws.customerprofiles#Readiness": {
+            "type": "structure",
+            "members": {
+                "ProgressPercentage": {
+                    "target": "com.amazonaws.customerprofiles#percentageInteger",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Approximately how far the Calculated Attribute creation is from completion.</p>"
+                    }
+                },
+                "Message": {
+                    "target": "com.amazonaws.customerprofiles#text",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Any customer messaging.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Information indicating if the Calculated Attribute is ready for use by confirming all\n         historical data has been processed and reflected.</p>"
+            }
+        },
+        "com.amazonaws.customerprofiles#ReadinessStatus": {
+            "type": "enum",
+            "members": {
+                "PREPARING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PREPARING"
+                    }
+                },
+                "IN_PROGRESS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IN_PROGRESS"
+                    }
+                },
+                "COMPLETED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "COMPLETED"
+                    }
+                },
+                "FAILED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FAILED"
+                    }
+                }
+            }
+        },
         "com.amazonaws.customerprofiles#ResourceNotFoundException": {
             "type": "structure",
             "members": {
@@ -11820,6 +12951,35 @@
                 "smithy.api#documentation": "<p>The requested resource does not exist, or access was denied.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 404
+            }
+        },
+        "com.amazonaws.customerprofiles#ResultsSummary": {
+            "type": "structure",
+            "members": {
+                "UpdatedRecords": {
+                    "target": "com.amazonaws.customerprofiles#optionalLong",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of records that were updated during the upload job. </p>",
+                        "smithy.api#jsonName": "UpdatedRecords"
+                    }
+                },
+                "CreatedRecords": {
+                    "target": "com.amazonaws.customerprofiles#optionalLong",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of records that were newly created during the upload job. </p>",
+                        "smithy.api#jsonName": "CreatedRecords"
+                    }
+                },
+                "FailedRecords": {
+                    "target": "com.amazonaws.customerprofiles#optionalLong",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of records that failed to be processed during the upload job. </p>",
+                        "smithy.api#jsonName": "FailedRecords"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The summary of results for an upload job, including the number of updated, created, and\n         failed records. </p>"
             }
         },
         "com.amazonaws.customerprofiles#RoleArn": {
@@ -12939,6 +14099,60 @@
                         "smithy.api#enumValue": "COMMUNICATION_RECORD"
                     }
                 },
+                "AIR_PREFERENCE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AIR_PREFERENCE"
+                    }
+                },
+                "HOTEL_PREFERENCE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HOTEL_PREFERENCE"
+                    }
+                },
+                "AIR_BOOKING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AIR_BOOKING"
+                    }
+                },
+                "AIR_SEGMENT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AIR_SEGMENT"
+                    }
+                },
+                "HOTEL_RESERVATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HOTEL_RESERVATION"
+                    }
+                },
+                "HOTEL_STAY_REVENUE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HOTEL_STAY_REVENUE"
+                    }
+                },
+                "LOYALTY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LOYALTY"
+                    }
+                },
+                "LOYALTY_TRANSACTION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LOYALTY_TRANSACTION"
+                    }
+                },
+                "LOYALTY_PROMOTION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "LOYALTY_PROMOTION"
+                    }
+                },
                 "UNIQUE": {
                     "target": "smithy.api#Unit",
                     "traits": {
@@ -12972,12 +14186,71 @@
             }
         },
         "com.amazonaws.customerprofiles#Start": {
-            "type": "integer",
-            "traits": {
-                "smithy.api#range": {
-                    "min": 1,
-                    "max": 366
+            "type": "integer"
+        },
+        "com.amazonaws.customerprofiles#StartUploadJob": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#StartUploadJobRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#StartUploadJobResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
                 }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>This API starts the processing of an upload job to ingest profile data. </p>",
+                "smithy.api#http": {
+                    "method": "PUT",
+                    "uri": "/domains/{DomainName}/upload-jobs/{JobId}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#StartUploadJobRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain containing the upload job to start. </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "JobId": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the upload job to start. </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#StartUploadJobResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.customerprofiles#Statistic": {
@@ -13087,6 +14360,88 @@
             "type": "integer",
             "traits": {
                 "smithy.api#default": 0
+            }
+        },
+        "com.amazonaws.customerprofiles#StatusReason": {
+            "type": "enum",
+            "members": {
+                "VALIDATION_FAILURE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "VALIDATION_FAILURE"
+                    }
+                },
+                "INTERNAL_FAILURE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INTERNAL_FAILURE"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#StopUploadJob": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#StopUploadJobRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#StopUploadJobResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>This API stops the processing of an upload job. </p>",
+                "smithy.api#http": {
+                    "method": "PUT",
+                    "uri": "/domains/{DomainName}/upload-jobs/{JobId}/stop",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#StopUploadJobRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain containing the upload job to stop. </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "JobId": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the upload job to stop. </p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#StopUploadJobResponse": {
+            "type": "structure",
+            "members": {},
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.customerprofiles#StringDimensionType": {
@@ -13744,6 +15099,24 @@
                         "smithy.api#documentation": "<p>The mathematical expression and a list of attribute items specified in that\n         expression.</p>"
                     }
                 },
+                "UseHistoricalData": {
+                    "target": "com.amazonaws.customerprofiles#optionalBoolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Whether historical data ingested before the Calculated Attribute was created should be\n         included in calculations.</p>"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.customerprofiles#ReadinessStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Status of the Calculated Attribute creation (whether all historical data has been\n         indexed.)</p>"
+                    }
+                },
+                "Readiness": {
+                    "target": "com.amazonaws.customerprofiles#Readiness",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Information indicating if the Calculated Attribute is ready for use by confirming all\n         historical data has been processed and reflected.</p>"
+                    }
+                },
                 "Tags": {
                     "target": "com.amazonaws.customerprofiles#TagMap",
                     "traits": {
@@ -13787,6 +15160,164 @@
                     "uri": "/domains/{DomainName}",
                     "code": 200
                 }
+            }
+        },
+        "com.amazonaws.customerprofiles#UpdateDomainLayout": {
+            "type": "operation",
+            "input": {
+                "target": "com.amazonaws.customerprofiles#UpdateDomainLayoutRequest"
+            },
+            "output": {
+                "target": "com.amazonaws.customerprofiles#UpdateDomainLayoutResponse"
+            },
+            "errors": [
+                {
+                    "target": "com.amazonaws.customerprofiles#AccessDeniedException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#BadRequestException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#InternalServerException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ResourceNotFoundException"
+                },
+                {
+                    "target": "com.amazonaws.customerprofiles#ThrottlingException"
+                }
+            ],
+            "traits": {
+                "smithy.api#documentation": "<p>Updates the layout used to view data for a specific domain. This API can only be invoked\n         from the Amazon Connect admin website.</p>",
+                "smithy.api#http": {
+                    "method": "PUT",
+                    "uri": "/domains/{DomainName}/layouts/{LayoutDefinitionName}",
+                    "code": 200
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#UpdateDomainLayoutRequest": {
+            "type": "structure",
+            "members": {
+                "DomainName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the domain.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "LayoutDefinitionName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the layout.</p>",
+                        "smithy.api#httpLabel": {},
+                        "smithy.api#required": {}
+                    }
+                },
+                "Description": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveText",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The description of the layout</p>"
+                    }
+                },
+                "DisplayName": {
+                    "target": "com.amazonaws.customerprofiles#displayName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The display name of the layout</p>"
+                    }
+                },
+                "IsDefault": {
+                    "target": "com.amazonaws.customerprofiles#boolean",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>If set to true for a layout, this layout will be used by default to view data. If set to\n         false, then the layout will not be used by default, but it can be used to view data by\n         explicitly selecting it in the console.</p>"
+                    }
+                },
+                "LayoutType": {
+                    "target": "com.amazonaws.customerprofiles#LayoutType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of layout that can be used to view data under a Customer Profiles domain.</p>"
+                    }
+                },
+                "Layout": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveString1To2000000",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A customizable layout that can be used to view data under a Customer Profiles domain.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#input": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#UpdateDomainLayoutResponse": {
+            "type": "structure",
+            "members": {
+                "LayoutDefinitionName": {
+                    "target": "com.amazonaws.customerprofiles#name",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique name of the layout.</p>"
+                    }
+                },
+                "Description": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveText",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The description of the layout</p>"
+                    }
+                },
+                "DisplayName": {
+                    "target": "com.amazonaws.customerprofiles#displayName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The display name of the layout</p>"
+                    }
+                },
+                "IsDefault": {
+                    "target": "com.amazonaws.customerprofiles#boolean",
+                    "traits": {
+                        "smithy.api#default": false,
+                        "smithy.api#documentation": "<p>If set to true for a layout, this layout will be used by default to view data. If set to\n         false, then the layout will not be used by default, but it can be used to view data by\n         explicitly selecting it in the console.</p>"
+                    }
+                },
+                "LayoutType": {
+                    "target": "com.amazonaws.customerprofiles#LayoutType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of layout that can be used to view data under a Customer Profiles domain.</p>"
+                    }
+                },
+                "Layout": {
+                    "target": "com.amazonaws.customerprofiles#sensitiveString1To2000000",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A customizable layout that can be used to view data under a Customer Profiles domain.</p>"
+                    }
+                },
+                "Version": {
+                    "target": "com.amazonaws.customerprofiles#string1To255",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The version used to create layout.</p>"
+                    }
+                },
+                "CreatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the layout was created.</p>"
+                    }
+                },
+                "LastUpdatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp of when the layout was most recently updated.</p>"
+                    }
+                },
+                "Tags": {
+                    "target": "com.amazonaws.customerprofiles#TagMap",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags used to organize, track, or control access for this resource.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#output": {}
             }
         },
         "com.amazonaws.customerprofiles#UpdateDomainRequest": {
@@ -13986,7 +15517,7 @@
                 "EventTriggerLimits": {
                     "target": "com.amazonaws.customerprofiles#EventTriggerLimits",
                     "traits": {
-                        "smithy.api#documentation": "<p>Defines limits controlling whether an event triggers the destination, based on ingestion latency and the number of invocations per profile over specific time periods.</p>"
+                        "smithy.api#documentation": "<p>Defines limits controlling whether an event triggers the destination, based on ingestion\n         latency and the number of invocations per profile over specific time periods.</p>"
                     }
                 }
             },
@@ -14030,7 +15561,7 @@
                 "EventTriggerLimits": {
                     "target": "com.amazonaws.customerprofiles#EventTriggerLimits",
                     "traits": {
-                        "smithy.api#documentation": "<p>Defines limits controlling whether an event triggers the destination, based on ingestion latency and the number of invocations per profile over specific time periods.</p>"
+                        "smithy.api#documentation": "<p>Defines limits controlling whether an event triggers the destination, based on ingestion\n         latency and the number of invocations per profile over specific time periods.</p>"
                     }
                 },
                 "CreatedAt": {
@@ -14117,7 +15648,7 @@
                 "AccountNumber": {
                     "target": "com.amazonaws.customerprofiles#sensitiveString0To255",
                     "traits": {
-                        "smithy.api#documentation": "<p>An account number that you have given to the customer.</p>"
+                        "smithy.api#documentation": "<p>An account number that you have assigned to the customer.</p>"
                     }
                 },
                 "PartyType": {
@@ -14266,12 +15797,116 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.customerprofiles#UploadJobItem": {
+            "type": "structure",
+            "members": {
+                "JobId": {
+                    "target": "com.amazonaws.customerprofiles#uuid",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The unique identifier of the upload job. </p>",
+                        "smithy.api#jsonName": "JobId"
+                    }
+                },
+                "DisplayName": {
+                    "target": "com.amazonaws.customerprofiles#string1To255",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the upload job. </p>",
+                        "smithy.api#jsonName": "DisplayName"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.customerprofiles#UploadJobStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The current status of the upload job. </p>",
+                        "smithy.api#jsonName": "Status"
+                    }
+                },
+                "StatusReason": {
+                    "target": "com.amazonaws.customerprofiles#StatusReason",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The reason for the current status of the upload job. </p>",
+                        "smithy.api#jsonName": "StatusReason"
+                    }
+                },
+                "CreatedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp when the upload job was created. </p>",
+                        "smithy.api#jsonName": "CreatedAt"
+                    }
+                },
+                "CompletedAt": {
+                    "target": "com.amazonaws.customerprofiles#timestamp",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The timestamp when the upload job was completed. </p>",
+                        "smithy.api#jsonName": "CompletedAt"
+                    }
+                },
+                "DataExpiry": {
+                    "target": "com.amazonaws.customerprofiles#expirationDaysInteger",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The expiry duration for the profiles ingested with the upload job. </p>",
+                        "smithy.api#jsonName": "DataExpiry"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The summary information for an individual upload job. </p>"
+            }
+        },
+        "com.amazonaws.customerprofiles#UploadJobStatus": {
+            "type": "enum",
+            "members": {
+                "CREATED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CREATED"
+                    }
+                },
+                "IN_PROGRESS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IN_PROGRESS"
+                    }
+                },
+                "PARTIALLY_SUCCEEDED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PARTIALLY_SUCCEEDED"
+                    }
+                },
+                "SUCCEEDED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SUCCEEDED"
+                    }
+                },
+                "FAILED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FAILED"
+                    }
+                },
+                "STOPPED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "STOPPED"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.customerprofiles#UploadJobsList": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.customerprofiles#UploadJobItem"
+            }
+        },
         "com.amazonaws.customerprofiles#Value": {
             "type": "integer",
             "traits": {
                 "smithy.api#range": {
-                    "min": 1,
-                    "max": 366
+                    "min": 0,
+                    "max": 2147483647
                 }
             }
         },
@@ -14286,6 +15921,34 @@
                     "max": 10
                 }
             }
+        },
+        "com.amazonaws.customerprofiles#ValueRange": {
+            "type": "structure",
+            "members": {
+                "Start": {
+                    "target": "com.amazonaws.customerprofiles#ValueRangeStart",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The start time of when to include objects. Use positive numbers to indicate that the\n         starting point is in the past, and negative numbers to indicate it is in the future.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "End": {
+                    "target": "com.amazonaws.customerprofiles#ValueRangeEnd",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The end time of when to include objects. Use positive numbers to indicate that the\n         starting point is in the past, and negative numbers to indicate it is in the future.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>A structure letting customers specify a relative time window over which over which data\n         is included in the Calculated Attribute. Use positive numbers to indicate that the endpoint\n         is in the past, and negative numbers to indicate it is in the future. ValueRange overrides\n         Value.</p>"
+            }
+        },
+        "com.amazonaws.customerprofiles#ValueRangeEnd": {
+            "type": "integer"
+        },
+        "com.amazonaws.customerprofiles#ValueRangeStart": {
+            "type": "integer"
         },
         "com.amazonaws.customerprofiles#Values": {
             "type": "list",
@@ -14639,6 +16302,15 @@
         "com.amazonaws.customerprofiles#optionalLong": {
             "type": "long"
         },
+        "com.amazonaws.customerprofiles#percentageInteger": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#range": {
+                    "min": 0,
+                    "max": 100
+                }
+            }
+        },
         "com.amazonaws.customerprofiles#requestValueList": {
             "type": "list",
             "member": {
@@ -14701,6 +16373,16 @@
                 "smithy.api#length": {
                     "min": 1,
                     "max": 1000
+                },
+                "smithy.api#sensitive": {}
+            }
+        },
+        "com.amazonaws.customerprofiles#sensitiveString1To2000000": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 2000000
                 },
                 "smithy.api#sensitive": {}
             }
