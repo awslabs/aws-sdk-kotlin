@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.4.123] - 07/16/2025
+
+### Features
+* (**bedrock**) This release adds support for on-demand custom model inference through CustomModelDeployment APIs for Amazon Bedrock.
+* (**bedrockagentcore**) Initial release of Amazon Bedrock AgentCore SDK including Runtime, Built-In Tools, Memory, Gateway and Identity.
+* (**bedrockagentcorecontrol**) Initial release of Amazon Bedrock AgentCore SDK including Runtime, Built-In Tools, Memory, Gateway and Identity.
+* (**bedrockruntime**) document update to support on demand custom model.
+* (**cloudwatchlogs**) CloudWatch Logs updates: Added X-Ray tracing for Amazon Bedrock Agent resources. Logs introduced Log Group level resource policies (managed through Put/Delete/Describe Resource Policy APIs). For more information, see CloudWatch Logs API documentation.
+* (**datasync**) AWS DataSync now supports IPv6 address inputs and outputs in create, update, and describe operations for NFS, SMB, and Object Storage locations
+* (**glue**) AWS Glue now supports schema, partition and sort management of Apache Iceberg tables using Glue SDK
+* (**guardduty**) Add expectedBucketOwner parameter to ThreatIntel and IPSet APIs.
+* (**iotwireless**) FuotaTaskId is not a valid IdentifierType for EventConfiguration and is being removed from possible IdentifierType values.
+* (**mediapackagev2**) This release adds support for CDN Authentication using Static Headers in MediaPackage v2.
+* (**networkflowmonitor**) Introducing 2 new scope status types - DEACTIVATING and DEACTIVATED.
+* (**paymentcryptographydata**) Expand length of message data field for Mac generation and validation to 8192 characters.
+* Add support for Bearer authentication using a token set in an environment variable for Bedrock services
+
+### Documentation
+* (**sfn**) Doc-only update to introduction, and edits to clarify input parameter and the set of control characters.
+
 ## [1.4.122] - 07/16/2025
 
 ### Features
