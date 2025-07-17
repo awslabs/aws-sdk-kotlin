@@ -2,8 +2,8 @@
  * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-import aws.sdk.kotlin.gradle.dsl.configureLinting
 import aws.sdk.kotlin.gradle.dsl.configureJReleaser
+import aws.sdk.kotlin.gradle.dsl.configureLinting
 import aws.sdk.kotlin.gradle.util.typedProp
 
 buildscript {
@@ -17,7 +17,7 @@ buildscript {
         Enforce jackson to a version supported both by dokka and jreleaser:
         https://github.com/Kotlin/dokka/issues/3472#issuecomment-1929712374
         https://github.com/Kotlin/dokka/issues/3194#issuecomment-1929382630
-        */
+         */
         classpath(enforcedPlatform("com.fasterxml.jackson:jackson-bom:2.15.3"))
     }
 }

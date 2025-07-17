@@ -114,13 +114,6 @@ publishing {
             artifactId = "version-catalog"
             description = "Provides a version catalog"
             from(components["versionCatalog"])
-
-            /*
-            Creates a placeholder JAR for version catalog publishing
-            The `version-catalog` plugin doesn't generate one because it isn't needed but JReleaser requires a jar
-            https://docs.gradle.org/current/userguide/version_catalogs.html#sec:version-catalog-plugin
-            */
-            artifact(tasks["versionCatalogJar"])
         }
     }
 }
