@@ -14743,6 +14743,216 @@
                     "traits": {
                         "smithy.api#enumValue": "AWS::SSM::Document"
                     }
+                },
+                "AppConfigExtensionAssociation": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::AppConfig::ExtensionAssociation"
+                    }
+                },
+                "AppIntegrationsApplication": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::AppIntegrations::Application"
+                    }
+                },
+                "AppSyncApiCache": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::AppSync::ApiCache"
+                    }
+                },
+                "BedrockGuardrail": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::Bedrock::Guardrail"
+                    }
+                },
+                "BedrockKnowledgeBase": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::Bedrock::KnowledgeBase"
+                    }
+                },
+                "CognitoIdentityPool": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::Cognito::IdentityPool"
+                    }
+                },
+                "ConnectRule": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::Connect::Rule"
+                    }
+                },
+                "ConnectUser": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::Connect::User"
+                    }
+                },
+                "EC2ClientVpnTargetNetworkAssociation": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::ClientVpnTargetNetworkAssociation"
+                    }
+                },
+                "EC2EIPAssociation": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::EIPAssociation"
+                    }
+                },
+                "EC2IPAMResourceDiscovery": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::IPAMResourceDiscovery"
+                    }
+                },
+                "EC2IPAMResourceDiscoveryAssociation": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::IPAMResourceDiscoveryAssociation"
+                    }
+                },
+                "EC2InstanceConnectEndpoint": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::InstanceConnectEndpoint"
+                    }
+                },
+                "EC2SnapshotBlockPublicAccess": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::SnapshotBlockPublicAccess"
+                    }
+                },
+                "EC2VPCBlockPublicAccessExclusion": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::VPCBlockPublicAccessExclusion"
+                    }
+                },
+                "EC2VPCBlockPublicAccessOptions": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::VPCBlockPublicAccessOptions"
+                    }
+                },
+                "EC2VPCEndpointConnectionNotification": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::VPCEndpointConnectionNotification"
+                    }
+                },
+                "EC2VPNConnectionRoute": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::EC2::VPNConnectionRoute"
+                    }
+                },
+                "EvidentlySegment": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::Evidently::Segment"
+                    }
+                },
+                "IAMOIDCProvider": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::IAM::OIDCProvider"
+                    }
+                },
+                "InspectorV2Activation": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::InspectorV2::Activation"
+                    }
+                },
+                "MSKClusterPolicy": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::MSK::ClusterPolicy"
+                    }
+                },
+                "MSKVpcConnection": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::MSK::VpcConnection"
+                    }
+                },
+                "MediaConnectGateway": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::MediaConnect::Gateway"
+                    }
+                },
+                "MemoryDBSubnetGroup": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::MemoryDB::SubnetGroup"
+                    }
+                },
+                "OpenSearchServerlessCollection": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::OpenSearchServerless::Collection"
+                    }
+                },
+                "OpenSearchServerlessVpcEndpoint": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::OpenSearchServerless::VpcEndpoint"
+                    }
+                },
+                "RedshiftEndpointAuthorization": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::Redshift::EndpointAuthorization"
+                    }
+                },
+                "Route53ProfilesProfile": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::Route53Profiles::Profile"
+                    }
+                },
+                "S3StorageLensGroup": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::S3::StorageLensGroup"
+                    }
+                },
+                "S3ExpressBucketPolicy": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::S3Express::BucketPolicy"
+                    }
+                },
+                "S3ExpressDirectoryBucket": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::S3Express::DirectoryBucket"
+                    }
+                },
+                "SageMakerInferenceExperiment": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::SageMaker::InferenceExperiment"
+                    }
+                },
+                "SecurityHubStandard": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::SecurityHub::Standard"
+                    }
+                },
+                "TransferProfile": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "AWS::Transfer::Profile"
+                    }
                 }
             }
         },
