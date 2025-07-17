@@ -1,5 +1,87 @@
 # Changelog
 
+## [1.4.121] - 07/15/2025
+
+### Features
+* (**bedrockagent**) Add support for S3 Vectors as a vector store.
+* (**datazone**) Removing restriction of environment profile identifier as required field, S3 feature release
+* (**dynamodbstreams**) Added support for optional shard filter parameter in DescribeStream api that allows customers to fetch child shards of a read_only parent shard.
+* (**ec2**) This release adds support for volume initialization status, which enables you to monitor when the initialization process for an EBS volume is completed. This release also adds IPv6 support to EC2 Instance Connect Endpoints, allowing you to connect to your EC2 Instance via a private IPv6 address.
+* (**ecs**) Amazon ECS supports native blue/green deployments, allowing you to validate new service revisions before directing production traffic to them.
+* (**eventbridge**) Add customer-facing logging for the EventBridge Event Bus, enabling customers to better observe their events and extract insights about their EventBridge usage.
+* (**opensearch**) AWS Opensearch adds support for enabling s3 vector engine options. After enabling this option, customers will be able to create indices with s3 vector engine.
+* (**pricing**) This release adds support for new filter types in GetProducts API, including EQUALS, CONTAINS, ANY_OF, and NONE_OF.
+* (**quicksight**) Introduced custom instructions for topics.
+* (**repostspace**) This release introduces Channels functionality with CreateChannel, GetChannel, ListChannels, and UpdateChannel operations. Channels provide dedicated collaboration spaces where teams can organize discussions and knowledge by projects, business units, or areas of responsibility.
+* (**s3**) Amazon S3 Metadata live inventory tables provide a queryable inventory of all the objects in your general purpose bucket so that you can determine the latest state of your data. To help minimize your storage costs, use journal table record expiration to set a retention period for your records.
+* (**s3tables**) Adds table bucket type to ListTableBucket and GetTableBucket API operations
+* (**s3vectors**) Amazon S3 Vectors provides cost-effective, elastic, and durable vector storage for queries based on semantic meaning and similarity.
+* (**sagemaker**) This release adds support for a new Restricted instance group type to enable a specialized environment for running Nova customization jobs on SageMaker HyperPod clusters. This release also adds support for SageMaker pipeline versioning.
+
+## [1.4.120] - 07/09/2025
+
+### Features
+* (**ec2**) Adds support to Capacity Blocks for ML for purchasing EC2 P6e-GB200 UltraServers. Customers can now purchase u-p6e-gb200x72 and u-p6e-gb200x36 UltraServers. Adds new DescribeCapacityBlocks andDescribeCapacityBlockStatus APIs. Adds support for CapacityBlockId to DescribeInstanceTopology.
+* (**freetier**) This release introduces four new APIs: GetAccountPlanState and UpgradeAccountPlan for AWS account plan management; ListAccountActivities and GetAccountActivity that provide activity tracking capabilities.
+
+### Documentation
+* (**opsworkscm**) Removing content that refers to an S3 bucket that is no longer in use.
+
+## [1.4.119] - 07/03/2025
+
+### Features
+* (**customerprofiles**) This release introduces capability of create Segments via importing a CSV file directly. This consumes the CSV file and creates/updates corresponding profiles for the particular domain.
+* (**deadline**) Added fields for output manifest reporting and task chunking parameters
+* (**ec2**) This release adds GroupOwnerId as a response member to the DescribeSecurityGroupVpcAssociations API and also adds waiters for SecurityGroupVpcAssociations (SecurityGroupVpcAssociationAssociated and SecurityGroupVpcAssociationDisassociated).
+* (**mediapackagev2**) This release adds support for Microsoft Smooth Streaming (MSS) and allows users to exclude DRM segment Metadata in MediaPackage v2 Origin Endpoints
+* (**route53**) Amazon Route 53 now supports the iso-e regions for private DNS Amazon VPCs and cloudwatch healthchecks.
+* (**sagemaker**) Changes include new StartSession API for SageMaker Studio spaces and CreateHubContentPresignedUrls API for SageMaker JumpStart.
+
+## [1.4.118] - 07/02/2025
+
+### Features
+* (**connectcases**) This release adds DeleteCase and DeleteRelatedItem APIs, which enable deleting cases and comments, undoing contact association, and removing service level agreements (SLAs) from cases. Contact center admins can use these APIs to delete cases when requested by customers and correct agent errors.
+* (**ec2**) AWS Site-to-Site VPN now supports IPv6 addresses on outer tunnel IPs, making it easier for customers to build or transition to IPv6-only networks.
+* (**s3**) Added support for directory bucket creation with tags and bucket ARN retrieval in CreateBucket, ListDirectoryBuckets, and HeadBucket operations
+* (**s3control**) Added TagResource, UntagResource, and ListTagsForResource support for directory bucket
+
+## [1.4.117] - 07/01/2025
+
+### Features
+* (**cleanroomsml**) This release introduces support for incremental training and distributed training for custom models in AWS Clean Rooms ML.
+* (**datazone**) Add support for the new optional domain-unit-id parameter in the UpdateProject API.
+* (**ec2**) Add Context to GetInstanceTypesFromInstanceRequirements API
+* (**odb**) This release adds API operations for Oracle Database@AWS. You can use the APIs to create Exadata infrastructure, ODB networks, and Exadata and Autonomous VM clusters inside AWS data centers. The infrastructure is managed by OCI. You can integrate these resources with AWS services.
+* (**qbusiness**) New ChatResponseConfiguration to Customize Q Business chat responses for specific use cases and communication needs. Updated Boosting capability allowing admins to provide preference on date attributes for recency and/or provide a preferred data source.
+* (**sagemaker**) Updated field validation requirements for InstanceGroups.
+
+### Documentation
+* (**rds**) Amazon RDS Custom for Oracle now supports multi-AZ database instances.
+
+## [1.4.116] - 06/30/2025
+
+### Features
+* (**arczonalshift**) Added support for on-demand practice runs and balanced capacity checks in ARC autoshift practice.
+* (**b2bi**) Updated APIs to support inbound EDI split capabilities and additional Partnership-level configurations of generated EDI files' contents and format.
+* (**bedrock**) Add support for API Keys, Re-Ranker, implicit filter for RAG / KB evaluation for Bedrock APIs.
+* (**bedrockruntime**) Add API Key and document citations support for Bedrock Runtime APIs
+* (**cloudformation**) Added support for UNKNOWN drift status.
+* (**cloudwatchlogs**) Increase minimum length of queryId parameter to 1 character.
+* (**configservice**) Updated ResourceType enum with new resource types onboarded by AWS Config as of June 2025
+* (**connect**) This release introduces ChatMetrics to the model, providing comprehensive analytics insights for Amazon Connect chat conversations. Users can access these detailed metrics through the AWS Connect API by using the DescribeContact operation with their specific instance and contact IDs
+* (**dataexchange**) This release updates resource Id with alphanumeric constraint, including Asset id, Revision id, Data Set id, Job id, and Event Action id.
+* (**dynamodb**) This change adds support for witnesses in global tables. It also adds a new table status, REPLICATION_NOT_AUTHORIZED. This status will indicate scenarios where global replicas table can't be utilized for data plane operations.
+* (**eventbridge**) Added support for EventBridge Dualstack endpoints in AWS GovCloud (US) regions (us-gov-east-1 and us-gov-west-1). The dualstack endpoints are identical for both FIPS and non-FIPS configurations, following the format: events.{region}.api.aws
+* (**glue**) releasing source processing properties to support source properties for ODB integrations
+* (**iam**) Updated IAM ServiceSpecificCredential support to include expiration, API Key output format instead of username and password for services that will support API keys, and the ability to list credentials for all users in the account for a given service configuration.
+* (**medicalimaging**) Added new fields to support the concept of primary image sets within the storage hierarchy.
+* (**networkflowmonitor**) Add ConflictExceptions to UpdateScope and DeleteScope operations for scopes being mutated.
+* (**outposts**) Make ContactName and ContactPhoneNumber required fields when creating and updating Outpost Site Addresses.
+* (**pcs**) Fixed the validation pattern for an instance profile Amazon Resource Name (ARN) in AWS PCS.
+* (**quicksight**) Introduced custom permission capabilities for reporting content. Added menu option in exploration to preserve configuration data when textbox menu option is used. Added support for Athena trusted identity propagation.
+* (**ssm**) Introduces AccessType, a new filter value for the DescribeSessions API.
+* (**transfer**) Added support for dual-stack (IPv4 and IPv6) endpoints for SFTP public endpoints and VPC-internal endpoints (SFTP, FTPS, FTP, and AS2), enabling customers to configure new servers with IPv4 or dual-stack mode, convert existing servers to dual-stack, and use IPv6 with service APIs.
+
 ## [1.4.115] - 06/27/2025
 
 ### Features

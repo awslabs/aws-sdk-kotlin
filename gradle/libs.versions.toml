@@ -4,7 +4,7 @@ ksp-version = "2.2.0-2.0.2" # Keep in sync with kotlin-version
 
 dokka-version = "2.0.0"
 
-aws-kotlin-repo-tools-version = "0.4.31"
+aws-kotlin-repo-tools-version = "0.4.32"
 
 # libs
 coroutines-version = "1.10.2"
@@ -118,6 +118,7 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
 
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest-version" }
 kotest-assertions-core-jvm = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest-version" }
+kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest-version" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest-version" }
 kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinx-benchmark-version" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-version" }

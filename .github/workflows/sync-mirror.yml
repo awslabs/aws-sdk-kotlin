@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions: { }
+
 jobs:
   git-sync:
     # Only sync when pushing to source repo

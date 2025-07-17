@@ -3690,6 +3690,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Use the <code>RoleArn</code> structure to override an account-wide role for a specific Athena data source. For example, say an account administrator has turned off all Athena access with an account-wide role. The administrator can then use <code>RoleArn</code> to bypass the account-wide role and allow Athena access for the single Athena data source that is specified in the structure, even if the account-wide role forbidding Athena access is still active.</p>"
                     }
+                },
+                "IdentityCenterConfiguration": {
+                    "target": "com.amazonaws.quicksight#IdentityCenterConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An optional parameter that configures IAM Identity Center authentication to grant Amazon QuickSight access to your workgroup.</p>\n         <p>This parameter can only be specified if your Amazon QuickSight account is configured with IAM Identity Center.</p>"
+                    }
                 }
             },
             "traits": {
@@ -5902,13 +5908,25 @@
                 "ExportToCsv": {
                     "target": "com.amazonaws.quicksight#CapabilityState",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ability to export to CSV files.</p>"
+                        "smithy.api#documentation": "<p>The ability to export to CSV files from the UI.</p>"
                     }
                 },
                 "ExportToExcel": {
                     "target": "com.amazonaws.quicksight#CapabilityState",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ability to export to Excel files.</p>"
+                        "smithy.api#documentation": "<p>The ability to export to Excel files from the UI.</p>"
+                    }
+                },
+                "ExportToPdf": {
+                    "target": "com.amazonaws.quicksight#CapabilityState",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ability to export to PDF files from the UI.</p>"
+                    }
+                },
+                "PrintReports": {
+                    "target": "com.amazonaws.quicksight#CapabilityState",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ability to print reports.</p>"
                     }
                 },
                 "CreateAndUpdateThemes": {
@@ -5999,6 +6017,30 @@
                     "target": "com.amazonaws.quicksight#CapabilityState",
                     "traits": {
                         "smithy.api#documentation": "<p>The ability to create a SPICE dataset.</p>"
+                    }
+                },
+                "ExportToPdfInScheduledReports": {
+                    "target": "com.amazonaws.quicksight#CapabilityState",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ability to export to PDF files in scheduled email reports.</p>"
+                    }
+                },
+                "ExportToCsvInScheduledReports": {
+                    "target": "com.amazonaws.quicksight#CapabilityState",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ability to export to CSV files in scheduled email reports.</p>"
+                    }
+                },
+                "ExportToExcelInScheduledReports": {
+                    "target": "com.amazonaws.quicksight#CapabilityState",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ability to export to Excel files in scheduled email reports.</p>"
+                    }
+                },
+                "IncludeContentInScheduledReportsEmail": {
+                    "target": "com.amazonaws.quicksight#CapabilityState",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ability to include content in scheduled email reports.</p>"
                     }
                 }
             },
@@ -11254,6 +11296,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The Folder ARN of the folder that you want the topic to reside in.</p>"
                     }
+                },
+                "CustomInstructions": {
+                    "target": "com.amazonaws.quicksight#CustomInstructions",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Custom instructions for the topic.</p>"
+                    }
                 }
             },
             "traits": {
@@ -11944,6 +11992,31 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>A list of custom filter values.</p>"
+            }
+        },
+        "com.amazonaws.quicksight#CustomInstructions": {
+            "type": "structure",
+            "members": {
+                "CustomInstructionsString": {
+                    "target": "com.amazonaws.quicksight#CustomInstructionsString",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A text field for providing additional guidance or context for response generation.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Instructions that provide additional guidance and context for response generation.</p>"
+            }
+        },
+        "com.amazonaws.quicksight#CustomInstructionsString": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 5000
+                },
+                "smithy.api#sensitive": {}
             }
         },
         "com.amazonaws.quicksight#CustomLabel": {
@@ -13446,7 +13519,7 @@
                 "DataSetId": {
                     "target": "com.amazonaws.quicksight#ResourceId",
                     "traits": {
-                        "smithy.api#documentation": "<p>The ID of the dataset.</p>"
+                        "smithy.api#documentation": "<p>The ID of the dataset. Limited to 96 characters.</p>"
                     }
                 },
                 "Name": {
@@ -24100,6 +24173,12 @@
                         "smithy.api#default": 0,
                         "smithy.api#documentation": "<p>The HTTP status of the request.</p>",
                         "smithy.api#httpResponseCode": {}
+                    }
+                },
+                "CustomInstructions": {
+                    "target": "com.amazonaws.quicksight#CustomInstructions",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Custom instructions for the topic.</p>"
                     }
                 }
             },
@@ -35787,7 +35866,7 @@
                 }
             ],
             "traits": {
-                "smithy.api#documentation": "<p>Lists the history of SPICE ingestions for a dataset.</p>",
+                "smithy.api#documentation": "<p>Lists the history of SPICE ingestions for a dataset. Limited to 5 TPS per user and 25 TPS per account.</p>",
                 "smithy.api#http": {
                     "method": "GET",
                     "uri": "/accounts/{AwsAccountId}/data-sets/{DataSetId}/ingestions",
@@ -48547,6 +48626,12 @@
                     "traits": {
                         "smithy.api#enumValue": "QBUSINESS"
                     }
+                },
+                "ATHENA": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ATHENA"
+                    }
                 }
             }
         },
@@ -49306,6 +49391,12 @@
                     "target": "com.amazonaws.quicksight#SheetTextBoxContent",
                     "traits": {
                         "smithy.api#documentation": "<p>The content that is displayed in the text box.</p>"
+                    }
+                },
+                "Interactions": {
+                    "target": "com.amazonaws.quicksight#TextBoxInteractionOptions",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The general textbox interactions setup for a textbox.</p>"
                     }
                 }
             },
@@ -53127,6 +53218,34 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>The display options of a control.</p>"
+            }
+        },
+        "com.amazonaws.quicksight#TextBoxInteractionOptions": {
+            "type": "structure",
+            "members": {
+                "TextBoxMenuOption": {
+                    "target": "com.amazonaws.quicksight#TextBoxMenuOption",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The menu options for the textbox.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The general textbox interactions setup for textbox publish options.</p>"
+            }
+        },
+        "com.amazonaws.quicksight#TextBoxMenuOption": {
+            "type": "structure",
+            "members": {
+                "AvailabilityStatus": {
+                    "target": "com.amazonaws.quicksight#DashboardBehavior",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The availability status of the textbox menu. If the value of this property is set to <code>ENABLED</code>, dashboard readers can interact with the textbox menu.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The menu options for the interactions of a textbox.</p>"
             }
         },
         "com.amazonaws.quicksight#TextConditionalFormat": {
@@ -61463,6 +61582,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The definition of the topic that you want to update.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "CustomInstructions": {
+                    "target": "com.amazonaws.quicksight#CustomInstructions",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Custom instructions for the topic.</p>"
                     }
                 }
             },

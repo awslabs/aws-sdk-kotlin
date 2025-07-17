@@ -261,6 +261,79 @@
                         {
                             "conditions": [
                                 {
+                                    "fn": "not",
+                                    "argv": [
+                                        {
+                                            "fn": "isSet",
+                                            "argv": [
+                                                {
+                                                    "ref": "Endpoint"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "fn": "isSet",
+                                    "argv": [
+                                        {
+                                            "ref": "Region"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "fn": "aws.partition",
+                                    "argv": [
+                                        {
+                                            "ref": "Region"
+                                        }
+                                    ],
+                                    "assign": "PartitionResult"
+                                },
+                                {
+                                    "fn": "stringEquals",
+                                    "argv": [
+                                        {
+                                            "fn": "getAttr",
+                                            "argv": [
+                                                {
+                                                    "ref": "PartitionResult"
+                                                },
+                                                "name"
+                                            ]
+                                        },
+                                        "aws-us-gov"
+                                    ]
+                                },
+                                {
+                                    "fn": "booleanEquals",
+                                    "argv": [
+                                        {
+                                            "ref": "UseFIPS"
+                                        },
+                                        true
+                                    ]
+                                },
+                                {
+                                    "fn": "booleanEquals",
+                                    "argv": [
+                                        {
+                                            "ref": "UseDualStack"
+                                        },
+                                        true
+                                    ]
+                                }
+                            ],
+                            "endpoint": {
+                                "url": "https://events.{Region}.{PartitionResult#dualStackDnsSuffix}",
+                                "properties": {},
+                                "headers": {}
+                            },
+                            "type": "endpoint"
+                        },
+                        {
+                            "conditions": [
+                                {
                                     "fn": "isSet",
                                     "argv": [
                                         {
@@ -1209,19 +1282,6 @@
                             }
                         },
                         {
-                            "documentation": "For region us-gov-east-1 with FIPS enabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://events.us-gov-east-1.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "Region": "us-gov-east-1",
-                                "UseFIPS": true,
-                                "UseDualStack": false
-                            }
-                        },
-                        {
                             "documentation": "For region us-gov-west-1 with FIPS disabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
@@ -1232,32 +1292,6 @@
                                 "Region": "us-gov-west-1",
                                 "UseFIPS": false,
                                 "UseDualStack": false
-                            }
-                        },
-                        {
-                            "documentation": "For region us-gov-west-1 with FIPS enabled and DualStack disabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://events.us-gov-west-1.amazonaws.com"
-                                }
-                            },
-                            "params": {
-                                "Region": "us-gov-west-1",
-                                "UseFIPS": true,
-                                "UseDualStack": false
-                            }
-                        },
-                        {
-                            "documentation": "For region us-gov-east-1 with FIPS enabled and DualStack enabled",
-                            "expect": {
-                                "endpoint": {
-                                    "url": "https://events-fips.us-gov-east-1.api.aws"
-                                }
-                            },
-                            "params": {
-                                "Region": "us-gov-east-1",
-                                "UseFIPS": true,
-                                "UseDualStack": true
                             }
                         },
                         {
@@ -1582,15 +1616,107 @@
                             }
                         },
                         {
-                            "documentation": "Valid EndpointId with DualStack enabled and partition does not support DualStack",
+                            "documentation": "legacy fips endpoint @ us-gov-east-1",
                             "expect": {
-                                "error": "DualStack is enabled but this partition does not support DualStack"
+                                "endpoint": {
+                                    "url": "https://events.us-gov-east-1.amazonaws.com"
+                                }
                             },
                             "params": {
-                                "EndpointId": "abc123.456def",
+                                "Region": "us-gov-east-1",
+                                "UseDualStack": false,
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "legacy non-fips endpoint @ us-gov-east-1",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://events.us-gov-east-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-east-1",
+                                "UseDualStack": false,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "Dualstack fips endpoint @ us-gov-east-1",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://events.us-gov-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-east-1",
                                 "UseDualStack": true,
-                                "UseFIPS": false,
-                                "Region": "us-isob-east-1"
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "Dualstack non-fips endpoint @ us-gov-east-1",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://events.us-gov-east-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-east-1",
+                                "UseDualStack": true,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "legacy fips endpoint @ us-gov-west-1",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://events.us-gov-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-west-1",
+                                "UseDualStack": false,
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "legacy non-fips endpoint @ us-gov-west-1",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://events.us-gov-west-1.amazonaws.com"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-west-1",
+                                "UseDualStack": false,
+                                "UseFIPS": false
+                            }
+                        },
+                        {
+                            "documentation": "Dualstack fips endpoint @ us-gov-west-1",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://events.us-gov-west-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-west-1",
+                                "UseDualStack": true,
+                                "UseFIPS": true
+                            }
+                        },
+                        {
+                            "documentation": "Dualstack non-fips endpoint @ us-gov-west-1",
+                            "expect": {
+                                "endpoint": {
+                                    "url": "https://events.us-gov-west-1.api.aws"
+                                }
+                            },
+                            "params": {
+                                "Region": "us-gov-west-1",
+                                "UseDualStack": true,
+                                "UseFIPS": false
                             }
                         }
                     ],
@@ -3469,6 +3595,12 @@
                 "DeadLetterConfig": {
                     "target": "com.amazonaws.eventbridge#DeadLetterConfig"
                 },
+                "LogConfig": {
+                    "target": "com.amazonaws.eventbridge#LogConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The logging configuration settings for the event bus.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/eb-event-bus-logs.html\">Configuring logs for event buses</a> in the <i>EventBridge User Guide</i>.</p>"
+                    }
+                },
                 "Tags": {
                     "target": "com.amazonaws.eventbridge#TagList",
                     "traits": {
@@ -3503,6 +3635,12 @@
                 },
                 "DeadLetterConfig": {
                     "target": "com.amazonaws.eventbridge#DeadLetterConfig"
+                },
+                "LogConfig": {
+                    "target": "com.amazonaws.eventbridge#LogConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The logging configuration settings for the event bus.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/eb-event-bus-logs.html\">Configuring logs for event buses</a> in the <i>EventBridge User Guide</i>.</p>"
+                    }
                 }
             },
             "traits": {
@@ -4658,6 +4796,12 @@
                     "target": "com.amazonaws.eventbridge#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The policy that enables the external account to send events to your account.</p>"
+                    }
+                },
+                "LogConfig": {
+                    "target": "com.amazonaws.eventbridge#LogConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The logging configuration settings for the event bus.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/eb-event-bus-logs.html\">Configuring logs for event buses</a> in the <i>EventBridge User Guide</i>.</p>"
                     }
                 },
                 "CreationTime": {
@@ -5845,6 +5989,23 @@
                 "smithy.api#error": "client"
             }
         },
+        "com.amazonaws.eventbridge#IncludeDetail": {
+            "type": "enum",
+            "members": {
+                "NONE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NONE"
+                    }
+                },
+                "FULL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FULL"
+                    }
+                }
+            }
+        },
         "com.amazonaws.eventbridge#InputTransformer": {
             "type": "structure",
             "members": {
@@ -5962,6 +6123,35 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "EXTERNAL"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.eventbridge#Level": {
+            "type": "enum",
+            "members": {
+                "OFF": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "OFF"
+                    }
+                },
+                "ERROR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ERROR"
+                    }
+                },
+                "INFO": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INFO"
+                    }
+                },
+                "TRACE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "TRACE"
                     }
                 }
             }
@@ -6899,6 +7089,26 @@
             },
             "traits": {
                 "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.eventbridge#LogConfig": {
+            "type": "structure",
+            "members": {
+                "IncludeDetail": {
+                    "target": "com.amazonaws.eventbridge#IncludeDetail",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Whether EventBridge include detailed event information in the records it generates. \n      Detailed data can be useful for troubleshooting and debugging. This information includes details of the event itself, as well as target details.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-bus-logs.html#eb-event-logs-data\">Including detail data in event bus logs</a> in the <i>EventBridge User Guide</i>.</p>"
+                    }
+                },
+                "Level": {
+                    "target": "com.amazonaws.eventbridge#Level",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The level of logging detail to include. This applies to all log destinations for the event bus.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-bus-logs.html#eb-event-bus-logs-level\">Specifying event bus log level</a> in the <i>EventBridge User Guide</i>.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The logging configuration settings for the event bus.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/eb-event-bus-logs.html\">Configuring logs for event buses</a> in the <i>EventBridge User Guide</i>.</p>"
             }
         },
         "com.amazonaws.eventbridge#Long": {
@@ -10023,6 +10233,12 @@
                 },
                 "DeadLetterConfig": {
                     "target": "com.amazonaws.eventbridge#DeadLetterConfig"
+                },
+                "LogConfig": {
+                    "target": "com.amazonaws.eventbridge#LogConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The logging configuration settings for the event bus.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/eb-event-bus-logs.html\">Configuring logs for event buses</a> in the <i>EventBridge User Guide</i>.</p>"
+                    }
                 }
             },
             "traits": {
@@ -10058,6 +10274,12 @@
                 },
                 "DeadLetterConfig": {
                     "target": "com.amazonaws.eventbridge#DeadLetterConfig"
+                },
+                "LogConfig": {
+                    "target": "com.amazonaws.eventbridge#LogConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The logging configuration settings for the event bus.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/eb-event-bus-logs.html\">Configuring logs for event buses</a> in the <i>EventBridge User Guide</i>.</p>"
+                    }
                 }
             },
             "traits": {
