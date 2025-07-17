@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * SPDX-License-Identifier: Apache-2.0
  */
 plugins {
-    alias(libs.plugins.kotlin.jvm)
+    id(libs.plugins.kotlin.jvm.get().pluginId)
     jacoco
 }
 
@@ -60,6 +60,7 @@ val generateSdkRuntimeVersion by tasks.registering {
 tasks.withType<KotlinCompile> {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_17)
+        freeCompilerArgs.add("-Xjdk-release=17")
     }
     dependsOn(generateSdkRuntimeVersion)
 }

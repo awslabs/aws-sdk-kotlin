@@ -59,3 +59,9 @@ public fun itemOf(vararg pairs: Pair<String, AttributeValue>): Item = mapOf(*pai
  */
 @JvmName("itemOfPairStringAny")
 internal fun itemOf(vararg pairs: Pair<String, Any?>): Item = mapOf(*pairs).toItem()
+
+/**
+ * Truncate this item to include only the specified key attributes, removing any non-key attributes
+ * @param keys The collection of key names which should be preserved
+ */
+internal fun Item.intersectKeys(keys: Collection<String>): Item = filterKeys { keys.contains(it) }.toItem()

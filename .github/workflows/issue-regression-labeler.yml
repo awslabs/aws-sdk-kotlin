@@ -3,6 +3,7 @@ name: issue-regression-label
 on:
   issues:
     types: [opened, edited]
+permissions: { }
 jobs:
   add-regression-label:
     runs-on: ubuntu-latest

@@ -13,7 +13,7 @@ import kotlin.test.assertTrue
 
 class SimpleItemConverterTest {
     @Test
-    fun testSomething() {
+    fun testBasicConversion() {
         val converter = SimpleItemConverter(
             ::ProductBuilder,
             ProductBuilder::build,
@@ -32,6 +32,24 @@ class SimpleItemConverterTest {
 
         val unconverted = converter.convertFrom(item)
         assertEquals(foo, unconverted)
+    }
+
+    @Test
+    fun testKeyOnlyConversion() {
+        val converter = SimpleItemConverter(
+            ::ProductBuilder,
+            ProductBuilder::build,
+            AttributeDescriptor("id", Product::id, ProductBuilder::id::set, IntConverter),
+            AttributeDescriptor("name", Product::name, ProductBuilder::name::set, StringConverter),
+            AttributeDescriptor("in-stock", Product::inStock, ProductBuilder::inStock::set, BooleanConverter),
+        )
+
+        val foo = Product(42, "Foo 2.0", inStock = true)
+        val item = converter.convertTo(foo, setOf("id", "name"))
+
+        assertEquals(2, item.size)
+        assertEquals(42, item.getValue("id").asN().toInt())
+        assertEquals("Foo 2.0", item.getValue("name").asS())
     }
 }
 

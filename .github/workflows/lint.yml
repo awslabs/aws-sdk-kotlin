@@ -12,6 +12,9 @@ on:
       - '*-main'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   PACKAGE_NAME: aws-sdk-kotlin
 

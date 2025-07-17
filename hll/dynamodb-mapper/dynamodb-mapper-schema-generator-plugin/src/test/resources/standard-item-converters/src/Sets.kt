@@ -28,6 +28,7 @@ public data class Sets(
     var setUInt: Set<UInt>,
     var setULong: Set<ULong>,
     var setUShort: Set<UShort>,
+    var nullableSet: Set<String>?,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -48,6 +49,8 @@ public data class Sets(
         if (setUInt != other.setUInt) return false
         if (setULong != other.setULong) return false
         if (setUShort != other.setUShort) return false
+
+        if (nullableSet != other.nullableSet) return false
 
         return true
     }

@@ -554,7 +554,7 @@
             "type": "structure",
             "members": {
                 "JobId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a job.</p>",
                         "smithy.api#httpLabel": {},
@@ -1024,6 +1024,12 @@
                         "smithy.api#documentation": "<p>What occurs to start an action.</p>",
                         "smithy.api#required": {}
                     }
+                },
+                "Tags": {
+                    "target": "com.amazonaws.dataexchange#MapOf__string",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Key-value pairs that you can associate with the event action.</p>"
+                    }
                 }
             }
         },
@@ -1058,6 +1064,12 @@
                     "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for the event action.</p>"
+                    }
+                },
+                "Tags": {
+                    "target": "com.amazonaws.dataexchange#MapOf__string",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags for the event action.</p>"
                     }
                 },
                 "UpdatedAt": {
@@ -1221,7 +1233,7 @@
                     }
                 },
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -2576,7 +2588,7 @@
             "type": "structure",
             "members": {
                 "AssetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for an asset.</p>",
                         "smithy.api#httpLabel": {},
@@ -2584,7 +2596,7 @@
                     }
                 },
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -2592,7 +2604,7 @@
                     }
                 },
                 "RevisionId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a revision.</p>",
                         "smithy.api#httpLabel": {},
@@ -2692,7 +2704,7 @@
             "type": "structure",
             "members": {
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -2786,7 +2798,7 @@
             "type": "structure",
             "members": {
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -2794,7 +2806,7 @@
                     }
                 },
                 "RevisionId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a revision.</p>",
                         "smithy.api#httpLabel": {},
@@ -3179,7 +3191,7 @@
             "type": "structure",
             "members": {
                 "AssetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for an asset.</p>",
                         "smithy.api#httpLabel": {},
@@ -3187,7 +3199,7 @@
                     }
                 },
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -3195,7 +3207,7 @@
                     }
                 },
                 "RevisionId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a revision.</p>",
                         "smithy.api#httpLabel": {},
@@ -3465,7 +3477,7 @@
             "type": "structure",
             "members": {
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -3623,6 +3635,12 @@
                         "smithy.api#documentation": "<p>The unique identifier for the event action.</p>"
                     }
                 },
+                "Tags": {
+                    "target": "com.amazonaws.dataexchange#MapOf__string",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The tags for the event action.</p>"
+                    }
+                },
                 "UpdatedAt": {
                     "target": "com.amazonaws.dataexchange#Timestamp",
                     "traits": {
@@ -3667,7 +3685,7 @@
             "type": "structure",
             "members": {
                 "JobId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a job.</p>",
                         "smithy.api#httpLabel": {},
@@ -3911,7 +3929,7 @@
             "type": "structure",
             "members": {
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -3919,7 +3937,7 @@
                     }
                 },
                 "RevisionId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a revision.</p>",
                         "smithy.api#httpLabel": {},
@@ -4023,7 +4041,10 @@
             }
         },
         "com.amazonaws.dataexchange#Id": {
-            "type": "string"
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^[a-zA-Z0-9]{30,40}$"
+            }
         },
         "com.amazonaws.dataexchange#ImportAssetFromApiGatewayApiRequestDetails": {
             "type": "structure",
@@ -5124,7 +5145,7 @@
             "type": "structure",
             "members": {
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -5696,7 +5717,7 @@
             "type": "structure",
             "members": {
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -5719,7 +5740,7 @@
                     }
                 },
                 "RevisionId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a revision.</p>",
                         "smithy.api#httpLabel": {},
@@ -6422,7 +6443,7 @@
             "type": "structure",
             "members": {
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -6430,7 +6451,7 @@
                     }
                 },
                 "RevisionId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a revision.</p>",
                         "smithy.api#httpLabel": {},
@@ -6913,7 +6934,7 @@
                     }
                 },
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>Affected\n         data set of the notification.</p>",
                         "smithy.api#httpLabel": {},
@@ -7037,7 +7058,7 @@
             "type": "structure",
             "members": {
                 "JobId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a job.</p>",
                         "smithy.api#httpLabel": {},
@@ -7317,7 +7338,7 @@
             "type": "structure",
             "members": {
                 "AssetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for an asset.</p>",
                         "smithy.api#httpLabel": {},
@@ -7325,7 +7346,7 @@
                     }
                 },
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -7340,7 +7361,7 @@
                     }
                 },
                 "RevisionId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a revision.</p>",
                         "smithy.api#httpLabel": {},
@@ -7452,7 +7473,7 @@
             "type": "structure",
             "members": {
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -7679,7 +7700,7 @@
                     }
                 },
                 "DataSetId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a data set.</p>",
                         "smithy.api#httpLabel": {},
@@ -7694,7 +7715,7 @@
                     }
                 },
                 "RevisionId": {
-                    "target": "com.amazonaws.dataexchange#__string",
+                    "target": "com.amazonaws.dataexchange#Id",
                     "traits": {
                         "smithy.api#documentation": "<p>The unique identifier for a revision.</p>",
                         "smithy.api#httpLabel": {},

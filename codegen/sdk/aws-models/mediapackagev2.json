@@ -9,7 +9,7 @@
                 }
             },
             "traits": {
-                "smithy.api#documentation": "<p>You don't have permissions to perform the requested operation. The user or role that is making the request must have at least one IAM permissions policy attached that grants the required permissions. For more information, see Access Management in the IAM User Guide.</p>",
+                "smithy.api#documentation": "<p>Access is denied because either you don't have permissions to perform the requested operation or MediaPackage is getting throttling errors with CDN authorization. The user or role that is making the request must have at least \n         one IAM permissions policy attached that grants the required permissions. For more information, see Access Management in the IAM User Guide. Or, if you're using CDN authorization, you will receive this exception\n         if MediaPackage receives a throttling error from Secrets Manager.</p>",
                 "smithy.api#error": "client",
                 "smithy.api#httpError": 403
             }
@@ -146,6 +146,56 @@
             "members": {},
             "traits": {
                 "smithy.api#output": {}
+            }
+        },
+        "com.amazonaws.mediapackagev2#CdnAuthConfiguration": {
+            "type": "structure",
+            "members": {
+                "CdnIdentifierSecretArns": {
+                    "target": "com.amazonaws.mediapackagev2#CdnIdentifierSecretArns",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN for the secret in Secrets Manager that your CDN uses for authorization to access the endpoint.</p>",
+                        "smithy.api#length": {
+                            "min": 1
+                        },
+                        "smithy.api#required": {}
+                    }
+                },
+                "SecretsRoleArn": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The ARN for the IAM role that gives MediaPackage read access to Secrets Manager and KMS for CDN authorization.</p>",
+                        "smithy.api#length": {
+                            "min": 20,
+                            "max": 2048
+                        },
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The settings to enable CDN authorization headers in MediaPackage.</p>"
+            }
+        },
+        "com.amazonaws.mediapackagev2#CdnIdentifierSecretArn": {
+            "type": "string",
+            "traits": {
+                "smithy.api#length": {
+                    "min": 20,
+                    "max": 2048
+                }
+            }
+        },
+        "com.amazonaws.mediapackagev2#CdnIdentifierSecretArns": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mediapackagev2#CdnIdentifierSecretArn"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 1,
+                    "max": 100
+                }
             }
         },
         "com.amazonaws.mediapackagev2#ChannelGroupListConfiguration": {
@@ -460,6 +510,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "CMAF"
+                    }
+                },
+                "ISM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ISM"
                     }
                 }
             }
@@ -947,6 +1003,42 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Determines the type of UTC timing included in the DASH Media Presentation Description (MPD).</p>"
                     }
+                },
+                "Profiles": {
+                    "target": "com.amazonaws.mediapackagev2#DashProfiles",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The profile that the output is compliant with.</p>"
+                    }
+                },
+                "BaseUrls": {
+                    "target": "com.amazonaws.mediapackagev2#DashBaseUrls",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The base URLs to use for retrieving segments.</p>"
+                    }
+                },
+                "ProgramInformation": {
+                    "target": "com.amazonaws.mediapackagev2#DashProgramInformation",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Details about the content that you want MediaPackage to pass through in the manifest to the playback device.</p>"
+                    }
+                },
+                "DvbSettings": {
+                    "target": "com.amazonaws.mediapackagev2#DashDvbSettings",
+                    "traits": {
+                        "smithy.api#documentation": "<p>For endpoints that use the DVB-DASH profile only. The font download and error reporting information that you want MediaPackage to pass through to the manifest.</p>"
+                    }
+                },
+                "Compactness": {
+                    "target": "com.amazonaws.mediapackagev2#DashCompactness",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The layout of the DASH manifest that MediaPackage produces. <code>STANDARD</code> indicates a default manifest, which is compacted. <code>NONE</code> indicates a full manifest.</p>\n         <p>For information about compactness, see <a href=\"https://docs.aws.amazon.com/mediapackage/latest/userguide/compacted.html\">DASH manifest compactness</a> in the <i>Elemental MediaPackage v2 User Guide</i>.</p>"
+                    }
+                },
+                "SubtitleConfiguration": {
+                    "target": "com.amazonaws.mediapackagev2#DashSubtitleConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration for DASH subtitles.</p>"
+                    }
                 }
             },
             "traits": {
@@ -1399,6 +1491,45 @@
                 "target": "com.amazonaws.mediapackagev2#CreateLowLatencyHlsManifestConfiguration"
             }
         },
+        "com.amazonaws.mediapackagev2#CreateMssManifestConfiguration": {
+            "type": "structure",
+            "members": {
+                "ManifestName": {
+                    "target": "com.amazonaws.mediapackagev2#ManifestName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A short string that's appended to the endpoint URL to create a unique path to this MSS manifest. The manifest name must be unique within the origin endpoint and can contain letters, numbers, hyphens, and underscores.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "ManifestWindowSeconds": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The total duration (in seconds) of the manifest window. This determines how much content is available in the manifest at any given time. The manifest window slides forward as new segments become available, maintaining a consistent duration of content. The minimum value is 30 seconds.</p>",
+                        "smithy.api#range": {
+                            "min": 30
+                        }
+                    }
+                },
+                "FilterConfiguration": {
+                    "target": "com.amazonaws.mediapackagev2#FilterConfiguration"
+                },
+                "ManifestLayout": {
+                    "target": "com.amazonaws.mediapackagev2#MssManifestLayout",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Determines the layout format of the MSS manifest. This controls how the manifest is structured and presented to client players, affecting compatibility with different MSS-compatible devices and applications.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Configuration parameters for creating a Microsoft Smooth Streaming (MSS) manifest. MSS is a streaming media format developed by Microsoft that delivers adaptive bitrate streaming content to compatible players and devices.</p>"
+            }
+        },
+        "com.amazonaws.mediapackagev2#CreateMssManifests": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mediapackagev2#CreateMssManifestConfiguration"
+            }
+        },
         "com.amazonaws.mediapackagev2#CreateOriginEndpoint": {
             "type": "operation",
             "input": {
@@ -1734,7 +1865,43 @@
                                     "ScteDash": {
                                         "AdMarkerDash": "XML"
                                     },
-                                    "DrmSignaling": "INDIVIDUAL"
+                                    "DrmSignaling": "INDIVIDUAL",
+                                    "UtcTiming": {
+                                        "TimingMode": "HTTP_HEAD",
+                                        "TimingSource": "example"
+                                    },
+                                    "Profiles": [
+                                        "DVB_DASH"
+                                    ],
+                                    "BaseUrls": [
+                                        {
+                                            "Url": "http://example.com/",
+                                            "ServiceLocation": "A",
+                                            "DvbPriority": 1,
+                                            "DvbWeight": 3
+                                        }
+                                    ],
+                                    "ProgramInformation": {
+                                        "Title": "exampleTitle",
+                                        "Source": "exampleSource",
+                                        "Copyright": "(c) Example. All rights reserved",
+                                        "LanguageCode": "en",
+                                        "MoreInformationUrl": "https://example.com/more-information"
+                                    },
+                                    "DvbSettings": {
+                                        "FontDownload": {
+                                            "Url": "https://example.com/fonts/SubtitleDisplay.woff",
+                                            "MimeType": "application/font",
+                                            "FontFamily": "SubtitleDisplay"
+                                        },
+                                        "ErrorMetrics": [
+                                            {
+                                                "ReportingUrl": "https://example.com/dvb-errors/errors",
+                                                "Probability": 500
+                                            }
+                                        ]
+                                    },
+                                    "Compactness": "STANDARD"
                                 },
                                 {
                                     "ManifestName": "exampleDashManifest2",
@@ -1752,7 +1919,43 @@
                                     "ScteDash": {
                                         "AdMarkerDash": "XML"
                                     },
-                                    "DrmSignaling": "INDIVIDUAL"
+                                    "DrmSignaling": "INDIVIDUAL",
+                                    "UtcTiming": {
+                                        "TimingMode": "HTTP_HEAD",
+                                        "TimingSource": "example"
+                                    },
+                                    "Profiles": [
+                                        "DVB_DASH"
+                                    ],
+                                    "BaseUrls": [
+                                        {
+                                            "Url": "http://example2.com/",
+                                            "ServiceLocation": "B",
+                                            "DvbPriority": 2,
+                                            "DvbWeight": 2
+                                        }
+                                    ],
+                                    "ProgramInformation": {
+                                        "Title": "exampleTitle2",
+                                        "Source": "exampleSource2",
+                                        "Copyright": "(c) Example. All rights reserved",
+                                        "LanguageCode": "en",
+                                        "MoreInformationUrl": "https://example2.com/more-information"
+                                    },
+                                    "DvbSettings": {
+                                        "FontDownload": {
+                                            "Url": "https://example.com/fonts/SubtitleDisplay.woff",
+                                            "MimeType": "application/font",
+                                            "FontFamily": "SubtitleDisplay"
+                                        },
+                                        "ErrorMetrics": [
+                                            {
+                                                "ReportingUrl": "https://example2.com/dvb-errors/errors",
+                                                "Probability": 600
+                                            }
+                                        ]
+                                    },
+                                    "Compactness": "STANDARD"
                                 }
                             ],
                             "Tags": {
@@ -1867,7 +2070,43 @@
                                         "AdMarkerDash": "XML"
                                     },
                                     "DrmSignaling": "INDIVIDUAL",
-                                    "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointCMAF/exampleDashManifest1.mpd"
+                                    "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointCMAF/exampleDashManifest1.mpd",
+                                    "UtcTiming": {
+                                        "TimingMode": "HTTP_HEAD",
+                                        "TimingSource": "example"
+                                    },
+                                    "Profiles": [
+                                        "DVB_DASH"
+                                    ],
+                                    "BaseUrls": [
+                                        {
+                                            "Url": "http://example.com/",
+                                            "ServiceLocation": "A",
+                                            "DvbPriority": 1,
+                                            "DvbWeight": 3
+                                        }
+                                    ],
+                                    "ProgramInformation": {
+                                        "Title": "exampleTitle",
+                                        "Source": "exampleSource",
+                                        "Copyright": "(c) Example. All rights reserved",
+                                        "LanguageCode": "en",
+                                        "MoreInformationUrl": "https://example.com/more-information"
+                                    },
+                                    "DvbSettings": {
+                                        "FontDownload": {
+                                            "Url": "https://example.com/fonts/SubtitleDisplay.woff",
+                                            "MimeType": "application/font",
+                                            "FontFamily": "SubtitleDisplay"
+                                        },
+                                        "ErrorMetrics": [
+                                            {
+                                                "ReportingUrl": "https://example.com/dvb-errors/errors",
+                                                "Probability": 500
+                                            }
+                                        ]
+                                    },
+                                    "Compactness": "STANDARD"
                                 },
                                 {
                                     "ManifestName": "exampleDashManifest2",
@@ -1886,7 +2125,147 @@
                                         "AdMarkerDash": "XML"
                                     },
                                     "DrmSignaling": "INDIVIDUAL",
-                                    "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointCMAF/exampleDashManifest2.mpd"
+                                    "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointCMAF/exampleDashManifest2.mpd",
+                                    "UtcTiming": {
+                                        "TimingMode": "HTTP_HEAD",
+                                        "TimingSource": "example"
+                                    },
+                                    "Profiles": [
+                                        "DVB_DASH"
+                                    ],
+                                    "BaseUrls": [
+                                        {
+                                            "Url": "http://example2.com/",
+                                            "ServiceLocation": "B",
+                                            "DvbPriority": 2,
+                                            "DvbWeight": 2
+                                        }
+                                    ],
+                                    "ProgramInformation": {
+                                        "Title": "exampleTitle2",
+                                        "Source": "exampleSource2",
+                                        "Copyright": "(c) Example. All rights reserved",
+                                        "LanguageCode": "en",
+                                        "MoreInformationUrl": "https://example2.com/more-information"
+                                    },
+                                    "DvbSettings": {
+                                        "FontDownload": {
+                                            "Url": "https://example.com/fonts/SubtitleDisplay.woff",
+                                            "MimeType": "application/font",
+                                            "FontFamily": "SubtitleDisplay"
+                                        },
+                                        "ErrorMetrics": [
+                                            {
+                                                "ReportingUrl": "https://example2.com/dvb-errors/errors",
+                                                "Probability": 600
+                                            }
+                                        ]
+                                    },
+                                    "Compactness": "STANDARD"
+                                }
+                            ],
+                            "ETag": "GlfT+dwAyGIR4wuy8nKWl1RDPwSrjQej9qUutLZxoxk=",
+                            "Tags": {
+                                "key1": "value1",
+                                "key2": "value2"
+                            }
+                        }
+                    },
+                    {
+                        "title": "Creating an OriginEndpoint with container type ISM, and encryption enabled",
+                        "input": {
+                            "ChannelGroupName": "exampleChannelGroup",
+                            "ChannelName": "exampleChannel",
+                            "OriginEndpointName": "exampleOriginEndpointISM",
+                            "ContainerType": "ISM",
+                            "Description": "Description for exampleOriginEndpointISM",
+                            "StartoverWindowSeconds": 300,
+                            "ForceEndpointErrorConfiguration": {
+                                "EndpointErrorConditions": [
+                                    "STALE_MANIFEST",
+                                    "INCOMPLETE_MANIFEST",
+                                    "MISSING_DRM_KEY",
+                                    "SLATE_INPUT"
+                                ]
+                            },
+                            "Segment": {
+                                "SegmentDurationSeconds": 2,
+                                "SegmentName": "segmentName",
+                                "Encryption": {
+                                    "EncryptionMethod": {
+                                        "IsmEncryptionMethod": "CENC"
+                                    },
+                                    "SpekeKeyProvider": {
+                                        "EncryptionContractConfiguration": {
+                                            "PresetSpeke20Audio": "SHARED",
+                                            "PresetSpeke20Video": "SHARED"
+                                        },
+                                        "ResourceId": "ResourceId",
+                                        "DrmSystems": [
+                                            "PLAYREADY"
+                                        ],
+                                        "RoleArn": "arn:aws:iam::123456789012:role/empRole",
+                                        "Url": "https://speke-key-provider.example.com"
+                                    }
+                                }
+                            },
+                            "MssManifests": [
+                                {
+                                    "ManifestName": "exampleMssManifest1",
+                                    "ManifestWindowSeconds": 60,
+                                    "ManifestLayout": "FULL"
+                                }
+                            ],
+                            "Tags": {
+                                "key1": "value1",
+                                "key2": "value2"
+                            }
+                        },
+                        "output": {
+                            "ChannelGroupName": "exampleChannelGroup",
+                            "ChannelName": "exampleChannel",
+                            "OriginEndpointName": "exampleOriginEndpointISM",
+                            "Description": "Description for exampleOriginEndpointISM",
+                            "Arn": "arn:aws:mediapackagev2:us-west-2:123456789012:channelGroup/exampleChannelGroup/channel/exampleChannel/originEndpoint/exampleOriginEndpointISM",
+                            "CreatedAt": "2022-10-18T09:36:00.00Z",
+                            "ModifiedAt": "2022-10-18T09:36:00.00Z",
+                            "ContainerType": "ISM",
+                            "StartoverWindowSeconds": 300,
+                            "ForceEndpointErrorConfiguration": {
+                                "EndpointErrorConditions": [
+                                    "STALE_MANIFEST",
+                                    "INCOMPLETE_MANIFEST",
+                                    "MISSING_DRM_KEY",
+                                    "SLATE_INPUT"
+                                ]
+                            },
+                            "Segment": {
+                                "SegmentDurationSeconds": 2,
+                                "SegmentName": "segmentName",
+                                "Encryption": {
+                                    "EncryptionMethod": {
+                                        "IsmEncryptionMethod": "CENC"
+                                    },
+                                    "SpekeKeyProvider": {
+                                        "EncryptionContractConfiguration": {
+                                            "PresetSpeke20Audio": "SHARED",
+                                            "PresetSpeke20Video": "SHARED"
+                                        },
+                                        "ResourceId": "ResourceId",
+                                        "DrmSystems": [
+                                            "PLAYREADY"
+                                        ],
+                                        "RoleArn": "arn:aws:iam::123456789012:role/empRole",
+                                        "Url": "https://speke-key-provider.example.com"
+                                    }
+                                }
+                            },
+                            "MssManifests": [
+                                {
+                                    "ManifestName": "exampleMssManifest1",
+                                    "ManifestWindowSeconds": 60,
+                                    "ManifestLayout": "FULL",
+                                    "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointISM/exampleMssManifest1.ism/Manifest"
                                 }
                             ],
                             "ETag": "GlfT+dwAyGIR4wuy8nKWl1RDPwSrjQej9qUutLZxoxk=",
@@ -1986,6 +2365,13 @@
                     "traits": {
                         "aws.cloudformation#cfnExcludeProperty": {},
                         "smithy.api#documentation": "<p>A DASH manifest configuration.</p>"
+                    }
+                },
+                "MssManifests": {
+                    "target": "com.amazonaws.mediapackagev2#CreateMssManifests",
+                    "traits": {
+                        "aws.cloudformation#cfnExcludeProperty": {},
+                        "smithy.api#documentation": "<p>A list of Microsoft Smooth Streaming (MSS) manifest configurations for the origin endpoint. You can configure multiple MSS manifests to provide different streaming experiences or to support different client requirements.</p>"
                     }
                 },
                 "ForceEndpointErrorConfiguration": {
@@ -2095,6 +2481,12 @@
                         "smithy.api#documentation": "<p>A DASH manifest configuration.</p>"
                     }
                 },
+                "MssManifests": {
+                    "target": "com.amazonaws.mediapackagev2#GetMssManifests",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Microsoft Smooth Streaming (MSS) manifest configurations that were created for this origin endpoint.</p>"
+                    }
+                },
                 "ForceEndpointErrorConfiguration": {
                     "target": "com.amazonaws.mediapackagev2#ForceEndpointErrorConfiguration",
                     "traits": {
@@ -2120,6 +2512,84 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.mediapackagev2#DashBaseUrl": {
+            "type": "structure",
+            "members": {
+                "Url": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A source location for segments.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 2048
+                        },
+                        "smithy.api#required": {}
+                    }
+                },
+                "ServiceLocation": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the source location.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 2048
+                        }
+                    }
+                },
+                "DvbPriority": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>For use with DVB-DASH profiles only. The priority of this location for servings segments. The lower the number, the higher the priority.</p>",
+                        "smithy.api#range": {
+                            "min": 1,
+                            "max": 15000
+                        }
+                    }
+                },
+                "DvbWeight": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>For use with DVB-DASH profiles only. The weighting for source locations that have the same priority. </p>",
+                        "smithy.api#range": {
+                            "min": 1,
+                            "max": 15000
+                        }
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The base URLs to use for retrieving segments. You can specify multiple locations and indicate the priority and weight for when each should be used, for use in mutli-CDN workflows.</p>"
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashBaseUrls": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mediapackagev2#DashBaseUrl"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 20
+                }
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashCompactness": {
+            "type": "enum",
+            "members": {
+                "STANDARD": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "STANDARD"
+                    }
+                },
+                "NONE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NONE"
+                    }
+                }
+            }
+        },
         "com.amazonaws.mediapackagev2#DashDrmSignaling": {
             "type": "enum",
             "members": {
@@ -2135,6 +2605,106 @@
                         "smithy.api#enumValue": "REFERENCED"
                     }
                 }
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashDvbErrorMetrics": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mediapackagev2#DashDvbMetricsReporting"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 20
+                }
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashDvbFontDownload": {
+            "type": "structure",
+            "members": {
+                "Url": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The URL for downloading fonts for subtitles.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 2048
+                        }
+                    }
+                },
+                "MimeType": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The <code>mimeType</code> of the resource that's at the font download URL.</p>\n         <p>For information about font MIME types, see the <a href=\"https://dvb.org/wp-content/uploads/2021/06/A168r4_MPEG-DASH-Profile-for-Transport-of-ISO-BMFF-Based-DVB-Services_Draft-ts_103-285-v140_November_2021.pdf\">MPEG-DASH Profile for Transport of ISO BMFF Based DVB Services over IP Based Networks</a> document. </p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 256
+                        },
+                        "smithy.api#pattern": "^[a-zA-Z0-9][a-zA-Z0-9_/-]*[a-zA-Z0-9]$"
+                    }
+                },
+                "FontFamily": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The <code>fontFamily</code> name for subtitles, as described in <a href=\"https://tech.ebu.ch/publications/tech3380\">EBU-TT-D Subtitling Distribution Format</a>. </p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 256
+                        }
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>For use with DVB-DASH profiles only. The settings for font downloads that you want Elemental MediaPackage to pass through to the manifest.</p>"
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashDvbMetricsReporting": {
+            "type": "structure",
+            "members": {
+                "ReportingUrl": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The URL where playback devices send error reports.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 2048
+                        },
+                        "smithy.api#required": {}
+                    }
+                },
+                "Probability": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The number of playback devices per 1000 that will send error reports to the reporting URL. This represents the probability that a playback device will be a reporting player for this session.</p>",
+                        "smithy.api#range": {
+                            "min": 1,
+                            "max": 1000
+                        }
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>For use with DVB-DASH profiles only. The settings for error reporting from the playback device that you want Elemental MediaPackage to pass through to the manifest.</p>"
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashDvbSettings": {
+            "type": "structure",
+            "members": {
+                "FontDownload": {
+                    "target": "com.amazonaws.mediapackagev2#DashDvbFontDownload",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Subtitle font settings.</p>"
+                    }
+                },
+                "ErrorMetrics": {
+                    "target": "com.amazonaws.mediapackagev2#DashDvbErrorMetrics",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Playback device error reporting settings.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>For endpoints that use the DVB-DASH profile only. The font download and error reporting information that you want MediaPackage to pass through to the manifest.</p>"
             }
         },
         "com.amazonaws.mediapackagev2#DashPeriodTrigger": {
@@ -2184,6 +2754,88 @@
                 }
             }
         },
+        "com.amazonaws.mediapackagev2#DashProfile": {
+            "type": "enum",
+            "members": {
+                "DVB_DASH": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DVB_DASH"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashProfiles": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mediapackagev2#DashProfile"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 5
+                }
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashProgramInformation": {
+            "type": "structure",
+            "members": {
+                "Title": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The title for the manifest.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 2048
+                        }
+                    }
+                },
+                "Source": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Information about the content provider.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 2048
+                        }
+                    }
+                },
+                "Copyright": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A copyright statement about the content.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 2048
+                        }
+                    }
+                },
+                "LanguageCode": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The language code for this manifest.</p>",
+                        "smithy.api#length": {
+                            "min": 2,
+                            "max": 5
+                        },
+                        "smithy.api#pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]*[a-zA-Z0-9]$"
+                    }
+                },
+                "MoreInformationUrl": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>An absolute URL that contains more information about this content.</p>",
+                        "smithy.api#length": {
+                            "min": 1,
+                            "max": 2048
+                        }
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Details about the content that you want MediaPackage to pass through in the manifest to the playback device.</p>"
+            }
+        },
         "com.amazonaws.mediapackagev2#DashSegmentTemplateFormat": {
             "type": "enum",
             "members": {
@@ -2191,6 +2843,52 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "NUMBER_WITH_TIMELINE"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashSubtitleConfiguration": {
+            "type": "structure",
+            "members": {
+                "TtmlConfiguration": {
+                    "target": "com.amazonaws.mediapackagev2#DashTtmlConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Settings for TTML subtitles.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The configuration for DASH subtitles.</p>"
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashTtmlConfiguration": {
+            "type": "structure",
+            "members": {
+                "TtmlProfile": {
+                    "target": "com.amazonaws.mediapackagev2#DashTtmlProfile",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The profile that MediaPackage uses when signaling subtitles in the manifest. <code>IMSC</code> is the default profile. \n         <code>EBU-TT-D</code> produces subtitles that are compliant with the EBU-TT-D TTML profile. \n         MediaPackage passes through subtitle styles to the manifest. For more information about EBU-TT-D subtitles, see <a href=\"https://tech.ebu.ch/publications/tech3380\">EBU-TT-D Subtitling Distribution Format</a>.</p>",
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The settings for TTML subtitles.</p>"
+            }
+        },
+        "com.amazonaws.mediapackagev2#DashTtmlProfile": {
+            "type": "enum",
+            "members": {
+                "IMSC_1": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IMSC_1"
+                    }
+                },
+                "EBU_TT_D_101": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "EBU_TT_D_101"
                     }
                 }
             }
@@ -2726,6 +3424,12 @@
                         }
                     }
                 },
+                "CmafExcludeSegmentDrmMetadata": {
+                    "target": "smithy.api#Boolean",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Excludes SEIG and SGPD boxes from segment metadata in CMAF containers.</p>\n         <p>When set to <code>true</code>, MediaPackage omits these DRM metadata boxes from CMAF segments, which can improve compatibility with certain devices and players that don't support these boxes.</p>\n         <p>Important considerations:</p>\n         <ul>\n            <li>\n               <p>This setting only affects CMAF container formats</p>\n            </li>\n            <li>\n               <p>Key rotation can still be handled through media playlist signaling</p>\n            </li>\n            <li>\n               <p>PSSH and TENC boxes remain unaffected</p>\n            </li>\n            <li>\n               <p>Default behavior is preserved when this setting is disabled</p>\n            </li>\n         </ul>\n         <p>Valid values: <code>true</code> | <code>false</code>\n         </p>\n         <p>Default: <code>false</code>\n         </p>"
+                    }
+                },
                 "SpekeKeyProvider": {
                     "target": "com.amazonaws.mediapackagev2#SpekeKeyProvider",
                     "traits": {
@@ -2773,6 +3477,12 @@
                     "target": "com.amazonaws.mediapackagev2#CmafEncryptionMethod",
                     "traits": {
                         "smithy.api#documentation": "<p>The encryption method to use.</p>"
+                    }
+                },
+                "IsmEncryptionMethod": {
+                    "target": "com.amazonaws.mediapackagev2#IsmEncryptionMethod",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The encryption method used for Microsoft Smooth Streaming (MSS) content. This specifies how the MSS segments are encrypted to protect the content during delivery to client players.</p>"
                     }
                 }
             },
@@ -3378,6 +4088,42 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Determines the type of UTC timing included in the DASH Media Presentation Description (MPD).</p>"
                     }
+                },
+                "Profiles": {
+                    "target": "com.amazonaws.mediapackagev2#DashProfiles",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The profile that the output is compliant with.</p>"
+                    }
+                },
+                "BaseUrls": {
+                    "target": "com.amazonaws.mediapackagev2#DashBaseUrls",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The base URL to use for retrieving segments.</p>"
+                    }
+                },
+                "ProgramInformation": {
+                    "target": "com.amazonaws.mediapackagev2#DashProgramInformation",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Details about the content that you want MediaPackage to pass through in the manifest to the playback device.</p>"
+                    }
+                },
+                "DvbSettings": {
+                    "target": "com.amazonaws.mediapackagev2#DashDvbSettings",
+                    "traits": {
+                        "smithy.api#documentation": "<p>For endpoints that use the DVB-DASH profile only. The font download and error reporting information that you want MediaPackage to pass through to the manifest.</p>"
+                    }
+                },
+                "Compactness": {
+                    "target": "com.amazonaws.mediapackagev2#DashCompactness",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The layout of the DASH manifest that MediaPackage produces. <code>STANDARD</code> indicates a default manifest, which is compacted. <code>NONE</code> indicates a full manifest.</p>"
+                    }
+                },
+                "SubtitleConfiguration": {
+                    "target": "com.amazonaws.mediapackagev2#DashSubtitleConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The configuration for DASH subtitles.</p>"
+                    }
                 }
             },
             "traits": {
@@ -3811,6 +4557,49 @@
                 "target": "com.amazonaws.mediapackagev2#GetLowLatencyHlsManifestConfiguration"
             }
         },
+        "com.amazonaws.mediapackagev2#GetMssManifestConfiguration": {
+            "type": "structure",
+            "members": {
+                "ManifestName": {
+                    "target": "com.amazonaws.mediapackagev2#ManifestName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the MSS manifest. This name is appended to the origin endpoint URL to create the unique path for accessing this specific MSS manifest.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Url": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The complete URL for accessing the MSS manifest. Client players use this URL to retrieve the manifest and begin streaming the Microsoft Smooth Streaming content.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "FilterConfiguration": {
+                    "target": "com.amazonaws.mediapackagev2#FilterConfiguration"
+                },
+                "ManifestWindowSeconds": {
+                    "target": "smithy.api#Integer",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The duration (in seconds) of the manifest window. This represents the total amount of content available in the manifest at any given time.</p>"
+                    }
+                },
+                "ManifestLayout": {
+                    "target": "com.amazonaws.mediapackagev2#MssManifestLayout",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The layout format of the MSS manifest, which determines how the manifest is structured for client compatibility.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Configuration details for a Microsoft Smooth Streaming (MSS) manifest associated with an origin endpoint. This includes all the settings and properties that define how the MSS content is packaged and delivered.</p>"
+            }
+        },
+        "com.amazonaws.mediapackagev2#GetMssManifests": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mediapackagev2#GetMssManifestConfiguration"
+            }
+        },
         "com.amazonaws.mediapackagev2#GetOriginEndpoint": {
             "type": "operation",
             "input": {
@@ -3947,6 +4736,73 @@
                                 "key2": "value2"
                             }
                         }
+                    },
+                    {
+                        "title": "Getting an OriginEndpoint with ISM container",
+                        "input": {
+                            "ChannelGroupName": "exampleChannelGroup",
+                            "ChannelName": "exampleChannel",
+                            "OriginEndpointName": "exampleOriginEndpointISM"
+                        },
+                        "output": {
+                            "ChannelGroupName": "exampleChannelGroup",
+                            "ChannelName": "exampleChannel",
+                            "OriginEndpointName": "exampleOriginEndpointISM",
+                            "Description": "Description for exampleOriginEndpointISM",
+                            "Arn": "arn:aws:mediapackagev2:us-west-2:123456789012:channelGroup/exampleChannelGroup/channel/exampleChannel/originEndpoint/exampleOriginEndpointISM",
+                            "CreatedAt": "2022-10-18T09:36:00.00Z",
+                            "ModifiedAt": "2022-10-18T09:36:00.00Z",
+                            "ContainerType": "ISM",
+                            "StartoverWindowSeconds": 300,
+                            "ForceEndpointErrorConfiguration": {
+                                "EndpointErrorConditions": [
+                                    "STALE_MANIFEST",
+                                    "INCOMPLETE_MANIFEST",
+                                    "MISSING_DRM_KEY",
+                                    "SLATE_INPUT"
+                                ]
+                            },
+                            "Segment": {
+                                "SegmentDurationSeconds": 2,
+                                "SegmentName": "segmentName",
+                                "Encryption": {
+                                    "EncryptionMethod": {
+                                        "IsmEncryptionMethod": "CENC"
+                                    },
+                                    "SpekeKeyProvider": {
+                                        "EncryptionContractConfiguration": {
+                                            "PresetSpeke20Audio": "SHARED",
+                                            "PresetSpeke20Video": "SHARED"
+                                        },
+                                        "ResourceId": "ResourceId",
+                                        "DrmSystems": [
+                                            "PLAYREADY"
+                                        ],
+                                        "RoleArn": "arn:aws:iam::123456789012:role/empRole",
+                                        "Url": "https://speke-key-provider.example.com"
+                                    }
+                                }
+                            },
+                            "MssManifests": [
+                                {
+                                    "ManifestName": "exampleMssManifest1",
+                                    "ManifestWindowSeconds": 60,
+                                    "ManifestLayout": "FULL",
+                                    "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointISM/exampleMssManifest1.ism/Manifest"
+                                },
+                                {
+                                    "ManifestName": "exampleMssManifest2",
+                                    "ManifestWindowSeconds": 30,
+                                    "ManifestLayout": "COMPACT",
+                                    "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointISM/exampleMssManifest2.ism/Manifest"
+                                }
+                            ],
+                            "ETag": "HmgU+ewBzHJS5xvz9nLXm2SEQxTsjRfk0rVvuMayoyl=",
+                            "Tags": {
+                                "key1": "value1",
+                                "key2": "value2"
+                            }
+                        }
                     }
                 ],
                 "smithy.api#http": {
@@ -4068,6 +4924,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The policy assigned to the origin endpoint.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "CdnAuthConfiguration": {
+                    "target": "com.amazonaws.mediapackagev2#CdnAuthConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The settings for using authorization headers between the MediaPackage endpoint and your CDN. </p>\n         <p>For information about CDN authorization, see <a href=\"https://docs.aws.amazon.com/mediapackage/latest/userguide/cdn-auth.html\">CDN authorization\n            in Elemental MediaPackage</a>  in the MediaPackage user guide.</p>"
                     }
                 }
             },
@@ -4199,6 +5061,12 @@
                     "target": "com.amazonaws.mediapackagev2#GetDashManifests",
                     "traits": {
                         "smithy.api#documentation": "<p>A DASH manifest configuration.</p>"
+                    }
+                },
+                "MssManifests": {
+                    "target": "com.amazonaws.mediapackagev2#GetMssManifests",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Microsoft Smooth Streaming (MSS) manifest configurations associated with this origin endpoint.</p>"
                     }
                 },
                 "ForceEndpointErrorConfiguration": {
@@ -4604,6 +5472,17 @@
                 "smithy.api#httpError": 500
             }
         },
+        "com.amazonaws.mediapackagev2#IsmEncryptionMethod": {
+            "type": "enum",
+            "members": {
+                "CENC": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CENC"
+                    }
+                }
+            }
+        },
         "com.amazonaws.mediapackagev2#ListChannelGroups": {
             "type": "operation",
             "input": {
@@ -4929,11 +5808,7 @@
                                     "CreatedAt": "2024-05-28T09:36:00.00Z",
                                     "ModifiedAt": "2024-05-28T09:36:00.00Z",
                                     "Status": "QUEUED",
-                                    "ETag": "GlfT+dwAyGIR4wuy8nKWl1RDPwSrjQej9qUutLZxoxk=",
-                                    "Tags": {
-                                        "key1": "value1",
-                                        "key2": "value2"
-                                    }
+                                    "ETag": "GlfT+dwAyGIR4wuy8nKWl1RDPwSrjQej9qUutLZxoxk="
                                 },
                                 {
                                     "ChannelGroupName": "exampleChannelGroup",
@@ -4972,11 +5847,7 @@
                                     "CreatedAt": "2024-05-28T15:30:00.00Z",
                                     "ModifiedAt": "2024-05-28T15:30:00.00Z",
                                     "Status": "IN_PROGRESS",
-                                    "ETag": "GlfT+dwAyGIR4wuy8nKWl1RDPwSrjQej9qUutLZxoxk=",
-                                    "Tags": {
-                                        "key1": "value1",
-                                        "key2": "value2"
-                                    }
+                                    "ETag": "GlfT+dwAyGIR4wuy8nKWl1RDPwSrjQej9qUutLZxoxk="
                                 }
                             ],
                             "NextToken": "someTokenValue"
@@ -5027,11 +5898,7 @@
                                     "CreatedAt": "2024-05-28T09:36:00.00Z",
                                     "ModifiedAt": "2024-05-28T09:36:00.00Z",
                                     "Status": "QUEUED",
-                                    "ETag": "GlfT+dwAyGIR4wuy8nKWl1RDPwSrjQej9qUutLZxoxk=",
-                                    "Tags": {
-                                        "key1": "value1",
-                                        "key2": "value2"
-                                    }
+                                    "ETag": "GlfT+dwAyGIR4wuy8nKWl1RDPwSrjQej9qUutLZxoxk="
                                 },
                                 {
                                     "ChannelGroupName": "exampleChannelGroup",
@@ -5069,11 +5936,7 @@
                                     "Arn": "arn:aws:mediapackagev2:us-west-2:123456789012:channelGroup/exampleChannelGroup/channel/exampleChannelName/originEndpoint/exampleOriginEndpointName2/harvestJob/HarvestJobName2",
                                     "CreatedAt": "2024-05-28T15:30:00.00Z",
                                     "ModifiedAt": "2024-05-28T15:30:00.00Z",
-                                    "Status": "IN_PROGRESS",
-                                    "Tags": {
-                                        "key1": "value1",
-                                        "key2": "value2"
-                                    }
+                                    "Status": "IN_PROGRESS"
                                 }
                             ],
                             "NextToken": "someTokenValue"
@@ -5362,6 +6225,33 @@
                 "target": "com.amazonaws.mediapackagev2#ListLowLatencyHlsManifestConfiguration"
             }
         },
+        "com.amazonaws.mediapackagev2#ListMssManifestConfiguration": {
+            "type": "structure",
+            "members": {
+                "ManifestName": {
+                    "target": "com.amazonaws.mediapackagev2#ResourceName",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The name of the MSS manifest configuration.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "Url": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The URL for accessing the MSS manifest.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Summary information about a Microsoft Smooth Streaming (MSS) manifest configuration. This provides key details about the MSS manifest without including all configuration parameters.</p>"
+            }
+        },
+        "com.amazonaws.mediapackagev2#ListMssManifests": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.mediapackagev2#ListMssManifestConfiguration"
+            }
+        },
         "com.amazonaws.mediapackagev2#ListOriginEndpoints": {
             "type": "operation",
             "input": {
@@ -5489,6 +6379,34 @@
                                         {
                                             "ManifestName": "exampleDashManifest2",
                                             "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointCMAF/exampleDashManifest2.mpd"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "ChannelGroupName": "exampleChannelGroup",
+                                    "ChannelName": "exampleChannel",
+                                    "OriginEndpointName": "exampleOriginEndpointISM",
+                                    "Description": "Description for exampleOriginEndpointISM",
+                                    "Arn": "arn:aws:mediapackagev2:us-west-2:123456789012:channelGroup/exampleChannelGroup/channel/exampleChannel/originEndpoint/exampleOriginEndpointISM",
+                                    "CreatedAt": "2022-10-18T09:36:00.00Z",
+                                    "ModifiedAt": "2022-10-18T09:36:00.00Z",
+                                    "ContainerType": "ISM",
+                                    "ForceEndpointErrorConfiguration": {
+                                        "EndpointErrorConditions": [
+                                            "STALE_MANIFEST",
+                                            "INCOMPLETE_MANIFEST",
+                                            "MISSING_DRM_KEY",
+                                            "SLATE_INPUT"
+                                        ]
+                                    },
+                                    "MssManifests": [
+                                        {
+                                            "ManifestName": "exampleMssManifest1",
+                                            "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointISM/exampleMssManifest1.ism/Manifest"
+                                        },
+                                        {
+                                            "ManifestName": "exampleMssManifest2",
+                                            "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointISM/exampleMssManifest2.ism/Manifest"
                                         }
                                     ]
                                 }
@@ -5657,6 +6575,23 @@
                 "smithy.api#pattern": "^[a-zA-Z0-9-]+$"
             }
         },
+        "com.amazonaws.mediapackagev2#MssManifestLayout": {
+            "type": "enum",
+            "members": {
+                "FULL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FULL"
+                    }
+                },
+                "COMPACT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "COMPACT"
+                    }
+                }
+            }
+        },
         "com.amazonaws.mediapackagev2#OriginEndpointListConfiguration": {
             "type": "structure",
             "members": {
@@ -5729,6 +6664,12 @@
                     "target": "com.amazonaws.mediapackagev2#ListDashManifests",
                     "traits": {
                         "smithy.api#documentation": "<p>A DASH manifest configuration.</p>"
+                    }
+                },
+                "MssManifests": {
+                    "target": "com.amazonaws.mediapackagev2#ListMssManifests",
+                    "traits": {
+                        "smithy.api#documentation": "<p>A list of Microsoft Smooth Streaming (MSS) manifest configurations associated with the origin endpoint. Each configuration represents a different MSS streaming option available from this endpoint.</p>"
                     }
                 },
                 "ForceEndpointErrorConfiguration": {
@@ -6123,6 +7064,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The policy to attach to the specified origin endpoint.</p>",
                         "smithy.api#required": {}
+                    }
+                },
+                "CdnAuthConfiguration": {
+                    "target": "com.amazonaws.mediapackagev2#CdnAuthConfiguration",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The settings for using authorization headers between the MediaPackage endpoint and your CDN. </p>\n         <p>For information about CDN authorization, see <a href=\"https://docs.aws.amazon.com/mediapackage/latest/userguide/cdn-auth.html\">CDN authorization\n            in Elemental MediaPackage</a>  in the MediaPackage user guide. </p>"
                     }
                 }
             },
@@ -7519,6 +8466,117 @@
                                 "key2": "value2"
                             }
                         }
+                    },
+                    {
+                        "title": "Updating an OriginEndpoint with ISM container",
+                        "input": {
+                            "ChannelGroupName": "exampleChannelGroup",
+                            "ChannelName": "exampleChannel",
+                            "OriginEndpointName": "exampleOriginEndpointISM",
+                            "ContainerType": "ISM",
+                            "Description": "Updated description for exampleOriginEndpointISM",
+                            "StartoverWindowSeconds": 600,
+                            "ForceEndpointErrorConfiguration": {
+                                "EndpointErrorConditions": [
+                                    "STALE_MANIFEST",
+                                    "INCOMPLETE_MANIFEST",
+                                    "MISSING_DRM_KEY",
+                                    "SLATE_INPUT"
+                                ]
+                            },
+                            "Segment": {
+                                "SegmentDurationSeconds": 2,
+                                "SegmentName": "segmentName2",
+                                "Encryption": {
+                                    "EncryptionMethod": {
+                                        "IsmEncryptionMethod": "CENC"
+                                    },
+                                    "SpekeKeyProvider": {
+                                        "EncryptionContractConfiguration": {
+                                            "PresetSpeke20Audio": "SHARED",
+                                            "PresetSpeke20Video": "SHARED"
+                                        },
+                                        "ResourceId": "ResourceId",
+                                        "DrmSystems": [
+                                            "PLAYREADY"
+                                        ],
+                                        "RoleArn": "arn:aws:iam::123456789012:role/empRole",
+                                        "Url": "https://speke-key-provider.example.com"
+                                    }
+                                }
+                            },
+                            "MssManifests": [
+                                {
+                                    "ManifestName": "exampleMssManifest1",
+                                    "ManifestWindowSeconds": 60,
+                                    "ManifestLayout": "FULL"
+                                },
+                                {
+                                    "ManifestName": "exampleMssManifest2",
+                                    "ManifestWindowSeconds": 30,
+                                    "ManifestLayout": "COMPACT"
+                                }
+                            ]
+                        },
+                        "output": {
+                            "ChannelGroupName": "exampleChannelGroup",
+                            "ChannelName": "exampleChannel",
+                            "OriginEndpointName": "exampleOriginEndpointISM",
+                            "Description": "Updated description for exampleOriginEndpointISM",
+                            "Arn": "arn:aws:mediapackagev2:us-west-2:123456789012:channelGroup/exampleChannelGroup/channel/exampleChannel/originEndpoint/exampleOriginEndpointISM",
+                            "CreatedAt": "2022-10-18T09:36:00.00Z",
+                            "ModifiedAt": "2022-10-18T09:37:00.00Z",
+                            "ContainerType": "ISM",
+                            "StartoverWindowSeconds": 600,
+                            "ForceEndpointErrorConfiguration": {
+                                "EndpointErrorConditions": [
+                                    "STALE_MANIFEST",
+                                    "INCOMPLETE_MANIFEST",
+                                    "MISSING_DRM_KEY",
+                                    "SLATE_INPUT"
+                                ]
+                            },
+                            "Segment": {
+                                "SegmentDurationSeconds": 2,
+                                "SegmentName": "segmentName2",
+                                "Encryption": {
+                                    "EncryptionMethod": {
+                                        "IsmEncryptionMethod": "CENC"
+                                    },
+                                    "SpekeKeyProvider": {
+                                        "EncryptionContractConfiguration": {
+                                            "PresetSpeke20Audio": "SHARED",
+                                            "PresetSpeke20Video": "SHARED"
+                                        },
+                                        "ResourceId": "ResourceId",
+                                        "DrmSystems": [
+                                            "PLAYREADY"
+                                        ],
+                                        "RoleArn": "arn:aws:iam::123456789012:role/empRole",
+                                        "Url": "https://speke-key-provider.example.com"
+                                    }
+                                }
+                            },
+                            "MssManifests": [
+                                {
+                                    "ManifestName": "exampleMssManifest1",
+                                    "ManifestWindowSeconds": 60,
+                                    "ManifestLayout": "FULL",
+                                    "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointISM/exampleMssManifest1.ism/Manifest"
+                                },
+                                {
+                                    "ManifestName": "exampleMssManifest2",
+                                    "ManifestWindowSeconds": 30,
+                                    "ManifestLayout": "COMPACT",
+                                    "Url": "https://abcde.egress.vwxyz.mediapackagev2.us-west-2.amazonaws.com/out/v1/exampleChannelGroup/exampleChannel/exampleOriginEndpointISM/exampleMssManifest2.ism/Manifest"
+                                }
+                            ],
+                            "ETag": "HmgU+ewBzHJS5xvz9nLXm2SEQxTsjRfk0rVvuMayoyl=",
+                            "Tags": {
+                                "key1": "value1",
+                                "key2": "value2"
+                            }
+                        }
                     }
                 ],
                 "smithy.api#http": {
@@ -7604,6 +8662,13 @@
                     "traits": {
                         "aws.cloudformation#cfnExcludeProperty": {},
                         "smithy.api#documentation": "<p>A DASH manifest configuration.</p>"
+                    }
+                },
+                "MssManifests": {
+                    "target": "com.amazonaws.mediapackagev2#CreateMssManifests",
+                    "traits": {
+                        "aws.cloudformation#cfnExcludeProperty": {},
+                        "smithy.api#documentation": "<p>A list of Microsoft Smooth Streaming (MSS) manifest configurations to update for the origin endpoint. This replaces the existing MSS manifest configurations.</p>"
                     }
                 },
                 "ForceEndpointErrorConfiguration": {
@@ -7706,6 +8771,12 @@
                     "target": "com.amazonaws.mediapackagev2#GetLowLatencyHlsManifests",
                     "traits": {
                         "smithy.api#documentation": "<p>A low-latency HLS manifest configuration.</p>"
+                    }
+                },
+                "MssManifests": {
+                    "target": "com.amazonaws.mediapackagev2#GetMssManifests",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The updated Microsoft Smooth Streaming (MSS) manifest configurations for this origin endpoint.</p>"
                     }
                 },
                 "ForceEndpointErrorConfiguration": {
@@ -7813,6 +8884,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "ENCRYPTION_CONTRACT_WITHOUT_AUDIO_RENDITION_INCOMPATIBLE"
+                    }
+                },
+                "ENCRYPTION_CONTRACT_WITH_ISM_CONTAINER_INCOMPATIBLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ENCRYPTION_CONTRACT_WITH_ISM_CONTAINER_INCOMPATIBLE"
                     }
                 },
                 "ENCRYPTION_CONTRACT_UNENCRYPTED": {
@@ -8103,6 +9180,36 @@
                         "smithy.api#enumValue": "START_TAG_TIME_OFFSET_INVALID"
                     }
                 },
+                "INCOMPATIBLE_DASH_PROFILE_DVB_DASH_CONFIGURATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INCOMPATIBLE_DASH_PROFILE_DVB_DASH_CONFIGURATION"
+                    }
+                },
+                "DASH_DVB_ATTRIBUTES_WITHOUT_DVB_DASH_PROFILE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DASH_DVB_ATTRIBUTES_WITHOUT_DVB_DASH_PROFILE"
+                    }
+                },
+                "INCOMPATIBLE_DASH_COMPACTNESS_CONFIGURATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INCOMPATIBLE_DASH_COMPACTNESS_CONFIGURATION"
+                    }
+                },
+                "INCOMPATIBLE_XML_ENCODING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INCOMPATIBLE_XML_ENCODING"
+                    }
+                },
+                "CMAF_EXCLUDE_SEGMENT_DRM_METADATA_INCOMPATIBLE_CONTAINER_TYPE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CMAF_EXCLUDE_SEGMENT_DRM_METADATA_INCOMPATIBLE_CONTAINER_TYPE"
+                    }
+                },
                 "ONLY_CMAF_INPUT_TYPE_ALLOW_MQCS_INPUT_SWITCHING": {
                     "target": "smithy.api#Unit",
                     "traits": {
@@ -8113,6 +9220,138 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "ONLY_CMAF_INPUT_TYPE_ALLOW_MQCS_OUTPUT_CONFIGURATION"
+                    }
+                },
+                "TS_CONTAINER_TYPE_WITH_MSS_MANIFEST": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "TS_CONTAINER_TYPE_WITH_MSS_MANIFEST"
+                    }
+                },
+                "CMAF_CONTAINER_TYPE_WITH_MSS_MANIFEST": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "CMAF_CONTAINER_TYPE_WITH_MSS_MANIFEST"
+                    }
+                },
+                "ISM_CONTAINER_TYPE_WITH_HLS_MANIFEST": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ISM_CONTAINER_TYPE_WITH_HLS_MANIFEST"
+                    }
+                },
+                "ISM_CONTAINER_TYPE_WITH_LL_HLS_MANIFEST": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ISM_CONTAINER_TYPE_WITH_LL_HLS_MANIFEST"
+                    }
+                },
+                "ISM_CONTAINER_TYPE_WITH_DASH_MANIFEST": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ISM_CONTAINER_TYPE_WITH_DASH_MANIFEST"
+                    }
+                },
+                "ISM_CONTAINER_TYPE_WITH_SCTE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ISM_CONTAINER_TYPE_WITH_SCTE"
+                    }
+                },
+                "ISM_CONTAINER_WITH_KEY_ROTATION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ISM_CONTAINER_WITH_KEY_ROTATION"
+                    }
+                },
+                "BATCH_GET_SECRET_VALUE_DENIED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "BATCH_GET_SECRET_VALUE_DENIED"
+                    }
+                },
+                "GET_SECRET_VALUE_DENIED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "GET_SECRET_VALUE_DENIED"
+                    }
+                },
+                "DESCRIBE_SECRET_DENIED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DESCRIBE_SECRET_DENIED"
+                    }
+                },
+                "INVALID_SECRET_FORMAT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INVALID_SECRET_FORMAT"
+                    }
+                },
+                "SECRET_IS_NOT_ONE_KEY_VALUE_PAIR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SECRET_IS_NOT_ONE_KEY_VALUE_PAIR"
+                    }
+                },
+                "INVALID_SECRET_KEY": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INVALID_SECRET_KEY"
+                    }
+                },
+                "INVALID_SECRET_VALUE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INVALID_SECRET_VALUE"
+                    }
+                },
+                "SECRET_ARN_RESOURCE_NOT_FOUND": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SECRET_ARN_RESOURCE_NOT_FOUND"
+                    }
+                },
+                "DECRYPT_SECRET_FAILED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DECRYPT_SECRET_FAILED"
+                    }
+                },
+                "TOO_MANY_SECRETS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "TOO_MANY_SECRETS"
+                    }
+                },
+                "DUPLICATED_SECRET": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DUPLICATED_SECRET"
+                    }
+                },
+                "MALFORMED_SECRET_ARN": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "MALFORMED_SECRET_ARN"
+                    }
+                },
+                "SECRET_FROM_DIFFERENT_ACCOUNT": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SECRET_FROM_DIFFERENT_ACCOUNT"
+                    }
+                },
+                "SECRET_FROM_DIFFERENT_REGION": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SECRET_FROM_DIFFERENT_REGION"
+                    }
+                },
+                "INVALID_SECRET": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "INVALID_SECRET"
                     }
                 }
             }

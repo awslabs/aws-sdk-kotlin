@@ -17,6 +17,7 @@ local.properties
 services/*/generated-src
 services/*/build.gradle.kts
 services/*/API.md
+services/*/OVERVIEW.md
 .kotest/
 .kotlin/
 *.klib
