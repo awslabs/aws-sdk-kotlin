@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.4.124] - 07/17/2025
+
+### Features
+* (**cleanroomsml**) This release introduces Parquet result format support for ML Input Channel models in AWS Clean Rooms ML.
+* (**ec2**) AWS Free Tier Version2 Support
+* (**mailmanager**) Allow underscores in the local part of the input of the "Email recipients rewrite" action in rule sets.
+* (**mediaconvert**) This release expands the range of supported audio outputs to include xHE, 192khz FLAC and the deprecation of dual mono for AC3.
+* (**synthetics**) This feature allows AWS Synthetics customers to provide code dependencies using lambda layer while creating a canary
+
+### Documentation
+* (**cloudfront**) Doc only update for CloudFront that fixes some customer-reported issues
+* (**keyspacesstreams**) Doc only update for the Amazon Keyspaces Streams API.
+* (**sfn**) Align input with style guidelines.
+
 ## [1.4.123] - 07/16/2025
 
 ### Features
