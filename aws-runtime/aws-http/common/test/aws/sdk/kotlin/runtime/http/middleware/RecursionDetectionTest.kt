@@ -21,8 +21,8 @@ import kotlin.test.assertFalse
 class RecursionDetectionTest {
     private class TraceHeaderSerializer(
         private val traceHeader: String,
-    ) : HttpSerialize<Unit> {
-        override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder {
+    ) : HttpSerializer.NonStreaming<Unit> {
+        override fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder {
             val builder = HttpRequestBuilder()
             builder.headers[HEADER_TRACE_ID] = traceHeader
             return builder
@@ -37,8 +37,13 @@ class RecursionDetectionTest {
         expectedTraceHeader: String?,
     ) {
         val op = SdkHttpOperation.build<Unit, HttpResponse> {
-            serializer = if (existingTraceHeader != null) TraceHeaderSerializer(existingTraceHeader) else UnitSerializer
-            deserializer = IdentityDeserializer
+            serializeWith = if (existingTraceHeader != null) {
+                TraceHeaderSerializer(existingTraceHeader)
+            } else {
+                HttpSerializer.Unit
+            }
+
+            deserializeWith = HttpDeserializer.Identity
             operationName = "testOperation"
             serviceName = "TestService"
         }

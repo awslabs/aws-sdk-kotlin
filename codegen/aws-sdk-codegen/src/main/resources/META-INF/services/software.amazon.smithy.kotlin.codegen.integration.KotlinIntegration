@@ -7,6 +7,7 @@ aws.sdk.kotlin.codegen.customization.DefaultMiddleware
 aws.sdk.kotlin.codegen.customization.AccountIdEndpointBuiltinCustomization
 aws.sdk.kotlin.codegen.customization.PresignableModelIntegration
 aws.sdk.kotlin.codegen.customization.BackfillOptionalAuth
+aws.sdk.kotlin.codegen.endpoints.AwsEndpointDiscoveryIntegration
 aws.sdk.kotlin.codegen.endpoints.BindAwsEndpointBuiltins
 aws.sdk.kotlin.codegen.endpoints.AddAwsEndpointFunctions
 aws.sdk.kotlin.codegen.PresignerGenerator

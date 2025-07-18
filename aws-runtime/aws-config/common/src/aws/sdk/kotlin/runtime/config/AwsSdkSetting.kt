@@ -220,6 +220,15 @@ public object AwsSdkSetting {
         strEnvSetting("aws.sigV4aSigningRegionSet", "AWS_SIGV4A_SIGNING_REGION_SET")
 
     /**
+     * A flag indicating whether endpoint discovery is enabled for AWS services that support it. The implicit default
+     * value for this setting is:
+     * * `true` for services which _require_ EP discovery (e.g., Timestream)
+     * * `false` for services which _allow but do not require_ EP discovery (e.g., DynamoDB)
+     */
+    public val AwsEndpointDiscoveryEnabled: EnvironmentSetting<Boolean> =
+        boolEnvSetting("aws.endpointDiscoveryEnabled", "AWS_ENABLE_ENDPOINT_DISCOVERY")
+
+    /**
      * Configures request checksum calculation
      */
     public val AwsRequestChecksumCalculation: EnvironmentSetting<RequestHttpChecksumConfig> =
