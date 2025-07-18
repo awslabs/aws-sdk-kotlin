@@ -101,16 +101,3 @@ public fun resolveAccountId(endpointMode: AccountIdEndpointMode, attributes: Att
     AccountIdEndpointMode.DISABLED -> null
     AccountIdEndpointMode.REQUIRED -> attributes.getOrNull(AwsClientOption.AccountId) ?: throw ConfigurationException("AccountIdEndpointMode is set to required but no AWS account ID found")
 }
-
-/**
- * Resolve the endpoint discovery mode
- */
-@InternalSdkApi
-public suspend fun resolveEndpointDiscoveryEnabled(
-    provider: PlatformProvider = PlatformProvider.System,
-    profile: LazyAsyncValue<AwsProfile> = asyncLazy { loadAwsSharedConfig(provider).activeProfile },
-    serviceRequiresEpDiscovery: Boolean,
-): Boolean =
-    AwsSdkSetting.AwsEndpointDiscoveryEnabled.resolve(provider)
-        ?: profile.get().endpointDiscoveryEnabled
-        ?: serviceRequiresEpDiscovery

@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package aws.sdk.kotlin.runtime.config
+package aws.sdk.kotlin.runtime.client
 
 import aws.smithy.kotlin.runtime.client.SdkClientConfig
-import aws.smithy.kotlin.runtime.client.region.RegionProvider
 
 /**
  * Base interface all generated AWS SDK Kotlin clients implement
@@ -15,26 +14,10 @@ public interface AwsSdkClientConfig : SdkClientConfig {
 
     /**
      * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
-     * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more information.
-     * When specified, this static region configuration takes precedence over other region resolution methods.
-     *
-     * The region resolution order is:
-     * 1. Static region (if specified)
-     * 2. Custom region provider (if configured)
-     * 3. Default region provider chain
+     * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
+     * information
      */
     public val region: String?
-
-    /**
-     * An optional region provider that determines the AWS region for client operations. When specified, this provider
-     * takes precedence over the default region provider chain, unless a static region is explicitly configured.
-     *
-     * The region resolution order is:
-     * 1. Static region (if specified)
-     * 2. Custom region provider (if configured)
-     * 3. Default region provider chain
-     */
-    public val regionProvider: RegionProvider
 
     /**
      * Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.
@@ -66,26 +49,10 @@ public interface AwsSdkClientConfig : SdkClientConfig {
     public interface Builder {
         /**
          * The AWS region (e.g. `us-west-2`) to make requests to. See about AWS
-         * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more information.
-         * When specified, this static region configuration takes precedence over other region resolution methods.
-         *
-         * The region resolution order is:
-         * 1. Static region (if specified)
-         * 2. Custom region provider (if configured)
-         * 3. Default region provider chain
+         * [global infrastructure](https://aws.amazon.com/about-aws/global-infrastructure/regions_az/) for more
+         * information
          */
         public var region: String?
-
-        /**
-         * An optional region provider that determines the AWS region for client operations. When specified, this provider
-         * takes precedence over the default region provider chain, unless a static region is explicitly configured.
-         *
-         * The region resolution order is:
-         * 1. Static region (if specified)
-         * 2. Custom region provider (if configured)
-         * 3. Default region provider chain
-         */
-        public var regionProvider: RegionProvider?
 
         /**
          * Flag to toggle whether to use [FIPS](https://aws.amazon.com/compliance/fips/) endpoints when making requests.

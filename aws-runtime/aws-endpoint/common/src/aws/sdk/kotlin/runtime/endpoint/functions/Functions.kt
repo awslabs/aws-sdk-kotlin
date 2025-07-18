@@ -9,6 +9,7 @@ import aws.sdk.kotlin.runtime.InternalSdkApi
 import aws.smithy.kotlin.runtime.client.endpoints.functions.isValidHostLabel
 import aws.smithy.kotlin.runtime.net.isIpv4
 import aws.smithy.kotlin.runtime.net.isIpv6
+import kotlin.jvm.JvmOverloads
 
 // the number of top-level components an arn contains (separated by colons)
 private const val ARN_COMPONENT_COUNT = 6
@@ -69,6 +70,23 @@ public data class PartitionConfig(
     public val supportsDualStack: Boolean? = null,
     public val implicitGlobalRegion: String? = null,
 ) {
+    @Deprecated("This constructor does not support implicitGlobalRegion") // but is added for backwards compatibility
+    @JvmOverloads
+    public constructor (
+        name: String? = null,
+        dnsSuffix: String? = null,
+        dualStackDnsSuffix: String? = null,
+        supportsFIPS: Boolean? = null,
+        supportsDualStack: Boolean? = null,
+    ) : this(
+        name,
+        dnsSuffix,
+        dualStackDnsSuffix,
+        supportsFIPS,
+        supportsDualStack,
+        null,
+    )
+
     public fun mergeWith(other: PartitionConfig): PartitionConfig =
         PartitionConfig(
             other.name ?: name,

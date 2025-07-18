@@ -1,9 +1,0 @@
-{
-    "id": "49af01b8-6fed-4add-ace0-9f027e83425a",
-    "type": "feature",
-    "description": "⚠️ **IMPORTANT**: Refactor endpoint discoverer classes into interfaces so custom implementations may be provided",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1413"
-    ],
-    "requiresMinorVersionBump": true
-}

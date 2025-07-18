@@ -74,7 +74,7 @@ internal sealed class JsonCredentialsResponse {
  * ```
  */
 @Suppress("ktlint:standard:property-naming")
-internal fun deserializeJsonCredentials(deserializer: Deserializer): JsonCredentialsResponse {
+internal suspend fun deserializeJsonCredentials(deserializer: Deserializer): JsonCredentialsResponse {
     val CODE_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("Code"))
     val ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("AccessKeyId"))
     val SECRET_ACCESS_KEY_ID_DESCRIPTOR = SdkFieldDescriptor(SerialKind.String, JsonSerialName("SecretAccessKey"))

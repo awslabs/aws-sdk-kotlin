@@ -12,13 +12,10 @@ import aws.sdk.kotlin.runtime.http.middleware.UserAgent
 import aws.smithy.kotlin.runtime.client.LogMode
 import aws.smithy.kotlin.runtime.client.SdkClientOption
 import aws.smithy.kotlin.runtime.client.endpoints.Endpoint
-import aws.smithy.kotlin.runtime.http.HttpCall
-import aws.smithy.kotlin.runtime.http.HttpStatusCode
-import aws.smithy.kotlin.runtime.http.SdkHttpClient
+import aws.smithy.kotlin.runtime.http.*
 import aws.smithy.kotlin.runtime.http.engine.DefaultHttpEngine
 import aws.smithy.kotlin.runtime.http.engine.HttpClientEngine
 import aws.smithy.kotlin.runtime.http.engine.ProxySelector
-import aws.smithy.kotlin.runtime.http.isSuccess
 import aws.smithy.kotlin.runtime.http.operation.*
 import aws.smithy.kotlin.runtime.io.Closeable
 import aws.smithy.kotlin.runtime.io.closeIfCloseable
@@ -112,12 +109,13 @@ public class ImdsClient private constructor(builder: Builder) : InstanceMetadata
      */
     public override suspend fun get(path: String): String {
         val op = SdkHttpOperation.build<Unit, String> {
-            serializeWith = HttpSerializer.Unit
-            deserializeWith = object : HttpDeserializer.NonStreaming<String> {
-                override fun deserialize(context: ExecutionContext, call: HttpCall, payload: ByteArray?): String {
+            serializer = UnitSerializer
+            deserializer = object : HttpDeserialize<String> {
+                override suspend fun deserialize(context: ExecutionContext, call: HttpCall): String {
                     val response = call.response
                     if (response.status.isSuccess()) {
-                        return payload!!.decodeToString()
+                        val payload = response.body.readAll() ?: throw EC2MetadataError(response.status, "no metadata payload")
+                        return payload.decodeToString()
                     } else {
                         throw EC2MetadataError(response.status, "error retrieving instance metadata: ${response.status.description}")
                     }
@@ -234,9 +232,9 @@ public enum class EndpointMode(internal val defaultEndpoint: Endpoint) {
  * @param message The error message
  */
 public class EC2MetadataError(public val status: HttpStatusCode, message: String) : AwsServiceException(message) {
-    @Deprecated("This constructor passes HTTP status as an Int instead of as HttpStatusCode. This declaration will be removed in version 1.6.x.")
+    @Deprecated("This constructor passes HTTP status as an Int instead of as HttpStatusCode")
     public constructor(statusCode: Int, message: String) : this(HttpStatusCode.fromValue(statusCode), message)
 
-    @Deprecated("This property is now deprecated and should be fetched from status.value. This declaration will be removed in version 1.6.x.")
+    @Deprecated("This property is now deprecated and should be fetched from status.value")
     public val statusCode: Int = status.value
 }

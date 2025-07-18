@@ -6,7 +6,6 @@
 package aws.sdk.kotlin.runtime.region
 
 import aws.sdk.kotlin.runtime.config.AwsSdkSetting
-import aws.smithy.kotlin.runtime.client.region.RegionProvider
 import aws.smithy.kotlin.runtime.util.EnvironmentProvider
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 

@@ -36,7 +36,7 @@ class PollyPresigner : KotlinIntegration {
     }
 
     private val customizeUnsignedRequest = SectionWriter { writer, _ ->
-        val ctx = writer.getContextValue(CodegenContext.Key)
+        val ctx = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.CodegenContext)
         val operation = ctx.model.expectShape<OperationShape>(writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.OperationId))
         val resolver = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.HttpBindingResolver)
         val defaultTimestampFormat = writer.getContextValue(PresignerGenerator.UnsignedRequestCustomizationSection.DefaultTimestampFormat)

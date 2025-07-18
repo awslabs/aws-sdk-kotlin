@@ -27,7 +27,7 @@ class ReplaceServiceExceptionBase : KotlinIntegration {
         get() = listOf(SectionWriterBinding(ExceptionBaseClassGenerator.ExceptionBaseClassSection, exceptionSectionWriter))
 
     private val exceptionSectionWriter = SectionWriter { writer, _ ->
-        val ctx = writer.getContextValue(CodegenContext.Key)
+        val ctx = writer.getContextValue(ExceptionBaseClassGenerator.ExceptionBaseClassSection.CodegenContext)
         AwsServiceExceptionBaseClassGenerator().render(ctx, writer)
     }
 }

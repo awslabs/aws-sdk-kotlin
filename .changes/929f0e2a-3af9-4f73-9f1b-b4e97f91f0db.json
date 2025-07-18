@@ -1,9 +1,0 @@
-{
-    "id": "929f0e2a-3af9-4f73-9f1b-b4e97f91f0db",
-    "type": "feature",
-    "description": "⚠️ **IMPORTANT**: Add support for enabling/disabling endpoint discovery via [standard cross-SDK config mechanisms](https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoint-discovery.html)",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1413"
-    ],
-    "requiresMinorVersionBump": true
-}

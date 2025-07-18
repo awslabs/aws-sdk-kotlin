@@ -5,7 +5,8 @@
 import aws.sdk.kotlin.gradle.dsl.skipPublishing
 
 plugins {
-    id(libs.plugins.kotlin.jvm.get().pluginId)
+    id(libs.plugins.kotlin.multiplatform.get().pluginId)
+    alias(libs.plugins.aws.kotlin.repo.tools.kmp)
     application
 }
 
@@ -40,7 +41,7 @@ kotlin {
             optinAnnotations.forEach { languageSettings.optIn(it) }
         }
 
-        main {
+        jvmMain {
             dependencies {
                 api(libs.smithy.kotlin.runtime.core)
                 implementation(project(":aws-runtime:aws-core"))
