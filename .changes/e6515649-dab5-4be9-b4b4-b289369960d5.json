@@ -1,8 +1,0 @@
-{
-    "id": "e6515649-dab5-4be9-b4b4-b289369960d5",
-    "type": "bugfix",
-    "description": "Favor `endpointUrl` instead of endpoint discovery if both are provided",
-    "issues": [
-        "awslabs/aws-sdk-kotlin#1413"
-    ]
-}
