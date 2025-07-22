@@ -9,26 +9,24 @@ import aws.sdk.kotlin.services.s3.model.*
 import aws.sdk.kotlin.testing.PRINTABLE_CHARS
 import aws.sdk.kotlin.testing.withAllEngines
 import aws.smithy.kotlin.runtime.client.ProtocolRequestInterceptorContext
-import aws.smithy.kotlin.runtime.content.ByteStream
-import aws.smithy.kotlin.runtime.content.asByteStream
-import aws.smithy.kotlin.runtime.content.decodeToString
-import aws.smithy.kotlin.runtime.content.fromFile
-import aws.smithy.kotlin.runtime.content.toByteArray
-import aws.smithy.kotlin.runtime.content.toByteStream
+import aws.smithy.kotlin.runtime.content.*
 import aws.smithy.kotlin.runtime.hashing.sha256
 import aws.smithy.kotlin.runtime.http.HttpException
 import aws.smithy.kotlin.runtime.http.interceptors.HttpInterceptor
 import aws.smithy.kotlin.runtime.http.request.HttpRequest
 import aws.smithy.kotlin.runtime.testing.RandomTempFile
 import aws.smithy.kotlin.runtime.text.encoding.encodeToHex
-import kotlinx.coroutines.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
 import java.io.File
-import java.util.UUID
+import java.util.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 
@@ -51,6 +49,7 @@ class S3BucketOpsIntegrationTest {
     @AfterAll
     fun cleanup() = runBlocking {
         S3TestUtils.deleteBucketAndAllContents(client, testBucket)
+        client.close()
     }
 
     @Test

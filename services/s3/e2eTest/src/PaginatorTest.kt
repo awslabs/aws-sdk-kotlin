@@ -38,6 +38,7 @@ class PaginatorTest {
     @AfterAll
     fun cleanup() = runBlocking {
         S3TestUtils.deleteBucketAndAllContents(client, testBucket)
+        client.close()
     }
 
     // ListParts has a strange pagination termination condition via [IsTerminated]. Verify it actually works correctly.

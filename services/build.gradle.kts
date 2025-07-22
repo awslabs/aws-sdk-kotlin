@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.configurePublishing
-import aws.sdk.kotlin.gradle.kmp.*
+import aws.sdk.kotlin.gradle.kmp.kotlin
 import aws.sdk.kotlin.gradle.util.typedProp
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.time.LocalDateTime
@@ -109,13 +109,6 @@ subprojects {
                         testClassesDirs = output.classesDirs
 
                         useJUnitPlatform()
-                        testLogging {
-                            events("passed", "skipped", "failed")
-                            showStandardStreams = true
-                            showStackTraces = true
-                            showExceptions = true
-                            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-                        }
 
                         // model a random input to enable re-running e2e tests back to back without
                         // up-to-date checks or cache getting in the way
@@ -132,6 +125,16 @@ subprojects {
             allWarningsAsErrors.set(false) // FIXME Tons of errors occur in generated code
             jvmTarget.set(JvmTarget.JVM_1_8) // fixes outgoing variant metadata: https://github.com/smithy-lang/smithy-kotlin/issues/258
             freeCompilerArgs.add("-Xjdk-release=1.8")
+        }
+    }
+
+    tasks.withType<org.gradle.api.tasks.testing.AbstractTestTask>().configureEach {
+        testLogging {
+            events("passed", "skipped", "failed")
+            showStandardStreams = true
+            showStackTraces = true
+            showExceptions = true
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         }
     }
 
