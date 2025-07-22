@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.1] - 07/22/2025
+
+### Features
+* (**ecr**) Add support for Image Tag Mutability Exception feature, allowing repositories to define wildcard-based patterns that override the default image tag mutability settings.
+* (**emr**) This release adds new parameter 'ExtendedSupport' in AWS EMR RunJobFlow, ModifyCluster and DescribeCluster API.
+* (**lambda**) This release migrated the model to Smithy keeping all features unchanged.
+* (**neptunedata**) This release updates the supported regions for Neptune API to include current AWS regions.
+
 ## [1.5.0] - 07/21/2025
 
 ### Features
