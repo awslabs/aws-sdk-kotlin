@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.2] - 07/23/2025
+
+### Features
+* (**ec2**) Added support for skip-os-shutdown option for the EC2 instance stop and terminate operations. This feature enables customers to bypass the graceful OS shutdown, supporting faster state transitions when instance data preservation isn't critical.
+* (**glue**) AWS Glue now supports dynamic session policies for job executions. This feature allows you to specify custom, fine-grained permissions for each job run without creating multiple IAM roles.
+* (**workspacesthinclient**) Added the lastUserId parameter to the ListDevices and GetDevice API.
+
 ## [1.5.1] - 07/22/2025
 
 ### Features
