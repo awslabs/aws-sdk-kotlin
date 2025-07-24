@@ -7,8 +7,6 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinMultiplatformPluginWrapper
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinMetadataTarget
-import org.jetbrains.kotlin.gradle.targets.js.KotlinJsTarget
-import java.util.*
 
 plugins {
     `maven-publish`
@@ -84,7 +82,6 @@ fun createBomConstraintsAndVersionCatalog() {
 
 fun Project.artifactId(target: KotlinTarget): String = when (target) {
     is KotlinMetadataTarget -> name
-    is KotlinJsTarget -> "$name-js"
     else -> "$name-${target.targetName.lowercase()}"
 }
 

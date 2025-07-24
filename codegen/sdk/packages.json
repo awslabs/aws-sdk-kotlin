@@ -247,6 +247,18 @@
             "brazilName": "AwsSdkKotlinBedrockAgentRuntime"
         },
         {
+            "sdkId": "Bedrock AgentCore",
+            "namespace": "aws.sdk.kotlin.services.bedrockagentcore",
+            "artifactName": "bedrockagentcore",
+            "brazilName": "AwsSdkKotlinBedrockAgentcore"
+        },
+        {
+            "sdkId": "Bedrock AgentCore Control",
+            "namespace": "aws.sdk.kotlin.services.bedrockagentcorecontrol",
+            "artifactName": "bedrockagentcorecontrol",
+            "brazilName": "AwsSdkKotlinBedrockAgentcoreControl"
+        },
+        {
             "sdkId": "Bedrock Data Automation",
             "namespace": "aws.sdk.kotlin.services.bedrockdataautomation",
             "artifactName": "bedrockdataautomation",
@@ -1841,6 +1853,12 @@
             "namespace": "aws.sdk.kotlin.services.s3tables",
             "artifactName": "s3tables",
             "brazilName": "AwsSdkKotlinS3tables"
+        },
+        {
+            "sdkId": "S3Vectors",
+            "namespace": "aws.sdk.kotlin.services.s3vectors",
+            "artifactName": "s3vectors",
+            "brazilName": "AwsSdkKotlinS3vectors"
         },
         {
             "sdkId": "SES",

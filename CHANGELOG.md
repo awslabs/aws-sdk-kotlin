@@ -1,5 +1,105 @@
 # Changelog
 
+## [1.5.2] - 07/23/2025
+
+### Features
+* (**ec2**) Added support for skip-os-shutdown option for the EC2 instance stop and terminate operations. This feature enables customers to bypass the graceful OS shutdown, supporting faster state transitions when instance data preservation isn't critical.
+* (**glue**) AWS Glue now supports dynamic session policies for job executions. This feature allows you to specify custom, fine-grained permissions for each job run without creating multiple IAM roles.
+* (**workspacesthinclient**) Added the lastUserId parameter to the ListDevices and GetDevice API.
+
+## [1.5.1] - 07/22/2025
+
+### Features
+* (**ecr**) Add support for Image Tag Mutability Exception feature, allowing repositories to define wildcard-based patterns that override the default image tag mutability settings.
+* (**emr**) This release adds new parameter 'ExtendedSupport' in AWS EMR RunJobFlow, ModifyCluster and DescribeCluster API.
+* (**lambda**) This release migrated the model to Smithy keeping all features unchanged.
+* (**neptunedata**) This release updates the supported regions for Neptune API to include current AWS regions.
+
+## [1.5.0] - 07/21/2025
+
+### Features
+* (**cloudfront**) Add dualstack endpoint support
+* (**deadline**) Add support for VPC resource endpoints in Service Managed Fleets
+* (**ec2**) This release adds support for C8gn, F2 and P6e-GB200 Instance types
+* (**sagemaker**) This release adds 1/ Support for S3FileSystem in CustomFileSystems 2/ The ability for a customer to select their preferred IpAddressType for use with private Workforces 3/ Support for p4de instance type in SageMaker Training Plans
+* (**timestreaminfluxdb**) Timestream for InfluxDB adds support for db.influx.24xlarge instance type. This enhancement enables higher compute capacity for demanding workloads through CreateDbInstance, CreateDbCluster, UpdateDbInstance, and UpdateDbCluster APIs.
+* Upgrade to Kotlin 2.2.0
+* [#1413](https://github.com/awslabs/aws-sdk-kotlin/issues/1413) ⚠️ **IMPORTANT**: Refactor endpoint discoverer classes into interfaces so custom implementations may be provided
+* [#1478](https://github.com/awslabs/aws-sdk-kotlin/issues/1478) Add `regionProvider` property to client config
+* [#1413](https://github.com/awslabs/aws-sdk-kotlin/issues/1413) ⚠️ **IMPORTANT**: Add support for enabling/disabling endpoint discovery via [standard cross-SDK config mechanisms](https://docs.aws.amazon.com/sdkref/latest/guide/feature-endpoint-discovery.html)
+
+### Fixes
+* [#1413](https://github.com/awslabs/aws-sdk-kotlin/issues/1413) Favor `endpointUrl` instead of endpoint discovery if both are provided
+
+## [1.4.125] - 07/18/2025
+
+### Features
+* (**auditmanager**) Updated error handling for RegisterOrganizationAdminAccount API to properly translate TooManyExceptions to HTTP 429 status code. This enhancement improves error handling consistency and provides clearer feedback when request limits are exceeded.
+* (**cloudwatchlogs**) CloudWatchLogs launches GetLogObject API with streaming support for efficient log data retrieval. Logs added support for new AccountPolicy type METRIC_EXTRACTION_POLICY. For more information, see CloudWatch Logs API documentation
+* (**mediaconvert**) This release adds support for TAMS server integration with MediaConvert inputs.
+* (**outposts**) Add AWS Outposts API to surface customer billing information
+* (**sesv2**) Added IP Visibility support for managed dedicated pools. Enhanced GetDedicatedIp and GetDedicatedIps APIs to return managed IP addresses.
+
+### Documentation
+* (**ssm**) July 2025 doc-only updates for Systems Manager.
+
+## [1.4.124] - 07/17/2025
+
+### Features
+* (**cleanroomsml**) This release introduces Parquet result format support for ML Input Channel models in AWS Clean Rooms ML.
+* (**ec2**) AWS Free Tier Version2 Support
+* (**mailmanager**) Allow underscores in the local part of the input of the "Email recipients rewrite" action in rule sets.
+* (**mediaconvert**) This release expands the range of supported audio outputs to include xHE, 192khz FLAC and the deprecation of dual mono for AC3.
+* (**synthetics**) This feature allows AWS Synthetics customers to provide code dependencies using lambda layer while creating a canary
+
+### Documentation
+* (**cloudfront**) Doc only update for CloudFront that fixes some customer-reported issues
+* (**keyspacesstreams**) Doc only update for the Amazon Keyspaces Streams API.
+* (**sfn**) Align input with style guidelines.
+
+## [1.4.123] - 07/16/2025
+
+### Features
+* (**bedrock**) This release adds support for on-demand custom model inference through CustomModelDeployment APIs for Amazon Bedrock.
+* (**bedrockagentcore**) Initial release of Amazon Bedrock AgentCore SDK including Runtime, Built-In Tools, Memory, Gateway and Identity.
+* (**bedrockagentcorecontrol**) Initial release of Amazon Bedrock AgentCore SDK including Runtime, Built-In Tools, Memory, Gateway and Identity.
+* (**bedrockruntime**) document update to support on demand custom model.
+* (**cloudwatchlogs**) CloudWatch Logs updates: Added X-Ray tracing for Amazon Bedrock Agent resources. Logs introduced Log Group level resource policies (managed through Put/Delete/Describe Resource Policy APIs). For more information, see CloudWatch Logs API documentation.
+* (**datasync**) AWS DataSync now supports IPv6 address inputs and outputs in create, update, and describe operations for NFS, SMB, and Object Storage locations
+* (**glue**) AWS Glue now supports schema, partition and sort management of Apache Iceberg tables using Glue SDK
+* (**guardduty**) Add expectedBucketOwner parameter to ThreatIntel and IPSet APIs.
+* (**iotwireless**) FuotaTaskId is not a valid IdentifierType for EventConfiguration and is being removed from possible IdentifierType values.
+* (**mediapackagev2**) This release adds support for CDN Authentication using Static Headers in MediaPackage v2.
+* (**networkflowmonitor**) Introducing 2 new scope status types - DEACTIVATING and DEACTIVATED.
+* (**paymentcryptographydata**) Expand length of message data field for Mac generation and validation to 8192 characters.
+* Add support for Bearer authentication using a token set in an environment variable for Bedrock services
+
+### Documentation
+* (**sfn**) Doc-only update to introduction, and edits to clarify input parameter and the set of control characters.
+
+## [1.4.122] - 07/16/2025
+
+### Features
+* (**ecs**) This release removes hookDetails for the Amazon ECS native blue/green deployments.
+
+## [1.4.121] - 07/15/2025
+
+### Features
+* (**bedrockagent**) Add support for S3 Vectors as a vector store.
+* (**datazone**) Removing restriction of environment profile identifier as required field, S3 feature release
+* (**dynamodbstreams**) Added support for optional shard filter parameter in DescribeStream api that allows customers to fetch child shards of a read_only parent shard.
+* (**ec2**) This release adds support for volume initialization status, which enables you to monitor when the initialization process for an EBS volume is completed. This release also adds IPv6 support to EC2 Instance Connect Endpoints, allowing you to connect to your EC2 Instance via a private IPv6 address.
+* (**ecs**) Amazon ECS supports native blue/green deployments, allowing you to validate new service revisions before directing production traffic to them.
+* (**eventbridge**) Add customer-facing logging for the EventBridge Event Bus, enabling customers to better observe their events and extract insights about their EventBridge usage.
+* (**opensearch**) AWS Opensearch adds support for enabling s3 vector engine options. After enabling this option, customers will be able to create indices with s3 vector engine.
+* (**pricing**) This release adds support for new filter types in GetProducts API, including EQUALS, CONTAINS, ANY_OF, and NONE_OF.
+* (**quicksight**) Introduced custom instructions for topics.
+* (**repostspace**) This release introduces Channels functionality with CreateChannel, GetChannel, ListChannels, and UpdateChannel operations. Channels provide dedicated collaboration spaces where teams can organize discussions and knowledge by projects, business units, or areas of responsibility.
+* (**s3**) Amazon S3 Metadata live inventory tables provide a queryable inventory of all the objects in your general purpose bucket so that you can determine the latest state of your data. To help minimize your storage costs, use journal table record expiration to set a retention period for your records.
+* (**s3tables**) Adds table bucket type to ListTableBucket and GetTableBucket API operations
+* (**s3vectors**) Amazon S3 Vectors provides cost-effective, elastic, and durable vector storage for queries based on semantic meaning and similarity.
+* (**sagemaker**) This release adds support for a new Restricted instance group type to enable a specialized environment for running Nova customization jobs on SageMaker HyperPod clusters. This release also adds support for SageMaker pipeline versioning.
+
 ## [1.4.120] - 07/09/2025
 
 ### Features
