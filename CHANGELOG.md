@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.3] - 07/24/2025
+
+### Features
+* (**datazone**) This release adds support for 1) highlighting relevant text in returned results for Search and SearchListings APIs and 2) returning aggregated counts of values for specified attributes for SearchListings API.
+* (**omics**) Add Git integration and README support for HealthOmics workflows
+
 ## [1.5.2] - 07/23/2025
 
 ### Features
