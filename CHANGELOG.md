@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.4] - 07/25/2025
+
+### Features
+* (**appintegrations**) Amazon AppIntegrations introduces new configuration capabilities to enable customers to manage iframe permissions, control application refresh behavior (per contact or per browser/cross-contact), and run background applications (service).
+* (**budgets**) Adds IPv6 and PrivateLink support for AWS Budgets in IAD.
+* (**ec2**) Transit Gateway native integration with AWS Network Firewall. Adding new enum value for the new Transit Gateway Attachment type.
+* (**mediapackagev2**) This release adds support for specifying a preferred input for channels using CMAF ingest.
+* (**socialmessaging**) This release introduces new WhatsApp template management APIs that enable customers to programmatically create and submit templates for approval, monitor approval status, and manage the complete template lifecycle
+
+### Documentation
+* (**configservice**) Documentation improvements have been made to the EvaluationModel and DescribeConfigurationRecorders APIs.
+* (**kms**) Doc only update: fixed grammatical errors.
+* (**sqs**) Documentation updates for Amazon SQS fair queues feature.
+
 ## [1.5.3] - 07/24/2025
 
 ### Features
