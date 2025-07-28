@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.5] - 07/28/2025
+
+### Features
+* (**directconnect**) Enable MACSec support and features on Interconnects.
+* (**iotsitewise**) Add support for native anomaly detection in IoT SiteWise using new Computation Model APIs
+* (**osis**) Add Pipeline Role Arn as an optional parameter to the create / update pipeline APIs as an alternative to passing in the pipeline configuration body
+
 ## [1.5.4] - 07/25/2025
 
 ### Features
