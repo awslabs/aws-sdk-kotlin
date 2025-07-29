@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.6] - 07/29/2025
+
+### Features
+* (**batch**) AWS Batch for SageMaker Training jobs feature support.  Includes new APIs for service job submission (e.g., SubmitServiceJob) and managing service environments (e.g., CreateServiceEnvironment) that enable queueing SageMaker Training jobs.
+* (**cleanrooms**) This feature provides the ability to update the table reference and allowed columns on an existing configured table.
+* (**deadline**) Adds support for tag management on monitors.
+* (**location**) This release 1) adds support for multi-polygon geofences with disconnected territories, and 2) enables polygon exclusion zones within geofences for more accurate representation of real-world boundaries.
+* (**opensearchserverless**) This is to support Granular access control support for SAML with IAMFedraton in AOSS
+
 ## [1.5.5] - 07/28/2025
 
 ### Features
