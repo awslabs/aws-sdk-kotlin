@@ -8,7 +8,7 @@ import software.amazon.smithy.kotlin.codegen.utils.toPascalCase
 
 private val whitespaceRegex = Regex("\\s")
 
-private val dashRegex = Regex("-")
+private val spaceOrDashRegex = Regex("\\s|-")
 
 /**
  * Base interface for string transformers.
@@ -72,7 +72,7 @@ object SigV4NameTransform {
      * Replace all dashes from the SigV4 service signing name with underscores and capitalize all letters.
      */
     object UpperSnakeCase : SigV4NameTransformer {
-        override fun transform(id: String): String = id.replaceDash("_").uppercase()
+        override fun transform(id: String): String = id.lowercase().replaceDash("_").uppercase()
     }
 
     /**
@@ -90,4 +90,4 @@ fun <T : StringTransformer> String.withTransform(transformer: T): String = trans
 
 private fun String.replaceWhitespace(replacement: String) = replace(whitespaceRegex, replacement)
 
-private fun String.replaceDash(replacement: String) = replace(dashRegex, replacement)
+private fun String.replaceDash(replacement: String) = replace(spaceOrDashRegex, replacement)

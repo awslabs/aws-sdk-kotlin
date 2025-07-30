@@ -22,15 +22,15 @@ import software.amazon.smithy.model.shapes.ServiceShape
 import software.amazon.smithy.model.traits.HttpBearerAuthTrait
 
 /**
- * Customization that enables sourcing Bearer tokens from JVM system properties and environment variables
+ * Customization that enables sourcing Bearer tokens from JVM system properties and system environment variables
  *
- * When a service-specific JVM system property (e.g., aws.bearerTokenBedrock) or environment variable
+ * When a service-specific JVM system property (e.g., aws.bearerTokenBedrock) or system environment variable
  * for bearer tokens is present (e.g., AWS_BEARER_TOKEN_BEDROCK), this customization configures the
  * auth scheme resolver to prefer the smithy.api#httpBearerAuth scheme over other authentication methods.
  * Additionally, it configures a token provider that extracts the bearer token from these sources.
  */
 class EnvironmentBearerTokenCustomization : KotlinIntegration {
-    // Currently only services with sigv4 service name 'bedrock' need this customization
+    // Currently only services with sigV4 service name 'bedrock' need this customization
     private val supportedSigningServiceNames = setOf("bedrock")
 
     override fun enabledForService(model: Model, settings: KotlinSettings): Boolean {
@@ -68,11 +68,11 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
     ) {
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
         val signingServiceName = AwsSignatureVersion4.signingServiceName(serviceShape)
-        // Transform signing service name to service name suffix
+        // Transform signing service name to environment variable key suffix
         val envVarSuffix = signingServiceName.withTransform(SigV4NameTransform.UpperSnakeCase)
-        val jvmSysPropSuffix = signingServiceName.withTransform(SigV4NameTransform.PascalCase)
-        val envVarName = "AWS_BEARER_TOKEN_$envVarSuffix"
-        val sysPropName = "aws.bearerToken$jvmSysPropSuffix"
+        val sysPropSuffix = signingServiceName.withTransform(SigV4NameTransform.PascalCase)
+        val envVarKey = "AWS_BEARER_TOKEN_$envVarSuffix"
+        val sysPropKey = "aws.bearerToken$sysPropSuffix"
         val authSchemeId = RuntimeTypes.Auth.Identity.AuthSchemeId
 
         writer.withBlock(
@@ -81,9 +81,13 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
             serviceSymbol,
             RuntimeTypes.Core.Utils.PlatformProvider,
         ) {
-            write("val bearerToken = provider.getProperty(#S) ?: provider.getenv(#S)", sysPropName, envVarName)
+            withBlock("val sourceKey = when {", "}") {
+                write("provider.getProperty(#1S) != null -> #1S", sysPropKey)
+                write("provider.getenv(#1S) != null -> #1S", envVarKey)
+                write("else -> null")
+            }
             // The customization does nothing if environment variable and JVM system property are not set
-            write("if (bearerToken == null) return")
+            write("if (sourceKey == null) return")
             // Configure auth scheme preference if customer hasn't specify one
             write("builder.config.authSchemePreference = builder.config.authSchemePreference ?: listOf(#T.HttpBearer)", authSchemeId)
 
@@ -95,7 +99,7 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
             write("builder.config.authSchemePreference = listOf(#1T.HttpBearer) + filteredSchemes", authSchemeId)
 
             write(
-                "builder.config.bearerTokenProvider = builder.config.bearerTokenProvider ?: #T(bearerToken)",
+                "builder.config.bearerTokenProvider = builder.config.bearerTokenProvider ?: #T(sourceKey, provider)",
                 RuntimeTypes.Auth.HttpAuth.EnvironmentBearerTokenProvider,
             )
         }
