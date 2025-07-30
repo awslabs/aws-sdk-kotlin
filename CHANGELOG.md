@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.7] - 07/30/2025
+
+### Features
+* (**cloudfront**) This release adds new origin timeout options: 1) ResponseCompletionTimeout and 2) OriginReadTimeout (for S3 origins)
+* (**directoryservice**) This release adds support for AWS Managed Microsoft AD Hybrid Edition, introducing new operations: StartADAssessment, DescribeADAssessment, ListADAssessments, DeleteADAssessment, CreateHybridAD, UpdateHybridAD, and DescribeHybridADUpdate; and updated existing operation: DescribeDirectories.
+* (**docdb**) Add support for setting Serverless Scaling Configuration on clusters.
+* (**ec2**) Release to show the next hop IP address for routes propagated by VPC Route Server into VPC route tables.
+* (**iotwireless**) Added TxPowerIndexMin, TxPowerIndexMax, NbTransMin and NbTransMax params to ServiceProfile.
+
 ## [1.5.6] - 07/29/2025
 
 ### Features
