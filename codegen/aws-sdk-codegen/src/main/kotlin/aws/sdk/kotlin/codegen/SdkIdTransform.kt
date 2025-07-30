@@ -72,14 +72,14 @@ object SigV4NameTransform {
      * Replace all dashes from the SigV4 service signing name with underscores and capitalize all letters.
      */
     object UpperSnakeCase : SigV4NameTransformer {
-        override fun transform(id: String): String = id.lowercase().replaceSpaceOrDash("_").uppercase()
+        override fun transform(name: String): String = name.lowercase().replaceSpaceOrDash("_").uppercase()
     }
 
     /**
      * Remove dashes and convert SigV4 service signing name to PascalCase
      */
     object PascalCase : SigV4NameTransformer {
-        override fun transform(id: String): String = id.toPascalCase()
+        override fun transform(name: String): String = name.toPascalCase()
     }
 }
 
