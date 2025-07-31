@@ -67,6 +67,9 @@ object SdkIdTransform {
     }
 }
 
+/**
+ * Implements all standardized SigV4 service signing name transforms.
+ */
 object SigV4NameTransform {
     /**
      * Replace all dashes from the SigV4 service signing name with underscores and capitalize all letters.
