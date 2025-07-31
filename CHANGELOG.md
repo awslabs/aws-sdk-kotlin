@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.5.8] - 07/31/2025
+
+### Features
+* (**customerprofiles**) The release updates standard profile with 2 new fields that supports account-level engagement. Updated APIs include CreateProfile, UpdateProfile, MergeProfiles, SearchProfiles, BatchGetProfile, GetSegmentMembership, CreateSegmentDefinition, CreateSegmentEstimate.
+* (**ec2**) Added support for the force option for the EC2 instance terminate command. This feature enables customers to recover resources associated with an instance stuck in the shutting-down state as a result of rare issues caused by a frozen operating system or an underlying hardware problem.
+* (**entityresolution**) Add support for creating advanced rule-based matching workflows in AWS Entity Resolution.
+* (**glue**) Added support for Route node, S3 Iceberg sources/targets, catalog Iceberg sources, DynamoDB ELT connector, AutoDataQuality evaluation, enhanced PII detection with redaction, Kinesis fan-out support, and new R-series worker types.
+* (**inspector2**) Extend usage to include agentless hours and add CODE_REPOSITORY to aggregation resource type
+* (**iot**) This release allows AWS IoT Core users to use their own AWS KMS keys for data protection
+* (**opensearch**) Granular access control support for NEO-SAML with IAMFederation for AOS data source
+* (**quicksight**) Added Impala connector support
+* (**s3control**) Add Tags field to CreateAccessPoint
+* (**sesv2**) This release introduces support for Multi-tenant management
+* (**workspacesweb**) Added ability to log session activity on a portal to an S3 bucket.
+
+### Documentation
+* (**elasticloadbalancingv2**) This release enables secondary IP addresses for Network Load Balancers.
+
 ## [1.5.7] - 07/30/2025
 
 ### Features
