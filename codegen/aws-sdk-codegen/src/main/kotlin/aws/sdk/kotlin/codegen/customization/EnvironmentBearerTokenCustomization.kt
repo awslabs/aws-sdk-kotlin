@@ -69,9 +69,9 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
         val signingServiceName = AwsSignatureVersion4.signingServiceName(serviceShape)
         // Transform signing service name to environment variable key suffix
-        val envVarSuffix = signingServiceName.withTransform(SigV4NameTransform.UpperSnakeCase)
+        val envSuffix = signingServiceName.withTransform(SigV4NameTransform.UpperSnakeCase)
         val sysPropSuffix = signingServiceName.withTransform(SigV4NameTransform.PascalCase)
-        val envVarKey = "AWS_BEARER_TOKEN_$envVarSuffix"
+        val envKey = "AWS_BEARER_TOKEN_$envSuffix"
         val sysPropKey = "aws.bearerToken$sysPropSuffix"
         val authSchemeId = RuntimeTypes.Auth.Identity.AuthSchemeId
 
@@ -81,13 +81,8 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
             serviceSymbol,
             RuntimeTypes.Core.Utils.PlatformProvider,
         ) {
-            withBlock("val sourceKey = when {", "}") {
-                write("provider.getProperty(#1S) != null -> #1S", sysPropKey)
-                write("provider.getenv(#1S) != null -> #1S", envVarKey)
-                write("else -> null")
-            }
             // The customization does nothing if environment variable and JVM system property are not set
-            write("if (sourceKey == null) return")
+            write("if (provider.getProperty(#S) == null && provider.getenv(#S) == null) return", sysPropKey, envKey)
             // Configure auth scheme preference if customer hasn't specify one
             write("builder.config.authSchemePreference = builder.config.authSchemePreference ?: listOf(#T.HttpBearer)", authSchemeId)
 
@@ -99,8 +94,10 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
             write("builder.config.authSchemePreference = listOf(#1T.HttpBearer) + filteredSchemes", authSchemeId)
 
             write(
-                "builder.config.bearerTokenProvider = builder.config.bearerTokenProvider ?: #T(sourceKey, provider)",
+                "builder.config.bearerTokenProvider = builder.config.bearerTokenProvider ?: #T(#S, #S, provider)",
                 RuntimeTypes.Auth.HttpAuth.EnvironmentBearerTokenProvider,
+                sysPropKey,
+                envKey,
             )
         }
     }

@@ -35,35 +35,35 @@ object SdkIdTransform {
      * Replace all whitespace from the sdkId with underscores and lowercase all letters.
      */
     object LowerSnakeCase : SdkIdTransformer {
-        override fun transform(id: String): String = id.replaceWhitespace("_").lowercase()
+        override fun transform(input: String): String = input.replaceWhitespace("_").lowercase()
     }
 
     /**
      * None. Directly use the sdkId.
      */
     object Identity : SdkIdTransformer {
-        override fun transform(id: String): String = id
+        override fun transform(input: String): String = input
     }
 
     /**
      * Remove all whitespace from the sdkId.
      */
     object NoWhitespace : SdkIdTransformer {
-        override fun transform(id: String): String = id.replaceWhitespace("")
+        override fun transform(input: String): String = input.replaceWhitespace("")
     }
 
     /**
      * Replace all whitespace from the sdkId with dashes and lowercase all letters.
      */
     object LowerKebabCase : SdkIdTransformer {
-        override fun transform(id: String): String = id.replaceWhitespace("-").lowercase()
+        override fun transform(input: String): String = input.replaceWhitespace("-").lowercase()
     }
 
     /**
      * Replace all whitespace from the sdkId with underscores and capitalize all letters.
      */
     object UpperSnakeCase : SdkIdTransformer {
-        override fun transform(id: String): String = id.replaceWhitespace("_").uppercase()
+        override fun transform(input: String): String = input.replaceWhitespace("_").uppercase()
     }
 }
 
@@ -72,14 +72,14 @@ object SigV4NameTransform {
      * Replace all dashes from the SigV4 service signing name with underscores and capitalize all letters.
      */
     object UpperSnakeCase : SigV4NameTransformer {
-        override fun transform(name: String): String = name.lowercase().replaceSpaceOrDash("_").uppercase()
+        override fun transform(input: String): String = input.lowercase().replaceSpaceOrDash("_").uppercase()
     }
 
     /**
      * Remove dashes and convert SigV4 service signing name to PascalCase
      */
     object PascalCase : SigV4NameTransformer {
-        override fun transform(name: String): String = name.toPascalCase()
+        override fun transform(input: String): String = input.toPascalCase()
     }
 }
 
