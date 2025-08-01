@@ -25,6 +25,12 @@
             "brazilName": "AwsSdkKotlinApiGateway"
         },
         {
+            "sdkId": "ARC Region switch",
+            "namespace": "aws.sdk.kotlin.services.arcregionswitch",
+            "artifactName": "arcregionswitch",
+            "brazilName": "AwsSdkKotlinArcRegionSwitch"
+        },
+        {
             "sdkId": "ARC Zonal Shift",
             "namespace": "aws.sdk.kotlin.services.arczonalshift",
             "artifactName": "arczonalshift",

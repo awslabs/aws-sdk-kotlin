@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.5.9] - 08/01/2025
+
+### Features
+* (**aiops**) This release includes fix for InvestigationGroup timestamp conversion issue.
+* (**arcregionswitch**) This is the initial SDK release for Region switch
+* (**auditmanager**) Added a note to Framework APIs (CreateAssessmentFramework, GetAssessmentFramework, UpdateAssessmentFramework) clarifying that the Controls object returns a partial response when called through Framework APIs. Added documentation that the Framework's controlSources parameter is no longer supported.
+* (**lightsail**) This release adds support for the Asia Pacific (Jakarta) (ap-southeast-3) Region.
+* (**observabilityadmin**) CloudWatch Observability Admin adds the ability to enable telemetry on AWS resources such as Amazon VPCs (Flow Logs) in customers AWS Accounts and Organizations. The release introduces new APIs to manage telemetry rules, which define telemetry settings to be applied on AWS resources.
+* (**pcs**) Add support for IPv6 Networking for Clusters.
+* (**securityhub**) Release new resource detail type CodeRepository
+
+### Documentation
+* (**acmpca**) Doc-only update to add more information to GetCertificate action.
+* (**sns**) Amazon SNS support for Amazon SQS fair queues
+
 ## [1.5.8] - 07/31/2025
 
 ### Features
