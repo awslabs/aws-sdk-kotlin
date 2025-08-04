@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.10] - 08/04/2025
+
+### Features
+* (**bedrockagentcore**) Remove superfluous field from API
+* (**codeconnections**) New integration with Azure DevOps provider type.
+* (**evs**) TagResource API now throws ServiceQuotaExceededException when the number of tags on the Amazon EVS resource exceeds the maximum allowed. TooManyTagsException is deprecated.
+* (**iotsitewise**) Support Interface for IoT SiteWise Asset Modeling
+* (**sagemaker**) This release adds the ability for customers to attach and detach their EBS volumes to EKS-orchestrated HyperPod cluster nodes.
+
 ## [1.5.9] - 08/01/2025
 
 ### Features
