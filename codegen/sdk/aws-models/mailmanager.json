@@ -1380,12 +1380,6 @@
                         "smithy.api#documentation": "<p>Specifies the network configuration for the ingress point. This allows you to create an IPv4-only, Dual-Stack, or PrivateLink type of ingress point. If not specified, the default network type is IPv4-only. </p>"
                     }
                 },
-                "NetworkConfiguration": {
-                    "target": "com.amazonaws.mailmanager#NetworkConfiguration",
-                    "traits": {
-                        "smithy.api#documentation": "<p>Specifies the network configuration for the ingress point.\n            This allows you to create an IPv4-only, Dual-Stack, or PrivateLink type of ingress point. If not specified, the default network type is IPv4-only.\n        </p>"
-                    }
-                },
                 "Tags": {
                     "target": "com.amazonaws.mailmanager#TagList",
                     "traits": {
@@ -2206,7 +2200,7 @@
                     "min": 0,
                     "max": 254
                 },
-                "smithy.api#pattern": "^[0-9A-Za-z@+.-]+$",
+                "smithy.api#pattern": "^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+$",
                 "smithy.api#sensitive": {}
             }
         },
@@ -4143,60 +4137,6 @@
                 "smithy.api#documentation": "<p>The structure for an IPv6 based condition matching on the incoming mail.</p>"
             }
         },
-        "com.amazonaws.mailmanager#IngressIpv6Attribute": {
-            "type": "enum",
-            "members": {
-                "SENDER_IPV6": {
-                    "target": "smithy.api#Unit",
-                    "traits": {
-                        "smithy.api#enumValue": "SENDER_IPV6"
-                    }
-                }
-            }
-        },
-        "com.amazonaws.mailmanager#IngressIpv6Expression": {
-            "type": "structure",
-            "members": {
-                "Evaluate": {
-                    "target": "com.amazonaws.mailmanager#IngressIpv6ToEvaluate",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The left hand side argument of an IPv6 condition expression.</p>",
-                        "smithy.api#required": {}
-                    }
-                },
-                "Operator": {
-                    "target": "com.amazonaws.mailmanager#IngressIpOperator",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The matching operator for an IPv6 condition expression.</p>",
-                        "smithy.api#required": {}
-                    }
-                },
-                "Values": {
-                    "target": "com.amazonaws.mailmanager#Ipv6Cidrs",
-                    "traits": {
-                        "smithy.api#documentation": "<p>The right hand side argument of an IPv6 condition expression.</p>",
-                        "smithy.api#required": {}
-                    }
-                }
-            },
-            "traits": {
-                "smithy.api#documentation": "<p>The union type representing the allowed types for the left hand side of an IPv6 condition.</p>"
-            }
-        },
-        "com.amazonaws.mailmanager#IngressIpv6ToEvaluate": {
-            "type": "union",
-            "members": {
-                "Attribute": {
-                    "target": "com.amazonaws.mailmanager#IngressIpv6Attribute",
-                    "traits": {
-                        "smithy.api#documentation": "<p>An enum type representing the allowed attribute types for an IPv6 condition.</p>"
-                    }
-                }
-            },
-            "traits": {
-                "smithy.api#documentation": "<p>The structure for an IPv6 based condition matching on the incoming mail.</p>"
-            }
-        },
         "com.amazonaws.mailmanager#IngressIsInAddressList": {
             "type": "structure",
             "members": {
@@ -4645,23 +4585,6 @@
             },
             "traits": {
                 "smithy.api#documentation": "<p>The union type representing the allowed types for the left hand side of a TLS condition.</p>"
-            }
-        },
-        "com.amazonaws.mailmanager#IpType": {
-            "type": "enum",
-            "members": {
-                "IPV4": {
-                    "target": "smithy.api#Unit",
-                    "traits": {
-                        "smithy.api#enumValue": "IPV4"
-                    }
-                },
-                "DUAL_STACK": {
-                    "target": "smithy.api#Unit",
-                    "traits": {
-                        "smithy.api#enumValue": "DUAL_STACK"
-                    }
-                }
             }
         },
         "com.amazonaws.mailmanager#IpType": {
@@ -6756,12 +6679,6 @@
                     "target": "com.amazonaws.mailmanager#IngressIpv6Expression",
                     "traits": {
                         "smithy.api#documentation": "<p>This represents an IPv6 based condition matching on the incoming mail. It performs the operation configured in 'Operator' and evaluates the 'Protocol' object against the 'Value'.</p>"
-                    }
-                },
-                "Ipv6Expression": {
-                    "target": "com.amazonaws.mailmanager#IngressIpv6Expression",
-                    "traits": {
-                        "smithy.api#documentation": "<p>This represents an IPv6 based condition matching on the incoming mail. It performs the\n            operation configured in 'Operator' and evaluates the 'Protocol' object against the\n            'Value'.</p>"
                     }
                 },
                 "TlsExpression": {

@@ -5,11 +5,12 @@
 
 package aws.sdk.kotlin.runtime.config
 
-import aws.sdk.kotlin.runtime.client.AwsSdkClientConfig
 import aws.sdk.kotlin.runtime.config.profile.loadAwsSharedConfig
 import aws.sdk.kotlin.runtime.config.useragent.resolveUserAgentAppId
 import aws.sdk.kotlin.runtime.config.utils.mockPlatform
+import aws.sdk.kotlin.runtime.region.DefaultRegionProviderChain
 import aws.smithy.kotlin.runtime.client.*
+import aws.smithy.kotlin.runtime.client.region.RegionProvider
 import aws.smithy.kotlin.runtime.retries.StandardRetryStrategy
 import aws.smithy.kotlin.runtime.util.PlatformProvider
 import aws.smithy.kotlin.runtime.util.asyncLazy
@@ -129,6 +130,7 @@ private interface TestClient : SdkClient {
         override val clientName: String = builder.clientName
         override val logMode: LogMode = builder.logMode ?: LogMode.Default
         override val region: String? = builder.region
+        override var regionProvider: RegionProvider = builder.regionProvider ?: DefaultRegionProviderChain()
         override var useFips: Boolean = builder.useFips ?: false
         override var useDualStack: Boolean = builder.useDualStack ?: false
         override val applicationId: String? = builder.applicationId
@@ -141,6 +143,7 @@ private interface TestClient : SdkClient {
             override var clientName: String = "Test"
             override var logMode: LogMode? = LogMode.Default
             override var region: String? = null
+            override var regionProvider: RegionProvider? = null
             override var useFips: Boolean? = null
             override var useDualStack: Boolean? = null
             override var applicationId: String? = null

@@ -69,6 +69,12 @@
                     "traits": {
                         "smithy.api#enumValue": "HEV2"
                     }
+                },
+                "XHE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "XHE"
+                    }
                 }
             },
             "traits": {
@@ -111,6 +117,26 @@
             },
             "traits": {
                 "smithy.api#documentation": "The Coding mode that you specify determines the number of audio channels and the audio channel layout metadata in your AAC output. Valid coding modes depend on the Rate control mode and Profile that you select. The following list shows the number of audio channels and channel layout for each coding mode. * 1.0 Audio Description (Receiver Mix): One channel, C. Includes audio description data from your stereo input. For more information see ETSI TS 101 154 Annex E. * 1.0 Mono: One channel, C. * 2.0 Stereo: Two channels, L, R. * 5.1 Surround: Six channels, C, L, R, Ls, Rs, LFE."
+            }
+        },
+        "com.amazonaws.mediaconvert#AacLoudnessMeasurementMode": {
+            "type": "enum",
+            "members": {
+                "PROGRAM": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "PROGRAM"
+                    }
+                },
+                "ANCHOR": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ANCHOR"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "Choose the loudness measurement mode for your audio content. For music or advertisements: We recommend that you keep the default value, Program. For speech or other content: We recommend that you choose Anchor. When you do, MediaConvert optimizes the loudness of your output for clarify by applying speech gates."
             }
         },
         "com.amazonaws.mediaconvert#AacRateControlMode": {
@@ -184,6 +210,20 @@
                         "smithy.api#jsonName": "codingMode"
                     }
                 },
+                "LoudnessMeasurementMode": {
+                    "target": "com.amazonaws.mediaconvert#AacLoudnessMeasurementMode",
+                    "traits": {
+                        "smithy.api#documentation": "Choose the loudness measurement mode for your audio content. For music or advertisements: We recommend that you keep the default value, Program. For speech or other content: We recommend that you choose Anchor. When you do, MediaConvert optimizes the loudness of your output for clarify by applying speech gates.",
+                        "smithy.api#jsonName": "loudnessMeasurementMode"
+                    }
+                },
+                "RapInterval": {
+                    "target": "com.amazonaws.mediaconvert#__integerMin2000Max30000",
+                    "traits": {
+                        "smithy.api#documentation": "Specify the RAP (Random Access Point) interval for your xHE-AAC audio output. A RAP allows a decoder to decode audio data mid-stream, without the need to reference previous audio frames, and perform adaptive audio bitrate switching. To specify the RAP interval: Enter an integer from 2000 to 30000, in milliseconds. Smaller values allow for better seeking and more frequent stream switching, while large values improve compression efficiency. To have MediaConvert automatically determine the RAP interval: Leave blank.",
+                        "smithy.api#jsonName": "rapInterval"
+                    }
+                },
                 "RateControlMode": {
                     "target": "com.amazonaws.mediaconvert#AacRateControlMode",
                     "traits": {
@@ -210,6 +250,13 @@
                     "traits": {
                         "smithy.api#documentation": "Use MPEG-2 AAC instead of MPEG-4 AAC audio for raw or MPEG-2 Transport Stream containers.",
                         "smithy.api#jsonName": "specification"
+                    }
+                },
+                "TargetLoudnessRange": {
+                    "target": "com.amazonaws.mediaconvert#__integerMin6Max16",
+                    "traits": {
+                        "smithy.api#documentation": "Specify the xHE-AAC loudness target. Enter an integer from 6 to 16, representing \"loudness units\". For more information, see the following specification: Supplementary information for R 128 EBU Tech 3342-2023.",
+                        "smithy.api#jsonName": "targetLoudnessRange"
                     }
                 },
                 "VbrQuality": {
@@ -5035,6 +5082,12 @@
                         "smithy.api#enumValue": "HEVC"
                     }
                 },
+                "JPEG2000": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "JPEG2000"
+                    }
+                },
                 "MJPEG": {
                     "target": "smithy.api#Unit",
                     "traits": {
@@ -5524,7 +5577,7 @@
                 "Format": {
                     "target": "com.amazonaws.mediaconvert#Format",
                     "traits": {
-                        "smithy.api#documentation": "The format of your media file. For example: MP4, QuickTime (MOV), Matroska (MKV), or WebM. Note that this will be blank if your media file has a format that the MediaConvert Probe operation does not recognize.",
+                        "smithy.api#documentation": "The format of your media file. For example: MP4, QuickTime (MOV), Matroska (MKV), WebM or MXF. Note that this will be blank if your media file has a format that the MediaConvert Probe operation does not recognize.",
                         "smithy.api#jsonName": "format"
                     }
                 },
@@ -9598,7 +9651,7 @@
                     }
                 },
                 "SampleRate": {
-                    "target": "com.amazonaws.mediaconvert#__integerMin22050Max48000",
+                    "target": "com.amazonaws.mediaconvert#__integerMin22050Max192000",
                     "traits": {
                         "smithy.api#documentation": "Sample rate in Hz.",
                         "smithy.api#jsonName": "sampleRate"
@@ -9698,6 +9751,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "webm"
+                    }
+                },
+                "mxf": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "mxf"
                     }
                 }
             }
@@ -13833,7 +13892,7 @@
                 "FileInput": {
                     "target": "com.amazonaws.mediaconvert#__stringMax2048PatternS3Https",
                     "traits": {
-                        "smithy.api#documentation": "Specify the source file for your transcoding job. You can use multiple inputs in a single job. The service concatenates these inputs, in the order that you specify them in the job, to create the outputs. If your input format is IMF, specify your input by providing the path to your CPL. For example, \"s3://bucket/vf/cpl.xml\". If the CPL is in an incomplete IMP, make sure to use *Supplemental IMPs* to specify any supplemental IMPs that contain assets referenced by the CPL.",
+                        "smithy.api#documentation": "Specify the source file for your transcoding job. You can use multiple inputs in a single job. The service concatenates these inputs, in the order that you specify them in the job, to create the outputs. For standard inputs, provide the path to your S3, HTTP, or HTTPS source file. For example, s3://amzn-s3-demo-bucket/input.mp4 for an Amazon S3 input or https://example.com/input.mp4 for an HTTPS input. For TAMS inputs, specify the HTTPS endpoint of your TAMS server. For example, https://tams-server.example.com . When you do, also specify Source ID, Timerange, GAP handling, and the Authorization connection ARN under TAMS settings. (Don't include these parameters in the Input file URL.) For IMF inputs, specify your input by providing the path to your CPL. For example, s3://amzn-s3-demo-bucket/vf/cpl.xml . If the CPL is in an incomplete IMP, make sure to use Supplemental IMPsto specify any supplemental IMPs that contain assets referenced by the CPL.",
                         "smithy.api#jsonName": "fileInput"
                     }
                 },
@@ -13898,6 +13957,13 @@
                     "traits": {
                         "smithy.api#documentation": "Provide a list of any necessary supplemental IMPs. You need supplemental IMPs if the CPL that you're using for your input is in an incomplete IMP. Specify either the supplemental IMP directories with a trailing slash or the ASSETMAP.xml files. For example [\"s3://bucket/ov/\", \"s3://bucket/vf2/ASSETMAP.xml\"]. You don't need to specify the IMP that contains your input CPL, because the service automatically detects it.",
                         "smithy.api#jsonName": "supplementalImps"
+                    }
+                },
+                "TamsSettings": {
+                    "target": "com.amazonaws.mediaconvert#InputTamsSettings",
+                    "traits": {
+                        "smithy.api#documentation": "Specify a Time Addressable Media Store (TAMS) server as an input source. TAMS is an open-source API specification that provides access to time-segmented media content. Use TAMS to retrieve specific time ranges from live or archived media streams. When you specify TAMS settings, MediaConvert connects to your TAMS server, retrieves the media segments for your specified time range, and processes them as a single input. This enables workflows like extracting clips from live streams or processing specific portions of archived content. To use TAMS, you must: 1. Have access to a TAMS-compliant server 2. Specify the server URL in the Input file URL field 3. Provide the required SourceId and Timerange parameters 4. Configure authentication, if your TAMS server requires it",
+                        "smithy.api#jsonName": "tamsSettings"
                     }
                 },
                 "TimecodeSource": {
@@ -14186,6 +14252,42 @@
             },
             "traits": {
                 "smithy.api#documentation": "When you have a progressive segmented frame (PsF) input, use this setting to flag the input as PsF. MediaConvert doesn't automatically detect PsF. Therefore, flagging your input as PsF results in better preservation of video quality when you do deinterlacing and frame rate conversion. If you don't specify, the default value is Auto. Auto is the correct setting for all inputs that are not PsF. Don't set this value to PsF when your input is interlaced. Doing so creates horizontal interlacing artifacts."
+            }
+        },
+        "com.amazonaws.mediaconvert#InputTamsSettings": {
+            "type": "structure",
+            "members": {
+                "AuthConnectionArn": {
+                    "target": "com.amazonaws.mediaconvert#__stringPatternArnAwsAZ09EventsAZ090912ConnectionAZAZ09AF0936",
+                    "traits": {
+                        "smithy.api#documentation": "Specify the ARN (Amazon Resource Name) of an EventBridge Connection to authenticate with your TAMS server. The EventBridge Connection stores your authentication credentials securely. MediaConvert assumes your job's IAM role to access this connection, so ensure the role has the events:RetrieveConnectionCredentials, secretsmanager:DescribeSecret, and secretsmanager:GetSecretValue permissions. Format: arn:aws:events:region:account-id:connection/connection-name/unique-id",
+                        "smithy.api#jsonName": "authConnectionArn"
+                    }
+                },
+                "GapHandling": {
+                    "target": "com.amazonaws.mediaconvert#TamsGapHandling",
+                    "traits": {
+                        "smithy.api#documentation": "Specify how MediaConvert handles gaps between media segments in your TAMS source. Gaps can occur in live streams due to network issues or other interruptions. Choose from the following options: * Skip gaps - Default. Skip over gaps and join segments together. This creates a continuous output with no blank frames, but may cause timeline discontinuities. * Fill with black - Insert black frames to fill gaps between segments. This maintains timeline continuity but adds black frames where content is missing. * Hold last frame - Repeat the last frame before a gap until the next segment begins. This maintains visual continuity during gaps.",
+                        "smithy.api#jsonName": "gapHandling"
+                    }
+                },
+                "SourceId": {
+                    "target": "com.amazonaws.mediaconvert#__string",
+                    "traits": {
+                        "smithy.api#documentation": "Specify the unique identifier for the media source in your TAMS server. MediaConvert uses this source ID to locate the appropriate flows containing the media segments you want to process. The source ID corresponds to a specific media source registered in your TAMS server. This source must be of type urn:x-nmos:format:multi, and can can reference multiple flows for audio, video, or combined audio/video content. MediaConvert automatically selects the highest quality flows available for your job. This setting is required when include TAMS settings in your job.",
+                        "smithy.api#jsonName": "sourceId"
+                    }
+                },
+                "Timerange": {
+                    "target": "com.amazonaws.mediaconvert#__stringPattern019090190908019090190908",
+                    "traits": {
+                        "smithy.api#documentation": "Specify the time range of media segments to retrieve from your TAMS server. MediaConvert fetches only the segments that fall within this range. Use the format specified by your TAMS server implementation. This must be two timestamp values with the format {sign?}{seconds}:{nanoseconds}, separated by an underscore, surrounded by either parentheses or square brackets.  Example: [15:0_35:0) This setting is required when include TAMS settings in your job.",
+                        "smithy.api#jsonName": "timerange"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "Specify a Time Addressable Media Store (TAMS) server as an input source. TAMS is an open-source API specification that provides access to time-segmented media content. Use TAMS to retrieve specific time ranges from live or archived media streams. When you specify TAMS settings, MediaConvert connects to your TAMS server, retrieves the media segments for your specified time range, and processes them as a single input. This enables workflows like extracting clips from live streams or processing specific portions of archived content. To use TAMS, you must: 1. Have access to a TAMS-compliant server 2. Specify the server URL in the Input file URL field 3. Provide the required SourceId and Timerange parameters 4. Configure authentication, if your TAMS server requires it"
             }
         },
         "com.amazonaws.mediaconvert#InputTemplate": {
@@ -23965,6 +24067,32 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.mediaconvert#TamsGapHandling": {
+            "type": "enum",
+            "members": {
+                "SKIP_GAPS": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "SKIP_GAPS"
+                    }
+                },
+                "FILL_WITH_BLACK": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "FILL_WITH_BLACK"
+                    }
+                },
+                "HOLD_LAST_FRAME": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "HOLD_LAST_FRAME"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "Specify how MediaConvert handles gaps between media segments in your TAMS source. Gaps can occur in live streams due to network issues or other interruptions. Choose from the following options: * Skip gaps - Default. Skip over gaps and join segments together. This creates a continuous output with no blank frames, but may cause timeline discontinuities. * Fill with black - Insert black frames to fill gaps between segments. This maintains timeline continuity but adds black frames where content is missing. * Hold last frame - Repeat the last frame before a gap until the next segment begins. This maintains visual continuity during gaps."
+            }
+        },
         "com.amazonaws.mediaconvert#TeletextDestinationSettings": {
             "type": "structure",
             "members": {
@@ -25583,7 +25711,7 @@
                 "Codec": {
                     "target": "com.amazonaws.mediaconvert#VideoCodec",
                     "traits": {
-                        "smithy.api#documentation": "Specifies the video codec. This must be equal to one of the enum values defined by the object VideoCodec. To passthrough the video stream of your input JPEG2000, VC-3, AVC-INTRA or Apple ProRes video without any video encoding: Choose Passthrough. If you have multiple input videos, note that they must have identical encoding attributes. When you choose Passthrough, your output container must be MXF or QuickTime MOV.",
+                        "smithy.api#documentation": "Specifies the video codec. This must be equal to one of the enum values defined by the object VideoCodec. To passthrough the video stream of your input without any video encoding: Choose Passthrough. More information about passthrough codec support and job settings requirements, see: https://docs.aws.amazon.com/mediaconvert/latest/ug/video-passthrough-feature-restrictions.html",
                         "smithy.api#jsonName": "codec"
                     }
                 },
@@ -25881,7 +26009,7 @@
                 "Height": {
                     "target": "com.amazonaws.mediaconvert#__integerMin0Max2147483647",
                     "traits": {
-                        "smithy.api#documentation": "Specify the height of the video overlay cropping rectangle. To use the same height as your overlay input video: Keep blank, or enter 0. To specify a different height for the cropping rectangle: Enter an integer representing the Unit type that you choose, either Pixels or Percentage. For example, when you enter 100 and choose Pixels, the cropping rectangle will 100 pixels high. When you enter 10, choose Percentage, and your overlay input video is 1920x1080, the cropping rectangle will be 108 pixels high.",
+                        "smithy.api#documentation": "Specify the height of the video overlay cropping rectangle. To use the same height as your overlay input video: Keep blank, or enter 0. To specify a different height for the cropping rectangle: Enter an integer representing the Unit type that you choose, either Pixels or Percentage. For example, when you enter 100 and choose Pixels, the cropping rectangle will be 100 pixels high. When you enter 10, choose Percentage, and your overlay input video is 1920x1080, the cropping rectangle will be 108 pixels high.",
                         "smithy.api#jsonName": "height"
                     }
                 },
@@ -25895,7 +26023,7 @@
                 "Width": {
                     "target": "com.amazonaws.mediaconvert#__integerMin0Max2147483647",
                     "traits": {
-                        "smithy.api#documentation": "Specify the width of the video overlay cropping rectangle. To use the same width as your overlay input video: Keep blank, or enter 0. To specify a different width for the cropping rectangle: Enter an integer representing the Unit type that you choose, either Pixels or Percentage. For example, when you enter 100 and choose Pixels, the cropping rectangle will 100 pixels wide. When you enter 10, choose Percentage, and your overlay input video is 1920x1080, the cropping rectangle will be 192 pixels wide.",
+                        "smithy.api#documentation": "Specify the width of the video overlay cropping rectangle. To use the same width as your overlay input video: Keep blank, or enter 0. To specify a different width for the cropping rectangle: Enter an integer representing the Unit type that you choose, either Pixels or Percentage. For example, when you enter 100 and choose Pixels, the cropping rectangle will be 100 pixels wide. When you enter 10, choose Percentage, and your overlay input video is 1920x1080, the cropping rectangle will be 192 pixels wide.",
                         "smithy.api#jsonName": "width"
                     }
                 },
@@ -28434,6 +28562,24 @@
                 }
             }
         },
+        "com.amazonaws.mediaconvert#__integerMin2000Max30000": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#range": {
+                    "min": 2000,
+                    "max": 30000
+                }
+            }
+        },
+        "com.amazonaws.mediaconvert#__integerMin22050Max192000": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#range": {
+                    "min": 22050,
+                    "max": 192000
+                }
+            }
+        },
         "com.amazonaws.mediaconvert#__integerMin22050Max48000": {
             "type": "integer",
             "traits": {
@@ -28602,6 +28748,15 @@
                 "smithy.api#range": {
                     "min": 64000,
                     "max": 640000
+                }
+            }
+        },
+        "com.amazonaws.mediaconvert#__integerMin6Max16": {
+            "type": "integer",
+            "traits": {
+                "smithy.api#range": {
+                    "min": 6,
+                    "max": 16
                 }
             }
         },
@@ -29425,6 +29580,12 @@
                 "smithy.api#pattern": "^([01][0-9]|2[0-4]):[0-5][0-9]:[0-5][0-9][:;][0-9]{2}(@[0-9]+(\\.[0-9]+)?(:[0-9]+)?)?$"
             }
         },
+        "com.amazonaws.mediaconvert#__stringPattern019090190908019090190908": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^(\\[|\\()?(-?(0|[1-9][0-9]*):(0|[1-9][0-9]{0,8}))?(_(-?(0|[1-9][0-9]*):(0|[1-9][0-9]{0,8}))?)?(\\]|\\))?$"
+            }
+        },
         "com.amazonaws.mediaconvert#__stringPattern01D20305D205D": {
             "type": "string",
             "traits": {
@@ -29471,6 +29632,12 @@
             "type": "string",
             "traits": {
                 "smithy.api#pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9-]+)?$"
+            }
+        },
+        "com.amazonaws.mediaconvert#__stringPatternArnAwsAZ09EventsAZ090912ConnectionAZAZ09AF0936": {
+            "type": "string",
+            "traits": {
+                "smithy.api#pattern": "^arn:aws[a-z0-9-]*:events:[a-z0-9-]+:[0-9]{12}:connection/[a-zA-Z0-9-]+/[a-f0-9-]{36}$"
             }
         },
         "com.amazonaws.mediaconvert#__stringPatternArnAwsUsGovAcm": {

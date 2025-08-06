@@ -157,6 +157,14 @@ public val AwsProfile.sigV4aSigningRegionSet: String?
     get() = getOrNull("sigv4a_signing_region_set")
 
 /**
+ * A flag indicating whether endpoint discovery should be enabled for a service that supports it. This setting has no
+ * effect for services which _do not_ support endpoint discovery.
+ */
+@InternalSdkApi
+public val AwsProfile.endpointDiscoveryEnabled: Boolean?
+    get() = getBooleanOrNull("endpoint_discovery_enabled")
+
+/**
  * Configures request checksum calculation
  */
 @InternalSdkApi
@@ -176,20 +184,6 @@ public val AwsProfile.responseChecksumValidation: ResponseHttpChecksumConfig?
 @InternalSdkApi
 public val AwsProfile.authSchemePreference: String?
     get() = getOrNull("auth_scheme_preference")
-
-/**
- * Specifies a named EC2 instance profile to use which allows bypassing auto-discovery
- */
-@InternalSdkApi
-public val AwsProfile.ec2InstanceProfileName: String?
-    get() = getOrNull("ec2_instance_profile_name")
-
-/**
- * The flag which disables the use of IMDS for credentials
- */
-@InternalSdkApi
-public val AwsProfile.ec2MetadataDisabled: Boolean?
-    get() = getBooleanOrNull("disable_ec2_metadata")
 
 /**
  * Parse a config value as a boolean, ignoring case.
