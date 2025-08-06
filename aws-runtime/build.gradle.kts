@@ -32,7 +32,7 @@ subprojects {
         plugin(libraries.plugins.aws.kotlin.repo.tools.kmp.get().pluginId)
     }
 
-    // TODO Use configurePublishing when migrating to Maven Central
+    // TODO Use configurePublishing when migrating to Sonatype Publisher API / JReleaser
     configureNexusPublishing("aws-sdk-kotlin")
 
     kotlin {

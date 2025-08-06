@@ -135,7 +135,7 @@ subprojects {
         }
     }
 
-    // TODO Use configurePublishing when migrating to Maven Central
+    // TODO Use configurePublishing when migrating to Sonatype Publisher API / JReleaser
     configureNexusPublishing("aws-sdk-kotlin")
 
     publishing {
