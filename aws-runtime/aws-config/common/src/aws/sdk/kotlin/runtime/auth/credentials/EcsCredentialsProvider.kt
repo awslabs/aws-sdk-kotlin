@@ -87,8 +87,8 @@ public class EcsCredentialsProvider(
         }
 
         val op = SdkHttpOperation.build<Unit, Credentials> {
-            serializer = EcsCredentialsSerializer(authToken)
-            deserializer = EcsCredentialsDeserializer()
+            serializeWith = EcsCredentialsSerializer(authToken)
+            deserializeWith = EcsCredentialsDeserializer()
             operationName = "EcsCredentialsProvider"
             serviceName = "EcsContainerMetadata"
             execution.endpointResolver = EndpointResolver { Endpoint(url) }
@@ -196,14 +196,14 @@ public class EcsCredentialsProvider(
     override fun toString(): String = this.simpleClassName
 }
 
-private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
-    override suspend fun deserialize(context: ExecutionContext, call: HttpCall): Credentials {
+private class EcsCredentialsDeserializer : HttpDeserializer.NonStreaming<Credentials> {
+    override fun deserialize(context: ExecutionContext, call: HttpCall, payload: ByteArray?): Credentials {
         val response = call.response
         if (!response.status.isSuccess()) {
-            throwCredentialsResponseException(response)
+            throwCredentialsResponseException(response, payload)
         }
 
-        val payload = response.body.readAll() ?: throw CredentialsProviderException("HTTP credentials response did not contain a payload")
+        if (payload == null) throw CredentialsProviderException("HTTP credentials response did not contain a payload")
         val deserializer = JsonDeserializer(payload)
         val resp = deserializeJsonCredentials(deserializer)
         if (resp !is JsonCredentialsResponse.SessionCredentials) {
@@ -221,8 +221,8 @@ private class EcsCredentialsDeserializer : HttpDeserialize<Credentials> {
     }
 }
 
-private suspend fun throwCredentialsResponseException(response: HttpResponse): Nothing {
-    val errorResp = tryParseErrorResponse(response)
+private fun throwCredentialsResponseException(response: HttpResponse, payload: ByteArray?): Nothing {
+    val errorResp = tryParseErrorResponse(response, payload)
     val messageDetails = errorResp?.run { "code=$code; message=$message" } ?: "HTTP ${response.status}"
 
     throw CredentialsProviderException("Error retrieving credentials from container service: $messageDetails").apply {
@@ -233,17 +233,15 @@ private suspend fun throwCredentialsResponseException(response: HttpResponse): N
     }
 }
 
-private suspend fun tryParseErrorResponse(response: HttpResponse): JsonCredentialsResponse.Error? {
-    if (response.headers["Content-Type"] != "application/json") return null
-    val payload = response.body.readAll() ?: return null
-
+private fun tryParseErrorResponse(response: HttpResponse, payload: ByteArray?): JsonCredentialsResponse.Error? {
+    if (response.headers["Content-Type"] != "application/json" || payload == null) return null
     return deserializeJsonCredentials(JsonDeserializer(payload)) as? JsonCredentialsResponse.Error
 }
 
 private class EcsCredentialsSerializer(
     private val authToken: String? = null,
-) : HttpSerialize<Unit> {
-    override suspend fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder {
+) : HttpSerializer.NonStreaming<Unit> {
+    override fun serialize(context: ExecutionContext, input: Unit): HttpRequestBuilder {
         val builder = HttpRequestBuilder()
         builder.url.path
         builder.header("Accept", "application/json")

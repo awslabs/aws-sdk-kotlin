@@ -21,8 +21,8 @@ class AwsRetryHeaderMiddlewareTest {
     fun testItSetsRetryHeaders() = runTest {
         // see retry-header SEP
         val op = SdkHttpOperation.build<Unit, Unit> {
-            serializer = UnitSerializer
-            deserializer = UnitDeserializer
+            serializeWith = HttpSerializer.Unit
+            deserializeWith = HttpDeserializer.Unit
             operationName = "TestOperation"
             serviceName = "TestService"
         }

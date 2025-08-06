@@ -27,8 +27,8 @@ class UserAgentTest {
 
     private fun initializeOp(platformProvider: PlatformProvider = TestPlatformProvider()) =
         SdkHttpOperation.build<Unit, HttpResponse> {
-            serializer = UnitSerializer
-            deserializer = IdentityDeserializer
+            serializeWith = HttpSerializer.Unit
+            deserializeWith = HttpDeserializer.Identity
             operationName = "testOperation"
             serviceName = "TestService"
         }.apply {
