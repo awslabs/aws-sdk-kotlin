@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import aws.sdk.kotlin.gradle.dsl.configurePublishing
+import aws.sdk.kotlin.gradle.dsl.configureNexusPublishing
 import aws.sdk.kotlin.gradle.kmp.kotlin
 import aws.sdk.kotlin.gradle.kmp.needsKmpConfigured
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -46,7 +46,8 @@ val hllPreviewVersion = if (sdkVersion.contains("-SNAPSHOT")) { // e.g. 1.3.29-b
 subprojects {
     group = "aws.sdk.kotlin"
     version = hllPreviewVersion
-    configurePublishing("aws-sdk-kotlin")
+    // TODO Use configurePublishing when migrating to Maven Central
+    configureNexusPublishing("aws-sdk-kotlin")
 }
 
 subprojects {
