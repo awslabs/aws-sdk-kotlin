@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.13] - 08/07/2025
+
+### Features
+* (**cloudfront**) Added new viewer security policy, TLSv1.3_2025, for CloudFront.
+* (**codebuild**) AWS CodeBuild now supports comment-based pull request control.
+* (**glue**) AWS Glue Data Catalog now supports Iceberg Optimization settings at the Catalog level, and supports new options to control the optimization job run rate.
+* (**guardduty**) Added support for VPC owner account ID associated with DNS request in the GuardDuty finding.
+
+### Documentation
+* (**batch**) This feature allows customers to use AWS Batch with Linux with ARM64 CPU Architecture with Fargate Spot compute support.
+* (**gameliftstreams**) Adds Proton 9.0-2 to the list of runtime environment options available when creating an Amazon GameLift Streams application
+
 ## [1.5.12] - 08/06/2025
 
 ### Features
