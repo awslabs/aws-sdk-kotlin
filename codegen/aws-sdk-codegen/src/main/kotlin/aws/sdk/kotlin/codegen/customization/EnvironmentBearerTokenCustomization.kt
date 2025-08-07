@@ -5,7 +5,7 @@
 package aws.sdk.kotlin.codegen.customization
 
 import aws.sdk.kotlin.codegen.ServiceClientCompanionObjectWriter
-import aws.sdk.kotlin.codegen.SigV4NameTransform
+import aws.sdk.kotlin.codegen.SigV4NameTransformers
 import aws.sdk.kotlin.codegen.withTransform
 import software.amazon.smithy.kotlin.codegen.KotlinSettings
 import software.amazon.smithy.kotlin.codegen.core.*
@@ -69,8 +69,8 @@ class EnvironmentBearerTokenCustomization : KotlinIntegration {
         val serviceSymbol = ctx.symbolProvider.toSymbol(serviceShape)
         val signingServiceName = AwsSignatureVersion4.signingServiceName(serviceShape)
         // Transform signing service name to environment variable key suffix
-        val envSuffix = signingServiceName.withTransform(SigV4NameTransform.UpperSnakeCase)
-        val sysPropSuffix = signingServiceName.withTransform(SigV4NameTransform.PascalCase)
+        val envSuffix = signingServiceName.withTransform(SigV4NameTransformers.UpperSnakeCase)
+        val sysPropSuffix = signingServiceName.withTransform(SigV4NameTransformers.PascalCase)
         val envKey = "AWS_BEARER_TOKEN_$envSuffix"
         val sysPropKey = "aws.bearerToken$sysPropSuffix"
         val authSchemeId = RuntimeTypes.Auth.Identity.AuthSchemeId
