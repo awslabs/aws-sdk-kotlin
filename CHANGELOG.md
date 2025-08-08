@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.5.14] - 08/08/2025
+
+### Features
+* (**applicationsignals**) Removed incorrect endpoint tests
+* (**backupsearch**) Removed incorrect endpoint tests
+* (**bcmpricingcalculator**) Removed incorrect endpoint tests
+* (**billing**) Removed incorrect endpoint tests
+* (**connect**) This release adds a new API GetContactMetrics for Amazon Connect.
+* (**dsql**) Removed incorrect endpoint tests
+* (**gameliftstreams**) Removed incorrect endpoint tests
+* (**inspector2**) Add CVSSV4 to Vulnerability Search API and update enable/disable account id list length to 5
+* (**invoicing**) Removed incorrect endpoint tests
+* (**iotdataplane**) Adding DeleteConnection API to IoT Data Plane
+* (**iotmanagedintegrations**) Removed incorrect endpoint tests
+* (**keyspacesstreams**) Removed incorrect endpoint tests
+* (**mpa**) Removed incorrect endpoint tests
+* (**networkflowmonitor**) Removed incorrect endpoint tests
+* (**notifications**) Removed incorrect endpoint tests
+* (**notificationscontacts**) Removed incorrect endpoint tests
+* (**partnercentralselling**) Removed incorrect endpoint tests
+* (**s3vectors**) Removed incorrect endpoint tests
+* (**sagemaker**) Adds support for GB200 UltraServers in Amazon SageMaker training jobs, training plans, and HyperPod clusters
+* (**securityir**) Removed incorrect endpoint tests
+* (**workspacesinstances**) Removed incorrect endpoint tests
+
+### Documentation
+* (**transcribe**) Update documentation to use key ARN only in OutputEncryptionKMSKeyId request parameter
+
 ## [1.5.13] - 08/07/2025
 
 ### Features
