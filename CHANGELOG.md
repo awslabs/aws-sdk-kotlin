@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.5.15] - 08/11/2025
+
+### Features
+* (**bedrock**) This release includes model updates and enhanced SDK documentation for union fields in automated reasoning policy components. Added docs cover policy definitions, mutations (add/update for rules/types/variables), build assets, workflow sources, test results, and tag exception handling.
+* (**cognitoidentityprovider**) Remove SigV4 auth requirement for GetTokensFromRefreshToken
+* (**connect**) Updating SearchUserHierarchyGroups API
+* (**deadline**) Adds support for Wait and Save feature in service-managed fleets
+* (**ec2**) This release adds AvailabilityZoneId support for CreateVolume, DescribeVolume, LaunchTemplates, RunInstances, DescribeInstances, CreateDefaultSubnet, SpotInstances, and CreateDefaultSubnet APIs.
+* (**quicksight**) Add RowAxisDisplayOptions and ColumnAxisDisplayOptions to HeatMapConfiguration, add Actions to PluginVisual, increase limit for CalculatedFields list
+* (**ssoadmin**) Added support for managing user background session for applications
+
+### Documentation
+* (**evs**) Update for general availability of Amazon Elastic VMware Service (EVS).
+* (**lambda**) Doc-only update for Lambda that updates the maximum payload size for response streaming invocations to 200 MB.
+
 ## [1.5.14] - 08/08/2025
 
 ### Features
