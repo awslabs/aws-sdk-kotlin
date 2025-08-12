@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.5.16] - 08/12/2025
+
+### Features
+* (**backupsearch**) Using recommended smithy trait to generate regional endpoints for Backup Search
+* (**codebuild**) AWS CodeBuild now supports PullRequestBuildPolicy in webhook object.
+* (**ec2**) Release to allow route table association with a PublicIpv4Pool.
+* (**organizations**) This release introduces 2 new APIs in Organizations: 1. ListAccountsWithInvalidEffectivePolicy 2. ListEffectivePolicyValidationErrors
+* (**sagemaker**) IAM Identity Center trusted identity propagation is now supported in SageMaker Studio.
+* (**transcribe**) AWS HealthScribe now supports specifying preferred patient pronouns through the MedicalScribeContext parameter for use in the generated clinical notes.
+* (**transcribestreaming**) AWS HealthScribe now supports specifying preferred patient pronouns through the MedicalScribeContext parameter for use in the generated clinical notes.
+
 ## [1.5.15] - 08/11/2025
 
 ### Features
