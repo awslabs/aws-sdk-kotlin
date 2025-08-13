@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.17] - 08/13/2025
+
+### Features
+* (**braket**) Add support for Braket program sets.
+* (**datazone**) Adds support for account pools and project profile account decoupling
+* (**fsx**) Add Dual-Stack support for Amazon FSx for OpenZFS file systems
+* (**partnercentralselling**) Add Tagging Support for Opportunity resources
+* (**sagemaker**) This release introduces compute quota for GPU, Trainium accelerators, vCPU, and vCPU memory utilization across teams in HyperPod clusters
+* (**securityir**) Added support for Organizational Unit-level Membership configuration and the ability to resume a cancelled membership.
+
 ## [1.5.16] - 08/12/2025
 
 ### Features
