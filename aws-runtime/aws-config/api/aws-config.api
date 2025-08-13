@@ -77,8 +77,6 @@ public final class aws/sdk/kotlin/runtime/auth/credentials/EnvironmentCredential
 
 public final class aws/sdk/kotlin/runtime/auth/credentials/ImdsCredentialsProvider : aws/smithy/kotlin/runtime/auth/awscredentials/CloseableCredentialsProvider {
 	public fun <init> ()V
-	public fun <init> (Ljava/lang/String;Laws/sdk/kotlin/runtime/config/imds/InstanceMetadataProvider;Laws/smithy/kotlin/runtime/util/PlatformProvider;)V
-	public synthetic fun <init> (Ljava/lang/String;Laws/sdk/kotlin/runtime/config/imds/InstanceMetadataProvider;Laws/smithy/kotlin/runtime/util/PlatformProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;Laws/smithy/kotlin/runtime/time/Clock;)V
 	public synthetic fun <init> (Ljava/lang/String;Lkotlin/Lazy;Laws/smithy/kotlin/runtime/util/PlatformEnvironProvider;Laws/smithy/kotlin/runtime/time/Clock;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
@@ -280,7 +278,6 @@ public final class aws/sdk/kotlin/runtime/config/AwsSdkSetting {
 	public final fun getAwsContainerCredentialsFullUri ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsContainerCredentialsRelativeUri ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsDisableRequestCompression ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
-	public final fun getAwsEc2InstanceProfileName ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsEc2MetadataDisabled ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsEc2MetadataServiceEndpoint ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
 	public final fun getAwsEc2MetadataServiceEndpointMode ()Laws/smithy/kotlin/runtime/config/EnvironmentSetting;
@@ -427,13 +424,6 @@ public final class aws/sdk/kotlin/runtime/config/imds/ImdsClient$Builder {
 
 public final class aws/sdk/kotlin/runtime/config/imds/ImdsClient$Companion {
 	public final fun invoke (Lkotlin/jvm/functions/Function1;)Laws/sdk/kotlin/runtime/config/imds/ImdsClient;
-}
-
-public final class aws/sdk/kotlin/runtime/config/imds/ImdsResolversKt {
-	public static final fun resolveDisableEc2Metadata (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun resolveDisableEc2Metadata$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
-	public static final fun resolveEc2InstanceProfileName (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun resolveEc2InstanceProfileName$default (Laws/smithy/kotlin/runtime/util/PlatformProvider;Laws/smithy/kotlin/runtime/util/LazyAsyncValue;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 }
 
 public abstract interface class aws/sdk/kotlin/runtime/config/imds/InstanceMetadataProvider : java/io/Closeable {
