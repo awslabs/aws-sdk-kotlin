@@ -16,10 +16,7 @@ import aws.smithy.kotlin.runtime.util.TestPlatformProvider
 import io.kotest.matchers.string.shouldContain
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.*
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.fail
+import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 
 class ImdsClientTest {
@@ -203,7 +200,7 @@ class ImdsClientTest {
             client.get("/latest/metadata")
         }
 
-        assertEquals(HttpStatusCode.Forbidden, ex.status)
+        assertEquals(HttpStatusCode.Forbidden.value, ex.statusCode)
         connection.assertRequests()
     }
 
