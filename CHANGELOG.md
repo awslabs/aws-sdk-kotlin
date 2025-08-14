@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.5.18] - 08/14/2025
+
+### Features
+* (**arcregionswitch**) Endpoint rule test and documentation update.
+* (**bcmrecommendedactions**) Initial SDK release for AWS Billing and Cost Management Recommended Actions.
+* (**directconnect**) Added pagination support for DescribeHostedConnections, DescribeVirtualInterfaces, DescribeConnections, DescribeInterconnects, DescribeLags. Added asnLong support for BGP peer operations which supports a large range.
+* (**dynamodb**) This release 1/ Adds support for throttled keys mode for CloudWatch Contributor Insights, 2/ Adds throttling reasons to exceptions across dataplane APIs. 3/ Explicitly models ThrottlingException as a class in statically typed languages. Refer to the launch day blog post for more details.
+* (**ec2**) This release adds ModifyInstanceConnectEndpoint API to update configurations on existing EC2 Instance Connect Endpoints and improves IPv6 support through dualstack DNS names for EC2 Instance Connect Endpoints.
+* (**fsx**) Amazon FSx for NetApp ONTAP 2nd generation file systems now support decreasing SSD storage capacity.
+* (**glue**) AWS Glue now supports Trusted Identity Propagation.
+* (**guardduty**) Added support for entity lists.
+* (**medialive**) CMAF Ingest output groups in MediaLive can now accept one additional destination url for single pipeline channels and up to two additional destination urls for standard channels.
+* (**pcs**) Updated the regex pattern and description of iamInstanceProfileArn in the CreateComputeNodeGroup and UpdateComputeNodeGroup API actions. Name and path requirements apply to the ARN of the IAM role associated with the instance profile and not the ARN of the instance profile.
+* (**servicediscovery**) Added support for cross account through Id parameter overloading with ARN and allow owner account for some APIs instead of ARN
+* (**workspaces**) New APIs introduced to import WorkSpaces BYOL image using a new process that leveraged EC2 Image Builder. WorkSpaces tests and fixes your image's compatibility issues and supports customized VM images.
+
+### Documentation
+* (**qapps**) Documentation update for Amazon Q Apps API Reference
+
 ## [1.5.17] - 08/13/2025
 
 ### Features

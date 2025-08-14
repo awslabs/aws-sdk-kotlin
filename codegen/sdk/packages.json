@@ -211,6 +211,12 @@
             "brazilName": "AwsSdkKotlinBcmPricingCalculator"
         },
         {
+            "sdkId": "BCM Recommended Actions",
+            "namespace": "aws.sdk.kotlin.services.bcmrecommendedactions",
+            "artifactName": "bcmrecommendedactions",
+            "brazilName": "AwsSdkKotlinBcmRecommendedActions"
+        },
+        {
             "sdkId": "Backup",
             "namespace": "aws.sdk.kotlin.services.backup",
             "artifactName": "backup",
