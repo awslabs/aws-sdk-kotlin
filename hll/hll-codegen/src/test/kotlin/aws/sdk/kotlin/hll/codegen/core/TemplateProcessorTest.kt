@@ -6,8 +6,8 @@ package aws.sdk.kotlin.hll.codegen.core
 
 import aws.sdk.kotlin.hll.codegen.model.TypeRef
 import aws.sdk.kotlin.hll.codegen.model.TypeVar
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.Test
 import kotlin.test.assertContains
 
 class TemplateProcessorTest {
