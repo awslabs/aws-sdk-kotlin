@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.19] - 08/15/2025
+
+### Features
+* (**amp**) Add Resource-based Policy APIs for Amazon Prometheus
+* (**bedrockagent**) This release adds support for saving Bedrock Flows while node configuration is still in progress, even if the Flow is not yet able to be invoked
+* (**glue**) AWS Glue Zero ETL now supports On-demand snapshot load
+
 ## [1.5.18] - 08/14/2025
 
 ### Features
