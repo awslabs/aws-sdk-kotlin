@@ -97,7 +97,7 @@ abstract class ProtocolTestTask @Inject constructor(private val project: Project
         val gradlew = project.rootProject.file(wrapper).absolutePath
 
         // NOTE - this still requires us to publish to maven local.
-        project.exec {
+        providers.exec {
             workingDir = projectionRootDir
             executable = gradlew
             args = listOf("test")
