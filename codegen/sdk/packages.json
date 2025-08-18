@@ -199,6 +199,12 @@
             "brazilName": "AwsSdkKotlinAutoScalingPlans"
         },
         {
+            "sdkId": "BCM Dashboards",
+            "namespace": "aws.sdk.kotlin.services.bcmdashboards",
+            "artifactName": "bcmdashboards",
+            "brazilName": "AwsSdkKotlinBcmDashboards"
+        },
+        {
             "sdkId": "BCM Data Exports",
             "namespace": "aws.sdk.kotlin.services.bcmdataexports",
             "artifactName": "bcmdataexports",
