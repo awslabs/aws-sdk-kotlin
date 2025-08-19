@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.21] - 08/19/2025
+
+### Features
+* (**cleanrooms**) Support error message configuration for analysis templates
+* (**ec2**) Add support for "warning" volume status.
+* (**polly**) Added support for new output format - Opus.
+
 ## [1.5.20] - 08/18/2025
 
 ### Features
