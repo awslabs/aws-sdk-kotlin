@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.5.22] - 08/20/2025
+
+### Features
+* (**bedrockruntime**) Launch CountTokens API to allow token counting
+* (**billing**) Clarify IPv4 and IPv6 endpoints
+* (**budgets**) Remove incorrect endpoint tests
+* (**cognitoidentityprovider**) This release adds support for the new Terms APIs which allow displaying Terms of Use and Privacy Policy on the Managed Login user-registration page.
+* (**costexplorer**) Remove incorrect endpoint tests
+* (**datazone**) This release supports policy grant identifier for cloud formation integration
+* (**detective**) Remove incorrect endpoint tests
+* (**dynamodb**) Remove incorrect endpoint tests
+* (**efs**) Remove incorrect endpoint tests
+* (**eks**) EKS Add-ons Custom Namespace Support
+* (**iam**) Remove incorrect endpoint tests
+* (**kinesis**) Remove incorrect endpoint tests
+* (**kinesisanalyticsv2**) Adds Key Management Service (KMS) support allowing customer-managed key (CMK) encryption for Flink application data.
+* (**marketplaceentitlementservice**) Remove incorrect endpoint tests
+* (**marketplacemetering**) Remove incorrect endpoint tests
+* (**networkmanager**) Remove incorrect endpoint tests
+* (**pinpointsmsvoicev2**) This change added InternationalSendingEnbaled as part of describe/Update/Request phone number API response, and as part of update/Request phone number API request
+* (**route53recoverycontrolconfig**) Remove incorrect endpoint tests
+* (**sagemaker**) This release adds 1/ Launch ml.p5.4xlarge instance in Processing jobs, Training jobs and Training Plan 2/ Makes S3Uri to be required for S3FileSystem and S3FileSystemConfig.
+* (**sesv2**) Remove incorrect endpoint tests
+
 ## [1.5.21] - 08/19/2025
 
 ### Features
