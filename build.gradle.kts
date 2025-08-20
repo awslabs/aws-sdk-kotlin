@@ -38,12 +38,6 @@ val testJavaVersion = typedProp<String>("test.java.version")?.let {
 }
 
 allprojects {
-    if (rootProject.typedProp<Boolean>("kotlinWarningsAsErrors") == true) {
-        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            compilerOptions.allWarningsAsErrors = true
-        }
-    }
-
     if (testJavaVersion != null) {
         tasks.withType<Test> {
             val toolchains = project.extensions.getByType<JavaToolchainService>()

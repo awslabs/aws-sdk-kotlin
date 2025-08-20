@@ -203,18 +203,10 @@ NOTE: We need the following tasks to depend on codegen for gradle caching/up-to-
 */
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     dependsOn(tasks.generateSmithyProjections)
-
-    compilerOptions {
-        // generated sts/sso credential providers have quite a few warnings
-        allWarningsAsErrors.set(false)
-    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
     dependsOn(tasks.generateSmithyProjections)
-    compilerOptions {
-        allWarningsAsErrors.set(false)
-    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon> {
