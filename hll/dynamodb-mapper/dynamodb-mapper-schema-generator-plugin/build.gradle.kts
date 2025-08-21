@@ -151,6 +151,9 @@ tasks.withType<KotlinCompile> {
     dependsOn(generateSdkVersionFile)
     dependsOn(generateKotlinVersionFile)
     dependsOn(generateSmithyKotlinVersionFile)
+    compilerOptions {
+        allWarningsAsErrors = false // FIXME Re-enable warnings as errors SDK-KT-787
+    }
 }
 
 tasks.withType<Test> {

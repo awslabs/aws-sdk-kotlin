@@ -35,5 +35,4 @@ public fun AccountIdEndpointMode.toBusinessMetric(): BusinessMetric = when (this
     AccountIdEndpointMode.PREFERRED -> SmithyBusinessMetric.ACCOUNT_ID_MODE_PREFERRED
     AccountIdEndpointMode.DISABLED -> SmithyBusinessMetric.ACCOUNT_ID_MODE_DISABLED
     AccountIdEndpointMode.REQUIRED -> SmithyBusinessMetric.ACCOUNT_ID_MODE_REQUIRED
-    else -> throw IllegalStateException("Unexpected AccountIdEndpointMode value: ${this::class.simpleName}")
 }
