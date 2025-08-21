@@ -1,5 +1,85 @@
 # Changelog
 
+## [1.5.23] - 08/21/2025
+
+### Features
+* (**accessanalyzer**) Remove incorrect endpoint tests
+* (**amp**) Remove incorrect endpoint tests
+* (**apigatewaymanagementapi**) Remove incorrect endpoint tests
+* (**appfabric**) Remove incorrect endpoint tests
+* (**appintegrations**) Remove incorrect endpoint tests
+* (**appstream**) Remove incorrect endpoint tests
+* (**artifact**) Remove incorrect endpoint tests
+* (**auditmanager**) Remove incorrect endpoint tests
+* (**backup**) Remove incorrect endpoint tests
+* (**backupgateway**) Remove incorrect endpoint tests
+* (**bedrockagentruntime**) Remove incorrect endpoint tests
+* (**billingconductor**) Remove incorrect endpoint tests
+* (**cloudfront**) Remove incorrect endpoint tests
+* (**cloudhsm**) Remove incorrect endpoint tests
+* (**cloudtrail**) Remove incorrect endpoint tests
+* (**cognitoidentity**) Remove incorrect endpoint tests
+* (**comprehend**) Remove incorrect endpoint tests
+* (**configservice**) Remove incorrect endpoint tests
+* (**connect**) Remove incorrect endpoint tests
+* (**connectcampaignsv2**) Remove incorrect endpoint tests
+* (**connectcases**) Remove incorrect endpoint tests
+* (**costoptimizationhub**) Remove incorrect endpoint tests
+* (**customerprofiles**) Remove incorrect endpoint tests
+* (**databasemigrationservice**) Remove incorrect endpoint tests
+* (**deadline**) Remove incorrect endpoint tests
+* (**directoryservice**) Remove incorrect endpoint tests
+* (**directoryservicedata**) Remove incorrect endpoint tests
+* (**dynamodbstreams**) Remove incorrect endpoint tests
+* (**ebs**) Remove incorrect endpoint tests
+* (**ecrpublic**) Remove incorrect endpoint tests
+* (**elasticbeanstalk**) Remove incorrect endpoint tests
+* (**elasticloadbalancingv2**) Remove incorrect endpoint tests
+* (**elasticsearchservice**) Remove incorrect endpoint tests
+* (**forecastquery**) Remove incorrect endpoint tests
+* (**gameliftstreams**) The default application in a stream group can now be changed at any time using UpdateStreamGroup to update the DefaultApplicationIdentifier.
+* (**glue**) Added support for preprocessing queries in Data Quality operations through new DataQualityGlueTable structure.
+* (**grafana**) Remove incorrect endpoint tests
+* (**greengrassv2**) Remove incorrect endpoint tests
+* (**guardduty**) Remove Pattern trait from email field
+* (**inspector2**) Remove incorrect endpoint tests
+* (**iotdeviceadvisor**) Remove incorrect endpoint tests
+* (**iotevents**) Remove incorrect endpoint tests
+* (**ioteventsdata**) Remove incorrect endpoint tests
+* (**iotthingsgraph**) Remove incorrect endpoint tests
+* (**ivs**) Remove incorrect endpoint tests
+* (**kinesisvideosignaling**) Remove incorrect endpoint tests
+* (**kinesisvideowebrtcstorage**) Remove incorrect endpoint tests
+* (**lexruntimev2**) Remove incorrect endpoint tests
+* (**lightsail**) Remove incorrect endpoint tests
+* (**lookoutmetrics**) Remove incorrect endpoint tests
+* (**managedblockchain**) Remove incorrect endpoint tests
+* (**marketplaceagreement**) Remove incorrect endpoint tests
+* (**mediaconnect**) Remove incorrect endpoint tests
+* (**mediaconvert**) Remove incorrect endpoint tests
+* (**mediapackage**) Remove incorrect endpoint tests
+* (**mediapackagev2**) Remove incorrect endpoint tests
+* (**mediatailor**) Remove incorrect endpoint tests
+* (**mwaa**) Remove incorrect endpoint tests
+* (**observabilityadmin**) Remove incorrect endpoint tests
+* (**panorama**) Remove incorrect endpoint tests
+* (**pinpointemail**) Remove incorrect endpoint tests
+* (**resourcegroups**) Remove incorrect endpoint tests
+* (**route53profiles**) Remove incorrect endpoint tests
+* (**route53resolver**) Remove incorrect endpoint tests
+* (**s3outposts**) Remove incorrect endpoint tests
+* (**securitylake**) Remove incorrect endpoint tests
+* (**ssmquicksetup**) Remove incorrect endpoint tests
+* (**sts**) Remove incorrect endpoint tests
+* (**timestreaminfluxdb**) Remove incorrect endpoint tests
+* (**verifiedpermissions**) Remove incorrect endpoint tests
+* (**wisdom**) Remove incorrect endpoint tests
+* (**workspacesweb**) Remove incorrect endpoint tests
+
+### Documentation
+* (**ecs**) This is a documentation only release that adds additional information for the update-service request parameters.
+* (**ssmcontacts**) Doc-only updates for Incident Manager Contacts August 2025
+
 ## [1.5.22] - 08/20/2025
 
 ### Features
