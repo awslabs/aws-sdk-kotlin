@@ -1,5 +1,52 @@
 # Changelog
 
+## [1.5.24] - 08/22/2025
+
+### Features
+* (**account**) Remove incorrect endpoint tests
+* (**apigateway**) Remove incorrect endpoint tests
+* (**apigatewayv2**) Remove incorrect endpoint tests
+* (**b2bi**) Remove incorrect endpoint tests
+* (**clouddirectory**) Remove incorrect endpoint tests
+* (**codepipeline**) Remove incorrect endpoint tests
+* (**cognitosync**) Remove incorrect endpoint tests
+* (**dataexchange**) Remove incorrect endpoint tests
+* (**docdb**) Remove incorrect endpoint tests
+* (**elasticloadbalancing**) Remove incorrect endpoint tests
+* (**emrserverless**) Remove incorrect endpoint tests
+* (**firehose**) Remove incorrect endpoint tests
+* (**healthlake**) Remove incorrect endpoint tests
+* (**iotanalytics**) Remove incorrect endpoint tests
+* (**launchwizard**) Remove incorrect endpoint tests
+* (**location**) Remove incorrect endpoint tests
+* (**macie2**) Remove incorrect endpoint tests
+* (**marketplacecommerceanalytics**) Remove incorrect endpoint tests
+* (**medialive**) AWS Elemental MediaLive now has a field called "SubtitleRows" for controlling subtitle row count for DVB-Sub and Burn-In captions outputs
+* (**memorydb**) Remove incorrect endpoint tests
+* (**migrationhuborchestrator**) Remove incorrect endpoint tests
+* (**networkmonitor**) Remove incorrect endpoint tests
+* (**organizations**) Remove incorrect endpoint tests
+* (**paymentcryptography**) Remove incorrect endpoint tests
+* (**pricing**) Remove incorrect endpoint tests
+* (**proton**) Remove incorrect endpoint tests
+* (**qconnect**) Releasing model ID support for UpdateAIPrompt
+* (**qldb**) Remove incorrect endpoint tests
+* (**redshiftdata**) Remove incorrect endpoint tests
+* (**rolesanywhere**) Remove incorrect endpoint tests
+* (**route53recoveryreadiness**) Remove incorrect endpoint tests
+* (**rum**) Remove incorrect endpoint tests
+* (**sagemaker**) Launch SageMaker Notebook Instances support for AL2023 along with P6-B200 instance type and Rootless Docker support for SageMaker Studio.
+* (**sagemakera2iruntime**) Remove incorrect endpoint tests
+* (**sagemakermetrics**) Remove incorrect endpoint tests
+* (**simspaceweaver**) Remove incorrect endpoint tests
+* (**sqs**) Remove incorrect endpoint tests
+* (**synthetics**) Added multi browser support for synthetics canaries, Increased ephemeral storage limit from 5GB to 10GB
+* (**wafv2**) test and verified, safe to release
+
+### Documentation
+* (**rds**) Updates Amazon RDS documentation for Db2 read-only replicas.
+* (**servicediscovery**) Updating SDK examples after launch of shared AWS Cloud Map namespaces
+
 ## [1.5.23] - 08/21/2025
 
 ### Features
