@@ -1,0 +1,5 @@
+{
+    "id": "b02d92c5-68b1-4b48-97c9-f4b733022153",
+    "type": "misc",
+    "description": "Remove OpsWorks and OpsWorks-CM service clients from SDK because the [service has reached End Of Life](https://docs.aws.amazon.com/opsworks/latest/userguide/stacks-eol-faqs.html)"
+}
