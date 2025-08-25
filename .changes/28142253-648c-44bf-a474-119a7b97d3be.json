@@ -1,0 +1,5 @@
+{
+    "id": "28142253-648c-44bf-a474-119a7b97d3be",
+    "type": "bugfix",
+    "description": "Stop erroneously using `ProfileCredentialsProvider.profileName` to initialize IMDS instance profile"
+}
