@@ -1,5 +1,101 @@
 # Changelog
 
+## [1.5.25] - 08/25/2025
+
+### Features
+* (**acm**) Remove incorrect endpoint tests
+* (**aiops**) Remove incorrect endpoint tests
+* (**appflow**) Remove incorrect endpoint tests
+* (**appsync**) Remove incorrect endpoint tests
+* (**athena**) Remove incorrect endpoint tests
+* (**autoscaling**) Remove incorrect endpoint tests
+* (**b2bi**) Updated APIs to support custom validation rules.
+* (**bedrock**) Remove incorrect endpoint tests
+* (**bedrockagent**) Remove incorrect endpoint tests
+* (**bedrockdataautomation**) Remove incorrect endpoint tests
+* (**bedrockdataautomationruntime**) Remove incorrect endpoint tests
+* (**braket**) Remove incorrect endpoint tests
+* (**chatbot**) Remove incorrect endpoint tests
+* (**chimesdkmediapipelines**) Remove incorrect endpoint tests
+* (**chimesdkmessaging**) Remove incorrect endpoint tests
+* (**cloudcontrol**) Remove incorrect endpoint tests
+* (**cloudformation**) Remove incorrect endpoint tests
+* (**cloudsearch**) Remove incorrect endpoint tests
+* (**cloudtraildata**) Remove incorrect endpoint tests
+* (**cloudwatchevents**) Remove incorrect endpoint tests
+* (**cloudwatchlogs**) Remove incorrect endpoint tests
+* (**codeartifact**) Remove incorrect endpoint tests
+* (**codestarnotifications**) Remove incorrect endpoint tests
+* (**connectparticipant**) Remove incorrect endpoint tests
+* (**controltower**) Remove incorrect endpoint tests
+* (**costandusagereportservice**) Remove incorrect endpoint tests
+* (**datazone**) Releasing the following features - Asset classification that lets users use restricted terms for classifying assets if they have the right permissions. Also adding a new enum value "Moving" to project status.
+* (**dax**) Remove incorrect endpoint tests
+* (**devicefarm**) Remove incorrect endpoint tests
+* (**devopsguru**) Remove incorrect endpoint tests
+* (**directconnect**) Remove incorrect endpoint tests
+* (**docdbelastic**) Remove incorrect endpoint tests
+* (**ec2**) Added IPv6 support for AWS Client VPN.
+* (**eks**) Remove incorrect endpoint tests
+* (**emrcontainers**) Remove incorrect endpoint tests
+* (**finspacedata**) Remove incorrect endpoint tests
+* (**forecast**) Remove incorrect endpoint tests
+* (**fsx**) Remove incorrect endpoint tests
+* (**groundstation**) Remove incorrect endpoint tests
+* (**health**) Remove incorrect endpoint tests
+* (**iotdataplane**) Remove incorrect endpoint tests
+* (**iotfleethub**) Remove incorrect endpoint tests
+* (**iotsitewise**) Remove incorrect endpoint tests
+* (**kendra**) Remove incorrect endpoint tests
+* (**keyspaces**) Remove incorrect endpoint tests
+* (**kinesisanalytics**) Remove incorrect endpoint tests
+* (**kinesisvideoarchivedmedia**) Remove incorrect endpoint tests
+* (**lambda**) Remove incorrect endpoint tests
+* (**lexmodelsv2**) Remove incorrect endpoint tests
+* (**lexruntimeservice**) Remove incorrect endpoint tests
+* (**licensemanager**) Remove incorrect endpoint tests
+* (**lookoutequipment**) Remove incorrect endpoint tests
+* (**mailmanager**) Remove incorrect endpoint tests
+* (**marketplacecatalog**) Remove incorrect endpoint tests
+* (**mediaconvert**) This release adds support for input rendition selection for HLS input, adds new Share API to enable sharing jobs with AWS Support for support investigations, and adds INCLUDE_AS_TS to iFrameOnlyManifest setting for HLS outputs.
+* (**mediapackagevod**) Remove incorrect endpoint tests
+* (**mediastore**) Remove incorrect endpoint tests
+* (**migrationhubstrategy**) Remove incorrect endpoint tests
+* (**odb**) Remove incorrect endpoint tests
+* (**opensearchserverless**) Remove incorrect endpoint tests
+* (**opsworkscm**) Remove incorrect endpoint tests
+* (**outposts**) Remove incorrect endpoint tests
+* (**pcaconnectorad**) Remove incorrect endpoint tests
+* (**personalizeruntime**) Remove incorrect endpoint tests
+* (**qbusiness**) The Amazon Q Business GetDocumentContent operation now supports retrieval of the extracted text content in JSON format.
+* (**redshiftserverless**) Remove incorrect endpoint tests
+* (**repostspace**) Remove incorrect endpoint tests
+* (**resiliencehub**) Remove incorrect endpoint tests
+* (**resourcegroupstaggingapi**) Remove incorrect endpoint tests
+* (**sagemakeredge**) Remove incorrect endpoint tests
+* (**sagemakerfeaturestoreruntime**) Remove incorrect endpoint tests
+* (**sagemakerruntime**) Remove incorrect endpoint tests
+* (**serverlessapplicationrepository**) Remove incorrect endpoint tests
+* (**servicecatalog**) Remove incorrect endpoint tests
+* (**sfn**) Remove incorrect endpoint tests
+* (**shield**) Remove incorrect endpoint tests
+* (**snowball**) Remove incorrect endpoint tests
+* (**ssoadmin**) Remove incorrect endpoint tests
+* (**storagegateway**) Remove incorrect endpoint tests
+* (**support**) Remove incorrect endpoint tests
+* (**supportapp**) Remove incorrect endpoint tests
+* (**taxsettings**) Remove incorrect endpoint tests
+* (**timestreaminfluxdb**) Add MAINTENANCE status for DbInstance and DbCluster
+* (**transcribe**) Remove incorrect endpoint tests
+* (**transcribestreaming**) Remove incorrect endpoint tests
+* (**translate**) Remove incorrect endpoint tests
+* (**wellarchitected**) Remove incorrect endpoint tests
+* (**workspacesthinclient**) Remove incorrect endpoint tests
+
+### Documentation
+* (**codegurusecurity**) Documentation update to notify users of the discontinuation of Amazon CodeGuru Security.
+* (**sqs**) Documentation update for Amazon SQS Supports Large Payload Message feature
+
 ## [1.5.24] - 08/22/2025
 
 ### Features
