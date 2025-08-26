@@ -4,8 +4,8 @@
  */
 package aws.sdk.kotlin.hll.codegen.core
 
-import kotlin.test.assertEquals
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class TemplateEngineTest {
