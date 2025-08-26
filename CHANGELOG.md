@@ -1,5 +1,77 @@
 # Changelog
 
+## [1.5.26] - 08/26/2025
+
+### Features
+* (**appconfig**) Remove incorrect endpoint tests
+* (**appmesh**) Remove incorrect endpoint tests
+* (**apprunner**) Remove incorrect endpoint tests
+* (**arczonalshift**) This release adds new API options to enable allowed windows and multiple alarms for practice runs.
+* (**bedrockagentcorecontrol**) Remove incorrect endpoint tests
+* (**cleanrooms**) Remove incorrect endpoint tests
+* (**cloudwatch**) Remove incorrect endpoint tests
+* (**codecommit**) Remove incorrect endpoint tests
+* (**codestarconnections**) Remove incorrect endpoint tests
+* (**comprehendmedical**) Remove incorrect endpoint tests
+* (**connectcontactlens**) Remove incorrect endpoint tests
+* (**connectparticipant**) Amazon Connect Participant Service: Remove unused fields from WebRTCConnection
+* (**controlcatalog**) Remove incorrect endpoint tests
+* (**datasync**) Remove incorrect endpoint tests
+* (**dlm**) Remove incorrect endpoint tests
+* (**drs**) Remove incorrect endpoint tests
+* (**ec2**) Add new APIs for viewing how your shared AMIs are used by other accounts, and identify resources in your account that are dependent on particular AMIs
+* (**elastictranscoder**) Remove incorrect endpoint tests
+* (**evs**) Remove incorrect endpoint tests
+* (**finspace**) Remove incorrect endpoint tests
+* (**gamelift**) Remove incorrect endpoint tests
+* (**georoutes**) Added RouteFerryNotice PotentialViolatedVehicleRestrictionUsage value for CalculateRoutes. This value indicates when the Route is potentially forbidden for the given vehicle profile.
+* (**glacier**) Remove incorrect endpoint tests
+* (**globalaccelerator**) Remove incorrect endpoint tests
+* (**greengrass**) Remove incorrect endpoint tests
+* (**identitystore**) Remove incorrect endpoint tests
+* (**imagebuilder**) Remove incorrect endpoint tests
+* (**iotjobsdataplane**) Remove incorrect endpoint tests
+* (**iotsecuretunneling**) Remove incorrect endpoint tests
+* (**iottwinmaker**) Remove incorrect endpoint tests
+* (**kafka**) Remove incorrect endpoint tests
+* (**licensemanagerlinuxsubscriptions**) Remove incorrect endpoint tests
+* (**lookoutvision**) Remove incorrect endpoint tests
+* (**m2**) Remove incorrect endpoint tests
+* (**migrationhub**) Remove incorrect endpoint tests
+* (**migrationhubrefactorspaces**) Remove incorrect endpoint tests
+* (**mq**) Remove incorrect endpoint tests
+* (**neptunedata**) Remove incorrect endpoint tests
+* (**pcaconnectorscep**) Remove incorrect endpoint tests
+* (**personalizeevents**) Remove incorrect endpoint tests
+* (**pinpoint**) Remove incorrect endpoint tests
+* (**polly**) Remove incorrect endpoint tests
+* (**ram**) Remove incorrect endpoint tests
+* (**rbin**) Remove incorrect endpoint tests
+* (**rdsdata**) Remove incorrect endpoint tests
+* (**resourceexplorer2**) Remove incorrect endpoint tests
+* (**route53**) Remove incorrect endpoint tests
+* (**route53recoverycluster**) Remove incorrect endpoint tests
+* (**sagemakergeospatial**) Remove incorrect endpoint tests
+* (**secretsmanager**) Remove incorrect endpoint tests
+* (**securityhub**) Remove incorrect endpoint tests
+* (**servicecatalogappregistry**) Remove incorrect endpoint tests
+* (**signer**) Remove incorrect endpoint tests
+* (**socialmessaging**) Remove incorrect endpoint tests
+* (**ssm**) Remove incorrect endpoint tests
+* (**ssmsap**) Remove incorrect endpoint tests
+* (**ssooidc**) Remove incorrect endpoint tests
+* (**tnb**) Remove incorrect endpoint tests
+* (**transfer**) Remove incorrect endpoint tests
+* (**trustedadvisor**) Remove incorrect endpoint tests
+* (**wafregional**) Remove incorrect endpoint tests
+* (**workspaces**) Remove incorrect endpoint tests
+
+### Fixes
+* Stop erroneously using `ProfileCredentialsProvider.profileName` to initialize IMDS instance profile
+
+### Miscellaneous
+* Remove OpsWorks and OpsWorks-CM service clients from SDK because the [service has reached End Of Life](https://docs.aws.amazon.com/opsworks/latest/userguide/stacks-eol-faqs.html)
+
 ## [1.5.25] - 08/25/2025
 
 ### Features
