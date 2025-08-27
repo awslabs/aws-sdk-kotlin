@@ -70,6 +70,10 @@ jobs:
         uses: awslabs/aws-kotlin-repo-tools/.github/actions/configure-gradle@main
         with:
           working-directory: ./smithy-kotlin
+      - name: Disable native builds # FIXME remove this step once K/N is merged
+        run: |
+          echo "\n\naws.kotlin.native=false" >> smithy-kotlin/local.properties
+          echo "\n\naws.kotlin.native=false" >> aws-sdk-kotlin/local.properties
       - name: Build smithy-kotlin
         working-directory: ./smithy-kotlin
         shell: bash
