@@ -1,5 +1,73 @@
 # Changelog
 
+## [1.5.27] - 08/27/2025
+
+### Features
+* (**acmpca**) Remove incorrect endpoint tests
+* (**amplifybackend**) Remove incorrect endpoint tests
+* (**amplifyuibuilder**) Remove incorrect endpoint tests
+* (**appconfigdata**) Remove incorrect endpoint tests
+* (**applicationdiscoveryservice**) Remove incorrect endpoint tests
+* (**applicationinsights**) Remove incorrect endpoint tests
+* (**apptest**) Remove incorrect endpoint tests
+* (**bedrockagentcore**) Remove incorrect endpoint tests
+* (**chime**) Remove incorrect endpoint tests
+* (**chimesdkidentity**) Remove incorrect endpoint tests
+* (**chimesdkmeetings**) Remove incorrect endpoint tests
+* (**chimesdkvoice**) Remove incorrect endpoint tests
+* (**cleanroomsml**) Remove incorrect endpoint tests
+* (**codebuild**) Remove incorrect endpoint tests
+* (**codeconnections**) Remove incorrect endpoint tests
+* (**codeguruprofiler**) Remove incorrect endpoint tests
+* (**computeoptimizer**) Remove incorrect endpoint tests
+* (**datapipeline**) Remove incorrect endpoint tests
+* (**directoryservice**) Add APIs for CA AutoEnrollment support: DescribeCAEnrollmentPolicy, EnableCAEnrollmentPolicy and DisableCAEnrollmentPolicy.
+* (**eks**) Add support for on-demand refresh of EKS cluster insights
+* (**elasticache**) Remove incorrect endpoint tests
+* (**evidently**) Remove incorrect endpoint tests
+* (**frauddetector**) Remove incorrect endpoint tests
+* (**inspector**) Remove incorrect endpoint tests
+* (**iot**) Remove incorrect endpoint tests
+* (**iotfleetwise**) Remove incorrect endpoint tests
+* (**iotwireless**) Remove incorrect endpoint tests
+* (**ivschat**) Remove incorrect endpoint tests
+* (**ivsrealtime**) Remove incorrect endpoint tests
+* (**kafkaconnect**) Remove incorrect endpoint tests
+* (**kinesisvideo**) Remove incorrect endpoint tests
+* (**kinesisvideomedia**) Remove incorrect endpoint tests
+* (**kms**) Remove incorrect endpoint tests
+* (**lakeformation**) Remove incorrect endpoint tests
+* (**lexmodelbuildingservice**) Remove incorrect endpoint tests
+* (**marketplacereporting**) Remove incorrect endpoint tests
+* (**medicalimaging**) Remove incorrect endpoint tests
+* (**mgn**) Remove incorrect endpoint tests
+* (**migrationhubconfig**) Remove incorrect endpoint tests
+* (**neptune**) Remove incorrect endpoint tests
+* (**neptunegraph**) Add StartGraph and StopGraph operations to Neptune Analytics
+* (**omics**) Remove incorrect endpoint tests
+* (**paymentcryptographydata**) Remove incorrect endpoint tests
+* (**personalize**) Remove incorrect endpoint tests
+* (**pi**) Remove incorrect endpoint tests
+* (**qapps**) Remove incorrect endpoint tests
+* (**qldbsession**) Remove incorrect endpoint tests
+* (**redshift**) Remove incorrect endpoint tests
+* (**robomaker**) Remove incorrect endpoint tests
+* (**s3tables**) Remove incorrect endpoint tests
+* (**sagemaker**) This release adds support for AutoScaling on SageMaker HyperPod.
+* (**schemas**) Remove incorrect endpoint tests
+* (**snowdevicemanagement**) Remove incorrect endpoint tests
+* (**sns**) Remove incorrect endpoint tests
+* (**supplychain**) Remove incorrect endpoint tests
+* (**textract**) Remove incorrect endpoint tests
+* (**timestreamwrite**) Remove incorrect endpoint tests
+* (**voiceid**) Remove incorrect endpoint tests
+* (**vpclattice**) Remove incorrect endpoint tests
+* (**workdocs**) Remove incorrect endpoint tests
+* (**workmail**) Remove incorrect endpoint tests
+
+### Documentation
+* (**batch**) Added ECS_AL2023_NVIDIA as an option for Ec2Configuration.imageType.
+
 ## [1.5.26] - 08/26/2025
 
 ### Features
