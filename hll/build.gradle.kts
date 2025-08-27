@@ -70,6 +70,12 @@ subprojects {
                 optinAnnotations.forEach(languageSettings::optIn)
             }
 
+            named("commonMain") {
+                dependencies {
+                    api(project(":aws-runtime:aws-core")) // for InternalSdkApi annotation
+                }
+            }
+
             named("commonTest") {
                 dependencies {
                     implementation(libraries.kotest.assertions.core)

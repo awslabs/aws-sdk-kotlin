@@ -73,6 +73,6 @@ internal fun String.toEndpointUrlConfigNames(): EndpointUrlConfigNames = Endpoin
 // for our client names
 // e.g. sdkId "Elasticsearch Service" -> client name "ElasticsearchClient", prop "aws.endpointUrlElasticsearch"
 private object JvmSystemPropertySuffix : StringTransformer {
-    override fun transform(id: String): String =
-        id.toPascalCase().removeSuffix("Service")
+    override fun transform(input: String): String =
+        input.toPascalCase().removeSuffix("Service")
 }

@@ -5,6 +5,7 @@
 import aws.sdk.kotlin.gradle.dsl.configureLinting
 import aws.sdk.kotlin.gradle.dsl.configureNexus
 import aws.sdk.kotlin.gradle.util.typedProp
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     // NOTE: buildscript classpath for the root project is the parent classloader for the subprojects, we
@@ -38,9 +39,9 @@ val testJavaVersion = typedProp<String>("test.java.version")?.let {
 }
 
 allprojects {
-    if (rootProject.typedProp<Boolean>("kotlinWarningsAsErrors") == true) {
-        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            compilerOptions.allWarningsAsErrors = true
+    tasks.withType<KotlinCompile> {
+        compilerOptions {
+            allWarningsAsErrors = true
         }
     }
 
