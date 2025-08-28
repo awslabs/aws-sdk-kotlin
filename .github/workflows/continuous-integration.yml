@@ -74,8 +74,8 @@ jobs:
         run: |
           echo "DEBUG:"
           find . -maxdepth 3
-          echo "\n\naws.kotlin.native=false" >> ./smithy-kotlin/local.properties
-          echo "\n\naws.kotlin.native=false" >> ./aws-sdk-kotlin/local.properties
+          echo "\n\naws.kotlin.native=false" >> ./smithy-kotlin/gradle.properties
+          echo "\n\naws.kotlin.native=false" >> ./aws-sdk-kotlin/gradle.properties
       - name: Build smithy-kotlin
         working-directory: ./smithy-kotlin
         shell: bash
