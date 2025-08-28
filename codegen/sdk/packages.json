@@ -1555,18 +1555,6 @@
             "brazilName": "AwsSdkKotlinOpensearchserverless"
         },
         {
-            "sdkId": "OpsWorks",
-            "namespace": "aws.sdk.kotlin.services.opsworks",
-            "artifactName": "opsworks",
-            "brazilName": "AwsSdkKotlinOpsworks"
-        },
-        {
-            "sdkId": "OpsWorksCM",
-            "namespace": "aws.sdk.kotlin.services.opsworkscm",
-            "artifactName": "opsworkscm",
-            "brazilName": "AwsSdkKotlinOpsworkscm"
-        },
-        {
             "sdkId": "Organizations",
             "namespace": "aws.sdk.kotlin.services.organizations",
             "artifactName": "organizations",

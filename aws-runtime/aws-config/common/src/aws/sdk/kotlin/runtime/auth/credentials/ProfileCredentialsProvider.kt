@@ -106,7 +106,6 @@ public class ProfileCredentialsProvider @InternalSdkApi constructor(
     private val namedProviders = mapOf(
         "Environment" to EnvironmentCredentialsProvider(platformProvider::getenv),
         "Ec2InstanceMetadata" to ImdsCredentialsProvider(
-            profileOverride = profileName,
             client = lazy {
                 ImdsClient {
                     platformProvider = this@ProfileCredentialsProvider.platformProvider
