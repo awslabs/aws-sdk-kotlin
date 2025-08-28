@@ -73,13 +73,13 @@ jobs:
       - name: Disable native builds # FIXME remove this step once K/N is merged
         run: |
           echo "Appending aws.kotlin.native=false to smithy-kotlin/gradle.properties..."
-          echo "\n\naws.kotlin.native=false" >> ./smithy-kotlin/gradle.properties
+          echo -e "\n\naws.kotlin.native=false" >> ./smithy-kotlin/gradle.properties
           echo "Contents of smithy-kotlin/gradle.properties:"
           cat ./smithy-kotlin/gradle.properties
           echo ""
 
           echo "Appending aws.kotlin.native=false to aws-sdk-kotlin/gradle.properties..."
-          echo "\n\naws.kotlin.native=false" >> ./aws-sdk-kotlin/gradle.properties
+          echo -e "\n\naws.kotlin.native=false" >> ./aws-sdk-kotlin/gradle.properties
           echo "Contents of aws-sdk-kotlin/gradle.properties:"
           cat ./aws-sdk-kotlin/gradle.properties
           echo ""
