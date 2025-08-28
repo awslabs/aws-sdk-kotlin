@@ -72,8 +72,6 @@ jobs:
           working-directory: ./smithy-kotlin
       - name: Disable native builds # FIXME remove this step once K/N is merged
         run: |
-          echo "DEBUG:"
-          find . -maxdepth 3
           echo "\n\naws.kotlin.native=false" >> ./smithy-kotlin/gradle.properties
           echo "\n\naws.kotlin.native=false" >> ./aws-sdk-kotlin/gradle.properties
       - name: Build smithy-kotlin
