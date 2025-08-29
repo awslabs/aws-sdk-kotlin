@@ -1400,11 +1400,6 @@ private const val TEST_SUITE_JSON = """
     "service_envvar_name": "AWS_ENDPOINT_URL_SIGNER"
   },
   {
-    "service_id": "SMS",
-    "services_section_name": "sms",
-    "service_envvar_name": "AWS_ENDPOINT_URL_SMS"
-  },
-  {
     "service_id": "Pinpoint SMS Voice",
     "services_section_name": "pinpoint_sms_voice",
     "service_envvar_name": "AWS_ENDPOINT_URL_PINPOINT_SMS_VOICE"
@@ -1849,7 +1844,6 @@ private const val JAVA_CLIENT_NAMES_JSON = """
   "MemoryDB": "MemoryDbClient",
   "Payment Cryptography": "PaymentCryptographyClient",
   "Cognito Identity": "CognitoIdentityClient",
-  "SMS": "SmsClient",
   "OSIS": "OsisClient",
   "Proton": "ProtonClient",
   "ECR PUBLIC": "EcrPublicClient",
