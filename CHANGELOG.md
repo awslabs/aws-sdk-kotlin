@@ -1,5 +1,142 @@
 # Changelog
 
+## [1.5.28] - 08/28/2025
+
+### Features
+* (**amplify**) Remove incorrect endpoint tests
+* (**applicationautoscaling**) Remove incorrect endpoint tests
+* (**applicationcostprofiler**) Remove incorrect endpoint tests
+* (**autoscalingplans**) Remove incorrect endpoint tests
+* (**bedrockruntime**) Remove incorrect endpoint tests
+* (**cloud9**) Remove incorrect endpoint tests
+* (**cloudhsmv2**) Remove incorrect endpoint tests
+* (**cloudsearchdomain**) Remove incorrect endpoint tests
+* (**codedeploy**) Remove incorrect endpoint tests
+* (**codegurureviewer**) Remove incorrect endpoint tests
+* (**connect**) AgentStatusDrillDown feature in GetCurrentMetricData API. Adding AGENT_STATUS as filter and grouping in GetCurrentMetricData API
+* (**connectcampaigns**) Remove incorrect endpoint tests
+* (**databrew**) Remove incorrect endpoint tests
+* (**dynamodb**) Remove incorrect endpoint tests
+* (**ec2**) This release adds support for copying Amazon EBS snapshot and AMIs to and from Local Zones.
+* (**ec2instanceconnect**) Remove incorrect endpoint tests
+* (**ecr**) Remove incorrect endpoint tests
+* (**emr**) Remove incorrect endpoint tests
+* (**entityresolution**) Remove incorrect endpoint tests
+* (**eventbridge**) Remove incorrect endpoint tests
+* (**fis**) Remove incorrect endpoint tests
+* (**fms**) Remove incorrect endpoint tests
+* (**geomaps**) Remove incorrect endpoint tests
+* (**geoplaces**) Remove incorrect endpoint tests
+* (**glue**) Adding support to fetch TargetDatabase field during GetDatabases with AttributesToGet
+* (**healthlake**) Add ValidationLevel parameter to StartFHIRImportJob API, allowing users to specify a FHIR validation level for their asynchronous import jobs.
+* (**inspectorscan**) Remove incorrect endpoint tests
+* (**internetmonitor**) Remove incorrect endpoint tests
+* (**kinesis**) Remove incorrect endpoint tests
+* (**licensemanagerusersubscriptions**) Remove incorrect endpoint tests
+* (**machinelearning**) Remove incorrect endpoint tests
+* (**managedblockchainquery**) Remove incorrect endpoint tests
+* (**marketplacedeployment**) Remove incorrect endpoint tests
+* (**mediastoredata**) Remove incorrect endpoint tests
+* (**mturk**) Remove incorrect endpoint tests
+* (**networkfirewall**) Remove incorrect endpoint tests
+* (**oam**) Remove incorrect endpoint tests
+* (**omics**) Adds Amazon ECR pull through cache support to AWS HealthOmics, so you can more easily use container images from external sources.
+* (**opensearch**) Remove incorrect endpoint tests
+* (**osis**) Remove incorrect endpoint tests
+* (**pcs**) Remove incorrect endpoint tests
+* (**pinpointsmsvoice**) Remove incorrect endpoint tests
+* (**pinpointsmsvoicev2**) Remove incorrect endpoint tests
+* (**pipes**) Remove incorrect endpoint tests
+* (**quicksight**) Remove incorrect endpoint tests
+* (**rds**) Added RDS HTTP Endpoint feature support flag to DescribeOrderableDBInstanceOptions API
+* (**rekognition**) Remove incorrect endpoint tests
+* (**route53domains**) Remove incorrect endpoint tests
+* (**savingsplans**) Remove incorrect endpoint tests
+* (**scheduler**) Remove incorrect endpoint tests
+* (**servicequotas**) Remove incorrect endpoint tests
+* (**ses**) Remove incorrect endpoint tests
+* (**sesv2**) Remove incorrect endpoint tests
+* (**ssmguiconnect**) Remove incorrect endpoint tests
+* (**ssmincidents**) Remove incorrect endpoint tests
+* (**ssmsap**) Added support for Configuration Checks on SAP HANA Applications.
+* (**sso**) Remove incorrect endpoint tests
+* (**swf**) Remove incorrect endpoint tests
+* (**timestreamquery**) Remove incorrect endpoint tests
+* (**waf**) Remove incorrect endpoint tests
+* (**workmailmessageflow**) Remove incorrect endpoint tests
+* (**xray**) Remove incorrect endpoint tests
+
+### Documentation
+* (**apprunner**) Doc only updates for APIs and and datatypes related to IPAddressType and Subnets for IPv6 dualstack support.
+
+## [1.5.27] - 08/27/2025
+
+### Features
+* (**acmpca**) Remove incorrect endpoint tests
+* (**amplifybackend**) Remove incorrect endpoint tests
+* (**amplifyuibuilder**) Remove incorrect endpoint tests
+* (**appconfigdata**) Remove incorrect endpoint tests
+* (**applicationdiscoveryservice**) Remove incorrect endpoint tests
+* (**applicationinsights**) Remove incorrect endpoint tests
+* (**apptest**) Remove incorrect endpoint tests
+* (**bedrockagentcore**) Remove incorrect endpoint tests
+* (**chime**) Remove incorrect endpoint tests
+* (**chimesdkidentity**) Remove incorrect endpoint tests
+* (**chimesdkmeetings**) Remove incorrect endpoint tests
+* (**chimesdkvoice**) Remove incorrect endpoint tests
+* (**cleanroomsml**) Remove incorrect endpoint tests
+* (**codebuild**) Remove incorrect endpoint tests
+* (**codeconnections**) Remove incorrect endpoint tests
+* (**codeguruprofiler**) Remove incorrect endpoint tests
+* (**computeoptimizer**) Remove incorrect endpoint tests
+* (**datapipeline**) Remove incorrect endpoint tests
+* (**directoryservice**) Add APIs for CA AutoEnrollment support: DescribeCAEnrollmentPolicy, EnableCAEnrollmentPolicy and DisableCAEnrollmentPolicy.
+* (**eks**) Add support for on-demand refresh of EKS cluster insights
+* (**elasticache**) Remove incorrect endpoint tests
+* (**evidently**) Remove incorrect endpoint tests
+* (**frauddetector**) Remove incorrect endpoint tests
+* (**inspector**) Remove incorrect endpoint tests
+* (**iot**) Remove incorrect endpoint tests
+* (**iotfleetwise**) Remove incorrect endpoint tests
+* (**iotwireless**) Remove incorrect endpoint tests
+* (**ivschat**) Remove incorrect endpoint tests
+* (**ivsrealtime**) Remove incorrect endpoint tests
+* (**kafkaconnect**) Remove incorrect endpoint tests
+* (**kinesisvideo**) Remove incorrect endpoint tests
+* (**kinesisvideomedia**) Remove incorrect endpoint tests
+* (**kms**) Remove incorrect endpoint tests
+* (**lakeformation**) Remove incorrect endpoint tests
+* (**lexmodelbuildingservice**) Remove incorrect endpoint tests
+* (**marketplacereporting**) Remove incorrect endpoint tests
+* (**medicalimaging**) Remove incorrect endpoint tests
+* (**mgn**) Remove incorrect endpoint tests
+* (**migrationhubconfig**) Remove incorrect endpoint tests
+* (**neptune**) Remove incorrect endpoint tests
+* (**neptunegraph**) Add StartGraph and StopGraph operations to Neptune Analytics
+* (**omics**) Remove incorrect endpoint tests
+* (**paymentcryptographydata**) Remove incorrect endpoint tests
+* (**personalize**) Remove incorrect endpoint tests
+* (**pi**) Remove incorrect endpoint tests
+* (**qapps**) Remove incorrect endpoint tests
+* (**qldbsession**) Remove incorrect endpoint tests
+* (**redshift**) Remove incorrect endpoint tests
+* (**robomaker**) Remove incorrect endpoint tests
+* (**s3tables**) Remove incorrect endpoint tests
+* (**sagemaker**) This release adds support for AutoScaling on SageMaker HyperPod.
+* (**schemas**) Remove incorrect endpoint tests
+* (**snowdevicemanagement**) Remove incorrect endpoint tests
+* (**sns**) Remove incorrect endpoint tests
+* (**supplychain**) Remove incorrect endpoint tests
+* (**textract**) Remove incorrect endpoint tests
+* (**timestreamwrite**) Remove incorrect endpoint tests
+* (**voiceid**) Remove incorrect endpoint tests
+* (**vpclattice**) Remove incorrect endpoint tests
+* (**workdocs**) Remove incorrect endpoint tests
+* (**workmail**) Remove incorrect endpoint tests
+
+### Documentation
+* (**batch**) Added ECS_AL2023_NVIDIA as an option for Ec2Configuration.imageType.
+
 ## [1.5.26] - 08/26/2025
 
 ### Features
