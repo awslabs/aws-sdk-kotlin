@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.29] - 08/29/2025
+
+### Features
+* (**bedrockruntime**) Fixed stop sequence limit for converse API.
+* (**ec2**) Release shows new route types such as filtered and advertisement.
+* (**xray**) AWS X-Ray Features: Support Sampling Rate Boost On Anomaly
+
 ## [1.5.28] - 08/28/2025
 
 ### Features
