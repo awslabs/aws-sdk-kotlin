@@ -1,5 +1,5 @@
 {
     "id": "caf14041-a20b-4e51-a29b-c0421231bf3d",
     "type": "misc",
-    "description": "Remove SMS service client from SDK because the service has been shutdown"
+    "description": "Remove SMS service"
 }
