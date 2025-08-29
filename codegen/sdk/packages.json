@@ -1885,12 +1885,6 @@
             "brazilName": "AwsSdkKotlinSfn"
         },
         {
-            "sdkId": "SMS",
-            "namespace": "aws.sdk.kotlin.services.sms",
-            "artifactName": "sms",
-            "brazilName": "AwsSdkKotlinSms"
-        },
-        {
             "sdkId": "SNS",
             "namespace": "aws.sdk.kotlin.services.sns",
             "artifactName": "sns",
