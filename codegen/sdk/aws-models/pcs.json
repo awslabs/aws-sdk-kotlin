@@ -567,17 +567,6 @@
                             }
                         },
                         {
-                            "documentation": "For region us-iso-east-1 with FIPS enabled and DualStack enabled",
-                            "expect": {
-                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
-                            },
-                            "params": {
-                                "Region": "us-iso-east-1",
-                                "UseFIPS": true,
-                                "UseDualStack": true
-                            }
-                        },
-                        {
                             "documentation": "For region us-iso-east-1 with FIPS enabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
@@ -588,17 +577,6 @@
                                 "Region": "us-iso-east-1",
                                 "UseFIPS": true,
                                 "UseDualStack": false
-                            }
-                        },
-                        {
-                            "documentation": "For region us-iso-east-1 with FIPS disabled and DualStack enabled",
-                            "expect": {
-                                "error": "DualStack is enabled but this partition does not support DualStack"
-                            },
-                            "params": {
-                                "Region": "us-iso-east-1",
-                                "UseFIPS": false,
-                                "UseDualStack": true
                             }
                         },
                         {
@@ -615,17 +593,6 @@
                             }
                         },
                         {
-                            "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack enabled",
-                            "expect": {
-                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
-                            },
-                            "params": {
-                                "Region": "us-isob-east-1",
-                                "UseFIPS": true,
-                                "UseDualStack": true
-                            }
-                        },
-                        {
                             "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
@@ -636,17 +603,6 @@
                                 "Region": "us-isob-east-1",
                                 "UseFIPS": true,
                                 "UseDualStack": false
-                            }
-                        },
-                        {
-                            "documentation": "For region us-isob-east-1 with FIPS disabled and DualStack enabled",
-                            "expect": {
-                                "error": "DualStack is enabled but this partition does not support DualStack"
-                            },
-                            "params": {
-                                "Region": "us-isob-east-1",
-                                "UseFIPS": false,
-                                "UseDualStack": true
                             }
                         },
                         {
@@ -1247,7 +1203,7 @@
                 "iamInstanceProfileArn": {
                     "target": "com.amazonaws.pcs#InstanceProfileArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM instance profile used to pass an IAM role when launching EC2 instances. The role contained in your instance profile must have the <code>pcs:RegisterComputeNodeGroupInstance</code> permission. The resource identifier of the ARN must start with <code>AWSPCS</code> or it must have <code>/aws-pcs/</code> in its path.</p> <p class=\"title\"> <b>Examples</b> </p> <ul> <li> <p> <code>arn:aws:iam::111122223333:instance-profile/AWSPCS-example-role-1</code> </p> </li> <li> <p> <code>arn:aws:iam::111122223333:instance-profile/aws-pcs/example-role-2</code> </p> </li> </ul>",
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM instance profile used to pass an IAM role when launching EC2 instances. The role contained in your instance profile must have the <code>pcs:RegisterComputeNodeGroupInstance</code> permission and the role name must start with <code>AWSPCS</code> or must have the path <code>/aws-pcs/</code>. For more information, see <a href=\"https://docs.aws.amazon.com/pcs/latest/userguide/security-instance-profiles.html\">IAM instance profiles for PCS</a> in the <i>PCS User Guide</i>.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -1780,7 +1736,7 @@
                 "iamInstanceProfileArn": {
                     "target": "com.amazonaws.pcs#InstanceProfileArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM instance profile used to pass an IAM role when launching EC2 instances. The role contained in your instance profile must have the <code>pcs:RegisterComputeNodeGroupInstance</code> permission. The resource identifier of the ARN must start with <code>AWSPCS</code> or it must have <code>/aws-pcs/</code> in its path.</p> <p class=\"title\"> <b>Examples</b> </p> <ul> <li> <p> <code>arn:aws:iam::111122223333:instance-profile/AWSPCS-example-role-1</code> </p> </li> <li> <p> <code>arn:aws:iam::111122223333:instance-profile/aws-pcs/example-role-2</code> </p> </li> </ul>",
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM instance profile used to pass an IAM role when launching EC2 instances. The role contained in your instance profile must have the <code>pcs:RegisterComputeNodeGroupInstance</code> permission and the role name must start with <code>AWSPCS</code> or must have the path <code>/aws-pcs/</code>. For more information, see <a href=\"https://docs.aws.amazon.com/pcs/latest/userguide/security-instance-profiles.html\">IAM instance profiles for PCS</a> in the <i>PCS User Guide</i>.</p>",
                         "smithy.api#required": {}
                     }
                 },
@@ -2532,7 +2488,7 @@
         "com.amazonaws.pcs#InstanceProfileArn": {
             "type": "string",
             "traits": {
-                "smithy.api#pattern": "^arn:aws([a-zA-Z-]{0,10})?:iam::[0-9]{12}:instance-profile/[/\\w+=,.@-]{1,128}$"
+                "smithy.api#pattern": "^arn:aws([a-zA-Z-]{0,10})?:iam::[0-9]{12}:instance-profile/([!-~]{1,510}/)?([\\w+=,.@-]{1,128})$"
             }
         },
         "com.amazonaws.pcs#InternalServerException": {
@@ -4010,7 +3966,7 @@
                 "iamInstanceProfileArn": {
                     "target": "com.amazonaws.pcs#InstanceProfileArn",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM instance profile used to pass an IAM role when launching EC2 instances. The role contained in your instance profile must have the <code>pcs:RegisterComputeNodeGroupInstance</code> permission. The resource identifier of the ARN must start with <code>AWSPCS</code> or it must have <code>/aws-pcs/</code> in its path.</p> <p class=\"title\"> <b>Examples</b> </p> <ul> <li> <p> <code>arn:aws:iam::111122223333:instance-profile/AWSPCS-example-role-1</code> </p> </li> <li> <p> <code>arn:aws:iam::111122223333:instance-profile/aws-pcs/example-role-2</code> </p> </li> </ul>"
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM instance profile used to pass an IAM role when launching EC2 instances. The role contained in your instance profile must have the <code>pcs:RegisterComputeNodeGroupInstance</code> permission and the role name must start with <code>AWSPCS</code> or must have the path <code>/aws-pcs/</code>. For more information, see <a href=\"https://docs.aws.amazon.com/pcs/latest/userguide/security-instance-profiles.html\">IAM instance profiles for PCS</a> in the <i>PCS User Guide</i>.</p>"
                     }
                 },
                 "slurmConfiguration": {

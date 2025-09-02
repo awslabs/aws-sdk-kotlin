@@ -7638,6 +7638,119 @@
                 "smithy.api#pattern": "^arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:cluster/[a-z0-9]{12}$"
             }
         },
+        "com.amazonaws.sagemaker#ClusterAutoScalerType": {
+            "type": "enum",
+            "members": {
+                "KARPENTER": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Karpenter"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.sagemaker#ClusterAutoScalingConfig": {
+            "type": "structure",
+            "members": {
+                "Mode": {
+                    "target": "com.amazonaws.sagemaker#ClusterAutoScalingMode",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes whether autoscaling is enabled or disabled for the cluster. Valid values are <code>Enable</code> and <code>Disable</code>.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AutoScalerType": {
+                    "target": "com.amazonaws.sagemaker#ClusterAutoScalerType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of autoscaler to use. Currently supported value is <code>Karpenter</code>.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>Specifies the autoscaling configuration for a HyperPod cluster.</p>"
+            }
+        },
+        "com.amazonaws.sagemaker#ClusterAutoScalingConfigOutput": {
+            "type": "structure",
+            "members": {
+                "Mode": {
+                    "target": "com.amazonaws.sagemaker#ClusterAutoScalingMode",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Describes whether autoscaling is enabled or disabled for the cluster.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "AutoScalerType": {
+                    "target": "com.amazonaws.sagemaker#ClusterAutoScalerType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The type of autoscaler configured for the cluster.</p>"
+                    }
+                },
+                "Status": {
+                    "target": "com.amazonaws.sagemaker#ClusterAutoScalingStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The current status of the autoscaling configuration. Valid values are <code>InService</code>, <code>Failed</code>, <code>Creating</code>, and <code>Deleting</code>.</p>",
+                        "smithy.api#required": {}
+                    }
+                },
+                "FailureMessage": {
+                    "target": "smithy.api#String",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>If the autoscaling status is <code>Failed</code>, this field contains a message describing the failure.</p>"
+                    }
+                }
+            },
+            "traits": {
+                "smithy.api#documentation": "<p>The autoscaling configuration and status information for a HyperPod cluster.</p>"
+            }
+        },
+        "com.amazonaws.sagemaker#ClusterAutoScalingMode": {
+            "type": "enum",
+            "members": {
+                "ENABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Enable"
+                    }
+                },
+                "DISABLE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Disable"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.sagemaker#ClusterAutoScalingStatus": {
+            "type": "enum",
+            "members": {
+                "INSERVICE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "InService"
+                    }
+                },
+                "FAILED": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Failed"
+                    }
+                },
+                "CREATING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Creating"
+                    }
+                },
+                "DELETING": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Deleting"
+                    }
+                }
+            }
+        },
         "com.amazonaws.sagemaker#ClusterAvailabilityZone": {
             "type": "string",
             "traits": {
@@ -7658,6 +7771,20 @@
                     "traits": {
                         "smithy.api#clientOptional": {},
                         "smithy.api#documentation": "<p>The size in gigabytes (GB) of the additional EBS volume to be attached to the instances in the SageMaker HyperPod cluster instance group. The additional EBS volume is attached to each instance within the SageMaker HyperPod cluster instance group and mounted to <code>/opt/sagemaker</code>.</p>"
+                    }
+                },
+                "VolumeKmsKeyId": {
+                    "target": "com.amazonaws.sagemaker#KmsKeyId",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The ID of a KMS key to encrypt the Amazon EBS volume.</p>"
+                    }
+                },
+                "RootVolume": {
+                    "target": "com.amazonaws.sagemaker#Boolean",
+                    "traits": {
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>Specifies whether the configuration is for the cluster's root or secondary Amazon EBS volume. You can specify two <code>ClusterEbsVolumeConfig</code> fields to configure both the root and secondary volumes. Set the value to <code>True</code> if you'd like to provide your own customer managed Amazon Web Services KMS key to encrypt the root volume. When <code>True</code>:</p> <ul> <li> <p>The configuration is applied to the root volume.</p> </li> <li> <p>You can't specify the <code>VolumeSizeInGB</code> field. The size of the root volume is determined for you.</p> </li> <li> <p>You must specify a KMS key ID for <code>VolumeKmsKeyId</code> to encrypt the root volume with your own KMS key instead of an Amazon Web Services owned KMS key.</p> </li> </ul> <p>Otherwise, by default, the value is <code>False</code>, and the following applies:</p> <ul> <li> <p>The configuration is applied to the secondary volume, while the root volume is encrypted with an Amazon Web Services owned key.</p> </li> <li> <p>You must specify the <code>VolumeSizeInGB</code> field.</p> </li> <li> <p>You can optionally specify the <code>VolumeKmsKeyId</code> to encrypt the secondary volume with your own KMS key instead of an Amazon Web Services owned KMS key.</p> </li> </ul>"
                     }
                 }
             },
@@ -8067,7 +8194,7 @@
                 "ImageId": {
                     "target": "com.amazonaws.sagemaker#ImageId",
                     "traits": {
-                        "smithy.api#documentation": "<p>When configuring your HyperPod cluster, you can specify an image ID using one of the following options:</p> <ul> <li> <p> <code>HyperPodPublicAmiId</code>: Use a HyperPod public AMI</p> </li> <li> <p> <code>CustomAmiId</code>: Use your custom AMI</p> </li> <li> <p> <code>default</code>: Use the default latest system image</p> </li> </ul> <p>f you choose to use a custom AMI (<code>CustomAmiId</code>), ensure it meets the following requirements:</p> <ul> <li> <p>Encryption: The custom AMI must be unencrypted.</p> </li> <li> <p>Ownership: The custom AMI must be owned by the same Amazon Web Services account that is creating the HyperPod cluster.</p> </li> <li> <p>Volume support: Only the primary AMI snapshot volume is supported; additional AMI volumes are not supported.</p> </li> </ul> <p>When updating the instance group's AMI through the <code>UpdateClusterSoftware</code> operation, if an instance group uses a custom AMI, you must provide an <code>ImageId</code> or use the default as input.</p>"
+                        "smithy.api#documentation": "<p>When configuring your HyperPod cluster, you can specify an image ID using one of the following options:</p> <ul> <li> <p> <code>HyperPodPublicAmiId</code>: Use a HyperPod public AMI</p> </li> <li> <p> <code>CustomAmiId</code>: Use your custom AMI</p> </li> <li> <p> <code>default</code>: Use the default latest system image</p> </li> </ul> <p>If you choose to use a custom AMI (<code>CustomAmiId</code>), ensure it meets the following requirements:</p> <ul> <li> <p>Encryption: The custom AMI must be unencrypted.</p> </li> <li> <p>Ownership: The custom AMI must be owned by the same Amazon Web Services account that is creating the HyperPod cluster.</p> </li> <li> <p>Volume support: Only the primary AMI snapshot volume is supported; additional AMI volumes are not supported.</p> </li> </ul> <p>When updating the instance group's AMI through the <code>UpdateClusterSoftware</code> operation, if an instance group uses a custom AMI, you must provide an <code>ImageId</code> or use the default as input. Note that if you don't specify an instance group in your <code>UpdateClusterSoftware</code> request, then all of the instance groups are patched with the specified image.</p>"
                     }
                 }
             },
@@ -8233,6 +8360,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "ml.p5.48xlarge"
+                    }
+                },
+                "ML_P6E_GB200_36XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.p6e-gb200.36xlarge"
                     }
                 },
                 "ML_TRN1_32XLARGE": {
@@ -11741,6 +11874,18 @@
                     "target": "com.amazonaws.sagemaker#ClusterNodeProvisioningMode",
                     "traits": {
                         "smithy.api#documentation": "<p>The mode for provisioning nodes in the cluster. You can specify the following modes:</p> <ul> <li> <p> <b>Continuous</b>: Scaling behavior that enables 1) concurrent operation execution within instance groups, 2) continuous retry mechanisms for failed operations, 3) enhanced customer visibility into cluster events through detailed event streams, 4) partial provisioning capabilities. Your clusters and instance groups remain <code>InService</code> while scaling. This mode is only supported for EKS orchestrated clusters.</p> </li> </ul>"
+                    }
+                },
+                "ClusterRole": {
+                    "target": "com.amazonaws.sagemaker#RoleArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM role that HyperPod assumes to perform cluster autoscaling operations. This role must have permissions for <code>sagemaker:BatchAddClusterNodes</code> and <code>sagemaker:BatchDeleteClusterNodes</code>. This is only required when autoscaling is enabled and when HyperPod is performing autoscaling operations.</p>"
+                    }
+                },
+                "AutoScaling": {
+                    "target": "com.amazonaws.sagemaker#ClusterAutoScalingConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The autoscaling configuration for the cluster. Enables automatic scaling of cluster nodes based on workload demand using a Karpenter-based system.</p>"
                     }
                 }
             },
@@ -21717,6 +21862,18 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The mode used for provisioning nodes in the cluster.</p>"
                     }
+                },
+                "ClusterRole": {
+                    "target": "com.amazonaws.sagemaker#RoleArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM role that HyperPod uses for cluster autoscaling operations.</p>"
+                    }
+                },
+                "AutoScaling": {
+                    "target": "com.amazonaws.sagemaker#ClusterAutoScalingConfigOutput",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The current autoscaling configuration and status for the autoscaler.</p>"
+                    }
                 }
             },
             "traits": {
@@ -30410,6 +30567,12 @@
                     "target": "com.amazonaws.sagemaker#VpcOnlyTrustedAccounts",
                     "traits": {
                         "smithy.api#documentation": "<p>The list of Amazon Web Services accounts that are trusted when the domain is created in VPC-only mode.</p>"
+                    }
+                },
+                "RootlessDocker": {
+                    "target": "com.amazonaws.sagemaker#FeatureStatus",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Indicates whether to use rootless Docker. Default value is <code>DISABLED</code>.</p>"
                     }
                 }
             },
@@ -39538,6 +39701,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "ml.p5.48xlarge"
+                    }
+                },
+                "ML_P6_B200_48XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.p6-b200.48xlarge"
                     }
                 },
                 "ML_M6I_LARGE": {
@@ -57669,9 +57838,9 @@
             "traits": {
                 "smithy.api#length": {
                     "min": 0,
-                    "max": 15
+                    "max": 20
                 },
-                "smithy.api#pattern": "^(notebook-al1-v1|notebook-al2-v1|notebook-al2-v2|notebook-al2-v3)$"
+                "smithy.api#pattern": "^(notebook-al1-v1|notebook-al2-v1|notebook-al2-v2|notebook-al2-v3|notebook-al2023-v1)$"
             }
         },
         "com.amazonaws.sagemaker#PolicyString": {
@@ -58674,6 +58843,12 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "ml.r7i.48xlarge"
+                    }
+                },
+                "ML_P5_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.p5.4xlarge"
                     }
                 }
             }
@@ -63751,6 +63926,12 @@
                     "traits": {
                         "smithy.api#enumValue": "ml.p6e-gb200.36xlarge"
                     }
+                },
+                "ML_P5_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.p5.4xlarge"
+                    }
                 }
             }
         },
@@ -64906,7 +65087,9 @@
                 "S3Uri": {
                     "target": "com.amazonaws.sagemaker#S3SchemaUri",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon S3 URI that specifies the location in S3 where files are stored, which is mounted within the Studio environment. For example: <code>s3://&lt;bucket-name&gt;/&lt;prefix&gt;/</code>.</p>"
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The Amazon S3 URI that specifies the location in S3 where files are stored, which is mounted within the Studio environment. For example: <code>s3://&lt;bucket-name&gt;/&lt;prefix&gt;/</code>.</p>",
+                        "smithy.api#required": {}
                     }
                 }
             },
@@ -64926,7 +65109,9 @@
                 "S3Uri": {
                     "target": "com.amazonaws.sagemaker#S3SchemaUri",
                     "traits": {
-                        "smithy.api#documentation": "<p>The Amazon S3 URI of the S3 file system configuration.</p>"
+                        "smithy.api#clientOptional": {},
+                        "smithy.api#documentation": "<p>The Amazon S3 URI of the S3 file system configuration.</p>",
+                        "smithy.api#required": {}
                     }
                 }
             },
@@ -67097,17 +67282,6 @@
                             }
                         },
                         {
-                            "documentation": "For region us-iso-east-1 with FIPS enabled and DualStack enabled",
-                            "expect": {
-                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
-                            },
-                            "params": {
-                                "Region": "us-iso-east-1",
-                                "UseFIPS": true,
-                                "UseDualStack": true
-                            }
-                        },
-                        {
                             "documentation": "For region us-iso-east-1 with FIPS enabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
@@ -67121,28 +67295,6 @@
                             }
                         },
                         {
-                            "documentation": "For region us-iso-east-1 with FIPS disabled and DualStack enabled",
-                            "expect": {
-                                "error": "DualStack is enabled but this partition does not support DualStack"
-                            },
-                            "params": {
-                                "Region": "us-iso-east-1",
-                                "UseFIPS": false,
-                                "UseDualStack": true
-                            }
-                        },
-                        {
-                            "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack enabled",
-                            "expect": {
-                                "error": "FIPS and DualStack are enabled, but this partition does not support one or both"
-                            },
-                            "params": {
-                                "Region": "us-isob-east-1",
-                                "UseFIPS": true,
-                                "UseDualStack": true
-                            }
-                        },
-                        {
                             "documentation": "For region us-isob-east-1 with FIPS enabled and DualStack disabled",
                             "expect": {
                                 "endpoint": {
@@ -67153,17 +67305,6 @@
                                 "Region": "us-isob-east-1",
                                 "UseFIPS": true,
                                 "UseDualStack": false
-                            }
-                        },
-                        {
-                            "documentation": "For region us-isob-east-1 with FIPS disabled and DualStack enabled",
-                            "expect": {
-                                "error": "DualStack is enabled but this partition does not support DualStack"
-                            },
-                            "params": {
-                                "Region": "us-isob-east-1",
-                                "UseFIPS": false,
-                                "UseDualStack": true
                             }
                         },
                         {
@@ -73498,6 +73639,12 @@
                     "traits": {
                         "smithy.api#enumValue": "ml.p6e-gb200.36xlarge"
                     }
+                },
+                "ML_P5_4XLARGE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "ml.p5.4xlarge"
+                    }
                 }
             }
         },
@@ -77129,6 +77276,18 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Specify the names of the instance groups to delete. Use a single <code>,</code> as the separator between multiple names.</p>"
                     }
+                },
+                "ClusterRole": {
+                    "target": "com.amazonaws.sagemaker#RoleArn",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The Amazon Resource Name (ARN) of the IAM role that HyperPod assumes for cluster autoscaling operations. Cannot be updated while autoscaling is enabled.</p>"
+                    }
+                },
+                "AutoScaling": {
+                    "target": "com.amazonaws.sagemaker#ClusterAutoScalingConfig",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Updates the autoscaling configuration for the cluster. Use to enable or disable automatic node scaling.</p>"
+                    }
                 }
             },
             "traits": {
@@ -77308,7 +77467,7 @@
                 "ImageId": {
                     "target": "com.amazonaws.sagemaker#ImageId",
                     "traits": {
-                        "smithy.api#documentation": "<p>When configuring your HyperPod cluster, you can specify an image ID using one of the following options:</p> <ul> <li> <p> <code>HyperPodPublicAmiId</code>: Use a HyperPod public AMI</p> </li> <li> <p> <code>CustomAmiId</code>: Use your custom AMI</p> </li> <li> <p> <code>default</code>: Use the default latest system image</p> </li> </ul> <p>f you choose to use a custom AMI (<code>CustomAmiId</code>), ensure it meets the following requirements:</p> <ul> <li> <p>Encryption: The custom AMI must be unencrypted.</p> </li> <li> <p>Ownership: The custom AMI must be owned by the same Amazon Web Services account that is creating the HyperPod cluster.</p> </li> <li> <p>Volume support: Only the primary AMI snapshot volume is supported; additional AMI volumes are not supported.</p> </li> </ul> <p>When updating the instance group's AMI through the <code>UpdateClusterSoftware</code> operation, if an instance group uses a custom AMI, you must provide an <code>ImageId</code> or use the default as input.</p>"
+                        "smithy.api#documentation": "<p>When configuring your HyperPod cluster, you can specify an image ID using one of the following options:</p> <ul> <li> <p> <code>HyperPodPublicAmiId</code>: Use a HyperPod public AMI</p> </li> <li> <p> <code>CustomAmiId</code>: Use your custom AMI</p> </li> <li> <p> <code>default</code>: Use the default latest system image</p> </li> </ul> <p>If you choose to use a custom AMI (<code>CustomAmiId</code>), ensure it meets the following requirements:</p> <ul> <li> <p>Encryption: The custom AMI must be unencrypted.</p> </li> <li> <p>Ownership: The custom AMI must be owned by the same Amazon Web Services account that is creating the HyperPod cluster.</p> </li> <li> <p>Volume support: Only the primary AMI snapshot volume is supported; additional AMI volumes are not supported.</p> </li> </ul> <p>When updating the instance group's AMI through the <code>UpdateClusterSoftware</code> operation, if an instance group uses a custom AMI, you must provide an <code>ImageId</code> or use the default as input. Note that if you don't specify an instance group in your <code>UpdateClusterSoftware</code> request, then all of the instance groups are patched with the specified image.</p>"
                     }
                 }
             },
