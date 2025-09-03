@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.31] - 09/03/2025
+
+### Features
+* (**cleanrooms**) Added support for adding new data provider members to an existing collaboration.
+* (**cleanroomsml**) AWS Clean Rooms ML adds log sanitization for privacy-enhanced error summaries, supports new instance types for custom models providing better performance and lower costs, and deprecates P3-series instances.
+* (**cloudfront**) Adding an optional field IpAddressType in CustomOriginConfig
+* (**mq**) Add CONFIG_MANAGED as a supported AuthenticationStrategy for Amazon MQ for RabbitMQ brokers. Make username and password optional on broker creation for CONFIG_MANAGED brokers.
+* (**rds**) This release adds support for MasterUserAuthenticationType parameter on CreateDBInstance, ModifyDBInstance, CreateDBCluster, and ModifyDBCluster operations.
+* (**route53**) Amazon Route 53 now supports the Asia Pacific (New Zealand) Region (ap-southeast-6) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region.
+* (**route53domains**) Added new ExtraParams AU_ELIGIBILITY_TYPE, AU_POLICY_REASON, and AU_REGISTRANT_NAME
+* (**transcribestreaming**) This release adds support for automatic language identification in AWS Transcribe Call Analytics
+
 ## [1.5.30] - 09/02/2025
 
 ### Features
