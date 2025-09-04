@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.32] - 09/04/2025
+
+### Features
+* (**cleanrooms**) Add support for configurable compute sizes for PySpark jobs.
+* (**cloudformation**) ListHookResults API now supports retrieving invocation results for all CloudFormation Hooks (previously limited to create change set and Cloud Control operations) with new optional parameters for filtering by Hook status and ARN.
+* (**ec2**) Add m8i, m8i-flex and i8ge instance types.
+* (**opensearchserverless**) Add support for Federal Information Processing Standards (FIPS) and Federal Risk and Authorization Management Program (FedRAMP) compliance
+* (**rds**) Added new EndpointNetworkType and TargetConnectionNetworkType fields in Proxy APIs to support IPv6
+* (**verifiedpermissions**) Amazon Verified Permissions / Features : Adds support for datetime and duration attribute values.
+
 ## [1.5.31] - 09/03/2025
 
 ### Features
