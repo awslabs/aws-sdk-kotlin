@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.5.33] - 09/05/2025
+
+### Features
+* (**sagemaker**) Release IPv6 support with dualstack in SageMaker Notebooks, Tiered Storage Checkpointing Support in SageMaker HyperPod and P5.4xlarge instance type for SageMaker Hosting.
+
+### Documentation
+* (**ecs**) This is a documentation only release that adds additional information for Amazon ECS Availability Zone rebalancing.
+* (**pcs**) Documentation-only update to add AccountingStorageEnforce to SlurmCustomSetting.
+
 ## [1.5.32] - 09/04/2025
 
 ### Features
