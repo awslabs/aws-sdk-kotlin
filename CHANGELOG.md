@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.34] - 09/08/2025
+
+### Features
+* (**iotsitewise**) Add ComputationModelVersion support in IoT SiteWise APIs
+* (**s3**) This release includes backward compatibility work on the "Expires" parameter.
+* (**securityhub**) This release adds the RESOURCE_NOT_FOUND error code as a possible value in responses to the following operations: BatchGetStandardsControlAssociations, BatchUpdateStandardsControlAssociations, and BatchGetSecurityControls.
+
 ## [1.5.33] - 09/05/2025
 
 ### Features
