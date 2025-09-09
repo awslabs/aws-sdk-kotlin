@@ -92,7 +92,7 @@ dependencies {
     }
 }
 val packagesToIgnore = listOf(
-    "aws.sdk.kotlin.runtime.auth.credentials.internal.ssooidc"
+    "aws.sdk.kotlin.runtime.auth.credentials.internal.ssooidc",
 )
 apiValidation {
     ignoredPackages += packagesToIgnore
