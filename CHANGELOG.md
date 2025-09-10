@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.36] - 09/10/2025
+
+### Features
+* (**networkflowmonitor**) Added new enum value (AWS::Region) for type field under MonitorLocalResource and MonitorRemoteResource. Workload Insights and Monitor top contributors queries now support a new DestinationCategory (INTER_REGION).
+* (**paymentcryptography**) AWS Payment Cryptography Service now supports Multi-Region key replication. Customers can choose to automatically distribute keys across AWS Regions.
+
 ## [1.5.34] - 09/08/2025
 
 ### Features
