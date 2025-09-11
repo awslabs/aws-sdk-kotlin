@@ -1,3 +1,8 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package aws.sdk.kotlin.services.bedrock
 
 import aws.sdk.kotlin.services.bedrock.auth.finalizeBearerTokenConfig
@@ -25,7 +30,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class BedrockEnvironmentBearerTokenTest {
-    private fun mockHttpClient(handler: (HttpRequest) -> HttpResponse): HttpClientEngine {
+    private fun mockHttpClient(handler: (HttpRequest) -> HttpResponse): HttpClientEngine =
         return object : HttpClientEngineBase("test engine") {
             override val config: HttpClientEngineConfig = HttpClientEngineConfig.Default
 
@@ -34,7 +39,6 @@ class BedrockEnvironmentBearerTokenTest {
                 return HttpCall(request, response, Instant.now(), Instant.now())
             }
         }
-    }
 
     private val mockPlatformProvider = TestPlatformProvider(
         env = mapOf("AWS_BEARER_TOKEN_BEDROCK" to "bedrock-token"),
