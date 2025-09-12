@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.38] - 09/12/2025
+
+### Features
+* (**paymentcryptography**) Add support for certificates to be signed by 3rd party certificate authorities.  New API GetCertificateSigningRequest API and support for providing certificates at run-time for tr-34 import/export
+
+### Documentation
+* Improve documentation for [`AwsRetryPolicy`](https://docs.aws.amazon.com/sdk-for-kotlin/api/latest/aws-http/aws.sdk.kotlin.runtime.http.retries/-aws-retry-policy/)
+
 ## [1.5.37] - 09/11/2025
 
 ### Features
