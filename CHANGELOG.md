@@ -1,5 +1,81 @@
 # Changelog
 
+## [1.5.38] - 09/12/2025
+
+### Features
+* (**paymentcryptography**) Add support for certificates to be signed by 3rd party certificate authorities.  New API GetCertificateSigningRequest API and support for providing certificates at run-time for tr-34 import/export
+
+### Documentation
+* Improve documentation for [`AwsRetryPolicy`](https://docs.aws.amazon.com/sdk-for-kotlin/api/latest/aws-http/aws.sdk.kotlin.runtime.http.retries/-aws-retry-policy/)
+
+## [1.5.37] - 09/11/2025
+
+### Features
+* (**amp**) Add Vended Logs APIs for Amazon Prometheus Managed Collector
+* (**datazone**) adding IAM principal id to IAM user profile details
+* (**ecs**) This release supports hook details for Amazon ECS lifecycle hooks.
+* (**emrcontainers**) Added nodeLabel support in container provider to aid hardware isolation support for virtual cluster and security configuration.
+* (**evs**) CreateEnvironment API now supports parameters (isHcxPublic & hcxNetworkAclId) for HCX migration via public internet, adding flexibility for migration scenarios. New APIs have been added for associating (AssociateEipToVlan) & disassociating (DisassociateEipFromVlan) Elastic IP (EIP) addresses.
+* (**guardduty**) Updated Java SDK implementation of entity set status in GuardDuty API.
+* (**medialive**) AWS Elemental MediaLive adds a new feature in MediaPackage output group that enables MediaPackage V2 users to control HLS-related parameters directly in MediaLive. These parameter settings are then reflected in MediaPackage outputs, providing more streamlined control over HLS configurations.
+* (**quicksight**) This release adds support for Account level custom permissions, additional Dashboard Options, and Null support for Q&A.
+* (**rds**) Adds support for end-to-end IAM authentication in RDS Proxy for MySQL, MariaDB, and PostgreSQL engines.
+
+## [1.5.36] - 09/10/2025
+
+### Features
+* (**networkflowmonitor**) Added new enum value (AWS::Region) for type field under MonitorLocalResource and MonitorRemoteResource. Workload Insights and Monitor top contributors queries now support a new DestinationCategory (INTER_REGION).
+* (**paymentcryptography**) AWS Payment Cryptography Service now supports Multi-Region key replication. Customers can choose to automatically distribute keys across AWS Regions.
+
+## [1.5.34] - 09/08/2025
+
+### Features
+* (**iotsitewise**) Add ComputationModelVersion support in IoT SiteWise APIs
+* (**s3**) This release includes backward compatibility work on the "Expires" parameter.
+* (**securityhub**) This release adds the RESOURCE_NOT_FOUND error code as a possible value in responses to the following operations: BatchGetStandardsControlAssociations, BatchUpdateStandardsControlAssociations, and BatchGetSecurityControls.
+
+## [1.5.33] - 09/05/2025
+
+### Features
+* (**sagemaker**) Release IPv6 support with dualstack in SageMaker Notebooks, Tiered Storage Checkpointing Support in SageMaker HyperPod and P5.4xlarge instance type for SageMaker Hosting.
+
+### Documentation
+* (**ecs**) This is a documentation only release that adds additional information for Amazon ECS Availability Zone rebalancing.
+* (**pcs**) Documentation-only update to add AccountingStorageEnforce to SlurmCustomSetting.
+
+## [1.5.32] - 09/04/2025
+
+### Features
+* (**cleanrooms**) Add support for configurable compute sizes for PySpark jobs.
+* (**cloudformation**) ListHookResults API now supports retrieving invocation results for all CloudFormation Hooks (previously limited to create change set and Cloud Control operations) with new optional parameters for filtering by Hook status and ARN.
+* (**ec2**) Add m8i, m8i-flex and i8ge instance types.
+* (**opensearchserverless**) Add support for Federal Information Processing Standards (FIPS) and Federal Risk and Authorization Management Program (FedRAMP) compliance
+* (**rds**) Added new EndpointNetworkType and TargetConnectionNetworkType fields in Proxy APIs to support IPv6
+* (**verifiedpermissions**) Amazon Verified Permissions / Features : Adds support for datetime and duration attribute values.
+
+## [1.5.31] - 09/03/2025
+
+### Features
+* (**cleanrooms**) Added support for adding new data provider members to an existing collaboration.
+* (**cleanroomsml**) AWS Clean Rooms ML adds log sanitization for privacy-enhanced error summaries, supports new instance types for custom models providing better performance and lower costs, and deprecates P3-series instances.
+* (**cloudfront**) Adding an optional field IpAddressType in CustomOriginConfig
+* (**mq**) Add CONFIG_MANAGED as a supported AuthenticationStrategy for Amazon MQ for RabbitMQ brokers. Make username and password optional on broker creation for CONFIG_MANAGED brokers.
+* (**rds**) This release adds support for MasterUserAuthenticationType parameter on CreateDBInstance, ModifyDBInstance, CreateDBCluster, and ModifyDBCluster operations.
+* (**route53**) Amazon Route 53 now supports the Asia Pacific (New Zealand) Region (ap-southeast-6) for latency records, geoproximity records, and private DNS for Amazon VPCs in that region.
+* (**route53domains**) Added new ExtraParams AU_ELIGIBILITY_TYPE, AU_POLICY_REASON, and AU_REGISTRANT_NAME
+* (**transcribestreaming**) This release adds support for automatic language identification in AWS Transcribe Call Analytics
+
+## [1.5.30] - 09/02/2025
+
+### Features
+* (**ec2**) MaximumEbsAttachments and AttachmentLimitType fields added to DescribeInstanceTypesResponse. G6f, Gr6f, R8i, R8i-flex and p5.4xlarge instance types added to InstanceTypes enum.
+* (**neptune**) Removed the deprecated marker from publiclyAccessible parameter from DbInstance, CreateDbInstance and ModifyDbInstance and added relevant usage information for the parameter.
+* (**notifications**) Added Org support for notifications:  - `ListMemberAccounts` gets member accounts list, `AssociateOrganizationalUnit` links OU to notification configuration, `DisassociateOrganizationalUnit` removes OU from notification configuration, `ListOrganizationalUnits` shows OUs configured for notifications.
+* (**workmail**) Make RoleArn an optional parameter for the PutEmailMonitoringConfiguration API, and add UnsupportedOperationException to RegisterToWorkMail.
+
+### Miscellaneous
+* Remove SMS service
+
 ## [1.5.29] - 08/29/2025
 
 ### Features

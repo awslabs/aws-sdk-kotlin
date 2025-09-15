@@ -4528,6 +4528,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The life cycle type for this DB cluster.</p>\n         <note>\n            <p>By default, this value is set to <code>open-source-rds-extended-support</code>, which enrolls your DB cluster into Amazon RDS Extended Support. \n              At the end of standard support, you can avoid charges for Extended Support by setting the value to <code>open-source-rds-extended-support-disabled</code>. In this case, \n             creating the DB cluster will fail if the DB major version is past its end of standard support date.</p>\n         </note>\n         <p>You can use this setting to enroll your DB cluster into Amazon RDS Extended Support. With RDS Extended Support, \n        you can run the selected major engine version on your DB cluster past the end of standard support for that engine version. For more information, see the following sections:</p>\n         <ul>\n            <li>\n               <p>Amazon Aurora - <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/extended-support.html\">Amazon RDS Extended Support with Amazon Aurora</a> in the <i>Amazon Aurora User Guide</i>\n               </p>\n            </li>\n            <li>\n               <p>Amazon RDS - <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html\">Amazon RDS Extended Support with Amazon RDS</a> in the <i>Amazon RDS User Guide</i>\n               </p>\n            </li>\n         </ul>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>\n         <p>Valid Values: <code>open-source-rds-extended-support | open-source-rds-extended-support-disabled</code>\n         </p>\n         <p>Default: <code>open-source-rds-extended-support</code>\n         </p>"
                     }
+                },
+                "MasterUserAuthenticationType": {
+                    "target": "com.amazonaws.rds#MasterUserAuthenticationType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the authentication type for the master user. With IAM master user authentication, you can configure the master DB user with IAM database authentication when you create a DB cluster.</p>\n         <p>You can specify one of the following values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>password</code> - Use standard database authentication with a password.</p>\n            </li>\n            <li>\n               <p>\n                  <code>iam-db-auth</code> - Use IAM database authentication for the master user.</p>\n            </li>\n         </ul>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>\n         <p>This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.</p>"
+                    }
                 }
             },
             "traits": {
@@ -5319,6 +5325,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>The life cycle type for this DB instance.</p>\n         <note>\n            <p>By default, this value is set to <code>open-source-rds-extended-support</code>, which enrolls your DB instance into Amazon RDS Extended Support. \n              At the end of standard support, you can avoid charges for Extended Support by setting the value to <code>open-source-rds-extended-support-disabled</code>. In this case, \n              creating the DB instance will fail if the DB major version is past its end of standard support date.</p>\n         </note>\n         <p>This setting applies only to RDS for MySQL and RDS for PostgreSQL. For Amazon Aurora DB instances, the life cycle type is managed by the DB cluster.</p>\n         <p>You can use this setting to enroll your DB instance into Amazon RDS Extended Support. With RDS Extended Support, \n        you can run the selected major engine version on your DB instance past the end of standard support for that engine version. For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support.html\">Amazon RDS Extended Support with Amazon RDS</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>Valid Values: <code>open-source-rds-extended-support | open-source-rds-extended-support-disabled</code>\n         </p>\n         <p>Default: <code>open-source-rds-extended-support</code>\n         </p>"
                     }
+                },
+                "MasterUserAuthenticationType": {
+                    "target": "com.amazonaws.rds#MasterUserAuthenticationType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the authentication type for the master user. With IAM master user authentication, you can configure the master DB user with IAM database authentication when you create a DB instance.</p>\n         <p>You can specify one of the following values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>password</code> - Use standard database authentication with a password.</p>\n            </li>\n            <li>\n               <p>\n                  <code>iam-db-auth</code> - Use IAM database authentication for the master user.</p>\n            </li>\n         </ul>\n         <p>This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.</p>"
+                    }
                 }
             },
             "traits": {
@@ -5924,6 +5936,12 @@
                 },
                 "Tags": {
                     "target": "com.amazonaws.rds#TagList"
+                },
+                "EndpointNetworkType": {
+                    "target": "com.amazonaws.rds#EndpointNetworkType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The network type of the DB proxy endpoint. The network type determines the IP version that the proxy endpoint supports.</p>\n         <p>Valid values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>IPV4</code> - The proxy endpoint supports IPv4 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>IPV6</code> - The proxy endpoint supports IPv6 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DUAL</code> - The proxy endpoint supports both IPv4 and IPv6.</p>\n            </li>\n         </ul>\n         <p>Default: <code>IPV4</code>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>If you specify <code>IPV6</code> or <code>DUAL</code>, the VPC and all subnets must have an IPv6 CIDR block.</p>\n            </li>\n            <li>\n               <p>If you specify <code>IPV6</code> or <code>DUAL</code>, the VPC tenancy cannot be <code>dedicated</code>.</p>\n            </li>\n         </ul>"
+                    }
                 }
             },
             "traits": {
@@ -5963,12 +5981,16 @@
                         "smithy.api#required": {}
                     }
                 },
+                "DefaultAuthScheme": {
+                    "target": "com.amazonaws.rds#DefaultAuthScheme",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. \n            Valid values are <code>NONE</code> and <code>IAM_AUTH</code>. \n            When set to <code>IAM_AUTH</code>, the proxy uses end-to-end IAM authentication to connect to the database. \n            If you don't specify <code>DefaultAuthScheme</code> or specify this parameter \n            as <code>NONE</code>, you must specify the <code>Auth</code> option.</p>"
+                    }
+                },
                 "Auth": {
                     "target": "com.amazonaws.rds#UserAuthConfigList",
                     "traits": {
-                        "smithy.api#clientOptional": {},
-                        "smithy.api#documentation": "<p>The authorization mechanism that the proxy uses.</p>",
-                        "smithy.api#required": {}
+                        "smithy.api#documentation": "<p>The authorization mechanism that the proxy uses.</p>"
                     }
                 },
                 "RoleArn": {
@@ -6015,6 +6037,18 @@
                     "target": "com.amazonaws.rds#TagList",
                     "traits": {
                         "smithy.api#documentation": "<p>An optional set of key-value pairs to associate arbitrary data of your choosing with the proxy.</p>"
+                    }
+                },
+                "EndpointNetworkType": {
+                    "target": "com.amazonaws.rds#EndpointNetworkType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The network type of the DB proxy endpoint. The network type determines the IP version that the proxy endpoint supports.</p>\n         <p>Valid values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>IPV4</code> - The proxy endpoint supports IPv4 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>IPV6</code> - The proxy endpoint supports IPv6 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DUAL</code> - The proxy endpoint supports both IPv4 and IPv6.</p>\n            </li>\n         </ul>\n         <p>Default: <code>IPV4</code>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>If you specify <code>IPV6</code> or <code>DUAL</code>, the VPC and all subnets must have an IPv6 CIDR block.</p>\n            </li>\n            <li>\n               <p>If you specify <code>IPV6</code> or <code>DUAL</code>, the VPC tenancy cannot be <code>dedicated</code>.</p>\n            </li>\n         </ul>"
+                    }
+                },
+                "TargetConnectionNetworkType": {
+                    "target": "com.amazonaws.rds#TargetConnectionNetworkType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The network type that the proxy uses to connect to the target database. The network type determines the IP version that the proxy uses for connections to the database.</p>\n         <p>Valid values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>IPV4</code> - The proxy connects to the database using IPv4 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>IPV6</code> - The proxy connects to the database using IPv6 only.</p>\n            </li>\n         </ul>\n         <p>Default: <code>IPV4</code>\n         </p>\n         <p>Constraints:</p>\n         <ul>\n            <li>\n               <p>If you specify <code>IPV6</code>, the database must support dual-stack mode. RDS doesn't support IPv6-only databases.</p>\n            </li>\n            <li>\n               <p>All targets registered with the proxy must be compatible with the specified network type.</p>\n            </li>\n         </ul>"
                     }
                 }
             },
@@ -10341,6 +10375,12 @@
                         "smithy.api#documentation": "<p>The EC2 subnet IDs for the proxy.</p>"
                     }
                 },
+                "DefaultAuthScheme": {
+                    "target": "com.amazonaws.rds#String",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. \n            Valid values are <code>NONE</code> and <code>IAM_AUTH</code>. \n            When set to <code>IAM_AUTH</code>, the proxy uses end-to-end IAM authentication to connect to the database. \n        </p>"
+                    }
+                },
                 "Auth": {
                     "target": "com.amazonaws.rds#UserAuthConfigInfoList",
                     "traits": {
@@ -10387,6 +10427,18 @@
                     "target": "com.amazonaws.rds#TStamp",
                     "traits": {
                         "smithy.api#documentation": "<p>The date and time when the proxy was last updated.</p>"
+                    }
+                },
+                "EndpointNetworkType": {
+                    "target": "com.amazonaws.rds#EndpointNetworkType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The network type of the DB proxy endpoint. The network type determines the IP version that the proxy endpoint supports.</p>\n         <p>Valid values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>IPV4</code> - The proxy endpoint supports IPv4 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>IPV6</code> - The proxy endpoint supports IPv6 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DUAL</code> - The proxy endpoint supports both IPv4 and IPv6.</p>\n            </li>\n         </ul>"
+                    }
+                },
+                "TargetConnectionNetworkType": {
+                    "target": "com.amazonaws.rds#TargetConnectionNetworkType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The network type that the proxy uses to connect to the target database. The network type determines the IP version that the proxy uses for connections to the database.</p>\n         <p>Valid values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>IPV4</code> - The proxy connects to the database using IPv4 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>IPV6</code> - The proxy connects to the database using IPv6 only.</p>\n            </li>\n         </ul>"
                     }
                 }
             },
@@ -10478,6 +10530,12 @@
                     "target": "com.amazonaws.rds#Boolean",
                     "traits": {
                         "smithy.api#documentation": "<p>Indicates whether this endpoint is the default endpoint for the associated DB proxy.\n        Default DB proxy endpoints always have read/write capability. Other endpoints that you associate with the\n        DB proxy can be either read/write or read-only.</p>"
+                    }
+                },
+                "EndpointNetworkType": {
+                    "target": "com.amazonaws.rds#EndpointNetworkType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The network type of the DB proxy endpoint. The network type determines the IP version that the proxy endpoint supports.</p>\n         <p>Valid values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>IPV4</code> - The proxy endpoint supports IPv4 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>IPV6</code> - The proxy endpoint supports IPv6 only.</p>\n            </li>\n            <li>\n               <p>\n                  <code>DUAL</code> - The proxy endpoint supports both IPv4 and IPv6.</p>\n            </li>\n         </ul>"
                     }
                 }
             },
@@ -12058,6 +12116,23 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "advanced"
+                    }
+                }
+            }
+        },
+        "com.amazonaws.rds#DefaultAuthScheme": {
+            "type": "enum",
+            "members": {
+                "IAM_AUTH": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IAM_AUTH"
+                    }
+                },
+                "NONE": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "NONE"
                     }
                 }
             }
@@ -18950,6 +19025,29 @@
                 "smithy.api#documentation": "<p>This data type represents the information you need to connect to an Amazon RDS DB instance.\n      This data type is used as a response element in the following actions:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>CreateDBInstance</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>DescribeDBInstances</code>\n               </p>\n            </li>\n            <li>\n               <p>\n                  <code>DeleteDBInstance</code>\n               </p>\n            </li>\n         </ul>\n         <p>For the data structure that represents Amazon Aurora DB cluster endpoints,\n        see <code>DBClusterEndpoint</code>.</p>"
             }
         },
+        "com.amazonaws.rds#EndpointNetworkType": {
+            "type": "enum",
+            "members": {
+                "IPV4": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IPV4"
+                    }
+                },
+                "IPV6": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IPV6"
+                    }
+                },
+                "DUAL": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "DUAL"
+                    }
+                }
+            }
+        },
         "com.amazonaws.rds#Engine": {
             "type": "string",
             "traits": {
@@ -21178,6 +21276,23 @@
                 }
             }
         },
+        "com.amazonaws.rds#MasterUserAuthenticationType": {
+            "type": "enum",
+            "members": {
+                "PASSWORD": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "password"
+                    }
+                },
+                "IAM_DB_AUTH": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "iam-db-auth"
+                    }
+                }
+            }
+        },
         "com.amazonaws.rds#MasterUserSecret": {
             "type": "structure",
             "members": {
@@ -22037,7 +22152,7 @@
                 "DatabaseInsightsMode": {
                     "target": "com.amazonaws.rds#DatabaseInsightsMode",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies the mode of Database Insights to enable for the DB cluster.</p>\n         <p>If you change the value from <code>standard</code> to <code>advanced</code>, you must set the \n            <code>PerformanceInsightsEnabled</code> parameter to <code>true</code> and the \n            <code>PerformanceInsightsRetentionPeriod</code> parameter to 465.</p>\n         <p>If you change the value from <code>advanced</code> to <code>standard</code>, you must \n            set the <code>PerformanceInsightsEnabled</code> parameter to <code>false</code>.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>"
+                        "smithy.api#documentation": "<p>Specifies the mode of Database Insights to enable for the DB cluster.</p>\n         <p>If you change the value from <code>standard</code> to <code>advanced</code>, you must set the \n            <code>PerformanceInsightsEnabled</code> parameter to <code>true</code> and the \n            <code>PerformanceInsightsRetentionPeriod</code> parameter to 465.</p>\n         <p>If you change the value from <code>advanced</code> to <code>standard</code>, you can set the <code>PerformanceInsightsEnabled</code> parameter to <code>true</code> to collect detailed database counter and per-query metrics.</p>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>"
                     }
                 },
                 "EnablePerformanceInsights": {
@@ -22119,6 +22234,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The CA certificate identifier to use for the DB cluster's server certificate.</p>\n         <p>For more information, see <a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL.html\">Using SSL/TLS to encrypt a connection to a DB \n            instance</a> in the <i>Amazon RDS User Guide</i>.</p>\n         <p>Valid for Cluster Type: Multi-AZ DB clusters</p>"
+                    }
+                },
+                "MasterUserAuthenticationType": {
+                    "target": "com.amazonaws.rds#MasterUserAuthenticationType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the authentication type for the master user. With IAM master user authentication, you can change the master DB user to use IAM database authentication.</p>\n         <p>You can specify one of the following values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>password</code> - Use standard database authentication with a password.</p>\n            </li>\n            <li>\n               <p>\n                  <code>iam-db-auth</code> - Use IAM database authentication for the master user.</p>\n            </li>\n         </ul>\n         <p>Valid for Cluster Type: Aurora DB clusters and Multi-AZ DB clusters</p>\n         <p>This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.</p>"
                     }
                 }
             },
@@ -22796,6 +22917,12 @@
                     "traits": {
                         "smithy.api#documentation": "<p>Specifies whether the to convert your DB instance from the single-tenant conﬁguration\n            to the multi-tenant conﬁguration. This parameter is supported only for RDS for Oracle\n            CDB instances.</p>\n         <p>During the conversion, RDS creates an initial tenant database and associates the DB\n            name, master user name, character set, and national character set metadata with this\n            database. The tags associated with the instance also propagate to the initial tenant\n            database. You can add more tenant databases to your DB instance by using the\n                <code>CreateTenantDatabase</code> operation.</p>\n         <important>\n            <p>The conversion to the multi-tenant configuration is permanent and irreversible, so\n                you can't later convert back to the single-tenant configuration. When you specify\n                this parameter, you must also specify <code>ApplyImmediately</code>.</p>\n         </important>"
                     }
+                },
+                "MasterUserAuthenticationType": {
+                    "target": "com.amazonaws.rds#MasterUserAuthenticationType",
+                    "traits": {
+                        "smithy.api#documentation": "<p>Specifies the authentication type for the master user. With IAM master user authentication, you can change the master DB user to use IAM database authentication.</p>\n         <p>You can specify one of the following values:</p>\n         <ul>\n            <li>\n               <p>\n                  <code>password</code> - Use standard database authentication with a password.</p>\n            </li>\n            <li>\n               <p>\n                  <code>iam-db-auth</code> - Use IAM database authentication for the master user.</p>\n            </li>\n         </ul>\n         <p>This option is only valid for RDS for PostgreSQL and Aurora PostgreSQL engines.</p>"
+                    }
                 }
             },
             "traits": {
@@ -22984,6 +23111,12 @@
                     "target": "com.amazonaws.rds#String",
                     "traits": {
                         "smithy.api#documentation": "<p>The new identifier for the <code>DBProxy</code>. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens.</p>"
+                    }
+                },
+                "DefaultAuthScheme": {
+                    "target": "com.amazonaws.rds#DefaultAuthScheme",
+                    "traits": {
+                        "smithy.api#documentation": "<p>The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. \n            Valid values are <code>NONE</code> and <code>IAM_AUTH</code>. \n            When set to <code>IAM_AUTH</code>, the proxy uses end-to-end IAM authentication to connect to the database.</p>"
                     }
                 },
                 "Auth": {
@@ -31340,6 +31473,23 @@
                 "smithy.api#output": {}
             }
         },
+        "com.amazonaws.rds#TargetConnectionNetworkType": {
+            "type": "enum",
+            "members": {
+                "IPV4": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IPV4"
+                    }
+                },
+                "IPV6": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "IPV6"
+                    }
+                }
+            }
+        },
         "com.amazonaws.rds#TargetDBClusterParameterGroupName": {
             "type": "string",
             "traits": {
@@ -31920,6 +32070,12 @@
             "type": "list",
             "member": {
                 "target": "com.amazonaws.rds#UserAuthConfig"
+            },
+            "traits": {
+                "smithy.api#length": {
+                    "min": 0,
+                    "max": 200
+                }
             }
         },
         "com.amazonaws.rds#ValidDBInstanceModificationsMessage": {

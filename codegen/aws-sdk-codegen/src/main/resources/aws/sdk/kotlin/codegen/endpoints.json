@@ -14050,6 +14050,7 @@
           "ap-south-2" : { },
           "ap-southeast-1" : { },
           "ap-southeast-2" : { },
+          "ap-southeast-5" : { },
           "ca-central-1" : { },
           "eu-central-1" : { },
           "eu-north-1" : { },
@@ -17988,6 +17989,7 @@
       },
       "omics" : {
         "endpoints" : {
+          "ap-northeast-2" : { },
           "ap-southeast-1" : {
             "credentialScope" : {
               "region" : "ap-southeast-1"
@@ -19315,6 +19317,8 @@
           "eu-west-1" : { },
           "eu-west-2" : { },
           "eu-west-3" : { },
+          "il-central-1" : { },
+          "me-central-1" : { },
           "sa-east-1" : { },
           "us-east-1" : { },
           "us-east-2" : { },
@@ -20222,6 +20226,7 @@
       },
       "redshift-serverless" : {
         "endpoints" : {
+          "af-south-1" : { },
           "ap-east-1" : { },
           "ap-northeast-1" : { },
           "ap-northeast-2" : { },
@@ -20240,6 +20245,7 @@
           "eu-central-1" : { },
           "eu-central-2" : { },
           "eu-north-1" : { },
+          "eu-south-1" : { },
           "eu-south-2" : { },
           "eu-west-1" : { },
           "eu-west-2" : { },
@@ -20819,6 +20825,7 @@
           "ap-southeast-3" : { },
           "ap-southeast-4" : { },
           "ap-southeast-5" : { },
+          "ap-southeast-6" : { },
           "ap-southeast-7" : { },
           "ca-central-1" : { },
           "ca-west-1" : { },
@@ -22616,6 +22623,7 @@
           "ap-southeast-3" : { },
           "ap-southeast-4" : { },
           "ap-southeast-5" : { },
+          "ap-southeast-6" : { },
           "ap-southeast-7" : { },
           "ca-central-1" : { },
           "ca-west-1" : { },
@@ -24121,6 +24129,23 @@
           "us-east-1" : { },
           "us-east-2" : { },
           "us-west-2" : { }
+        }
+      },
+      "sms" : {
+        "endpoints" : {
+          "fips-us-west-2" : {
+            "credentialScope" : {
+              "region" : "us-west-2"
+            },
+            "deprecated" : true,
+            "hostname" : "sms-fips.us-west-2.amazonaws.com"
+          },
+          "us-west-2" : {
+            "variants" : [ {
+              "hostname" : "sms-fips.us-west-2.amazonaws.com",
+              "tags" : [ "fips" ]
+            } ]
+          }
         }
       },
       "sms-voice" : {
@@ -27654,6 +27679,7 @@
           "ap-southeast-3" : { },
           "ap-southeast-4" : { },
           "ap-southeast-5" : { },
+          "ap-southeast-6" : { },
           "ap-southeast-7" : { },
           "ca-central-1" : {
             "variants" : [ {
@@ -28420,6 +28446,7 @@
               "tags" : [ "fips" ]
             } ]
           },
+          "ap-east-2" : { },
           "ap-northeast-1" : {
             "credentialScope" : {
               "region" : "ap-northeast-1"
@@ -31626,6 +31653,12 @@
             "deprecated" : true,
             "hostname" : "appstream2-fips.us-gov-west-1.amazonaws.com"
           }
+        }
+      },
+      "aps" : {
+        "endpoints" : {
+          "us-gov-east-1" : { },
+          "us-gov-west-1" : { }
         }
       },
       "arc-zonal-shift" : {
@@ -39628,6 +39661,7 @@
       },
       "compute-optimizer" : {
         "endpoints" : {
+          "us-isof-east-1" : { },
           "us-isof-south-1" : {
             "credentialScope" : {
               "region" : "us-isof-south-1"
