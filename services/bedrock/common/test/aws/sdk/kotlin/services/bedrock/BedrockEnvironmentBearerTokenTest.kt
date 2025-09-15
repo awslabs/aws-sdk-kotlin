@@ -31,7 +31,7 @@ import kotlin.test.assertTrue
 
 class BedrockEnvironmentBearerTokenTest {
     private fun mockHttpClient(handler: (HttpRequest) -> HttpResponse): HttpClientEngine =
-        return object : HttpClientEngineBase("test engine") {
+        object : HttpClientEngineBase("test engine") {
             override val config: HttpClientEngineConfig = HttpClientEngineConfig.Default
 
             override suspend fun roundTrip(context: ExecutionContext, request: HttpRequest): HttpCall {
