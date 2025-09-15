@@ -65,8 +65,8 @@ dokka {
     dokkaSourceSets.configureEach {
         externalDocumentationLinks {
             create("smithy-kotlin") {
-                val smithyKotlinRuntimeVersion = versionCatalogs.named("libs").findVersion("smithy-kotlin-runtime-version").get()
-                url("https://sdk.amazonaws.com/kotlin/api/smithy-kotlin/api/$smithyKotlinRuntimeVersion")
+                //val smithyKotlinRuntimeVersion = versionCatalogs.named("libs").findVersion("smithy-kotlin-runtime-version").get()
+                url("https://docs.aws.amazon.com/smithy-kotlin/api/latest")
             }
         }
     }
