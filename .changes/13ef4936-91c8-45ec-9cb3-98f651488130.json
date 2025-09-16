@@ -1,5 +1,0 @@
-{
-    "id": "13ef4936-91c8-45ec-9cb3-98f651488130",
-    "type": "documentation",
-    "description": "Improve documentation for [`AwsRetryPolicy`](https://docs.aws.amazon.com/sdk-for-kotlin/api/latest/aws-http/aws.sdk.kotlin.runtime.http.retries/-aws-retry-policy/)"
-}

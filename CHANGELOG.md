@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.5.39] - 09/15/2025
+
+### Features
+* (**costexplorer**) Added endpoint support for eusc-de-east-1 region.
+* (**medicalimaging**) Added support for OpenID Connect (OIDC) custom authorizer
+* (**observabilityadmin**) CloudWatch Observability Admin adds the ability to enable telemetry centralization in customers' Organizations. The release introduces new APIs to manage centralization rules, which define settings to replicate telemetry data to a central destination in the customers' Organization.
+* (**s3control**) Introduce three new encryption filters: EncryptionType (SSE-S3, SSE-KMS, DSSE-KMS, SSE-C, NOT-SSE), KmsKeyArn (for SSE-KMS and DSSE-KMS), and BucketKeyEnabled (for SSE-KMS).
+
+## [1.5.38] - 09/12/2025
+
+### Features
+* (**paymentcryptography**) Add support for certificates to be signed by 3rd party certificate authorities.  New API GetCertificateSigningRequest API and support for providing certificates at run-time for tr-34 import/export
+
+### Documentation
+* Improve documentation for [`AwsRetryPolicy`](https://docs.aws.amazon.com/sdk-for-kotlin/api/latest/aws-http/aws.sdk.kotlin.runtime.http.retries/-aws-retry-policy/)
+
+## [1.5.37] - 09/11/2025
+
+### Features
+* (**amp**) Add Vended Logs APIs for Amazon Prometheus Managed Collector
+* (**datazone**) adding IAM principal id to IAM user profile details
+* (**ecs**) This release supports hook details for Amazon ECS lifecycle hooks.
+* (**emrcontainers**) Added nodeLabel support in container provider to aid hardware isolation support for virtual cluster and security configuration.
+* (**evs**) CreateEnvironment API now supports parameters (isHcxPublic & hcxNetworkAclId) for HCX migration via public internet, adding flexibility for migration scenarios. New APIs have been added for associating (AssociateEipToVlan) & disassociating (DisassociateEipFromVlan) Elastic IP (EIP) addresses.
+* (**guardduty**) Updated Java SDK implementation of entity set status in GuardDuty API.
+* (**medialive**) AWS Elemental MediaLive adds a new feature in MediaPackage output group that enables MediaPackage V2 users to control HLS-related parameters directly in MediaLive. These parameter settings are then reflected in MediaPackage outputs, providing more streamlined control over HLS configurations.
+* (**quicksight**) This release adds support for Account level custom permissions, additional Dashboard Options, and Null support for Q&A.
+* (**rds**) Adds support for end-to-end IAM authentication in RDS Proxy for MySQL, MariaDB, and PostgreSQL engines.
+
 ## [1.5.36] - 09/10/2025
 
 ### Features
