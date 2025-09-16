@@ -13,6 +13,13 @@ import aws.smithy.kotlin.runtime.client.config.RequestHttpChecksumConfig
 import aws.smithy.kotlin.runtime.client.config.ResponseHttpChecksumConfig
 import kotlin.test.Test
 
+// TODO: REMOVE THIS WHEN DONE TESTING
+public annotation class DeprecatedUntilVersion(
+    val major: Int,
+    val minor: Int,
+)
+
+@DeprecatedUntilVersion(1, 6)
 class ChecksumBusinessMetricsTest {
     @Test
     fun defaultConfigBusinessMetrics() = runChecksumTest(

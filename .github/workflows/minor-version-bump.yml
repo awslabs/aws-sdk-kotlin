@@ -1,0 +1,12 @@
+name: Minor version bump check
+on:
+  pull_request:
+
+jobs:
+  minor-version-bump-check:
+    if: github.head_ref == '^v\d+\.\d+.*$' # Only runs on branches starting with vX.X (e.g., v1.2, v1.2.3, v1.2-main)
+    permissions: {}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Minor version bump check
+        uses: awslabs/aws-kotlin-repo-tools/.github/actions/minor-version-bump@minor-version-strategy # TODO: Change branch to main when done testing

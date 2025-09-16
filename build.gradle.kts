@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.configureLinting
+import aws.sdk.kotlin.gradle.dsl.configureMinorVersionStrategyRules
 import aws.sdk.kotlin.gradle.dsl.configureNexus
 import aws.sdk.kotlin.gradle.util.typedProp
 
@@ -106,3 +107,9 @@ val lintPaths = listOf(
 )
 
 configureLinting(lintPaths)
+configureMinorVersionStrategyRules(lintPaths)
+
+// Set SDK version from gradle.properties as a system property for 'configureMinorVersionStrategyRules' to use
+tasks.withType<JavaExec> {
+    systemProperty("sdkVersion", findProperty("sdkVersion") ?: throw Exception("sdkVersion not set"))
+}
