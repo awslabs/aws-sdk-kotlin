@@ -107,9 +107,14 @@ val lintPaths = listOf(
 )
 
 configureLinting(lintPaths)
-configureMinorVersionStrategyRules(lintPaths)
 
-// Set SDK version from gradle.properties as a system property for 'deprecatedApiRule' to use
-tasks.withType<JavaExec> {
-    systemProperty("sdkVersion", findProperty("sdkVersion") ?: throw Exception("sdkVersion not set"))
-}
+/*
+Set SDK version from gradle.properties as a system property for minor versiom strategy ktlint rules
+See: https://github.com/aws/aws-kotlin-repo-tools/pull/132
+ */
+tasks.withType<JavaExec>()
+    .matching { it.name == "verifyMinorVersionBump" }
+    .configureEach {
+        systemProperty("sdkVersion", findProperty("sdkVersion") ?: throw Exception("sdkVersion not set"))
+    }
+configureMinorVersionStrategyRules(lintPaths)

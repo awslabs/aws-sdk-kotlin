@@ -58,7 +58,6 @@ include(":hll")
 include(":hll:hll-codegen")
 include(":hll:hll-mapping-core")
 include(":services")
-include("ktlint-rules:minor-version-strategy")
 
 include(":tests")
 include(":tests:codegen")
