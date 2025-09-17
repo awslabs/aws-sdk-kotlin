@@ -58,7 +58,6 @@ include(":hll")
 include(":hll:hll-codegen")
 include(":hll:hll-mapping-core")
 include(":services")
-
 include(":tests")
 include(":tests:codegen")
 include(":tests:codegen:event-stream")
