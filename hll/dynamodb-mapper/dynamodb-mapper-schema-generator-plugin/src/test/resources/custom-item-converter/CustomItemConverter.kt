@@ -1,8 +1,3 @@
-/*
- * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0
- */
-
 package my.custom.item.converter
 
 import aws.sdk.kotlin.hll.dynamodbmapper.items.AttributeDescriptor
