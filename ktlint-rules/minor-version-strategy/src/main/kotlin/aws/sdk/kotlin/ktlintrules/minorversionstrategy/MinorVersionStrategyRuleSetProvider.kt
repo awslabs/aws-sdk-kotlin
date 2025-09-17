@@ -8,7 +8,7 @@ package aws.sdk.kotlin.ktlintrules.minorversionstrategy
 import com.pinterest.ktlint.cli.ruleset.core.api.RuleSetProviderV3
 import com.pinterest.ktlint.rule.engine.core.api.RuleProvider
 import com.pinterest.ktlint.rule.engine.core.api.RuleSetId
-import software.aws.ktlint.rules.apisScheduledForRemovalRule
+import software.aws.ktlint.rules.deprecatedApiRule
 
 /**
  * Ruleset provider for AWS SDK Kotlin minor-version-bump-specific Ktlint rules.
@@ -21,7 +21,7 @@ class MinorVersionStrategyRuleSetProvider : RuleSetProviderV3(RuleSetId("minor-v
     override fun getRuleProviders(): Set<RuleProvider> = setOf(
         RuleProvider {
             // Look for APIs that are scheduled for removal in upcoming minor version
-            apisScheduledForRemovalRule(majorVersion, minorVersion + 1)
+            deprecatedApiRule(majorVersion, minorVersion + 1)
         },
     )
 }

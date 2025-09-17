@@ -109,7 +109,7 @@ val lintPaths = listOf(
 configureLinting(lintPaths)
 configureMinorVersionStrategyRules(lintPaths)
 
-// Set SDK version from gradle.properties as a system property for 'configureMinorVersionStrategyRules' to use
+// Set SDK version from gradle.properties as a system property for 'deprecatedApiRule' to use
 tasks.withType<JavaExec> {
     systemProperty("sdkVersion", findProperty("sdkVersion") ?: throw Exception("sdkVersion not set"))
 }
