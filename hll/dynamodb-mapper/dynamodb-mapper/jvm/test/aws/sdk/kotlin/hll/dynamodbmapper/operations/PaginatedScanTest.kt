@@ -1,8 +1,3 @@
-/*
- * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0
- */
-
 package aws.sdk.kotlin.hll.dynamodbmapper.operations
 
 import aws.sdk.kotlin.hll.dynamodbmapper.items.*
