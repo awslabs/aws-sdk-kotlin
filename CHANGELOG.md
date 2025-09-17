@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.41] - 09/17/2025
+
+### Features
+* (**ec2**) Add mac-m4.metal and mac-m4pro.metal instance types.
+* (**networkfirewall**) Network Firewall now prevents TLS handshakes with the target server until after the Server Name Indication (SNI) has been seen and verified. The monitoring dashboard now provides deeper insights into PrivateLink endpoint candidates and offers filters based on IP addresses and protocol.
+* (**pcs**) Add support for Amazon EC2 Capacity Blocks for ML
+
 ## [1.5.40] - 09/16/2025
 
 ### Features
