@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.42] - 09/18/2025
+
+### Features
+* (**bedrock**) Release includes an increase to the maximum policy build document size, an update to DeleteAutomatedReasoningPolicyBuildWorkflow to add ResourceInUseException, and corrections to UpdateAutomatedReasoningPolicyTestCaseRequest.
+* (**budgets**) Added BillingViewHealthStatus Exception which is thrown when a Budget is created or updated with a Billing View that is not in the HEALTHY status
+* (**chimesdkmessaging**) Amazon Chime SDK Messaging GetMessagingSessionEndpoint API now returns dual-stack WebSocket endpoints supporting IPv4/IPv6.
+* (**ec2**) Allowed AMIs adds support for four new parameters - marketplaceProductCodes, deprecationTimeCondition, creationDateCondition and imageNames
+
 ## [1.5.41] - 09/17/2025
 
 ### Features
