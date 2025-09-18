@@ -68,6 +68,8 @@ jobs:
             echo "cancelling in-progress build: id=$BUILD_ID"
             aws codebuild stop-build --id $BUILD_ID
           fi
+      - name: Upload metrics
+        uses: ./.github/actions/workflow-metrics
 
   service-check-batch-and-artifact-size-metrics:
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
@@ -155,6 +157,8 @@ jobs:
             echo If this is expected please add the 'acknowledge-artifact-size-increase' label to this pull request.
             exit 1
           }
+      - name: Upload metrics
+        uses: ./.github/actions/workflow-metrics
 
   release-artifact-size-metrics:
     if: github.event_name == 'release'

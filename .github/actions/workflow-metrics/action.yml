@@ -28,6 +28,10 @@ runs:
                 "Value": "${{ github.workflow }}"
               },
               {
+                "Name": "JobName",
+                "Value": "${{ github.job }}"
+              },
+              {
                 "Name": "Repository", 
                 "Value": "${{ github.repository }}"
               }

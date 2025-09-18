@@ -39,5 +39,4 @@ jobs:
           echo "::error ::* Add the 'acknowledge-api-break' label to this PR (in rare cases warranting an API breakage)"
           exit 1
       - name: Upload metrics
-        if: always()
         uses: ./.github/actions/workflow-metrics
