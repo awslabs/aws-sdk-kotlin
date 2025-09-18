@@ -4,6 +4,7 @@ description: >
 
 permissions:
   id-token: write
+  contents: read
 
 inputs:
   workflow-name:
