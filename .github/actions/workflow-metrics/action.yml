@@ -2,6 +2,9 @@ name: Workflow Metrics
 description: >
   Track and upload workflow execution time to CloudWatch
 
+permissions:
+  id-token: write
+
 inputs:
   workflow-name:
     description: >
