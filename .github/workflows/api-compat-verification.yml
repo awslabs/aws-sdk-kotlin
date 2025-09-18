@@ -11,14 +11,13 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  WORKFLOW_START_TIME: ${{ github.event.created_at && github.event.created_at || github.run_id }}
-
 jobs:
   api-compat-verification:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set start time
+        run: echo "WORKFLOW_START_TIME=$(date +%s)" >> $GITHUB_ENV
       - name: Check for API compatibility
         if: ${{ !contains(github.event.pull_request.labels.*.name, 'acknowledge-api-break') }}
         run: |
