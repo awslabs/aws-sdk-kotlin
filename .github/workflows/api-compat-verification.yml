@@ -7,7 +7,9 @@ on:
       - main
       - '*-main'
 
-permissions: { }
+permissions:
+  id-token: write
+  contents: read
 
 env:
   WORKFLOW_START_TIME: ${{ github.event.created_at && github.event.created_at || github.run_id }}
