@@ -9,6 +9,9 @@ on:
 
 permissions: { }
 
+env:
+  WORKFLOW_START_TIME: ${{ github.event.created_at && github.event.created_at || github.run_id }}
+
 jobs:
   api-compat-verification:
     runs-on: ubuntu-latest
@@ -34,3 +37,8 @@ jobs:
           echo "::error ::* Revert the changes which caused the API incompatibility –or–"
           echo "::error ::* Add the 'acknowledge-api-break' label to this PR (in rare cases warranting an API breakage)"
           exit 1
+      - name: Upload metrics
+        if: always()
+        uses: ./.github/actions/workflow-metrics
+        with:
+          workflow-name: 'api-compat-verification'

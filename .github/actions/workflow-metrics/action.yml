@@ -1,0 +1,26 @@
+name: Workflow Metrics
+description: >
+  Track and upload workflow execution time to CloudWatch
+
+inputs:
+  workflow-name:
+    description: >
+      Name of the workflow
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Checkout sources
+      uses: actions/checkout@v2
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::886436966712:role/Admin
+        aws-region: us-west-2
+    - name: Upload workflow metrics
+      shell: bash
+      run: |
+        duration=$(($(date +%s) - $WORKFLOW_START_TIME))
+        aws cloudwatch put-metric-data \
+          --namespace "GitHub/Workflows" \
+          --metric-data MetricName=Duration,Value=$duration,Unit=Seconds,Dimensions=WorkflowName=${{ inputs.workflow-name }},Repository=${{ github.repository }}
