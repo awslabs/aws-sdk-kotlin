@@ -23,4 +23,18 @@ runs:
         duration=$(($(date +%s) - $WORKFLOW_START_TIME))
         aws cloudwatch put-metric-data \
           --namespace "GitHub/Workflows" \
-          --metric-data MetricName=Duration,Value=$duration,Unit=Seconds,Dimensions=WorkflowName=${{ inputs.workflow-name }},Repository=${{ github.repository }}
+          --metric-data '[{
+            "MetricName": "Duration",
+            "Value": '$duration',
+            "Unit": "Seconds",
+            "Dimensions": [
+              {
+                "Name": "WorkflowName",
+                "Value": "${{ inputs.workflow-name }}"
+              },
+              {
+                "Name": "Repository", 
+                "Value": "${{ github.repository }}"
+              }
+            ]
+          }]'
