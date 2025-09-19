@@ -7,13 +7,17 @@ on:
       - main
       - '*-main'
 
-permissions: { }
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   api-compat-verification:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set start time
+        run: echo "WORKFLOW_START_TIME=$(date +%s)" >> $GITHUB_ENV
       - name: Check for API compatibility
         if: ${{ !contains(github.event.pull_request.labels.*.name, 'acknowledge-api-break') }}
         run: |
@@ -34,3 +38,5 @@ jobs:
           echo "::error ::* Revert the changes which caused the API incompatibility –or–"
           echo "::error ::* Add the 'acknowledge-api-break' label to this PR (in rare cases warranting an API breakage)"
           exit 1
+      - name: Upload metrics
+        uses: ./.github/actions/workflow-metrics
