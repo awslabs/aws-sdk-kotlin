@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set start time
-      - run: echo "WORKFLOW_START_TIME=$(date +%s)" >> $GITHUB_ENV
+        run: echo "WORKFLOW_START_TIME=$(date +%s)" >> $GITHUB_ENV
       - name: Verify PRs are not running malicious code
         if: ${{ (inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == false }}
         run: |
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set start time
-      - run: echo "WORKFLOW_START_TIME=$(date +%s)" >> $GITHUB_ENV
+        run: echo "WORKFLOW_START_TIME=$(date +%s)" >> $GITHUB_ENV
       - name: Verify PRs are not running malicious code
         if: ${{ (inputs.aws-sdk-kotlin-pr != '' || inputs.smithy-kotlin-pr != '') && inputs.check-pr == false }}
         run: |
