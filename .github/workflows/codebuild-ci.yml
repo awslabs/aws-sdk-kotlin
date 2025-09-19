@@ -73,6 +73,7 @@ jobs:
             aws codebuild stop-build --id $BUILD_ID
           fi
       - name: Upload metrics
+        if: always()
         uses: ./.github/actions/workflow-metrics
 
   service-check-batch-and-artifact-size-metrics:
@@ -164,6 +165,7 @@ jobs:
             exit 1
           }
       - name: Upload metrics
+        if: always()
         uses: ./.github/actions/workflow-metrics
 
   release-artifact-size-metrics:
