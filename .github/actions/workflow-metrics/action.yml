@@ -23,10 +23,10 @@ runs:
         
         # Build job name with matrix values
         job_name="${{ github.job }}"
-        if [ -z "${{ matrix.java-version }}" ]; then
+        if [ ! -z "${{ matrix.java-version || '' }}" ]; then
         job_name="${job_name}(${{ matrix.java-version }})"
         fi
-        if [ -z "${{ matrix.os }}" ]; then
+        if [ ! -z "${{ matrix.os || '' }}" ]; then
         job_name="${job_name}(${{ matrix.os }})"
         fi
         
