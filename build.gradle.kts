@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import aws.sdk.kotlin.gradle.dsl.configureLinting
+import aws.sdk.kotlin.gradle.dsl.configureMinorVersionStrategyRules
 import aws.sdk.kotlin.gradle.dsl.configureNexus
 import aws.sdk.kotlin.gradle.util.typedProp
 
@@ -94,3 +95,4 @@ val lintPaths = listOf(
 )
 
 configureLinting(lintPaths)
+configureMinorVersionStrategyRules(lintPaths)
