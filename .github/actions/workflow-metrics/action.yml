@@ -65,7 +65,7 @@ runs:
             "Dimensions": [
               {
                 "Name": "WorkflowName",
-                "Value": "'${{ github.workflow }}'"
+                "Value": "${{ github.workflow }}"
               },
               {
                 "Name": "JobName",
@@ -73,7 +73,7 @@ runs:
               },
               {
                 "Name": "Repository", 
-                "Value": "'${{ github.repository }}'"
+                "Value": "${{ github.repository }}"
               }
             ]
           }
