@@ -14,6 +14,16 @@ runs:
       shell: bash
       run: |
         duration=$(($(date +%s) - $WORKFLOW_START_TIME))
+        
+        # Build job name with matrix values
+        job_name="${{ github.job }}"
+        if [ ! -z "${{ matrix.java-version || '' }}" ]; then
+        job_name="${job_name}(${{ matrix.java-version }})"
+        fi
+        if [ ! -z "${{ matrix.os || '' }}" ]; then
+        job_name="${job_name}(${{ matrix.os }})"
+        fi
+        
         aws cloudwatch put-metric-data \
           --namespace "GitHub/Workflows" \
           --metric-data '[{
