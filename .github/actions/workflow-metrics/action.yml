@@ -30,6 +30,13 @@ runs:
         job_name="${job_name}(${{ matrix.os }})"
         fi
         
+        # Determine success/failure (1 for success, 0 for failure)
+        if [ "${{ job.status }}" == "success" ]; then
+          success_value=1
+        else
+          success_value=0
+        fi
+        
         aws cloudwatch put-metric-data \
           --namespace "GitHub/Workflows" \
           --metric-data '[{
@@ -50,4 +57,24 @@ runs:
                 "Value": "${{ github.repository }}"
               }
             ]
-          }]'
+          },
+          {
+            "MetricName": "Success",
+            "Value": '$success_value',
+            "Unit": "Count",
+            "Dimensions": [
+              {
+                "Name": "WorkflowName",
+                "Value": "'${{ github.workflow }}'"
+              },
+              {
+                "Name": "JobName",
+                "Value": "'$job_name'"
+              },
+              {
+                "Name": "Repository", 
+                "Value": "'${{ github.repository }}'"
+              }
+            ]
+          }
+        ]'
