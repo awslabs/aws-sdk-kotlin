@@ -51,7 +51,7 @@ jobs:
           ls -lsa
           ./gradlew -Ptest.java.version=${{ matrix.java-version }} jvmTest --stacktrace
       - name: Upload metrics
-        uses: ./.github/actions/workflow-metrics
+        uses: ./aws-sdk-kotlin/.github/actions/workflow-metrics
       - name: Save Test Reports
         if: failure()
         uses: actions/upload-artifact@v4
@@ -108,7 +108,7 @@ jobs:
           ./gradlew test jvmTest
           ./gradlew testAllProtocols
       - name: Upload metrics
-        uses: ./.github/actions/workflow-metrics
+        uses: ./aws-sdk-kotlin/.github/actions/workflow-metrics
       - name: Save Test Reports
         if: failure()
         uses: actions/upload-artifact@v4
