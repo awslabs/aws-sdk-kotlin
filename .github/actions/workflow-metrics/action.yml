@@ -5,8 +5,6 @@ description: >
 runs:
   using: composite
   steps:
-    - name: Checkout sources
-      uses: actions/checkout@v2
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
