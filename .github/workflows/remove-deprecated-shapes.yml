@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Check branch name
         run: |
+          echo $$GITHUB_HEAD_REF
           # Only continue on branches starting with vX.X (e.g. v1.2, v1.2.3, v1.2-main)
           if [[ ! "$GITHUB_HEAD_REF" =~ ^v\.[0-9]+\.[0-9]+.*$ ]]; then
             exit 0
