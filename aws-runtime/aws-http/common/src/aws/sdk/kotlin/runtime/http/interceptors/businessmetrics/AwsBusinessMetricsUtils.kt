@@ -1,3 +1,8 @@
+/*
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package aws.sdk.kotlin.runtime.http.interceptors.businessmetrics
 
 import aws.sdk.kotlin.runtime.http.BUSINESS_METRICS_MAX_LENGTH
