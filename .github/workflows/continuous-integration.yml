@@ -67,6 +67,7 @@ jobs:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
     steps:
       - name: Set start time
+        shell: bash
         run: echo "WORKFLOW_START_TIME=$(date +%s)" >> $GITHUB_ENV
       - name: Checkout sources
         uses: actions/checkout@v4
