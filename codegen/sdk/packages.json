@@ -2083,6 +2083,12 @@
             "brazilName": "AwsSdkKotlinSagemakerRuntimeHttp2"
         },
         {
+            "sdkId": "SageMakerTrainingSessionRuntime",
+            "namespace": "aws.sdk.kotlin.services.sagemakertrainingsessionruntime",
+            "artifactName": "sagemakertrainingsessionruntime",
+            "brazilName": "AwsSdkKotlinSagemakertrainingsessionruntime"
+        },
+        {
             "sdkId": "Sagemaker Edge",
             "namespace": "aws.sdk.kotlin.services.sagemakeredge",
             "artifactName": "sagemakeredge",

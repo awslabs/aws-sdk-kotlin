@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.9.18] - 10/12/2026
+
+### Features
+* (**bedrockagentcore**) AgentCore Memory now supports Long-Term Memory Time-to-Live on Batch APIs.
+* (**bedrockagentcorecontrol**) AgentCore Memory now supports configuring Long-Term Memory Time-to-Live (TTL) on Memory Strategies.
+* (**cloudwatchomni**) Adds support for updating agentCoreEvaluationRoleArn in UpdateSpace API
+* (**devopsagent**) Adds support for the includedData field in GetAgentSpace and ListAgentSpaces APIs
+* (**glue**) Adds new AWS Glue Data Quality APIs to retrieve and list data quality evaluation results. The new GetDataQualityResultV2, BatchGetDataQualityResultV2, and ListDataQualityResultsV2 operations return data quality results published from any supported data processing engine.
+* (**lambdacore**) Lambda Network Connector now supports Lambda Web Functions, letting them reach private VPC resources, and adds versioning, each connector update creates an immutable version that revisions pin to, so customers can roll out and roll back networking changes without affecting running workloads
+* (**lambdaweb**) Lambda Web Functions GA launch. Lambda Web Functions enable customers to run web applications and API backends
+* (**mediaconnect**) This release adds support for MediaConnect Router high-bitrate tiers. It also adds a configurable audio reference level for NDI flows, and enhanced source metadata that includes color information and transport stream ID.
+* (**observabilityadmin**) Adding support for TransactionSearch telemetry rules.
+* (**omics**) AWS HealthOmics now supports private workflow runs using VPC resources shared across accounts via AWS RAM. A new optional vpcOwnerAccountId field in CreateConfiguration's VpcConfig allows customers to specify the account that owns the shared subnets and security groups.
+* (**pcs**) Adding scheduler version to RegisterComputeNodeGroup API. A compute node uses this value to run the matching scheduler version.
+* (**pinpointsmsvoicev2**) DescribePhoneNumbers and DescribeSenderIds now return an optional PricingTier field that indicates whether a phone number, sender ID, short code, or long code is classified as Domestic or International, enabling customers to identify origination identities eligible for local pricing.
+* (**sagemaker**) Amazon SageMaker Training Session is a managed service for training on shared GPU infrastructure. It provides full lifecycle management of training sessions and exposes low-level primitive APIs for operations like forward-backward passes, optimizer steps, and state management.
+* (**sagemakertrainingsessionruntime**) Amazon SageMaker Training Session Runtime provides APIs for executing operations within active training sessions, including asynchronous training operations, sampling and inference requests, and streaming real-time model responses, enabling programmatic control over the training loop.
+* (**securityagent**) Adds support for Jira integration provider in AWS Security Agent.
+
+### Documentation
+* (**lambda**) Doc updates to reposition Lambda Functions as Lambda Event Functions
+
 ## [1.9.17] - 10/09/2026
 
 ### Features
