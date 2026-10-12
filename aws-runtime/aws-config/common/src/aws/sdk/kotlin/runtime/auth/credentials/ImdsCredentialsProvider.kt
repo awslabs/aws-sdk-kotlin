@@ -93,7 +93,7 @@ public class ImdsCredentialsProvider(
                 resp.sessionToken,
                 resp.expiration,
                 PROVIDER_NAME,
-                attributesOf { CredentialsRefreshBehaviorKey to CredentialsRefreshBehavior.RefreshableWithStaticStability },
+                imdsCredentialAttributes(),
             ).withBusinessMetric(AwsBusinessMetric.Credentials.CREDENTIALS_IMDS)
 
             is JsonCredentialsResponse.Error -> when (resp.code) {
@@ -128,4 +128,13 @@ public class ImdsCredentialsProvider(
     }
 
     override fun toString(): String = this.simpleClassName
+}
+
+/**
+ * IMDS credentials keep static stability, and the target services still accept them past their stated expiration, so
+ * an already-expired IMDS response is used even when nothing is cached yet.
+ */
+private fun imdsCredentialAttributes() = attributesOf {
+    CredentialsRefreshBehaviorKey to CredentialsRefreshBehavior.RefreshableWithStaticStability
+    AcceptedPastExpirationKey to true
 }
