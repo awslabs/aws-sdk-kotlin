@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.9.20] - 10/14/2026
+
+### Features
+* (**arcregionswitch**) Features - Adds support for an optional payload to invoke the Lambda function with as part of the Custom action Lambda execution block
+* (**bedrockagentcorecontrol**) This release supports scoping Amazon Bedrock AgentCore Gateway rate limits by request header or request body field.
+* (**cloudfront**) This release adds a new "IpAddressType" field to "VPCOriginEndpointConfig", allowing customers to specify whether their VPC origin accepts IPv4-only or dualstack connections.
+* (**dynamodbstreams**) Add support for a new iterator type (AT TIMESTAMP) for DynamoDB Streams GetShardIterator API that allows reading from a specific point in time from the stream.
+* (**ec2**) Adds T8i instance sizes to the InstanceType enum. T8i instances are low-cost burstable instances powered by custom sixth generation Intel Xeon 6 processors, available exclusively on AWS, and built on the latest sixth generation AWS Nitro cards
+* (**guardduty**) Releasing support for Custom Detection Rule Runtime Monitoring
+* (**imagebuilder**) This release adds parentInstance to infrastructure configurations, so builds can use an already-running instance from an Amazon EC2 Auto Scaling group. It also adds terminateInstanceOnCompletion, which keeps build and test instances running after image creation ends.
+* (**lambda**) AWS Lambda now supports an optional X-Ray trace header for chained invocations in durable executions, enabling child invocations to be linked to the initiating span.
+* (**organizations**) With dual-stack enabled, all requests now resolve to the endpoint in the partition's primary Region (for example, organizations.us-east-1.api.aws) and are signed for that Region. Previously, requests from other Regions resolved to a nonexistent endpoint. No API changes.
+* (**transfer**) AWS Transfer Family now lets you store SFTP server host keys in AWS Secrets Manager in your own AWS account. This gives you greater control over your server identity and helps simplify server migrations and failover.
+
+### Documentation
+* (**marketplacemetering**) Documentation update - added a Get started pointer to the AWS Marketplace AI Metering Agent Skill in the BatchMeterUsage API reference. No API or behavior change.
+
 ## [1.9.19] - 10/13/2026
 
 ### Features
