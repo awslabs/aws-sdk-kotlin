@@ -78,13 +78,20 @@ subprojects {
                             // Service-specific deps must live on the compilation (not inside the lazily-configured
                             // e2eTest task) so they're present whenever the e2eTest sources are compiled.
                             when (project.name) {
-                                "s3" -> {
-                                    implementation(project(":services:s3control"))
-                                    implementation(project(":services:sts"))
-                                    implementation(libraries.smithy.kotlin.aws.signing.crt)
-                                }
+                                "s3" -> implementation(libraries.smithy.kotlin.aws.signing.crt)
                                 "sesv2" -> implementation(libraries.smithy.kotlin.aws.signing.crt) // needed for E2E test of SigV4a
                                 "route53" -> implementation(libraries.smithy.kotlin.http.test) // needed for URI E2E tests
+                            }
+                        }
+
+                        // Sibling service projects are added at resolution time, not configuration time: CI bootstraps
+                        // only s3 and runs `build`, where :services:s3control and :services:sts don't exist.
+                        if (project.name == "s3") {
+                            project.configurations.named(implementationConfigurationName) {
+                                withDependencies {
+                                    add(project.dependencies.project(":services:s3control"))
+                                    add(project.dependencies.project(":services:sts"))
+                                }
                             }
                         }
                     }
