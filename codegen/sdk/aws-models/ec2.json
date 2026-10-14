@@ -18797,7 +18797,7 @@
                 "CopyImageTags": {
                     "target": "com.amazonaws.ec2#Boolean",
                     "traits": {
-                        "smithy.api#documentation": "<p>Specifies whether to copy your user-defined AMI tags to the new AMI.</p>\n         <p>The following tags are not be copied:</p>\n         <ul>\n            <li>\n               <p>System tags (prefixed with <code>aws:</code>)</p>\n            </li>\n            <li>\n               <p>For public and shared AMIs, user-defined tags that are attached by other Amazon Web Services\n          accounts</p>\n            </li>\n         </ul>\n         <p>Default: Your user-defined AMI tags are not copied.</p>"
+                        "smithy.api#documentation": "<p>Specifies whether to copy your user-defined AMI tags to the new AMI.</p>\n         <p>The following tags are not be copied:</p>\n         <ul>\n            <li>\n               <p>System tags (prefixed with <code>aws:</code>)</p>\n            </li>\n            <li>\n               <p>For public and shared AMIs, user-defined tags that are attached by other Amazon Web Services\n          accounts, except tags with the <code>ec2:SharedTag/</code> prefix. For more information\n          about tag sharing, see <a href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#sharing-tags\">Sharing\n          tags</a> in the <i>Amazon EC2 User Guide</i>.</p>\n            </li>\n         </ul>\n         <p>Default: Your user-defined AMI tags are not copied.</p>"
                     }
                 },
                 "TagSpecifications": {
@@ -91147,6 +91147,60 @@
                     "target": "smithy.api#Unit",
                     "traits": {
                         "smithy.api#enumValue": "m9g.medium"
+                    }
+                },
+                "t8i_nano": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "t8i.nano"
+                    }
+                },
+                "t8i_micro": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "t8i.micro"
+                    }
+                },
+                "t8i_small": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "t8i.small"
+                    }
+                },
+                "t8i_medium": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "t8i.medium"
+                    }
+                },
+                "i8g_metal_48xl": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "i8g.metal-48xl"
+                    }
+                },
+                "r8gb_48xlarge": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "r8gb.48xlarge"
+                    }
+                },
+                "r8gb_metal_48xl": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "r8gb.metal-48xl"
+                    }
+                },
+                "m9gd_medium": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "m9gd.medium"
+                    }
+                },
+                "trn2u_48xlarge": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "trn2u.48xlarge"
                     }
                 }
             }

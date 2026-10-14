@@ -1080,4 +1080,54 @@ class SchemaGeneratorPluginTest {
         val result = runner.buildAndFail()
         assertContains(result.output, "Unsupported set element")
     }
+
+    @Test
+    fun testMissingPartitionKeyFails() = withTestProject {
+        createClassFile("keys/NoPartitionKey")
+
+        val result = runner.buildAndFail()
+        assertContains(result.output, "Expected between 1 and 4 properties annotated with @DynamoDbPartitionKey, found 0")
+    }
+
+    @Test
+    fun testTooManyPartitionKeysFails() = withTestProject {
+        createClassFile("keys/TooManyPartitionKeys")
+
+        val result = runner.buildAndFail()
+        assertContains(result.output, "Expected between 1 and 4 properties annotated with @DynamoDbPartitionKey, found 5")
+    }
+
+    @Test
+    fun testTooManySortKeysFails() = withTestProject {
+        createClassFile("keys/TooManySortKeys")
+
+        val result = runner.buildAndFail()
+        assertContains(result.output, "Expected between 0 and 4 properties annotated with @DynamoDbSortKey, found 5")
+    }
+
+    @Test
+    fun testUnsupportedMapKeyTypeFails() = withTestProject {
+        createClassFile("keys/UnsupportedMapKey")
+
+        val result = runner.buildAndFail()
+        assertContains(result.output, "Unsupported key type:")
+    }
+
+    @Test
+    fun testUnsupportedKeyAttributeTypeFails() = withTestProject {
+        createClassFile("keys/UnsupportedKeyAttributeType")
+
+        val result = runner.buildAndFail()
+        assertContains(result.output, "Unsupported key attribute type")
+    }
+
+    @Test
+    fun testAllProblemsAreReported() = withTestProject {
+        createClassFile("keys/MultipleProblems")
+
+        val result = runner.buildAndFail()
+        assertContains(result.output, "Expected between 1 and 4 properties annotated with @DynamoDbPartitionKey, found 0")
+        assertContains(result.output, "@DynamoDbTtlSeconds must be positive, got -5 seconds on property expiresAt")
+        assertContains(result.output, "Property 'accessCount' annotated with @DynamoDbCounter must be of type Int or Long, but was String")
+    }
 }
