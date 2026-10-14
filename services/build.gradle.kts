@@ -74,32 +74,24 @@ subprojects {
                             implementation(libraries.kotlin.test.junit5)
                             implementation(project(":tests:e2e-test-util"))
                             implementation(libraries.slf4j.simple)
+
+                            // Service-specific deps must live on the compilation (not inside the lazily-configured
+                            // e2eTest task) so they're present whenever the e2eTest sources are compiled.
+                            when (project.name) {
+                                "s3" -> {
+                                    implementation(project(":services:s3control"))
+                                    implementation(project(":services:sts"))
+                                    implementation(libraries.smithy.kotlin.aws.signing.crt)
+                                }
+                                "sesv2" -> implementation(libraries.smithy.kotlin.aws.signing.crt) // needed for E2E test of SigV4a
+                                "route53" -> implementation(libraries.smithy.kotlin.http.test) // needed for URI E2E tests
+                            }
                         }
                     }
 
                     tasks.register<Test>("e2eTest") {
                         description = "Run e2e service tests"
                         group = "verification"
-
-                        if (project.name == "s3") {
-                            dependencies {
-                                implementation(project(":services:s3control"))
-                                implementation(project(":services:sts"))
-                                implementation(libs.smithy.kotlin.aws.signing.crt)
-                            }
-                        }
-
-                        if (project.name == "sesv2") {
-                            dependencies {
-                                implementation(libs.smithy.kotlin.aws.signing.crt) // needed for E2E test of SigV4a
-                            }
-                        }
-
-                        if (project.name == "route53") {
-                            dependencies {
-                                implementation(libraries.smithy.kotlin.http.test) // needed for URI E2E tests
-                            }
-                        }
 
                         // Run the tests with the classpath containing the compile dependencies (including 'main'),
                         // runtime dependencies, and the outputs of this compilation:
