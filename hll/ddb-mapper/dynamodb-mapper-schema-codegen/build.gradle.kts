@@ -27,6 +27,8 @@ dependencies {
 
     testImplementation(libs.kotest.assertions.core.jvm)
     testImplementation(libs.kotlin.test.junit5)
+    testImplementation(libs.mockk)
+    testImplementation(kotlin("reflect")) // align mockk's transitive kotlin-reflect with the build's Kotlin version
 }
 
 val optinAnnotations = listOf(
