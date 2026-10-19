@@ -4,13 +4,13 @@
  */
 package org.example
 
+import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbCounter
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbHeterogeneousAttribute
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbHeterogeneousType
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbItem
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbMappable
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbPartitionKey
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbSubtype
-import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbSubtypeMatch
 import aws.sdk.kotlin.hll.dynamodbmapper.DynamoDbTtlSeconds
 
 // Each family below has exactly one independent problem; all of them must be reported together.
@@ -59,7 +59,7 @@ public data class Plum(val p: Int) : Fruit
 @DynamoDbHeterogeneousType(typeAttribute = "type")
 public interface Tool
 
-@DynamoDbSubtype("hammer", match = DynamoDbSubtypeMatch.EXACT_TYPE)
+@DynamoDbSubtype("hammer")
 public interface Hammer : Tool
 
 @DynamoDbSubtype("saw")
@@ -86,6 +86,28 @@ public data class ShortSession(@DynamoDbPartitionKey val id: String, @DynamoDbTt
 
 @DynamoDbSubtype("long")
 public data class LongSession(@DynamoDbPartitionKey val id: String, @DynamoDbTtlSeconds(120) val expiresAt: Long) : Session
+
+// A TTL attribute declared by only one member
+@DynamoDbItem
+@DynamoDbHeterogeneousType(typeAttribute = "type")
+public sealed interface Cache
+
+@DynamoDbSubtype("temp")
+public data class TempEntry(@DynamoDbPartitionKey val id: String, @DynamoDbTtlSeconds(60) val expiresAt: Long) : Cache
+
+@DynamoDbSubtype("pinned")
+public data class PinnedEntry(@DynamoDbPartitionKey val id: String) : Cache
+
+// A counter attribute declared by only one member
+@DynamoDbItem
+@DynamoDbHeterogeneousType(typeAttribute = "type")
+public sealed interface Account
+
+@DynamoDbSubtype("versioned")
+public data class VersionedAccount(@DynamoDbPartitionKey val id: String, @DynamoDbCounter val version: Long) : Account
+
+@DynamoDbSubtype("plain")
+public data class PlainAccount(@DynamoDbPartitionKey val id: String) : Account
 
 // A final class can't have subtypes
 @DynamoDbHeterogeneousType(typeAttribute = "type")

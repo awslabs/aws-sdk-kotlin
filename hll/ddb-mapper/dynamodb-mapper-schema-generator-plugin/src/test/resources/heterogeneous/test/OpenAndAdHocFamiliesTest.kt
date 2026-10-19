@@ -8,8 +8,10 @@ import aws.sdk.kotlin.services.dynamodb.model.AttributeValue
 import org.example.dynamodbmapper.generatedschemas.AnimalConverter
 import org.example.dynamodbmapper.generatedschemas.AuditRecordConverter
 import org.example.dynamodbmapper.generatedschemas.EntitiesConverter
+import org.example.dynamodbmapper.generatedschemas.PlantConverter
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 
 class OpenAndAdHocFamiliesTest {
@@ -55,9 +57,19 @@ class OpenAndAdHocFamiliesTest {
     }
 
     @Test
+    fun testExactBaseDoesNotCatchUnregisteredSubclass() {
+        val item = PlantConverter.convertRight(Plant("Fern"))
+        assertEquals(AttributeValue.S("plant"), item["kind"])
+        assertEquals(Plant::class, PlantConverter.convertLeft(item)::class)
+
+        assertIs<Tree>(PlantConverter.convertLeft(PlantConverter.convertRight(Tree(height = 30))))
+        assertFailsWith<IllegalArgumentException> { PlantConverter.convertRight(Shrub()) }
+    }
+
+    @Test
     fun testAdHocFamily() {
-        val user = UserEntity("USER#1", "PROFILE", "Alice", 3)
-        val order = OrderEntity("USER#1", "ORDER#9", 1999, 1700000000)
+        val user = UserEntity("USER#1", "PROFILE", "Alice", 3, 1700000000)
+        val order = OrderEntity("USER#1", "ORDER#9", 1999, 1, 1700000000)
 
         listOf(user to "user", order to "order").forEach { (entity, typeName) ->
             val item = EntitiesConverter.convertRight(entity)
@@ -69,8 +81,8 @@ class OpenAndAdHocFamiliesTest {
     @Test
     fun testHeterogeneousAttribute() {
         val record = AuditRecord(
-            entity = UserEntity("USER#1", "PROFILE", "Alice", 3),
-            related = listOf(OrderEntity("USER#1", "ORDER#9", 1999, 1700000000)),
+            entity = UserEntity("USER#1", "PROFILE", "Alice", 3, 1700000000),
+            related = listOf(OrderEntity("USER#1", "ORDER#9", 1999, 1, 1700000000)),
         )
 
         val item = AuditRecordConverter.convertRight(record)

@@ -1157,10 +1157,10 @@ class SchemaGeneratorPluginTest {
                 public object VehicleConverter : ItemConverter<Vehicle> by HeterogeneousItemConverter<Vehicle>(
                     typeAttribute = "type",
                     block = {
-                        instanceOf<Bike>("bike", BikeConverter)
-                        instanceOf<Car>("car", CarConverter)
+                        exactType<Bike>("bike", BikeConverter)
+                        exactType<Car>("car", CarConverter)
                         instanceOf<Truck>("truck", TruckConverter)
-                        instanceOf<Unicycle>("unicycle", UnicycleConverter)
+                        exactType<Unicycle>("unicycle", UnicycleConverter)
                     },
                 )
             """.trimIndent(),
@@ -1231,7 +1231,11 @@ class SchemaGeneratorPluginTest {
         val animalBaseContents = File(testProjectDir, "$basePath/AnimalBaseConverter.kt").readText()
         assertContains(animalBaseContents, "public object AnimalBaseConverter : ItemConverter<Animal> by SimpleItemConverter(")
 
-        // An ad-hoc family's value type is Any; TTL and counter attributes are merged across its members
+        // With the default baseMatch, the base matches only its own exact class
+        val plantContents = File(testProjectDir, "$basePath/PlantSchema.kt").readText()
+        assertContains(plantContents, "exactType<Plant>(\"plant\", PlantBaseConverter)")
+
+        // An ad-hoc family's value type is Any; the TTL and counter attributes its members share become the schema's
         val entitiesContents = File(testProjectDir, "$basePath/EntitiesSchema.kt").readText()
         assertContains(entitiesContents, "public object EntitiesConverter : ItemConverter<Any> by HeterogeneousItemConverter<Any>(")
         assertContains(entitiesContents, "public object EntitiesSchema : ItemSchema.CompositeKey<Any, KeyType.Key1<String>, KeyType.Key1<String>> {")
@@ -1264,7 +1268,9 @@ class SchemaGeneratorPluginTest {
         assertContains(result.output, "No @DynamoDbHeterogeneousType family found for subtype 'org.example.Thing'")
         assertContains(result.output, "Family 'org.example.Things' must have at least one @DynamoDbSubtype")
         assertContains(result.output, "Property 'n' is annotated with @DynamoDbHeterogeneousAttribute(org.example.Things::class) but holds no value of type 'kotlin.Any'")
-        assertContains(result.output, "TTL lifetime of property 'expiresAt' conflicts across family 'org.example.Session'")
+        assertContains(result.output, "All members of table family 'org.example.Session' must declare the same @DynamoDbTtlSeconds attributes with the same lifetimes")
+        assertContains(result.output, "Subtype 'org.example.PinnedEntry' has TTL attributes [] but 'org.example.TempEntry' has TTL attributes [expiresAt: 60s]")
+        assertContains(result.output, "All members of table family 'org.example.Account' must declare the same @DynamoDbCounter attributes")
         assertContains(result.output, "@DynamoDbHeterogeneousType cannot be applied to 'org.example.Sealed' because it cannot have subtypes")
     }
 }

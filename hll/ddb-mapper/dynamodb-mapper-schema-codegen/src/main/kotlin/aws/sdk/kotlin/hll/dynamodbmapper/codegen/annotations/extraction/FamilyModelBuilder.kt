@@ -120,42 +120,43 @@ internal class FamilyModelBuilder(
 
         val errorsBefore = diagnostics.errorCount
         val (referenceDecl, reference) = contributions.first()
-        val ttlFields = linkedMapOf<String, Pair<Long, KSClassDeclaration>>()
-        val counterFields = linkedSetOf<String>()
+        val referenceName = referenceDecl.qualifiedName?.asString()
 
         contributions.forEach { (decl, contribution) ->
             contribution!!
+            val name = decl.qualifiedName?.asString()
             if (contribution.partitionKeys != reference!!.partitionKeys || contribution.sortKeys != reference.sortKeys) {
                 diagnostics.error(
-                    "Subtype '${decl.qualifiedName?.asString()}' has keys ${describeKeys(contribution)} but " +
-                        "'${referenceDecl.qualifiedName?.asString()}' has keys ${describeKeys(reference)}. All " +
-                        "members of table family '${family.qualifiedName}' must have the same key attribute names, " +
-                        "types and order.",
+                    "Subtype '$name' has keys ${describeKeys(contribution)} but '$referenceName' has keys " +
+                        "${describeKeys(reference)}. All members of table family '${family.qualifiedName}' must " +
+                        "have the same key attribute names, types and order.",
                     decl.asSymbolRef(),
                 )
             }
 
-            contribution.ttlFields.forEach { (field, lifetime) ->
-                val existing = ttlFields.putIfAbsent(field, lifetime to decl)
-                if (existing != null && existing.first != lifetime) {
-                    diagnostics.error(
-                        "TTL lifetime of property '$field' conflicts across family '${family.qualifiedName}': " +
-                            "${existing.first} seconds in '${existing.second.qualifiedName?.asString()}' but " +
-                            "$lifetime seconds in '${decl.qualifiedName?.asString()}'",
-                        decl.asSymbolRef(),
-                    )
-                }
+            // The TTL and counter interceptors apply a schema's fields to every item written with it, so a field
+            // declared by only some members would be written into (and, for TTL, expire) items of the others
+            if (contribution.ttlFields != reference.ttlFields) {
+                diagnostics.error(
+                    "Subtype '$name' has TTL attributes ${describeTtls(contribution)} but '$referenceName' has TTL " +
+                        "attributes ${describeTtls(reference)}. All members of table family " +
+                        "'${family.qualifiedName}' must declare the same @DynamoDbTtlSeconds attributes with the " +
+                        "same lifetimes.",
+                    decl.asSymbolRef(),
+                )
             }
 
-            counterFields += contribution.counterFields
+            if (contribution.counterFields != reference.counterFields) {
+                diagnostics.error(
+                    "Subtype '$name' has counter attributes ${describeCounters(contribution)} but '$referenceName' " +
+                        "has counter attributes ${describeCounters(reference)}. All members of table family " +
+                        "'${family.qualifiedName}' must declare the same @DynamoDbCounter attributes.",
+                    decl.asSymbolRef(),
+                )
+            }
         }
 
-        if (diagnostics.errorCount > errorsBefore) return null
-
-        return reference!!.copy(
-            ttlFields = ttlFields.mapValues { it.value.first },
-            counterFields = counterFields,
-        )
+        return if (diagnostics.errorCount > errorsBefore) null else reference
     }
 
     /**
@@ -186,3 +187,7 @@ private fun describeKeys(metadata: SchemaMetadata): String {
     fun List<KeyAttribute>.describe() = joinToString(prefix = "[", postfix = "]") { "${it.ddbName}: ${it.type.shortName}" }
     return "(partition ${metadata.partitionKeys.describe()}, sort ${metadata.sortKeys.describe()})"
 }
+
+private fun describeTtls(metadata: SchemaMetadata): String = metadata.ttlFields.entries.sortedBy { it.key }.joinToString(prefix = "[", postfix = "]") { "${it.key}: ${it.value}s" }
+
+private fun describeCounters(metadata: SchemaMetadata): String = metadata.counterFields.sorted().joinToString(prefix = "[", postfix = "]")
