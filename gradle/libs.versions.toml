@@ -1,6 +1,6 @@
 [versions]
 kotlin-version = "2.4.0"
-ksp-version = "2.3.11"
+ksp-version = "2.3.12"
 
 dokka-version = "2.2.0"
 jackson-bom-version = "2.22.3"
@@ -16,7 +16,7 @@ binary-compatibility-validator-version = "0.18.2"
 smithy-kotlin-version = "1.7.12"
 
 # codegen
-smithy-version = "1.73.0"
+smithy-version = "1.74.1"
 
 # testing
 ddb-local-version = "3.3.2"
@@ -150,4 +150,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-version" }
 mokkery = { id = "dev.mokkery", version.ref = "mokkery-version" }
 aws-kotlin-repo-tools-kmp = { id = "aws.sdk.kotlin.gradle.kmp", version.ref = "aws-kotlin-repo-tools-version" }
 aws-kotlin-repo-tools-smithybuild = { id = "aws.sdk.kotlin.gradle.smithybuild", version.ref = "aws-kotlin-repo-tools-version" }
-gradle-plugin-publish = { id = "com.gradle.plugin-publish", version = "2.1.1"}
+gradle-plugin-publish = { id = "com.gradle.plugin-publish", version = "2.2.1"}
