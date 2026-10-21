@@ -98,7 +98,7 @@ jobs:
           # because CI is masking it
           ./gradlew -Paws.kotlin.native=false test jvmTest
       - name: Release Check - build an SDK client
-        if: env.MERGED_NEEDED == 'true'
+        if: env.MERGE_NEEDED == 'true'
         shell: bash
         run: |
           # Additionally generate and build a service client to confirm that codegen and build works
