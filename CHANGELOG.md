@@ -1,5 +1,48 @@
 # Changelog
 
+## [1.9.24] - 10/22/2026
+
+### Features
+* (**bedrockagentcore**) Adds the dimension name to evaluation results and batch evaluation summaries. For multi-dimensional LLM-as-a-Judge evaluators, each result and summary now identifies which dimension it corresponds to.
+* (**bedrockagentcorecontrol**) Adds model-based routing and fallback to AgentCore Gateway rules. Rules can match the requested model, route to a specific model, and fall back across inference targets with an optional circuit breaker. Adds multi-dimensional rating scales for AgentCore Evaluations LLM-as-a-Judge evaluators.
+* (**connect**) Adds support for customer queryable replication errors.
+* (**continuum**) Releasing Continuum for Code Vulnerabilities APIs for SDKs
+* [#1880](https://github.com/aws/aws-sdk-kotlin/issues/1880) (**dynamodb-mapper**) Add `@DynamoDbHeterogeneousType`, `@DynamoDbSubtype` and `@DynamoDbHeterogeneousAttribute` annotations, which generate `HeterogeneousItemConverter`-based converters, schemas and table accessors for families of types
+* (**ec2**) AWS Transit Gateway now provides managed one-to-one NAT directly on its attachments, through integration with Regional Private NAT Gateway. Use ModifyTransitGatewayAttachmentNatConfiguration to enable NAT and configure NAT rules, and GetTransitGatewayAttachmentNatConfiguration to view them.
+* (**elementalinference**) Elemental Inference now supports feed scheduling, letting you apply feed configuration changes at a time you choose instead of building your own automation.
+* (**glue**) Add support for large worker types in AWS Glue
+* (**ivsrealtime**) Adds RevokeConnectionToken operation for Amazon IVS Real-Time Streaming.
+* (**kafkaconnect**) Amazon MSK Connect now supports pausing and resuming connectors via the asynchronous PauseConnector and ResumeConnector APIs. Paused connectors keep their configuration and committed offsets and resume where they left off. Each call returns an operation ARN to track with DescribeConnectorOperation.
+* (**networkmanager**) AWS Cloud WAN now provides managed one-to-one NAT directly on it's core network attachments, through integration with Regional Private NAT Gateway. Use UpdateAttachmentNatConfiguration to enable NAT and configure NAT rules, and ListAttachmentNatConfigurations to view them.
+* (**opensearchserverless**) Adds APIs to create, get, list, and cancel ingestion jobs, and to create, get, list, and delete ingestion streams, for ingesting data from Amazon S3 into OpenSearch Serverless collections.
+
+### Fixes
+* Revert smithy version bump due to codegen testing errors
+
+### Documentation
+* (**lambda**) AWS Lambda durable functions now supports payloads up to 1 MB for checkpoints, callback completion, and error details.
+
+## [1.9.23] - 10/21/2026
+
+### Features
+* (**autoscaling**) EC2 Auto Scaling now supports account settings, letting you manage account-level configuration for Auto Scaling.
+* (**connect**) Added support for AWS-managed security profiles.
+* (**datazone**) Added custom designations support with new CRUD APIs. The designation field in project membership and policy grant APIs supports a new enum for custom designations. These APIs also support a new field for custom designation id.
+* (**devopsagent**) Adds support for Microsoft Teams as a notification service. Associations can now be created and updated with a Microsoft Teams team and channel configuration using the DevOps Agent API and SDKs.
+* (**ec2**) Adds new response fields to DescribeInstanceStatus and Network Insights analysis results.
+* (**healthlake**) Update the UpdateProfileWithAgent API to return a streaming response to provide more frequent updates on what the agent is doing.
+* (**lexmodelsv2**) Adds support for Assisted NLU - Dialog Manager mode allowing usage of LLMs as the default NLU system and dialog management
+* (**lightsail**) This release adds support for metrics related to system-disk performance.
+* (**mediaconvert**) Adds AV1 CBR rate control and scene change detection. New sliding window peak bitrate setting for all codecs. DASH adaptation set grouping update. Option to disable the AV1 perceptual quality filter. Support for vertical (portrait) AV1 encoding.
+* (**networkfirewall**) Adds support for Network Firewall Resolved IP validation.
+* (**polly**) Added support for the new voices - Kenneth (en-US), Nate (en-US), Tina (de-DE), Carlos (es-US), Carolina (pt-BR), Leo (pt-BR), Curtis (en-AU), Kiara (en-IN), Arjun (en-IN) and Hyunduk (ko-KR). They are available as a Generative voices only.
+* (**quicksight**) Adds support for SharePoint and OneDrive two-legged OAuth certificate credentials and Google Workspace service account credentials when creating data sources
+* (**redshiftdata**) Add Redshift QueryUUID field to DescribeStatement response
+* (**sfn**) Release minor updates to API model
+
+### Fixes
+* Bump **smithy-kotlin** version to [**v1.7.12**](https://github.com/smithy-lang/smithy-kotlin/releases/tag/v1.7.12) to pick up event stream header validation improvements
+
 ## [1.9.22] - 10/20/2026
 
 ### Features
