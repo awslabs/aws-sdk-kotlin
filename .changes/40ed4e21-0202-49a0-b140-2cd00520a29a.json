@@ -1,0 +1,5 @@
+{
+    "id": "40ed4e21-0202-49a0-b140-2cd00520a29a",
+    "type": "bugfix",
+    "description": "Revert smithy version bump due to codegen testing errors"
+}
